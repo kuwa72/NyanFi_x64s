@@ -1,0 +1,117 @@
+# NyanFi_x64s - OSS ツールチェイン移植 (issue #1) Phase 0
+#
+# 目的は「誰でも無償でビルドでき、CI が回り、特定ベンダの許諾に依存しない」こと。
+# 対象は Win64 のみ (クロスプラットフォーム化は目的外)。
+#
+# 本番ターゲット: clang-cl + Windows SDK
+# ローカル検証   : mingw-w64 (cmake/toolchain-mingw-w64.cmake)
+#   cmake -B build -G Ninja --toolchain cmake/toolchain-mingw-w64.cmake
+#   cmake --build build && ctest --test-dir build
+
+cmake_minimum_required(VERSION 3.24)
+
+project(NyanFiPort LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+if(NOT WIN32)
+	message(FATAL_ERROR "Windows ターゲット専用です。--toolchain cmake/toolchain-mingw-w64.cmake を指定してください")
+endif()
+
+option(NYANFI_BUILD_TESTS "doctest によるテストをビルドする" ON)
+
+#-----------------------------------------------------------------------------
+# 共通のコンパイル設定
+#-----------------------------------------------------------------------------
+add_library(nyanfi_common_flags INTERFACE)
+target_compile_definitions(nyanfi_common_flags INTERFACE
+	UNICODE
+	_UNICODE
+	NOMINMAX
+	WIN32_LEAN_AND_MEAN=0
+	WINVER=0x0601        # Windows 7 以降 (README の動作対象に合わせる)
+	_WIN32_WINNT=0x0601
+)
+# 文字コード: ソースは UTF-8 (BOM 無し)。
+# narrow リテラルの実行時文字コードは CP932 に固定する。C++Builder は narrow
+# リテラルを CP932 として扱い、UnicodeString(const char*) は CP_ACP で変換して
+# いた。書庫 DLL が返す char バッファ (実行時の CP932 データ) も同じ経路を通る
+# ため、リテラル側を CP932 に合わせるのが唯一整合する選択になる。
+#
+# 留意: clang-cl は UTF-8 以外の実行時文字コードを扱えない。本番ターゲットへ
+# 移る前に、非 ASCII を含む narrow リテラルを wide (_T(...)) へ機械変換する
+# 必要がある。件数は docs/port/phase0-report.md に記録する。
+if(MSVC)
+	target_compile_options(nyanfi_common_flags INTERFACE /utf-8 /permissive-)
+else()
+	target_compile_options(nyanfi_common_flags INTERFACE
+		-finput-charset=UTF-8
+		-fexec-charset=CP932
+		-municode
+	)
+endif()
+
+#-----------------------------------------------------------------------------
+# VCL 互換シム
+#-----------------------------------------------------------------------------
+add_library(nyanfi_compat STATIC
+	compat/src/ustring.cpp
+	compat/src/sysutils.cpp
+	compat/src/datetime.cpp
+	compat/src/math.cpp
+	compat/src/classes.cpp
+	compat/src/streams.cpp
+	compat/src/encoding.cpp
+	compat/src/regex.cpp
+	compat/src/json.cpp
+	compat/src/graphics.cpp
+	compat/src/registry.cpp
+)
+target_include_directories(nyanfi_compat PUBLIC compat/include)
+target_link_libraries(nyanfi_compat PUBLIC
+	nyanfi_common_flags
+	shlwapi
+	ole32
+	oleaut32
+	uuid
+	version
+	advapi32
+	gdi32
+	user32
+)
+
+#-----------------------------------------------------------------------------
+# C++Builder の暗黙 vcl.h を再現する強制インクルードを付与する
+#-----------------------------------------------------------------------------
+function(nyanfi_target_vcl_shim target)
+	if(MSVC)
+		target_compile_options(${target} PRIVATE /FI vcl_shim.h)
+	else()
+		target_compile_options(${target} PRIVATE -include vcl_shim.h)
+	endif()
+endfunction()
+
+#-----------------------------------------------------------------------------
+# Phase 0 のロジック層 (フォーム非依存のファイル群)
+#-----------------------------------------------------------------------------
+include(cmake/phase0_sources.cmake)
+
+if(NYANFI_PHASE0_SOURCES)
+	add_library(nyanfi_core STATIC ${NYANFI_PHASE0_SOURCES})
+	target_include_directories(nyanfi_core PUBLIC src)
+	target_link_libraries(nyanfi_core PUBLIC nyanfi_compat)
+	nyanfi_target_vcl_shim(nyanfi_core)
+else()
+	message(STATUS "NYANFI_PHASE0_SOURCES が空のため nyanfi_core はスキップします")
+endif()
+
+#-----------------------------------------------------------------------------
+# テスト
+#-----------------------------------------------------------------------------
+if(NYANFI_BUILD_TESTS)
+	enable_testing()
+	add_subdirectory(tests)
+endif()
