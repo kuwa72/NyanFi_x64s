@@ -35,9 +35,15 @@ jobs:
             mingw-w64-ucrt-x86_64-gcc
             mingw-w64-ucrt-x86_64-cmake
             mingw-w64-ucrt-x86_64-ninja
+            mingw-w64-ucrt-x86_64-wxwidgets3.2-msw
 
+      # GUI (Phase 2 の骨格) も一緒にビルドする。MSYS2 のパッケージは wx 3.2 なので、
+      # 3.3 の API (MSWEnableDarkMode) はソース側でバージョンガードしてある。
       - name: Configure
-        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+        run: |
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
+            -DNYANFI_BUILD_GUI=ON \
+            -DWX_CONFIG=/ucrt64/bin/wx-config
 
       - name: Build
         run: cmake --build build
@@ -49,10 +55,25 @@ jobs:
         run: |
           objdump -p build/tests/core_tests.exe | grep -i "DLL Name" | sort -u
 
+      - name: GUI が起動するか確認
+        # GUI サブシステムなので出力は出ない。異常終了しないことだけを見る
+        # (wx のリソース未リンクだと OnInit が失敗して即終了する)
+        shell: pwsh
+        run: |
+          $p = Start-Process -FilePath build/gui/nyanfi.exe -PassThru
+          Start-Sleep -Seconds 5
+          if ($p.HasExited) {
+            Write-Error "nyanfi.exe が $($p.ExitCode) で終了しました"
+            exit 1
+          }
+          Stop-Process -Id $p.Id
+          Write-Output "5 秒間起動を維持しました"
+
       - uses: actions/upload-artifact@v4
         with:
           name: nyanfi-port-ucrt64
           path: |
+            build/gui/nyanfi.exe
             build/tests/*.exe
             build/*.a
           if-no-files-found: error
