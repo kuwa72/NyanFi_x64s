@@ -303,10 +303,10 @@ TEST_CASE("exclude_top / exclude_top_end: 先頭/先頭末尾を除外")
 
 TEST_CASE("trim_ex: 全角空白/タブも含めてトリミング")
 {
-	CHECK(trim_ex("　 \tabc\t 　") == UnicodeString("abc"));
+	CHECK(trim_ex(_T("　 \tabc\t 　")) == UnicodeString("abc"));
 	CHECK(trim_ex("abc") == UnicodeString("abc"));
 	CHECK(trim_ex("") == UnicodeString(""));
-	CHECK(trim_ex("　　") == UnicodeString(""));  //全角空白のみ
+	CHECK(trim_ex(_T("　　")) == UnicodeString(""));  //全角空白のみ
 }
 
 //===========================================================================
@@ -865,8 +865,8 @@ TEST_CASE("param_to_mSec: S/M/H 指定をミリ秒に変換")
 TEST_CASE("str_len_half: 半角換算の文字列長")
 {
 	CHECK(str_len_half("abc") == 3);
-	CHECK(str_len_half("あいう") == 6);  //全角は2文字換算
-	CHECK(str_len_half("aあb") == 4);
+	CHECK(str_len_half(_T("あいう")) == 6);  //全角は2文字換算
+	CHECK(str_len_half(_T("aあb")) == 4);
 	CHECK(str_len_half("") == 0);
 }
 
@@ -884,7 +884,7 @@ TEST_CASE("max_len_half: 最大幅の更新")
 	int w = 0;
 	max_len_half(w, "ab");
 	CHECK(w == 2);
-	max_len_half(w, "あいう");  //6 > 2
+	max_len_half(w, _T("あいう"));  //6 > 2
 	CHECK(w == 6);
 	max_len_half(w, "x");  //1 < 6 なので更新されない
 	CHECK(w == 6);
@@ -900,8 +900,8 @@ TEST_CASE("align_r_str / align_l_str: 半角換算幅で空白埋め")
 
 TEST_CASE("to_FullWidth / to_HalfWidth: 全角/半角変換")
 {
-	CHECK(to_FullWidth("abc123") == UnicodeString("ａｂｃ１２３"));
-	CHECK(to_HalfWidth("ａｂｃ１２３") == UnicodeString("abc123"));
+	CHECK(to_FullWidth("abc123") == UnicodeString(_T("ａｂｃ１２３")));
+	CHECK(to_HalfWidth(_T("ａｂｃ１２３")) == UnicodeString("abc123"));
 }
 
 //===========================================================================
@@ -909,8 +909,8 @@ TEST_CASE("to_FullWidth / to_HalfWidth: 全角/半角変換")
 //===========================================================================
 TEST_CASE("is_RuledLine: 罫線行の判定")
 {
-	CHECK(is_RuledLine("───") == 1);
-	CHECK(is_RuledLine("━━━") == 2);
+	CHECK(is_RuledLine(_T("───")) == 1);
+	CHECK(is_RuledLine(_T("━━━")) == 2);
 	CHECK(is_RuledLine("abc") == 0);
 	//空文字列は StringOfChar(c,0)==EmptyStr と常に一致する(0回の繰り返し)ため、
 	//"─" の0文字と見なされ 1 (罫線行) が返る。空文字を罫線行として直感的に
@@ -963,17 +963,17 @@ TEST_CASE("get_NameOfCodePage / get_CodePageOfName: 相互変換")
 	CHECK(get_CodePageOfName("unknown") == 0);
 
 	//UTF-8 は BOM 有無の表示が付く
-	CHECK(get_NameOfCodePage(65001, false, true) == UnicodeString("UTF-8 BOM付"));
-	CHECK(get_NameOfCodePage(65001, false, false) == UnicodeString("UTF-8 BOM無"));
-	CHECK(get_NameOfCodePage(65001, true, true) == UnicodeString("UTF-8 BOM付き"));
+	CHECK(get_NameOfCodePage(65001, false, true) == UnicodeString(_T("UTF-8 BOM付")));
+	CHECK(get_NameOfCodePage(65001, false, false) == UnicodeString(_T("UTF-8 BOM無")));
+	CHECK(get_NameOfCodePage(65001, true, true) == UnicodeString(_T("UTF-8 BOM付き")));
 }
 
 TEST_CASE("get_UnicodeBlockName: 代表的なブロック名")
 {
-	CHECK(get_UnicodeBlockName(0x0041) == UnicodeString("基本ラテン文字"));  //'A'
-	CHECK(get_UnicodeBlockName(0x3042) == UnicodeString("平仮名"));          //'あ'
-	CHECK(get_UnicodeBlockName(0x30A2) == UnicodeString("片仮名"));          //'ア'
-	CHECK(get_UnicodeBlockName(0x4E00) == UnicodeString("CJK統合漢字"));      //'一'
+	CHECK(get_UnicodeBlockName(0x0041) == UnicodeString(_T("基本ラテン文字")));  //'A'
+	CHECK(get_UnicodeBlockName(0x3042) == UnicodeString(_T("平仮名")));          //'あ'
+	CHECK(get_UnicodeBlockName(0x30A2) == UnicodeString(_T("片仮名")));          //'ア'
+	CHECK(get_UnicodeBlockName(0x4E00) == UnicodeString(_T("CJK統合漢字")));      //'一'
 }
 
 //===========================================================================

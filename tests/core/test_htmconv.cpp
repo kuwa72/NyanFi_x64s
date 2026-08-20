@@ -108,7 +108,7 @@ TEST_CASE("HtmConv::Convert: 非Markdownモードの箇条書きは ・ にな�
 
 	bool found = false;
 	for (int i = 0; i < hc.TxtBuf->Count; i++) {
-		if (ContainsStr(hc.TxtBuf->Strings[i], "・foo")) found = true;
+		if (ContainsStr(hc.TxtBuf->Strings[i], _T("・foo"))) found = true;
 	}
 	CHECK(found);
 }

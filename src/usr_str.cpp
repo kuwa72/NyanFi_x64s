@@ -515,14 +515,14 @@ UnicodeString trim_ex(UnicodeString s)
 {
 	//先頭
 	for (;;) {
-		if (remove_top_s(s, "　")) continue;
+		if (remove_top_s(s, _T("　"))) continue;
 		if (remove_top_s(s, ' '))  continue;
 		if (remove_top_s(s, '\t')) continue;
 		break;
 	}
 	//末尾
 	for (;;) {
-		if (remove_end_s(s, "　")) continue;
+		if (remove_end_s(s, _T("　"))) continue;
 		if (remove_end_s(s, ' '))  continue;
 		if (remove_end_s(s, '\t')) continue;
 		break;
@@ -1153,7 +1153,7 @@ void get_find_wd_list(UnicodeString wd, TStringList *lst)
 	for (;;) {
 		if (wd.IsEmpty()) break;
 		int ph = wd.Pos(' ');
-		int pw = wd.Pos("　");
+		int pw = wd.Pos(_T("　"));
 		int p = (ph && !pw)? ph : (!ph && pw)? pw : (ph && pw)? std::min(ph, pw) : 0;
 		if (p==1) {
 			wd.Delete(1, 1);
@@ -1606,7 +1606,7 @@ bool is_quot(UnicodeString s)
 //---------------------------------------------------------------------------
 UnicodeString add_quot_if_spc(UnicodeString s)
 {
-	if (!is_quot(s) && (ContainsStr(s, " ") || ContainsStr(s, "　"))) s = "\"" + s + "\"";
+	if (!is_quot(s) && (ContainsStr(s, " ") || ContainsStr(s, _T("　")))) s = "\"" + s + "\"";
 	return s;
 }
 
@@ -1771,7 +1771,7 @@ int str_len_half(UnicodeString s)
 		for (int i=1; i<=s.Length(); i++) {
 			if (!s.IsTrailSurrogate(i)) {
 				if (s[i]!=s_u[i] && s_u[i]=='?')
-					r_u += "？";
+					r_u += _T("？");
 				else
 					r_u += s_u[i];
 			}
@@ -1845,7 +1845,7 @@ UnicodeString minimize_str(
 				s = s.SubString(1, s.Length() - n);
 				ww = get_TextWidth(cv, s, spc_sw);
 			}
-			s += "…";
+			s += _T("…");
 
 			int p = s.Length() - 1;
 			while (p>0) {
@@ -1861,7 +1861,7 @@ UnicodeString minimize_str(
 				}
 			}
 			if (p==0) p = 1;
-			s.Insert("…", p);	p += 1;
+			s.Insert(_T("…"), p);	p += 1;
 
 			for (int i=0; i<3; i++) {
 				int n = std::max((ww - wd)/wz, 1);  if (n<=1) break;
@@ -2112,9 +2112,9 @@ UnicodeString get_NameOfCodePage(
 		if (ret_str.IsEmpty()) ret_str.sprintf(_T("%u"), code_page);
 		if (code_page==1200 || code_page==1201 || code_page==65001) {
 			if (long_sw)
-				ret_str += (has_bom? " BOM付き" : " BOM無し");
+				ret_str += (has_bom? _T(" BOM付き") : _T(" BOM無し"));
 			else
-				ret_str += (has_bom? " BOM付" : " BOM無");
+				ret_str += (has_bom? _T(" BOM付") : _T(" BOM無"));
 		}
 	}
 	return ret_str;

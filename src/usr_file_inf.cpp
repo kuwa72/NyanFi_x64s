@@ -378,7 +378,7 @@ UnicodeString get_chunk_list(TFileStream *fs,
 	if (anmf_cnt>1) {
 		TMatch mt = TRegEx::Match(ret_str, "(,ANMF){2,}");
 		if (mt.Success) {
-			ret_str = ReplaceStr(ret_str, mt.Value, mt.Groups.Item[1].Value + "×" + IntToStr(anmf_cnt));
+			ret_str = ReplaceStr(ret_str, mt.Value, mt.Groups.Item[1].Value + _T("×") + IntToStr(anmf_cnt));
 		}
 	}
 	return ret_str;
@@ -455,7 +455,7 @@ void get_WavInf(
 				}
 			}
 			else {
-				add_list_errmsg(lst, "dataチャンクが見つかりません。");
+				add_list_errmsg(lst, _T("dataチャンクが見つかりません。"));
 			}
 		}
 		else if (wfx.Format.wFormatTag==WAVE_FORMAT_MPEGLAYER3) {
@@ -770,7 +770,7 @@ UnicodeString get_wd_x_hi_str(int w, int h)
 //---------------------------------------------------------------------------
 UnicodeString get_img_size_str(int w, int h, UnicodeString name)
 {
-	if (name.IsEmpty()) name = "画像サイズ";
+	if (name.IsEmpty()) name = _T("画像サイズ");
 	UnicodeString infstr = make_PropLine(name, get_wd_x_hi_str(w, h));
 	if (w>0 && h>0) infstr.cat_sprintf(_T("  (%s)"), get_AspectStr(w, h).c_str());	//アスペクト比
 	return infstr;
@@ -799,14 +799,14 @@ void get_JpgExInf(
 			int slen = fsRead_int2(fs.get(), true);
 			//SOF0
 			if (mkr==0xffc0 || mkr==0xffc2) {
-				add_PropLine(_T("形式"), ((mkr==0xffc0)? "ベースライン" : "プログレッシブ"), lst);
+				add_PropLine(_T("形式"), ((mkr==0xffc0)? _T("ベースライン") : _T("プログレッシブ")), lst);
 				fs->Seek(5, soFromCurrent);
 
 				BYTE n;	//構成要素数
 				fs->ReadBuffer(&n, 1);
 				//グレースケール
 				if (n==1) {
-					add_PropLine(_T("カラー"), "グレースケール", lst);
+					add_PropLine(_T("カラー"), _T("グレースケール"), lst);
 				}
 				//YCbCr
 				else if (n==3) {
@@ -889,26 +889,26 @@ bool get_ExifInf(
 
 	std::unique_ptr<TStringList> d_lst(new TStringList());
 	d_lst->Text =
-		"271=メーカー名\n"
-		"272=モデル\n"
-		"36867=撮影日時\n"
-		"33437=絞り値\n"
-		"33434U=露出時間\n"
-		"37380=露光補正\n"
-		"34850L=露出プログラム\n"
-		"34855=ISO感度\n"
-		"37383=測光方式\n"
-		"37386=焦点距離\n"
-		"NK:5=ＷＢ\n"
-		"CN:4.7=ＷＢ\n"
-		"37385=フラッシュ\n"
-		"274L=画像方向\n"
-		"NK:7=フォーカス\n"
-		"42036=レンズ\n"
-		"305=ソフト名\n"
-		"FOVbVer=FOVb Ver.\n"
-		"GPS:2=GPS緯度\n"
-		"GPS:4=GPS経度\n";
+		_T("271=メーカー名\n")
+		_T("272=モデル\n")
+		_T("36867=撮影日時\n")
+		_T("33437=絞り値\n")
+		_T("33434U=露出時間\n")
+		_T("37380=露光補正\n")
+		_T("34850L=露出プログラム\n")
+		_T("34855=ISO感度\n")
+		_T("37383=測光方式\n")
+		_T("37386=焦点距離\n")
+		_T("NK:5=ＷＢ\n")
+		_T("CN:4.7=ＷＢ\n")
+		_T("37385=フラッシュ\n")
+		_T("274L=画像方向\n")
+		_T("NK:7=フォーカス\n")
+		_T("42036=レンズ\n")
+		_T("305=ソフト名\n")
+		_T("FOVbVer=FOVb Ver.\n")
+		_T("GPS:2=GPS緯度\n")
+		_T("GPS:4=GPS経度\n");
 
 	for (int i=0; i<d_lst->Count; i++)
 		add_PropLine_if(d_lst->ValueFromIndex[i].c_str(), i_lst->Values[d_lst->Names[i]], lst);
@@ -1016,7 +1016,7 @@ void get_MetafileInf(
 	try {
 		std::unique_ptr<TMetafile> mbuf(new TMetafile());
 		mbuf->LoadFromFile(fnam);
-		lst->Add(get_img_size_str(mbuf->Width, mbuf->Height, "サイズ"));
+		lst->Add(get_img_size_str(mbuf->Width, mbuf->Height, _T("サイズ")));
 		add_PropLine_if(_T("作成者"), mbuf->CreatedBy,   lst);
 		add_PropLine_if(_T("説明"),   mbuf->Description, lst);
 	}
@@ -1081,11 +1081,11 @@ bool get_PngInf(
 				fs->ReadBuffer(buf.get(), 1);
 				UnicodeString coltyp = get_PropTitle(_T("カラータイプ"));
 				switch (buf[0]) {
-				case 0: coltyp += "グレースケール";				break;
-				case 2: coltyp += "トゥルーカラー";				break;
-				case 3: coltyp += "インデックスカラー";			break;
-				case 4: coltyp += "グレースケール + アルファ";	break;
-				case 6: coltyp += "トゥルーカラー + アルファ";	break;
+				case 0: coltyp += _T("グレースケール");				break;
+				case 2: coltyp += _T("トゥルーカラー");				break;
+				case 3: coltyp += _T("インデックスカラー");			break;
+				case 4: coltyp += _T("グレースケール + アルファ");	break;
+				case 6: coltyp += _T("トゥルーカラー + アルファ");	break;
 				}
 				lst->Add(coltyp);
 				fs->Seek(3, soFromCurrent);
@@ -1166,8 +1166,8 @@ UnicodeString get_PngInfStr(
 	UnicodeString col_s, bit_s;
 	for (int i=0; i<i_lst->Count; i++) {
 		UnicodeString lbuf = i_lst->Strings[i];
-		if		(ContainsStr(lbuf, "カラータイプ: ")) col_s = Trim(get_tkn_r(lbuf, ':'));
-		else if (ContainsStr(lbuf, "ビット深度: "))	  bit_s = "  深度:" + Trim(get_tkn_r(lbuf, ':'));
+		if		(ContainsStr(lbuf, _T("カラータイプ: "))) col_s = Trim(get_tkn_r(lbuf, ':'));
+		else if (ContainsStr(lbuf, _T("ビット深度: ")))	  bit_s = _T("  深度:") + Trim(get_tkn_r(lbuf, ':'));
 	}
 
 	ret_str += (col_s + bit_s);
@@ -1306,7 +1306,7 @@ bool get_WebpInf(
 			int p = fs->Seek(0, soFromCurrent);
 
 			if (SameText(chunk, "VP8 ")) {
-				fmt = "ロッシー";
+				fmt = _T("ロッシー");
 				fs->Seek(6, soFromCurrent);
 				if (iw==0) {
 					fs->ReadBuffer(&ui_buf, 4);
@@ -1315,7 +1315,7 @@ bool get_WebpInf(
 				}
 			}
 			else if (SameText(chunk, "VP8L")) {
-				fmt = "ロスレス";
+				fmt = _T("ロスレス");
 				fs->ReadBuffer(buf.get(), 1);
 				if (buf[0]!=0x2f) Abort();
 				if (iw==0) {
@@ -1333,7 +1333,7 @@ bool get_WebpInf(
 				}
 			}
 			else if (SameText(chunk, "ICCP")) {
-				lst->Add(get_PropTitle(_T("ICCP")) + "有り");
+				lst->Add(get_PropTitle(_T("ICCP")) + _T("有り"));
 			}
 			else if (SameText(chunk, "ALPH")) {
 				has_alph = true;
@@ -1355,13 +1355,13 @@ bool get_WebpInf(
 				*/
 			}
 			else if (SameText(chunk, "ANIM")) {
-				fmt = "アニメーション";
+				fmt = _T("アニメーション");
 				fs->ReadBuffer(buf.get(), 4);
 				lst->Add(get_PropTitle(_T("背景色")).cat_sprintf(_T("R%u G%u B%u A%u"), buf[2], buf[1], buf[0], buf[3]));
 				fs->ReadBuffer(&us_buf, 2);
 				tmp = get_PropTitle(_T("ループ回数"));
 				if (us_buf==0)
-					lst->Add(tmp + "無限");
+					lst->Add(tmp + _T("無限"));
 				else
 					lst->Add(tmp.cat_sprintf(_T("%u"), us_buf));
 			}
@@ -1392,7 +1392,7 @@ bool get_WebpInf(
 		//形式
 		if (!fmt.IsEmpty()) {
 			tmp = make_PropLine(_T("形式"), fmt);
-			if (has_alph) tmp += " + アルファ";
+			if (has_alph) tmp += _T(" + アルファ");
 			if (lst_top==lst->Count) lst->Add(tmp); else lst->Insert(lst_top, tmp);
 		}
 		//フレーム数
@@ -1443,7 +1443,7 @@ UnicodeString get_WebpInfStr(
 	UnicodeString col_s, bit_s;
 	for (int i=0; i<i_lst->Count; i++) {
 		UnicodeString lbuf = i_lst->Strings[i];
-		if (ContainsStr(lbuf, "形式: ")) {
+		if (ContainsStr(lbuf, _T("形式: "))) {
 			ret_str += Trim(get_tkn_r(lbuf, ':'));
 			break;
 		}
@@ -1487,7 +1487,7 @@ bool get_PspInf(
 				if (i_wd && i_hi) { *i_wd = iw; *i_hi = ih; }
 
 				if (lst) {
-					UnicodeString lbuf = get_PropTitle("画像サイズ").cat_sprintf(_T("%u × %u"), iw, ih);
+					UnicodeString lbuf = get_PropTitle(_T("画像サイズ")).cat_sprintf(_T("%u × %u"), iw, ih);
 					if (iw>0 && ih>0) lbuf.cat_sprintf(_T("  (%s)"), get_AspectStr(iw, ih).c_str());
 					lst->Add(lbuf);
 					//解像度
@@ -1653,7 +1653,7 @@ void get_IconInf(
 					//色
 					fs->ReadBuffer(&b_buf, 1);
 					if (b_buf==0)
-				 		lbuf += "  256色以上";
+				 		lbuf += _T("  256色以上");
 					else
 				 		lbuf.cat_sprintf(_T("  %u色"), b_buf);
 					fs->Seek(13, soFromCurrent);
@@ -1779,7 +1779,7 @@ void get_AppInf(
 				Abort();
 			}
 			if (DOS_hdr.e_lfarlc<0x40 || fs->Size<(DOS_hdr.e_lfanew + sizeof(IMAGE_FILE_HEADER))) {
-				warn_msg = "PE、NE、LE以外のフォーマットです。";
+				warn_msg = _T("PE、NE、LE以外のフォーマットです。");
 				Abort();
 			}
 
@@ -1804,13 +1804,13 @@ void get_AppInf(
 			else {
 				switch (NT_hdr.Signature & 0x0000ffff) {
 				case IMAGE_OS2_SIGNATURE:		//NE
-					warn_msg = "NEフォーマット(Win16)です。";
+					warn_msg = _T("NEフォーマット(Win16)です。");
 					Abort();
 				case IMAGE_OS2_SIGNATURE_LE:	//LE
-					warn_msg = "LEフォーマット(VXD)です。";
+					warn_msg = _T("LEフォーマット(VXD)です。");
 					Abort();
 				default:
-					warn_msg = "PE、NE、LE以外のフォーマットです。";
+					warn_msg = _T("PE、NE、LE以外のフォーマットです。");
 					Abort();
 				}
 			}
@@ -1836,16 +1836,16 @@ void get_AppInf(
 			substr.sprintf(_T("\\StringFileInfo\\%04x%04x\\"), *lpTranslate, *(lpTranslate + 1));
 			std::unique_ptr<TStringList> s_lst(new TStringList());
 			s_lst->Text =
-				"FileDescription=説明\n"
-				"FileVersion=ファイルVer.\n"
-				"ProductName=製品名\n"
-				"ProductVersion=製品Ver.\n"
-				"LegalCopyright=著作権\n"
-				"CompanyName=会社名\n"
-				"LegalTrademarks=商標\n"
-				"Comments=コメント\n"
-				"OriginalFilename=元のファイル名\n"
-				"InternalName=内部名\n";
+				_T("FileDescription=説明\n")
+				_T("FileVersion=ファイルVer.\n")
+				_T("ProductName=製品名\n")
+				_T("ProductVersion=製品Ver.\n")
+				_T("LegalCopyright=著作権\n")
+				_T("CompanyName=会社名\n")
+				_T("LegalTrademarks=商標\n")
+				_T("Comments=コメント\n")
+				_T("OriginalFilename=元のファイル名\n")
+				_T("InternalName=内部名\n");
 
 			int l_cnt = 0;
 			for (int j=0; j<s_lst->Count; j++) {
@@ -2481,16 +2481,16 @@ int get_filename_warn(
 	//名前
 	UnicodeString nnam = ExtractFileName(fnam);
 	if (nnam.Length()>=256) 			add_WarnLine(tmp.sprintf(_T("名前が長すぎます(%u)。"), nnam.Length()), wlst.get());
-	if (ContainsStr(nnam, L"\u202e"))	add_WarnLine("名前に制御文字「RLO」が含まれています。", wlst.get());
+	if (ContainsStr(nnam, L"\u202e"))	add_WarnLine(_T("名前に制御文字「RLO」が含まれています。"), wlst.get());
 
 	//主部
 	UnicodeString bnam = is_dir? nnam : get_base_name(fnam);
-	if (StartsStr(' ', bnam))			add_WarnLine("名前の先頭に空白があります。", 		wlst.get());
-	if (StartsStr("　", bnam))			add_WarnLine("名前の先頭に全角空白があります。", 	wlst.get());
+	if (StartsStr(' ', bnam))			add_WarnLine(_T("名前の先頭に空白があります。"), 		wlst.get());
+	if (StartsStr(_T("　"), bnam))			add_WarnLine(_T("名前の先頭に全角空白があります。"), 	wlst.get());
 	if (bnam.Length()>1) {
-		if (EndsStr(' ', bnam))			add_WarnLine("名前の末尾に空白があります。", 		wlst.get());
-		if (EndsStr("　", bnam))		add_WarnLine("名前の末尾に全角空白があります。", 	wlst.get());
-		if (ContainsStr(bnam, "  "))	add_WarnLine("名前に連続した空白が含まれています。",wlst.get());
+		if (EndsStr(' ', bnam))			add_WarnLine(_T("名前の末尾に空白があります。"), 		wlst.get());
+		if (EndsStr(_T("　"), bnam))		add_WarnLine(_T("名前の末尾に全角空白があります。"), 	wlst.get());
+		if (ContainsStr(bnam, "  "))	add_WarnLine(_T("名前に連続した空白が含まれています。"),wlst.get());
 	}
 
 	UnicodeString s = check_EnvDepandChars(bnam);
@@ -2502,13 +2502,13 @@ int get_filename_warn(
 	//拡張子
 	if (!is_dir) {
 		UnicodeString xnam = get_tkn_r(get_extension(fnam), '.');
-		if (StartsStr(' ', xnam))		add_WarnLine("拡張子の先頭に空白があります。",		wlst.get());
-		if (StartsStr("　", xnam))		add_WarnLine("拡張子の先頭に全角空白があります。",	wlst.get());
+		if (StartsStr(' ', xnam))		add_WarnLine(_T("拡張子の先頭に空白があります。"),		wlst.get());
+		if (StartsStr(_T("　"), xnam))		add_WarnLine(_T("拡張子の先頭に全角空白があります。"),	wlst.get());
 
 		if (xnam.Length()>1) {
-			if (EndsStr(' ', xnam))		add_WarnLine("拡張子の末尾に空白があります。", 		wlst.get());
-			if (EndsStr("　", xnam))	add_WarnLine("拡張子の末尾に全角空白があります。",	wlst.get());
-			if (ContainsStr(xnam, "  "))	add_WarnLine("拡張子に連続した空白が含まれています。", wlst.get());
+			if (EndsStr(' ', xnam))		add_WarnLine(_T("拡張子の末尾に空白があります。"), 		wlst.get());
+			if (EndsStr(_T("　"), xnam))	add_WarnLine(_T("拡張子の末尾に全角空白があります。"),	wlst.get());
+			if (ContainsStr(xnam, "  "))	add_WarnLine(_T("拡張子に連続した空白が含まれています。"), wlst.get());
 		}
 	}
 

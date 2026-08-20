@@ -24,9 +24,9 @@ void make_KeyList(TStringList *lst)
 	lst->Text += "Del\nIns\nBkSp\nLeft\nRight\nUp\nDown\nPgUp\nPgDn\nHome\nEnd\nPause\nTab\nEsc\nEnter\nSpace\nApp\n";
 
 	if (is_JpKeybd())
-		lst->Text += "-\n^\n\\\n@\n[\n;\n:\n]\n,\n.\n/\n＼\n";	//JP
+		lst->Text += _T("-\n^\n\\\n@\n[\n;\n:\n]\n,\n.\n/\n＼\n");	//JP
 	else
-		lst->Text += "`\n-\n＝\n[\n]\n\\\n;\n'\n,\n.\n/\n";		//US
+		lst->Text += _T("`\n-\n＝\n[\n]\n\\\n;\n'\n,\n.\n/\n");		//US
 
 	for (int i=0; i<10; i++) lst->Add(itmbuf.sprintf(_T("10Key_%u"), i));	//10キー
 	lst->Text += "10Key_*\n10Key_+\n10Key_-\n10Key_/\n10Key_.\n";
@@ -197,10 +197,10 @@ UnicodeString get_KeyStr(WORD Key)
 	case VK_OEM_5:		keystr = "\\";		break;
 	case VK_OEM_6:		keystr = "]";		break;
 	case VK_OEM_MINUS:  keystr = "-";		break;
-	case VK_OEM_PLUS:   keystr = is_JpKeybd()? ";" : "＝"; break;
+	case VK_OEM_PLUS:   keystr = is_JpKeybd()? ";" : _T("＝"); break;
 	case VK_OEM_COMMA:  keystr = ",";		break;
 	case VK_OEM_PERIOD: keystr = ".";		break;
-	case VK_OEM_102:    keystr = "＼";		break;
+	case VK_OEM_102:    keystr = _T("＼");		break;
 
 	case VK_NUMPAD0:	keystr = "10Key_0";	break;
 	case VK_NUMPAD1:	keystr = "10Key_1";	break;

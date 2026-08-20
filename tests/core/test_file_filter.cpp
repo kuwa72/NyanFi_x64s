@@ -14,30 +14,30 @@
 //===========================================================================
 TEST_CASE("GetFilterInfStr: Head/Tail 指定")
 {
-	CHECK(GetFilterInfStr("Head(10)", false) == UnicodeString("先頭から10行"));
-	CHECK(GetFilterInfStr("Tail(5)", false) == UnicodeString("最後から5行"));
+	CHECK(GetFilterInfStr("Head(10)", false) == UnicodeString(_T("先頭から10行")));
+	CHECK(GetFilterInfStr("Tail(5)", false) == UnicodeString(_T("最後から5行")));
 	CHECK(GetFilterInfStr("", false) == UnicodeString(""));
 }
 
 TEST_CASE("GetFilterInfStr: HtmlHead/HtmlBody/HtmlRem")
 {
-	CHECK(GetFilterInfStr("HtmlHead", false) == UnicodeString("head要素行"));
-	CHECK(GetFilterInfStr("HtmlBody", false) == UnicodeString("body要素行"));
-	CHECK(GetFilterInfStr("HtmlRem", false) == UnicodeString("コメント行"));
-	CHECK(GetFilterInfStr("HtmlRem", true) == UnicodeString("コメント"));  //is_grep=true で表現が変わる
+	CHECK(GetFilterInfStr("HtmlHead", false) == UnicodeString(_T("head要素行")));
+	CHECK(GetFilterInfStr("HtmlBody", false) == UnicodeString(_T("body要素行")));
+	CHECK(GetFilterInfStr("HtmlRem", false) == UnicodeString(_T("コメント行")));
+	CHECK(GetFilterInfStr("HtmlRem", true) == UnicodeString(_T("コメント")));  //is_grep=true で表現が変わる
 }
 
 TEST_CASE("GetFilterInfStr: SubStr は is_grep=true のみ有効")
 {
-	CHECK(GetFilterInfStr("SubStr(3,5)", true) == UnicodeString("3文字目から5文字"));
-	CHECK(GetFilterInfStr("SubStr(3)", true) == UnicodeString("3文字目以降"));
+	CHECK(GetFilterInfStr("SubStr(3,5)", true) == UnicodeString(_T("3文字目から5文字")));
+	CHECK(GetFilterInfStr("SubStr(3)", true) == UnicodeString(_T("3文字目以降")));
 	//is_grep=false だと SubStr は認識されずエラー表記になる
 	CHECK(GetFilterInfStr("SubStr(3)", false) == UnicodeString("!ERR:[SubStr(3)]"));
 }
 
 TEST_CASE("GetFilterInfStr: 複数条件は | 区切りで連結")
 {
-	CHECK(GetFilterInfStr("Head(3)|HtmlBody", false) == UnicodeString("先頭から3行 | body要素行"));
+	CHECK(GetFilterInfStr("Head(3)|HtmlBody", false) == UnicodeString(_T("先頭から3行 | body要素行")));
 }
 
 TEST_CASE("GetFilterInfStr: 不正な指定はエラー表記")

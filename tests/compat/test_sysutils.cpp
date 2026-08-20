@@ -11,7 +11,7 @@ TEST_CASE("UpperCase/LowerCase は ASCII のみを変換する")
 	// 日本語や全角文字はそのまま (AnsiUpperCase/AnsiLowerCase と違い ASCII 限定)
 	CHECK(UpperCase("abcXYZ123") == "ABCXYZ123");
 	CHECK(LowerCase("abcXYZ123") == "abcxyz123");
-	CHECK(UpperCase("日本語abc") == "日本語ABC");
+	CHECK(UpperCase(_T("日本語abc")) == _T("日本語ABC"));
 }
 
 TEST_CASE("SameText/CompareText は ASCII の大小文字を無視する (実測 179 箇所で最多)")

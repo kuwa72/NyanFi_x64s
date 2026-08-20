@@ -123,27 +123,27 @@ bool ID3_GetInf(
 						else										     lbuf = EmptyStr;
 					}
 					else {
-						if		(contained_wd_i(_T("TALB|TAL"), id_str)) lbuf = "アルバム名";
-						else if (contained_wd_i(_T("TCOM|TCM"), id_str)) lbuf = "作曲者";
-						else if (contained_wd_i(_T("TCON|TCO"), id_str)) lbuf = "ジャンル";
-						else if (contained_wd_i(_T("TCOP|TCR"), id_str)) lbuf = "著作権情報";
-						else if (contained_wd_i(_T("TDAT|TDA"), id_str)) lbuf = "日付";
-						else if (contained_wd_i(_T("TENC|TEN"), id_str)) lbuf = "エンコード";
-						else if (contained_wd_i(_T("TIT1|TT1"), id_str)) lbuf = "グループ";
-						else if (contained_wd_i(_T("TIT2|TT2"), id_str)) lbuf = "タイトル";
-						else if (contained_wd_i(_T("TIT3|TT3"), id_str)) lbuf = "サブタイトル";
-						else if (contained_wd_i(_T("TLEN|TLE"), id_str)) lbuf = "曲の長さ";
+						if		(contained_wd_i(_T("TALB|TAL"), id_str)) lbuf = _T("アルバム名");
+						else if (contained_wd_i(_T("TCOM|TCM"), id_str)) lbuf = _T("作曲者");
+						else if (contained_wd_i(_T("TCON|TCO"), id_str)) lbuf = _T("ジャンル");
+						else if (contained_wd_i(_T("TCOP|TCR"), id_str)) lbuf = _T("著作権情報");
+						else if (contained_wd_i(_T("TDAT|TDA"), id_str)) lbuf = _T("日付");
+						else if (contained_wd_i(_T("TENC|TEN"), id_str)) lbuf = _T("エンコード");
+						else if (contained_wd_i(_T("TIT1|TT1"), id_str)) lbuf = _T("グループ");
+						else if (contained_wd_i(_T("TIT2|TT2"), id_str)) lbuf = _T("タイトル");
+						else if (contained_wd_i(_T("TIT3|TT3"), id_str)) lbuf = _T("サブタイトル");
+						else if (contained_wd_i(_T("TLEN|TLE"), id_str)) lbuf = _T("曲の長さ");
 						else if (contained_wd_i(_T("TORY|TOR|TDOR"), id_str))
-														 	 	   		 lbuf = "原曲リリース年";
-						else if (contained_wd_i(_T("TPE1|TP1"), id_str)) lbuf = "アーティスト";
-						else if (contained_wd_i(_T("TPE2|TP2"), id_str)) lbuf = "バンド/伴奏";
-						else if (contained_wd_i(_T("TPE3|TP3"), id_str)) lbuf = "指揮者";
-						else if (contained_wd_i(_T("TPOS|TPA"), id_str)) lbuf = "ディスク＃";
-						else if (contained_wd_i(_T("TPUB|TPB"), id_str)) lbuf = "出版社";
-						else if (contained_wd_i(_T("TRCK|TRK"), id_str)) lbuf = "トラック＃";
+														 	 	   		 lbuf = _T("原曲リリース年");
+						else if (contained_wd_i(_T("TPE1|TP1"), id_str)) lbuf = _T("アーティスト");
+						else if (contained_wd_i(_T("TPE2|TP2"), id_str)) lbuf = _T("バンド/伴奏");
+						else if (contained_wd_i(_T("TPE3|TP3"), id_str)) lbuf = _T("指揮者");
+						else if (contained_wd_i(_T("TPOS|TPA"), id_str)) lbuf = _T("ディスク＃");
+						else if (contained_wd_i(_T("TPUB|TPB"), id_str)) lbuf = _T("出版社");
+						else if (contained_wd_i(_T("TRCK|TRK"), id_str)) lbuf = _T("トラック＃");
 						else if (contained_wd_i(_T("TRDA|TRD|TDRC"), id_str))
-															 			 lbuf = "録音日時";
-						else if (contained_wd_i(_T("TYER|TYE"), id_str)) lbuf = "リリース年";
+															 			 lbuf = _T("録音日時");
+						else if (contained_wd_i(_T("TYER|TYE"), id_str)) lbuf = _T("リリース年");
 						else											 lbuf = id_str;
 						lbuf = get_PropTitle(lbuf);
 					}

@@ -46,7 +46,7 @@ TEST_CASE("UnicodeString: CP_ACP 往復 (narrow <-> wide)")
 {
 	// narrow リテラルは -fexec-charset=CP932 でビルドしているため、
 	// UnicodeString(const char*) は CP_ACP(=CP932) 変換で正しく戻るはず。
-	UnicodeString s("あいうえお");
+	UnicodeString s(_T("あいうえお"));
 	CHECK(s == UnicodeString(L"あいうえお"));
 
 	AnsiString a = s;             // UnicodeString -> AnsiString (CP_ACP)

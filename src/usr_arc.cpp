@@ -266,7 +266,7 @@ bool UserArcUnit::IsAvailable(int typ)
 		return fp->Available;
 	}
 	else {
-		ErrMsg = "対応していない形式です";
+		ErrMsg = _T("対応していない形式です");
 		return false;
 	}
 }
@@ -319,7 +319,7 @@ int UserArcUnit::ExeCommand(
 
 	if (res!=0) {
 		if (res==ERROR_USER_CANCEL)
-			ErrMsg = "処理を中断しました";
+			ErrMsg = _T("処理を中断しました");
 		else
 			ErrMsg = ResMsg;
 	}
@@ -347,7 +347,7 @@ bool UserArcUnit::Pack(
 	if (!fp || !fp->Available || fp->GetRunning()) return false;
 
 	if		(arc_file.Length()>=MAX_PATH)				ErrMsg = SysErrorMessage(ERROR_BUFFER_OVERFLOW);
-	else if (arc_t==UARCTYP_RAR || arc_t==UARCTYP_ISO)	ErrMsg = "圧縮には対応していません";
+	else if (arc_t==UARCTYP_RAR || arc_t==UARCTYP_ISO)	ErrMsg = _T("圧縮には対応していません");
 	if (!ErrMsg.IsEmpty()) return false;
 
 	if (!src_dir.IsEmpty()) src_dir = IncludeTrailingPathDelimiter(src_dir);
@@ -426,7 +426,7 @@ bool UserArcUnit::UnPack(
 	ErrMsg = EmptyStr;
 
 	if		(arc_file.Length()>=MAX_PATH)	ErrMsg = SysErrorMessage(ERROR_BUFFER_OVERFLOW);
-	else if (dst_dir.Length()>=MAX_PATH)	ErrMsg = "解凍先のパス名が長すぎます";
+	else if (dst_dir.Length()>=MAX_PATH)	ErrMsg = _T("解凍先のパス名が長すぎます");
 	else if (!FileExists(arc_file))			ErrMsg = SysErrorMessage(ERROR_FILE_NOT_FOUND);
 	if (!ErrMsg.IsEmpty()) return false;
 
@@ -457,7 +457,7 @@ bool UserArcUnit::UnPack(
 		}
 
 		if (!rename_Path(org_dir, dst_dir)) {
-			ErrMsg = "解凍先の一時改名に失敗";
+			ErrMsg = _T("解凍先の一時改名に失敗");
 			return false;
 		}
 
@@ -549,7 +549,7 @@ bool UserArcUnit::UnPack(
 
 	//解凍先を改名していたら元に戻す
 	if (!SameText(dst_dir, org_dir) && !rename_Path(dst_dir, org_dir))
-		ErrMsg += "\r\n解凍先ディレクトリ名の復帰に失敗";
+		ErrMsg += _T("\r\n解凍先ディレクトリ名の復帰に失敗");
 
 	return ErrMsg.IsEmpty();
 }
@@ -570,7 +570,7 @@ bool UserArcUnit::AddFile(
 	if		(arc_file.Length()>=MAX_PATH)	ErrMsg = SysErrorMessage(ERROR_BUFFER_OVERFLOW);
 	else if (!FileExists(arc_file))			ErrMsg = SysErrorMessage(ERROR_FILE_NOT_FOUND);
 	else if (arc_t==UARCTYP_CAB || arc_t==UARCTYP_TAR || arc_t==UARCTYP_RAR || arc_t==UARCTYP_ISO)
-											ErrMsg = "追加には対応していません";
+											ErrMsg = _T("追加には対応していません");
 	if (!ErrMsg.IsEmpty()) return false;
 
 	arc_func *fp = GetArcFunc(arc_t);
@@ -617,7 +617,7 @@ bool UserArcUnit::DelFile(
 	if 		(arc_file.Length()>=MAX_PATH)	ErrMsg = SysErrorMessage(ERROR_BUFFER_OVERFLOW);
 	else if (!FileExists(arc_file))			ErrMsg = SysErrorMessage(ERROR_FILE_NOT_FOUND);
 	else if (arc_t==UARCTYP_CAB || arc_t==UARCTYP_TAR || arc_t==UARCTYP_RAR || arc_t==UARCTYP_ISO)
-											ErrMsg = "削除には対応していません";
+											ErrMsg = _T("削除には対応していません");
 	if (!ErrMsg.IsEmpty()) return false;
 
 	//コマンド
@@ -1188,7 +1188,7 @@ bool UserArcUnit::SetArcTime(UnicodeString arc_file, bool force)
 		if (set_file_age(arc_file, dt, force)) ret = true;
 	}
 
-	ErrMsg = !ret? "タイムスタンプ設定に失敗しました" : "";
+	ErrMsg = !ret? _T("タイムスタンプ設定に失敗しました") : "";
 	return ret;
 }
 //---------------------------------------------------------------------------
