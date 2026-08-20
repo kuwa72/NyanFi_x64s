@@ -9,6 +9,7 @@
 #include <memory>
 #include <vector>
 
+#include <wx/choicdlg.h>
 #include <wx/radiobox.h>
 #include <wx/statline.h>
 #include <wx/textdlg.h>
@@ -186,7 +187,18 @@ void MainFrame::UpdateStatus()
 	}
 
 	FilePane *pane = ActivePane();
-	SetStatusText(to_wx(pane->GetSummary()), 0);
+
+	// インクリメンタルサーチ中はサーチ文字列と一致件数を表示する (どこにも
+	// 出さないと今の状態が分からなくなるため。VCL 版のステータス表示に相当)
+	if (incsearch_.IsActive()) {
+		UnicodeString text = _T("サーチ: ") + incsearch_.Word();
+		const int match_cnt = pane->GetMatchedCount();
+		if (match_cnt > 0) text.cat_sprintf(_T("  (%d 件一致)"), match_cnt);
+		SetStatusText(to_wx(text), 0);
+	}
+	else {
+		SetStatusText(to_wx(pane->GetSummary()), 0);
+	}
 
 	const FileItem *itm = pane->GetCurrentItem();
 	SetStatusText(itm != nullptr ? to_wx(itm->name) : wxString(), 1);
@@ -199,6 +211,14 @@ void MainFrame::OnCharHook(wxKeyEvent &event)
 	// (V モードのキー割り当ては KeyMap では扱わない。gui/key_map.cpp を参照)
 	if (viewer_ != nullptr && viewer_->IsShown()) {
 		if (!viewer_->HandleKey(event)) event.Skip();
+		return;
+	}
+
+	// インクリメンタルサーチ中は、KeyMap を経由せずキー入力を丸ごと横取りする
+	// (VCL 版の CurStt->is_IncSea が true の間、FileListIncSearch にキーを
+	// 渡して Key=0 にするのと同じ。gui/key_map.h 冒頭のコメントも参照)
+	if (incsearch_.IsActive()) {
+		HandleIncSearchKey(event);
 		return;
 	}
 
@@ -309,6 +329,24 @@ bool MainFrame::Execute(const UnicodeString &command)
 	}
 	else if (SameStr(command, _T("TextViewer"))) {
 		CmdTextViewer();
+	}
+	else if (SameStr(command, _T("IncSearch"))) {
+		StartIncSearch();
+	}
+	else if (SameStr(command, _T("BackDirHist"))) {
+		pane->GoBackDirHistory();  // 履歴が無ければ何もしない (VCL 版はアクション自体が無効化される)
+	}
+	else if (SameStr(command, _T("ForwardDirHist"))) {
+		pane->GoForwardDirHistory();
+	}
+	else if (SameStr(command, _T("DirHistory"))) {
+		ShowDirHistoryDialog();
+	}
+	else if (SameStr(command, _T("DriveList"))) {
+		ShowDriveListDialog();
+	}
+	else if (SameStr(command, _T("InputDir"))) {
+		ShowInputDirDialog();
 	}
 	else if (SameStr(command, _T("Exit"))) {
 		Close(true);
@@ -423,6 +461,231 @@ void MainFrame::ShowMaskDialog()
 	if (dlg.ShowModal() != wxID_OK) return;
 
 	pane->SetMask(to_us(dlg.GetValue()));
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief インクリメンタルサーチを開始する (F。src/Global.cpp の既定キー表
+ * "F:F=IncSearch" と同じ)
+ * @details 状態は incsearch_ (gui/navigation.h の IncrementalSearch) が持つ。
+ * 開始直後はキーワードが空なのでハイライトは付かない
+ */
+void MainFrame::StartIncSearch()
+{
+	incsearch_.Start();
+	ActivePane()->ClearIncSearchHighlight();
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief インクリメンタルサーチ中の1キー分の処理 (OnCharHook から横取りされる)
+ * @details VCL 版 (MainFrm.cpp::FileListIncSearch) と同様、サーチ中は
+ * ほぼ全てのキーをこのメソッドが飲み込む (event.Skip() を呼ばない)。
+ * ESC・Enter でサーチを抜ける動作は VCL 版の "S:Enter=IncSearchExit" と
+ * equal_ESC() チェックに相当する。上下キーは一致項目間の移動 (通常の
+ * カーソル移動1行分ではない)。それ以外の印字可能な文字は
+ * wxKeyEvent::GetUnicodeKey() から直接取り、VCL 版のような JP/US
+ * キーボードごとの Shift+記号変換表は持たない (gui/navigation.h の
+ * IncrementalSearch のコメントを参照。wx が OS 翻訳済みの文字を渡してくる
+ * ため不要と判断した。ただし実機のキーボード入力での確認はできていない
+ * ため、報告に未検証として明記する)
+ */
+void MainFrame::HandleIncSearchKey(wxKeyEvent &event)
+{
+	const UnicodeString key_str = KeyMap::KeyStrOf(event);
+
+	if (SameText(key_str, _T("ESC")) || SameText(key_str, _T("ENTER"))) {
+		ExitIncSearch();
+		return;
+	}
+	if (SameText(key_str, _T("BKSP")) || SameText(key_str, _T("Ctrl+H"))) {
+		HandleIncSearchBackspace();
+		return;
+	}
+	if (SameText(key_str, _T("UP"))) {
+		const std::vector<UnicodeString> names = ActivePane()->VisibleNames();
+		const int idx = FindIncrementalSearchMatch(names, incsearch_.Word(), ActivePane()->GetCursor(), false);
+		if (idx != -1) ActivePane()->MoveCursorTo(idx);
+		UpdateStatus();
+		return;
+	}
+	if (SameText(key_str, _T("DOWN"))) {
+		const std::vector<UnicodeString> names = ActivePane()->VisibleNames();
+		const int idx = FindIncrementalSearchMatch(names, incsearch_.Word(), ActivePane()->GetCursor(), true);
+		if (idx != -1) ActivePane()->MoveCursorTo(idx);
+		UpdateStatus();
+		return;
+	}
+
+	const wchar_t uc = static_cast<wchar_t>(event.GetUnicodeKey());
+	if (uc != WXK_NONE) HandleIncSearchChar(uc);
+
+	// マッチしない特殊キー (Ctrl+X 等) は無視する。VCL 版と同じくサーチ中は
+	// 通常のキー割り当てへフォールスルーさせない
+}
+
+//---------------------------------------------------------------------------
+/// サーチモードを抜ける (Esc/Enter。VCL 版の ExitIncSearch 相当)
+void MainFrame::ExitIncSearch()
+{
+	incsearch_.Exit();
+	ActivePane()->ClearIncSearchHighlight();
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 1文字追加する
+ * @details VCL 版の FileListIncSearch の「見つからなかった場合: 警告表示 +
+ * beep + delete_end(キーワード末尾を戻す)」に相当する動作。一致が1件も
+ * 無くなる文字は入力できない (見つかる直前の状態に戻る)
+ */
+void MainFrame::HandleIncSearchChar(wchar_t ch)
+{
+	FilePane *pane = ActivePane();
+
+	incsearch_.Append(ch);
+	pane->ApplyIncSearchHighlight(incsearch_.Word());
+
+	if (pane->GetMatchedCount() == 0) {
+		incsearch_.Backspace();
+		pane->ApplyIncSearchHighlight(incsearch_.Word());
+		wxBell();
+	}
+	else {
+		JumpToNearestIncSearchMatch();
+	}
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/// 1文字削除する (BackSpace)
+void MainFrame::HandleIncSearchBackspace()
+{
+	FilePane *pane = ActivePane();
+	if (!incsearch_.Backspace()) return;  // キーワードが元々空なら何もしない
+
+	pane->ApplyIncSearchHighlight(incsearch_.Word());
+	if (pane->GetMatchedCount() > 0) JumpToNearestIncSearchMatch();
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/// 現在のカーソル位置から最も近い (自分自身を含む) 一致項目へ移動する
+void MainFrame::JumpToNearestIncSearchMatch()
+{
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> names = pane->VisibleNames();
+	// カーソル自身も候補に含めたいので、開始位置を1つ手前にする
+	const int idx = FindIncrementalSearchMatch(names, incsearch_.Word(), pane->GetCursor() - 1, true);
+	if (idx != -1) pane->MoveCursorTo(idx);
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief ディレクトリ履歴の一覧から選ぶ (H。src/Global.cpp の既定キー表
+ * "F:H=DirHistory" と同じ)
+ * @details VCL 版 (HistDlg.cpp::TDirHistoryDlg) の簡略版。一覧の並び順
+ * (新しい順に表示する) は VCL 版の実際の表示順を確認できておらず、
+ * Phase 2 骨格として使いやすさを優先して決めたもの (推測。要検証)
+ */
+void MainFrame::ShowDirHistoryDialog()
+{
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> &entries = pane->DirHistoryEntries();
+
+	if (entries.empty()) {
+		wxMessageBox(to_wx(_T("ディレクトリ履歴がありません")), to_wx(_T("ディレクトリ履歴")),
+		             wxOK | wxICON_INFORMATION, this);
+		return;
+	}
+
+	wxArrayString choices;
+	for (int i = static_cast<int>(entries.size()) - 1; i >= 0; --i) {
+		choices.Add(to_wx(entries[static_cast<std::size_t>(i)]));
+	}
+
+	const int picked = wxGetSingleChoiceIndex(to_wx(_T("移動先のディレクトリを選んでください")),
+	                                           to_wx(_T("ディレクトリ履歴")), choices, this);
+	if (picked == -1) return;
+
+	const int index = static_cast<int>(entries.size()) - 1 - picked;
+	pane->GoDirHistoryIndex(index);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief ドライブの一覧から選んで移動する (L。src/Global.cpp の既定キー表
+ * "F:L=DriveList" と同じ)
+ * @details 移植済みの get_available_drive_list() (usr_file_ex.h) で
+ * 利用可能なドライブを列挙し、get_drive_type() の種別を DriveTypeLabel()
+ * (gui/navigation.h。Global.cpp の type_str と同じ文言) で添えて表示する。
+ * VCL 版 (DriveDlg.cpp::TSelDriveDlg) の空き容量・ボリューム名表示は
+ * Phase 2 骨格のスコープ外
+ */
+void MainFrame::ShowDriveListDialog()
+{
+	FilePane *pane = ActivePane();
+
+	std::unique_ptr<TStringList> drives(new TStringList());
+	get_available_drive_list(drives.get());
+
+	if (drives->Count == 0) {
+		wxMessageBox(to_wx(_T("利用可能なドライブがありません")), to_wx(_T("ドライブ一覧")),
+		             wxOK | wxICON_INFORMATION, this);
+		return;
+	}
+
+	wxArrayString choices;
+	std::vector<UnicodeString> paths;
+	for (int i = 0; i < drives->Count; ++i) {
+		const UnicodeString drv = drives->Strings[i];
+		const UnicodeString type_label = DriveTypeLabel(get_drive_type(drv));
+
+		UnicodeString label = drv;
+		if (!type_label.IsEmpty()) label += _T("  ") + type_label;
+
+		choices.Add(to_wx(label));
+		paths.push_back(drv);
+	}
+
+	const int picked = wxGetSingleChoiceIndex(to_wx(_T("移動先のドライブを選んでください")),
+	                                           to_wx(_T("ドライブ一覧")), choices, this);
+	if (picked == -1) return;
+
+	pane->SetPath(paths[static_cast<std::size_t>(picked)]);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief パスを直接入力して移動する (Ctrl+G、推測のキー。gui/key_map.cpp を参照)
+ * @details 環境変数の展開・相対パスの解決は gui/navigation.h の
+ * ResolveDirectoryInput() (移植済みの get_actual_path()/to_absolute_name()
+ * を使う) に委ねる。VCL 版 (MainFrm.cpp::InputDirActionExecute) にある
+ * UNC パスの疎通確認・クリップボードからの入力・ユーザー名指定は
+ * Phase 2 骨格のスコープ外
+ */
+void MainFrame::ShowInputDirDialog()
+{
+	FilePane *pane = ActivePane();
+
+	wxTextEntryDialog dlg(this, to_wx(_T("移動先のディレクトリ (環境変数 %VAR% が使えます)")),
+	                       to_wx(_T("ディレクトリを開く")), to_wx(pane->GetPath()));
+	if (dlg.ShowModal() != wxID_OK) return;
+
+	const UnicodeString input = to_us(dlg.GetValue());
+	UnicodeString resolved;
+	if (!ResolveDirectoryInput(input, pane->GetPath(), resolved)) {
+		wxMessageBox(to_wx(_T("ディレクトリが見つかりません:\n") + input),
+		             to_wx(_T("ディレクトリを開く")), wxOK | wxICON_ERROR, this);
+		return;
+	}
+
+	pane->SetPath(resolved);
+	UpdateStatus();
 }
 
 //---------------------------------------------------------------------------

@@ -20,6 +20,7 @@
 #include <wx/wx.h>
 
 #include "gui/file_item.h"
+#include "gui/navigation.h"
 
 /**
  * @brief ファイル一覧ペイン
@@ -29,7 +30,10 @@ public:
 	FilePane(wxWindow *parent, wxWindowID id);
 
 	//-- 表示対象 ----------------------------------------------------------
-	bool SetPath(const UnicodeString &path);  //!< ディレクトリを開く
+	/// ディレクトリを開く
+	/// @param record_history true (既定) ならディレクトリ履歴に記録する。
+	///        履歴をたどる移動 (GoBackHistory 等) からは false で呼ばれる
+	bool SetPath(const UnicodeString &path, bool record_history = true);
 	void Reload();                            //!< 再読み込み (カーソル位置は名前で復元)
 	UnicodeString GetPath() const { return path_; }
 
@@ -47,6 +51,17 @@ public:
 	void MarkAll(bool marked);
 	int GetMarkedCount() const;
 
+	//-- インクリメンタルサーチ (表示のハイライトのみ。状態管理は MainFrame 側の
+	//   IncrementalSearch が持つ。gui/navigation.h を参照) ---------------------
+	/// 一覧の項目名を表示順で返す (FindIncrementalSearchMatch に渡す用)
+	std::vector<UnicodeString> VisibleNames() const;
+	/// keyword に一致する項目の FileItem::matched を更新する (再描画も行う)
+	void ApplyIncSearchHighlight(const UnicodeString &keyword);
+	/// ハイライトを消す (ApplyIncSearchHighlight(EmptyStr) と同じ)
+	void ClearIncSearchHighlight() { ApplyIncSearchHighlight(EmptyStr); }
+	/// ハイライト中 (matched) の項目数
+	int GetMatchedCount() const;
+
 	/// ファイル操作 (Copy/Move/Delete) の対象名を返す。マーク済みがあれば
 	/// それら (".." を除く)、無ければカーソル位置の1件 (".." なら空)
 	std::vector<UnicodeString> GetSelectedNames() const;
@@ -61,6 +76,17 @@ public:
 
 	/// カーソル位置がディレクトリならそこへ入る
 	bool EnterCurrent();
+
+	//-- ディレクトリ履歴 (戻る/進む/一覧。gui/navigation.h の DirHistory) -------
+	bool HasBackDirHistory() const { return history_.CanBack(); }
+	bool HasForwardDirHistory() const { return history_.CanForward(); }
+	bool GoBackDirHistory();     //!< 履歴を1つ戻る (B)
+	bool GoForwardDirHistory();  //!< 履歴を1つ進む (Shift+B、推測のキー)
+	/// 履歴一覧 (古い順) と現在位置 (履歴ダイアログの表示用)
+	const std::vector<UnicodeString> &DirHistoryEntries() const { return history_.Entries(); }
+	int DirHistoryCurrentIndex() const { return history_.CurrentIndex(); }
+	/// 履歴一覧から index (DirHistoryEntries() の添字) の位置へ直接移動する
+	bool GoDirHistoryIndex(int index);
 
 	/// ステータス表示用の要約 (件数とマーク数)
 	UnicodeString GetSummary() const;
@@ -118,6 +144,8 @@ private:
 	bool sort_descending_ = false;
 	bool dirs_first_ = true;
 	UnicodeString mask_;
+
+	DirHistory history_;  //!< このペインのディレクトリ履歴 (戻る/進む/一覧)
 };
 
 #endif  // NYANFI_GUI_FILE_PANE_H

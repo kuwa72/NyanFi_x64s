@@ -194,6 +194,10 @@ endif()
 # 折り返し計算) も同じ理由 (wx 非依存、tests/core/test_gui_text_viewer.cpp
 # から直接テストする) でここに含める。文字コード判定は自前実装せず
 # src/usr_str.cpp の get_MemoryCodePage をそのまま使う。
+#
+# gui/navigation.cpp (インクリメンタルサーチの照合・ディレクトリ履歴・
+# ドライブ種別表示名・パス直接入力の解決) も同じ理由 (wx 非依存、
+# tests/core/test_gui_navigation.cpp から直接テストする) でここに含める。
 #-----------------------------------------------------------------------------
 if(TARGET nyanfi_core)
 	add_library(nyanfi_gui_core STATIC
@@ -204,6 +208,7 @@ if(TARGET nyanfi_core)
 		gui/file_open.cpp
 		gui/file_info.cpp
 		gui/text_viewer_core.cpp
+		gui/navigation.cpp
 	)
 	target_include_directories(nyanfi_gui_core PUBLIC ${PROJECT_SOURCE_DIR})
 	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core shell32)

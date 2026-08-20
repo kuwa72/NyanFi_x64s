@@ -20,6 +20,7 @@
 
 #include "gui/file_pane.h"
 #include "gui/key_map.h"
+#include "gui/navigation.h"
 #include "gui/settings.h"
 #include "gui/text_viewer.h"
 
@@ -47,6 +48,20 @@ private:
 	void ShowCmdList();
 	void ShowSortDialog();  //!< ソートダイアログ (S)。並べ替えキー/昇降順/Dir集約を選ぶ
 	void ShowMaskDialog();  //!< パスマスク入力 (Ctrl+M)。ファイル名マスクで一覧を絞り込む
+
+	// インクリメンタルサーチ (gui/navigation.h の IncrementalSearch)。状態遷移は
+	// OnCharHook が incsearch_.IsActive() を見て他のキー処理より先に横取りする
+	void StartIncSearch();                       //!< サーチモードへ入る (F)
+	void HandleIncSearchKey(wxKeyEvent &event);   //!< サーチ中の1キー分の処理
+	void ExitIncSearch();                        //!< サーチモードを抜ける (Esc/Enter)
+	void HandleIncSearchChar(wchar_t ch);         //!< 1文字追加。一致0件なら元に戻す
+	void HandleIncSearchBackspace();              //!< 1文字削除 (BackSpace)
+	void JumpToNearestIncSearchMatch();           //!< 現在位置から最も近い一致へ移動する
+
+	// ディレクトリ履歴・ドライブ一覧・パス直接入力 (gui/navigation.h)
+	void ShowDirHistoryDialog();  //!< ディレクトリ履歴の一覧から選ぶ (H)
+	void ShowDriveListDialog();   //!< ドライブの一覧から選ぶ (L)
+	void ShowInputDirDialog();    //!< パスを直接入力して移動する (Ctrl+G、推測のキー)
 
 	// ファイル操作 (gui/file_ops.h)。いずれも確認ダイアログを出してから実行し、
 	// 結果 (成功/スキップ/失敗の件数) を必ず表示する。詳細は main_frame.cpp を参照
@@ -77,6 +92,7 @@ private:
 	int active_ = 0;
 	KeyMap keymap_;
 	Settings settings_{Settings::DefaultIniPath()};
+	IncrementalSearch incsearch_;  //!< インクリメンタルサーチの状態 (gui/navigation.h)
 };
 
 #endif  // NYANFI_GUI_MAIN_FRAME_H

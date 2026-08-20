@@ -76,6 +76,23 @@ void KeyMap::LoadDefaults()
 	Assign(_T("K"), _T("CreateDir"));
 	Assign(_T("R"), _T("RenameDlg"));
 
+	// インクリメンタルサーチ・ディレクトリ移動の効率化。"F"/"B"/"H"/"L" は
+	// src/Global.cpp の既定キー表 ("F:F=IncSearch" / "F:B=BackDirHist" /
+	// "F:H=DirHistory" / "F:L=DriveList") と同じ
+	Assign(_T("F"), _T("IncSearch"));
+	Assign(_T("B"), _T("BackDirHist"));
+	Assign(_T("H"), _T("DirHistory"));
+	Assign(_T("L"), _T("DriveList"));
+	// ForwardDirHist (履歴を進む) は既定キー表に対応するキーが無い
+	// (マウスの第2ボタン X2BtnCmdF の既定値も空文字列で、割り当てが無い)。
+	// "B" (戻る) と対になるよう Phase 2 骨格向けに新規で決めたもの
+	// (推測。要検証)
+	Assign(_T("Shift+B"), _T("ForwardDirHist"));
+	// InputDir (パスを直接入力して移動) も既定キー表に対応するキーが無い。
+	// 多くのエディタ/ファイラの「Go to」の慣習に合わせた Phase 2 骨格独自の
+	// 割り当て (推測。要検証)
+	Assign(_T("Ctrl+G"), _T("InputDir"));
+
 	// 表示・終了。"FVI:PropertyDlg" (usr_cmdlist.cpp) には既定キーが無い
 	// (src/MainFrm.dfm の PropertyDlgAction にも ShortCut が無く、メニュー専用
 	// らしい)。Alt+Enter は Windows のプロパティ表示の慣習に合わせた
