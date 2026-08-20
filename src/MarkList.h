@@ -1,6 +1,6 @@
 /**
  * @file MarkList.h
- * @brief ƒRƒ“ƒgƒ[ƒ‹‚ÌŒŸõ•ƒ}[ƒN/ƒGƒ‰[˜g
+ * @brief ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã®æ¤œç´¢ï¼†ãƒãƒ¼ã‚¯/ã‚¨ãƒ©ãƒ¼æ 
  */
 //---------------------------------------------------------------------------
 #ifndef MarkListH
@@ -8,7 +8,7 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒ}[ƒNƒŠƒXƒg (TList ‚©‚çŒp³)
+ * @brief ãƒãƒ¼ã‚¯ãƒªã‚¹ãƒˆ (TList ã‹ã‚‰ç¶™æ‰¿)
  */
 class MarkList : public TList
 {
@@ -26,26 +26,26 @@ public:
 	__fastcall MarkList(Classes::TComponent* AOwner);
 	__fastcall ~MarkList();
 
-	/** @brief ƒ}[ƒN‚ğ‚·‚×‚ÄƒNƒŠƒA */
+	/** @brief ãƒãƒ¼ã‚¯ã‚’ã™ã¹ã¦ã‚¯ãƒªã‚¢ */
 	void __fastcall ClearAll();
 
 	/**
-	 * @brief ƒRƒ“ƒgƒ[ƒ‹‚ÌŒŸõ@n
-	 * ƒLƒƒƒvƒVƒ‡ƒ“‚ÉŒŸõŒê‚ªŠÜ‚Ü‚ê‚éƒRƒ“ƒgƒ[ƒ‹‚ğƒ}[ƒN
-	 * @param ctrl ‘ÎÛƒRƒ“ƒgƒ[ƒ‹
-	 * @param wd ŒŸõŒê
-	 * @return int ƒ}ƒbƒ`”
+	 * @brief ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã®æ¤œç´¢@n
+	 * ã‚­ãƒ£ãƒ—ã‚·ãƒ§ãƒ³ã«æ¤œç´¢èªãŒå«ã¾ã‚Œã‚‹ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚’ãƒãƒ¼ã‚¯
+	 * @param ctrl å¯¾è±¡ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«
+	 * @param wd æ¤œç´¢èª
+	 * @return int ãƒãƒƒãƒæ•°
 	 */
 	int __fastcall SearchControl(TWinControl *ctrl, UnicodeString wd);
 
-	/** @brief ŒŸõƒ}[ƒN‚ğ•\¦ */
+	/** @brief æ¤œç´¢ãƒãƒ¼ã‚¯ã‚’è¡¨ç¤º */
 	void __fastcall ShowMark();
 
 	/**
-	 * @brief ƒGƒ‰[˜g‚ğ•\¦
+	 * @brief ã‚¨ãƒ©ãƒ¼æ ã‚’è¡¨ç¤º
 	 * @param Owner 
-	 * @param cp ‘ÎÛƒRƒ“ƒgƒ[ƒ‹ 
-	 * @param sw_show •\¦ 
+	 * @param cp å¯¾è±¡ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ« 
+	 * @param sw_show è¡¨ç¤º 
 	 */
 	void __fastcall SetErrFrame(TForm *Owner, TWinControl *cp, bool sw_show);
 

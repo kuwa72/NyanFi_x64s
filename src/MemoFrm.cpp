@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  Edit ƒRƒ}ƒ“ƒh—pƒƒ‚ƒ{ƒbƒNƒX											//
+//  Edit ã‚³ãƒãƒ³ãƒ‰ç”¨ãƒ¡ãƒ¢ãƒœãƒƒã‚¯ã‚¹											//
 //----------------------------------------------------------------------//
 #include "UserMdl.h"
 #include "Global.h"
@@ -35,32 +35,32 @@ void __fastcall TMemoForm::FormShow(TObject *Sender)
 	ShowOptBtn->Hint = LoadUsrMsg(USTR_ShowOptPanel);
 
 	AssignScaledFont(MemoBox, ViewerFont);
-	//¦“ü—Í‚ÌÛ‚ÉƒtƒHƒ“ƒg‚ª•Ï‚í‚Á‚Ä‚µ‚Ü‚¤‚Ì‚ğ—}§
+	//â€»å…¥åŠ›ã®éš›ã«ãƒ•ã‚©ãƒ³ãƒˆãŒå¤‰ã‚ã£ã¦ã—ã¾ã†ã®ã‚’æŠ‘åˆ¶
 	DWORD lParam = ::SendMessage(MemoBox->Handle, EM_GETLANGOPTIONS, 0, 0);
 	lParam &= ~IMF_DUALFONT;
 	::SendMessage(MemoBox->Handle, EM_SETLANGOPTIONS, 0, lParam);
 
-	//ƒ^ƒuƒXƒgƒbƒv•‚ğƒŠƒZƒbƒg(8)
+	//ã‚¿ãƒ–ã‚¹ãƒˆãƒƒãƒ—å¹…ã‚’ãƒªã‚»ãƒƒãƒˆ(8)
 	int tab_size = 8 * 4;
 	MemoBox->Perform(EM_SETTABSTOPS, 1, (LPARAM)&tab_size);
-	//¶—]”’İ’è
+	//å·¦ä½™ç™½è¨­å®š
 	MemoBox->Perform(EM_SETMARGINS, EC_LEFTMARGIN, (NativeInt)8);
 
-	//ƒeƒLƒXƒg“à—e‚ğİ’è
+	//ãƒ†ã‚­ã‚¹ãƒˆå†…å®¹ã‚’è¨­å®š
 	MemoBox->Lines->Assign(LinesBuff);
 
-	//sŠÔİ’è
+	//è¡Œé–“è¨­å®š
 	MemoBox->SelectAll();
 	int f_hi = abs(MemoBox->Font->Height);
 	TParaFormat2 pf2 = {sizeof(TParaFormat2)};
 	pf2.dwMask = PFM_LINESPACING;
-	pf2.bLineSpacingRule = 5;	//dyLineSpacing/20 s’PˆÊ
+	pf2.bLineSpacingRule = 5;	//dyLineSpacing/20 è¡Œå˜ä½
 	pf2.dyLineSpacing	 = 20 * ViewTxtInterLn / f_hi;
 	MemoBox->Perform(EM_SETPARAFORMAT, 0, (LPARAM)&pf2);
 	MemoBox->Font->Color = (col_fgEdBox!=col_None)? col_fgEdBox : get_ViewFgCol();
 	MemoBox->Color		 = (col_bgEdBox!=col_None)? col_bgEdBox : get_ViewBgCol();
 
-	//‰º•”ƒpƒlƒ‹
+	//ä¸‹éƒ¨ãƒ‘ãƒãƒ«
 	OptPanel->Visible = IniFile->ReadBoolGen(_T("MemoFormShowOpt"), true);
 	OptVisible = OptPanel->Visible;
 	BlankPanel->Visible = !OptVisible;
@@ -123,7 +123,7 @@ void __fastcall TMemoForm::MemoBoxChange(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//‰º•”ƒpƒlƒ‹‚ÌŠJ•Â
+//ä¸‹éƒ¨ãƒ‘ãƒãƒ«ã®é–‹é–‰
 //---------------------------------------------------------------------------
 void __fastcall TMemoForm::ChgOptBtnClick(TObject *Sender)
 {
@@ -134,7 +134,7 @@ void __fastcall TMemoForm::ChgOptBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//Œ³‚É–ß‚·
+//å…ƒã«æˆ»ã™
 //---------------------------------------------------------------------------
 void __fastcall TMemoForm::UndoActionExecute(TObject *Sender)
 {
@@ -147,8 +147,8 @@ void __fastcall TMemoForm::UndoActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//“\‚è•t‚¯
-//  UserModule.EditPaste1 ‚ª‹@”\‚µ‚È‚¢‚½‚ß
+//è²¼ã‚Šä»˜ã‘
+//  UserModule.EditPaste1 ãŒæ©Ÿèƒ½ã—ãªã„ãŸã‚
 //---------------------------------------------------------------------------
 void __fastcall TMemoForm::PasteActionExecute(TObject *Sender)
 {
@@ -161,7 +161,7 @@ void __fastcall TMemoForm::PasteActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒJ[ƒ\ƒ‹s‚ğíœ
+//ã‚«ãƒ¼ã‚½ãƒ«è¡Œã‚’å‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TMemoForm::DelLineActionExecute(TObject *Sender)
 {
@@ -175,7 +175,7 @@ void __fastcall TMemoForm::DelLineActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//Web ‚ÅŒŸõ
+//Web ã§æ¤œç´¢
 //---------------------------------------------------------------------------
 void __fastcall TMemoForm::WebSearchActionExecute(TObject *Sender)
 {
@@ -190,7 +190,7 @@ void __fastcall TMemoForm::WebSearchActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//”wŒiF‚ğ•ÏX
+//èƒŒæ™¯è‰²ã‚’å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TMemoForm::ColBgItemClick(TObject *Sender)
 {
@@ -201,7 +201,7 @@ void __fastcall TMemoForm::ColBgItemClick(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//•¶šF‚ğ•ÏX
+//æ–‡å­—è‰²ã‚’å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TMemoForm::ColFgItemClick(TObject *Sender)
 {
@@ -212,7 +212,7 @@ void __fastcall TMemoForm::ColFgItemClick(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//ƒfƒtƒHƒ‹ƒg‚É–ß‚·
+//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã«æˆ»ã™
 //---------------------------------------------------------------------------
 void __fastcall TMemoForm::ColDefItemClick(TObject *Sender)
 {

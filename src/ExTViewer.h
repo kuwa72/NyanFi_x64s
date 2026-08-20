@@ -1,6 +1,6 @@
 /**
  * @file ExTViewer.h
- * @brief ƒeƒLƒXƒgƒrƒ…[ƒA(•ÊƒEƒBƒ“ƒhƒE)
+ * @brief ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢(åˆ¥ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦)
  */
 //---------------------------------------------------------------------------
 #ifndef ExTViewerH
@@ -22,11 +22,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒeƒLƒXƒgƒrƒ…[ƒA(•ÊƒEƒBƒ“ƒhƒE)
+ * @brief ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢(åˆ¥ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦)
  */
 class TExTxtViewer : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *AddCopyAction;
 	TAction *CodePageAction;
 	TAction *CopyAction;
@@ -117,22 +117,22 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall SaveDumpActionExecute(TObject *Sender);
 	void __fastcall SaveDumpActionUpdate(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
-	UsrScrollPanel *TxtViewScrPanel;	//“Æ©ƒXƒNƒ[ƒ‹ƒo[
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	UsrScrollPanel *TxtViewScrPanel;	//ç‹¬è‡ªã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 
 	bool DlgInitialized;
 
-	UnicodeString FirstKey;				//2ƒXƒgƒ[ƒNŠJnƒL[
-	bool Wait2ndKey;					//2ƒXƒgƒ[ƒN–Ú‘Ò‚¿ó‘Ô
+	UnicodeString FirstKey;				//2ã‚¹ãƒˆãƒ­ãƒ¼ã‚¯é–‹å§‹ã‚­ãƒ¼
+	bool Wait2ndKey;					//2ã‚¹ãƒˆãƒ­ãƒ¼ã‚¯ç›®å¾…ã¡çŠ¶æ…‹
 
-	UnicodeString ActionParam;			//ƒRƒ}ƒ“ƒhƒAƒNƒVƒ‡ƒ“‚Ìƒpƒ‰ƒ[ƒ^
-	UnicodeString ActionDesc;			//ƒRƒ}ƒ“ƒhƒAƒNƒVƒ‡ƒ“‚Ìà–¾
-	UnicodeString ActionErrMsg;			//ƒRƒ}ƒ“ƒhƒAƒNƒVƒ‡ƒ“‚ÌƒGƒ‰[ƒƒbƒZ[ƒW
-	bool ActionOk;						//ƒRƒ}ƒ“ƒhƒAƒNƒVƒ‡ƒ“‚ÌÀsŒ‹‰Ê
+	UnicodeString ActionParam;			//ã‚³ãƒãƒ³ãƒ‰ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
+	UnicodeString ActionDesc;			//ã‚³ãƒãƒ³ãƒ‰ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®èª¬æ˜
+	UnicodeString ActionErrMsg;			//ã‚³ãƒãƒ³ãƒ‰ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
+	bool ActionOk;						//ã‚³ãƒãƒ³ãƒ‰ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®å®Ÿè¡Œçµæœ
 
-	bool isViewText;					//ƒeƒLƒXƒg•\¦
-	bool isRichText;					//ƒŠƒbƒ`ƒeƒLƒXƒg•\¦
-	bool isXDoc2Txt;					//xdoc2txt ‚ğ—˜—p‚µ‚Ä•\¦
+	bool isViewText;					//ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¤º
+	bool isRichText;					//ãƒªãƒƒãƒãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¤º
+	bool isXDoc2Txt;					//xdoc2txt ã‚’åˆ©ç”¨ã—ã¦è¡¨ç¤º
 
 	int  LastWidth;
 
@@ -143,7 +143,7 @@ private:	// ƒ†[ƒU[éŒ¾
 	void __fastcall GlobalAbort();
 	UnicodeString __fastcall TwoStrokeSeq(WORD &Key, TShiftState Shift);
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	TTxtViewer *ExViewer;
 
 	file_rec *FileRec;

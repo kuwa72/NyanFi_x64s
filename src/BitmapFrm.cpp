@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒrƒbƒgƒ}ƒbƒvƒrƒ…[													//
+//  ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ãƒ“ãƒ¥ãƒ¼													//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "Global.h"
@@ -20,7 +20,7 @@ __fastcall TBitmapForm::TBitmapForm(TComponent* Owner)
 //---------------------------------------------------------------------------
 void __fastcall TBitmapForm::FormCreate(TObject *Sender)
 {
-	//ƒrƒbƒgƒ}ƒbƒvƒrƒ…[—pƒpƒŒƒbƒg‚Ì‰Šú‰»
+	//ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ãƒ“ãƒ¥ãƒ¼ç”¨ãƒ‘ãƒ¬ãƒƒãƒˆã®åˆæœŸåŒ–
 	for (int i=0; i<256; i++) {
 		BitPallet[i] = (i==0)				? clBlack   :
 					   (i>0 && i<=0x1f) 	? clFuchsia :
@@ -62,7 +62,7 @@ void __fastcall TBitmapForm::FormKeyDown(TObject *Sender, WORD &Key, TShiftState
 }
 
 //---------------------------------------------------------------------------
-//ƒrƒbƒgƒ}ƒbƒv‚Ì•`‰æ
+//ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TBitmapForm::BitmapBoxPaint(TObject *Sender)
 {
@@ -112,7 +112,7 @@ void __fastcall TBitmapForm::BitmapBoxMouseDown(TObject *Sender, TMouseButton Bu
 	}
 }
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹ƒ}ƒbƒv‚Ì•`‰æ
+//ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒƒãƒ—ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TBitmapForm::FileMapBoxPaint(TObject *Sender)
 {
@@ -176,7 +176,7 @@ void __fastcall TBitmapForm::FileMapBoxMouseMove(TObject *Sender, TShiftState Sh
 	SttPanel->Caption = (adr!=-1)? " " + get_AddrStr(adr) : EmptyStr;
 }
 //---------------------------------------------------------------------------
-//ƒrƒbƒgƒ}ƒbƒv•‚Ì•ÏX
+//ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—å¹…ã®å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TBitmapForm::MapWidthActionExecute(TObject *Sender)
 {
@@ -189,7 +189,7 @@ void __fastcall TBitmapForm::MapWidthActionUpdate(TObject *Sender)
 	ap->Checked = (ap->Tag == MapWidth);
 }
 //---------------------------------------------------------------------------
-//ƒrƒbƒgƒ}ƒbƒv•‚ğİ’è
+//ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—å¹…ã‚’è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall TBitmapForm::SetMapWidth(int w)
 {
@@ -207,7 +207,7 @@ void __fastcall TBitmapForm::SetMapWidth(int w)
 	MapScrBox->VertScrollBar->Position = 0;
 }
 //---------------------------------------------------------------------------
-//æ“ªƒAƒhƒŒƒX‚ğƒtƒ@ƒCƒ‹‚Ìæ“ª‚É
+//å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã®å…ˆé ­ã«
 //---------------------------------------------------------------------------
 void __fastcall TBitmapForm::SetTopAdrActionExecute(TObject *Sender)
 {
@@ -219,7 +219,7 @@ void __fastcall TBitmapForm::SetTopAdrActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = (TxtViewer->TopAddress!=0);
 }
 //---------------------------------------------------------------------------
-//æ“ªƒAƒhƒŒƒX‚ğƒtƒ@ƒCƒ‹‚Ìæs•”‚É
+//å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã®å…ˆè¡Œéƒ¨ã«
 //---------------------------------------------------------------------------
 void __fastcall TBitmapForm::SetPreAdrActionExecute(TObject *Sender)
 {
@@ -233,7 +233,7 @@ void __fastcall TBitmapForm::SetPreAdrActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = (TxtViewer->TopAddress!=0);
 }
 //---------------------------------------------------------------------------
-//æ“ªƒAƒhƒŒƒX‚ğƒtƒ@ƒCƒ‹‚ÌŒã‘±•”‚É
+//å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã®å¾Œç¶šéƒ¨ã«
 //---------------------------------------------------------------------------
 void __fastcall TBitmapForm::SetNextAdrActionExecute(TObject *Sender)
 {
@@ -245,7 +245,7 @@ void __fastcall TBitmapForm::SetNextAdrActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = TxtViewer->isContinue;
 }
 //---------------------------------------------------------------------------
-//I’[ƒAƒhƒŒƒX‚ğƒtƒ@ƒCƒ‹‚ÌÅŒã‚É
+//çµ‚ç«¯ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã®æœ€å¾Œã«
 //---------------------------------------------------------------------------
 void __fastcall TBitmapForm::SetEndAdrActionExecute(TObject *Sender)
 {

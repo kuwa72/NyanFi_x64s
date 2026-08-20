@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒIƒvƒVƒ‡ƒ“İ’è														//
+//  ã‚ªãƒ—ã‚·ãƒ§ãƒ³è¨­å®š														//
 //----------------------------------------------------------------------//
 #include "usr_shell.h"
 #include "usr_xd2tx.h"
@@ -22,7 +22,7 @@ TOptionDlg *OptionDlg = NULL;
 TStringList *FKeyLabelBuf;
 
 //---------------------------------------------------------------------------
-//FƒL[•\¦–¼ƒ\[ƒg—p‚Ì”äŠrŠÖ”
+//Fã‚­ãƒ¼è¡¨ç¤ºåã‚½ãƒ¼ãƒˆç”¨ã®æ¯”è¼ƒé–¢æ•°
 //---------------------------------------------------------------------------
 int __fastcall KeyComp_FKey(TStringList *List, int Index1, int Index2)
 {
@@ -41,7 +41,7 @@ int __fastcall KeyComp_FKey(TStringList *List, int Index1, int Index2)
 }
 
 //---------------------------------------------------------------------------
-// TOptionDlg ƒNƒ‰ƒX
+// TOptionDlg ã‚¯ãƒ©ã‚¹
 //---------------------------------------------------------------------------
 __fastcall TOptionDlg::TOptionDlg(TComponent* Owner)
 	: TForm(Owner)
@@ -55,11 +55,11 @@ void __fastcall TOptionDlg::FormCreate(TObject *Sender)
 
 	SplashHint = new UsrHintWindow(this);
 	AssignScaledFont(SplashHint->Font, HintFont, this);
-	SplashHint->ActivateHintEx(_T("\r\nƒIƒvƒVƒ‡ƒ“İ’è‚Ì€”õ’†...\r\n"), 320, 240, Application->MainForm, col_bgHint);
+	SplashHint->ActivateHintEx(_T("\r\nã‚ªãƒ—ã‚·ãƒ§ãƒ³è¨­å®šã®æº–å‚™ä¸­...\r\n"), 320, 240, Application->MainForm, col_bgHint);
 
 	cursor_HourGlass();
 
-	//“ü—Í—“‚Éƒ|ƒbƒvƒAƒbƒvƒƒjƒ…[‚ğİ’è
+	//å…¥åŠ›æ¬„ã«ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’è¨­å®š
 	UserModule->SetUsrPopupMenu(this);
 
 	FindMarkList = new MarkList(this);
@@ -72,16 +72,16 @@ void __fastcall TOptionDlg::FormCreate(TObject *Sender)
 	FKeyLabelBuf = new TStringList();
 
 	set_ComboBoxText(LayoutComboBox,
-		_T("ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚ªã\nƒtƒ@ƒCƒ‹ƒŠƒXƒg‚ª¶\nƒtƒ@ƒCƒ‹ƒŠƒXƒg‚ª‰E\nƒtƒ@ƒCƒ‹ƒŠƒXƒg‚ª‰º\n"));
+		_T("ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆãŒä¸Š\nãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆãŒå·¦\nãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆãŒå³\nãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆãŒä¸‹\n"));
 
 	set_ComboBoxText(SizeFmtComboBox,
-		_T("GB/MB/ƒoƒCƒg\nGB/MB/KB/ƒoƒCƒg\nGB/MB/KB\n"));
+		_T("GB/MB/ãƒã‚¤ãƒˆ\nGB/MB/KB/ãƒã‚¤ãƒˆ\nGB/MB/KB\n"));
 
 	set_ComboBoxText(TabStyleComboBox,
-		_T("ƒ^ƒu\nƒ^ƒu(Î)\nƒ{ƒ^ƒ“\nƒtƒ‰ƒbƒg\n"));
+		_T("ã‚¿ãƒ–\nã‚¿ãƒ–(æ–œ)\nãƒœã‚¿ãƒ³\nãƒ•ãƒ©ãƒƒãƒˆ\n"));
 
 	set_ComboBoxText(ScrBarStyleComboBox,
-		_T("•W€\nƒVƒ“ƒvƒ‹\nƒVƒ“ƒvƒ‹(3/4•)\nƒVƒ“ƒvƒ‹(1/2•)\nƒVƒ“ƒvƒ‹(‰æ‘œ)\n"));
+		_T("æ¨™æº–\nã‚·ãƒ³ãƒ—ãƒ«\nã‚·ãƒ³ãƒ—ãƒ«(3/4å¹…)\nã‚·ãƒ³ãƒ—ãƒ«(1/2å¹…)\nã‚·ãƒ³ãƒ—ãƒ«(ç”»åƒ)\n"));
 
 	FontBufList = new TStringList();
 	for (int i=0; i<FontList->Count-1; i++) {
@@ -94,171 +94,171 @@ void __fastcall TOptionDlg::FormCreate(TObject *Sender)
 	set_ComboBoxText(MaxTasksComboBox,   _T("1\n2\n3\n4\n"));
 
 	OptColListBox->Items->Text =
-		"bgList=ƒŠƒXƒg‚Ì”wŒiF\n"
-		"bgList2=ƒŠƒXƒg‚Ì”wŒiF(ŒğŒİ)\n"
-		"fgList=ƒŠƒXƒg‚Ì•¶šF\n"
-		"bgArc=‰¼‘zƒfƒBƒŒƒNƒgƒŠ‚Ì”wŒiF\n"
-		"bgFind=Œ‹‰ÊƒŠƒXƒg‚Ì”wŒiF\n"
-		"bgWork=ƒ[ƒNƒŠƒXƒg‚Ì”wŒiF\n"
-		"bgFTP=FTPƒŠƒ‚[ƒg‘¤‚Ì”wŒiF\n"
-		"bgADS=‘ã‘Öƒf[ƒ^ƒXƒgƒŠ[ƒ€ˆê——‚Ì”wŒiF\n"
-		"selItem=|‘I‘ğ€–Ú‚Ì”wŒiF\n"
-		"oppItem=”½‘ÎƒpƒX‘I‘ğ€–Ú‚Ì”wŒiF\n"
-		"fgSelItem=‘I‘ğ€–Ú‚Ì•¶šF\n"
-		"bgMark=xƒ}[ƒN€–Ú‚Ì”wŒiF\n"
-		"matchItem=INC.ƒT[ƒ`‚Ìƒ}ƒbƒ`€–Ú”wŒiF\n"
-		"Differ=Œ‹‰ÊƒŠƒXƒg‚Ì‘Šˆá‰ÓŠ”wŒiF\n"
-		"DifferN=Œ‹‰ÊƒŠƒXƒg‚Ì’–Ú‰ÓŠ”wŒiF\n"
-		"Folder=|ƒfƒBƒŒƒNƒgƒŠ‚Ì•¶šF\n"
-		"SymLink=ƒVƒ“ƒ{ƒŠƒbƒNƒŠƒ“ƒN/ƒWƒƒƒ“ƒNƒVƒ‡ƒ“‚Ì•¶šF\n"
-		"Protect=ƒfƒBƒŒƒNƒgƒŠ(íœ§ŒÀ)‚Ì•¶šF\n"
-		"ReadOnly=“Ç‚İ‚İê—p‘®«‚Ì•¶šF\n"
-		"Hidden=‰B‚µ‘®«‚Ì•¶šF\n"
-		"System=ƒVƒXƒeƒ€‘®«‚Ì•¶šF\n"
-		"Compress=ˆ³k‘®«‚Ì•¶šF\n"
-		"fgSpace=‹ó”’‹L†‚Ì•¶šF\n"
-		"fgTagNam=ƒfƒtƒHƒ‹ƒg‚Ìƒ^ƒOF\n"
-		"InvItem=–³Œø‚È€–Ú‚Ì•¶šF\n"
-		"Cursor=ƒ‰ƒCƒ“ƒJ[ƒ\ƒ‹‚ÌF\n"
-		"bgScrBar=|ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[‚Ì”wŒiF\n"
-		"bgScrKnob=ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒmƒu‚ÌF\n"
-		"frScrKnob=ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒmƒu‚Ì—ÖŠsF\n"
-		"bgActKnob=ƒhƒ‰ƒbƒO‚ÌƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒmƒuF\n"
-		"lnScrHit=ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[‚ÌƒqƒbƒgˆÊ’u\n"
-		"lnScrSel=ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[‚Ì‘I‘ğˆÊ’u(FL)\n"
-		"bgTlBar1=|ƒc[ƒ‹ƒo[‚ÌƒOƒ‰ƒf[ƒVƒ‡ƒ“ŠJnF\n"
-		"bgTlBar2=ƒc[ƒ‹ƒo[‚ÌƒOƒ‰ƒf[ƒVƒ‡ƒ“I—¹F\n"
-		"fgTlBar=ƒc[ƒ‹ƒo[‚Ì•¶šF\n"
-		"htTlBar=ƒc[ƒ‹ƒo[‚Ìƒzƒbƒgƒgƒ‰ƒbƒLƒ“ƒOF\n"
-		"Splitter=•ªŠ„‹«ŠEü\n"
-		"bgTabBar=|ƒ^ƒuƒo[‚Ì”wŒiF\n"
-		"bgActTab=ƒAƒNƒeƒBƒu‚Èƒ^ƒu‚Ì”wŒiF\n"
-		"bgInAcTab=”ñƒAƒNƒeƒBƒu‚Èƒ^ƒu‚Ì”wŒiF\n"
-		"frmTab=ƒ^ƒu‚Ì—ÖŠsü\n"
-		"fgTab=ƒ^ƒu‚Ì•¶šF\n"
-		"bgListHdr=|ƒŠƒXƒgƒwƒbƒ_‚Ì”wŒiF\n"
-		"fgListHdr=ƒŠƒXƒgƒwƒbƒ_‚Ì•¶šF\n"
-		"bgDirInf=ƒfƒBƒŒƒNƒgƒŠî•ñ‚Ì”wŒiF\n"
-		"fgDirInf=ƒfƒBƒŒƒNƒgƒŠî•ñ‚Ì•¶šF\n"
-		"bgDirRel=ƒfƒBƒŒƒNƒgƒŠŠÖŒW‚Ì”wŒiF\n"
-		"fgDirRel=ƒfƒBƒŒƒNƒgƒŠŠÖŒW‚Ì•¶šF\n"
-		"bdrDirB=ƒfƒBƒŒƒNƒgƒŠî•ñ‚Ì‰º‹«ŠEü\n"
-		"bgDrvInf=ƒhƒ‰ƒCƒuî•ñ‚Ì”wŒiF\n"
-		"fgDrvInf=ƒhƒ‰ƒCƒuî•ñ‚Ì•¶šF\n"
-		"bdrDrvT=ƒhƒ‰ƒCƒuî•ñ‚Ìã‹«ŠEü\n"
-		"bgInf=|ƒtƒ@ƒCƒ‹î•ñ‚Ì”wŒiF\n"
-		"fgInf=ƒtƒ@ƒCƒ‹î•ñ‚Ì•¶šF\n"
-		"fgInfNam=ƒtƒ@ƒCƒ‹î•ñ‚Ì€–Ú–¼•¶šF\n"
-		"fgInfEmp=ƒtƒ@ƒCƒ‹î•ñ‚Ì‹­’²•¶šF\n"
-		"bgTxtPrv=ƒeƒLƒXƒgƒvƒŒƒrƒ…[‚Ì”wŒiF\n"
-		"fgTxtPrv=ƒeƒLƒXƒgƒvƒŒƒrƒ…[‚Ì•¶šF\n"
-		"bgLog=ƒƒO‚Ì”wŒiF\n"
-		"fgLog=ƒƒO‚Ì•¶šF\n"
-		"bgTask=ƒ^ƒXƒNó‘Ô•\¦‚Ì”wŒiF\n"
-		"fgPrgBar=i’»ƒo[F\n"
-		"bgPrgBar=i’»”wŒiF\n"
-		"Error=ƒGƒ‰[/’ˆÓ‚Ì•¶šF\n"
-		"bgInfHdr=|î•ñƒwƒbƒ_‚Ì”wŒiF\n"
-		"fgInfHdr=î•ñƒwƒbƒ_‚Ì•¶šF\n"
-		"bgView=|ƒeƒLƒXƒgƒrƒ…[ƒA‚Ì”wŒiF\n"
-		"fgView=ƒeƒLƒXƒgƒrƒ…[ƒA‚Ì•¶šF\n"
-		"Margin=ƒeƒLƒXƒgƒrƒ…[ƒA‚Ì—]”’”’\n"
-		"bgRuler=ƒ‹[ƒ‰‚Ì”wŒiF\n"
-		"fgRuler=ƒ‹[ƒ‰‚Ì–Ú·F\n"
-		"bgLineNo=s”Ô†”wŒiF\n"
-		"LineNo=s”Ô†•¶šF\n"
-		"Mark=sƒ}[ƒN\n"
-		"bdrLine=s”Ô†‹«ŠEü\n"
-		"Indent=ƒCƒ“ƒfƒ“ƒgƒKƒCƒh\n"
-		"Indent2=ƒCƒ“ƒfƒ“ƒgƒKƒCƒh(ŒğŒİ)\n"
-		"bdrFold=Ü‚è•Ô‚µ‹«ŠEü\n"
-		"bdrFixed=ŒÅ’è’·•\¦‚ÌcŒrü\n"
-		"Comment=|ƒRƒƒ“ƒg‚Ì•¶šF\n"
-		"Strings=•¶š—ñ‚Ì•¶šF\n"
-		"Reserved=—\–ñŒê‚Ì•¶šF\n"
-		"Symbol=ƒVƒ“ƒ{ƒ‹‚Ì•¶šF\n"
-		"Numeric=”’l‚Ì•¶šF\n"
-		"fgEmpBin1=ƒoƒCƒiƒŠ‹­’²•¶šF1\n"
-		"fgEmpBin2=ƒoƒCƒiƒŠ‹­’²•¶šF2\n"
-		"fgEmpBin3=ƒoƒCƒiƒŠ‹­’²•¶šF3\n"
-		"Headline=Œ©o‚µ‚Ì•¶šF\n"
-		"Ruby=ƒ‹ƒr\n"
-		"URL=URL‚Ì•¶šF\n"
-		"LocalLink=ƒ[ƒJƒ‹ƒtƒ@ƒCƒ‹‚Ö‚ÌƒŠƒ“ƒN\n"
-		"fgEmp=‹­’²•¶šF\n"
-		"bgEmp=‹­’²”wŒiF\n"
-		"TAB=ƒ^ƒu•\¦F\n"
-		"CR=‰üs•\¦F\n"
-		"HR=Œrü‚ÌF\n"
-		"Ctrl=ƒRƒ“ƒgƒ[ƒ‹ƒR[ƒh\n"
-		"fgPair=‘Î‰‚·‚éŠ‡ŒÊ‚Ì•¶šF\n"
-		"bgImage=|‰æ‘œ‚Ì”wŒiF\n"
-		"bgDblPg=Œ©ŠJ‚«•\¦‚Ì—]”’F\n"
-		"bgWMF=ƒƒ^ƒtƒ@ƒCƒ‹‚Ì”wŒiF\n"
-		"bdrThumb=ƒTƒ€ƒlƒCƒ‹‚Ì‹«ŠEü\n"
-		"ThumbExif=ƒTƒ€ƒlƒCƒ‹‚ÌExifî•ñ\n"
-		"ImgGrid=‰æ‘œ•ªŠ„ƒOƒŠƒbƒh\n"
-		"GrBack=|ƒOƒ‰ƒt‚Ì”wŒiF\n"
-		"GrLine=ƒOƒ‰ƒt‚Ìƒ‰ƒCƒ“\n"
-		"GrGrid=ƒOƒ‰ƒt‚ÌƒOƒŠƒbƒh\n"
-		"GrText=ƒOƒ‰ƒt‚Ì•¶šF\n"
-		"GitHEAD=|Git: HEADƒ}[ƒN\n"
-		"GitMark=Git: ƒRƒ~ƒbƒgƒ}[ƒN\n"
-		"GitBra=Git: ƒuƒ‰ƒ“ƒ`\n"
-		"GitBraR=Git: ƒŠƒ‚[ƒgQÆ\n"
-		"GitTag=Git: ƒ^ƒO\n"
-		"GitHash=Git: ƒnƒbƒVƒ…\n"
-		"GitIns=Git: + s\n"
-		"GitDel=Git: - s\n"
-		"bgOptTab=|ƒAƒNƒeƒBƒu‚Èİ’èƒ^ƒu‚Ì”wŒiF\n"
-		"fgOptTab=ƒAƒNƒeƒBƒu‚Èİ’èƒ^ƒu‚Ì•¶šF\n"
-		"OptFind=ƒIƒvƒVƒ‡ƒ“İ’è‚ÌŒŸõŒ‹‰Ê\n"
-		"bgTips=|ƒc[ƒ‹ƒ`ƒbƒv‚Ì”wŒiF\n"
-		"fgTips=ƒc[ƒ‹ƒ`ƒbƒv‚Ì•¶šF\n"
-		"bgHint=ƒqƒ“ƒg•\¦‚Ì”wŒiF\n"
-		"fgHint=ƒqƒ“ƒg•\¦‚Ì•¶šF\n"
-		"bgWarn=Œx•\¦‚Ì”wŒiF\n"
-		"TlBorder=|ƒc[ƒ‹ƒEƒCƒ“ƒhƒE‚Ì‹«ŠEü\n";
+		"bgList=ãƒªã‚¹ãƒˆã®èƒŒæ™¯è‰²\n"
+		"bgList2=ãƒªã‚¹ãƒˆã®èƒŒæ™¯è‰²(äº¤äº’)\n"
+		"fgList=ãƒªã‚¹ãƒˆã®æ–‡å­—è‰²\n"
+		"bgArc=ä»®æƒ³ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®èƒŒæ™¯è‰²\n"
+		"bgFind=çµæœãƒªã‚¹ãƒˆã®èƒŒæ™¯è‰²\n"
+		"bgWork=ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã®èƒŒæ™¯è‰²\n"
+		"bgFTP=FTPãƒªãƒ¢ãƒ¼ãƒˆå´ã®èƒŒæ™¯è‰²\n"
+		"bgADS=ä»£æ›¿ãƒ‡ãƒ¼ã‚¿ã‚¹ãƒˆãƒªãƒ¼ãƒ ä¸€è¦§ã®èƒŒæ™¯è‰²\n"
+		"selItem=|é¸æŠé …ç›®ã®èƒŒæ™¯è‰²\n"
+		"oppItem=åå¯¾ãƒ‘ã‚¹é¸æŠé …ç›®ã®èƒŒæ™¯è‰²\n"
+		"fgSelItem=é¸æŠé …ç›®ã®æ–‡å­—è‰²\n"
+		"bgMark=æ ãƒãƒ¼ã‚¯é …ç›®ã®èƒŒæ™¯è‰²\n"
+		"matchItem=INC.ã‚µãƒ¼ãƒã®ãƒãƒƒãƒé …ç›®èƒŒæ™¯è‰²\n"
+		"Differ=çµæœãƒªã‚¹ãƒˆã®ç›¸é•ç®‡æ‰€èƒŒæ™¯è‰²\n"
+		"DifferN=çµæœãƒªã‚¹ãƒˆã®æ³¨ç›®ç®‡æ‰€èƒŒæ™¯è‰²\n"
+		"Folder=|ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®æ–‡å­—è‰²\n"
+		"SymLink=ã‚·ãƒ³ãƒœãƒªãƒƒã‚¯ãƒªãƒ³ã‚¯/ã‚¸ãƒ£ãƒ³ã‚¯ã‚·ãƒ§ãƒ³ã®æ–‡å­—è‰²\n"
+		"Protect=ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª(å‰Šé™¤åˆ¶é™)ã®æ–‡å­—è‰²\n"
+		"ReadOnly=èª­ã¿è¾¼ã¿å°‚ç”¨å±æ€§ã®æ–‡å­—è‰²\n"
+		"Hidden=éš ã—å±æ€§ã®æ–‡å­—è‰²\n"
+		"System=ã‚·ã‚¹ãƒ†ãƒ å±æ€§ã®æ–‡å­—è‰²\n"
+		"Compress=åœ§ç¸®å±æ€§ã®æ–‡å­—è‰²\n"
+		"fgSpace=ç©ºç™½è¨˜å·ã®æ–‡å­—è‰²\n"
+		"fgTagNam=ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã‚¿ã‚°è‰²\n"
+		"InvItem=ç„¡åŠ¹ãªé …ç›®ã®æ–‡å­—è‰²\n"
+		"Cursor=ãƒ©ã‚¤ãƒ³ã‚«ãƒ¼ã‚½ãƒ«ã®è‰²\n"
+		"bgScrBar=|ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã®èƒŒæ™¯è‰²\n"
+		"bgScrKnob=ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ–ã®è‰²\n"
+		"frScrKnob=ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ–ã®è¼ªéƒ­è‰²\n"
+		"bgActKnob=ãƒ‰ãƒ©ãƒƒã‚°æ™‚ã®ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ–è‰²\n"
+		"lnScrHit=ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã®ãƒ’ãƒƒãƒˆä½ç½®\n"
+		"lnScrSel=ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã®é¸æŠä½ç½®(FL)\n"
+		"bgTlBar1=|ãƒ„ãƒ¼ãƒ«ãƒãƒ¼ã®ã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³é–‹å§‹è‰²\n"
+		"bgTlBar2=ãƒ„ãƒ¼ãƒ«ãƒãƒ¼ã®ã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³çµ‚äº†è‰²\n"
+		"fgTlBar=ãƒ„ãƒ¼ãƒ«ãƒãƒ¼ã®æ–‡å­—è‰²\n"
+		"htTlBar=ãƒ„ãƒ¼ãƒ«ãƒãƒ¼ã®ãƒ›ãƒƒãƒˆãƒˆãƒ©ãƒƒã‚­ãƒ³ã‚°è‰²\n"
+		"Splitter=åˆ†å‰²å¢ƒç•Œç·š\n"
+		"bgTabBar=|ã‚¿ãƒ–ãƒãƒ¼ã®èƒŒæ™¯è‰²\n"
+		"bgActTab=ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªã‚¿ãƒ–ã®èƒŒæ™¯è‰²\n"
+		"bgInAcTab=éã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªã‚¿ãƒ–ã®èƒŒæ™¯è‰²\n"
+		"frmTab=ã‚¿ãƒ–ã®è¼ªéƒ­ç·š\n"
+		"fgTab=ã‚¿ãƒ–ã®æ–‡å­—è‰²\n"
+		"bgListHdr=|ãƒªã‚¹ãƒˆãƒ˜ãƒƒãƒ€ã®èƒŒæ™¯è‰²\n"
+		"fgListHdr=ãƒªã‚¹ãƒˆãƒ˜ãƒƒãƒ€ã®æ–‡å­—è‰²\n"
+		"bgDirInf=ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæƒ…å ±ã®èƒŒæ™¯è‰²\n"
+		"fgDirInf=ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæƒ…å ±ã®æ–‡å­—è‰²\n"
+		"bgDirRel=ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªé–¢ä¿‚ã®èƒŒæ™¯è‰²\n"
+		"fgDirRel=ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªé–¢ä¿‚ã®æ–‡å­—è‰²\n"
+		"bdrDirB=ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæƒ…å ±ã®ä¸‹å¢ƒç•Œç·š\n"
+		"bgDrvInf=ãƒ‰ãƒ©ã‚¤ãƒ–æƒ…å ±ã®èƒŒæ™¯è‰²\n"
+		"fgDrvInf=ãƒ‰ãƒ©ã‚¤ãƒ–æƒ…å ±ã®æ–‡å­—è‰²\n"
+		"bdrDrvT=ãƒ‰ãƒ©ã‚¤ãƒ–æƒ…å ±ã®ä¸Šå¢ƒç•Œç·š\n"
+		"bgInf=|ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã®èƒŒæ™¯è‰²\n"
+		"fgInf=ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã®æ–‡å­—è‰²\n"
+		"fgInfNam=ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã®é …ç›®åæ–‡å­—è‰²\n"
+		"fgInfEmp=ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã®å¼·èª¿æ–‡å­—è‰²\n"
+		"bgTxtPrv=ãƒ†ã‚­ã‚¹ãƒˆãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®èƒŒæ™¯è‰²\n"
+		"fgTxtPrv=ãƒ†ã‚­ã‚¹ãƒˆãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®æ–‡å­—è‰²\n"
+		"bgLog=ãƒ­ã‚°ã®èƒŒæ™¯è‰²\n"
+		"fgLog=ãƒ­ã‚°ã®æ–‡å­—è‰²\n"
+		"bgTask=ã‚¿ã‚¹ã‚¯çŠ¶æ…‹è¡¨ç¤ºã®èƒŒæ™¯è‰²\n"
+		"fgPrgBar=é€²æ—ãƒãƒ¼è‰²\n"
+		"bgPrgBar=é€²æ—èƒŒæ™¯è‰²\n"
+		"Error=ã‚¨ãƒ©ãƒ¼/æ³¨æ„ã®æ–‡å­—è‰²\n"
+		"bgInfHdr=|æƒ…å ±ãƒ˜ãƒƒãƒ€ã®èƒŒæ™¯è‰²\n"
+		"fgInfHdr=æƒ…å ±ãƒ˜ãƒƒãƒ€ã®æ–‡å­—è‰²\n"
+		"bgView=|ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã®èƒŒæ™¯è‰²\n"
+		"fgView=ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã®æ–‡å­—è‰²\n"
+		"Margin=ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã®ä½™ç™½ç™½\n"
+		"bgRuler=ãƒ«ãƒ¼ãƒ©ã®èƒŒæ™¯è‰²\n"
+		"fgRuler=ãƒ«ãƒ¼ãƒ©ã®ç›®ç››è‰²\n"
+		"bgLineNo=è¡Œç•ªå·èƒŒæ™¯è‰²\n"
+		"LineNo=è¡Œç•ªå·æ–‡å­—è‰²\n"
+		"Mark=è¡Œãƒãƒ¼ã‚¯\n"
+		"bdrLine=è¡Œç•ªå·å¢ƒç•Œç·š\n"
+		"Indent=ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã‚¬ã‚¤ãƒ‰\n"
+		"Indent2=ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã‚¬ã‚¤ãƒ‰(äº¤äº’)\n"
+		"bdrFold=æŠ˜ã‚Šè¿”ã—å¢ƒç•Œç·š\n"
+		"bdrFixed=å›ºå®šé•·è¡¨ç¤ºã®ç¸¦ç½«ç·š\n"
+		"Comment=|ã‚³ãƒ¡ãƒ³ãƒˆã®æ–‡å­—è‰²\n"
+		"Strings=æ–‡å­—åˆ—ã®æ–‡å­—è‰²\n"
+		"Reserved=äºˆç´„èªã®æ–‡å­—è‰²\n"
+		"Symbol=ã‚·ãƒ³ãƒœãƒ«ã®æ–‡å­—è‰²\n"
+		"Numeric=æ•°å€¤ã®æ–‡å­—è‰²\n"
+		"fgEmpBin1=ãƒã‚¤ãƒŠãƒªå¼·èª¿æ–‡å­—è‰²1\n"
+		"fgEmpBin2=ãƒã‚¤ãƒŠãƒªå¼·èª¿æ–‡å­—è‰²2\n"
+		"fgEmpBin3=ãƒã‚¤ãƒŠãƒªå¼·èª¿æ–‡å­—è‰²3\n"
+		"Headline=è¦‹å‡ºã—ã®æ–‡å­—è‰²\n"
+		"Ruby=ãƒ«ãƒ“\n"
+		"URL=URLã®æ–‡å­—è‰²\n"
+		"LocalLink=ãƒ­ãƒ¼ã‚«ãƒ«ãƒ•ã‚¡ã‚¤ãƒ«ã¸ã®ãƒªãƒ³ã‚¯\n"
+		"fgEmp=å¼·èª¿æ–‡å­—è‰²\n"
+		"bgEmp=å¼·èª¿èƒŒæ™¯è‰²\n"
+		"TAB=ã‚¿ãƒ–è¡¨ç¤ºè‰²\n"
+		"CR=æ”¹è¡Œè¡¨ç¤ºè‰²\n"
+		"HR=ç½«ç·šã®è‰²\n"
+		"Ctrl=ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚³ãƒ¼ãƒ‰\n"
+		"fgPair=å¯¾å¿œã™ã‚‹æ‹¬å¼§ã®æ–‡å­—è‰²\n"
+		"bgImage=|ç”»åƒã®èƒŒæ™¯è‰²\n"
+		"bgDblPg=è¦‹é–‹ãè¡¨ç¤ºã®ä½™ç™½è‰²\n"
+		"bgWMF=ãƒ¡ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«ã®èƒŒæ™¯è‰²\n"
+		"bdrThumb=ã‚µãƒ ãƒã‚¤ãƒ«ã®å¢ƒç•Œç·š\n"
+		"ThumbExif=ã‚µãƒ ãƒã‚¤ãƒ«ã®Exifæƒ…å ±\n"
+		"ImgGrid=ç”»åƒåˆ†å‰²ã‚°ãƒªãƒƒãƒ‰\n"
+		"GrBack=|ã‚°ãƒ©ãƒ•ã®èƒŒæ™¯è‰²\n"
+		"GrLine=ã‚°ãƒ©ãƒ•ã®ãƒ©ã‚¤ãƒ³\n"
+		"GrGrid=ã‚°ãƒ©ãƒ•ã®ã‚°ãƒªãƒƒãƒ‰\n"
+		"GrText=ã‚°ãƒ©ãƒ•ã®æ–‡å­—è‰²\n"
+		"GitHEAD=|Git: HEADãƒãƒ¼ã‚¯\n"
+		"GitMark=Git: ã‚³ãƒŸãƒƒãƒˆãƒãƒ¼ã‚¯\n"
+		"GitBra=Git: ãƒ–ãƒ©ãƒ³ãƒ\n"
+		"GitBraR=Git: ãƒªãƒ¢ãƒ¼ãƒˆå‚ç…§\n"
+		"GitTag=Git: ã‚¿ã‚°\n"
+		"GitHash=Git: ãƒãƒƒã‚·ãƒ¥\n"
+		"GitIns=Git: + è¡Œ\n"
+		"GitDel=Git: - è¡Œ\n"
+		"bgOptTab=|ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªè¨­å®šã‚¿ãƒ–ã®èƒŒæ™¯è‰²\n"
+		"fgOptTab=ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªè¨­å®šã‚¿ãƒ–ã®æ–‡å­—è‰²\n"
+		"OptFind=ã‚ªãƒ—ã‚·ãƒ§ãƒ³è¨­å®šã®æ¤œç´¢çµæœ\n"
+		"bgTips=|ãƒ„ãƒ¼ãƒ«ãƒãƒƒãƒ—ã®èƒŒæ™¯è‰²\n"
+		"fgTips=ãƒ„ãƒ¼ãƒ«ãƒãƒƒãƒ—ã®æ–‡å­—è‰²\n"
+		"bgHint=ãƒ’ãƒ³ãƒˆè¡¨ç¤ºã®èƒŒæ™¯è‰²\n"
+		"fgHint=ãƒ’ãƒ³ãƒˆè¡¨ç¤ºã®æ–‡å­—è‰²\n"
+		"bgWarn=è­¦å‘Šè¡¨ç¤ºã®èƒŒæ™¯è‰²\n"
+		"TlBorder=|ãƒ„ãƒ¼ãƒ«ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ã®å¢ƒç•Œç·š\n";
 
 	TimColListBox->Items->Text =
-		"Tim1H=1ŠÔˆÈ“à\n"
-		"Tim3H=3ŠÔˆÈ“à\n"
-		"Tim6H=6ŠÔˆÈ“à\n"
-		"Tim1D=1“úˆÈ“à\n"
-		"Tim3D=3“úˆÈ“à\n"
-		"Tim7D=7“úˆÈ“à\n"
-		"Tim1M=1ƒ–ŒˆÈ“à\n"
-		"Tim3M=3ƒ–ŒˆÈ“à\n"
-		"Tim6M=6ƒ–ŒˆÈ“à\n"
-		"Tim1Y=1”NˆÈ“à\n"
-		"Tim3Y=3”NˆÈ“à\n"
-		"TimOld=‚»‚ê‚æ‚è‘O\n"
-		"Size4G=|4GBˆÈã\n"
-		"Size2G=2GBˆÈã\n"
-		"Size1G=1GBˆÈã\n"
-		"Size512M=512MBˆÈã\n"
-		"Size256M=256MBˆÈã\n"
-		"Size128M=128MBˆÈã\n"
-		"Size64M=64MBˆÈã\n"
-		"Size32M=32MBˆÈã\n"
-		"Size16M=16MBˆÈã\n"
-		"Size1M=1MBˆÈã\n"
-		"Size1K=1KBˆÈã\n"
-		"SizeLT=1KB–¢–\n"
+		"Tim1H=1æ™‚é–“ä»¥å†…\n"
+		"Tim3H=3æ™‚é–“ä»¥å†…\n"
+		"Tim6H=6æ™‚é–“ä»¥å†…\n"
+		"Tim1D=1æ—¥ä»¥å†…\n"
+		"Tim3D=3æ—¥ä»¥å†…\n"
+		"Tim7D=7æ—¥ä»¥å†…\n"
+		"Tim1M=1ãƒ¶æœˆä»¥å†…\n"
+		"Tim3M=3ãƒ¶æœˆä»¥å†…\n"
+		"Tim6M=6ãƒ¶æœˆä»¥å†…\n"
+		"Tim1Y=1å¹´ä»¥å†…\n"
+		"Tim3Y=3å¹´ä»¥å†…\n"
+		"TimOld=ãã‚Œã‚ˆã‚Šå‰\n"
+		"Size4G=|4GBä»¥ä¸Š\n"
+		"Size2G=2GBä»¥ä¸Š\n"
+		"Size1G=1GBä»¥ä¸Š\n"
+		"Size512M=512MBä»¥ä¸Š\n"
+		"Size256M=256MBä»¥ä¸Š\n"
+		"Size128M=128MBä»¥ä¸Š\n"
+		"Size64M=64MBä»¥ä¸Š\n"
+		"Size32M=32MBä»¥ä¸Š\n"
+		"Size16M=16MBä»¥ä¸Š\n"
+		"Size1M=1MBä»¥ä¸Š\n"
+		"Size1K=1KBä»¥ä¸Š\n"
+		"SizeLT=1KBæœªæº€\n"
 		"Size0=0\n";
 
 	set_ComboBoxText(BgImgModeComboBox,
-		_T("”ñ•\¦\n")
-		_T("2‰æ–Ê‚É“n‚Á‚Ä•\¦\n")
-		_T("‚»‚ê‚¼‚ê‚É•\¦\n")
-		_T("ƒfƒXƒNƒgƒbƒv”wŒi‚ğ•\¦\n"));
+		_T("éè¡¨ç¤º\n")
+		_T("2ç”»é¢ã«æ¸¡ã£ã¦è¡¨ç¤º\n")
+		_T("ãã‚Œãã‚Œã«è¡¨ç¤º\n")
+		_T("ãƒ‡ã‚¹ã‚¯ãƒˆãƒƒãƒ—èƒŒæ™¯ã‚’è¡¨ç¤º\n"));
 	set_ComboBoxText(BgImgSubModeComboBox,
-		_T("’†‰›‚É•\¦\n")
-		_T("•À‚×‚Ä•\¦\n")
-		_T("•\¦ƒTƒCƒY‚ÉƒXƒgƒŒƒbƒ`\n")
-		_T("•\¦ƒTƒCƒY‚É‡‚í‚¹‚ÄØ‚èo‚µ\n"));
+		_T("ä¸­å¤®ã«è¡¨ç¤º\n")
+		_T("ä¸¦ã¹ã¦è¡¨ç¤º\n")
+		_T("è¡¨ç¤ºã‚µã‚¤ã‚ºã«ã‚¹ãƒˆãƒ¬ãƒƒãƒ\n")
+		_T("è¡¨ç¤ºã‚µã‚¤ã‚ºã«åˆã‚ã›ã¦åˆ‡ã‚Šå‡ºã—\n"));
 
-	//ƒ}ƒEƒXƒzƒC[ƒ‹
+	//ãƒã‚¦ã‚¹ãƒ›ã‚¤ãƒ¼ãƒ«
 	set_ComboBoxText(WheelCmdF0ComboBox,
 		_T("AlphaBlend_+32/AlphaBlend_-32\n")
 		_T("BackDirHist/ForwardDirHist\n")
@@ -303,7 +303,7 @@ void __fastcall TOptionDlg::FormCreate(TObject *Sender)
 	WheelCmdI2ComboBox->Items->Assign(WheelCmdI0ComboBox->Items);
 	WheelCmdI3ComboBox->Items->Assign(WheelCmdI0ComboBox->Items);
 
-	//ƒ}ƒEƒXƒ{ƒ^ƒ“
+	//ãƒã‚¦ã‚¹ãƒœã‚¿ãƒ³
 	set_ComboBoxText(WheelBtnF0ComboBox,
 		_T("AlphaBlend\n")
 		_T("BackDirHist\n")
@@ -371,42 +371,42 @@ void __fastcall TOptionDlg::FormCreate(TObject *Sender)
 	X2BtnIComboBox->Items->Assign(X1BtnIComboBox->Items);
 
 	set_ComboBoxText(MenuCmdComboBox,
-		_T("MaskSel      ƒ}ƒXƒN‚ÉŠY“–‚·‚éƒtƒ@ƒCƒ‹‚ğ‘I‘ğ\n")
-		_T("MaskDel      ƒ}ƒXƒN‚ÉŠY“–‚·‚éƒtƒ@ƒCƒ‹‚ğíœ\n")
-		_T("MaskCopy     ƒ}ƒXƒN‚ÉŠY“–‚·‚éƒtƒ@ƒCƒ‹‚ğƒRƒs[\n")
-		_T("MaskMove     ƒ}ƒXƒN‚ÉŠY“–‚·‚éƒtƒ@ƒCƒ‹‚ğˆÚ“®\n")
-		_T("MaskPack     ƒ}ƒXƒN‚ÉŠY“–‚·‚éƒtƒ@ƒCƒ‹‚ğˆ³k\n")
-		_T("ExeCommands  w’è‚µ‚½ƒRƒ}ƒ“ƒh‚ğÀs\n"));
+		_T("MaskSel      ãƒã‚¹ã‚¯ã«è©²å½“ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é¸æŠ\n")
+		_T("MaskDel      ãƒã‚¹ã‚¯ã«è©²å½“ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å‰Šé™¤\n")
+		_T("MaskCopy     ãƒã‚¹ã‚¯ã«è©²å½“ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚³ãƒ”ãƒ¼\n")
+		_T("MaskMove     ãƒã‚¹ã‚¯ã«è©²å½“ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ç§»å‹•\n")
+		_T("MaskPack     ãƒã‚¹ã‚¯ã«è©²å½“ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ã‚’åœ§ç¸®\n")
+		_T("ExeCommands  æŒ‡å®šã—ãŸã‚³ãƒãƒ³ãƒ‰ã‚’å®Ÿè¡Œ\n"));
 	RefMenuPrmBtn->Enabled = false;
 
 	set_ComboBoxText(AppPrmComboBox,
 		_T("\n")
-		_T("FA : ˆê——‘¤\n")
-		_T("FL : ƒ‰ƒ“ƒ`ƒƒ[‘¤\n")
-		_T("FI : ƒ‰ƒ“ƒ`ƒƒ[‘¤(INC.)\n")
-		_T("AO : ˆê——‚Ì‚İ•\¦\n")
-		_T("LO : ƒ‰ƒ“ƒ`ƒƒ[‚Ì‚İ•\¦\n")
-		_T("LI : ƒ‰ƒ“ƒ`ƒƒ[‚Ì‚İ(INC.)\n")
-		_T("FZ : ‚ ‚¢‚Ü‚¢ŒŸõ(INC.)\n")
-		_T("AS : ƒXƒ^[ƒgƒƒjƒ…[’Ç‰Á\n"));
+		_T("FA : ä¸€è¦§å´\n")
+		_T("FL : ãƒ©ãƒ³ãƒãƒ£ãƒ¼å´\n")
+		_T("FI : ãƒ©ãƒ³ãƒãƒ£ãƒ¼å´(INC.)\n")
+		_T("AO : ä¸€è¦§ã®ã¿è¡¨ç¤º\n")
+		_T("LO : ãƒ©ãƒ³ãƒãƒ£ãƒ¼ã®ã¿è¡¨ç¤º\n")
+		_T("LI : ãƒ©ãƒ³ãƒãƒ£ãƒ¼ã®ã¿(INC.)\n")
+		_T("FZ : ã‚ã„ã¾ã„æ¤œç´¢(INC.)\n")
+		_T("AS : ã‚¹ã‚¿ãƒ¼ãƒˆãƒ¡ãƒ‹ãƒ¥ãƒ¼è¿½åŠ \n"));
 
-	set_ComboBoxText(OpenByModeComboBox, _T("‚»‚Ì‚Ü‚Ü\nWindows‚ÌŠÖ˜A•t‚¯‚ÅŠJ‚­\n•W€‚Ì Enter ƒL[“®ì\n"));
+	set_ComboBoxText(OpenByModeComboBox, _T("ãã®ã¾ã¾\nWindowsã®é–¢é€£ä»˜ã‘ã§é–‹ã\næ¨™æº–ã® Enter ã‚­ãƒ¼å‹•ä½œ\n"));
 
 	set_ComboBoxText(DblClickFlComboBox,
-		_T("•W€‚Ì Enter ƒL[“®ì (OpenStandard)\n")
-		_T("Windows‚ÌŠÖ˜A•t‚¯‚ÅŠJ‚­ (OpenByWin)\n")
-		_T("“Æ©‚ÌŠÖ˜A•t‚¯‚ÅŠJ‚­ (OpenByApp)\n"));
+		_T("æ¨™æº–ã® Enter ã‚­ãƒ¼å‹•ä½œ (OpenStandard)\n")
+		_T("Windowsã®é–¢é€£ä»˜ã‘ã§é–‹ã (OpenByWin)\n")
+		_T("ç‹¬è‡ªã®é–¢é€£ä»˜ã‘ã§é–‹ã (OpenByApp)\n"));
 
-	set_ComboBoxText(DefDropComboBox, _T("Windows •W€\ní‚ÉƒRƒs[\ní‚ÉˆÚ“®\n"));
+	set_ComboBoxText(DefDropComboBox, _T("Windows æ¨™æº–\nå¸¸ã«ã‚³ãƒ”ãƒ¼\nå¸¸ã«ç§»å‹•\n"));
 
 	set_ComboBoxText(StdCmdComboBox,
-		_T("Windows‚ÌŠÖ˜A•t‚¯‚ÅŠJ‚­ (OpenByWin)\n")
-		_T("“Æ©‚ÌŠÖ˜A•t‚¯‚ÅŠJ‚­ (OpenByApp)\n")
-		_T("ƒeƒLƒXƒgƒrƒ…[ƒA‚ÅŠJ‚­ (TextViewer)\n")
-		_T("ƒGƒfƒBƒ^‚ÅŠJ‚­ (FileEdit)\n")
-		_T("ƒoƒCƒiƒŠƒGƒfƒBƒ^‚ÅŠJ‚­ (BinaryEdit)\n")
-		_T("ƒRƒ}ƒ“ƒhƒtƒ@ƒCƒ‹‚Æ‚µ‚ÄÀs (ExeCommands)\n")
-		_T("w’èƒRƒ}ƒ“ƒh‚ğÀs (ExeCommands_)\n"));
+		_T("Windowsã®é–¢é€£ä»˜ã‘ã§é–‹ã (OpenByWin)\n")
+		_T("ç‹¬è‡ªã®é–¢é€£ä»˜ã‘ã§é–‹ã (OpenByApp)\n")
+		_T("ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã§é–‹ã (TextViewer)\n")
+		_T("ã‚¨ãƒ‡ã‚£ã‚¿ã§é–‹ã (FileEdit)\n")
+		_T("ãƒã‚¤ãƒŠãƒªã‚¨ãƒ‡ã‚£ã‚¿ã§é–‹ã (BinaryEdit)\n")
+		_T("ã‚³ãƒãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã¨ã—ã¦å®Ÿè¡Œ (ExeCommands)\n")
+		_T("æŒ‡å®šã‚³ãƒãƒ³ãƒ‰ã‚’å®Ÿè¡Œ (ExeCommands_)\n"));
 
 	LayoutChanged  = false;
 	inh_KeySet	   = 0;
@@ -446,7 +446,7 @@ void __fastcall TOptionDlg::FormCreate(TObject *Sender)
 	SndFindFinEdit->Hint   = hntstr;
 	SndWatchEdit->Hint	   = hntstr;
 
-	FExtMaxWidthEdit->Hint	   = "'W'‚Ì•‚ğŠî€‚É‚µ‚½•¶š”";
+	FExtMaxWidthEdit->Hint	   = "'W'ã®å¹…ã‚’åŸºæº–ã«ã—ãŸæ–‡å­—æ•°";
 
 	HideAtrCheckBox->Hint	   = LoadUsrMsg(USTR_HintOptCmd, _T("ShowHideAtr"));
 	SysAtrCheckBox->Hint	   = LoadUsrMsg(USTR_HintOptCmd, _T("ShowSystemAtr"));
@@ -466,7 +466,7 @@ void __fastcall TOptionDlg::FormCreate(TObject *Sender)
 	ShowMainMenuCheckBox->Hint = LoadUsrMsg(USTR_HintOptCmd, _T("MenuBar"));
 	ScaleOptComboBox->Hint	   = LoadUsrMsg(USTR_HintOptCmd, _T("SetInterpolation"));
 
-	//ƒRƒ“ƒgƒ[ƒ‹‚Ìƒ^ƒO‚ÉA‘Î‰‚·‚é•Ï”‚Ìƒ|ƒCƒ“ƒ^‚ğİ’è
+	//ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã®ã‚¿ã‚°ã«ã€å¯¾å¿œã™ã‚‹å¤‰æ•°ã®ãƒã‚¤ãƒ³ã‚¿ã‚’è¨­å®š
 	//UnicodeString
 	GetFaviUrlEdit->Tag			= (NativeInt)&GetFaviconUrl;
 	L_IniPatEdit->Tag			= (NativeInt)&InitialPath[0];
@@ -846,7 +846,7 @@ void __fastcall TOptionDlg::FormCreate(TObject *Sender)
 
 	cursor_Default();
 
-	//ƒhƒƒbƒvƒ^[ƒQƒbƒg‚ğİ’è
+	//ãƒ‰ãƒ­ãƒƒãƒ—ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’è¨­å®š
 	usr_SH->AddTargetList(this, ToolExeEdit);
 	usr_SH->AddTargetList(this, TextEditorEdit);
 	usr_SH->AddTargetList(this, ImageEditorEdit);
@@ -876,18 +876,18 @@ void __fastcall TOptionDlg::FormShow(TObject *Sender)
 	TlBarColChanged = false;
 	DlgFontChanged  = false;
 
-	//INIƒtƒ@ƒCƒ‹‚ªƒfƒtƒHƒ‹ƒg‚ÆˆÙ‚È‚éê‡Aƒtƒ@ƒCƒ‹–¼‚ğ•\¦
+	//INIãƒ•ã‚¡ã‚¤ãƒ«ãŒãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã¨ç•°ãªã‚‹å ´åˆã€ãƒ•ã‚¡ã‚¤ãƒ«åã‚’è¡¨ç¤º
 	UnicodeString inam = IniFile->FileName;
-	UnicodeString tit = KeySetOnly? "ƒL[İ’è" : "ƒIƒvƒVƒ‡ƒ“İ’è";
+	UnicodeString tit = KeySetOnly? "ã‚­ãƒ¼è¨­å®š" : "ã‚ªãƒ—ã‚·ãƒ§ãƒ³è¨­å®š";
 	if (!SameText(inam, ChangeFileExt(Application->ExeName, ".INI")))
 		 tit.cat_sprintf(_T(" - %s"), to_relative_name(inam).c_str());
 	Caption = tit;
 
 	//------------------------------------------------------------------
-	//ƒL[İ’è
+	//ã‚­ãƒ¼è¨­å®š
 	//------------------------------------------------------------------
 	set_ListBoxItemHi(KeyListBox);
-	InitializeListHeader(KeyHeaderControl, _T("ƒL[|ƒRƒ}ƒ“ƒh_ƒpƒ‰ƒ[ƒ^|à–¾|FƒL[•\¦–¼"), Font);
+	InitializeListHeader(KeyHeaderControl, _T("ã‚­ãƒ¼|ã‚³ãƒãƒ³ãƒ‰_ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿|èª¬æ˜|Fã‚­ãƒ¼è¡¨ç¤ºå"), Font);
 	TCanvas *cv = KeyListBox->Canvas;
 	cv->Font->Assign(KeyListBox->Font);
 	int w0 = cv->TextWidth("Shift+Ctrl+Alt+Space ");
@@ -928,7 +928,7 @@ void __fastcall TOptionDlg::FormShow(TObject *Sender)
 		::PostMessage(Handle, WM_FORM_SHOWED, 0, 0);
 		return;
 	}
-	//ƒL[İ’è‚Ì‚İ‚Ìê‡‚Í‚±‚±‚Ü‚Å
+	//ã‚­ãƒ¼è¨­å®šã®ã¿ã®å ´åˆã¯ã“ã“ã¾ã§
 	//--------------------------------------------------
 
 	InitializeOptListBox();
@@ -944,13 +944,13 @@ void __fastcall TOptionDlg::FormShow(TObject *Sender)
 	VclStyleComboBox->ItemIndex = slst->IndexOf(VclStyle); 
 	if (VclStyleComboBox->ItemIndex==-1) VclStyleComboBox->ItemIndex = 0;
 
-	InitializeListHeader(ExtMenuHeader, _T("ƒLƒƒƒvƒVƒ‡ƒ“|ƒGƒCƒŠƒAƒX|İ’è"), Font);
+	InitializeListHeader(ExtMenuHeader, _T("ã‚­ãƒ£ãƒ—ã‚·ãƒ§ãƒ³|ã‚¨ã‚¤ãƒªã‚¢ã‚¹|è¨­å®š"), Font);
 	THeaderSections *sp = ExtMenuHeader->Sections;
 	sp->Items[0]->Width = IniFile->ReadScaledIntGen(_T("ExtMenuColWidth0"),	200, this);
 	sp->Items[1]->Width = IniFile->ReadScaledIntGen(_T("ExtMenuColWidth1"),	120, this);
 	adjust_HeaderSecWidth(ExtMenuHeader, 2);
 
-	InitializeListHeader(ExtToolHeader, _T("ƒLƒƒƒvƒVƒ‡ƒ“|ƒGƒCƒŠƒAƒX|İ’è"), Font);
+	InitializeListHeader(ExtToolHeader, _T("ã‚­ãƒ£ãƒ—ã‚·ãƒ§ãƒ³|ã‚¨ã‚¤ãƒªã‚¢ã‚¹|è¨­å®š"), Font);
 	sp = ExtToolHeader->Sections;
 	sp->Items[0]->Width = IniFile->ReadScaledIntGen(_T("ExtToolColWidth0"),	200, this);
 	sp->Items[1]->Width = IniFile->ReadScaledIntGen(_T("ExtToolColWidth1"),	120, this);
@@ -969,10 +969,10 @@ void __fastcall TOptionDlg::FormShow(TObject *Sender)
 	VirDrvComboBox->Clear();
 	for (int i=0; i<26; i++) VirDrvComboBox->Items->Add(UnicodeString().sprintf(_T("%c"), 'A' + i));
 
-	//ƒ^ƒO‚ğ—p‚¢‚ÄƒRƒ“ƒgƒ[ƒ‹‚É’l‚ğİ’è
+	//ã‚¿ã‚°ã‚’ç”¨ã„ã¦ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã«å€¤ã‚’è¨­å®š
 	BringOptionByTag(this);
 
-	//ƒ^ƒO‚ğ—p‚¢‚È‚¢İ’è
+	//ã‚¿ã‚°ã‚’ç”¨ã„ãªã„è¨­å®š
 	TempDirEdit->Text	 = TempPath;
 	MigemoDirEdit->Text  = MigemoPath;
 	LimitTxtEdit->Text	 = ViewTxtLimitSize/1024;
@@ -1061,7 +1061,7 @@ void __fastcall TOptionDlg::FormShow(TObject *Sender)
 	IniSeaCtrlCheckBox->Checked   = ContainsText(IniSeaShift, KeyStr_Ctrl);
 	IniSeaAltCheckBox->Checked	  = ContainsText(IniSeaShift, KeyStr_Alt);
 
-	//ƒCƒxƒ“ƒg
+	//ã‚¤ãƒ™ãƒ³ãƒˆ
 	EventListBox->Clear();
 	for (int i=0; i<MAX_EVENT_CMD; i++) {
 		EventListBox->Items->Add(
@@ -1130,11 +1130,11 @@ bool __fastcall TOptionDlg::FormHelp(WORD Command, THelpEventData Data, bool &Ca
 		if (PageControl1->ActivePage==KeySetSheet && (CmdComboBox->Focused() || PrmComboBox->Focused())) {
 			UnicodeString topic;
 			switch (KeyTabControl->TabIndex) {
-			case 0: topic = HELPTOPIC_FL;	break;	//ƒtƒ@ƒCƒ‰[
-			case 1: topic = HELPTOPIC_IS;	break;	//INC.ƒT[ƒ`
-			case 2: topic = HELPTOPIC_TV;	break;	//ƒeƒLƒXƒgƒrƒ…[ƒA
-			case 3: topic = HELPTOPIC_IV;	break;	//ƒCƒ[ƒWƒrƒ…[ƒA
-			case 4: topic = HELPTOPIC_CILW;	break;	//ƒƒO
+			case 0: topic = HELPTOPIC_FL;	break;	//ãƒ•ã‚¡ã‚¤ãƒ©ãƒ¼
+			case 1: topic = HELPTOPIC_IS;	break;	//INC.ã‚µãƒ¼ãƒ
+			case 2: topic = HELPTOPIC_TV;	break;	//ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢
+			case 3: topic = HELPTOPIC_IV;	break;	//ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢
+			case 4: topic = HELPTOPIC_CILW;	break;	//ãƒ­ã‚°
 			}
 
 			UnicodeString kwd = get_tkn(CmdComboBox->Text, ' ');
@@ -1176,7 +1176,7 @@ void __fastcall TOptionDlg::InitializeOptListBox()
 }
 
 //---------------------------------------------------------------------------
-//ƒOƒ‹[ƒv“à‚ÌƒRƒ“ƒ{ƒ{ƒbƒNƒX‚Ì‘I‘ğó‘Ô‚ğ‚·‚×‚Ä‰ğœ
+//ã‚°ãƒ«ãƒ¼ãƒ—å†…ã®ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹ã®é¸æŠçŠ¶æ…‹ã‚’ã™ã¹ã¦è§£é™¤
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::DeselectComboBox(TGroupBox *gp)
 {
@@ -1190,7 +1190,7 @@ void __fastcall TOptionDlg::DeselectComboBox(TGroupBox *gp)
 }
 
 //---------------------------------------------------------------------------
-//ƒƒbƒvó‚¯“ü‚ê
+//ãƒ­ãƒƒãƒ—å—ã‘å…¥ã‚Œ
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::WmDropped(TMessage &msg)
 {
@@ -1233,7 +1233,7 @@ void __fastcall TOptionDlg::PageControl1Change(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒu‚Ì•`‰æ (ŒŸõŒ‹‰Ê‚Ì‹­’²•\¦)
+//ã‚¿ãƒ–ã®æç”» (æ¤œç´¢çµæœã®å¼·èª¿è¡¨ç¤º)
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::PageControl1DrawTab(TCustomTabControl *Control, int TabIndex,
 	const TRect &Rect, bool Active)
@@ -1245,10 +1245,10 @@ void __fastcall TOptionDlg::PageControl1DrawTab(TCustomTabControl *Control, int 
 		cv->FillRect(Rect);
 	}
 	else {
-		//”wŒi
+		//èƒŒæ™¯
 		cv->Brush->Color = (PageControl1->Pages[TabIndex]->Tag==0)? (Active? col_bgOptTab : get_PanelColor()) : col_OptFind;
 		cv->FillRect(Rect);
-		//—ÖŠs
+		//è¼ªéƒ­
 		if (use_VclStyle() && !Active) {
 			cv->Pen->Style = psSolid;
 			cv->Pen->Width = 1;
@@ -1258,7 +1258,7 @@ void __fastcall TOptionDlg::PageControl1DrawTab(TCustomTabControl *Control, int 
 			cv->LineTo(Rect.Right, Rect.Top);
 			cv->LineTo(Rect.Right, Rect.Bottom);
 		}
-		//ƒ^ƒCƒgƒ‹
+		//ã‚¿ã‚¤ãƒˆãƒ«
 		cv->Font->Color = Active? col_fgOptTab : get_LabelColor();
 		cv->Font->Style = Active? (cv->Font->Style << fsBold) : (cv->Font->Style >> fsBold);
 		UnicodeString tstr = tp->Tabs->Strings[TabIndex];
@@ -1270,12 +1270,12 @@ void __fastcall TOptionDlg::PageControl1DrawTab(TCustomTabControl *Control, int 
 }
 
 //---------------------------------------------------------------------------
-//ƒL[İ’èƒRƒ“ƒ{ƒ{ƒbƒNƒX‚ğİ’è
+//ã‚­ãƒ¼è¨­å®šã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹ã‚’è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::SetKeyComboBox()
 {
 	UnicodeString kmd;
-	KeyKeyGroupBox->Caption = kmd.sprintf(_T("ƒL[ (%s)"), is_JpKeybd()? _T("JP") : _T("US"));
+	KeyKeyGroupBox->Caption = kmd.sprintf(_T("ã‚­ãƒ¼ (%s)"), is_JpKeybd()? _T("JP") : _T("US"));
 	KeyboardLabel->Caption  = kmd.sprintf(_T("(%s)"), (::GetKeyboardType(0)==7)? _T("JP") : _T("US"));
 
 	assign_KeyList(KeyComboBox);
@@ -1287,7 +1287,7 @@ void __fastcall TOptionDlg::SetKeyComboBox()
 }
 
 //---------------------------------------------------------------------------
-//ƒL[‘I‘ğƒRƒ“ƒ{ƒ{ƒbƒNƒX‚Ì“à•”ó‘Ô‚ğXV
+//ã‚­ãƒ¼é¸æŠã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹ã®å†…éƒ¨çŠ¶æ…‹ã‚’æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::UpdateKeyComboStt()
 {
@@ -1325,17 +1325,17 @@ void __fastcall TOptionDlg::UpdateKeyComboStt()
 
 	for (int i=0; i<key_lst->Count; i++) {
 		UnicodeString kstr = key_lst->Strings[i];
-		//2ƒXƒgƒ[ƒN
+		//2ã‚¹ãƒˆãƒ­ãƒ¼ã‚¯
 		if (ContainsStr(kstr, "~")) {
 			UnicodeString key = get_tkn(kstr, '~');
 			int idx = KeyComboBox->Items->IndexOf(key);
-			if (idx!=-1) KeyComboBox->Items->Objects[idx] = (TObject*)2;	//ŠJnƒL[
+			if (idx!=-1) KeyComboBox->Items->Objects[idx] = (TObject*)2;	//é–‹å§‹ã‚­ãƒ¼
 			if (SameText(key1, key)) {
 				int idx2 = Key2ComboBox->Items->IndexOf(get_tkn_r(kstr, '~'));
 				if (idx2!=-1) Key2ComboBox->Items->Objects[idx2] = (TObject*)1;
 			}
 		}
-		//’Êí
+		//é€šå¸¸
 		else {
 			int idx = KeyComboBox->Items->IndexOf(kstr);
 			if (idx!=-1) KeyComboBox->Items->Objects[idx] = (TObject*)1;
@@ -1357,7 +1357,7 @@ void __fastcall TOptionDlg::KeybdRadioGroupClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//Œ»İ‚Ì‘ÎÛƒŠƒXƒgƒ{ƒbƒNƒX‚ğæ“¾
+//ç¾åœ¨ã®å¯¾è±¡ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã‚’å–å¾—
 //---------------------------------------------------------------------------
 TCustomListBox* __fastcall TOptionDlg::GetCurListBox()
 {
@@ -1418,7 +1418,7 @@ UnicodeString __fastcall TOptionDlg::GetCmdKeyStr()
 }
 
 //---------------------------------------------------------------------------
-//2ƒXƒgƒ[ƒNŠJnƒL[‚©?
+//2ã‚¹ãƒˆãƒ­ãƒ¼ã‚¯é–‹å§‹ã‚­ãƒ¼ã‹?
 //---------------------------------------------------------------------------
 bool __fastcall TOptionDlg::IsFirstCmdKey()
 {
@@ -1440,7 +1440,7 @@ bool __fastcall TOptionDlg::IsFirstCmdKey()
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒu‚ğİ’è
+//ã‚¿ãƒ–ã‚’è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::SetSheet(UnicodeString prm)
 {
@@ -1461,44 +1461,44 @@ void __fastcall TOptionDlg::SetSheet(UnicodeString prm)
 }
 
 //---------------------------------------------------------------------------
-//ˆêƒfƒBƒŒƒNƒgƒŠ‚ÌQÆ
+//ä¸€æ™‚ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::RefTmpDirBtnClick(TObject *Sender)
 {
 	UnicodeString dnam = ExePath;
-	if (UserModule->SelectDirEx(_T("ˆêƒfƒBƒŒƒNƒgƒŠ"), dnam, true)) TempDirEdit->Text = dnam;
+	if (UserModule->SelectDirEx(_T("ä¸€æ™‚ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª"), dnam, true)) TempDirEdit->Text = dnam;
 }
 
 //---------------------------------------------------------------------------
-//MigemoƒfƒBƒŒƒNƒgƒŠ‚ÌQÆ
+//Migemoãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::RefMigemoBtnClick(TObject *Sender)
 {
 	UnicodeString dnam = ExePath;
-	if (UserModule->SelectDirEx(_T("Migemo ƒfƒBƒŒƒNƒgƒŠ"), dnam, true)) MigemoDirEdit->Text = dnam;
+	if (UserModule->SelectDirEx(_T("Migemo ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª"), dnam, true)) MigemoDirEdit->Text = dnam;
 }
 
 //---------------------------------------------------------------------------
-//git.exe QÆ
+//git.exe å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::RefCmdGitExeBtnClick(TObject *Sender)
 {
-	UserModule->PrepareOpenDlg(_T("git.exe ‚Ìw’è"), F_FILTER_EXE, _T("git.exe"), cv_env_var("%PROGRAMFILES%"));
+	UserModule->PrepareOpenDlg(_T("git.exe ã®æŒ‡å®š"), F_FILTER_EXE, _T("git.exe"), cv_env_var("%PROGRAMFILES%"));
 	UnicodeString fnam;
 	if (UserModule->OpenDlgToStr(fnam)) CmdGitExeEdit->Text = fnam;
 }
 //---------------------------------------------------------------------------
-//grep.exe QÆ
+//grep.exe å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::RefCmdGrepExeBtnClick(TObject *Sender)
 {
-	UserModule->PrepareOpenDlg(_T("grep.exe ‚Ìw’è"), F_FILTER_EXE, _T("grep.exe"), cv_env_var("%PROGRAMFILES%"));
+	UserModule->PrepareOpenDlg(_T("grep.exe ã®æŒ‡å®š"), F_FILTER_EXE, _T("grep.exe"), cv_env_var("%PROGRAMFILES%"));
 	UnicodeString fnam;
 	if (UserModule->OpenDlgToStr(fnam)) CmdGrepExeEdit->Text = fnam;
 }
 
 //---------------------------------------------------------------------------
-//‚»‚Ì‘¼‚ÌƒGƒfƒBƒ^ˆê——‚Ì•`‰æ
+//ãã®ä»–ã®ã‚¨ãƒ‡ã‚£ã‚¿ä¸€è¦§ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::EtcEditorListBoxDrawItem(TWinControl *Control, int Index,
 	TRect &Rect, TOwnerDrawState State)
@@ -1541,13 +1541,13 @@ void __fastcall TOptionDlg::EtcEditorListBoxClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒGƒfƒBƒ^/ƒrƒ…[ƒA‚ÌQÆ
+//ã‚¨ãƒ‡ã‚£ã‚¿/ãƒ“ãƒ¥ãƒ¼ã‚¢ã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::RefEditorBtnClick(TObject *Sender)
 {
 	int tag = ((TComponent*)Sender)->Tag;
 	UnicodeString tit = get_word_i_idx(
-		"ƒeƒLƒXƒgƒGƒfƒBƒ^|ƒCƒ[ƒWƒGƒfƒBƒ^|ƒoƒCƒiƒŠƒGƒfƒBƒ^|‚»‚Ì‘¼‚ÌƒGƒfƒBƒ^", tag);
+		"ãƒ†ã‚­ã‚¹ãƒˆã‚¨ãƒ‡ã‚£ã‚¿|ã‚¤ãƒ¡ãƒ¼ã‚¸ã‚¨ãƒ‡ã‚£ã‚¿|ãƒã‚¤ãƒŠãƒªã‚¨ãƒ‡ã‚£ã‚¿|ãã®ä»–ã®ã‚¨ãƒ‡ã‚£ã‚¿", tag);
 	UserModule->PrepareOpenDlg(tit.c_str(), F_FILTER_EXE2);
 	UnicodeString fnam;
 	if (UserModule->OpenDlgToStr(fnam)) {
@@ -1561,14 +1561,14 @@ void __fastcall TOptionDlg::RefEditorBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒXƒNI—¹‚Ì’Ê’m‰¹‚ÌQÆ
+//ã‚¿ã‚¹ã‚¯çµ‚äº†æ™‚ã®é€šçŸ¥éŸ³ã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::RefSoundBtnClick(TObject *Sender)
 {
 	int tag = ((TComponent*)Sender)->Tag;
 
 	UnicodeString inidir = def_if_empty(ExtractFileDir(to_absolute_name((tag==0)? SndWarnEdit->Text : SndTaskFinEdit->Text)), ExePath);
-	UserModule->PrepareOpenDlg(_T("ƒTƒEƒ“ƒhƒtƒ@ƒCƒ‹‚Ìw’è"), F_FILTER_WAV, NULL, inidir);
+	UserModule->PrepareOpenDlg(_T("ã‚µã‚¦ãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã®æŒ‡å®š"), F_FILTER_WAV, NULL, inidir);
 
 	UnicodeString fnam;
 	if (UserModule->OpenDlgToStr(fnam, true)) {
@@ -1593,7 +1593,7 @@ void __fastcall TOptionDlg::TestSoundBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//‘S‘Ì—š—ğƒtƒ@ƒCƒ‹İ’è‚Ì•ÏX
+//å…¨ä½“å±¥æ­´ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®šã®å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::ExtSavDirHistCheckBoxClick(TObject *Sender)
 {
@@ -1601,7 +1601,7 @@ void __fastcall TOptionDlg::ExtSavDirHistCheckBoxClick(TObject *Sender)
 
 	if (ExtSavDirHistCheckBox->Checked)	{
 		UnicodeString fnam = ExePath + DIR_HIST_FILE;
-		if (file_exists(fnam) && msgbox_Sure(_T("Šù‘¶‚Ì—š—ğƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚İ‚Ü‚·‚©H"))) {
+		if (file_exists(fnam) && msgbox_Sure(_T("æ—¢å­˜ã®å±¥æ­´ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã¿ã¾ã™ã‹ï¼Ÿ"))) {
 			std::unique_ptr<UsrIniFile> hst_file(new UsrIniFile(fnam));
 			hst_file->LoadListItems("AllDirHistory", AllDirHistory, 0, false);
 		}
@@ -1609,7 +1609,7 @@ void __fastcall TOptionDlg::ExtSavDirHistCheckBoxClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒŒƒCƒAƒEƒg•ÏX
+//ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆå¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::LayoutChange(TObject *Sender)
 {
@@ -1617,25 +1617,25 @@ void __fastcall TOptionDlg::LayoutChange(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//”wŒi‰æ‘œ‚ÌQÆ
+//èƒŒæ™¯ç”»åƒã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::RefBgImgBtnClick(TObject *Sender)
 {
 	int tag = ((TComponent*)Sender)->Tag;
 	TLabeledEdit *ep = (tag==0)? BgImg1Edit : (tag==1)? BgImg2Edit : (tag==2)? SpImgEdit : SpImg2Edit;
-	UserModule->OpenImgDlg->Title = "”wŒi‰æ‘œ‚Ìw’è";
+	UserModule->OpenImgDlg->Title = "èƒŒæ™¯ç”»åƒã®æŒ‡å®š";
 	UserModule->SetOpenImgFilter(ep->Text);
 	UserModule->OpenImgDlg->InitialDir = to_absolute_name(ExtractFilePath(ep->Text));
 	UserModule->OpenImgDlg->FileName   = EmptyStr;
 	UserModule->OpenImgDlgToEdit(ep, true);
 }
 //---------------------------------------------------------------------------
-//ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒmƒu‰æ‘œ‚ÌQÆ
+//ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ–ç”»åƒã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::ScrBarStyleComboBoxClick(TObject *Sender)
 {
 	if (ScrBarStyleComboBox->ItemIndex==4) {
-		UserModule->OpenImgDlg->Title = "ƒmƒu‰æ‘œ‚Ìw’è";
+		UserModule->OpenImgDlg->Title = "ãƒãƒ–ç”»åƒã®æŒ‡å®š";
 		UserModule->SetOpenImgFilter(KnobImgEdit->Text);
 		UserModule->OpenImgDlg->InitialDir = to_absolute_name(ExtractFilePath(KnobImgEdit->Text));
 		UserModule->OpenImgDlg->FileName   = EmptyStr;
@@ -1650,7 +1650,7 @@ void __fastcall TOptionDlg::ScrBarStyleComboBoxClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒHƒ“ƒg
+//ãƒ•ã‚©ãƒ³ãƒˆ
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::FontComboBoxDrawItem(TWinControl *Control, int Index,
 	TRect &Rect, TOwnerDrawState State)
@@ -1669,11 +1669,11 @@ void __fastcall TOptionDlg::FontComboBoxDrawItem(TWinControl *Control, int Index
 
 	if (Index<FontBufList->Count) {
 		TFont *f = (TFont*)FontBufList->Objects[Index];
-		//ƒTƒCƒY
+		//ã‚µã‚¤ã‚º
 		UnicodeString szstr = f->Size;
 		cv->TextOut(xp + get_CharWidth(cv, 2) - cv->TextWidth(szstr), yp, szstr);
 		xp += fh*2;
-		//–¼‘O
+		//åå‰
 		cv->Font->Assign(f);
 		cv->Font->Size = cp->Font->Size;
 		SetHighlight(cv, State.Contains(odSelected));
@@ -1688,15 +1688,15 @@ void __fastcall TOptionDlg::RefFontBtnClick(TObject *Sender)
 	if (idx>=0 && idx<FontComboBox->Items->Count && idx<FontBufList->Count) {
 		TFont *f = (TFont*)FontBufList->Objects[idx];
 		UserModule->FontDlg->Options.Clear();
-		if (SameText(FontBufList->ValueFromIndex[idx], "ƒeƒLƒXƒgƒrƒ…[ƒA"))
-			UserModule->FontDlg->Options << fdFixedPitchOnly;	//ƒeƒLƒXƒgƒrƒ…[ƒA‚Í“™•
+		if (SameText(FontBufList->ValueFromIndex[idx], "ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢"))
+			UserModule->FontDlg->Options << fdFixedPitchOnly;	//ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã¯ç­‰å¹…
 
 		if (UserModule->FontDlgToFont(f)) FontComboBox->Repaint();
 	}
 }
 
 //---------------------------------------------------------------------------
-//”zF
+//é…è‰²
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::OptColListBoxDrawItem(TWinControl *Control, int Index,
 	TRect &Rect, TOwnerDrawState State)
@@ -1725,7 +1725,7 @@ void __fastcall TOptionDlg::ModalColorBoxChange(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//”zF‚Ì–³Œø‰»
+//é…è‰²ã®ç„¡åŠ¹åŒ–
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::DisableColActionExecute(TObject *Sender)
 {
@@ -1765,7 +1765,7 @@ void __fastcall TOptionDlg::DisableTimColActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒXƒ|ƒCƒg
+//ã‚¹ãƒã‚¤ãƒˆ
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::SpuitImageMouseDown(TObject *Sender, TMouseButton Button,
 		TShiftState Shift, int X, int Y)
@@ -1788,7 +1788,7 @@ void __fastcall TOptionDlg::SpuitImageMouseDown(TObject *Sender, TMouseButton Bu
 					(TColor)ColBufList->Values[lp->Items->Names[lp->ItemIndex]].ToIntDef(col_None);
 	}
 
-	//ƒXƒEƒHƒbƒ`ƒuƒbƒN
+	//ã‚¹ã‚¦ã‚©ãƒƒãƒãƒ–ãƒƒã‚¯
 	SetCustomColToSwatch(UserModule->ColorDlg->CustomColors);
 
 	TGroupBox *gp = (SpuitTag==3)? TagColGroupBox :
@@ -1833,7 +1833,7 @@ void __fastcall TOptionDlg::SpuitImageMouseUp(TObject *Sender, TMouseButton Butt
 	}
 }
 //---------------------------------------------------------------------------
-//“§–¾“x§ŒÀ
+//é€æ˜åº¦åˆ¶é™
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::ModalAlphaEditChange(TObject *Sender)
 {
@@ -1842,7 +1842,7 @@ void __fastcall TOptionDlg::ModalAlphaEditChange(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//Šg’£q•Ê”zF
+//æ‹¡å¼µå­åˆ¥é…è‰²
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::ExtColListBoxClick(TObject *Sender)
 {
@@ -1853,7 +1853,7 @@ void __fastcall TOptionDlg::ExtColListBoxClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//Šg’£q•Ê”zFˆê——‚Ì•`‰æ
+//æ‹¡å¼µå­åˆ¥é…è‰²ä¸€è¦§ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::ExtColListBoxDrawItem(TWinControl *Control, int Index,
 	TRect &Rect, TOwnerDrawState State)
@@ -1889,10 +1889,10 @@ void __fastcall TOptionDlg::RefExtColBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//Šg’£q‚Ìd•¡‚ğƒ`ƒFƒbƒN
+//æ‹¡å¼µå­ã®é‡è¤‡ã‚’ãƒã‚§ãƒƒã‚¯
 //---------------------------------------------------------------------------
 bool __fastcall TOptionDlg::CheckDuplExt(
-	int skip_idx)	//!=-1 ‚È‚ç•ÏX€–Ú‚ÌƒCƒ“ƒfƒbƒNƒX	(default = -1: ’Ç‰Á)
+	int skip_idx)	//!=-1 ãªã‚‰å¤‰æ›´é …ç›®ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹	(default = -1: è¿½åŠ )
 {
 	std::unique_ptr<TStringList> dpl_lst(new TStringList());
 	TListBox *lp = ExtColListBox;
@@ -1931,7 +1931,7 @@ bool __fastcall TOptionDlg::CheckDuplExt(
 			else
 				msg.cat_sprintf(_T(".%s"), fext.c_str());
 		}
-		msgbox_WARN(msg + "]‚Í‚·‚Å‚É“o˜^‚³‚ê‚Ä‚¢‚Ü‚·B");
+		msgbox_WARN(msg + "]ã¯ã™ã§ã«ç™»éŒ²ã•ã‚Œã¦ã„ã¾ã™ã€‚");
 		return true;
 	}
 
@@ -1939,7 +1939,7 @@ bool __fastcall TOptionDlg::CheckDuplExt(
 }
 
 //---------------------------------------------------------------------------
-//Šg’£q•Ê”zF‚Ì’Ç‰Á
+//æ‹¡å¼µå­åˆ¥é…è‰²ã®è¿½åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::AddExtColActionExecute(TObject *Sender)
 {
@@ -1956,7 +1956,7 @@ void __fastcall TOptionDlg::AddExtColActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = !ExtColorEdit->Text.IsEmpty();
 }
 //---------------------------------------------------------------------------
-//Šg’£q•Ê”zF‚Ì•ÏX
+//æ‹¡å¼µå­åˆ¥é…è‰²ã®å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::ChgExtColActionExecute(TObject *Sender)
 {
@@ -1974,7 +1974,7 @@ void __fastcall TOptionDlg::ChgExtColActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//Šg’£q‚ÌŒŸõ
+//æ‹¡å¼µå­ã®æ¤œç´¢
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::FindXColEditChange(TObject *Sender)
 {
@@ -1996,7 +1996,7 @@ void __fastcall TOptionDlg::FindXColEditChange(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒO•Ê”zFˆê——‚Ì•`‰æ
+//ã‚¿ã‚°åˆ¥é…è‰²ä¸€è¦§ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::TagColListBoxDrawItem(TWinControl *Control, int Index,
 	TRect &Rect, TOwnerDrawState State)
@@ -2010,7 +2010,7 @@ void __fastcall TOptionDlg::TagColListBoxDrawItem(TWinControl *Control, int Inde
 	TColor col = (TColor)lp->Items->ValueFromIndex[Index].ToIntDef(col_None);
 	if (col==col_None) {
 		col = (TColor)ColBufList->Values["fgTagNam"].ToIntDef(clBlack);
-		stt = "<ƒfƒtƒHƒ‹ƒg>";
+		stt = "<ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ>";
 	}
 
 	TRect rc = Rect;
@@ -2077,7 +2077,7 @@ void __fastcall TOptionDlg::RevTagColCheckBoxClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//”zF‚ÌŒŸõ
+//é…è‰²ã®æ¤œç´¢
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::FindColEditKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -2093,7 +2093,7 @@ void __fastcall TOptionDlg::FindColEditKeyDown(TObject *Sender, WORD &Key, TShif
 	}
 }
 //---------------------------------------------------------------------------
-//”zF‚ğ‰º•ûŒü‚ÉŒŸõ
+//é…è‰²ã‚’ä¸‹æ–¹å‘ã«æ¤œç´¢
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::FindColDownActionExecute(TObject *Sender)
 {
@@ -2119,7 +2119,7 @@ void __fastcall TOptionDlg::FindColDownActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = found;
 }
 //---------------------------------------------------------------------------
-//”zF‚ğã•ûŒü‚ÉŒŸõ
+//é…è‰²ã‚’ä¸Šæ–¹å‘ã«æ¤œç´¢
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::FindColUpActionExecute(TObject *Sender)
 {
@@ -2162,7 +2162,7 @@ void __fastcall TOptionDlg::FindColEditChange(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒŠƒXƒg‚Å‚ÌƒL[‘€ì
+//ãƒªã‚¹ãƒˆã§ã®ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::OptListBoxKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -2195,7 +2195,7 @@ void __fastcall TOptionDlg::OptListBoxKeyDown(TObject *Sender, WORD &Key, TShift
 }
 
 //---------------------------------------------------------------------------
-//‚»‚Ì‘¼‚ÌƒGƒfƒBƒ^‚Ì’Ç‰Á
+//ãã®ä»–ã®ã‚¨ãƒ‡ã‚£ã‚¿ã®è¿½åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::AddEtcEditorActionExecute(TObject *Sender)
 {
@@ -2208,7 +2208,7 @@ void __fastcall TOptionDlg::AddEtcEditorActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = !FExtEtcEdit->Text.IsEmpty() && !EtcEditorEdit->Text.IsEmpty();
 }
 //---------------------------------------------------------------------------
-//‚»‚Ì‘¼‚ÌƒGƒfƒBƒ^‚Ì•ÏX
+//ãã®ä»–ã®ã‚¨ãƒ‡ã‚£ã‚¿ã®å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::ChgEtcEditorActionExecute(TObject *Sender)
 {
@@ -2223,14 +2223,14 @@ void __fastcall TOptionDlg::ChgEtcEditorActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒGƒCƒŠƒAƒX•ÏX‚ğ”½‰f
+//ã‚¨ã‚¤ãƒªã‚¢ã‚¹å¤‰æ›´ã‚’åæ˜ 
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::UpdateAlias(UnicodeString o_name, UnicodeString n_name)
 {
 	if (SameText(o_name, n_name)) return;
 
 	UnicodeString tmp;
-	//ƒL[İ’è
+	//ã‚­ãƒ¼è¨­å®š
 	for (int i=0; i<MAX_KEYTABS; i++) {
 		for (int j=0; j<KeyListBuf[i]->Count; j++) {
 			UnicodeString vbuf = KeyListBuf[i]->ValueFromIndex[j];
@@ -2239,7 +2239,7 @@ void __fastcall TOptionDlg::UpdateAlias(UnicodeString o_name, UnicodeString n_na
 				KeyListBuf[i]->ValueFromIndex[j] = tmp.sprintf(_T("$%s"), n_name.c_str());
 		}
 	}
-	//ŠÖ˜A•t‚¯
+	//é–¢é€£ä»˜ã‘
 	TListBox *lp = AssociateListBox;
 	for (int i=0; i<lp->Count; i++) {
 		UnicodeString vbuf = exclude_quot(lp->Items->ValueFromIndex[i]);
@@ -2249,15 +2249,15 @@ void __fastcall TOptionDlg::UpdateAlias(UnicodeString o_name, UnicodeString n_na
 	}
 }
 //---------------------------------------------------------------------------
-//ƒGƒCƒŠƒAƒX‚ÉŠÖ˜A•t‚¯‚ç‚ê‚Ä‚¢‚éŠg’£q‚ğæ“¾
+//ã‚¨ã‚¤ãƒªã‚¢ã‚¹ã«é–¢é€£ä»˜ã‘ã‚‰ã‚Œã¦ã„ã‚‹æ‹¡å¼µå­ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString __fastcall TOptionDlg::get_AliasInfo(UnicodeString alias)
 {
-	//ƒL[
+	//ã‚­ãƒ¼
 	UnicodeString k_inf;
 	for (int i=0; i<MAX_KEYTABS && k_inf.IsEmpty(); i++) k_inf = get_Alias_KeyStr(alias, KeyListBuf[i]);
 
-	//ŠÖ˜A•t‚¯
+	//é–¢é€£ä»˜ã‘
 	UnicodeString a_inf;
 	TListBox *lp = AssociateListBox;
 	for (int i=0; i<lp->Count; i++) {
@@ -2273,22 +2273,22 @@ UnicodeString __fastcall TOptionDlg::get_AliasInfo(UnicodeString alias)
 	return ret_str;
 }
 //---------------------------------------------------------------------------
-//ƒGƒCƒŠƒAƒX‚Ìd•¡ƒƒbƒZ[ƒW‚ğæ“¾
+//ã‚¨ã‚¤ãƒªã‚¢ã‚¹ã®é‡è¤‡ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å–å¾—
 //---------------------------------------------------------------------------
 bool __fastcall TOptionDlg::CheckDuplAliasMsg(
-	UnicodeString alias,	//ƒGƒCƒŠƒAƒX
-	TCheckListBox *lp)		//•ÏX‘ÎÛƒŠƒXƒgƒ{ƒbƒNƒX (’Ç‰Á‚Ìê‡‚Í NULL)
+	UnicodeString alias,	//ã‚¨ã‚¤ãƒªã‚¢ã‚¹
+	TCheckListBox *lp)		//å¤‰æ›´å¯¾è±¡ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ (è¿½åŠ ã®å ´åˆã¯ NULL)
 {
 	if (alias.IsEmpty()) return false;
 
 	UnicodeString mgs;
-	mgs.sprintf(_T("ƒGƒCƒŠƒAƒX \"%s\" ‚ª\r\n"), alias.c_str());
+	mgs.sprintf(_T("ã‚¨ã‚¤ãƒªã‚¢ã‚¹ \"%s\" ãŒ\r\n"), alias.c_str());
 
 	for (int i=0; i<ExtMenuListBox->Count; i++) {
 		if (lp==ExtMenuListBox && i==lp->ItemIndex) continue;
 		TStringDynArray itm_buf = get_csv_array(ExtMenuListBox->Items->Strings[i], EXTMENU_CSVITMCNT, true);
 		if (SameText(alias, itm_buf[3])) {
-			msgbox_WARN(mgs.cat_sprintf(_T("’Ç‰Áƒƒjƒ…[ \"%s\" ‚Åd•¡‚µ‚Ä‚¢‚Ü‚·B"), itm_buf[0].c_str()));
+			msgbox_WARN(mgs.cat_sprintf(_T("è¿½åŠ ãƒ¡ãƒ‹ãƒ¥ãƒ¼ \"%s\" ã§é‡è¤‡ã—ã¦ã„ã¾ã™ã€‚"), itm_buf[0].c_str()));
 			return true;
 		}
 	}
@@ -2296,7 +2296,7 @@ bool __fastcall TOptionDlg::CheckDuplAliasMsg(
 		if (lp==ExtToolListBox && i==lp->ItemIndex) continue;
 		TStringDynArray itm_buf = get_csv_array(ExtToolListBox->Items->Strings[i], EXTTOOL_CSVITMCNT, true);
 		if (SameText(alias, itm_buf[4])) {
-			msgbox_WARN(mgs.cat_sprintf(_T("ŠO•”ƒc[ƒ‹ \"%s\" ‚Åd•¡‚µ‚Ä‚¢‚Ü‚·B"), itm_buf[0].c_str()));
+			msgbox_WARN(mgs.cat_sprintf(_T("å¤–éƒ¨ãƒ„ãƒ¼ãƒ« \"%s\" ã§é‡è¤‡ã—ã¦ã„ã¾ã™ã€‚"), itm_buf[0].c_str()));
 			return true;
 		}
 	}
@@ -2305,7 +2305,7 @@ bool __fastcall TOptionDlg::CheckDuplAliasMsg(
 }
 
 //---------------------------------------------------------------------------
-//ŠO•”ƒc[ƒ‹
+//å¤–éƒ¨ãƒ„ãƒ¼ãƒ«
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::ExtToolListBoxClick(TObject *Sender)
 {
@@ -2346,7 +2346,7 @@ void __fastcall TOptionDlg::ToolTitEditChange(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ŠO•”ƒc[ƒ‹‚ÌÀsƒtƒ@ƒCƒ‹‚ğİ’è
+//å¤–éƒ¨ãƒ„ãƒ¼ãƒ«ã®å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«ã‚’è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::SetExtToolExeName(UnicodeString fnam)
 {
@@ -2362,7 +2362,7 @@ void __fastcall TOptionDlg::SetExtToolExeName(UnicodeString fnam)
 			ToolAliasEdit->Text = EmptyStr;
 		}
 		else {
-			msgbox_WARN("ƒŠƒ“ƒNæ‚ª .exe ƒtƒ@ƒCƒ‹‚Å‚Í‚ ‚è‚Ü‚¹‚ñ");
+			msgbox_WARN("ãƒªãƒ³ã‚¯å…ˆãŒ .exe ãƒ•ã‚¡ã‚¤ãƒ«ã§ã¯ã‚ã‚Šã¾ã›ã‚“");
 		}
 	}
 	else {
@@ -2370,7 +2370,7 @@ void __fastcall TOptionDlg::SetExtToolExeName(UnicodeString fnam)
 	}
 }
 //---------------------------------------------------------------------------
-//ŠO•”ƒc[ƒ‹‚Ì’Ç‰ÁE•ÏX
+//å¤–éƒ¨ãƒ„ãƒ¼ãƒ«ã®è¿½åŠ ãƒ»å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::ChangeExtToolList(bool add)
 {
@@ -2383,29 +2383,29 @@ void __fastcall TOptionDlg::ChangeExtToolList(bool add)
 	UnicodeString lbuf = make_csv_rec_str({
 		ToolTitEdit->Text, ToolExeEdit->Text, ToolPrmEdit->Text, ToolDirEdit->Text, ToolAliasEdit->Text, (chk? "1" : "0")});
 
-	//’Ç‰Á
+	//è¿½åŠ 
 	if (add) {
 		lp->Items->Add(lbuf);
 		lp->Checked[lp->Count - 1] = true;
 	}
-	//•ÏX
+	//å¤‰æ›´
 	else {
 		if (idx==-1) return;
 		UnicodeString last_alias = get_csv_item(lp->Items->Strings[idx], 4);
 		lp->Items->Strings[idx] = lbuf;
-		//ƒGƒCƒŠƒAƒX•ÏX‚ğ”½‰f
+		//ã‚¨ã‚¤ãƒªã‚¢ã‚¹å¤‰æ›´ã‚’åæ˜ 
 		UpdateAlias(last_alias, ToolAliasEdit->Text);
 	}
 }
 //---------------------------------------------------------------------------
-//’Ç‰Á
+//è¿½åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::AddToolActionExecute(TObject *Sender)
 {
 	ChangeExtToolList(true);
 }
 //---------------------------------------------------------------------------
-//•ÏX
+//å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::ChgToolActionExecute(TObject *Sender)
 {
@@ -2423,16 +2423,16 @@ void __fastcall TOptionDlg::ChgToolActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ŠO•”ƒc[ƒ‹‚ÌQÆ
+//å¤–éƒ¨ãƒ„ãƒ¼ãƒ«ã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::RefExeBtnClick(TObject *Sender)
 {
-	UserModule->PrepareOpenDlg(_T("ŠO•”ƒc[ƒ‹"), F_FILTER_EXE2);
+	UserModule->PrepareOpenDlg(_T("å¤–éƒ¨ãƒ„ãƒ¼ãƒ«"), F_FILTER_EXE2);
 	UnicodeString fnam;
 	if (UserModule->OpenDlgToStr(fnam)) SetExtToolExeName(fnam);
 }
 //---------------------------------------------------------------------------
-//ŠO•”ƒc[ƒ‹ƒpƒ‰ƒ[ƒ^‘®•¶š—ñ‚ÌQÆ
+//å¤–éƒ¨ãƒ„ãƒ¼ãƒ«ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æ›¸å¼æ–‡å­—åˆ—ã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::RefToolFmtBtnClick(TObject *Sender)
 {
@@ -2445,16 +2445,16 @@ void __fastcall TOptionDlg::FrmtItemClick(TObject *Sender)
 	ToolPrmEdit->SelText = get_tkn(((TMenuItem*)Sender)->Caption, ' ');
 }
 //---------------------------------------------------------------------------
-//ŠO•”ƒc[ƒ‹‚Ìì‹ÆƒfƒBƒŒƒNƒgƒŠ‚ÌQÆ
+//å¤–éƒ¨ãƒ„ãƒ¼ãƒ«ã®ä½œæ¥­ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::RefDirBtnClick(TObject *Sender)
 {
 	UnicodeString dnam = ExePath;
-	if (UserModule->SelectDirEx(_T("ì‹ÆƒfƒBƒŒƒNƒgƒŠ"), dnam)) ToolDirEdit->Text = dnam;
+	if (UserModule->SelectDirEx(_T("ä½œæ¥­ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª"), dnam)) ToolDirEdit->Text = dnam;
 }
 
 //---------------------------------------------------------------------------
-//’Ç‰Áƒƒjƒ…[
+//è¿½åŠ ãƒ¡ãƒ‹ãƒ¥ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::ExtMenuListBoxClick(TObject *Sender)
 {
@@ -2516,7 +2516,7 @@ void __fastcall TOptionDlg::MenuTitEditChange(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒƒjƒ…[€–Ú‚Ì’Ç‰ÁE•ÏX
+//ãƒ¡ãƒ‹ãƒ¥ãƒ¼é …ç›®ã®è¿½åŠ ãƒ»å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::ChangeExtMenuList(bool add)
 {
@@ -2538,19 +2538,19 @@ void __fastcall TOptionDlg::ChangeExtMenuList(bool add)
 		if (idx==-1) return;
 		UnicodeString last_alias = get_csv_item(lp->Items->Strings[idx], 3);
 		lp->Items->Strings[idx] = lbuf;
-		//ƒGƒCƒŠƒAƒX•ÏX‚ğ”½‰f
+		//ã‚¨ã‚¤ãƒªã‚¢ã‚¹å¤‰æ›´ã‚’åæ˜ 
 		UpdateAlias(last_alias, MenuAliasEdit->Text);
 	}
 }
 //---------------------------------------------------------------------------
-//’Ç‰Á
+//è¿½åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::AddMenuActionExecute(TObject *Sender)
 {
 	ChangeExtMenuList(true);
 }
 //---------------------------------------------------------------------------
-//•ÏX
+//å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::ChgMenuActionExecute(TObject *Sender)
 {
@@ -2568,7 +2568,7 @@ void __fastcall TOptionDlg::ChgMenuActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒpƒ‰ƒ[ƒ^ƒtƒ@ƒCƒ‹‚ÌQÆ
+//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«ã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::RefCmdsBtnClick(TObject *Sender)
 {
@@ -2585,12 +2585,12 @@ void __fastcall TOptionDlg::RefCmdsBtnClick(TObject *Sender)
 	if		(PageControl1->ActivePage==ExtMenuSheet) cmd = get_CmdStr(MenuPrmEdit->Text);
 	else if (PageControl1->ActivePage==EventSheet)	 cmd = get_CmdStr(EventCmdsEdit->Text);
 
-	//’Êíƒtƒ@ƒCƒ‹‚Ì‘I‘ğ
+	//é€šå¸¸ãƒ•ã‚¡ã‚¤ãƒ«ã®é¸æŠ
 	if (contained_wd_i(
 		"ContextMenu|ExeMenuFile|FileEdit|LoadWorkList|OpenByApp|OpenByWin|OpenStandard|SelByList|SetFolderIcon|TextViewer",
 			cmd))
 	{
-		UnicodeString tit = "ƒpƒ‰ƒ[ƒ^‚Ìw’è" + subtit;
+		UnicodeString tit = "ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®æŒ‡å®š" + subtit;
 		UserModule->PrepareOpenDlg(tit.c_str(), F_FILTER_ALL, NULL, RefParamPath);
 		UnicodeString fnam;
 		if (UserModule->OpenDlgToStr(fnam)) {
@@ -2612,7 +2612,7 @@ void __fastcall TOptionDlg::RefCmdsBtnClick(TObject *Sender)
 			}
 		}
 	}
-	//ƒRƒ}ƒ“ƒhƒtƒ@ƒCƒ‹‚Ì‘I‘ğ
+	//ã‚³ãƒãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã®é¸æŠ
 	else if (CmdFileListDlg->ShowToSelect()==mrOk) {
 		UnicodeString fnam = CmdFileListDlg->CmdFileName;
 		fnam = "@" + to_relative_name(fnam);
@@ -2634,16 +2634,16 @@ void __fastcall TOptionDlg::RefCmdsBtnClick(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//ƒAƒCƒRƒ“‚ÌQÆ
+//ã‚¢ã‚¤ã‚³ãƒ³ã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::RefMenuIconBtnClick(TObject *Sender)
 {
-	UserModule->PrepareOpenDlg(_T("ƒAƒCƒRƒ“‚Ìw’è"), F_FILTER_ICO);
+	UserModule->PrepareOpenDlg(_T("ã‚¢ã‚¤ã‚³ãƒ³ã®æŒ‡å®š"), F_FILTER_ICO);
 	UserModule->OpenDlgToEdit(MenuIconEdit, true);
 }
 
 //---------------------------------------------------------------------------
-//ŠÖ˜A•t‚¯
+//é–¢é€£ä»˜ã‘
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::AssociateListBoxClick(TObject *Sender)
 {
@@ -2677,7 +2677,7 @@ void __fastcall TOptionDlg::AssociateListBoxMouseUp(TObject *Sender, TMouseButto
 	if (app_lst.Length>1) {
 		std::unique_ptr<TStringList> m_lst(new TStringList());
 		make_AssoMenuList(app_lst, m_lst.get());
-		//ƒeƒXƒgƒƒjƒ…[‚ğì¬
+		//ãƒ†ã‚¹ãƒˆãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’ä½œæˆ
 		TestPopupMenu->Items->Clear();
 		TestPopupMenu->AutoHotkeys = maAutomatic;
 		IconVImgListP->AutoFill = false;
@@ -2693,12 +2693,12 @@ void __fastcall TOptionDlg::AssociateListBoxMouseUp(TObject *Sender, TMouseButto
 			}
 		}
 		IconVImgListP->AutoFill = true;
-		//ƒeƒXƒgƒƒjƒ…[‚ğ•\¦
+		//ãƒ†ã‚¹ãƒˆãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’è¡¨ç¤º
 		TestPopupMenu->Popup(Mouse->CursorPos.x, Mouse->CursorPos.y);
 	}
 }
 //---------------------------------------------------------------------------
-//ƒeƒXƒgƒƒjƒ…[‚Ì•`‰æ
+//ãƒ†ã‚¹ãƒˆãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::TestAdvancedDrawItem(TObject *Sender, TCanvas *ACanvas,
 	const TRect &ARect, TOwnerDrawState State)
@@ -2710,12 +2710,12 @@ void __fastcall TOptionDlg::TestAdvancedDrawItem(TObject *Sender, TCanvas *ACanv
 								(State.Contains(odGrayed) || State.Contains(odDisabled))? clGrayText : clMenuText);
 	ACanvas->FillRect(ARect);
 
-	//ƒZƒpƒŒ[ƒ^
+	//ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿
 	if (SameStr(mp->Caption, "-")) {
 		draw_MenuSeparator(ACanvas, ARect);
 	}
 	else {
-		//ƒLƒƒƒvƒVƒ‡ƒ“
+		//ã‚­ãƒ£ãƒ—ã‚·ãƒ§ãƒ³
 		TRect rc = ARect;
 		int hi = rc.Height();
 		rc.Left += (hi + SCALED_THIS(8));
@@ -2724,7 +2724,7 @@ void __fastcall TOptionDlg::TestAdvancedDrawItem(TObject *Sender, TCanvas *ACanv
 		UINT opt = DT_LEFT;  if (State.Contains(odNoAccel))  opt |= DT_HIDEPREFIX;
 		::DrawText(ACanvas->Handle, mp->Caption.c_str(), -1, &rc, opt);
 
-		//ƒAƒCƒRƒ“
+		//ã‚¢ã‚¤ã‚³ãƒ³
 		int idx = mp->ImageIndex;
 		if (idx>=0 && idx<IconVImgListP->Count) {
 			IconVImgListP->Draw(ACanvas, ARect.Left + SCALED_THIS(4), yp, mp->ImageIndex);
@@ -2732,7 +2732,7 @@ void __fastcall TOptionDlg::TestAdvancedDrawItem(TObject *Sender, TCanvas *ACanv
 	}
 }
 //---------------------------------------------------------------------------
-//ŠÖ˜A•t‚¯ˆê——‚Ìƒ\[ƒg (“¯‚¶Šg’£q“à‚Í‚»‚Ì‚Ü‚Ü)
+//é–¢é€£ä»˜ã‘ä¸€è¦§ã®ã‚½ãƒ¼ãƒˆ (åŒã˜æ‹¡å¼µå­å†…ã¯ãã®ã¾ã¾)
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::SortAssoListBox(UnicodeString item)
 {
@@ -2770,7 +2770,7 @@ void __fastcall TOptionDlg::SortAssoListBox(UnicodeString item)
 }
 
 //---------------------------------------------------------------------------
-//ŠÖ˜A•t‚¯€–Ú‚Ì’Ç‰ÁE•ÏX
+//é–¢é€£ä»˜ã‘é …ç›®ã®è¿½åŠ ãƒ»å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::ChangeAssociateList(bool add)
 {
@@ -2780,12 +2780,12 @@ void __fastcall TOptionDlg::ChangeAssociateList(bool add)
 	if (!SameStr(s, "..")) remove_top_s(s, '.');
 	s.cat_sprintf(_T("=\"%s\""), AsoAppComboBox->Text.c_str());
 
-	//’Ç‰Á
+	//è¿½åŠ 
 	if (add) {
 		AssociateListBox->Items->Add(s);
 		if (AsoSortCheckBox->Checked) SortAssoListBox(s);
 	}
-	//•ÏX
+	//å¤‰æ›´
 	else {
 		if (AssociateListBox->ItemIndex==-1) return;
 		AssociateListBox->Items->Strings[AssociateListBox->ItemIndex] = s;
@@ -2799,7 +2799,7 @@ void __fastcall TOptionDlg::ChangeAssociateList(bool add)
 }
 
 //---------------------------------------------------------------------------
-//ŠÖ˜A•t‚¯‚ÌQÆ“à—e‚ğİ’è
+//é–¢é€£ä»˜ã‘ã®å‚ç…§å†…å®¹ã‚’è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::AsoAppComboBoxDropDown(TObject *Sender)
 {
@@ -2810,7 +2810,7 @@ void __fastcall TOptionDlg::AsoAppComboBoxDropDown(TObject *Sender)
 	}
 	cmd_lst->Sort();
 
-	//d•¡íœ
+	//é‡è¤‡å‰Šé™¤
 	if (cmd_lst->Count>1) {
 		UnicodeString laststr = cmd_lst->Strings[0];
 		int i = 1;
@@ -2826,7 +2826,7 @@ void __fastcall TOptionDlg::AsoAppComboBoxDropDown(TObject *Sender)
 		}
 	}
 
-	//ƒGƒCƒŠƒAƒX
+	//ã‚¨ã‚¤ãƒªã‚¢ã‚¹
 	for (int i=0; i<ExtMenuListBox->Count; i++) {
 		UnicodeString itm = get_csv_item(ExtMenuListBox->Items->Strings[i], 3);
 	 	if (!itm.IsEmpty()) cmd_lst->Add("$" + itm);
@@ -2840,14 +2840,14 @@ void __fastcall TOptionDlg::AsoAppComboBoxDropDown(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//’Ç‰Á
+//è¿½åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::AddAssoActionExecute(TObject *Sender)
 {
 	ChangeAssociateList(true);
 }
 //---------------------------------------------------------------------------
-//•ÏX
+//å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::ChgAssoActionExecute(TObject *Sender)
 {
@@ -2860,17 +2860,17 @@ void __fastcall TOptionDlg::ChgAssoActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ŠÖ˜A•t‚¯Àsƒtƒ@ƒCƒ‹‚Ì‘I‘ğ
+//é–¢é€£ä»˜ã‘å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«ã®é¸æŠ
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::AsoRefBtnClick(TObject *Sender)
 {
-	UserModule->PrepareOpenDlg(_T("ŠÖ˜A•t‚¯"), F_FILTER_EXE2 _T("|") F_FILTER_NBT);
+	UserModule->PrepareOpenDlg(_T("é–¢é€£ä»˜ã‘"), F_FILTER_EXE2 _T("|") F_FILTER_NBT);
 	UnicodeString fnam;
 	if (UserModule->OpenDlgToStr(fnam)) SetExtNameToCtrl(fnam, AsoAppComboBox, true);
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚Ì•`‰æ
+//ä¸€è¦§ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::OptListBoxDrawItem(TWinControl *Control, int Index,
 	TRect &Rect, TOwnerDrawState State)
@@ -2892,7 +2892,7 @@ void __fastcall TOptionDlg::OptListBoxDrawItem(TWinControl *Control, int Index,
 	int yp = Rect.Top + (Rect.Height() - cv->TextHeight("Q"))/2;
 	UnicodeString lbuf = lp->Items->Strings[Index];
 	bool brk = false;
-	//ƒCƒxƒ“ƒg
+	//ã‚¤ãƒ™ãƒ³ãƒˆ
 	if (lp==EventListBox) {
 		UnicodeString tmp = split_pre_tab(lbuf);
 		brk = remove_top_s(tmp, '|');
@@ -2900,20 +2900,20 @@ void __fastcall TOptionDlg::OptListBoxDrawItem(TWinControl *Control, int Index,
 		if (StartsStr(';', lbuf)) cv->Font->Color = AdjustColor(cv->Font->Color, ADJCOL_FGLIST);
 		cv->TextOut(xp + MaxWd_Ev, yp, lbuf);
 	}
-	//‰¼‘zƒhƒ‰ƒCƒu
+	//ä»®æƒ³ãƒ‰ãƒ©ã‚¤ãƒ–
 	else if (lp==VirDrvListBox) {
 		cv->TextOut(xp, yp, split_tkn(lbuf, '=') + ": => ");
 		xp += cv->TextWidth("W: => ");
 		cv->TextOut(xp, yp, lbuf);
 	}
-	//ŠÖ˜A•t‚¯
+	//é–¢é€£ä»˜ã‘
 	else {
 		if (Index>0) brk = !SameText(lp->Items->Names[Index], lp->Items->Names[Index-1]);
 		cv->TextOut(xp, yp, split_tkn(lbuf, '='));
 		xp += MaxWd_AssExt;
 
 		lbuf = exclude_quot(lbuf);
-		//ƒAƒCƒRƒ“‚Ìæ“¾
+		//ã‚¢ã‚¤ã‚³ãƒ³ã®å–å¾—
 		UnicodeString fnam;
 		UnicodeString tmp = lbuf;
 		if (remove_top_text(tmp, "ExeCommands_")) {
@@ -2943,7 +2943,7 @@ void __fastcall TOptionDlg::OptListBoxDrawItem(TWinControl *Control, int Index,
 		cv->TextOut(xp, yp, exclude_quot(lbuf));
 	}
 
-	//‹«ŠEü(ã•Ó)
+	//å¢ƒç•Œç·š(ä¸Šè¾º)
 	if (brk) draw_separateLine(cv, Rect);
 }
 //---------------------------------------------------------------------------
@@ -2959,7 +2959,7 @@ void __fastcall TOptionDlg::OptMenuListBoxDrawItem(TWinControl *Control, int Ind
 	SetHighlight(cv, State.Contains(odSelected));
 	cv->FillRect(Rect);
 
-	//€–Ú‚ÌŠK‘w‚ğ’²‚×‚é
+	//é …ç›®ã®éšå±¤ã‚’èª¿ã¹ã‚‹
 	int sub_lvl = 0;
 	for (int i=0; i<=Index; i++) {
 		UnicodeString itm = get_csv_item(lp->Items->Strings[i], 0);
@@ -2974,14 +2974,14 @@ void __fastcall TOptionDlg::OptMenuListBoxDrawItem(TWinControl *Control, int Ind
 
 	UnicodeString lbuf = lp->Items->Strings[Index];
 	TStringDynArray itm_buf = get_csv_array(lbuf, (is_tool? EXTTOOL_CSVITMCNT : EXTMENU_CSVITMCNT), true);
-	//ƒZƒpƒŒ[ƒ^
+	//ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿
 	if (is_separator(itm_buf[0])) {
 		TRect rc = Rect;  rc.Left = xp - SCALED_THIS(4);
 		draw_Separator(cv, rc);
 	}
-	//€–Ú
+	//é …ç›®
 	else {
-		//ƒAƒCƒRƒ“
+		//ã‚¢ã‚¤ã‚³ãƒ³
 		UnicodeString fnam = cv_env_str(itm_buf[is_tool? 1 : 5]);
 		if (is_tool) {
 			fnam = get_actual_name(fnam);
@@ -2991,14 +2991,14 @@ void __fastcall TOptionDlg::OptMenuListBoxDrawItem(TWinControl *Control, int Ind
 			fnam = file_exists(anam)? anam : get_actual_name(fnam);
 		}
 		draw_SmallIconF(fnam, cv, Rect.Left + SCALED_THIS(2), Rect.Top + (Rect.Height() - SCALED_THIS(16))/2, this);
-		//ƒLƒƒƒvƒVƒ‡ƒ“
+		//ã‚­ãƒ£ãƒ—ã‚·ãƒ§ãƒ³
 		UnicodeString lbuf = minimize_str(itm_buf[0], cv, sp->Items[0]->Width - xp, true);
 		cv->TextOut(xp, yp, lbuf);
-		//ƒGƒCƒŠƒAƒX
+		//ã‚¨ã‚¤ãƒªã‚¢ã‚¹
 		if (!starts_tchs("-<", lbuf)) {
 			cv->TextOut(sp->Items[0]->Width, yp, minimize_str(itm_buf[is_tool? 4 : 3], cv, sp->Items[1]->Width, true));
 		}
-		//İ’è
+		//è¨­å®š
 		if (!starts_tchs("-<>", lbuf)) {
 			lbuf = EmptyStr;
 			for (int i=1; i<(is_tool? 4 : 3); i++) {
@@ -3023,7 +3023,7 @@ void __fastcall TOptionDlg::ExtToolHeaderSectionResize(THeaderControl *HeaderCon
 }
 
 //---------------------------------------------------------------------------
-//ƒL[İ’è
+//ã‚­ãƒ¼è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::KeyTabControlDrawTab(TCustomTabControl *Control, int TabIndex,
 	const TRect &Rect, bool Active)
@@ -3031,7 +3031,7 @@ void __fastcall TOptionDlg::KeyTabControlDrawTab(TCustomTabControl *Control, int
 	draw_OwnerTab(Control, TabIndex, Rect, Active);
 }
 //---------------------------------------------------------------------------
-//ƒJƒeƒSƒŠ[•ÏX
+//ã‚«ãƒ†ã‚´ãƒªãƒ¼å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::KeyTabControlChanging(TObject *Sender, bool &AllowChange)
 {
@@ -3074,7 +3074,7 @@ void __fastcall TOptionDlg::KeyHeaderControlSectionClick(THeaderControl *HeaderC
 }
 
 //---------------------------------------------------------------------------
-//ƒL[ƒRƒ“ƒ{ƒ{ƒbƒNƒX‚Ì•`‰æ
+//ã‚­ãƒ¼ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::KeyComboBoxDrawItem(TWinControl *Control, int Index, TRect &Rect,
 	TOwnerDrawState State)
@@ -3090,17 +3090,17 @@ void __fastcall TOptionDlg::KeyComboBoxDrawItem(TWinControl *Control, int Index,
 
 	int stt = (int)cp->Items->Objects[Index];
 	if (stt>0) {
-		xp = Rect.Right - cv->TextWidth(" ") - SCALED_THIS(2);
+		xp = Rect.Right - cv->TextWidth("â–¡") - SCALED_THIS(2);
 		cv->Font->Color = AdjustColor(cv->Font->Color, ADJCOL_FGLIST);
-		cv->TextOut(xp, yp, (stt==2)? "~" : " ");
+		cv->TextOut(xp, yp, (stt==2)? "~" : "â–¡");
 	}
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒ}ƒ“ƒh(CmdComboBox)‚Ì€–Ú‚ğİ’è
+//ã‚³ãƒãƒ³ãƒ‰(CmdComboBox)ã®é …ç›®ã‚’è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::SetCmdCombo(
-	UnicodeString kwd)		//ƒtƒBƒ‹ƒ^•¶š—ñ (default = EmptyStr : i‚è‚İ–³‚µ)
+	UnicodeString kwd)		//ãƒ•ã‚£ãƒ«ã‚¿æ–‡å­—åˆ— (default = EmptyStr : çµã‚Šè¾¼ã¿ç„¡ã—)
 {
 	PrmComboBox->Text	 = EmptyStr;
 	PrmComboBox->Enabled = false;
@@ -3116,7 +3116,7 @@ void __fastcall TOptionDlg::SetCmdCombo(
 		if (StartsText(modstr, lbuf)) cmd_lst->Add(get_tkn_r(lbuf, ':'));
 	}
 
-	//’Ç‰Áƒƒjƒ…[/ŠO•”ƒc[ƒ‹‚ÌƒGƒCƒŠƒAƒX
+	//è¿½åŠ ãƒ¡ãƒ‹ãƒ¥ãƒ¼/å¤–éƒ¨ãƒ„ãƒ¼ãƒ«ã®ã‚¨ã‚¤ãƒªã‚¢ã‚¹
 	if (KeyTabControl->TabIndex==0 || KeyTabControl->TabIndex==2 || KeyTabControl->TabIndex==3) {
 		for (int i=0; i<ExtMenuListBox->Count; i++) {
 			UnicodeString itm = get_csv_item(ExtMenuListBox->Items->Strings[i], 3);
@@ -3130,12 +3130,12 @@ void __fastcall TOptionDlg::SetCmdCombo(
 
 	if (UnRegCmdCheckBox->Checked) {
 		TListBox *lp = KeyListBox;
-		//“o˜^ÏƒRƒ}ƒ“ƒh‚ğ’Šo
+		//ç™»éŒ²æ¸ˆã‚³ãƒãƒ³ãƒ‰ã‚’æŠ½å‡º
 		std::unique_ptr<TStringList> reg_lst(new TStringList());
 		for (int i=0; i<lp->Count; i++) {
 			if (StartsText(modstr, lp->Items->Strings[i])) reg_lst->Add(lp->Items->ValueFromIndex[i]);
 		}
-		//–¢“o˜^€–Ú‚Ì‚İ‚ğc‚·
+		//æœªç™»éŒ²é …ç›®ã®ã¿ã‚’æ®‹ã™
 		int i = 0;
 		while (i<cmd_lst->Count) {
 			bool found = false;
@@ -3143,7 +3143,7 @@ void __fastcall TOptionDlg::SetCmdCombo(
 				found = SameText(cmd_lst->Strings[i], get_CmdStr(reg_lst->Strings[j]));
 			if (found) cmd_lst->Delete(i); else i++;
 		}
-		//Œ»İˆÊ’u‚Ì€–Ú‚ğ’Ç‰Á
+		//ç¾åœ¨ä½ç½®ã®é …ç›®ã‚’è¿½åŠ 
 		int idx = lp->ItemIndex;
 		if (idx!=-1) {
 			cmd_lst->Add(get_CmdStr(lp->Items->ValueFromIndex[idx]));
@@ -3151,7 +3151,7 @@ void __fastcall TOptionDlg::SetCmdCombo(
 		}
 	}
 
-	//ƒtƒBƒ‹ƒ^
+	//ãƒ•ã‚£ãƒ«ã‚¿
 	bool is_TV = SameText(modstr, "V:");
 	if (!kwd.IsEmpty()) {
 		std::unique_ptr<TStringList> lst(new TStringList());
@@ -3168,14 +3168,14 @@ void __fastcall TOptionDlg::SetCmdCombo(
 		cmd_lst->Assign(lst.get());
 	}
 
-	//ƒhƒƒbƒvƒ_ƒEƒ“€–Ú‚ğŠ„‚è“–‚Ä
+	//ãƒ‰ãƒ­ãƒƒãƒ—ãƒ€ã‚¦ãƒ³é …ç›®ã‚’å‰²ã‚Šå½“ã¦
 	for (int i=0; i<cmd_lst->Count; i++) {
 		sp->Add(get_CmdDesc(cmd_lst->Strings[i], false, ExtMenuListBox->Items, ExtToolListBox->Items, is_TV));
 	}
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒ}ƒ“ƒhƒRƒ“ƒ{ƒ{ƒbƒNƒX‚Ì•`‰æ
+//ã‚³ãƒãƒ³ãƒ‰ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::CmdComboBoxDrawItem(TWinControl *Control, int Index, TRect &Rect,
 	TOwnerDrawState State)
@@ -3200,11 +3200,11 @@ void __fastcall TOptionDlg::CmdComboBoxChange(TObject *Sender)
 {
 	UnicodeString cmd = get_tkn(CmdComboBox->Text, ' ');
 
-	//ƒpƒ‰ƒ[ƒ^€–Ú‚ğİ’è
+	//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿é …ç›®ã‚’è¨­å®š
 	std::unique_ptr<TStringList> p_list(new TStringList());
 	get_PrmList(cmd, KeyTabControl->TabIndex, p_list.get(), PrmComboBox);
 
-	//“®“I‚È€–Ú‚ğİ’è
+	//å‹•çš„ãªé …ç›®ã‚’è¨­å®š
 	UnicodeString tmp;
 	if (contained_wd_i("ChangeRegDir|ChangeOppRegDir", cmd)) {
 		for (int i=0; i<RegDirList->Count; i++) {
@@ -3294,7 +3294,7 @@ void __fastcall TOptionDlg::KeyListBoxClick(TObject *Sender)
 	SelCheckBox->Checked   = remove_text(kstr, KeyStr_SELECT);
 
 	if (ContainsStr(kstr, "~")) {
-		//2ƒXƒgƒ[ƒN
+		//2ã‚¹ãƒˆãƒ­ãƒ¼ã‚¯
 		KeyComboBox->ItemIndex	= KeyComboBox->Items->IndexOf(get_tkn(kstr, '~'));
 		Key2ComboBox->ItemIndex = Key2ComboBox->Items->IndexOf(get_tkn_r(kstr, '~'));
 	}
@@ -3303,7 +3303,7 @@ void __fastcall TOptionDlg::KeyListBoxClick(TObject *Sender)
 		Key2ComboBox->ItemIndex = 0;
 	}
 
-	//ƒRƒ}ƒ“ƒh
+	//ã‚³ãƒãƒ³ãƒ‰
 	UnicodeString cmd = fstr;
 	UnicodeString prm;
 	if (!starts_Dollar(cmd)) {
@@ -3320,7 +3320,7 @@ void __fastcall TOptionDlg::KeyListBoxClick(TObject *Sender)
 		}
 	}
 
-	//ƒpƒ‰ƒ[ƒ^
+	//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 	cp = PrmComboBox;
 	if (cp->Enabled) {
 		if (cp->Style==csDropDown) {
@@ -3349,7 +3349,7 @@ void __fastcall TOptionDlg::KeyListBoxDblClick(TObject *Sender)
 	TRegExOptions opt; opt << roIgnoreCase;
 	if (TRegEx::IsMatch(kstr, ":(Shift\\+|Ctrl\\+|Alt\\+)*F\\d+", opt)) {
 		UnicodeString lbl  = FKeyLabelBuf->Values[kstr];
-		UnicodeString tit = "ƒtƒ@ƒ“ƒNƒVƒ‡ƒ“ƒL[•\¦–¼‚Ì•ÏX";
+		UnicodeString tit = "ãƒ•ã‚¡ãƒ³ã‚¯ã‚·ãƒ§ãƒ³ã‚­ãƒ¼è¡¨ç¤ºåã®å¤‰æ›´";
 		tit.cat_sprintf(_T(" - %s"), KeyListBuf[KeyTabControl->TabIndex]->Values[kstr].c_str());
 		UnicodeString prm;  prm.sprintf(_T("[%s]"), get_tkn_r(kstr, ':').c_str());
 		if (input_query_ex(tit.c_str(), prm.c_str(), &lbl)) {
@@ -3381,7 +3381,7 @@ void __fastcall TOptionDlg::KeySetClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒBƒ‹ƒ^
+//ãƒ•ã‚£ãƒ«ã‚¿
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::KeyFilterEdit_Change(TObject *Sender)
 {
@@ -3396,7 +3396,7 @@ void __fastcall TOptionDlg::KeyFilterEdit_Change(TObject *Sender)
 		CmdComboBoxChange(CmdComboBox);
 	}
 	CmdComboBox->UnlockDrawing();
-	Screen->Cursor = crArrow;	//¦ƒhƒƒbƒvƒ_ƒEƒ“‚ÉƒJ[ƒ\ƒ‹‚ªÁ‚¦‚éŒ»Û‚Ö‚Ì‘Îô
+	Screen->Cursor = crArrow;	//â€»ãƒ‰ãƒ­ãƒƒãƒ—ãƒ€ã‚¦ãƒ³æ™‚ã«ã‚«ãƒ¼ã‚½ãƒ«ãŒæ¶ˆãˆã‚‹ç¾è±¡ã¸ã®å¯¾ç­–
 }
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::KeyFilterEdit_KeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
@@ -3408,7 +3408,7 @@ void __fastcall TOptionDlg::KeyFilterEdit_KeyDown(TObject *Sender, WORD &Key, TS
 		perform_Key(CmdComboBox, VK_DOWN);
 	}
 	else if (equal_ENTER(KeyStr)) {
-		//Šm’è
+		//ç¢ºå®š
 		if (CmdComboBox->DroppedDown) {
 			CmdComboBox->SetFocus();
 			perform_Key_RETURN(CmdComboBox);
@@ -3431,11 +3431,11 @@ void __fastcall TOptionDlg::KeyFilterEdit_KeyPress(TObject *Sender, System::Wide
 }
 
 //---------------------------------------------------------------------------
-//ƒL[ŒŸõ
+//ã‚­ãƒ¼æ¤œç´¢
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::FindKeyBtnClick(TObject *Sender)
 {
-	if (!FindKeyDlg) FindKeyDlg = new TFindKeyDlg(this);	//‰‰ñ‚É“®“Iì¬
+	if (!FindKeyDlg) FindKeyDlg = new TFindKeyDlg(this);	//åˆå›ã«å‹•çš„ä½œæˆ
 
 	FindKeyDlg->KeyList->Assign(KeyListBox->Items);
 	if (FindKeyDlg->ShowModal()==mrOk) {
@@ -3445,7 +3445,7 @@ void __fastcall TOptionDlg::FindKeyBtnClick(TObject *Sender)
 		AltCheckBox->Checked   = remove_text(kstr, KeyStr_Alt);
 
 		if (ContainsStr(kstr, "~")) {
-			//2ƒXƒgƒ[ƒN
+			//2ã‚¹ãƒˆãƒ­ãƒ¼ã‚¯
 			KeyComboBox->ItemIndex	= KeyComboBox->Items->IndexOf(get_tkn(kstr, '~'));
 			Key2ComboBox->ItemIndex = Key2ComboBox->Items->IndexOf(get_tkn_r(kstr, '~'));
 		}
@@ -3474,7 +3474,7 @@ void __fastcall TOptionDlg::FindKeyBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒL[İ’è‚ÌŒŸõ
+//ã‚­ãƒ¼è¨­å®šã®æ¤œç´¢
 //---------------------------------------------------------------------------
 bool __fastcall TOptionDlg::MatchKeyItem(int idx)
 {
@@ -3518,7 +3518,7 @@ void __fastcall TOptionDlg::FindKeyEditKeyDown(TObject *Sender, WORD &Key, TShif
 	}
 }
 //---------------------------------------------------------------------------
-//‰º•ûŒü‚ÉŒŸõ
+//ä¸‹æ–¹å‘ã«æ¤œç´¢
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::FindKeyDownActionExecute(TObject *Sender)
 {
@@ -3544,7 +3544,7 @@ void __fastcall TOptionDlg::FindKeyDownActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = (idx!=-1 && idx>lp->ItemIndex);
 }
 //---------------------------------------------------------------------------
-//ã•ûŒü‚ÉŒŸõ
+//ä¸Šæ–¹å‘ã«æ¤œç´¢
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::FindKeyUpActionExecute(TObject *Sender)
 {
@@ -3571,7 +3571,7 @@ void __fastcall TOptionDlg::FindKeyUpActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒL[ˆê——‚Ì•`‰æ
+//ã‚­ãƒ¼ä¸€è¦§ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::KeyListBoxDrawItem(TWinControl *Control, int Index, TRect &Rect,
 	TOwnerDrawState State)
@@ -3600,7 +3600,7 @@ void __fastcall TOptionDlg::KeyListBoxDrawItem(TWinControl *Control, int Index, 
 	xp += w_cmd;
 	cv->TextOut(xp, yp, dsc);
 
-	//ƒtƒ@ƒ“ƒNƒVƒ‡ƒ“ƒL[–¼
+	//ãƒ•ã‚¡ãƒ³ã‚¯ã‚·ãƒ§ãƒ³ã‚­ãƒ¼å
 	UnicodeString lbl = FKeyLabelBuf->Values[key];
 	if (!lbl.IsEmpty()) {
 		xp = Rect.Left + Rect.Width() - get_CharWidth(cv, 16);
@@ -3609,7 +3609,7 @@ void __fastcall TOptionDlg::KeyListBoxDrawItem(TWinControl *Control, int Index, 
 }
 
 //---------------------------------------------------------------------------
-//ƒL[Š„“–ˆê——‚Ìƒ\[ƒg
+//ã‚­ãƒ¼å‰²å½“ä¸€è¦§ã®ã‚½ãƒ¼ãƒˆ
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::SortKeyListBox(UnicodeString item)
 {
@@ -3636,7 +3636,7 @@ void __fastcall TOptionDlg::SortKeyListBox(UnicodeString item)
 }
 
 //---------------------------------------------------------------------------
-//ƒL[İ’è‚Ì’Ç‰ÁE•ÏX
+//ã‚­ãƒ¼è¨­å®šã®è¿½åŠ ãƒ»å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::ChangeKeyList(bool add)
 {
@@ -3648,12 +3648,12 @@ void __fastcall TOptionDlg::ChangeKeyList(bool add)
 				cmd.cat_sprintf(_T("_%s"), get_tkn(PrmComboBox->Text, " : ").c_str());
 
 			TListBox *lp = KeyListBox;
-			//’Ç‰Á
+			//è¿½åŠ 
 			if (add) {
 				ibuf.cat_sprintf(_T("=%s"), cmd.c_str());
 				lp->Items->Add(ibuf);
 			}
-			//•ÏX
+			//å¤‰æ›´
 			else {
 				int kidx = -1;
 				TStrings *sp = lp->Items;
@@ -3679,17 +3679,17 @@ void __fastcall TOptionDlg::ChangeKeyList(bool add)
 }
 
 //---------------------------------------------------------------------------
-//ƒpƒ‰ƒ[ƒ^‚ÌQÆ
+//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::RefCmdPrmBtnClick(TObject *Sender)
 {
 	UnicodeString cmd = get_tkn(CmdComboBox->Text, ' ');
-	//ƒfƒBƒŒƒNƒgƒŠ
+	//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 	if (contained_wd_i("ChangeDir|ChangeOppDir|CopyTo|ListTree|MoveTo|OpenByExp|PlayList|SubDirList", cmd)) {
 		UnicodeString dnam = PrmComboBox->Text;
-		if (UserModule->SelectDirEx(_T("ƒpƒ‰ƒ[ƒ^w’è : ƒfƒBƒŒƒNƒgƒŠ"), dnam)) PrmComboBox->Text = dnam;
+		if (UserModule->SelectDirEx(_T("ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æŒ‡å®š : ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª"), dnam)) PrmComboBox->Text = dnam;
 	}
-	//ƒtƒ@ƒCƒ‹
+	//ãƒ•ã‚¡ã‚¤ãƒ«
 	else {
 		if (contained_wd_i("DebugCmdFile|ExeCommands", cmd)) {
 			if (CmdFileListDlg->ShowToSelect()==mrOk) {
@@ -3706,12 +3706,12 @@ void __fastcall TOptionDlg::RefCmdPrmBtnClick(TObject *Sender)
 			UnicodeString pnam =
 				contained_wd_i("DistributionDlg|Restart|SetColor", cmd)? ExePath : RefParamPath;
 
-			UserModule->PrepareOpenDlg(_T("ƒpƒ‰ƒ[ƒ^w’è : ƒtƒ@ƒCƒ‹"), NULL, fmsk.c_str(), pnam);
+			UserModule->PrepareOpenDlg(_T("ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æŒ‡å®š : ãƒ•ã‚¡ã‚¤ãƒ«"), NULL, fmsk.c_str(), pnam);
 
 			UnicodeString fnam;
 			if (UserModule->OpenDlgToStr(fnam)) {
 				RefParamPath = ExtractFilePath(fnam);
-				//Àsƒtƒ@ƒCƒ‹
+				//å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«
 				if (SameText(cmd, "FileRun")) {
 					TStringDynArray plst = split_strings_semicolon(GetEnvironmentVariable("PATH"));
 					for (int i=0; i<plst.Length; i++) {
@@ -3720,7 +3720,7 @@ void __fastcall TOptionDlg::RefCmdPrmBtnClick(TObject *Sender)
 						}
 					}
 				}
-				//NyanFi ‘Š‘Î
+				//NyanFi ç›¸å¯¾
 				else if (contained_wd_i(
 					"ContextMenu|DistributionDlg|ExeMenuFile|FindFileDlg|LoadBgImage|LoadResultList|"
 					"LoadTabGroup|LoadWorkList|PlayList|Restart|SaveAsTabGroup|SetColor", cmd))
@@ -3742,10 +3742,10 @@ bool __fastcall TOptionDlg::CheckKeyAction(bool ok, bool add)
 			ok = !PrmComboBox->Text.IsEmpty();
 	}
 
-	//2ƒXƒgƒ[ƒNŠJnƒL[‚Ìƒ`ƒFƒbƒN
+	//2ã‚¹ãƒˆãƒ­ãƒ¼ã‚¯é–‹å§‹ã‚­ãƒ¼ã®ãƒã‚§ãƒƒã‚¯
 	if (ok) ok = !IsFirstCmdKey();
 
-	//Šù‘¶ƒ`ƒFƒbƒN
+	//æ—¢å­˜ãƒã‚§ãƒƒã‚¯
 	if (add && ok) {
 		UnicodeString kbuf = GetCmdKeyStr();
 		TStrings *sp = KeyListBox->Items;
@@ -3757,7 +3757,7 @@ bool __fastcall TOptionDlg::CheckKeyAction(bool ok, bool add)
 }
 
 //---------------------------------------------------------------------------
-//’Ç‰Á
+//è¿½åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::AddKeyActionExecute(TObject *Sender)
 {
@@ -3771,7 +3771,7 @@ void __fastcall TOptionDlg::AddKeyActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//•ÏX
+//å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::ChgKeyActionExecute(TObject *Sender)
 {
@@ -3785,7 +3785,7 @@ void __fastcall TOptionDlg::ChgKeyActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒL[İ’è‚Ìíœ
+//ã‚­ãƒ¼è¨­å®šã®å‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::DelKeyActionExecute(TObject *Sender)
 {
@@ -3800,7 +3800,7 @@ void __fastcall TOptionDlg::DelKeyActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ŒŸõ
+//æ¤œç´¢
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::FindCore()
 {
@@ -3814,17 +3814,17 @@ void __fastcall TOptionDlg::FindCore()
 
 	UnicodeString wd = FindEdit->Text;
 	if (!wd.IsEmpty()) {
-		//ƒ^ƒuƒV[ƒg–ˆ‚ÉŒŸõ
+		//ã‚¿ãƒ–ã‚·ãƒ¼ãƒˆæ¯ã«æ¤œç´¢
 		for (int i=0; i<pp->PageCount; i++) {
 			TTabSheet *sp = pp->Pages[i];
 			if (!sp->TabVisible) continue;
 			sp->Tag = (FindMarkList->SearchControl((TWinControl*)sp, wd)>0 || ContainsText(sp->Caption, wd))? 1 : 0;
-			//Œ©‚Â‚©‚Á‚½‚ç Tag=1 ‚É
+			//è¦‹ã¤ã‹ã£ãŸã‚‰ Tag=1 ã«
 		}
 		FindMarkList->ShowMark();
 		pp->Repaint();
 
-		//Œ©‚Â‚©‚Á‚½€–Ú‚ğŠÜ‚Şƒ^ƒu‚ğƒAƒNƒeƒBƒu‚É
+		//è¦‹ã¤ã‹ã£ãŸé …ç›®ã‚’å«ã‚€ã‚¿ãƒ–ã‚’ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«
 		bool found = false;
 		for (int i=0; i<pp->PageCount && !found; i++) {
 			if (pp->Pages[i]->Tag==1) {
@@ -3838,7 +3838,7 @@ void __fastcall TOptionDlg::FindCore()
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::FindEditChange(TObject *Sender)
 {
-	//IME“ü—Í‘Îô
+	//IMEå…¥åŠ›å¯¾ç­–
 	Timer1->Enabled  = false;
 	Timer1->Interval = REPEAT_WAIT;
 	Timer1->Enabled  = true;
@@ -3854,7 +3854,7 @@ void __fastcall TOptionDlg::Timer1Timer(TObject *Sender)
 void __fastcall TOptionDlg::RefIniPatBtnClick(TObject *Sender)
 {
 	UnicodeString dnam = ExePath;
-	if (UserModule->SelectDirEx(_T("‰ŠúƒpƒX"), dnam)) {
+	if (UserModule->SelectDirEx(_T("åˆæœŸãƒ‘ã‚¹"), dnam)) {
 		dnam = to_path_name(dnam);
 		if (((TComponent*)Sender)->Tag==1) R_IniPatEdit->Text = dnam; else L_IniPatEdit->Text = dnam;
 	}
@@ -3872,17 +3872,17 @@ void __fastcall TOptionDlg::R_IniPatMod1RadioBtnClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::RefHomeWorkBtnClick(TObject *Sender)
 {
-	UserModule->PrepareOpenDlg(_T("ƒz[ƒ€ƒ[ƒNƒŠƒXƒg‚Ìw’è"), F_FILTER_NWL, _T("*.nwl"), WorkListPath);
+	UserModule->PrepareOpenDlg(_T("ãƒ›ãƒ¼ãƒ ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã®æŒ‡å®š"), F_FILTER_NWL, _T("*.nwl"), WorkListPath);
 	UserModule->OpenDlgToEdit(HomeWorkListEdit, true);
 }
 
 //---------------------------------------------------------------------------
-//‰¼‘zƒhƒ‰ƒCƒu‚É‚·‚éƒfƒBƒŒƒNƒgƒŠ‚ÌQÆ
+//ä»®æƒ³ãƒ‰ãƒ©ã‚¤ãƒ–ã«ã™ã‚‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::RefVDrvBtnClick(TObject *Sender)
 {
 	UnicodeString dnam = VirDriveEdit->Text;
-	if (UserModule->SelectDirEx(_T("ƒ}ƒEƒ“ƒg‚·‚éƒfƒBƒŒƒNƒgƒŠ"), dnam)) VirDriveEdit->Text = dnam;
+	if (UserModule->SelectDirEx(_T("ãƒã‚¦ãƒ³ãƒˆã™ã‚‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª"), dnam)) VirDriveEdit->Text = dnam;
 }
 
 //---------------------------------------------------------------------------
@@ -3896,7 +3896,7 @@ void __fastcall TOptionDlg::VirDrvListBoxClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//’Ç‰Á
+//è¿½åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::AddDrvActionExecute(TObject *Sender)
 {
@@ -3912,7 +3912,7 @@ void __fastcall TOptionDlg::AddDrvActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = (VirDrvComboBox->ItemIndex!=-1) && !VirDriveEdit->Text.IsEmpty();
 }
 //---------------------------------------------------------------------------
-//•ÏX
+//å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::ChgDrvActionExecute(TObject *Sender)
 {
@@ -3926,7 +3926,7 @@ void __fastcall TOptionDlg::ChgDrvActionUpdate(TObject *Sender)
 		= (VirDrvListBox->ItemIndex!=-1) && (VirDrvComboBox->ItemIndex!=-1) && !VirDriveEdit->Text.IsEmpty();
 }
 //---------------------------------------------------------------------------
-//íœ
+//å‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::DelDrvActionExecute(TObject *Sender)
 {
@@ -3939,11 +3939,11 @@ void __fastcall TOptionDlg::DelDrvActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//”zF‚ÌƒCƒ“ƒ|[ƒg
+//é…è‰²ã®ã‚¤ãƒ³ãƒãƒ¼ãƒˆ
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::InpColBtnClick(TObject *Sender)
 {
-	UserModule->PrepareOpenDlg(_T("”zF‚ÌƒCƒ“ƒ|[ƒg"), F_FILTER_INI, _T("*.INI"));
+	UserModule->PrepareOpenDlg(_T("é…è‰²ã®ã‚¤ãƒ³ãƒãƒ¼ãƒˆ"), F_FILTER_INI, _T("*.INI"));
 	UnicodeString fnam = UserModule->OpenDlgExecute();
 	if (!fnam.IsEmpty()) {
 		std::unique_ptr<TStringList> col_lst(new TStringList());
@@ -3954,13 +3954,13 @@ void __fastcall TOptionDlg::InpColBtnClick(TObject *Sender)
 		inp_file->LoadListItems("ExtColList",	ext_lst.get());
 		inp_file->ReadSection(  "TagColList",	tag_lst.get());
 		if ((col_lst->Count + ext_lst->Count + tag_lst->Count)==0) {
-			msgbox_WARN("”zFİ’è‚ª‚ ‚è‚Ü‚¹‚ñB");
+			msgbox_WARN("é…è‰²è¨­å®šãŒã‚ã‚Šã¾ã›ã‚“ã€‚");
 		}
 		else {
 			if (col_lst->Count>0) ColBufList->Assign(col_lst.get());
 			if (ext_lst->Count>0) ExtColListBox->Items->Assign(ext_lst.get());
 			if (tag_lst->Count>0) TagColListBox->Items->Assign(tag_lst.get());
-			//•\¦‚ğXV
+			//è¡¨ç¤ºã‚’æ›´æ–°
 			OptColListBox->Repaint();
 			TimColListBox->Repaint();
 			ExtColListBox->Repaint();
@@ -3969,36 +3969,36 @@ void __fastcall TOptionDlg::InpColBtnClick(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//”zF‚ÌƒGƒNƒXƒ|[ƒg
+//é…è‰²ã®ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::ExpColBtnClick(TObject *Sender)
 {
-	UserModule->PrepareSaveDlg(_T("”zF‚ÌƒGƒNƒXƒ|[ƒg"), F_FILTER_INI, _T("Export_Col.INI"));
+	UserModule->PrepareSaveDlg(_T("é…è‰²ã®ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ"), F_FILTER_INI, _T("Export_Col.INI"));
 	UnicodeString fnam = UserModule->SaveDlgExecute();
 	if (!fnam.IsEmpty()) {
 		std::unique_ptr<UsrIniFile> exp_file(new UsrIniFile(fnam));
-		//”zF
+		//é…è‰²
 		exp_file->AssignSection("Color", ColBufList);
-		//Šg’£q•Ê”zF
+		//æ‹¡å¼µå­åˆ¥é…è‰²
 		std::unique_ptr<TStringList> exp_lst(new TStringList());
 		exp_lst->Assign(ExtColListBox->Items);
 		exp_file->SaveListItems("ExtColList", exp_lst.get());
-		//ƒ^ƒO•ÊF
+		//ã‚¿ã‚°åˆ¥è‰²
 		exp_lst->Assign(TagColListBox->Items);
 		exp_file->AssignSection("TagColList", exp_lst.get());
 		exp_file->WriteBool(SCT_Option, "RevTagColor",	RevTagColor);
 
-		//•Û‘¶
+		//ä¿å­˜
 		if (!exp_file->UpdateFile(true)) msgbox_ERR(USTR_FaildSave);
 	}
 }
 
 //---------------------------------------------------------------------------
-//ƒL[İ’è‚ÌƒCƒ“ƒ|[ƒg
+//ã‚­ãƒ¼è¨­å®šã®ã‚¤ãƒ³ãƒãƒ¼ãƒˆ
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::InpKeyBtnClick(TObject *Sender)
 {
-	UserModule->PrepareOpenDlg(_T("ƒL[İ’è‚ÌƒCƒ“ƒ|[ƒg"), F_FILTER_INI, _T("*.INI"));
+	UserModule->PrepareOpenDlg(_T("ã‚­ãƒ¼è¨­å®šã®ã‚¤ãƒ³ãƒãƒ¼ãƒˆ"), F_FILTER_INI, _T("*.INI"));
 	UnicodeString fnam = UserModule->OpenDlgExecute();
 	if (!fnam.IsEmpty()) {
 		std::unique_ptr<UsrIniFile> inp_file(new UsrIniFile(fnam));
@@ -4015,7 +4015,7 @@ void __fastcall TOptionDlg::InpKeyBtnClick(TObject *Sender)
 			}
 			inp_file->ReadSection("FKeyLabelList", FKeyLabelBuf);
 			KeyTabControlChange(KeyTabControl);
-			//‚»‚Ì‘¼‚ÌƒL[İ’è
+			//ãã®ä»–ã®ã‚­ãƒ¼è¨­å®š
 			UnicodeString sstr = inp_file->ReadString(SCT_Option, "DlgMoveShift");
 			DlgMoveShiftCheckBox->Checked = ContainsText(sstr, KeyStr_Shift);
 			DlgMoveCtrlCheckBox->Checked  = ContainsText(sstr, KeyStr_Ctrl);
@@ -4031,15 +4031,15 @@ void __fastcall TOptionDlg::InpKeyBtnClick(TObject *Sender)
 			IniSeaByNumCheckBox->Checked  = inp_file->ReadBool(SCT_Option, "IniSeaByNum");
 			IniSeaBySignCheckBox->Checked = inp_file->ReadBool(SCT_Option, "IniSeaBySign");
 		}
-		else msgbox_WARN("ƒL[İ’è‚ª‚ ‚è‚Ü‚¹‚ñB");
+		else msgbox_WARN("ã‚­ãƒ¼è¨­å®šãŒã‚ã‚Šã¾ã›ã‚“ã€‚");
 	}
 }
 //---------------------------------------------------------------------------
-//ƒL[İ’è‚ÌƒGƒNƒXƒ|[ƒg
+//ã‚­ãƒ¼è¨­å®šã®ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::ExpKeyBtnClick(TObject *Sender)
 {
-	UserModule->PrepareSaveDlg(_T("ƒL[İ’è‚ÌƒGƒNƒXƒ|[ƒg"), F_FILTER_INI, _T("Export_Key.INI"));
+	UserModule->PrepareSaveDlg(_T("ã‚­ãƒ¼è¨­å®šã®ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ"), F_FILTER_INI, _T("Export_Key.INI"));
 	UnicodeString fnam = UserModule->SaveDlgExecute();
 	if (!fnam.IsEmpty()) {
 		std::unique_ptr<UsrIniFile> exp_file(new UsrIniFile(fnam));
@@ -4049,7 +4049,7 @@ void __fastcall TOptionDlg::ExpKeyBtnClick(TObject *Sender)
 		key_lst->CustomSort(KeyComp_Key);
 		exp_file->AssignSection("KeyFuncList",	 key_lst.get());
 		exp_file->AssignSection("FKeyLabelList", FKeyLabelBuf);
-		//‚»‚Ì‘¼‚ÌƒL[İ’è
+		//ãã®ä»–ã®ã‚­ãƒ¼è¨­å®š
 		UnicodeString sstr;
 		if (DlgMoveShiftCheckBox->Checked) sstr += KeyStr_Shift;
 		if (DlgMoveCtrlCheckBox->Checked)  sstr += KeyStr_Ctrl;
@@ -4067,12 +4067,12 @@ void __fastcall TOptionDlg::ExpKeyBtnClick(TObject *Sender)
 		exp_file->WriteString(SCT_Option, "IniSeaShift", sstr);
 		exp_file->WriteBool(SCT_Option, "IniSeaByNum",	IniSeaByNumCheckBox);
 		exp_file->WriteBool(SCT_Option, "IniSeaBySign",	IniSeaBySignCheckBox);
-		//‘‚«o‚µ
+		//æ›¸ãå‡ºã—
 		if (!exp_file->UpdateFile(true)) msgbox_ERR(USTR_FaildSave);
 	}
 }
 //---------------------------------------------------------------------------
-//‰EŠñ‚¹
+//å³å¯„ã›
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::AlRightBtnClick(TObject *Sender)
 {
@@ -4080,7 +4080,7 @@ void __fastcall TOptionDlg::AlRightBtnClick(TObject *Sender)
 	WinSizeChanged = IniWin1RadioBtn->Checked;
 }
 //---------------------------------------------------------------------------
-//Å‘å•
+//æœ€å¤§å¹…
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::MaxWdBtnClick(TObject *Sender)
 {
@@ -4089,7 +4089,7 @@ void __fastcall TOptionDlg::MaxWdBtnClick(TObject *Sender)
 	WinSizeChanged = IniWin1RadioBtn->Checked;
 }
 //---------------------------------------------------------------------------
-//Å‘å‚
+//æœ€å¤§é«˜
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::MaxHiBtnClick(TObject *Sender)
 {
@@ -4104,7 +4104,7 @@ void __fastcall TOptionDlg::IniWinSizeChange(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//OpenStandard ƒRƒ}ƒ“ƒh‚Ö‚ÌŠÖ˜A•t‚¯
+//OpenStandard ã‚³ãƒãƒ³ãƒ‰ã¸ã®é–¢é€£ä»˜ã‘
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::StdCmdListBoxClick(TObject *Sender)
 {
@@ -4161,7 +4161,7 @@ void __fastcall TOptionDlg::RefStdCmdPrmBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//•W€ƒRƒ}ƒ“ƒh‚Ì’Ç‰ÁE•ÏX
+//æ¨™æº–ã‚³ãƒãƒ³ãƒ‰ã®è¿½åŠ ãƒ»å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::ChangeStdCmdList(bool add)
 {
@@ -4171,18 +4171,18 @@ void __fastcall TOptionDlg::ChangeStdCmdList(bool add)
 	UnicodeString cmd = get_in_paren(StdCmdComboBox->Text);
 	if (ContainsStr(cmd, "_")) cmd += StdCmdPrmEdit->Text;
 
-	//’Ç‰Á
+	//è¿½åŠ 
 	if (add) {
 		StdCmdListBox->Items->Add(fext.cat_sprintf(_T("=%s"), cmd.c_str()));
 	}
-	//•ÏX
+	//å¤‰æ›´
 	else {
 		int idx = StdCmdListBox->ItemIndex;  if (idx==-1) return;
 		StdCmdListBox->Items->Strings[idx] = fext.cat_sprintf(_T("=%s"), cmd.c_str());
 	}
 }
 //---------------------------------------------------------------------------
-//’Ç‰Á
+//è¿½åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::AddStdCmdActionExecute(TObject *Sender)
 {
@@ -4194,7 +4194,7 @@ void __fastcall TOptionDlg::AddStdCmdActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = !FExtStdEdit->Text.IsEmpty() && !StdCmdComboBox->Text.IsEmpty();
 }
 //---------------------------------------------------------------------------
-//•ÏX
+//å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::ChgStdCmdActionExecute(TObject *Sender)
 {
@@ -4208,7 +4208,7 @@ void __fastcall TOptionDlg::ChgStdCmdActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒCƒxƒ“ƒg
+//ã‚¤ãƒ™ãƒ³ãƒˆ
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::EventListBoxClick(TObject *Sender)
 {
@@ -4264,7 +4264,7 @@ void __fastcall TOptionDlg::FindEvEditKeyDown(TObject *Sender, WORD &Key, TShift
 	}
 }
 //---------------------------------------------------------------------------
-//ƒCƒxƒ“ƒg‚ğ‰º•ûŒü‚ÉŒŸõ
+//ã‚¤ãƒ™ãƒ³ãƒˆã‚’ä¸‹æ–¹å‘ã«æ¤œç´¢
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::FindEvDownActionExecute(TObject *Sender)
 {
@@ -4294,7 +4294,7 @@ void __fastcall TOptionDlg::FindEvDownActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = found;
 }
 //---------------------------------------------------------------------------
-//ƒCƒxƒ“ƒg‚ğã•ûŒü‚ÉŒŸõ
+//ã‚¤ãƒ™ãƒ³ãƒˆã‚’ä¸Šæ–¹å‘ã«æ¤œç´¢
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::FindEvUpActionExecute(TObject *Sender)
 {
@@ -4325,7 +4325,7 @@ void __fastcall TOptionDlg::FindEvUpActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒ}ƒ“ƒh/ƒƒjƒ…[ƒtƒ@ƒCƒ‹‚Ì•ÒW
+//ã‚³ãƒãƒ³ãƒ‰/ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã®ç·¨é›†
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::EditFileActionExecute(TObject *Sender)
 {
@@ -4357,12 +4357,12 @@ void __fastcall TOptionDlg::PrtDirListBoxDrawItem(TWinControl *Control, int Inde
 	cv->TextOut(Rect.Left + SCALED_THIS(2), Rect.Top + get_TopMargin(cv), lp->Items->Strings[Index]);
 }
 //---------------------------------------------------------------------------
-//íœ§ŒÀƒfƒBƒŒƒNƒgƒŠ‚Ì’Ç‰Á
+//å‰Šé™¤åˆ¶é™ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®è¿½åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::AddPrtDirActionExecute(TObject *Sender)
 {
 	UnicodeString dnam;
-	if (UserModule->SelectDirEx(_T("ì‹ÆƒfƒBƒŒƒNƒgƒŠ"), dnam)) {
+	if (UserModule->SelectDirEx(_T("ä½œæ¥­ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª"), dnam)) {
 		if (PrtDirListBox->Items->IndexOf(dnam)==-1) {
 			PrtDirListBox->Items->Add(dnam);
 			PrtDirListBox->ItemIndex = PrtDirListBox->Items->IndexOf(dnam);
@@ -4371,7 +4371,7 @@ void __fastcall TOptionDlg::AddPrtDirActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒfƒUƒCƒ“‚Ì“K—p
+//ãƒ‡ã‚¶ã‚¤ãƒ³ã®é©ç”¨
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::AppDesignBtnClick(TObject *Sender)
 {
@@ -4382,23 +4382,23 @@ void __fastcall TOptionDlg::AppDesignBtnClick(TObject *Sender)
 	else if (!ShowIconCheckBox->Checked)
 		IconMode = 0;
 
-	//ƒƒCƒ“‰æ–Ê‚É’Ê’m
+	//ãƒ¡ã‚¤ãƒ³ç”»é¢ã«é€šçŸ¥
 	::SendMessage(MainHandle, WM_NYANFI_APPEAR, (LayoutChanged? 1 : 0), 0);
 }
 //---------------------------------------------------------------------------
-//ƒtƒHƒ“ƒgE”zF‚Ì“K—p
+//ãƒ•ã‚©ãƒ³ãƒˆãƒ»é…è‰²ã®é©ç”¨
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::AppColorBtnClick(TObject *Sender)
 {
 	ApplyOptionByTag(FontColSheet);
 
-	//ƒtƒHƒ“ƒg
+	//ãƒ•ã‚©ãƒ³ãƒˆ
 	for (int i=0; i<FontBufList->Count; i++) {
 		TFont *f = (TFont *)FontList->Objects[i];
 		f->Assign((TFont *)FontBufList->Objects[i]);
 	}
 
-	//”zF
+	//é…è‰²
 	ColorList->Assign(ColBufList);
 	set_col_from_ColorList();
 	ExtColList->Assign(ExtColListBox->Items);
@@ -4408,7 +4408,7 @@ void __fastcall TOptionDlg::AppColorBtnClick(TObject *Sender)
 	ExtColListBox->Repaint();
 	TagColListBox->Repaint();
 
-	//ƒƒCƒ“‰æ–Ê‚É’Ê’m
+	//ãƒ¡ã‚¤ãƒ³ç”»é¢ã«é€šçŸ¥
 	::SendMessage(MainHandle, WM_NYANFI_APPEAR, 0, 0);
 
 	set_ListBoxItemHi(KeyListBox);
@@ -4418,20 +4418,20 @@ void __fastcall TOptionDlg::AppColorBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//Šm’è
+//ç¢ºå®š
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::OkActionExecute(TObject *Sender)
 {
 	ModalResult = mrNone;
 
-	//ƒL[İ’è
+	//ã‚­ãƒ¼è¨­å®š
 	KeyListBuf[KeyTabControl->TabIndex]->Assign(KeyListBox->Items);
 	std::unique_ptr<TStringList> key_lst(new TStringList());
 	for (int i=0; i<MAX_KEYTABS; i++) key_lst->AddStrings(KeyListBuf[i]);
 	key_lst->CustomSort(KeyComp_Key);
 	KeyFuncList->Assign(key_lst.get());
 
-	//ƒtƒ@ƒ“ƒNƒVƒ‡ƒ“ƒL[‚Ì•\¦–¼
+	//ãƒ•ã‚¡ãƒ³ã‚¯ã‚·ãƒ§ãƒ³ã‚­ãƒ¼ã®è¡¨ç¤ºå
 	FKeyLabelList->Assign(FKeyLabelBuf);
 	int i = 0;
 	while (i<FKeyLabelList->Count) {
@@ -4442,10 +4442,10 @@ void __fastcall TOptionDlg::OkActionExecute(TObject *Sender)
 		ModalResult = mrOk;
 		return;
 	}
-	//ƒL[İ’è‚Ì‚İ‚Ìê‡‚Í‚±‚±‚Ü‚Å
+	//ã‚­ãƒ¼è¨­å®šã®ã¿ã®å ´åˆã¯ã“ã“ã¾ã§
 	//--------------------------------------------------
 
-	//‰¼‘zƒhƒ‰ƒCƒu
+	//ä»®æƒ³ãƒ‰ãƒ©ã‚¤ãƒ–
 	VirDriveList->Assign(VirDrvListBox->Items);
 	if (VirDriveList->Count>0) {
 		int cnt = 0;
@@ -4459,7 +4459,7 @@ void __fastcall TOptionDlg::OkActionExecute(TObject *Sender)
 		if (cnt>0) get_DriveInfoList();
 	}
 
-	//NyanFi ƒzƒbƒgƒL[Ä“o˜^
+	//NyanFi ãƒ›ãƒƒãƒˆã‚­ãƒ¼å†ç™»éŒ²
 	if (IsPrimary) {
 		UnicodeString kstr;
 		if (!HotKeyComboBox->Text.IsEmpty()) {
@@ -4475,13 +4475,13 @@ void __fastcall TOptionDlg::OkActionExecute(TObject *Sender)
 			}
 			else {
 				FindEdit->Text = EmptyStr;
-				FindEdit->Text = "ŒÄ‚Ño‚µƒzƒbƒgƒL[";
+				FindEdit->Text = "å‘¼ã³å‡ºã—ãƒ›ãƒƒãƒˆã‚­ãƒ¼";
 				msgbox_ERR(GlobalErrMsg);
 				return;
 			}
 		}
 
-		//AppList ƒzƒbƒgƒL[Ä“o˜^
+		//AppList ãƒ›ãƒƒãƒˆã‚­ãƒ¼å†ç™»éŒ²
 		kstr = EmptyStr;
 		if (!AppKeyComboBox->Text.IsEmpty()) {
 			if (AppShiftCheckBox->Checked) kstr += KeyStr_Shift;
@@ -4504,10 +4504,10 @@ void __fastcall TOptionDlg::OkActionExecute(TObject *Sender)
 		}
 	}
 
-	//ƒRƒ“ƒgƒ[ƒ‹‚Ìƒ^ƒO‚É‚µ‚½‚ª‚Á‚Ä•ÏX‚ğ“K—p
+	//ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã®ã‚¿ã‚°ã«ã—ãŸãŒã£ã¦å¤‰æ›´ã‚’é©ç”¨
 	ApplyOptionByTag((TForm *)this);
 
-	//ƒ^ƒO‚ğ—p‚¢‚È‚¢İ’è
+	//ã‚¿ã‚°ã‚’ç”¨ã„ãªã„è¨­å®š
 	VclStyle = VclStyleComboBox->Text;
 	TempPath = to_path_name(TempDirEdit->Text);
 	SetTempPathA(TempPath);
@@ -4526,7 +4526,7 @@ void __fastcall TOptionDlg::OkActionExecute(TObject *Sender)
 		IconMode = 0;
 
 	UnicodeString tmp;
-	//Migemo Ä‰Šú‰»
+	//Migemo å†åˆæœŸåŒ–
 	if (!SameText(MigemoPath, MigemoDirEdit->Text)) {
 		MigemoPath = to_path_name(MigemoDirEdit->Text);
 		delete usr_Migemo;
@@ -4535,18 +4535,18 @@ void __fastcall TOptionDlg::OkActionExecute(TObject *Sender)
 	}
 	usr_Migemo->MinLength = IncSeaMigemoMin;
 
-	//7z.dll‘Î‰Šg’£q
+	//7z.dllå¯¾å¿œæ‹¡å¼µå­
 	usr_ARC->FExt7zDll = FExt7zDll;
 
 	EtcEditorList->Assign(EtcEditorListBox->Items);
 
-	//ƒtƒHƒ“ƒg
+	//ãƒ•ã‚©ãƒ³ãƒˆ
 	for (int i=0; i<FontBufList->Count; i++) {
 		TFont *f = (TFont *)FontList->Objects[i];
 		f->Assign((TFont *)FontBufList->Objects[i]);
 	}
 
-	//”zF
+	//é…è‰²
 	ColorList->Assign(ColBufList);
 	set_col_from_ColorList();
 	ExtColList->Assign(ExtColListBox->Items);
@@ -4588,17 +4588,17 @@ void __fastcall TOptionDlg::OkActionExecute(TObject *Sender)
 	if (DlgSizeCtrlCheckBox->Checked)  DlgSizeShift += KeyStr_Ctrl;
 	if (DlgSizeAltCheckBox->Checked)   DlgSizeShift += KeyStr_Alt;
 
-	//“ª•¶šƒT[ƒ`
+	//é ­æ–‡å­—ã‚µãƒ¼ãƒ
 	IniSeaShift = "F:";
 	if (IniSeaShiftCheckBox->Checked) IniSeaShift += KeyStr_Shift;
 	if (IniSeaCtrlCheckBox->Checked)  IniSeaShift += KeyStr_Ctrl;
 	if (IniSeaAltCheckBox->Checked)   IniSeaShift += KeyStr_Alt;
 
-	//ƒCƒxƒ“ƒg
+	//ã‚¤ãƒ™ãƒ³ãƒˆ
 	for (int i=0; i<MAX_EVENT_CMD; i++)
 		 *(EventCmdList[i].sp) = get_post_tab(EventListBox->Items->Strings[i]);
 
-	//ƒc[ƒ‹ƒ`ƒbƒv‚Ì•\¦
+	//ãƒ„ãƒ¼ãƒ«ãƒãƒƒãƒ—ã®è¡¨ç¤º
 	Application->ShowHint = ShowTooltip;
 
 	SetupTimer();
@@ -4712,16 +4712,16 @@ void __fastcall TOptionDlg::OkActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒLƒƒƒ“ƒZƒ‹ˆ—
+//ã‚­ãƒ£ãƒ³ã‚»ãƒ«å‡¦ç†
 //---------------------------------------------------------------------------
 void __fastcall TOptionDlg::CanButtonClick(TObject *Sender)
 {
-	//ƒXƒ|ƒCƒg‚ÌƒLƒƒƒ“ƒZƒ‹
+	//ã‚¹ãƒã‚¤ãƒˆã®ã‚­ãƒ£ãƒ³ã‚»ãƒ«
 	if (UserModule->SpuitEnabled()) {
 		SwatchPanel->Visible = false;
 		UserModule->EndSpuit();
 	}
-	//•Â‚¶‚é
+	//é–‰ã˜ã‚‹
 	else {
 		ModalResult = mrCancel;
 	}

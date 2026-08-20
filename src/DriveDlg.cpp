@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒhƒ‰ƒCƒuˆê——														//
+//  ãƒ‰ãƒ©ã‚¤ãƒ–ä¸€è¦§														//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "Global.h"
@@ -39,7 +39,7 @@ void __fastcall TSelDriveDlg::FormShow(TObject *Sender)
 
 	TStringGrid *gp = DriveGrid;
 	InitializeListGrid(gp);
-	InitializeListHeader(DriveHeader, _T("ƒL[|ƒ{ƒŠƒ…[ƒ€|í—Ş (I/F)|g—p—e—Ê|‹ó‚«—e—Ê|‘S‘Ì—e—Ê|ƒVƒXƒeƒ€"));
+	InitializeListHeader(DriveHeader, _T("ã‚­ãƒ¼|ãƒœãƒªãƒ¥ãƒ¼ãƒ |ç¨®é¡ (I/F)|ä½¿ç”¨å®¹é‡|ç©ºãå®¹é‡|å…¨ä½“å®¹é‡|ã‚·ã‚¹ãƒ†ãƒ "));
 	IniFile->LoadGridColWidth(gp, 7, 40,100,160,75,120,75,60);
 	set_HeaderFromGrid(gp, DriveHeader);
 	set_UsrScrPanel(GridScrPanel);
@@ -105,7 +105,7 @@ void __fastcall TSelDriveDlg::DriveHeaderSectionResize(THeaderControl *HeaderCon
 }
 
 //---------------------------------------------------------------------------
-//ƒwƒbƒ_‚Ì•`‰æ
+//ãƒ˜ãƒƒãƒ€ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TSelDriveDlg::DriveHeaderDrawSection(THeaderControl *HeaderControl,
 	THeaderSection *Section, const TRect &Rect, bool Pressed)
@@ -130,7 +130,7 @@ UnicodeString __fastcall TSelDriveDlg::getCurDrvStr(const _TCHAR *suf)
 }
 
 //---------------------------------------------------------------------------
-//ƒhƒ‰ƒCƒuˆê——‚ÌXV
+//ãƒ‰ãƒ©ã‚¤ãƒ–ä¸€è¦§ã®æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TSelDriveDlg::UpdateDriveList()
 {
@@ -143,7 +143,7 @@ void __fastcall TSelDriveDlg::UpdateDriveList()
 	gp->DefaultRowHeight = get_FontHeightMgnS(gp->Font, ListInterLn) + std::max(8 - ListInterLn/2, 0);
 	if (icon_md==2 && gp->DefaultRowHeight<(icon_sz + s_4)) gp->DefaultRowHeight = icon_sz + s_4;
 
-	//•\¦ƒhƒ‰ƒCƒu‚ğ’Šo
+	//è¡¨ç¤ºãƒ‰ãƒ©ã‚¤ãƒ–ã‚’æŠ½å‡º
 	update_DriveInfo();
 	std::unique_ptr<TStringList> lst(new TStringList());
 	for (int i=0; i<DriveInfoList->Count; i++) {
@@ -159,15 +159,15 @@ void __fastcall TSelDriveDlg::UpdateDriveList()
 		for (int i=0; i<lst->Count; i++) {
 			drive_info *dp = (drive_info *)lst->Objects[i];
 			UnicodeString drv_str = dp->drive_str;
-			UnicodeString typ_str = dp->is_virtual? UnicodeString("‰¼‘zƒhƒ‰ƒCƒu") : dp->type_str;
+			UnicodeString typ_str = dp->is_virtual? UnicodeString("ä»®æƒ³ãƒ‰ãƒ©ã‚¤ãƒ–") : dp->type_str;
 			if (!dp->is_virtual && !dp->bus_type.IsEmpty()) typ_str.cat_sprintf(_T(" (%s)"), dp->bus_type.c_str());
 
 			int rn = i;
-			gp->Cells[0][rn] = get_tkn(drv_str, ':');	//ƒhƒ‰ƒCƒu•¶š
-			gp->Cells[2][rn] = typ_str;					//í—Ş
-			gp->Cells[6][rn] = dp->f_system;			//ƒtƒ@ƒCƒ‹ƒVƒXƒeƒ€
+			gp->Cells[0][rn] = get_tkn(drv_str, ':');	//ãƒ‰ãƒ©ã‚¤ãƒ–æ–‡å­—
+			gp->Cells[2][rn] = typ_str;					//ç¨®é¡
+			gp->Cells[6][rn] = dp->f_system;			//ãƒ•ã‚¡ã‚¤ãƒ«ã‚·ã‚¹ãƒ†ãƒ 
 
-			//—e—Ê
+			//å®¹é‡
 			bool ok = false;
 			if (!drv_str.IsEmpty() && dp->accessible &&
 				(gp->ColWidths[3]>=COL_WD_HIDE || gp->ColWidths[4]>=COL_WD_HIDE || gp->ColWidths[5]>=COL_WD_HIDE))
@@ -206,7 +206,7 @@ void __fastcall TSelDriveDlg::ToRootCheckBoxClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒZƒ‹‚Ì•`‰æ
+//ã‚»ãƒ«ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TSelDriveDlg::DriveGridDrawCell(TObject *Sender, System::LongInt ACol, System::LongInt ARow,
 		TRect &Rect, TGridDrawState State)
@@ -229,7 +229,7 @@ void __fastcall TSelDriveDlg::DriveGridDrawCell(TObject *Sender, System::LongInt
 
 		int c_wd = rc.Right - xp - SCALED_THIS(4);
 
-		//ƒJ[ƒ\ƒ‹ˆÊ’u‚Ìƒhƒ‰ƒCƒuî•ñ‚ğæ“¾
+		//ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®ãƒ‰ãƒ©ã‚¤ãƒ–æƒ…å ±ã‚’å–å¾—
 		drive_info *dp = NULL;
 		int idx = 0;
 		for (int i=0; i<DriveInfoList->Count; i++) {
@@ -243,10 +243,10 @@ void __fastcall TSelDriveDlg::DriveGridDrawCell(TObject *Sender, System::LongInt
 		TColor fcol = gp->Cells[3][ARow].IsEmpty()? AdjustColor(get_ListFgCol(), ADJCOL_FGLIST) :
 								is_SelFgCol(State)? col_fgSelItem : col_None;
 
-		//ƒ{ƒŠƒ…[ƒ€/ƒpƒX
+		//ãƒœãƒªãƒ¥ãƒ¼ãƒ /ãƒ‘ã‚¹
 		if (ACol==1) {
 			if (dp) {
-				//ƒAƒCƒRƒ“
+				//ã‚¢ã‚¤ã‚³ãƒ³
 				if (ShowIconCheckBox->Checked) {
 					int icon_sz = SCALED_THIS(ShowIconCheckBox->Checked? (LargeIconCheckBox->Checked? 32 : 16) : 0);
 					TIcon *ip = LargeIconCheckBox->Checked? dp->large_ico : dp->small_ico;
@@ -261,7 +261,7 @@ void __fastcall TSelDriveDlg::DriveGridDrawCell(TObject *Sender, System::LongInt
 
 				UnicodeString vnam = dp->volume;
 				UnicodeString pnam = (dp->drv_type==DRIVE_REMOTE)? dp->unc : dp->mnt_dir;
-				//ƒ{ƒŠƒ…[ƒ€
+				//ãƒœãƒªãƒ¥ãƒ¼ãƒ 
 				if (pnam.IsEmpty() || (cv->TextWidth(vnam + pnam.SubString(1, pnam.Length()/2)) + SCALED_THIS(16) < c_wd)) {
 					cv->Font->Color = (fcol==col_None)? get_ListFgCol() : fcol;
 					cv->TextRect(rc, xp, yp, vnam);
@@ -270,7 +270,7 @@ void __fastcall TSelDriveDlg::DriveGridDrawCell(TObject *Sender, System::LongInt
 					c_wd = rc.Width() - SCALED_THIS(4);
 				}
 
-				//ƒpƒX
+				//ãƒ‘ã‚¹
 				if (!pnam.IsEmpty()) {
 					if (dp->is_virtual) {
 						UnicodeString dnam = ExtractFileName(pnam);
@@ -287,35 +287,35 @@ void __fastcall TSelDriveDlg::DriveGridDrawCell(TObject *Sender, System::LongInt
 				}
 			}
 		}
-		//í—Ş
+		//ç¨®é¡
 		else {
 			UnicodeString cellstr = gp->Cells[ACol][ARow];
 			if (ACol==2) {
 				if (cv->TextWidth(cellstr)>c_wd) {
-					remove_text(cellstr, "EƒƒfƒBƒA");
-					remove_text(cellstr, "Eƒhƒ‰ƒCƒu");
-					remove_text(cellstr, "ƒhƒ‰ƒCƒu");
+					remove_text(cellstr, "ãƒ»ãƒ¡ãƒ‡ã‚£ã‚¢");
+					remove_text(cellstr, "ãƒ»ãƒ‰ãƒ©ã‚¤ãƒ–");
+					remove_text(cellstr, "ãƒ‰ãƒ©ã‚¤ãƒ–");
 				}
 				if (cv->TextWidth(cellstr)>c_wd) {
 					cellstr = ReplaceStr(cellstr, "CD-ROM",				"CD");
-					cellstr = ReplaceStr(cellstr, "ƒn[ƒhƒfƒBƒXƒN",		"HDD");
-					cellstr = ReplaceStr(cellstr, "ƒ\ƒŠƒbƒhƒXƒe[ƒg",	"SSD");
-					cellstr = ReplaceStr(cellstr, "ƒŠƒ€[ƒoƒuƒ‹",		"RM");
-					cellstr = ReplaceStr(cellstr, "ƒlƒbƒgƒ[ƒN",		"NET");
-					remove_text(cellstr, "ƒfƒBƒXƒN");
+					cellstr = ReplaceStr(cellstr, "ãƒãƒ¼ãƒ‰ãƒ‡ã‚£ã‚¹ã‚¯",		"HDD");
+					cellstr = ReplaceStr(cellstr, "ã‚½ãƒªãƒƒãƒ‰ã‚¹ãƒ†ãƒ¼ãƒˆ",	"SSD");
+					cellstr = ReplaceStr(cellstr, "ãƒªãƒ ãƒ¼ãƒãƒ–ãƒ«",		"RM");
+					cellstr = ReplaceStr(cellstr, "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯",		"NET");
+					remove_text(cellstr, "ãƒ‡ã‚£ã‚¹ã‚¯");
 				}
 				if (cv->TextWidth(cellstr)>c_wd) cellstr = get_tkn(cellstr, " (");
-				//Ú‘±I/F ‚ğ‰EŠñ‚¹
+				//æ¥ç¶šI/F ã‚’å³å¯„ã›
 				int p = cellstr.Pos(" (");
 				if (p>0) while (cv->TextWidth(cellstr + " ") < c_wd) cellstr.Insert(" ", p);
 			}
-			//g—p—e—Ê
+			//ä½¿ç”¨å®¹é‡
 			else if (ACol==3) {
 				int w = 0;
 				for (int i=1; i<gp->RowCount; i++) w = std::max(w, cv->TextWidth(gp->Cells[3][i]));
 				if (w>c_wd) cellstr = get_tkn(cellstr, " (");
 			}
-			//‹ó‚«—e—Ê
+			//ç©ºãå®¹é‡
 			else if (ACol==4) {
 				int w = 0;
 				for (int i=1; i<gp->RowCount; i++) w = std::max(w, cv->TextWidth(gp->Cells[4][i]));
@@ -325,18 +325,18 @@ void __fastcall TSelDriveDlg::DriveGridDrawCell(TObject *Sender, System::LongInt
 			int s_wd = cv->TextWidth(cellstr);
 
 			switch (ACol) {
-			case 0:	//ƒhƒ‰ƒCƒu(ƒL[)
-				if (s_wd<c_wd) xp += (c_wd - s_wd)/2;	//ƒZƒ“ƒ^ƒŠƒ“ƒO
+			case 0:	//ãƒ‰ãƒ©ã‚¤ãƒ–(ã‚­ãƒ¼)
+				if (s_wd<c_wd) xp += (c_wd - s_wd)/2;	//ã‚»ãƒ³ã‚¿ãƒªãƒ³ã‚°
 				break;
-			case 3: case 4: case 5:	//—e—Ê
-				if (s_wd<c_wd) xp += (c_wd - s_wd);	//‰EŠñ‚¹
+			case 3: case 4: case 5:	//å®¹é‡
+				if (s_wd<c_wd) xp += (c_wd - s_wd);	//å³å¯„ã›
 				break;
 			}
 
 			cv->Font->Color = (fcol==col_None)? get_ListFgCol() : fcol;
 			cv->TextRect(rc, xp, yp, cellstr);
 
-			//g—p—¦ƒOƒ‰ƒt
+			//ä½¿ç”¨ç‡ã‚°ãƒ©ãƒ•
 			if (ACol==5) {
 				UnicodeString s = get_tkn_m(gp->Cells[4][ARow], '(', '%');
 				if (!s.IsEmpty()) {
@@ -355,12 +355,12 @@ void __fastcall TSelDriveDlg::DriveGridDrawCell(TObject *Sender, System::LongInt
 		}
 	}
 
-	//ƒJ[ƒ\ƒ‹
+	//ã‚«ãƒ¼ã‚½ãƒ«
 	draw_GridCursor(gp, Rect, ARow, State);
 }
 
 //---------------------------------------------------------------------------
-//ƒL[‘€ì
+//ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TSelDriveDlg::DriveGridKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -391,14 +391,14 @@ void __fastcall TSelDriveDlg::DriveGridKeyDown(TObject *Sender, WORD &Key, TShif
 	}
 	else {
 		UnicodeString cmd_F = Key_to_CmdF(KeyStr);
-		//ƒRƒ“ƒeƒLƒXƒgƒƒjƒ…[
+		//ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆãƒ¡ãƒ‹ãƒ¥ãƒ¼
 		if (StartsText("ContextMenu", cmd_F)) {
 			TStringGrid *gp = (TStringGrid*)Sender;
 			Mouse->CursorPos = gp->ClientToScreen(Point(gp->ColWidths[0] + gp->ColWidths[1], 16));
 			ClearKeyBuff(true);
 			ShowDriveMenu();
 		}
-		//—e—ÊƒOƒ‰ƒt
+		//å®¹é‡ã‚°ãƒ©ãƒ•
 		else if (StartsText("DriveGraph", cmd_F)) {
 			ShowDriveGraph();
 		}
@@ -409,12 +409,12 @@ void __fastcall TSelDriveDlg::DriveGridKeyDown(TObject *Sender, WORD &Key, TShif
 }
 
 //---------------------------------------------------------------------------
-//ƒ}ƒEƒX‘€ì
+//ãƒã‚¦ã‚¹æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TSelDriveDlg::DriveGridMouseUp(TObject *Sender, TMouseButton Button,
 		TShiftState Shift, int X, int Y)
 {
-	//ƒhƒ‰ƒCƒu‚ÌƒRƒ“ƒeƒLƒXƒgƒƒjƒ…[‚ğŠJ‚­
+	//ãƒ‰ãƒ©ã‚¤ãƒ–ã®ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’é–‹ã
 	if (Button==mbRight) ShowDriveMenu();
 }
 //---------------------------------------------------------------------------
@@ -430,17 +430,17 @@ void __fastcall TSelDriveDlg::OptCheckBoxClick(TObject *Sender)
 	UpdateDriveList();
 }
 //---------------------------------------------------------------------------
-//ƒhƒ‰ƒCƒug—p—¦„ˆÚ‚ğ•\¦
+//ãƒ‰ãƒ©ã‚¤ãƒ–ä½¿ç”¨ç‡æ¨ç§»ã‚’è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TSelDriveDlg::ShowDriveGraph()
 {
-	if (!DriveGraph) DriveGraph = new TDriveGraph(this);	//‰‰ñ‚É“®“Iì¬
+	if (!DriveGraph) DriveGraph = new TDriveGraph(this);	//åˆå›ã«å‹•çš„ä½œæˆ
 	DriveGraph->DriveName = getCurDrvStr();
 	DriveGraph->ShowModal();
 }
 
 //---------------------------------------------------------------------------
-//ƒhƒ‰ƒCƒu‚ÌƒRƒ“ƒeƒLƒXƒgƒƒjƒ…[‚ğ•\¦
+//ãƒ‰ãƒ©ã‚¤ãƒ–ã®ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TSelDriveDlg::ShowDriveMenu()
 {
@@ -450,15 +450,15 @@ void __fastcall TSelDriveDlg::ShowDriveMenu()
 	std::unique_ptr<TStringList> ex_item(new TStringList());
 	ex_item->Text =
 		"-\n"
-		"ƒlƒbƒgƒ[ƒNƒhƒ‰ƒCƒu‚ÌŠ„‚è“–‚Ä(&N)...	NetConnect\n"
-		"ƒlƒbƒgƒ[ƒNƒhƒ‰ƒCƒu‚ÌØ’f(&D)...	NetDisConnect\n"
+		"ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ãƒ‰ãƒ©ã‚¤ãƒ–ã®å‰²ã‚Šå½“ã¦(&N)...	NetConnect\n"
+		"ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ãƒ‰ãƒ©ã‚¤ãƒ–ã®åˆ‡æ–­(&D)...	NetDisConnect\n"
 		"-\n"
-		"ƒ{ƒŠƒ…[ƒ€–¼‚Ì•ÏX	Rename\n"
-		"ÅV‚Ìî•ñ‚ÉXV	ReloadList\n"
-		"ƒhƒ‰ƒCƒug—p—¦„ˆÚ	DriveGraph\n";
+		"ãƒœãƒªãƒ¥ãƒ¼ãƒ åã®å¤‰æ›´	Rename\n"
+		"æœ€æ–°ã®æƒ…å ±ã«æ›´æ–°	ReloadList\n"
+		"ãƒ‰ãƒ©ã‚¤ãƒ–ä½¿ç”¨ç‡æ¨ç§»	DriveGraph\n";
 	if (ContainsText(typstr, "CD-ROM")) {
 		ex_item->Add("-");
-		ex_item->Add("ƒhƒ‰ƒCƒu‚ÌƒgƒŒƒC‚ğŠJ‚­(&T)	EjectTray");
+		ex_item->Add("ãƒ‰ãƒ©ã‚¤ãƒ–ã®ãƒˆãƒ¬ã‚¤ã‚’é–‹ã(&T)	EjectTray");
 	}
 
 	UnicodeString res_str = usr_SH->DriveContextMenu(Handle, drvnam, ex_item.get());
@@ -471,7 +471,7 @@ void __fastcall TSelDriveDlg::ShowDriveMenu()
 		else if (SameText(m_buf[1], "DriveGraph"))		ShowDriveGraph();
 		else if (SameText(m_buf[1], "Rename")) {
 			UnicodeString new_name = get_VolumeInfo(drvnam);
-			if (input_query_ex(USTR_Rename, _T("–¼‘O"), &new_name)) {
+			if (input_query_ex(USTR_Rename, _T("åå‰"), &new_name)) {
 				if (::SetVolumeLabel(drvnam.c_str(), new_name.c_str())) UpdateDriveList();
 			}
 		}
@@ -479,7 +479,7 @@ void __fastcall TSelDriveDlg::ShowDriveMenu()
 }
 
 //---------------------------------------------------------------------------
-//ƒhƒ‰ƒCƒu‚ÌƒvƒƒpƒeƒB
+//ãƒ‰ãƒ©ã‚¤ãƒ–ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 //---------------------------------------------------------------------------
 void __fastcall TSelDriveDlg::DrivePropBtnClick(TObject *Sender)
 {
@@ -488,7 +488,7 @@ void __fastcall TSelDriveDlg::DrivePropBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒhƒ‰ƒCƒu‚Ìæ‚èo‚µ
+//ãƒ‰ãƒ©ã‚¤ãƒ–ã®å–ã‚Šå‡ºã—
 //---------------------------------------------------------------------------
 void __fastcall TSelDriveDlg::EjectDriveActionExecute(TObject *Sender)
 {
@@ -503,7 +503,7 @@ void __fastcall TSelDriveDlg::EjectDriveActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒhƒ‰ƒCƒu‚ÌƒgƒŒƒC‚ğŠJ‚­
+//ãƒ‰ãƒ©ã‚¤ãƒ–ã®ãƒˆãƒ¬ã‚¤ã‚’é–‹ã
 //---------------------------------------------------------------------------
 void __fastcall TSelDriveDlg::EjectTrayActionExecute(TObject *Sender)
 {
@@ -526,14 +526,14 @@ void __fastcall TSelDriveDlg::EjectTrayActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = (dp && dp->drv_type==DRIVE_CDROM);
 }
 //---------------------------------------------------------------------------
-//ƒGƒNƒXƒvƒ[ƒ‰‚ÅŠJ‚­
+//ã‚¨ã‚¯ã‚¹ãƒ—ãƒ­ãƒ¼ãƒ©ã§é–‹ã
 //---------------------------------------------------------------------------
 void __fastcall TSelDriveDlg::OpenExpItemClick(TObject *Sender)
 {
 	Execute_ex(getCurDrvStr(_T(":\\")));
 }
 //---------------------------------------------------------------------------
-//ƒvƒƒpƒeƒB
+//ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 //---------------------------------------------------------------------------
 void __fastcall TSelDriveDlg::PropertyActionExecute(TObject *Sender)
 {
@@ -542,7 +542,7 @@ void __fastcall TSelDriveDlg::PropertyActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//İ’èƒpƒlƒ‹‚ÌŠJ•Â
+//è¨­å®šãƒ‘ãƒãƒ«ã®é–‹é–‰
 //---------------------------------------------------------------------------
 void __fastcall TSelDriveDlg::ChgOptBtnClick(TObject *Sender)
 {

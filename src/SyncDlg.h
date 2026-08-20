@@ -1,6 +1,6 @@
 /**
  * @file SyncDlg.h
- * @brief “¯ŠúƒRƒs[‚Ìİ’èƒ_ƒCƒAƒƒO
+ * @brief åŒæœŸã‚³ãƒ”ãƒ¼ã®è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 //---------------------------------------------------------------------------
 #ifndef SyncDlgH
@@ -19,11 +19,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief “¯ŠúƒRƒs[‚Ìİ’èƒ_ƒCƒAƒƒO
+ * @brief åŒæœŸã‚³ãƒ”ãƒ¼ã®è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TRegSyncDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *AddDirAction;
 	TAction *AddRegAction;
 	TAction *ChgRegAction;
@@ -63,12 +63,12 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall ClrDirActionExecute(TObject *Sender);
 	void __fastcall OkButtonClick(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	UnicodeString InitDir;
 
 	UnicodeString __fastcall MakeRegItem(int idx = -1);
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	__fastcall TRegSyncDlg(TComponent* Owner);
 };
 //---------------------------------------------------------------------------

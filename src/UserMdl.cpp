@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------//
-// ”Ä—p‹¤—pƒ‚ƒWƒ…[ƒ‹													//
+// æ±ç”¨å…±ç”¨ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«													//
 //																		//
 //----------------------------------------------------------------------//
 #include "usr_scale.h"
@@ -21,7 +21,7 @@
 TUserModule *UserModule;
 
 //---------------------------------------------------------------------------
-//ƒeƒLƒXƒg•Û‘¶ƒR[ƒhƒy[ƒW
+//ãƒ†ã‚­ã‚¹ãƒˆä¿å­˜ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸
 code_page_inf SaveCodePages[MAX_SAVE_CODEPAGES] = {
 	{  932,	"Shift_JIS"},
 	{65001,	"UTF-8"},
@@ -42,9 +42,9 @@ void __fastcall TUserModule::DataModuleCreate(TObject *Sender)
 {
 	BlinkObj = NULL;
 
-	//ƒ}ƒEƒXƒ|ƒCƒ“ƒ^[‚ğİ’è
-	crHandGrabR = (TCursor)6;	//ƒCƒ[ƒWˆÚ“®
-	crSpuitTool = (TCursor)7;	//ƒXƒ|ƒCƒg
+	//ãƒã‚¦ã‚¹ãƒã‚¤ãƒ³ã‚¿ãƒ¼ã‚’è¨­å®š
+	crHandGrabR = (TCursor)6;	//ã‚¤ãƒ¡ãƒ¼ã‚¸ç§»å‹•
+	crSpuitTool = (TCursor)7;	//ã‚¹ãƒã‚¤ãƒˆ
 	Screen->Cursors[crHandGrabR] = (HCURSOR)::LoadImage(HInstance, _T("HNDGRB_R"),	 IMAGE_CURSOR, 0, 0, LR_DEFAULTSIZE);
 	Screen->Cursors[crSpuitTool] = (HCURSOR)::LoadImage(HInstance, _T("SPUIT_TOOL"), IMAGE_CURSOR, 0, 0, LR_DEFAULTSIZE);
 
@@ -59,37 +59,37 @@ void __fastcall TUserModule::DataModuleCreate(TObject *Sender)
 	SaveTxtDlg->Encodings->Clear();
 	for (int i=0; i<MAX_SAVE_CODEPAGES; i++) SaveTxtDlg->Encodings->Add(SaveCodePages[i].name);
 
-	//ƒRƒ}ƒ“ƒhƒpƒ‰ƒ[ƒ^‚ÌQÆ
+	//ã‚³ãƒãƒ³ãƒ‰ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®å‚ç…§
 	CmdParamList = new TStringList();
 
-	//³‹K•\Œ»‚ÌQÆ
+	//æ­£è¦è¡¨ç¾ã®å‚ç…§
 	RefRegExList = new TStringList();
 	RefRegExList->Text =
-		"\\	Ÿ‚Ìƒƒ^•¶š‚ğƒNƒH[ƒg\n"
-		"^	s“ª\n"
-		".	‰üsˆÈŠO‚Ì‚·‚×‚Ä‚Ì•¶š\n"
-		"$	s––\n"
-		"|	‘I‘ğ\n"
-		"()	ƒOƒ‹[ƒv‰»\n"
-		"[]	•¶šƒNƒ‰ƒX\n"
+		"\\	æ¬¡ã®ãƒ¡ã‚¿æ–‡å­—ã‚’ã‚¯ã‚©ãƒ¼ãƒˆ\n"
+		"^	è¡Œé ­\n"
+		".	æ”¹è¡Œä»¥å¤–ã®ã™ã¹ã¦ã®æ–‡å­—\n"
+		"$	è¡Œæœ«\n"
+		"|	é¸æŠ\n"
+		"()	ã‚°ãƒ«ãƒ¼ãƒ—åŒ–\n"
+		"[]	æ–‡å­—ã‚¯ãƒ©ã‚¹\n"
 		"-\n"
-		"\\w	’PŒê‚Ì\¬•¶š(‰p”š‚Æ\"_\")\n"
-		"\\W	’PŒê‚Ì\¬•¶šˆÈŠO\n"
-		"\\s	‹ó”’•¶š\n"
-		"\\S	‹ó”’•¶šˆÈŠO\n"
-		"\\d	”š\n"
-		"\\D	”šˆÈŠO\n"
-		"\\b	’PŒê‚Ì‹«ŠE\n"
-		"\\B	’PŒê‚Ì‹«ŠEˆÈŠO\n"
+		"\\w	å˜èªã®æ§‹æˆæ–‡å­—(è‹±æ•°å­—ã¨\"_\")\n"
+		"\\W	å˜èªã®æ§‹æˆæ–‡å­—ä»¥å¤–\n"
+		"\\s	ç©ºç™½æ–‡å­—\n"
+		"\\S	ç©ºç™½æ–‡å­—ä»¥å¤–\n"
+		"\\d	æ•°å­—\n"
+		"\\D	æ•°å­—ä»¥å¤–\n"
+		"\\b	å˜èªã®å¢ƒç•Œ\n"
+		"\\B	å˜èªã®å¢ƒç•Œä»¥å¤–\n"
 		"-\n"
-		"*	0 ‰ñˆÈã\n"
-		"+	1 ‰ñˆÈã\n"
-		"?	1 ‰ñ‚Ü‚½‚Í 0 ‰ñ\n"
-		"{n}	‚¿‚å‚¤‚Ç n ‰ñ\n"
-		"{n,}	n ‰ñˆÈã\n"
-		"{n,m}	n ‰ñˆÈã m ‰ñˆÈ‰º\n";
+		"*	0 å›ä»¥ä¸Š\n"
+		"+	1 å›ä»¥ä¸Š\n"
+		"?	1 å›ã¾ãŸã¯ 0 å›\n"
+		"{n}	ã¡ã‚‡ã†ã© n å›\n"
+		"{n,}	n å›ä»¥ä¸Š\n"
+		"{n,m}	n å›ä»¥ä¸Š m å›ä»¥ä¸‹\n";
 
-	//³‹K•\Œ»ƒƒjƒ…[‚Ìİ’è
+	//æ­£è¦è¡¨ç¾ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®è¨­å®š
 	for (int i=0; i<RefRegExList->Count; i++) {
 		UnicodeString lbuf = RefRegExList->Strings[i];
 		if (lbuf.IsEmpty()) continue;
@@ -112,7 +112,7 @@ void __fastcall TUserModule::DataModuleCreate(TObject *Sender)
 		}
 	}
 
-	FileListRect = Rect(0,0, 600,400);	//‰¼İ’è
+	FileListRect = Rect(0,0, 600,400);	//ä»®è¨­å®š
 
 	LastComboBox   = NULL;
 	LastComboBoxSS = 0;
@@ -126,9 +126,9 @@ void __fastcall TUserModule::DataModuleDestroy(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒŠƒXƒgƒ{ƒbƒNƒX‚Ì‰Šú‰» (TListBox/TCheckListBox ‚É‘Î‰)
-//  DragMode=dmAutomatic ‚È‚çƒhƒ‰ƒbƒO&ƒhƒƒbƒv‚É‚æ‚é€–ÚˆÚ“®‚ª‰Â”\
-//  €–Ú‚Ìã‰ºˆÚ“®‚¨‚æ‚Ñíœ—pƒAƒNƒVƒ‡ƒ“‚ğ’ñ‹Ÿ
+//ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®åˆæœŸåŒ– (TListBox/TCheckListBox ã«å¯¾å¿œ)
+//  DragMode=dmAutomatic ãªã‚‰ãƒ‰ãƒ©ãƒƒã‚°&ãƒ‰ãƒ­ãƒƒãƒ—ã«ã‚ˆã‚‹é …ç›®ç§»å‹•ãŒå¯èƒ½
+//  é …ç›®ã®ä¸Šä¸‹ç§»å‹•ãŠã‚ˆã³å‰Šé™¤ç”¨ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’æä¾›
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::InitializeListBox(TCustomListBox *lp, UsrScrollPanel *sp)
 {
@@ -179,7 +179,7 @@ void __fastcall TUserModule::UninitializeListBox()
 }
 
 //---------------------------------------------------------------------------
-//ƒŠƒXƒg€–Ú‚ğˆê‚Âã‚Ö
+//ãƒªã‚¹ãƒˆé …ç›®ã‚’ä¸€ã¤ä¸Šã¸
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::UpListItemActionExecute(TObject *Sender)
 {
@@ -200,7 +200,7 @@ void __fastcall TUserModule::UpListItemActionUpdate(TObject *Sender)
 			&& ActiveListBox->ItemIndex>=1 && ActiveListBox->ItemIndex<ActiveListBox->Count;
 }
 //---------------------------------------------------------------------------
-//ƒŠƒXƒg€–Ú‚ğˆê‚Â‰º‚Ö
+//ãƒªã‚¹ãƒˆé …ç›®ã‚’ä¸€ã¤ä¸‹ã¸
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::DownListItemActionExecute(TObject *Sender)
 {
@@ -221,7 +221,7 @@ void __fastcall TUserModule::DownListItemActionUpdate(TObject *Sender)
 			&& ActiveListBox->ItemIndex>=0 && ActiveListBox->ItemIndex<ActiveListBox->Count-1;
 }
 //---------------------------------------------------------------------------
-//ƒŠƒXƒg€–Ú‚ğíœ
+//ãƒªã‚¹ãƒˆé …ç›®ã‚’å‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::DelListItemActionExecute(TObject *Sender)
 {
@@ -239,7 +239,7 @@ void __fastcall TUserModule::DelListItemActionUpdate(TObject *Sender)
 			&& ActiveListBox->ItemIndex!=-1;
 }
 //---------------------------------------------------------------------------
-//ƒŠƒXƒg€–Ú‚ğƒNƒŠƒA
+//ãƒªã‚¹ãƒˆé …ç›®ã‚’ã‚¯ãƒªã‚¢
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::ClrListItemActionExecute(TObject *Sender)
 {
@@ -257,7 +257,7 @@ void __fastcall TUserModule::ClrListItemActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒhƒ‰ƒbƒO&ƒhƒƒbƒv‚É‚æ‚éƒŠƒXƒg€–Ú‚ÌˆÚ“®
+//ãƒ‰ãƒ©ãƒƒã‚°&ãƒ‰ãƒ­ãƒƒãƒ—ã«ã‚ˆã‚‹ãƒªã‚¹ãƒˆé …ç›®ã®ç§»å‹•
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::ListBoxStartDrag(TObject *Sender, TDragObject *&DragObject)
 {
@@ -275,21 +275,21 @@ void __fastcall TUserModule::ListBoxDragOver(TObject *Sender, TObject *Source, i
 	int ch = lp->ClientHeight;
 	int ih = (class_is_CheckListBox(lp)? ((TCheckListBox*)lp)->ItemHeight : ((TListBox*)lp)->ItemHeight);
 	if (lp->TopIndex>0 && Y<(ih - 4)) {
-		//ã‚ÖƒXƒNƒ[ƒ‹
+		//ä¸Šã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«
 		ScrollTimer->Interval = 100;
 		ScrollTimer->Tag	  = (Y<=0)? -2 : -1;
 		ScrollTimer->Enabled  = true;
 	}
 	else if (Y>(ch - (ih - 4))) {
-		//‰º‚ÖƒXƒNƒ[ƒ‹
+		//ä¸‹ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«
 		ScrollTimer->Interval = 100;
 		ScrollTimer->Tag	  = (Y>=ch)? 2 : 1;
 		ScrollTimer->Enabled  = true;
 	}
 	else if (Accept) {
 		int idx = lp->ItemAtPos(Point(X, Y), true);
-		draw_ListItemLine(lp, PrevListIdx);		//’¼‘O‚Ìƒhƒƒbƒvæ•\¦‚ğÁ‹
-		draw_ListItemLine(lp, idx);				//V‚µ‚¢ƒhƒƒbƒvæ•\¦‚ğ•`‰æ
+		draw_ListItemLine(lp, PrevListIdx);		//ç›´å‰ã®ãƒ‰ãƒ­ãƒƒãƒ—å…ˆè¡¨ç¤ºã‚’æ¶ˆå»
+		draw_ListItemLine(lp, idx);				//æ–°ã—ã„ãƒ‰ãƒ­ãƒƒãƒ—å…ˆè¡¨ç¤ºã‚’æç”»
 		PrevListIdx = idx;
 	}
 
@@ -302,7 +302,7 @@ void __fastcall TUserModule::ListBoxDragDrop(TObject *Sender, TObject *Source, i
 
 	TCustomListBox *lp = (TCustomListBox*)Sender;
 	int idx = lp->ItemAtPos(Point(X, Y), true);
-	draw_ListItemLine(lp, PrevListIdx);		//’¼‘O‚Ìƒhƒƒbƒvæ•\¦‚ğÁ‹
+	draw_ListItemLine(lp, PrevListIdx);		//ç›´å‰ã®ãƒ‰ãƒ­ãƒƒãƒ—å…ˆè¡¨ç¤ºã‚’æ¶ˆå»
 	if (idx!=-1) {
 		lp->Items->Move(lp->ItemIndex, idx);
 		lp->ItemIndex = idx;
@@ -315,7 +315,7 @@ void __fastcall TUserModule::ListBoxEndDrag(TObject *Sender, TObject *Target, in
 	ScrollTimer->Enabled  = false;
 }
 //---------------------------------------------------------------------------
-//ƒŠƒXƒgƒ{ƒbƒNƒX‚Ì©“®ƒXƒNƒ[ƒ‹
+//ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®è‡ªå‹•ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::ScrollTimerTimer(TObject *Sender)
 {
@@ -323,7 +323,7 @@ void __fastcall TUserModule::ScrollTimerTimer(TObject *Sender)
 		int last_top = ActiveListBox->TopIndex;
 		ActiveListBox->TopIndex = ActiveListBox->TopIndex + ((TComponent*)Sender)->Tag;
 		if (ActiveListBox->TopIndex!=last_top) {
-			draw_ListItemLine(ActiveListBox, PrevListIdx);		//’¼‘O‚Ìƒhƒƒbƒvæ•\¦‚ğÁ‹
+			draw_ListItemLine(ActiveListBox, PrevListIdx);		//ç›´å‰ã®ãƒ‰ãƒ­ãƒƒãƒ—å…ˆè¡¨ç¤ºã‚’æ¶ˆå»
 			PrevListIdx = -1;
 			ActiveListBox->Invalidate();
 		}
@@ -333,7 +333,7 @@ void __fastcall TUserModule::ScrollTimerTimer(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒŠƒXƒgƒ{ƒbƒNƒX‚Ì€–Ú‚É‘Î‚·‚éƒL[‘€ì (ˆÚ“®Aíœ)
+//ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®é …ç›®ã«å¯¾ã™ã‚‹ã‚­ãƒ¼æ“ä½œ (ç§»å‹•ã€å‰Šé™¤)
 //---------------------------------------------------------------------------
 bool __fastcall TUserModule::ListBoxOpeItem(UnicodeString keystr)
 {
@@ -349,14 +349,14 @@ bool __fastcall TUserModule::ListBoxOpeItem(UnicodeString keystr)
 }
 
 //---------------------------------------------------------------------------
-//ƒ}ƒEƒXˆÊ’u‚ÌƒsƒNƒZƒ‹F‚ğæ“¾‚·‚éƒXƒ|ƒCƒg‹@”\
+//ãƒã‚¦ã‚¹ä½ç½®ã®ãƒ”ã‚¯ã‚»ãƒ«è‰²ã‚’å–å¾—ã™ã‚‹ã‚¹ãƒã‚¤ãƒˆæ©Ÿèƒ½
 //---------------------------------------------------------------------------
-//ŠJn
+//é–‹å§‹
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::BeginSpuit(
-	TPanel *pp,			//ƒXƒ|ƒCƒgƒpƒlƒ‹
-	TImage *ip,			//ƒXƒ|ƒCƒgƒCƒ[ƒW
-	TColor col_def)		//ƒfƒtƒHƒ‹ƒgF
+	TPanel *pp,			//ã‚¹ãƒã‚¤ãƒˆãƒ‘ãƒãƒ«
+	TImage *ip,			//ã‚¹ãƒã‚¤ãƒˆã‚¤ãƒ¡ãƒ¼ã‚¸
+	TColor col_def)		//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆè‰²
 {
 	SpuitImage = ip;
 	if (SpuitImage) SpuitImage->Visible = false;
@@ -370,7 +370,7 @@ void __fastcall TUserModule::BeginSpuit(
 	SpuitTimer->Enabled = true;
 }
 //---------------------------------------------------------------------------
-//I—¹
+//çµ‚äº†
 //---------------------------------------------------------------------------
 TColor __fastcall TUserModule::EndSpuit()
 {
@@ -387,14 +387,14 @@ TColor __fastcall TUserModule::EndSpuit()
 	return col;
 }
 //---------------------------------------------------------------------------
-//ƒXƒ|ƒCƒg“®ì’†?
+//ã‚¹ãƒã‚¤ãƒˆå‹•ä½œä¸­?
 //---------------------------------------------------------------------------
 bool __fastcall TUserModule::SpuitEnabled()
 {
 	return SpuitTimer->Enabled;
 }
 //---------------------------------------------------------------------------
-//ƒXƒ|ƒCƒg‚Åƒ}ƒEƒXˆÊ’u‚ÌƒsƒNƒZƒ‹F‚ğæ“¾
+//ã‚¹ãƒã‚¤ãƒˆã§ãƒã‚¦ã‚¹ä½ç½®ã®ãƒ”ã‚¯ã‚»ãƒ«è‰²ã‚’å–å¾—
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::SpuitTimerTimer(TObject *Sender)
 {
@@ -436,11 +436,11 @@ void __fastcall TUserModule::ComboBoxContextPopup(TObject *Sender, const TPoint 
 }
 
 //---------------------------------------------------------------------------
-//ƒGƒfƒBƒbƒg/ƒRƒ“ƒ{ƒ{ƒbƒNƒX‚É“Æ©ƒ|ƒbƒvƒAƒbƒvƒƒjƒ…[‚ğİ’è
+//ã‚¨ãƒ‡ã‚£ãƒƒãƒˆ/ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹ã«ç‹¬è‡ªãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::SetUsrPopupMenu(TForm *fp)
 {
-	//“ü—Í—“‚Éƒ|ƒbƒvƒAƒbƒvƒƒjƒ…[‚ğİ’è
+	//å…¥åŠ›æ¬„ã«ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’è¨­å®š
 	for (int i=0; i<fp->ComponentCount; i++) {
 		TComponent *cp = fp->Components[i];
 		if (class_is_Edit(cp)) {
@@ -463,7 +463,7 @@ void __fastcall TUserModule::SetUsrPopupMenu(TForm *fp)
 }
 
 //---------------------------------------------------------------------------
-//ƒGƒfƒBƒbƒg/ƒRƒ“ƒ{ƒ{ƒbƒNƒX‚Ìƒ|ƒbƒvƒAƒbƒvƒƒjƒ…[‚ğ•\¦
+//ã‚¨ãƒ‡ã‚£ãƒƒãƒˆ/ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹ã®ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’è¡¨ç¤º
 //---------------------------------------------------------------------------
 bool __fastcall TUserModule::ShowPopupMenu()
 {
@@ -483,7 +483,7 @@ bool __fastcall TUserModule::ShowPopupMenu()
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒH[ƒJƒX‚Ì‚ ‚éƒRƒ“ƒ{ƒ{ƒbƒNƒX‚ğæ“¾
+//ãƒ•ã‚©ãƒ¼ã‚«ã‚¹ã®ã‚ã‚‹ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹ã‚’å–å¾—
 //---------------------------------------------------------------------------
 TComboBox * __fastcall TUserModule::GetActiveComboBox()
 {
@@ -491,7 +491,7 @@ TComboBox * __fastcall TUserModule::GetActiveComboBox()
 	return class_is_ComboBox(cp)? (TComboBox*)cp : NULL;
 }
 //---------------------------------------------------------------------------
-//ƒtƒH[ƒJƒX‚Ì‚ ‚éƒJƒXƒ^ƒ€ƒGƒfƒBƒbƒg‚ğæ“¾
+//ãƒ•ã‚©ãƒ¼ã‚«ã‚¹ã®ã‚ã‚‹ã‚«ã‚¹ã‚¿ãƒ ã‚¨ãƒ‡ã‚£ãƒƒãƒˆã‚’å–å¾—
 //---------------------------------------------------------------------------
 TCustomEdit * __fastcall TUserModule::GetActiveCustomEdit()
 {
@@ -500,7 +500,7 @@ TCustomEdit * __fastcall TUserModule::GetActiveCustomEdit()
 }
 
 //---------------------------------------------------------------------------
-//Ø‚èæ‚è
+//åˆ‡ã‚Šå–ã‚Š
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::CutComboActionExecute(TObject *Sender)
 {
@@ -514,7 +514,7 @@ void __fastcall TUserModule::EditComboActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = (cp && !cp->SelText.IsEmpty());
 }
 //---------------------------------------------------------------------------
-//ƒRƒs[
+//ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::CopyComboActionExecute(TObject *Sender)
 {
@@ -522,7 +522,7 @@ void __fastcall TUserModule::CopyComboActionExecute(TObject *Sender)
 	if (cp) cp->Perform(WM_COPY, 0, (NativeInt)0);
 }
 //---------------------------------------------------------------------------
-//“\‚è•t‚¯
+//è²¼ã‚Šä»˜ã‘
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::PasteComboActionExecute(TObject *Sender)
 {
@@ -547,10 +547,10 @@ void __fastcall TUserModule::EditPaste1Execute(TObject *Sender)
 		if (ep->SelText.Length()==ep->EditText.Length() || ep->SelText.Length()==0) {
 			TDateTime dt;
 			if (ToDateTime(s, &dt)) {
-				//ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv
+				//ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—
 				if (SameText(ep->Name, "TimeMaskEdit"))
 					s = format_DateTime(dt);
-				//“ú•t
+				//æ—¥ä»˜
 				else if(SameText(ep->Name, "DateMaskEdit"))
 					s = format_Date(dt);
 				ep->Text	  = s;
@@ -572,7 +572,7 @@ void __fastcall TUserModule::EditPaste1Execute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//‚·‚×‚Ä‘I‘ğ
+//ã™ã¹ã¦é¸æŠ
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::SelAllComboActionExecute(TObject *Sender)
 {
@@ -587,7 +587,7 @@ void __fastcall TUserModule::SelAllComboActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//‚±‚ÌŒŸõ•¶š—ñ‚ğ—š—ğ‚©‚çíœ
+//ã“ã®æ¤œç´¢æ–‡å­—åˆ—ã‚’å±¥æ­´ã‹ã‚‰å‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::DelHistComboActionExecute(TObject *Sender)
 {
@@ -602,7 +602,7 @@ void __fastcall TUserModule::DelHistComboActionUpdate(TObject *Sender)
 	ap->Enabled = (ap->Visible && cp && cp->Items->Count>0 && !cp->Text.IsEmpty());
 }
 //---------------------------------------------------------------------------
-//ŒŸõ—š—ğ‚ğ‚·‚×‚Äíœ
+//æ¤œç´¢å±¥æ­´ã‚’ã™ã¹ã¦å‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::ClrHistComboActionExecute(TObject *Sender)
 {
@@ -619,7 +619,7 @@ void __fastcall TUserModule::ClrHistComboActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒ}ƒ“ƒh–¼‚ÌQÆ
+//ã‚³ãƒãƒ³ãƒ‰åã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::RefCmdNameActionExecute(TObject *Sender)
 {
@@ -631,7 +631,7 @@ void __fastcall TUserModule::RefCmdNameActionExecute(TObject *Sender)
 			((TCustomEdit*)wp)->SelText = InpCmdsDlg->CmdsComboBox->Text;
 	}
 	else if (class_is_ComboBox(wp)) {
-		//ƒtƒH[ƒJƒX‚ª–ß‚Á‚½‚Æ‚«‘S‘I‘ğ‚É‚È‚Á‚Ä‚µ‚Ü‚¤Œ»Û‚Ö‚Ì‘Îô
+		//ãƒ•ã‚©ãƒ¼ã‚«ã‚¹ãŒæˆ»ã£ãŸã¨ãå…¨é¸æŠã«ãªã£ã¦ã—ã¾ã†ç¾è±¡ã¸ã®å¯¾ç­–
 		TComboBox *cp = (TComboBox*)wp;
 		int s_start = cp->SelStart;
 		int s_len	= cp->SelLength;
@@ -664,7 +664,7 @@ void __fastcall TUserModule::RefCmdNameActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒJ[ƒ\ƒ‹ˆÊ’u‚Ìƒtƒ@ƒCƒ‹–¼‚ğQÆ
+//ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®ãƒ•ã‚¡ã‚¤ãƒ«åã‚’å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::RefCurFNameActionExecute(TObject *Sender)
 {
@@ -679,7 +679,7 @@ void __fastcall TUserModule::RefCurFNameActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Visible = (wp && contained_wd_i(_T("DistrMaskEdit|ExeComboBox"), wp->Name));
 }
 //---------------------------------------------------------------------------
-//ƒJ[ƒ\ƒ‹ˆÊ’u‚ÌƒpƒX•t‚«ƒtƒ@ƒCƒ‹–¼‚ğQÆ
+//ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®ãƒ‘ã‚¹ä»˜ããƒ•ã‚¡ã‚¤ãƒ«åã‚’å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::RefCurPNameActionExecute(TObject *Sender)
 {
@@ -695,7 +695,7 @@ void __fastcall TUserModule::RefCurPNameActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒJƒŒƒ“ƒgƒpƒX‚ğQÆ
+//ã‚«ãƒ¬ãƒ³ãƒˆãƒ‘ã‚¹ã‚’å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::RefCurPathActionExecute(TObject *Sender)
 {
@@ -710,7 +710,7 @@ void __fastcall TUserModule::RefCurPathActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Visible = (wp && contained_wd_i(_T("DistrDirEdit"), wp->Name));
 }
 //---------------------------------------------------------------------------
-//”½‘ÎƒpƒX‚ğQÆ
+//åå¯¾ãƒ‘ã‚¹ã‚’å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::RefOppPathActionExecute(TObject *Sender)
 {
@@ -725,7 +725,7 @@ void __fastcall TUserModule::RefOppPathActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Visible = (wp && contained_wd_i(_T("DistrDirEdit"), wp->Name));
 }
 //---------------------------------------------------------------------------
-//Œ³ƒtƒ@ƒCƒ‹–¼‚ğ‘}“ü
+//å…ƒãƒ•ã‚¡ã‚¤ãƒ«åã‚’æŒ¿å…¥
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::RefFileNameActionExecute(TObject *Sender)
 {
@@ -740,7 +740,7 @@ void __fastcall TUserModule::RefFileNameActionUpdate(TObject *Sender)
 	ap->Enabled = ap->Visible;
 }
 //---------------------------------------------------------------------------
-//ƒJƒŒƒ“ƒg‚ÌƒpƒX–³‚µƒfƒBƒŒƒNƒgƒŠ–¼
+//ã‚«ãƒ¬ãƒ³ãƒˆã®ãƒ‘ã‚¹ç„¡ã—ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::RefCurDirActionExecute(TObject *Sender)
 {
@@ -761,7 +761,7 @@ void __fastcall TUserModule::RefCurDirActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒ“ƒ{ƒ{ƒbƒNƒX‚Ìƒ|ƒbƒvƒAƒbƒvƒƒjƒ…[
+//ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹ã®ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::EditPopupMenuCPopup(TObject *Sender)
 {
@@ -770,10 +770,10 @@ void __fastcall TUserModule::EditPopupMenuCPopup(TObject *Sender)
 
 	RegExpItem->Visible   = (tag & CBTAG_RGEX_V);
 	RegExpItem->Enabled   = (tag & CBTAG_RGEX_E);
-	EditItemItem->Visible = (cp && (StartsStr(". ‚Å‹æØ‚Á‚Ä", cp->Hint) || StartsStr("; ‚Å‹æØ‚Á‚Ä", cp->Hint)));
+	EditItemItem->Visible = (cp && (StartsStr(". ã§åŒºåˆ‡ã£ã¦", cp->Hint) || StartsStr("; ã§åŒºåˆ‡ã£ã¦", cp->Hint)));
 	EditItemItem->Enabled = EditItemItem->Visible;
 
-	//ƒRƒ}ƒ“ƒhƒpƒ‰ƒ[ƒ^‚ÌQÆ
+	//ã‚³ãƒãƒ³ãƒ‰ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®å‚ç…§
 	CmdParamItem->Visible = (cp && SameText(cp->Name, "PrmComboBox") && CmdParamList->Count>0);
 	if (CmdParamItem->Visible) {
 		CmdParamItem->Clear();
@@ -790,7 +790,7 @@ void __fastcall TUserModule::EditPopupMenuCPopup(TObject *Sender)
 	reduction_MenuLine(EditPopupMenuC->Items);
 }
 //---------------------------------------------------------------------------
-//ƒGƒfƒBƒbƒg‚Ìƒ|ƒbƒvƒAƒbƒvƒƒjƒ…[
+//ã‚¨ãƒ‡ã‚£ãƒƒãƒˆã®ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::EditPopupMenuEPopup(TObject *Sender)
 {
@@ -807,11 +807,11 @@ void __fastcall TUserModule::EditPopupMenuEPopup(TObject *Sender)
 	PopRefDlmtItem->Visible  = dd_sw;
 	PopRefDlmtItem->Enabled  = dd_sw;
 
-	PopEditItemItem->Visible = wp && (StartsStr(". ‚Å‹æØ‚Á‚Ä", wp->Hint) || StartsStr("; ‚Å‹æØ‚Á‚Ä", wp->Hint));
+	PopEditItemItem->Visible = wp && (StartsStr(". ã§åŒºåˆ‡ã£ã¦", wp->Hint) || StartsStr("; ã§åŒºåˆ‡ã£ã¦", wp->Hint));
 	PopEditItemItem->Enabled = PopEditItemItem->Visible;
 
-	//ƒTƒEƒ“ƒh¯•Êq
-	PopRefSndIdItem->Visible = wp && ContainsStr(wp->Hint, "ƒTƒEƒ“ƒh¯•Êq");
+	//ã‚µã‚¦ãƒ³ãƒ‰è­˜åˆ¥å­
+	PopRefSndIdItem->Visible = wp && ContainsStr(wp->Hint, "ã‚µã‚¦ãƒ³ãƒ‰è­˜åˆ¥å­");
 	if (PopRefSndIdItem->Visible) {
 		PopRefSndIdItem->Clear();
 		std::unique_ptr<TRegistry> reg(new TRegistry());
@@ -840,7 +840,7 @@ void __fastcall TUserModule::EditPopupMenuEPopup(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒ}ƒ“ƒhƒpƒ‰ƒ[ƒ^‚ÌQÆ
+//ã‚³ãƒãƒ³ãƒ‰ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::CmdParamItemClick(TObject *Sender)
 {
@@ -849,7 +849,7 @@ void __fastcall TUserModule::CmdParamItemClick(TObject *Sender)
 	if (cp) cp->SelText = lbuf;
 }
 //---------------------------------------------------------------------------
-//ƒTƒEƒ“ƒh¯•Êq‚ÌQÆ
+//ã‚µã‚¦ãƒ³ãƒ‰è­˜åˆ¥å­ã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::PopSndIdItemClick(TObject *Sender)
 {
@@ -857,7 +857,7 @@ void __fastcall TUserModule::PopSndIdItemClick(TObject *Sender)
 	if (ep) ep->Text = ((TMenuItem*)Sender)->Caption;
 }
 //---------------------------------------------------------------------------
-//³‹K•\Œ»‚ÌQÆ
+//æ­£è¦è¡¨ç¾ã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::RefRegExItemClick(TObject *Sender)
 {
@@ -872,7 +872,7 @@ void __fastcall TUserModule::RefRegExItemClick(TObject *Sender)
 	if (ep) ep->SelText = lbuf;
 }
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠ‹æØ‚è‚ÌQÆ
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåŒºåˆ‡ã‚Šã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::PopDlmtItemClick(TObject *Sender)
 {
@@ -880,7 +880,7 @@ void __fastcall TUserModule::PopDlmtItemClick(TObject *Sender)
 	if (ep) ep->Text = get_tkn(((TMenuItem*)Sender)->Caption, ' ');
 }
 //---------------------------------------------------------------------------
-//U•ª‘®•¶š—ñ‚ÌQÆ
+//æŒ¯åˆ†æ›¸å¼æ–‡å­—åˆ—ã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::PopDFmtItemClick(TObject *Sender)
 {
@@ -889,13 +889,13 @@ void __fastcall TUserModule::PopDFmtItemClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//İ’è€–Ú‚Ì•ÒW
+//è¨­å®šé …ç›®ã®ç·¨é›†
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::PopEditItemItemClick(TObject *Sender)
 {
 	TCustomEdit *ep = GetActiveCustomEdit();
 	if (ep) {
-		if (!EditItemDlg) EditItemDlg = new TEditItemDlg(this);	//‰‰ñ‚É“®“Iì¬
+		if (!EditItemDlg) EditItemDlg = new TEditItemDlg(this);	//åˆå›ã«å‹•çš„ä½œæˆ
 		EditItemDlg->AssignItems(ep);
 		if (show_ModalDlg(EditItemDlg)==mrOk && !EditItemDlg->RetStr.IsEmpty()) {
 			ep->Text = EditItemDlg->RetStr;
@@ -907,7 +907,7 @@ void __fastcall TUserModule::EditItemItemClick(TObject *Sender)
 {
 	TComboBox *cp = GetActiveComboBox();
 	if (cp) {
-		if (!EditItemDlg) EditItemDlg = new TEditItemDlg(this);	//‰‰ñ‚É“®“Iì¬
+		if (!EditItemDlg) EditItemDlg = new TEditItemDlg(this);	//åˆå›ã«å‹•çš„ä½œæˆ
 		EditItemDlg->AssignItems(cp);
 		if (show_ModalDlg(EditItemDlg)==mrOk && !EditItemDlg->RetStr.IsEmpty()) {
 			cp->Text = EditItemDlg->RetStr;
@@ -916,15 +916,15 @@ void __fastcall TUserModule::EditItemItemClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//‰æ‘œƒtƒBƒ‹ƒ^‚ğİ’è
+//ç”»åƒãƒ•ã‚£ãƒ«ã‚¿ã‚’è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::SetOpenImgFilter(UnicodeString fnam)
 {
 	UnicodeString flt_str;
-	flt_str = "ƒrƒbƒgƒ}ƒbƒv (*.bmp)|*.BMP";
-	flt_str += "|JPEGƒtƒ@ƒCƒ‹(*.jpg)|*.JPG;*.JPE;*.JPEG";
-	flt_str += "|PNGƒtƒ@ƒCƒ‹(*.png)|*.PNG";
-	flt_str += "|GIFƒtƒ@ƒCƒ‹(*.gif)|*.GIF";
+	flt_str = "ãƒ“ãƒƒãƒˆãƒãƒƒãƒ— (*.bmp)|*.BMP";
+	flt_str += "|JPEGãƒ•ã‚¡ã‚¤ãƒ«(*.jpg)|*.JPG;*.JPE;*.JPEG";
+	flt_str += "|PNGãƒ•ã‚¡ã‚¤ãƒ«(*.png)|*.PNG";
+	flt_str += "|GIFãƒ•ã‚¡ã‚¤ãƒ«(*.gif)|*.GIF";
 	OpenImgDlg->Filter = flt_str;
 
 	UnicodeString ext = ExtractFileExt(fnam);
@@ -938,10 +938,10 @@ void __fastcall TUserModule::SetOpenImgFilter(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠ‚Ì‘I‘ğ
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®é¸æŠ
 //---------------------------------------------------------------------------
 bool __fastcall TUserModule::SelectDirEx(const _TCHAR *tit, UnicodeString &dnam,
-	bool to_rel)	//ÀsƒfƒBƒŒƒNƒgƒŠ‚©‚ç‚Ì‘Š‘Îw’è‚É•ÏŠ· (default = false);
+	bool to_rel)	//å®Ÿè¡Œãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰ã®ç›¸å¯¾æŒ‡å®šã«å¤‰æ› (default = false);
 {
 	if (!SelectDirectory(tit, EmptyStr, dnam, TSelectDirExtOpts() << sdNewUI << sdShowShares, Screen->ActiveForm)) return false;
 	if (!dir_exists(dnam)) {
@@ -956,7 +956,7 @@ bool __fastcall TUserModule::SelectDirEx(const _TCHAR *tit, UnicodeString &dnam,
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒBƒ‹ƒ^‚©‚çƒfƒtƒHƒ‹ƒg‚ÌŠg’£q‚ğæ“¾
+//ãƒ•ã‚£ãƒ«ã‚¿ã‹ã‚‰ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®æ‹¡å¼µå­ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString __fastcall TUserModule::get_DlgDefExt(UnicodeString filter)
 {
@@ -972,13 +972,13 @@ UnicodeString __fastcall TUserModule::get_DlgDefExt(UnicodeString filter)
 }
 
 //---------------------------------------------------------------------------
-//ŠJ‚­ƒ_ƒCƒAƒƒO‚Ì€”õ
+//é–‹ããƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®æº–å‚™
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::PrepareOpenDlg(
 	const _TCHAR *tit,
-	const _TCHAR *filter,	//ƒtƒBƒ‹ƒ^
-	const _TCHAR *fnam,		//ƒtƒ@ƒCƒ‹–¼	(default = NULL)
-	UnicodeString inidir)	//‰ŠúƒpƒX		(default = EmptyStr)
+	const _TCHAR *filter,	//ãƒ•ã‚£ãƒ«ã‚¿
+	const _TCHAR *fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å	(default = NULL)
+	UnicodeString inidir)	//åˆæœŸãƒ‘ã‚¹		(default = EmptyStr)
 {
 	OpenDlg->Title		= tit;
 	OpenDlg->Filter 	= filter? filter : null_TCHAR;
@@ -995,11 +995,11 @@ UnicodeString __fastcall TUserModule::OpenDlgExecute()
 	return fnam;
 }
 //---------------------------------------------------------------------------
-//ŠJ‚­ƒ_ƒCƒAƒƒO‚ÌŒ‹‰Ê‚ğİ’è
+//é–‹ããƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®çµæœã‚’è¨­å®š
 //---------------------------------------------------------------------------
 bool __fastcall TUserModule::OpenDlgToEdit(
 	TWinControl *ep,
-	bool to_rel)	//ÀsƒfƒBƒŒƒNƒgƒŠ‚©‚ç‚Ì‘Š‘Îw’è‚É•ÏŠ· (default = false);
+	bool to_rel)	//å®Ÿè¡Œãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰ã®ç›¸å¯¾æŒ‡å®šã«å¤‰æ› (default = false);
 {
 	bool res = OpenDlg->Execute();
 	if (res) {
@@ -1048,7 +1048,7 @@ bool __fastcall TUserModule::OpenDlgToStr(UnicodeString &s, bool to_rel)
 }
 
 //---------------------------------------------------------------------------
-//•Û‘¶ƒ_ƒCƒAƒƒO‚Ì€”õ
+//ä¿å­˜ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®æº–å‚™
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::PrepareSaveDlg(
 	const _TCHAR *tit, const _TCHAR *filter, const _TCHAR *fnam, UnicodeString inidir)
@@ -1069,7 +1069,7 @@ UnicodeString __fastcall TUserModule::SaveDlgExecute()
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒHƒ“ƒgƒ_ƒCƒAƒƒO‚ÌŒ‹‰Ê‚ğƒtƒHƒ“ƒg‚Éİ’è
+//ãƒ•ã‚©ãƒ³ãƒˆãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®çµæœã‚’ãƒ•ã‚©ãƒ³ãƒˆã«è¨­å®š
 //---------------------------------------------------------------------------
 bool __fastcall TUserModule::FontDlgToFont(TFont *f)
 {
@@ -1081,7 +1081,7 @@ bool __fastcall TUserModule::FontDlgToFont(TFont *f)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚©‚çƒAƒCƒRƒ“‚ğ‘I‘ğ
+//ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ã‚¢ã‚¤ã‚³ãƒ³ã‚’é¸æŠ
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::SelectIconDlg(UnicodeString &fnam)
 {
@@ -1101,10 +1101,10 @@ void __fastcall TUserModule::SelectIconDlg(UnicodeString &fnam)
 	}
 }
 //---------------------------------------------------------------------------
-//ŠJ‚­ƒ_ƒCƒAƒƒO‚ÌŒ‹‰Ê‚ğæ“¾(ƒAƒCƒRƒ“ƒCƒ“ƒfƒbƒNƒX•t)
+//é–‹ããƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®çµæœã‚’å–å¾—(ã‚¢ã‚¤ã‚³ãƒ³ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ä»˜)
 //---------------------------------------------------------------------------
 UnicodeString __fastcall TUserModule::OpenDlgIconIndex(
-	bool to_rel)	//ÀsƒfƒBƒŒƒNƒgƒŠ‚©‚ç‚Ì‘Š‘Îw’è‚É•ÏŠ· (default = false);
+	bool to_rel)	//å®Ÿè¡Œãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰ã®ç›¸å¯¾æŒ‡å®šã«å¤‰æ› (default = false);
 {
 	if (!OpenDlg->Execute()) return EmptyStr;
 
@@ -1116,11 +1116,11 @@ UnicodeString __fastcall TUserModule::OpenDlgIconIndex(
 }
 
 //---------------------------------------------------------------------------
-//³‹K•\Œ»ƒ`ƒFƒbƒJ[
+//æ­£è¦è¡¨ç¾ãƒã‚§ãƒƒã‚«ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::RegExCheckerActionExecute(TObject *Sender)
 {
-	if (!RegExChecker) RegExChecker = new TRegExChecker(this);	//‰‰ñ‚É“®“Iì¬
+	if (!RegExChecker) RegExChecker = new TRegExChecker(this);	//åˆå›ã«å‹•çš„ä½œæˆ
 
 	TComboBox *cp = GetActiveComboBox();
 	if (cp) {
@@ -1159,7 +1159,7 @@ void __fastcall TUserModule::RegExCheckerActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//WebŒŸõ
+//Webæ¤œç´¢
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::WebSeaComboActionExecute(TObject *Sender)
 {
@@ -1195,11 +1195,11 @@ void __fastcall TUserModule::WebSeaEditActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//“d‘ì
+//é›»å“
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::CalculatorActionExecute(TObject *Sender)
 {
-	if (!Calculator) Calculator = new TCalculator(this);	//‰‰ñ‚É“®“Iì¬
+	if (!Calculator) Calculator = new TCalculator(this);	//åˆå›ã«å‹•çš„ä½œæˆ
 
 	Calculator->ShowModal();
 }
@@ -1224,7 +1224,7 @@ void __fastcall TUserModule::CalculatorActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒAƒNƒeƒBƒu‚ÈƒtƒH[ƒ€‚ÌƒTƒCƒY‚ÆˆÊ’u‚ğƒtƒ@ƒCƒ‹ƒŠƒXƒg‚É‡‚í‚¹‚é
+//ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªãƒ•ã‚©ãƒ¼ãƒ ã®ã‚µã‚¤ã‚ºã¨ä½ç½®ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã«åˆã‚ã›ã‚‹
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::SizePosToFlieListActionExecute(TObject *Sender)
 {
@@ -1235,7 +1235,7 @@ void __fastcall TUserModule::SizePosToFlieListActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒ“ƒ{ƒ{ƒbƒNƒX‚Ì‘I‘ğó‘Ô‚ğ•Û‘¶
+//ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹ã®é¸æŠçŠ¶æ…‹ã‚’ä¿å­˜
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::SaveLastComboBox()
 {
@@ -1246,7 +1246,7 @@ void __fastcall TUserModule::SaveLastComboBox()
 	}
 }
 //---------------------------------------------------------------------------
-//ƒRƒ“ƒ{ƒ{ƒbƒNƒX‚Ì‘I‘ğó‘Ô‚ğ•œ‹A
+//ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹ã®é¸æŠçŠ¶æ…‹ã‚’å¾©å¸°
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::RestoreLastComboBox()
 {
@@ -1261,7 +1261,7 @@ void __fastcall TUserModule::RestoreLastComboBox()
 }
 
 //---------------------------------------------------------------------------
-//‹^—ƒLƒƒƒŒƒbƒg“_–Å—pƒ^ƒCƒ}[ˆ—
+//ç–‘ä¼¼ã‚­ãƒ£ãƒ¬ãƒƒãƒˆç‚¹æ»…ç”¨ã‚¿ã‚¤ãƒãƒ¼å‡¦ç†
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::SetBlinkTimer(TComponent *cp)
 {
@@ -1278,7 +1278,7 @@ void __fastcall TUserModule::SetBlinkTimer(TComponent *cp)
 }
 //---------------------------------------------------------------------------
 void __fastcall TUserModule::RepaintBlink(
-	bool rst_sw)	//•\¦ó‘Ô‚ÉƒŠƒZƒbƒg‚µ‚Ä•`‰æ	(defalut = true)
+	bool rst_sw)	//è¡¨ç¤ºçŠ¶æ…‹ã«ãƒªã‚»ãƒƒãƒˆã—ã¦æç”»	(defalut = true)
 {
 	if (BlinkObj) {
 		if (rst_sw) BlinkTimer->Tag = 1;
@@ -1295,7 +1295,7 @@ void __fastcall TUserModule::RepaintBlink(
 void __fastcall TUserModule::BlinkTimerTimer(TObject *Sender)
 {
 	if (BlinkObj) {
-		BlinkTimer->Tag = (BlinkTimer->Tag==0)? 1 : 0;	//“_–Åƒtƒ‰ƒO
+		BlinkTimer->Tag = (BlinkTimer->Tag==0)? 1 : 0;	//ç‚¹æ»…ãƒ•ãƒ©ã‚°
 		RepaintBlink(false);
 	}
 	else {

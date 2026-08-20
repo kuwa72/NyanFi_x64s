@@ -1,6 +1,6 @@
 /**
  * @file DirDlg.h
- * @brief “o˜^ƒfƒBƒŒƒNƒgƒŠ/“ÁêƒtƒHƒ‹ƒ_ˆê——/QÆ
+ * @brief ç™»éŒ²ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª/ç‰¹æ®Šãƒ•ã‚©ãƒ«ãƒ€ä¸€è¦§/å‚ç…§
  */
 //---------------------------------------------------------------------------
 #ifndef DirDlgH
@@ -22,11 +22,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief “o˜^ƒfƒBƒŒƒNƒgƒŠ/“ÁêƒtƒHƒ‹ƒ_ˆê——/QÆ
+ * @brief ç™»éŒ²ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª/ç‰¹æ®Šãƒ•ã‚©ãƒ«ãƒ€ä¸€è¦§/å‚ç…§
  */
 class TRegDirDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *AddItemAction;
 	TAction *AddNyanFiAction;
 	TAction *AddPathAction;
@@ -127,12 +127,12 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall FilterEditKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 	void __fastcall FilterEditKeyPress(TObject *Sender, System::WideChar &Key);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	int SelIndex;
 
 	bool KeyHandled;
 
-	UsrScrollPanel *ListScrPanel;	//ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[
+	UsrScrollPanel *ListScrPanel;	//ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 
 	TStringList *EnvVarList;
 	TStringList *SpDirList;
@@ -154,11 +154,11 @@ private:	// ƒ†[ƒU[éŒ¾
 
 	UnicodeString __fastcall GetCurDirItem(bool dsp_sw = false, bool nam_sw = false, bool exe_sw = false);
 
-public:		// ƒ†[ƒU[éŒ¾
-	bool IsSpecial;		//!< “ÁêƒtƒHƒ‹ƒ_ˆê——
-	bool IsAddMode;		//!< ’Ç‰Áƒ‚[ƒh
-	bool IsSelect;		//!< ‘I‘ğƒ‚[ƒh
-	bool ToFilter;		//!< ƒtƒBƒ‹ƒ^—“‚ÉƒtƒH[ƒJƒX
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	bool IsSpecial;		//!< ç‰¹æ®Šãƒ•ã‚©ãƒ«ãƒ€ä¸€è¦§
+	bool IsAddMode;		//!< è¿½åŠ ãƒ¢ãƒ¼ãƒ‰
+	bool IsSelect;		//!< é¸æŠãƒ¢ãƒ¼ãƒ‰
+	bool ToFilter;		//!< ãƒ•ã‚£ãƒ«ã‚¿æ¬„ã«ãƒ•ã‚©ãƒ¼ã‚«ã‚¹
 	UnicodeString CmdStr;
 
 	__fastcall TRegDirDlg(TComponent* Owner);

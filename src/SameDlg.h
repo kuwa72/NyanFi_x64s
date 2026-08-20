@@ -1,6 +1,6 @@
 /**
  * @file SameDlg.h
- * @brief “¯–¼ƒtƒ@ƒCƒ‹‚Ìˆ—ƒ_ƒCƒAƒƒO
+ * @brief åŒåãƒ•ã‚¡ã‚¤ãƒ«ã®å‡¦ç†ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 //---------------------------------------------------------------------------
 #ifndef SameDlgH
@@ -17,11 +17,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief “¯–¼ƒtƒ@ƒCƒ‹‚Ìˆ—ƒ_ƒCƒAƒƒO
+ * @brief åŒåãƒ•ã‚¡ã‚¤ãƒ«ã®å‡¦ç†ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TSameNameDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TButton *CanButton;
 	TButton *OkButton;
 	TCheckBox *AllCheckBox;
@@ -44,7 +44,7 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall RenameEditKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 	void __fastcall RenameEditKeyPress(TObject *Sender, System::WideChar &Key);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	bool InhAllChk;
 	bool KeyHandled;
 
@@ -55,7 +55,7 @@ private:	// ƒ†[ƒU[éŒ¾
 
 	void __fastcall UpdateBtnLabel();
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	bool CopyAll;
 	int  CopyMode;
 	bool IsSamePath;

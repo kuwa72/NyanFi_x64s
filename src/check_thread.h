@@ -1,6 +1,6 @@
 /**
  * @file check_thread.h
- * @brief UNCƒpƒX‚Ì‘¶Ýƒ`ƒFƒbƒNEƒXƒŒƒbƒh
+ * @brief UNCãƒ‘ã‚¹ã®å­˜åœ¨ãƒã‚§ãƒƒã‚¯ãƒ»ã‚¹ãƒ¬ãƒƒãƒ‰
  */
 //---------------------------------------------------------------------------
 #ifndef TCheckPathThreadH
@@ -10,7 +10,7 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief UNCƒpƒX‚Ì‘¶Ýƒ`ƒFƒbƒNEƒXƒŒƒbƒh
+ * @brief UNCãƒ‘ã‚¹ã®å­˜åœ¨ãƒã‚§ãƒƒã‚¯ãƒ»ã‚¹ãƒ¬ãƒƒãƒ‰
  */
 class TCheckPathThread : public TThread
 {
@@ -19,7 +19,7 @@ private:
 
 	TMultiReadExclusiveWriteSynchronizer *TaskRWLock;
 
-	//ƒXƒŒƒbƒhƒZ[ƒt‚ðl—¶‚µ‚½ƒvƒƒpƒeƒB
+	//ã‚¹ãƒ¬ãƒƒãƒ‰ã‚»ãƒ¼ãƒ•ã‚’è€ƒæ…®ã—ãŸãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	UnicodeString FPathName;
 	UnicodeString __fastcall GetPathName()
 	{

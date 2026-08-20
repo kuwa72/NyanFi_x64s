@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ŠÖ”^ƒ†[ƒU’è‹`•¶š—ñ^ƒ}[ƒNsˆê——								//
+//  é–¢æ•°ï¼ãƒ¦ãƒ¼ã‚¶å®šç¾©æ–‡å­—åˆ—ï¼ãƒãƒ¼ã‚¯è¡Œä¸€è¦§								//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -77,7 +77,7 @@ void __fastcall TFuncListDlg::FormClose(TObject *Sender, TCloseAction &Action)
 {
 	UserDefStr = EmptyStr;
 	isFuzzy = false;
-	KeyHandled = false;		//¦KeyHandled = true ‚Å•Â‚¶‚Ä‚µ‚Ü‚¤ê‡‚ª‚ ‚é‚½‚ß
+	KeyHandled = false;		//â€»KeyHandled = true ã§é–‰ã˜ã¦ã—ã¾ã†å ´åˆãŒã‚ã‚‹ãŸã‚
 
 	IniFile->SavePosInfo(this);
 
@@ -115,7 +115,7 @@ void __fastcall TFuncListDlg::ClearList()
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚Ì‰Šú‰»
+//ä¸€è¦§ã®åˆæœŸåŒ–
 //---------------------------------------------------------------------------
 void __fastcall TFuncListDlg::InitializeList(int mode)
 {
@@ -131,9 +131,9 @@ void __fastcall TFuncListDlg::InitializeList(int mode)
 
 	UnicodeString cap_str;
 
-	//ƒ†[ƒU’è‹`ˆê——
+	//ãƒ¦ãƒ¼ã‚¶å®šç¾©ä¸€è¦§
 	if (ListMode==1) {
-		cap_str = "ƒ†[ƒU’è‹`•¶š—ñˆê——";
+		cap_str = "ãƒ¦ãƒ¼ã‚¶å®šç¾©æ–‡å­—åˆ—ä¸€è¦§";
 		UserDefPanel->Visible = true;
 		if (UserDefComboBox->Text.IsEmpty()) {
 			UserDefList->Clear();
@@ -146,12 +146,12 @@ void __fastcall TFuncListDlg::InitializeList(int mode)
 			UpdateList();
 		}
 	}
-	//ƒ}[ƒNsˆê——
+	//ãƒãƒ¼ã‚¯è¡Œä¸€è¦§
 	else if (ListMode==2) {
-		cap_str = "ƒ}[ƒNsˆê——";
+		cap_str = "ãƒãƒ¼ã‚¯è¡Œä¸€è¦§";
 		UserDefPanel->Visible = false;
 
-		//ˆê——‚ğì¬
+		//ä¸€è¦§ã‚’ä½œæˆ
 		MarkLineList->Clear();
 		TStringDynArray m_lst = split_strings_semicolon(TxtViewer->MarkListStr);
 		for (int i=0; i<m_lst.Length; i++) {
@@ -166,16 +166,16 @@ void __fastcall TFuncListDlg::InitializeList(int mode)
 		}
 		UpdateList();
 	}
-	//ŠÖ”ˆê——	(ListMode==0)
+	//é–¢æ•°ä¸€è¦§	(ListMode==0)
 	else {
-		cap_str = "ŠÖ”ˆê——";
+		cap_str = "é–¢æ•°ä¸€è¦§";
 		UserDefPanel->Visible = false;
 
 		UnicodeString fnc_ptn = TxtViewer->GetFuncPtns(&NamePtn, &cap_str);
 		UnicodeString fext = get_extension(TxtViewer->FileName);
 		is_DFM = test_FileExt(fext, ".dfm");
 
-		//ˆê——‚ğì¬
+		//ä¸€è¦§ã‚’ä½œæˆ
 		if (FunctionList->Count==0 && !fnc_ptn.IsEmpty()) {
 			bool has_par = (ListMode==0 && ContainsStr(fnc_ptn, "\\("));
 			bool non_tab = StartsStr('^', fnc_ptn) && !StartsStr("^\\s*", fnc_ptn);
@@ -186,7 +186,7 @@ void __fastcall TFuncListDlg::InitializeList(int mode)
 				if (non_tab && (StartsStr('\t', lbuf) || StartsStr(' ', lbuf))) continue;
 				if (has_par && (!ContainsStr(lbuf, "(") || ContainsStr(lbuf, "="))) continue;
 				if (TRegEx::IsMatch(lbuf, fnc_ptn, opt)) {
-					if (TxtViewer->isAozora) lbuf = TRegEx::Replace(lbuf, "m”u.*?v‚Í((’†|‘å)Œ©o‚µ)n", EmptyStr);
+					if (TxtViewer->isAozora) lbuf = TRegEx::Replace(lbuf, "ï¼»ï¼ƒã€Œ.*?ã€ã¯((ä¸­|å¤§)è¦‹å‡ºã—)ï¼½", EmptyStr);
 					FunctionList->AddObject(lbuf, (TObject*)(NativeInt)rp->LineNo);
 				}
 			}
@@ -194,22 +194,22 @@ void __fastcall TFuncListDlg::InitializeList(int mode)
 		UpdateList();
 	}
 
-	Opt1Panel->Visible = (ListMode==0 && !NamePtn.IsEmpty());	//–¼‘O
+	Opt1Panel->Visible = (ListMode==0 && !NamePtn.IsEmpty());	//åå‰
 	Caption = cap_str;
 
 	cursor_Default();
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚Ì•\¦XV
+//ä¸€è¦§ã®è¡¨ç¤ºæ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TFuncListDlg::UpdateList(
-	bool link)	//ƒrƒ…[ƒAs‚ğ€–Ú‚É˜A“® (default = false)
+	bool link)	//ãƒ“ãƒ¥ãƒ¼ã‚¢è¡Œã‚’é …ç›®ã«é€£å‹• (default = false)
 {
 	std::unique_ptr<TStringList> flst(new TStringList());
 	flst->Assign((ListMode==0)? FunctionList : ((ListMode==1)? UserDefList : MarkLineList));
 
-	//ƒtƒBƒ‹ƒ^
+	//ãƒ•ã‚£ãƒ«ã‚¿
 	UnicodeString ptn = (isFuzzy && !MigemoCheckBox->Checked)? FilterEdit->Text :
 							usr_Migemo->GetRegExPtn(MigemoCheckBox->Checked, FilterEdit->Text);
 	bool case_sns = contains_upper(FilterEdit->Text);
@@ -255,7 +255,7 @@ void __fastcall TFuncListDlg::UpdateList(
 }
 
 //---------------------------------------------------------------------------
-//ƒŠƒXƒg€–Ú‚Ìs‚ÖˆÚ“®
+//ãƒªã‚¹ãƒˆé …ç›®ã®è¡Œã¸ç§»å‹•
 //---------------------------------------------------------------------------
 void __fastcall TFuncListDlg::ToLine()
 {
@@ -268,7 +268,7 @@ void __fastcall TFuncListDlg::ToLine()
 }
 
 //---------------------------------------------------------------------------
-//€–Ú‚Ì•`‰æ
+//é …ç›®ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TFuncListDlg::FuncListBoxDrawItem(TWinControl *Control, int Index,
 		TRect &Rect, TOwnerDrawState State)
@@ -286,7 +286,7 @@ void __fastcall TFuncListDlg::FuncListBoxDrawItem(TWinControl *Control, int Inde
 	int xp = Rect.Left;
 	int yp = Rect.Top + get_TopMargin2(cv);
 
-	//ƒ}[ƒN
+	//ãƒãƒ¼ã‚¯
 	if (ListMode!=2) {
 		rc.Right = rc.Left + SCALED_THIS(8);
 		cv->Brush->Color = col_bgLineNo;  cv->FillRect(rc);
@@ -297,13 +297,13 @@ void __fastcall TFuncListDlg::FuncListBoxDrawItem(TWinControl *Control, int Inde
 		xp += SCALED_THIS(8);
 	}
 
-	//s”Ô†
+	//è¡Œç•ªå·
 	rc = Rect;  rc.Left = xp;
 	cv->Font->Assign(lp->Font);
 	LineNoOut(cv, rc, lno);
 	xp = rc.Left + SCALED_THIS(4);
 
-	//“à—e
+	//å†…å®¹
 	cv->Brush->Color = get_ListBgCol();
 	cv->Font->Color  = get_ListFgCol();
 	if (ListMode==0) {
@@ -312,11 +312,11 @@ void __fastcall TFuncListDlg::FuncListBoxDrawItem(TWinControl *Control, int Inde
 			cv->TextOut(xp, yp, lbuf);
 		}
 		else if (!NamePtn.IsEmpty()) {
-			//s“ª‚Ì‹ó”’‚ğæ“¾
+			//è¡Œé ­ã®ç©ºç™½ã‚’å–å¾—
 			UnicodeString pre_str =
 				is_DFM? (StringOfChar(_T(' '), lbuf.Length() - TrimLeft(lbuf).Length())) : EmptyStr;
 
-			//ŠÖ”–¼‚ğ‹­’²
+			//é–¢æ•°åã‚’å¼·èª¿
 			std::unique_ptr<TStringList> elist(new TStringList());
 			TRegExOptions re_opt;  re_opt << roIgnoreCase;
 			TMatch mt = TRegEx::Match(lbuf, NamePtn, re_opt);
@@ -339,12 +339,12 @@ void __fastcall TFuncListDlg::FuncListBoxDrawItem(TWinControl *Control, int Inde
 		cv->TextOut(xp, yp, lbuf);
 	}
 
-	//ƒJ[ƒ\ƒ‹
+	//ã‚«ãƒ¼ã‚½ãƒ«
 	draw_ListCursor2(lp, Rect, Index, State);
 }
 
 //---------------------------------------------------------------------------
-//ƒL[‘€ì
+//ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TFuncListDlg::FuncListBoxKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -366,22 +366,22 @@ void __fastcall TFuncListDlg::FuncListBoxKeyDown(TObject *Sender, WORD &Key, TSh
 			ReqEditAction->Execute();
 		}
 		else if (SameText(cmd_V, "FunctionList")) {
-			InitializeList(0);	//ŠÖ”ˆê——
+			InitializeList(0);	//é–¢æ•°ä¸€è¦§
 		}
 		else if (SameText(cmd_V, "UserDefList")) {
-			InitializeList(1);	//ƒ†[ƒU’è‹`•¶š—ñˆê——
+			InitializeList(1);	//ãƒ¦ãƒ¼ã‚¶å®šç¾©æ–‡å­—åˆ—ä¸€è¦§
 		}
 		else if (SameText(cmd_V, "MarkList")) {
-			InitializeList(2);	//ƒ}[ƒNsˆê——
+			InitializeList(2);	//ãƒãƒ¼ã‚¯è¡Œä¸€è¦§
 		}
-		//ƒ}[ƒN
+		//ãƒãƒ¼ã‚¯
 		else if (SameText(cmd_V, "Mark")) {
 			if (ListMode!=2 && idx>=0 && idx<lp->Count) {
 				TxtViewer->MarkLine((int)lp->Items->Objects[idx]);
 				lp->Repaint();
 			}
 		}
-		//‚»‚Ì‘¼‚ÌˆÚ“®‚È‚Ç
+		//ãã®ä»–ã®ç§»å‹•ãªã©
 		else if (StartsText("IncSearch", cmd_F)) {
 			FilterEdit->SetFocus();
 		}
@@ -398,7 +398,7 @@ void __fastcall TFuncListDlg::FuncListBoxKeyDown(TObject *Sender, WORD &Key, TSh
 			show_PopupMenu(lp);
 		}
 
-		//˜A“®
+		//é€£å‹•
 		if (LinkCheckBox->Checked && idx!=-1 && idx!=lp->ItemIndex) ToLine();
 	}
 	catch (EAbort &e) {
@@ -410,7 +410,7 @@ void __fastcall TFuncListDlg::FuncListBoxKeyDown(TObject *Sender, WORD &Key, TSh
 //---------------------------------------------------------------------------
 void __fastcall TFuncListDlg::FuncListBoxKeyPress(TObject *Sender, System::WideChar &Key)
 {
-	//ƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`‚ğ‰ñ”ğ
+	//ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ã‚¿ãƒ«ã‚µãƒ¼ãƒã‚’å›é¿
 	if (_istalnum(Key) || Key==VK_SPACE) Key = 0;
 }
 
@@ -426,7 +426,7 @@ void __fastcall TFuncListDlg::FuncListBoxDblClick(TObject *Sender)
 	CloseListAction->Execute();
 }
 //---------------------------------------------------------------------------
-//ƒtƒBƒ‹ƒ^‚É‚æ‚éˆê——‚ÌXV
+//ãƒ•ã‚£ãƒ«ã‚¿ã«ã‚ˆã‚‹ä¸€è¦§ã®æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TFuncListDlg::FilterEditChange(TObject *Sender)
 {
@@ -445,7 +445,7 @@ void __fastcall TFuncListDlg::FilterEditExit(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒBƒ‹ƒ^—“‚Å‚ÌƒL[‘€ì
+//ãƒ•ã‚£ãƒ«ã‚¿æ¬„ã§ã®ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TFuncListDlg::FilterEditKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -483,7 +483,7 @@ void __fastcall TFuncListDlg::RegExActionExecute(TObject *Sender)
 	TAction *ap = (TAction *)Sender;
 	ap->Checked = !ap->Checked;
 
-	//ŒŸõ—š—ğ‚Ì“ü‚êŠ·‚¦
+	//æ¤œç´¢å±¥æ­´ã®å…¥ã‚Œæ›ãˆ
 	if (DlgInitialized) {
 		change_ComboBoxHistory(UserDefComboBox, _T("UserDefHistory"), _T("UserPtnHistory"), ap->Checked);
 	}
@@ -501,7 +501,7 @@ void __fastcall TFuncListDlg::UserDefComboBoxClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒ†[ƒU’è‹`•¶š—ñˆê——‚ÌXV
+//ãƒ¦ãƒ¼ã‚¶å®šç¾©æ–‡å­—åˆ—ä¸€è¦§ã®æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TFuncListDlg::UpdUserDefActionExecute(TObject *Sender)
 {
@@ -536,7 +536,7 @@ void __fastcall TFuncListDlg::UpdUserDefActionUpdate(TObject *Sender)
 	TAction *ap = (TAction*)Sender;
 
 	if (ListMode==1) {
-		//³‹K•\Œ»ƒpƒ^[ƒ“‚Ìƒ`ƒFƒbƒN
+		//æ­£è¦è¡¨ç¾ãƒ‘ã‚¿ãƒ¼ãƒ³ã®ãƒã‚§ãƒƒã‚¯
 		UnicodeString uwd = UserDefComboBox->Text;
 		bool reg_ng = RegExCheckBox->Checked && !uwd.IsEmpty() && !chk_RegExPtn(uwd);
 		ErrMarkList->SetErrFrame(this, UserDefComboBox, reg_ng);
@@ -551,7 +551,7 @@ void __fastcall TFuncListDlg::UpdUserDefActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚ğ•Â‚¶‚é
+//ä¸€è¦§ã‚’é–‰ã˜ã‚‹
 //---------------------------------------------------------------------------
 void __fastcall TFuncListDlg::CloseListActionExecute(TObject *Sender)
 {
@@ -564,7 +564,7 @@ void __fastcall TFuncListDlg::CloseListActionExecute(TObject *Sender)
 	else beep_Warn();
 }
 //---------------------------------------------------------------------------
-//ƒeƒLƒXƒgƒGƒfƒBƒ^‚ÅŠJ‚­
+//ãƒ†ã‚­ã‚¹ãƒˆã‚¨ãƒ‡ã‚£ã‚¿ã§é–‹ã
 //---------------------------------------------------------------------------
 void __fastcall TFuncListDlg::ReqEditActionExecute(TObject *Sender)
 {
@@ -573,7 +573,7 @@ void __fastcall TFuncListDlg::ReqEditActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚Ì“à—e•¶š—ñ‚ğæ“¾
+//ä¸€è¦§ã®å†…å®¹æ–‡å­—åˆ—ã‚’å–å¾—
 //---------------------------------------------------------------------------
 void __fastcall TFuncListDlg::GetStrList(TStringList *lst)
 {
@@ -594,7 +594,7 @@ void __fastcall TFuncListDlg::GetStrList(TStringList *lst)
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚ğƒRƒs[
+//ä¸€è¦§ã‚’ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TFuncListDlg::CopyListActionExecute(TObject *Sender)
 {
@@ -604,7 +604,7 @@ void __fastcall TFuncListDlg::CopyListActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚ğƒtƒ@ƒCƒ‹‚É•Û‘¶
+//ä¸€è¦§ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã«ä¿å­˜
 //---------------------------------------------------------------------------
 void __fastcall TFuncListDlg::SaveListActionExecute(TObject *Sender)
 {
@@ -629,7 +629,7 @@ void __fastcall TFuncListDlg::ListActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒ†[ƒU’è‹`•¶š—ñ‚ğŠg’£q‚É‘Î‚·‚éŒ©o‚µ‚Æ‚µ‚Ä“o˜^
+//ãƒ¦ãƒ¼ã‚¶å®šç¾©æ–‡å­—åˆ—ã‚’æ‹¡å¼µå­ã«å¯¾ã™ã‚‹è¦‹å‡ºã—ã¨ã—ã¦ç™»éŒ²
 //---------------------------------------------------------------------------
 void __fastcall TFuncListDlg::RegHeaderActionExecute(TObject *Sender)
 {

@@ -1,6 +1,6 @@
 /**
  * @file imgv_thread.h
- * @brief ‰æ‘œ•\Ž¦ˆ—ƒXƒŒƒbƒh 
+ * @brief ç”»åƒè¡¨ç¤ºå‡¦ç†ã‚¹ãƒ¬ãƒƒãƒ‰ 
  */
 //---------------------------------------------------------------------------
 #ifndef ImgViewThreadH
@@ -11,25 +11,25 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ‰æ‘œ•\Ž¦ˆ—ƒXƒŒƒbƒh
+ * @brief ç”»åƒè¡¨ç¤ºå‡¦ç†ã‚¹ãƒ¬ãƒƒãƒ‰
  * 
- * ƒCƒ[ƒWƒvƒŒƒrƒ…[‚¨‚æ‚ÑƒCƒ[ƒWƒrƒ…[ƒA‚Ì•\Ž¦ˆ—‚ðs‚¢‚Ü‚·B@n
- * ‚³‚Ü‚´‚Ü‚È•\Ž¦ˆ—‚ÍAAddRequest ƒƒ\ƒbƒh‚ÅƒRƒ}ƒ“ƒh‚ðŽw’è‚·‚é‚±‚Æ‚É‚æ‚Á‚ÄŽÀs‚³‚ê‚Ü‚·B@n
- * Žg—p‚Å‚«‚éƒRƒ}ƒ“ƒh‚ÍˆÈ‰º‚Ì’Ê‚è‚Å‚·B@n
- * - CLEAR: ‰æ–ÊƒNƒŠƒA
- * - REDRAW: Ä•`‰æ
- * - RELOAD: ƒŠƒ[ƒh
- * - WAIT: ‘Ò‚¿—v‹
- * - EMPTY: ƒtƒ@ƒCƒ‹–¼‚ðƒNƒŠƒA
- * - FILE: ‰æ‘œƒtƒ@ƒCƒ‹‚ðŽw’è
- * - VIDEO: “®‰æƒtƒ@ƒCƒ‹‚ðŽw’è
- * - USEBUF: ƒAƒCƒRƒ“/ƒtƒHƒ“ƒg/FŒ©–{‚È‚Ç‚ðŽw’è
- * - FITTED: ƒtƒBƒbƒg•\Ž¦
- * - GRAY: ƒOƒŒ[ƒXƒP[ƒ‹•\Ž¦
- * - GRID: ƒOƒŠƒbƒh‚ð•\Ž¦
- * - ZOOM: ƒY[ƒ€”{—¦
- * - ROTATION:  ‰ñ“]/”½“]
- * - EXIFORI: Exif‚Ì•ûŒüî•ñ
+ * ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ãŠã‚ˆã³ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢ã®è¡¨ç¤ºå‡¦ç†ã‚’è¡Œã„ã¾ã™ã€‚@n
+ * ã•ã¾ã–ã¾ãªè¡¨ç¤ºå‡¦ç†ã¯ã€AddRequest ãƒ¡ã‚½ãƒƒãƒ‰ã§ã‚³ãƒžãƒ³ãƒ‰ã‚’æŒ‡å®šã™ã‚‹ã“ã¨ã«ã‚ˆã£ã¦å®Ÿè¡Œã•ã‚Œã¾ã™ã€‚@n
+ * ä½¿ç”¨ã§ãã‚‹ã‚³ãƒžãƒ³ãƒ‰ã¯ä»¥ä¸‹ã®é€šã‚Šã§ã™ã€‚@n
+ * - CLEAR: ç”»é¢ã‚¯ãƒªã‚¢
+ * - REDRAW: å†æç”»
+ * - RELOAD: ãƒªãƒ­ãƒ¼ãƒ‰
+ * - WAIT: å¾…ã¡è¦æ±‚
+ * - EMPTY: ãƒ•ã‚¡ã‚¤ãƒ«åã‚’ã‚¯ãƒªã‚¢
+ * - FILE: ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«ã‚’æŒ‡å®š
+ * - VIDEO: å‹•ç”»ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æŒ‡å®š
+ * - USEBUF: ã‚¢ã‚¤ã‚³ãƒ³/ãƒ•ã‚©ãƒ³ãƒˆ/è‰²è¦‹æœ¬ãªã©ã‚’æŒ‡å®š
+ * - FITTED: ãƒ•ã‚£ãƒƒãƒˆè¡¨ç¤º
+ * - GRAY: ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«è¡¨ç¤º
+ * - GRID: ã‚°ãƒªãƒƒãƒ‰ã‚’è¡¨ç¤º
+ * - ZOOM: ã‚ºãƒ¼ãƒ å€çŽ‡
+ * - ROTATION:  å›žè»¢/åè»¢
+ * - EXIFORI: Exifã®æ–¹å‘æƒ…å ±
  * 
  */
 class TImgViewThread : public TThread
@@ -38,17 +38,17 @@ private:
 	UnicodeString Img_f_name;
 	__int64		  Img_f_size;
 	TDateTime	  Img_f_time;
-	UnicodeString Img_rot_str;		//!< ƒƒ^ƒtƒ@ƒCƒ‹‚Ì‰ñ“]E”½“]ˆ——š—ð
-	bool ChgPrvCur;					//!< ƒvƒŒƒrƒ…[ã‚Ìƒ}ƒEƒXƒ|ƒCƒ“ƒ^‚ð•ÏX
+	UnicodeString Img_rot_str;		//!< ãƒ¡ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«ã®å›žè»¢ãƒ»åè»¢å‡¦ç†å±¥æ­´
+	bool ChgPrvCur;					//!< ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ä¸Šã®ãƒžã‚¦ã‚¹ãƒã‚¤ãƒ³ã‚¿ã‚’å¤‰æ›´
 
 	UnicodeString MsgStr;
 	bool MsgIsErr;
 
-	TStringList *RequestList;		//!< ˆ—ƒLƒ…[
+	TStringList *RequestList;		//!< å‡¦ç†ã‚­ãƒ¥ãƒ¼
 
 	TMultiReadExclusiveWriteSynchronizer *TaskRWLock;
 
-	//ƒXƒŒƒbƒhƒZ[ƒt‚ðl—¶‚µ‚½ƒvƒƒpƒeƒB
+	//ã‚¹ãƒ¬ãƒƒãƒ‰ã‚»ãƒ¼ãƒ•ã‚’è€ƒæ…®ã—ãŸãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	bool FTaskBusy;
 	bool __fastcall GetTaskBusy()
 	{
@@ -72,33 +72,33 @@ private:
 	void __fastcall Execute();
 
 public:
-	UnicodeString FileName;		//!< —v‹‰æ‘œƒtƒ@ƒCƒ‹–¼
+	UnicodeString FileName;		//!< è¦æ±‚ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«å
 	UnicodeString FileName2;
 
-	bool ReqRedraw;				//!< Ä•`‰æ‚ð—v‹
-	bool ReqReload;				//!< ƒŠƒ[ƒh‚ð—v‹
-	bool ReqClear;				//!< ‰æ–ÊƒNƒŠƒA‚ð—v‹
-	bool ReqVideo;				//!< “®‰æ(ƒTƒ€ƒlƒCƒ‹•\Ž¦‚ð—v‹)
-	bool ReqWait;				//!< MinShowTime ‚É‚æ‚é‘Ò‚¿—v‹
-	bool UseViewBuff;			//!< ƒƒCƒ“‘¤‚ÅÝ’è‚³‚ê‚½ƒoƒbƒtƒ@“à—e‚ðŽg—p
-	int  Rotation;				//!< ‰ñ“]/”½“]‚ð—v‹ (1,3,4,5)
-	int  ExifOri;				//!< Exif ‚Ì•ûŒüî•ñ
-	int  ZoomRatio;				//!< ƒY[ƒ€”{—¦(%)
+	bool ReqRedraw;				//!< å†æç”»ã‚’è¦æ±‚
+	bool ReqReload;				//!< ãƒªãƒ­ãƒ¼ãƒ‰ã‚’è¦æ±‚
+	bool ReqClear;				//!< ç”»é¢ã‚¯ãƒªã‚¢ã‚’è¦æ±‚
+	bool ReqVideo;				//!< å‹•ç”»(ã‚µãƒ ãƒã‚¤ãƒ«è¡¨ç¤ºã‚’è¦æ±‚)
+	bool ReqWait;				//!< MinShowTime ã«ã‚ˆã‚‹å¾…ã¡è¦æ±‚
+	bool UseViewBuff;			//!< ãƒ¡ã‚¤ãƒ³å´ã§è¨­å®šã•ã‚ŒãŸãƒãƒƒãƒ•ã‚¡å†…å®¹ã‚’ä½¿ç”¨
+	int  Rotation;				//!< å›žè»¢/åè»¢ã‚’è¦æ±‚ (1,3,4,5)
+	int  ExifOri;				//!< Exif ã®æ–¹å‘æƒ…å ±
+	int  ZoomRatio;				//!< ã‚ºãƒ¼ãƒ å€çŽ‡(%)
 	double ZoomRatioF;
 
-	bool Fitted;				//!< ƒtƒBƒbƒg•\Ž¦
-	bool GrayScaled;			//!< ƒOƒŒ[ƒXƒP[ƒ‹•\Ž¦
-	bool ShowGrid;				//!< ƒOƒŠƒbƒh‚ð•\Ž¦
+	bool Fitted;				//!< ãƒ•ã‚£ãƒƒãƒˆè¡¨ç¤º
+	bool GrayScaled;			//!< ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«è¡¨ç¤º
+	bool ShowGrid;				//!< ã‚°ãƒªãƒƒãƒ‰ã‚’è¡¨ç¤º
 
 	bool ImgIsWmf;
 
-	Graphics::TBitmap *ImgBuff;		//!< ‰æ‘œƒoƒbƒtƒ@(Œ³ƒTƒCƒY)
-	Graphics::TBitmap *ViewBuff;	//!< •\Ž¦ƒoƒbƒtƒ@
+	Graphics::TBitmap *ImgBuff;		//!< ç”»åƒãƒãƒƒãƒ•ã‚¡(å…ƒã‚µã‚¤ã‚º)
+	Graphics::TBitmap *ViewBuff;	//!< è¡¨ç¤ºãƒãƒƒãƒ•ã‚¡
 	Graphics::TBitmap *ChgBuff;
-	TMetafile *MetaBuff;			//!< ƒƒ^ƒtƒ@ƒCƒ‹—pƒoƒbƒtƒ@
+	TMetafile *MetaBuff;			//!< ãƒ¡ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«ç”¨ãƒãƒƒãƒ•ã‚¡
 
 	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	 * @param CreateSuspended 
 	 */
 	__fastcall TImgViewThread(bool CreateSuspended);
@@ -107,17 +107,17 @@ public:
 	bool __fastcall IsWaiting();
 
 	/**
-	 * @brief ƒLƒ…[‚Éˆ——v‹‚ð’Ç‰Á
-	 * @param cmd ƒRƒ}ƒ“ƒh
-	 * @param prm1 ƒpƒ‰ƒ[ƒ^1
-	 * @param prm2 ƒpƒ‰ƒ[ƒ^2
+	 * @brief ã‚­ãƒ¥ãƒ¼ã«å‡¦ç†è¦æ±‚ã‚’è¿½åŠ 
+	 * @param cmd ã‚³ãƒžãƒ³ãƒ‰
+	 * @param prm1 ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿1
+	 * @param prm2 ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿2
 	 */
 	void __fastcall AddRequest(const _TCHAR *cmd, UnicodeString prm1 = EmptyStr, UnicodeString prm2 = EmptyStr);
 
 	/**
-	 * @brief ƒLƒ…[‚Éˆ——v‹‚ð’Ç‰Á
-	 * @param cmd ƒRƒ}ƒ“ƒh
-	 * @param prm ƒpƒ‰ƒ[ƒ^
+	 * @brief ã‚­ãƒ¥ãƒ¼ã«å‡¦ç†è¦æ±‚ã‚’è¿½åŠ 
+	 * @param cmd ã‚³ãƒžãƒ³ãƒ‰
+	 * @param prm ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 	 */
 	void __fastcall AddRequest(const _TCHAR *cmd, int prm);
 };

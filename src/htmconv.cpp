@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
-// HTML¨ƒeƒLƒXƒg•ÏŠ·ˆ—ƒNƒ‰ƒX											//
-// Markdown‹L–@‚É‚à‘Î‰													//
+// HTMLâ†’ãƒ†ã‚­ã‚¹ãƒˆå¤‰æ›å‡¦ç†ã‚¯ãƒ©ã‚¹											//
+// Markdownè¨˜æ³•ã«ã‚‚å¯¾å¿œ													//
 //----------------------------------------------------------------------//
 #include "usr_str.h"
 #include "htmconv.h"
@@ -9,7 +9,7 @@
 #pragma package(smart_init)
 
 //---------------------------------------------------------------------------
-// HtmConv ƒNƒ‰ƒX
+// HtmConv ã‚¯ãƒ©ã‚¹
 //---------------------------------------------------------------------------
 HtmConv::HtmConv()
 {
@@ -33,7 +33,7 @@ HtmConv::~HtmConv()
 }
 
 //---------------------------------------------------------------------------
-//URL‚ğâ‘ÎƒpƒX‚É•ÏŠ·
+//URLã‚’çµ¶å¯¾ãƒ‘ã‚¹ã«å¤‰æ›
 //---------------------------------------------------------------------------
 UnicodeString HtmConv::ToAbsUrl(UnicodeString url)
 {
@@ -52,12 +52,12 @@ UnicodeString HtmConv::ToAbsUrl(UnicodeString url)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹–¼‚ğ‘Š‘ÎƒpƒX‚©‚çâ‘ÎƒpƒX‚Ö•ÏŠ·
-// ƒhƒ‰ƒCƒu–¼‚ªw’è‚³‚ê‚Ä‚¢‚½‚çA•ÏŠ·‚¹‚¸‚É‚»‚Ì‚Ü‚Ü•Ô‚·
+//ãƒ•ã‚¡ã‚¤ãƒ«åã‚’ç›¸å¯¾ãƒ‘ã‚¹ã‹ã‚‰çµ¶å¯¾ãƒ‘ã‚¹ã¸å¤‰æ›
+// ãƒ‰ãƒ©ã‚¤ãƒ–åãŒæŒ‡å®šã•ã‚Œã¦ã„ãŸã‚‰ã€å¤‰æ›ã›ãšã«ãã®ã¾ã¾è¿”ã™
 //---------------------------------------------------------------------------
 UnicodeString HtmConv::rel_to_abs(
-	UnicodeString fnam,		//•ÏŠ·‘ÎÛƒtƒ@ƒCƒ‹–¼
-	UnicodeString rnam)		//Šî€ƒtƒ@ƒCƒ‹–¼
+	UnicodeString fnam,		//å¤‰æ›å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«å
+	UnicodeString rnam)		//åŸºæº–ãƒ•ã‚¡ã‚¤ãƒ«å
 {
 	if (fnam.IsEmpty() || !ExtractFileDrive(fnam).IsEmpty()) return fnam;
 
@@ -75,8 +75,8 @@ UnicodeString HtmConv::rel_to_abs(
 }
 
 //---------------------------------------------------------------------------
-//®”‚ğ a`z ‚É‚æ‚é•\‹L‚É•ÏŠ·
-//  a`z, aa`az, ba`bz...
+//æ•´æ•°ã‚’ aï½z ã«ã‚ˆã‚‹è¡¨è¨˜ã«å¤‰æ›
+//  aï½z, aaï½az, baï½bz...
 //---------------------------------------------------------------------------
 UnicodeString HtmConv::int_to_alpha(int n)
 {
@@ -94,12 +94,12 @@ UnicodeString HtmConv::int_to_alpha(int n)
 }
 
 //---------------------------------------------------------------------------
-//®”(1`999)‚ğƒ[ƒ}”š(¬•¶š)‚É•ÏŠ·
+//æ•´æ•°(1ï½999)ã‚’ãƒ­ãƒ¼ãƒæ•°å­—(å°æ–‡å­—)ã«å¤‰æ›
 //---------------------------------------------------------------------------
 UnicodeString HtmConv::int_to_roman(int n)
 {
 	UnicodeString ret_str;
-	//100‚ÌˆÊ
+	//100ã®ä½
 	int rn = (n/100)%10;
 	if (rn>0) {
 		switch (rn) {
@@ -113,7 +113,7 @@ UnicodeString HtmConv::int_to_roman(int n)
 		}
 	}
 
-	//10‚ÌˆÊ
+	//10ã®ä½
 	rn = (n/10)%10;
 	if (rn>0) {
 		switch (rn) {
@@ -127,7 +127,7 @@ UnicodeString HtmConv::int_to_roman(int n)
 		}
 	}
 
-	//1‚ÌˆÊ
+	//1ã®ä½
 	rn = n%10;
 	switch (rn) {
 	case 1: case 2: case 3:
@@ -142,11 +142,11 @@ UnicodeString HtmConv::int_to_roman(int n)
 }
 
 //---------------------------------------------------------------------------
-//w’è•¶š—ñ‚ÅˆÍ‚Ü‚ê‚½•”•ª‚ğíœ
+//æŒ‡å®šæ–‡å­—åˆ—ã§å›²ã¾ã‚ŒãŸéƒ¨åˆ†ã‚’å‰Šé™¤
 //---------------------------------------------------------------------------
 void HtmConv::del_tag_block(TStringList *lst,
-	const _TCHAR *start_wd,	//ŠJn•¶š—ñ
-	const _TCHAR *end_wd)		//I—¹•¶š—ñ
+	const _TCHAR *start_wd,	//é–‹å§‹æ–‡å­—åˆ—
+	const _TCHAR *end_wd)		//çµ‚äº†æ–‡å­—åˆ—
 {
 	bool flag = false;
 	int i = 0;
@@ -169,7 +169,7 @@ void HtmConv::del_tag_block(TStringList *lst,
 }
 
 //---------------------------------------------------------------------------
-//w’è‘®«‚ÌƒuƒƒbƒN‚ğíœ
+//æŒ‡å®šå±æ€§ã®ãƒ–ãƒ­ãƒƒã‚¯ã‚’å‰Šé™¤
 //---------------------------------------------------------------------------
 void HtmConv::DelAtrBlock(TStringList *lst, UnicodeString anam, UnicodeString aval)
 {
@@ -211,7 +211,7 @@ void HtmConv::DelAtrBlock(TStringList *lst, UnicodeString anam, UnicodeString av
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒO–¼‚ğæ“¾
+//ã‚¿ã‚°åã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString HtmConv::GetTag(UnicodeString s)
 {
@@ -238,11 +238,11 @@ UnicodeString HtmConv::GetTag(UnicodeString s)
 }
 
 //---------------------------------------------------------------------------
-//—v‘f‚©‚çw’è‚µ‚½‘®«‚Ì’l‚ğæ“¾
+//è¦ç´ ã‹ã‚‰æŒ‡å®šã—ãŸå±æ€§ã®å€¤ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString HtmConv::GetTagAtr(UnicodeString s,
-	UnicodeString t,	//ƒ^ƒO–¼
-	const _TCHAR *a)	//‘®«–¼
+	UnicodeString t,	//ã‚¿ã‚°å
+	const _TCHAR *a)	//å±æ€§å
 {
 	if (s.IsEmpty()) return EmptyStr;
 
@@ -263,7 +263,7 @@ UnicodeString HtmConv::GetTagAtr(UnicodeString s,
 			if (c=='>') {
 				flag = 0;
 			}
-			else if (c==' ') {	//ƒ^ƒOŠm’è
+			else if (c==' ') {	//ã‚¿ã‚°ç¢ºå®š
 				tag  = tag.Trim();
 				atr  = EmptyStr;
 				flag = 2;
@@ -273,7 +273,7 @@ UnicodeString HtmConv::GetTagAtr(UnicodeString s,
 			}
 			break;
 		case 2:
-			if (c=='=') {		//‘®«–¼Šm’è
+			if (c=='=') {		//å±æ€§åç¢ºå®š
 				atr  = atr.Trim();
 				flag = 3;
 			}
@@ -291,7 +291,7 @@ UnicodeString HtmConv::GetTagAtr(UnicodeString s,
 			if (c=='>') {
 				flag = 0;
 			}
-			else if (c!=' ') {	//‘®«’lŠJn
+			else if (c!=' ') {	//å±æ€§å€¤é–‹å§‹
 				qflag = (c=='\"');
 				if (qflag) vstr = EmptyStr; else vstr = c;
 				flag = 4;
@@ -301,7 +301,7 @@ UnicodeString HtmConv::GetTagAtr(UnicodeString s,
 			if ((qflag && c=='\"') || (!qflag && (c==' ' || c=='>'))) {
 				if (SameText(tag, t) && SameText(atr, a)) {
 					retstr = vstr;
-					flag   = -1;	//‘®«’lŠm’è!
+					flag   = -1;	//å±æ€§å€¤ç¢ºå®š!
 				}
 				else {
 					atr = EmptyStr;
@@ -321,16 +321,16 @@ UnicodeString HtmConv::GetTagAtr(UnicodeString s,
 }
 
 //---------------------------------------------------------------------------
-//À‘ÌQÆ‚Ì‰ğŒˆ
+//å®Ÿä½“å‚ç…§ã®è§£æ±º
 //---------------------------------------------------------------------------
 UnicodeString HtmConv::RefEntity(UnicodeString s)
 {
 	if (!ContainsStr(s, "&")) return s;
 
-	//•¶šÀ‘ÌQÆ‚©‚ç”’l•¶šQÆ‚Éˆê’U•ÏŠ·
+	//æ–‡å­—å®Ÿä½“å‚ç…§ã‹ã‚‰æ•°å€¤æ–‡å­—å‚ç…§ã«ä¸€æ—¦å¤‰æ›
 	s = ChEntRef_to_NumChRef(s);
 
-	//”ñƒ†ƒjƒR[ƒh‚Ìê‡A“K“–‚È•¶š‚É•ÏŠ·
+	//éãƒ¦ãƒ‹ã‚³ãƒ¼ãƒ‰ã®å ´åˆã€é©å½“ãªæ–‡å­—ã«å¤‰æ›
 	if (CodePage!=1200 && CodePage!=1201 && CodePage!=65000 && CodePage!=65001) {
 		std::unique_ptr<TStringList> ent_lst(new TStringList());
 		ent_lst->Text =
@@ -338,13 +338,13 @@ UnicodeString HtmConv::RefEntity(UnicodeString s)
 			"&#169;\t(c)\n"		//&copy;
 			"&#174;\t(R)\n"		//&reg;
 			"&#8194;\t \n"		//&ensp;
-			"&#8195;\t@\n"		//&emsp;
+			"&#8195;\tã€€\n"		//&emsp;
 			"&#8211;\t-\n"		//&ndash;
-			"&#8212;\t|\n";	//&mdash;
+			"&#8212;\tï¼\n";	//&mdash;
 		s = replace_str_by_list(s, ent_lst.get());
 	}
 
-	//”’l•¶šQÆ‚ğ‰ğŒˆ
+	//æ•°å€¤æ–‡å­—å‚ç…§ã‚’è§£æ±º
 	if (ContainsStr(s, "&")) {
 		int stt = 0;
 		int p = 1;
@@ -397,7 +397,7 @@ UnicodeString HtmConv::RefEntity(UnicodeString s)
 }
 
 //---------------------------------------------------------------------------
-//TxtLineBuf ‚ğ TxtBuf ‚Ö
+//TxtLineBuf ã‚’ TxtBuf ã¸
 //---------------------------------------------------------------------------
 void HtmConv::FlushText(UnicodeString s)
 {
@@ -412,10 +412,10 @@ void HtmConv::FlushText(UnicodeString s)
 		}
 		else {
 			if (!fPRE && !fXMP && ToMarkdown) {
-				//‰üs(”¼ŠpƒXƒy[ƒX~2)‚ğ•t‰Á
+				//æ”¹è¡Œ(åŠè§’ã‚¹ãƒšãƒ¼ã‚¹Ã—2)ã‚’ä»˜åŠ 
 				if (!TRegEx::IsMatch(s, NO_CRSPC_PTN)) s += "  ";
 			}
-			//ˆø—p
+			//å¼•ç”¨
 			if (BQ_level>0) s = StringOfChar(_T('>'), BQ_level) + s;
 			TxtBuf->Add(s);
 		}
@@ -425,7 +425,7 @@ void HtmConv::FlushText(UnicodeString s)
 }
 
 //---------------------------------------------------------------------------
-//Œrü‚ğ’Ç‰Á
+//ç½«ç·šã‚’è¿½åŠ 
 //---------------------------------------------------------------------------
 void HtmConv::AddHR()
 {
@@ -434,13 +434,13 @@ void HtmConv::AddHR()
 		s = StringOfChar(_T('-'), LineWidth);
 	}
 	else {
-		s = StringOfChar(_T('„Ÿ'), LineWidth/2);
+		s = StringOfChar(_T('â”€'), LineWidth/2);
 	}
 	TxtBuf->Add(s);
 }
 
 //---------------------------------------------------------------------------
-//•ÏŠ·ˆ—
+//å¤‰æ›å‡¦ç†
 //---------------------------------------------------------------------------
 void HtmConv::Convert()
 {
@@ -452,14 +452,14 @@ void HtmConv::Convert()
 		UlMarkStr = "- ";
 	}
 	else {
-		UlMarkStr = "E";
+		UlMarkStr = "ãƒ»";
 	}
 
 	std::unique_ptr<TStringList> lst(new TStringList());
 	TStringList *tmp_buf = lst.get();
 
 	//------------------------------
-	//ƒ^ƒO‚ğs–ˆ‚É•ª‰ğ
+	//ã‚¿ã‚°ã‚’è¡Œæ¯ã«åˆ†è§£
 	//------------------------------
 	for (int i=0; i<HtmBuf->Count; i++) {
 		UnicodeString s = HtmBuf->Strings[i];
@@ -480,27 +480,27 @@ void HtmConv::Convert()
 			}
 			if (!s.IsEmpty()) tmp_buf->Add(s);
 		}
-		tmp_buf->Add("</>");	//‰üsƒ}[ƒN
+		tmp_buf->Add("</>");	//æ”¹è¡Œãƒãƒ¼ã‚¯
 	}
 
 	//------------------------------
-	//ƒRƒƒ“ƒg•”•ª‚ğíœ
+	//ã‚³ãƒ¡ãƒ³ãƒˆéƒ¨åˆ†ã‚’å‰Šé™¤
 	//------------------------------
 	del_tag_block(tmp_buf, _T("<!--"), _T("-->"));
 
 	//------------------------------
-	//scriptAsytle •”•ª‚ğíœ
-	//ƒRƒƒ“ƒgƒAƒEƒg‚³‚ê‚Ä‚¢‚È‚¢ê‡‚Ì‘Îô
+	//scriptã€sytle éƒ¨åˆ†ã‚’å‰Šé™¤
+	//ã‚³ãƒ¡ãƒ³ãƒˆã‚¢ã‚¦ãƒˆã•ã‚Œã¦ã„ãªã„å ´åˆã®å¯¾ç­–
 	//------------------------------
 	del_tag_block(tmp_buf, _T("<SCRIPT"), 	 _T("</SCRIPT>"));
 	del_tag_block(tmp_buf, _T("<NOSCRIPT"),  _T("</NOSCRIPT>"));
 	del_tag_block(tmp_buf, _T("<STYLE"),	 _T("</STYLE>"));
 
-	//php •”•ª‚ğíœ
+	//php éƒ¨åˆ†ã‚’å‰Šé™¤
 	del_tag_block(tmp_buf, _T("<?PHP"),	 _T("?>"));
 
 	//------------------------------
-	//s•ª’f‚³‚ê‚Ä‚¢‚éƒ^ƒO‚ğ˜AŒ‹
+	//è¡Œåˆ†æ–­ã•ã‚Œã¦ã„ã‚‹ã‚¿ã‚°ã‚’é€£çµ
 	//------------------------------
 	int i = 0;
 	bool flag = false;
@@ -523,7 +523,7 @@ void HtmConv::Convert()
 	}
 
 	//------------------------------
-	//—]•ª‚È”¼ŠpƒXƒy[ƒX‚È‚Ç‚ğíœ
+	//ä½™åˆ†ãªåŠè§’ã‚¹ãƒšãƒ¼ã‚¹ãªã©ã‚’å‰Šé™¤
 	//------------------------------
 	fPRE = fXMP = false;
 	i = 0;
@@ -544,22 +544,22 @@ void HtmConv::Convert()
 			tmp_buf->Strings[i++] = Trim(s);
 		}
 		else {
-			//˜A‘±‚µ‚½”¼ŠpƒXƒy[ƒX‚ğˆê‚Â‚É
+			//é€£ç¶šã—ãŸåŠè§’ã‚¹ãƒšãƒ¼ã‚¹ã‚’ä¸€ã¤ã«
 			s = Trim(s);
 			while (ContainsStr(s, "  ")) s = ReplaceStr(s, "  ", " ");
 			if (s.IsEmpty()) tmp_buf->Delete(i); else tmp_buf->Strings[i++] = s;
 		}
 	}
 
-	//w’èƒNƒ‰ƒX‚ÌƒuƒƒbƒN‚ğíœ
+	//æŒ‡å®šã‚¯ãƒ©ã‚¹ã®ãƒ–ãƒ­ãƒƒã‚¯ã‚’å‰Šé™¤
 	TStringDynArray cls_lst = SplitString(DelBlkCls, ";");
 	for (int i=0; i<cls_lst.Length; i++) DelAtrBlock(tmp_buf, "class", cls_lst[i]);
-	//w’èID‚ÌƒuƒƒbƒN‚ğíœ
+	//æŒ‡å®šIDã®ãƒ–ãƒ­ãƒƒã‚¯ã‚’å‰Šé™¤
 	TStringDynArray id_lst = SplitString(DelBlkId, ";");
 	for (int i=0; i<id_lst.Length; i++)  DelAtrBlock(tmp_buf, "id", id_lst[i]);
 
 	//------------------------------
-	//•ÏŠ·
+	//å¤‰æ›
 	//------------------------------
 	int  fTITLE   = 0;
 	int  DL_level = 0;
@@ -593,7 +593,7 @@ void HtmConv::Convert()
 				TxtLineBuf += lbuf;
 			}
 			else if (!Skip) {
-				//”¼Šp•¶šŠÔ‚ÉƒXƒy[ƒX‚ğ‘}“ü
+				//åŠè§’æ–‡å­—é–“ã«ã‚¹ãƒšãƒ¼ã‚¹ã‚’æŒ¿å…¥
 				do {
 					if (TxtLineBuf.IsEmpty() || lbuf.IsEmpty()) break;
 					if (EndsStr(" ", TxtLineBuf) || StartsStr(" ", lbuf)) break;
@@ -605,13 +605,13 @@ void HtmConv::Convert()
 			}
 		}
 		else {
-			//<P> ‚ªƒuƒŒ[ƒN‚³‚ê‚½‚©H
+			//<P> ãŒãƒ–ãƒ¬ãƒ¼ã‚¯ã•ã‚ŒãŸã‹ï¼Ÿ
 			if (fP_al>0 && contained_wd_i("H1|H2|H3|H4|H5|H6|P|HR|DIV|CENTER|BLOCKQUOTE|TABLE|TR|TH|TD|UL|OL|DL|LI|PRE|XMP", tag)) {
 				FlushText();
 				fP_al--;
 			}
 
-			//ƒCƒ“ƒfƒ“ƒg•¶š—ñ
+			//ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆæ–‡å­—åˆ—
 			UnicodeString indent_str;
 			int n;
 			if (ToMarkdown) {
@@ -629,7 +629,7 @@ void HtmConv::Convert()
 				indent_str = StringOfChar(_T(' '), n);
 			}
 
-			//—v‘f
+			//è¦ç´ 
 			if (SameStr(tag, "/")) {
 				if (fPRE || fXMP) {
 					UnicodeString s = trim_ex(TxtLineBuf);
@@ -689,7 +689,7 @@ void HtmConv::Convert()
 			}
 			else if (contained_wd_i("DIV|/DIV", tag)) {
 				FlushText();
-				//w’èƒNƒ‰ƒX‚Ì‘O‚ÉŒrü‘}“ü
+				//æŒ‡å®šã‚¯ãƒ©ã‚¹ã®å‰ã«ç½«ç·šæŒ¿å…¥
 				if (SameStr(tag, "DIV") && !InsHrClass.IsEmpty()) {
 					UnicodeString cnam = GetTagAtr(lbuf, tag, _T("CLASS"));
 					if (!cnam.IsEmpty() && ContainsText(";" + InsHrClass + ";", ";" + cnam + ";")) AddHR();
@@ -707,7 +707,7 @@ void HtmConv::Convert()
 			else if (contained_wd_i("H1|H2|H3|H4|H5|H6", tag)) {
 				FlushText();
 				if (TxtBuf->Count>0) TxtBuf->Add(EmptyStr);
-				//Œ©o‚µ•¶š
+				//è¦‹å‡ºã—æ–‡å­—
 				TStringDynArray hlst = split_strings_semicolon(HeaderStr);
 				int idx = tag.SubString(2, 1).ToIntDef(1) - 1;
 				TxtLineBuf = (idx<hlst.Length)? hlst[idx] : EmptyStr;
@@ -720,7 +720,7 @@ void HtmConv::Convert()
 			else if (SameStr(tag, "HR")) {
 				FlushText();  AddHR();
 			}
-			//‰Óğ‘‚«
+			//ç®‡æ¡æ›¸ã
 			else if (SameStr(tag, "UL")) {
 				FlushText();
 				if (LI_level==0 && ToMarkdown) TxtBuf->Add(EmptyStr);
@@ -741,7 +741,7 @@ void HtmConv::Convert()
 			else if (SameStr(tag, "LI")) {
 				FlushText();
 				if (LI_level>0) {
-					//‡˜•t‚«ƒŠƒXƒg
+					//é †åºä»˜ããƒªã‚¹ãƒˆ
 					TxtLineBuf += indent_str;
 					if (LI_No[LI_level]>0) {
 						n = LI_No[LI_level];
@@ -757,7 +757,7 @@ void HtmConv::Convert()
 						TxtLineBuf += tmpstr;
 						LI_No[LI_level]++;
 					}
-					//‡˜–³‚µƒŠƒXƒg
+					//é †åºç„¡ã—ãƒªã‚¹ãƒˆ
 					else {
 						TxtLineBuf += UlMarkStr;
 					}
@@ -783,7 +783,7 @@ void HtmConv::Convert()
 					TxtLineBuf += indent_str;
 				}
 			}
-			//ƒe[ƒuƒ‹
+			//ãƒ†ãƒ¼ãƒ–ãƒ«
 			else if (SameStr(tag, "TABLE")) {
 				tr_list->Clear();
 				FlushText();
@@ -793,7 +793,7 @@ void HtmConv::Convert()
 			else if (SameStr(tag, "/TABLE")) {
 				tr_list->Add(TxtLineBuf);
 				if (ToMarkdown && tr_list->Count>0) {
-					//ƒZƒ‹•‚ğİ’è
+					//ã‚»ãƒ«å¹…ã‚’è¨­å®š
 					TStringDynArray wd_lst = split_strings_tab(tr_list->Strings[0]);
 					for (int j=0; j<wd_lst.Length; j++) wd_lst[j] = "0";
 					for (int j=0; j<tr_list->Count; j++) {
@@ -802,7 +802,7 @@ void HtmConv::Convert()
 							wd_lst[k] = std::max(str_len_half(RefEntity(Trim(td_lst[k]))), wd_lst[k].ToIntDef(2));
 						}
 					}
-					//s•¶š—ñì¬
+					//è¡Œæ–‡å­—åˆ—ä½œæˆ
 					for (int j=0; j<tr_list->Count; j++) {
 						TStringDynArray td_lst = split_strings_tab(tr_list->Strings[j]);
 						UnicodeString trbuf;
@@ -813,7 +813,7 @@ void HtmConv::Convert()
 						}
 						tr_list->Strings[j] = trbuf;
 					}
-					//ã‰ºŒrü‚ğ‘}“ü
+					//ä¸Šä¸‹ç½«ç·šã‚’æŒ¿å…¥
 					UnicodeString hrstr;
 					for (int j=0; j<wd_lst.Length; j++) {
 						if (j>0) hrstr += " ";
@@ -838,7 +838,7 @@ void HtmConv::Convert()
 				}
 				fTR = 1;
 			}
-			//ƒ‹ƒr
+			//ãƒ«ãƒ“
 			else if (SameStr(tag, "RUBY")) {
 				fRUBY = true;
 				fRP   = fRT = false;
@@ -856,7 +856,7 @@ void HtmConv::Convert()
 			else if (SameStr(tag, "/RT")) {
 				if (!fRP) TxtLineBuf += ")";
 			}
-			//ƒŠƒ“ƒN
+			//ãƒªãƒ³ã‚¯
 			else if (SameStr(tag, "A")) {
 				HrefStr = ToAbsUrl(GetTagAtr(lbuf, tag, _T("HREF")));
 				if (is_rel_url(HrefStr) && !FileName.IsEmpty()) {
@@ -876,7 +876,7 @@ void HtmConv::Convert()
 					if (ToMarkdown)
 						TxtLineBuf.cat_sprintf(_T("](%s)"), HrefStr.c_str());
 					else
-						TxtLineBuf.cat_sprintf(_T("i%sj"), HrefStr.c_str());
+						TxtLineBuf.cat_sprintf(_T("ï¼ˆ%sï¼‰"), HrefStr.c_str());
 				}
 				HrefStr = EmptyStr;
 			}
@@ -910,7 +910,7 @@ void HtmConv::Convert()
 				else if (SameText(mnam, "Keywords"))	Keywords	= cont;
 			}
 
-			//Markdown ‚Ìê‡‚Ì‚İ
+			//Markdown ã®å ´åˆã®ã¿
 			else if (ToMarkdown) {
 				if (contained_wd_i("B|/B|STRONG|/STRONG", tag)) {
 					TxtLineBuf += "**";
@@ -924,9 +924,9 @@ void HtmConv::Convert()
 					TxtLineBuf += "~~";
 					noSPC = true;
 				}
-				//‰æ‘œ
+				//ç”»åƒ
 				else if (SameStr(tag, "IMG")) {
-					UnicodeString alt_str = def_if_empty(GetTagAtr(lbuf, tag, _T("ALT")), "‰æ‘œ");
+					UnicodeString alt_str = def_if_empty(GetTagAtr(lbuf, tag, _T("ALT")), "ç”»åƒ");
 					UnicodeString src_str = ToAbsUrl(GetTagAtr(lbuf, tag, _T("SRC")));
 					TxtLineBuf.cat_sprintf(_T("![%s](%s)"), alt_str.c_str(), src_str.c_str());
 				}
@@ -935,7 +935,7 @@ void HtmConv::Convert()
 	}
 	FlushText();
 
-	//æ“ª‹ós‚ÌíœA˜A‘±‹ós‚Ì§ŒÀ
+	//å…ˆé ­ç©ºè¡Œã®å‰Šé™¤ã€é€£ç¶šç©ºè¡Œã®åˆ¶é™
 	i = 0;
 	int blkln = 0;
 	while (i<TxtBuf->Count) {
@@ -962,7 +962,7 @@ void HtmConv::Convert()
 		}
 	}
 
-	//ƒwƒbƒ_“à—e‚ğ‘}“ü
+	//ãƒ˜ãƒƒãƒ€å†…å®¹ã‚’æŒ¿å…¥
 	if (InsHdrInf) {
 		int top = 0;
 		if (!Description.IsEmpty()) {
@@ -974,7 +974,7 @@ void HtmConv::Convert()
 			TxtBuf->Insert(0, "Title : " + Title);
 			top++;
 		}
-		if (top>0) TxtBuf->Insert(top, StringOfChar(_T('„Ÿ'), LineWidth/2));
+		if (top>0) TxtBuf->Insert(top, StringOfChar(_T('â”€'), LineWidth/2));
 	}
 }
 //---------------------------------------------------------------------------

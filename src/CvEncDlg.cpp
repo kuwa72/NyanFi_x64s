@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  �����R�[�h�̕ϊ�													//
+//  文字コードの変換													//
 //----------------------------------------------------------------------//
 #include "Global.h"
 #include "UserFunc.h"
@@ -29,7 +29,7 @@ void __fastcall TCvTxtEncDlg::FormCreate(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TCvTxtEncDlg::FormShow(TObject *Sender)
 {
-	Caption = "�����R�[�h�̕ϊ�" + TitleInf;
+	Caption = "文字コードの変換" + TitleInf;
 
 	IniFile->LoadPosInfo(this, DialogCenter);
 	OutCodeComboBox->ItemIndex	= IniFile->ReadIntGen(_T("CvTextEncCode"));

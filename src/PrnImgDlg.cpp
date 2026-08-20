@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ˆóüİ’è															//
+//  å°åˆ·è¨­å®š															//
 //----------------------------------------------------------------------//
 #include "usr_wic.h"
 #include "usr_exif.h"
@@ -108,7 +108,7 @@ void __fastcall TPrintImgDlg::OptionUpDownClick(TObject *Sender, TUDBtnType Butt
 }
 
 //---------------------------------------------------------------------------
-//ƒvƒŠƒ“ƒ^[‚Ìİ’è
+//ãƒ—ãƒªãƒ³ã‚¿ãƒ¼ã®è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall TPrintImgDlg::PrnPropBtnClick(TObject *Sender)
 {
@@ -117,7 +117,7 @@ void __fastcall TPrintImgDlg::PrnPropBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒHƒ“ƒg‚ÌQÆ
+//ãƒ•ã‚©ãƒ³ãƒˆã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TPrintImgDlg::RefFontBtnClick(TObject *Sender)
 {
@@ -126,7 +126,7 @@ void __fastcall TPrintImgDlg::RefFontBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//•`‰æ
+//æç”»
 //---------------------------------------------------------------------------
 void __fastcall TPrintImgDlg::DrawImage(TCanvas *cv)
 {
@@ -138,7 +138,7 @@ void __fastcall TPrintImgDlg::DrawImage(TCanvas *cv)
 	int p_hi = Printer()->PageHeight;
 	if (p_wd==0 || p_hi==0) return;
 
-	int i_wd, i_hi;		//•`‰æƒTƒCƒY
+	int i_wd, i_hi;		//æç”»ã‚µã‚¤ã‚º
 	if (ImgViewThread->ImgIsWmf) {
 		i_wd = ImgViewThread->MetaBuff->Width;
 		i_hi = ImgViewThread->MetaBuff->Height;
@@ -149,7 +149,7 @@ void __fastcall TPrintImgDlg::DrawImage(TCanvas *cv)
 	}
 	if (i_wd==0 || i_hi==0) return;
 
-	int d_wd, d_hi;		//•`‰æ—Ìˆæ
+	int d_wd, d_hi;		//æç”»é ˜åŸŸ
 	float r;
 
 	bool is_prn = (cv==Printer()->Canvas);
@@ -158,7 +158,7 @@ void __fastcall TPrintImgDlg::DrawImage(TCanvas *cv)
 		d_hi = p_hi;
 	}
 	else {
-		//ƒvƒŒƒrƒ…[—Ìˆæ‚ğİ’è
+		//ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼é ˜åŸŸã‚’è¨­å®š
 		if (Printer()->Orientation==poLandscape) {
 			r = 1.0 * p_hi / p_wd;
 			d_wd = PrvImage->Width;
@@ -179,7 +179,7 @@ void __fastcall TPrintImgDlg::DrawImage(TCanvas *cv)
 	float d_r = 1.0 * d_wd / d_hi;
 
 	switch (OptRadioGroup->ItemIndex) {
-	case 0:	//ƒy[ƒW‚É‰ï‚í‚¹‚é
+	case 0:	//ãƒšãƒ¼ã‚¸ã«ä¼šã‚ã›ã‚‹
 		if (i_r>d_r) {
 			r = 1.0 * i_hi / i_wd;
 			i_wd = d_wd;
@@ -191,7 +191,7 @@ void __fastcall TPrintImgDlg::DrawImage(TCanvas *cv)
 			i_wd = i_hi * r;
 		}
 		break;
-	case 1:	//ƒy[ƒW‚ÌƒTƒCƒY‚ÅƒgƒŠƒ~ƒ“ƒO
+	case 1:	//ãƒšãƒ¼ã‚¸ã®ã‚µã‚¤ã‚ºã§ãƒˆãƒªãƒŸãƒ³ã‚°
 		if (i_r>d_r) {
 			r = 1.0 * i_wd / i_hi;
 			i_hi = d_hi;
@@ -203,7 +203,7 @@ void __fastcall TPrintImgDlg::DrawImage(TCanvas *cv)
 			i_hi = i_wd * r;
 		}
 		break;
-	case 2:	case 3:	//ƒy[ƒW’†‰›/¶ã
+	case 2:	case 3:	//ãƒšãƒ¼ã‚¸ä¸­å¤®/å·¦ä¸Š
 		if (i_r>d_r) {
 			r = 1.0 * i_hi / i_wd;
 			i_wd = d_wd;
@@ -221,7 +221,7 @@ void __fastcall TPrintImgDlg::DrawImage(TCanvas *cv)
 	}
 
 	std::unique_ptr<Graphics::TBitmap> r_bp(new Graphics::TBitmap());
-	//ƒƒ^ƒtƒ@ƒCƒ‹
+	//ãƒ¡ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«
 	if (ImgViewThread->ImgIsWmf) {
 		r_bp->SetSize(i_wd, i_hi);
 		TRect rc = Rect(0, 0, i_wd, i_hi);
@@ -231,15 +231,15 @@ void __fastcall TPrintImgDlg::DrawImage(TCanvas *cv)
 		}
 		r_bp->Canvas->StretchDraw(rc, ImgViewThread->MetaBuff);
 	}
-	//ƒrƒbƒgƒ}ƒbƒv
+	//ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—
 	else {
 		WIC_resize_image(ImgViewThread->ImgBuff, r_bp.get(), 0.0, i_wd, i_hi, WicScaleOpt);
 	}
 
-	//ƒOƒŒ[ƒXƒP[ƒ‹
+	//ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«
 	if (GrayCheckBox->Checked) WIC_grayscale_image(r_bp.get());
 
-	//ƒIƒtƒZƒbƒg
+	//ã‚ªãƒ•ã‚»ãƒƒãƒˆ
 	int x, y;
 	if (OptRadioGroup->ItemIndex==3) {
 		x = MulDiv(d_wd, EditToInt(OfsXEdit), 100);
@@ -251,7 +251,7 @@ void __fastcall TPrintImgDlg::DrawImage(TCanvas *cv)
 	}
 	cv->Draw(x, y, r_bp.get());
 
-	//•¶š“ü‚ê
+	//æ–‡å­—å…¥ã‚Œ
 	if (StrCheckBox->Checked) {
 		TDateTime xt;
 		UnicodeString fnam = FileRec? (FileRec->is_virtual? FileRec->tmp_name : FileRec->f_name) : EmptyStr;
@@ -262,7 +262,7 @@ void __fastcall TPrintImgDlg::DrawImage(TCanvas *cv)
 			xt = Now();
 		}
 
-		//‘®•¶š—ñ‚Ì“WŠJ
+		//æ›¸å¼æ–‡å­—åˆ—ã®å±•é–‹
 		UnicodeString s = StrFmtEdit->Text;
 		UnicodeString lbuf;
 		UnicodeString bnam = get_base_name(fnam);
@@ -285,7 +285,7 @@ void __fastcall TPrintImgDlg::DrawImage(TCanvas *cv)
 			}
 		}
 
-		//•`‰æ
+		//æç”»
 		int f_hi = StrFont->Size * 0.3527 * p_hi / ::GetDeviceCaps(Printer()->Handle, VERTSIZE);
 		if (!is_prn) f_hi = std::max((int)(1.0 * f_hi * d_hi/p_hi + 0.5), 2);
 		int mgn  = std::min(d_wd, d_hi) * EditToInt(StrMgnEdit) / 100.0;
@@ -305,13 +305,13 @@ void __fastcall TPrintImgDlg::DrawImage(TCanvas *cv)
 
 	UnicodeString tmp = minimize_str(FormatStr, Canvas, SizeLabel->Width - SCALED_THIS(4));
 	SizeLabel->Hint = FormatStr;
-	SizeLabel->Caption = tmp.cat_sprintf(_T("\r\nˆóü—Ìˆæ: %u ~ %umm (%u ~ %upx)"),
+	SizeLabel->Caption = tmp.cat_sprintf(_T("\r\nå°åˆ·é ˜åŸŸ: %u Ã— %umm (%u Ã— %upx)"),
 		::GetDeviceCaps(Printer()->Handle, HORZSIZE), ::GetDeviceCaps(Printer()->Handle, VERTSIZE),
 		::GetDeviceCaps(Printer()->Handle, HORZRES), ::GetDeviceCaps(Printer()->Handle, VERTRES));
 }
 
 //---------------------------------------------------------------------------
-//ƒvƒŒƒrƒ…[‚ÌXV
+//ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TPrintImgDlg::UpdatePreview()
 {
@@ -342,7 +342,7 @@ void __fastcall TPrintImgDlg::ClearPreview()
 }
 
 //---------------------------------------------------------------------------
-//ˆóü‚ğÀs
+//å°åˆ·ã‚’å®Ÿè¡Œ
 //---------------------------------------------------------------------------
 void __fastcall TPrintImgDlg::PrintActionExecute(TObject *Sender)
 {
@@ -360,7 +360,7 @@ void __fastcall TPrintImgDlg::PrintActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//‘O‚Ì‰æ‘œ
+//å‰ã®ç”»åƒ
 //---------------------------------------------------------------------------
 void __fastcall TPrintImgDlg::PrevBtn_Click(TObject *Sender)
 {
@@ -368,7 +368,7 @@ void __fastcall TPrintImgDlg::PrevBtn_Click(TObject *Sender)
 	if (isViewIcon || isViewAGif) ClearPreview();
 }
 //---------------------------------------------------------------------------
-//Ÿ‚Ì‰æ‘œ
+//æ¬¡ã®ç”»åƒ
 //---------------------------------------------------------------------------
 void __fastcall TPrintImgDlg::NextBtnClick(TObject *Sender)
 {
@@ -376,7 +376,7 @@ void __fastcall TPrintImgDlg::NextBtnClick(TObject *Sender)
 	if (isViewIcon || isViewAGif) ClearPreview();
 }
 //---------------------------------------------------------------------------
-//æ“ª‚Ì‰æ‘œ
+//å…ˆé ­ã®ç”»åƒ
 //---------------------------------------------------------------------------
 void __fastcall TPrintImgDlg::TopBtnClick(TObject *Sender)
 {
@@ -384,7 +384,7 @@ void __fastcall TPrintImgDlg::TopBtnClick(TObject *Sender)
 	if (isViewIcon || isViewAGif) ClearPreview();
 }
 //---------------------------------------------------------------------------
-//ÅŒã‚Ì‰æ‘œ
+//æœ€å¾Œã®ç”»åƒ
 //---------------------------------------------------------------------------
 void __fastcall TPrintImgDlg::EndBtnClick(TObject *Sender)
 {

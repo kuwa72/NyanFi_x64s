@@ -1,6 +1,6 @@
 /**
  * @file ChInfFrm.h
- * @brief •¶šî•ñ
+ * @brief æ–‡å­—æƒ…å ±
  */
 //---------------------------------------------------------------------------
 #ifndef ChInfFrmH
@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------
 class TCharInfoForm : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TListBox *InfoListBox;
 	TMenuItem *ChgFontItem;
 	TMenuItem *CopyItem;
@@ -56,16 +56,16 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall SetColItemClick(TObject *Sender);
 	void __fastcall FontNameItemClick(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	UnicodeString UniCharName;
 	UnicodeString NumRefHex;
 	UnicodeString NumRefDec;
-	UnicodeString RefInfo;		//QÆî•ñ
+	UnicodeString RefInfo;		//å‚ç…§æƒ…å ±
 
 	void __fastcall SetInfoHeight();
 	void __fastcall SetCharFont();
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	__fastcall TCharInfoForm(TComponent* Owner);
 
 	void __fastcall UpdateChar(UnicodeString c, UnicodeString inf = EmptyStr);

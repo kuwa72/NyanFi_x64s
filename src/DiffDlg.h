@@ -1,6 +1,6 @@
 /**
  * @file DiffDlg.h
- * @brief ƒfƒBƒŒƒNƒgƒŠ‚Ì”äŠrƒ_ƒCƒAƒƒO
+ * @brief ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®æ¯”è¼ƒãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 //---------------------------------------------------------------------------
 #ifndef DiffDlgH
@@ -19,11 +19,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒfƒBƒŒƒNƒgƒŠ‚Ì”äŠrƒ_ƒCƒAƒƒO
+ * @brief ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®æ¯”è¼ƒãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TDiffDirDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *StartAction;
 	TActionList *ActionList1;
 	TButton *CanButton;
@@ -42,7 +42,7 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall FormKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 	void __fastcall StartActionUpdate(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	void __fastcall WmFormShowed(TMessage &msg);
 
 	void __fastcall WmMenuChar(TMessage &msg)
@@ -50,7 +50,7 @@ private:	// ƒ†[ƒU[éŒ¾
 		if (msg.WParamHi==MF_POPUP) TForm::Dispatch(&msg); else msg.Result = MAKELONG(0, MNC_CLOSE);
 	}
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	__fastcall TDiffDirDlg(TComponent* Owner);
 
 	BEGIN_MESSAGE_MAP

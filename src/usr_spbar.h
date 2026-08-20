@@ -1,6 +1,6 @@
 /**
  * @file usr_spbar.h
- * @brief ƒXƒe[ƒ^ƒXƒo[ã‚ÌƒvƒƒOƒŒƒXƒo[
+ * @brief ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒãƒ¼ä¸Šã®ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹ãƒãƒ¼
  */
 //---------------------------------------------------------------------------
 #ifndef UsrSttPrgBarH
@@ -11,7 +11,7 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief w’è‚µ‚½ƒXƒe[ƒ^ƒXƒo[‚Ìƒpƒlƒ‹ã‚ÉƒvƒƒOƒŒƒXƒo[‚ğ•\¦
+ * @brief æŒ‡å®šã—ãŸã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒãƒ¼ã®ãƒ‘ãƒãƒ«ä¸Šã«ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹ãƒãƒ¼ã‚’è¡¨ç¤º
  */
 class SttProgressBar
 {
@@ -25,7 +25,7 @@ private:
 
 public:
 	TPaintBox *PrgBox;
-	int MsgIndex;		//!< ƒƒbƒZ[ƒW‚ğ•\¦‚·‚éƒpƒlƒ‹‚ÌƒCƒ“ƒfƒbƒNƒX
+	int MsgIndex;		//!< ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¡¨ç¤ºã™ã‚‹ãƒ‘ãƒãƒ«ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
 
 	TColor BgColor;
 	TColor BarColor;
@@ -34,22 +34,22 @@ public:
 	~SttProgressBar();
 
 	/**
-	 * @brief ƒvƒƒOƒŒƒXƒo[•\¦ŠJn
-	 * @param s •\¦ƒƒbƒZ[ƒW
+	 * @brief ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹ãƒãƒ¼è¡¨ç¤ºé–‹å§‹
+	 * @param s è¡¨ç¤ºãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
 	 */
 	void __fastcall Begin(const _TCHAR *s = NULL);
 
 	/**
-	 * @brief ƒvƒƒOƒŒƒXƒo[•\¦I—¹
-	 * @param s •\¦ƒƒbƒZ[ƒW
-	 * @param wait ‰B‚·‚Ü‚Å‚Ì‘Ò‚¿ŠÔ(ƒ~ƒŠ•b)
+	 * @brief ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹ãƒãƒ¼è¡¨ç¤ºçµ‚äº†
+	 * @param s è¡¨ç¤ºãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
+	 * @param wait éš ã™ã¾ã§ã®å¾…ã¡æ™‚é–“(ãƒŸãƒªç§’)
 	 */
 	void __fastcall End(UnicodeString s = EmptyStr, int wait = 100);
 
 	/**
-	 * @brief w’è‚µ‚½i’»’l‚ÉŠî‚Ã‚¢‚ÄƒvƒƒOƒŒƒXƒo[‚Ì•\¦‚ğİ’è
-	 * @param cnt i’»’l
-	 * @param max_cnt Å‘å’l
+	 * @brief æŒ‡å®šã—ãŸé€²æ—å€¤ã«åŸºã¥ã„ã¦ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹ãƒãƒ¼ã®è¡¨ç¤ºã‚’è¨­å®š
+	 * @param cnt é€²æ—å€¤
+	 * @param max_cnt æœ€å¤§å€¤
 	 */
 	void __fastcall SetPosI(int cnt, int max_cnt);
 };

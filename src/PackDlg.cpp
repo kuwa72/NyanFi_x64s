@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒA[ƒJƒCƒuì¬ƒ_ƒCƒAƒƒO											//
+//  ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ä½œæˆãƒ€ã‚¤ã‚¢ãƒ­ã‚°											//
 //----------------------------------------------------------------------//
 #include "Global.h"
 #include "usr_arc.h"
@@ -140,12 +140,12 @@ void __fastcall TPackArcDlg::FormatRadioGroupClick(TObject *Sender)
 	case 0:	//ZIP
 	case 1:	//7Z
 		set_ComboBoxText(ParamComboBox,
-			_T("–³ˆ³k\n")
-			_T("ˆ³kƒŒƒxƒ‹1\n")
-			_T("ˆ³kƒŒƒxƒ‹3\n")
-			_T("ˆ³kƒŒƒxƒ‹5 (ƒfƒtƒHƒ‹ƒg)\n")
-			_T("ˆ³kƒŒƒxƒ‹7\n")
-			_T("ˆ³kƒŒƒxƒ‹9\n"));
+			_T("ç„¡åœ§ç¸®\n")
+			_T("åœ§ç¸®ãƒ¬ãƒ™ãƒ«1\n")
+			_T("åœ§ç¸®ãƒ¬ãƒ™ãƒ«3\n")
+			_T("åœ§ç¸®ãƒ¬ãƒ™ãƒ«5 (ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ)\n")
+			_T("åœ§ç¸®ãƒ¬ãƒ™ãƒ«7\n")
+			_T("åœ§ç¸®ãƒ¬ãƒ™ãƒ«9\n"));
 		ParamComboBox->Enabled = true;
 
 		//ZIP
@@ -176,14 +176,14 @@ void __fastcall TPackArcDlg::FormatRadioGroupClick(TObject *Sender)
 
 	case 3:	//CAB
 		set_ComboBoxText(ParamComboBox,
-			_T("MSZIPŒ`Ž® (ƒfƒtƒHƒ‹ƒg)\n")
-			_T("LZXŒ`Ž® ˆ³kƒŒƒxƒ‹15\n")
-			_T("LZXŒ`Ž® ˆ³kƒŒƒxƒ‹16\n")
-			_T("LZXŒ`Ž® ˆ³kƒŒƒxƒ‹17\n")
-			_T("LZXŒ`Ž® ˆ³kƒŒƒxƒ‹18\n")
-			_T("LZXŒ`Ž® ˆ³kƒŒƒxƒ‹19\n")
-			_T("LZXŒ`Ž® ˆ³kƒŒƒxƒ‹20\n")
-			_T("LZXŒ`Ž® ˆ³kƒŒƒxƒ‹21\n"));
+			_T("MSZIPå½¢å¼ (ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ)\n")
+			_T("LZXå½¢å¼ åœ§ç¸®ãƒ¬ãƒ™ãƒ«15\n")
+			_T("LZXå½¢å¼ åœ§ç¸®ãƒ¬ãƒ™ãƒ«16\n")
+			_T("LZXå½¢å¼ åœ§ç¸®ãƒ¬ãƒ™ãƒ«17\n")
+			_T("LZXå½¢å¼ åœ§ç¸®ãƒ¬ãƒ™ãƒ«18\n")
+			_T("LZXå½¢å¼ åœ§ç¸®ãƒ¬ãƒ™ãƒ«19\n")
+			_T("LZXå½¢å¼ åœ§ç¸®ãƒ¬ãƒ™ãƒ«20\n")
+			_T("LZXå½¢å¼ åœ§ç¸®ãƒ¬ãƒ™ãƒ«21\n"));
 		ParamComboBox->Enabled	 = true;
 		ParamComboBox->ItemIndex = (usr_ARC->CabPrm_z>=15 && usr_ARC->CabPrm_z<=21)? usr_ARC->CabPrm_z - 14 : 0;
 		fext = ".cab";
@@ -192,16 +192,16 @@ void __fastcall TPackArcDlg::FormatRadioGroupClick(TObject *Sender)
 
 	case 4:	//TAR
 		set_ComboBoxText(ParamComboBox,
-			_T("–³ˆ³k\n")
-			_T("ˆ³kƒŒƒxƒ‹ gzip1\n")
-			_T("ˆ³kƒŒƒxƒ‹ gzip2\n")
-			_T("ˆ³kƒŒƒxƒ‹ gzip3\n")
-			_T("ˆ³kƒŒƒxƒ‹ gzip4\n")
-			_T("ˆ³kƒŒƒxƒ‹ gzip5\n")
-			_T("ˆ³kƒŒƒxƒ‹ gzip6 (ƒfƒtƒHƒ‹ƒg)\n")
-			_T("ˆ³kƒŒƒxƒ‹ gzip7\n")
-			_T("ˆ³kƒŒƒxƒ‹ gzip8\n")
-			_T("ˆ³kƒŒƒxƒ‹ gzip9\n"));
+			_T("ç„¡åœ§ç¸®\n")
+			_T("åœ§ç¸®ãƒ¬ãƒ™ãƒ« gzip1\n")
+			_T("åœ§ç¸®ãƒ¬ãƒ™ãƒ« gzip2\n")
+			_T("åœ§ç¸®ãƒ¬ãƒ™ãƒ« gzip3\n")
+			_T("åœ§ç¸®ãƒ¬ãƒ™ãƒ« gzip4\n")
+			_T("åœ§ç¸®ãƒ¬ãƒ™ãƒ« gzip5\n")
+			_T("åœ§ç¸®ãƒ¬ãƒ™ãƒ« gzip6 (ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ)\n")
+			_T("åœ§ç¸®ãƒ¬ãƒ™ãƒ« gzip7\n")
+			_T("åœ§ç¸®ãƒ¬ãƒ™ãƒ« gzip8\n")
+			_T("åœ§ç¸®ãƒ¬ãƒ™ãƒ« gzip9\n"));
 		ParamComboBox->Enabled	 = true;
 		ParamComboBox->ItemIndex = usr_ARC->TarPrm_z;
 		fext = ".tar";

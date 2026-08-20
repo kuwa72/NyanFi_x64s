@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  –¼‘O‚Ì•ÏX															//
+//  åå‰ã®å¤‰æ›´															//
 //----------------------------------------------------------------------//
 #include "usr_exif.h"
 #include "usr_id3.h"
@@ -34,21 +34,21 @@ void __fastcall TRenameDlg::FormCreate(TObject *Sender)
 	RenListComboBox->Tag = CBTAG_HISTORY;
 
 	set_ComboBoxText(IniSttComboBox,
-		_T("ƒtƒ@ƒCƒ‹–¼å•”‚Ì––”ö\n")
-		_T("ƒtƒ@ƒCƒ‹–¼‚Ìæ“ª\n")
-		_T("ƒtƒ@ƒCƒ‹–¼å•”‚ğ‘I‘ğ\n")
-		_T("ƒtƒ@ƒCƒ‹–¼‘S‘Ì‚ğ‘I‘ğ\n")
-		_T("w’èŒê‚ÌŒã\n")
-		_T("w’èŒê‚Ì‘O\n"));
+		_T("ãƒ•ã‚¡ã‚¤ãƒ«åä¸»éƒ¨ã®æœ«å°¾\n")
+		_T("ãƒ•ã‚¡ã‚¤ãƒ«åã®å…ˆé ­\n")
+		_T("ãƒ•ã‚¡ã‚¤ãƒ«åä¸»éƒ¨ã‚’é¸æŠ\n")
+		_T("ãƒ•ã‚¡ã‚¤ãƒ«åå…¨ä½“ã‚’é¸æŠ\n")
+		_T("æŒ‡å®šèªã®å¾Œ\n")
+		_T("æŒ‡å®šèªã®å‰\n"));
 	set_ComboBoxText(IniStt2ComboBox,
-		_T("ƒtƒ@ƒCƒ‹–¼å•”‚Ì––”ö\n")
-		_T("ƒtƒ@ƒCƒ‹–¼‚Ìæ“ª\n")
-		_T("ƒtƒ@ƒCƒ‹–¼å•”‚ğ‘I‘ğ\n")
-		_T("ƒtƒ@ƒCƒ‹–¼‘S‘Ì‚ğ‘I‘ğ\n"));
+		_T("ãƒ•ã‚¡ã‚¤ãƒ«åä¸»éƒ¨ã®æœ«å°¾\n")
+		_T("ãƒ•ã‚¡ã‚¤ãƒ«åã®å…ˆé ­\n")
+		_T("ãƒ•ã‚¡ã‚¤ãƒ«åä¸»éƒ¨ã‚’é¸æŠ\n")
+		_T("ãƒ•ã‚¡ã‚¤ãƒ«åå…¨ä½“ã‚’é¸æŠ\n"));
 
 	IniSttWdEdit->Hint = LoadUsrMsg(USTR_HintMltSepSC);
 
-	//‰EƒNƒŠƒbƒNƒƒjƒ…[‚ÌƒAƒNƒVƒ‡ƒ“‚ğİ’è
+	//å³ã‚¯ãƒªãƒƒã‚¯ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’è¨­å®š
 	UserModule->RenInsNameAction->OnExecute = Inp1stNameActionExecute;
 	UserModule->RenInsNameAction->OnUpdate	= Inp1stNameActionUpdate;
 
@@ -85,7 +85,7 @@ void __fastcall TRenameDlg::FormShow(TObject *Sender)
 	NewNameList->Clear();
 	for (int i=0; i<ItemList->Count; i++) NewNameList->Add(EmptyStr);
 
-	//İ’è‚Ì“Ç
+	//è¨­å®šã®èª­è¾¼
 	IniFile->LoadPosInfo(this, DialogCenter);
 
 	SerLeftPanel->Width 	   = IniFile->ReadScaledIntGen(_T("RenameDlgSerLWidth"), 280, this);
@@ -116,7 +116,7 @@ void __fastcall TRenameDlg::FormShow(TObject *Sender)
 	IniFile->LoadComboBoxItems(Mp3FmtComboBox,	_T("RenMp3FmtHistory"));
 	if (Mp3FmtComboBox->Items->Count==0) Mp3FmtComboBox->Items->Add("\\ID3(TT2)");
 
-	//ƒŠƒXƒgƒtƒ@ƒCƒ‹—š—ğ
+	//ãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«å±¥æ­´
 	IniFile->LoadComboBoxItems(RenListComboBox,	_T("RenListHistory"));
 	int i = 0;
 	while (i<RenListComboBox->Items->Count) {
@@ -145,7 +145,7 @@ void __fastcall TRenameDlg::FormShow(TObject *Sender)
 
 	if (UnInitializing) return;
 
-	//ŠÖ˜A‰ü–¼İ’è
+	//é–¢é€£æ”¹åè¨­å®š
 	TCheckListBox *lp = AssRenListBox;
 	set_ListBoxItemHi(lp);
 	lp->Items->Assign(AssRenList);
@@ -154,7 +154,7 @@ void __fastcall TRenameDlg::FormShow(TObject *Sender)
 	UserModule->InitializeListBox(lp);
 	AssExtEdit->Text = EmptyStr;
 
-	//ƒvƒŒƒrƒ…[•\¦‚Ì‰Šú‰»
+	//ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼è¡¨ç¤ºã®åˆæœŸåŒ–
 	TStringGrid *gp = PreviewGrid;
 	gp->RowCount = ItemList->Count;
 	for (int i=0; i<gp->RowCount; i++) clear_GridRow(gp, i);
@@ -164,7 +164,7 @@ void __fastcall TRenameDlg::FormShow(TObject *Sender)
 	KeepCsrCheckBox->Enabled = !IsMulti;
 	SglOpPanel->Visible      = !IsMulti;
 
-	//‘®«‚Ì‰Šú‰»
+	//å±æ€§ã®åˆæœŸåŒ–
 	int atr = file_GetAttr(ItemList->Strings[0]);
 	ReadOnlyCheckBox->Checked = (atr & faReadOnly);
 	HiddenCheckBox->Checked   = (atr & faHidden);
@@ -172,17 +172,17 @@ void __fastcall TRenameDlg::FormShow(TObject *Sender)
 	ArcCheckBox->Checked	  = (atr & faArchive);
 	CmpCheckBox->Checked	  = (atr & faCompressed);
 
-	ReadOnlyCheckBox->Tag	  = -1;	//•ÏX—L‚è‚Ìƒ`ƒFƒbƒN—p
+	ReadOnlyCheckBox->Tag	  = -1;	//å¤‰æ›´æœ‰ã‚Šã®ãƒã‚§ãƒƒã‚¯ç”¨
 	HiddenCheckBox->Tag 	  = -1;
 	SysCheckBox->Tag		  = -1;
 	ArcCheckBox->Tag		  = -1;
 	CmpCheckBox->Tag		  = -1;
 
-	//ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚Ì‰Šú‰»
+	//ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã®åˆæœŸåŒ–
 	TimeMaskEdit->Text = format_DateTime(get_file_age(ItemList->Strings[0]));
 	TimeMaskEdit->Font->Color = get_TextColor();
 
-	//ƒŠƒXƒg
+	//ãƒªã‚¹ãƒˆ
 	Case2CheckBox->Enabled	   = !EditedList;
 	OnlyBase2CheckBox->Enabled = !EditedList;
 	RefListBtn->Enabled		   = !EditedList;
@@ -191,7 +191,7 @@ void __fastcall TRenameDlg::FormShow(TObject *Sender)
 
 	int f_cnt = 0;
 	//---------------------------
-	//’P“Æ
+	//å˜ç‹¬
 	//---------------------------
 	if (!IsMulti) {
 		UnicodeString f_name = ItemList->Strings[0];
@@ -213,10 +213,10 @@ void __fastcall TRenameDlg::FormShow(TObject *Sender)
 		if (IsNameSheet()) RenameEdit->Text = ExtractFileName(f_name);
 	}
 	//---------------------------
-	//•¡”
+	//è¤‡æ•°
 	//---------------------------
 	else {
-		//‹¤’ÊŠg’£q‚Ìƒ`ƒFƒbƒN
+		//å…±é€šæ‹¡å¼µå­ã®ãƒã‚§ãƒƒã‚¯
 		for (int i=0; i<ItemList->Count; i++) {
 			UnicodeString f_name = ItemList->Strings[i];
 			bool is_dir = ends_PathDlmtr(f_name);
@@ -247,7 +247,7 @@ void __fastcall TRenameDlg::FormShow(TObject *Sender)
 		}
 	}
 
-	//ƒtƒ@ƒCƒ‹‚ğŠÜ‚Şê‡AŠg’£q‚Ìİ’è‚ğ—LŒø‚É
+	//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å«ã‚€å ´åˆã€æ‹¡å¼µå­ã®è¨­å®šã‚’æœ‰åŠ¹ã«
 	bool inc_file = (f_cnt>0);
 	FextRadioGroup->Enabled = inc_file;
 	ExtEdit->Text			= inc_file? get_tkn_r(get_extension_if_file(ItemList->Strings[0]), '.') : EmptyStr;
@@ -287,13 +287,13 @@ void __fastcall TRenameDlg::WmFormShowed(TMessage &msg)
 	Repaint();
 	UserModule->RenInsNameAction->Update();
 
-	//¦‹N“®ŒãÅ‰‚ÉŠJ‚¢‚½‚Æ‚«A–¼‘O—“‚ª‘S‘I‘ğ‚É‚È‚Á‚Ä‚µ‚Ü‚¤Œ»Û‚Ö‚Ì‘Îˆ
+	//â€»èµ·å‹•å¾Œæœ€åˆã«é–‹ã„ãŸã¨ãã€åå‰æ¬„ãŒå…¨é¸æŠã«ãªã£ã¦ã—ã¾ã†ç¾è±¡ã¸ã®å¯¾å‡¦
 	NamePageControlChange(NULL);
 
 	if (EditedList) {
 		RepRenList->Clear();
 		if (open_by_TextEditor(RenListFile)) {
-			if (msgbox_Sure(_T("ƒŠƒXƒgƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚İ‚Ü‚·‚©?"))) LoadListFile();
+			if (msgbox_Sure(_T("ãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã¿ã¾ã™ã‹?"))) LoadListFile();
 		}
 		else {
 			msgbox_ERR(GlobalErrMsg);
@@ -397,7 +397,7 @@ void __fastcall TRenameDlg::FormResize(TObject *Sender)
 {
 	TStringGrid *gp = PreviewGrid;
 	gp->ColWidths[1] = 20;
-	int s_wd = get_SysMetricsForPPI(SM_CXVSCROLL, CurrentPPI) + SCALED_THIS(2);	//ƒXƒNƒ[ƒ‹ƒo[•
+	int s_wd = get_SysMetricsForPPI(SM_CXVSCROLL, CurrentPPI) + SCALED_THIS(2);	//ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼å¹…
 	int wd	 = (gp->ClientWidth - s_wd - gp->ColWidths[1])/2;
 	gp->ColWidths[0] = wd;
 	gp->ColWidths[2] = wd;
@@ -432,7 +432,7 @@ void __fastcall TRenameDlg::StatusBar1DrawPanel(TStatusBar *StatusBar, TStatusPa
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒuƒy[ƒW•ÏX
+//ã‚¿ãƒ–ãƒšãƒ¼ã‚¸å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::NamePageControlChange(TObject *Sender)
 {
@@ -457,7 +457,7 @@ void __fastcall TRenameDlg::NamePageControlChange(TObject *Sender)
 		Repaint();
 	}
 
-	//–¼‘O
+	//åå‰
 	if (IsNameSheet()) {
 		UnicodeString f_name = ItemList->Strings[0];
 		bool is_dir = ends_PathDlmtr(f_name);
@@ -465,14 +465,14 @@ void __fastcall TRenameDlg::NamePageControlChange(TObject *Sender)
 		RenameEdit->Text = ExtractFileName(f_name);
 		RenameEdit->SetFocus();
 
-		//‰Šúó‘Ô‚Ìİ’è
+		//åˆæœŸçŠ¶æ…‹ã®è¨­å®š
 		int p = !is_dir? (pos_r(".", RenameEdit->Text) - 1) : -1;
 		if (p<0) p = RenameEdit->Text.Length();
 
 		int idx = IniSttComboBox->ItemIndex;
 		int wd_p = 0, wd_len = 0;
 		if (idx==4 || idx==5) {
-			//w’èŒê‚Ìƒ`ƒFƒbƒN
+			//æŒ‡å®šèªã®ãƒã‚§ãƒƒã‚¯
 			TStringDynArray wlst = split_strings_semicolon(IniSttWdEdit->Text);
 			for (int i=0; i<wlst.Length; i++) {
 				wd_p = (EndMatchCheckBox->Checked)? pos_r(wlst[i], RenameEdit->Text) : pos_i(wlst[i], RenameEdit->Text);
@@ -481,27 +481,27 @@ void __fastcall TRenameDlg::NamePageControlChange(TObject *Sender)
 					break;
 				}
 			}
-			//w’èŒê‚ªŠÜ‚Ü‚ê‚Ä‚¢‚È‚¯‚ê‚ÎŸŒó•â
+			//æŒ‡å®šèªãŒå«ã¾ã‚Œã¦ã„ãªã‘ã‚Œã°æ¬¡å€™è£œ
 			if (wd_p==0) idx = IniStt2ComboBox->ItemIndex;
 		}
 
 		switch (idx) {
-		case 1:	//–¼‘O‚Ìæ“ª
+		case 1:	//åå‰ã®å…ˆé ­
 			RenameEdit->SelStart = 0;
 			break;
-		case 2:	//ƒtƒ@ƒCƒ‹–¼å•”‚ğ‘I‘ğ
+		case 2:	//ãƒ•ã‚¡ã‚¤ãƒ«åä¸»éƒ¨ã‚’é¸æŠ
 			RenameEdit->SelStart  = 0;
 			RenameEdit->SelLength = p;
 			break;
-		case 3:	//ƒtƒ@ƒCƒ‹–¼‘S‘Ì‚ğ‘I‘ğ
+		case 3:	//ãƒ•ã‚¡ã‚¤ãƒ«åå…¨ä½“ã‚’é¸æŠ
 			RenameEdit->SelectAll();
 			break;
-		case 4:	//w’èŒê‚ÌŒã
+		case 4:	//æŒ‡å®šèªã®å¾Œ
 			p = wd_p;
 			if (p>0) p += (wd_len - 1);
 			RenameEdit->SelStart = p;
 			break;
-		case 5:	//w’èŒê‚Ì‘O
+		case 5:	//æŒ‡å®šèªã®å‰
 			p = wd_p;
 			if (p>0) p--;
 			RenameEdit->SelStart = p;
@@ -510,7 +510,7 @@ void __fastcall TRenameDlg::NamePageControlChange(TObject *Sender)
 			RenameEdit->SelStart = p;
 		}
 	}
-	//˜A”Ô
+	//é€£ç•ª
 	else if (IsSerialSheet()) {
 		PreNameEdit->Text	= EmptyStr;
 		PreNameEdit->Color	= bg_inv;
@@ -524,12 +524,12 @@ void __fastcall TRenameDlg::NamePageControlChange(TObject *Sender)
 		SerFmtComboBox->ItemIndex = -1;
 		SerFmtComboBox->Text = EmptyStr;
 	}
-	//’uŠ·
+	//ç½®æ›
 	else if (IsReplaceSheet()) {
 		ReplaceComboChange(NULL);
 		SrcStrComboBox->SetFocus();
 	}
-	//ƒŠƒXƒg
+	//ãƒªã‚¹ãƒˆ
 	else if (IsRenListSheet()) {
 		if (!EditedList && RenListComboBox->Items->Count>0) {
 			if (RenListComboBox->ItemIndex==-1) RenListComboBox->ItemIndex = 0;
@@ -561,19 +561,19 @@ void __fastcall TRenameDlg::NamePageControlChange(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//‰ü–¼—“ƒtƒH[ƒJƒX‚Ìˆ—
+//æ”¹åæ¬„ãƒ•ã‚©ãƒ¼ã‚«ã‚¹æ™‚ã®å‡¦ç†
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::RenameEditExit(TObject *Sender)
 {
 	TEdit *ep = (TEdit*)Sender;
 	switch (ep->Tag) {
-	case 10: case 13:	//‘OŒã
+	case 10: case 13:	//å‰å¾Œ
 		set_EditColor(ep, !NameChanged);
 		break;
-	case 11: case 12:	//˜A”Ô
+	case 11: case 12:	//é€£ç•ª
 		set_EditColor(ep, !NameChanged || SerNoEdit->Text.IsEmpty());
 		break;
-	case 14:			//Šg’£q
+	case 14:			//æ‹¡å¼µå­
 		set_EditColor(ep, !FExtChanged);
 		break;
 	}
@@ -596,7 +596,7 @@ void __fastcall TRenameDlg::SrcStrComboBoxExit(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒŠƒXƒgƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ
+//ãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿
 //---------------------------------------------------------------------------
 bool __fastcall TRenameDlg::LoadListFile()
 {
@@ -621,13 +621,13 @@ bool __fastcall TRenameDlg::LoadListFile()
 }
 
 //---------------------------------------------------------------------------
-//V‚µ‚¢–¼‘O‚ÌƒŠƒXƒg‚ğXV
+//æ–°ã—ã„åå‰ã®ãƒªã‚¹ãƒˆã‚’æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::UpdateNewNameList()
 {
 	if (Previewing || ModalResult!=mrNone) return;
 
-	//ƒtƒH[ƒJƒXó‘Ô‚ğ‘Ò”ğ
+	//ãƒ•ã‚©ãƒ¼ã‚«ã‚¹çŠ¶æ…‹ã‚’å¾…é¿
 	Application->ProcessMessages();
 	TWinControl *last_cp = Screen->ActiveControl;
 	TCustomEdit *last_ep = class_is_CustomEdit(last_cp)? (TCustomEdit *)last_cp : NULL;
@@ -638,14 +638,14 @@ void __fastcall TRenameDlg::UpdateNewNameList()
 	MainPanel->Enabled = false;
 	Previewing = true;
 	ExistErr   = false;
-	SttPrgBar->Begin(_T("ƒvƒŒƒrƒ…[..."));
+	SttPrgBar->Begin(_T("ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼..."));
 
-	//˜A”Ô
+	//é€£ç•ª
 	int sn	 = EditToInt(SerNoEdit);
 	int dn	 = EditToInt(IncNoEdit, 1);
 	int n_wd = SerNoEdit->Text.Length();
 
-	//’uŠ·
+	//ç½®æ›
 	UnicodeString sea_wd, rep_wd;
 	TRegExOptions opt;
 	bool only_base;
@@ -692,11 +692,11 @@ void __fastcall TRenameDlg::UpdateNewNameList()
 		UnicodeString old_name = b_name + f_ext;
 		UnicodeString new_name = old_name;
 
-		//–¼‘O
+		//åå‰
 		if (IsNameSheet()) {
 			new_name = RenameEdit->Text;
 		}
-		//˜A”Ô
+		//é€£ç•ª
 		else if (IsSerialSheet()) {
 			if (NameChanged) {
 				new_name  = format_FileName(PreNameEdit->Text, f_name, &pre_alstr);
@@ -714,7 +714,7 @@ void __fastcall TRenameDlg::UpdateNewNameList()
 				}
 			}
 			else if (FExtChanged) {
-				//Šg’£q‚Ì‚İ•ÏX
+				//æ‹¡å¼µå­ã®ã¿å¤‰æ›´
 				new_name = b_name;
 				if (ExtEdit->Enabled && !ExtEdit->Text.IsEmpty()) {
 					UnicodeString fext = f_ext;  remove_top_s(fext, '.');
@@ -723,7 +723,7 @@ void __fastcall TRenameDlg::UpdateNewNameList()
 			}
 			sn += dn;
 		}
-		//’uŠ·
+		//ç½®æ›
 		else if (IsReplaceSheet()) {
 			if (!illegal) {
 				try {
@@ -746,9 +746,9 @@ void __fastcall TRenameDlg::UpdateNewNameList()
 				}
 			}
 		}
-		//ƒŠƒXƒg
+		//ãƒªã‚¹ãƒˆ
 		else if (IsRenListSheet()) {
-			//•ÒW
+			//ç·¨é›†
 			if (EditedList) {
 				for (int j=top_idx; j<RepRenList->Count; j++) {
 					UnicodeString lbuf = RepRenList->Strings[j];
@@ -760,7 +760,7 @@ void __fastcall TRenameDlg::UpdateNewNameList()
 					}
 				}
 			}
-			//’uŠ·
+			//ç½®æ›
 			else if (!illegal) {
 				UnicodeString r_name = only_base? b_name : old_name;
 				bool matched = false;
@@ -778,7 +778,7 @@ void __fastcall TRenameDlg::UpdateNewNameList()
 					catch (...) {
 						illegal = true;
 						ListErrLabel->Caption
-							= UnicodeString().sprintf(_T("ƒŠƒXƒgƒtƒ@ƒCƒ‹‚É•s³‚Ès‚ª‚ ‚è‚Ü‚·(%u)"), j + 1);
+							= UnicodeString().sprintf(_T("ãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã«ä¸æ­£ãªè¡ŒãŒã‚ã‚Šã¾ã™(%u)"), j + 1);
 						break;
 					}
 				}
@@ -864,22 +864,22 @@ void __fastcall TRenameDlg::UpdateNewNameList()
 			}
 		}
 
-		//å•”‚Ì•¶ší•ÏŠ·
+		//ä¸»éƒ¨ã®æ–‡å­—ç¨®å¤‰æ›
 		int x_p = !is_dir? pos_r('.', new_name) : 0;
 		UnicodeString bnam = (x_p>1)? new_name.SubString(1, x_p - 1) : new_name;
 		if (FbaseRadioGroup->ItemIndex>0) bnam = ConvCharType(bnam, FbaseRadioGroup->ItemIndex);
-		//Šg’£q‚Ì•¶ší•ÏŠ·
+		//æ‹¡å¼µå­ã®æ–‡å­—ç¨®å¤‰æ›
 		UnicodeString xnam = (x_p>1 && x_p<new_name.Length())?
 								new_name.SubString(x_p + 1, new_name.Length() - x_p) : EmptyStr;
 		if (FextRadioGroup->ItemIndex>0)  xnam = ConvCharType(xnam, FextRadioGroup->ItemIndex);
 
-		//‹Ö~•¶š^ƒ†[ƒU’è‹`•¶š‚Ì•ÏŠ·
+		//ç¦æ­¢æ–‡å­—ï¼ãƒ¦ãƒ¼ã‚¶å®šç¾©æ–‡å­—ã®å¤‰æ›
 		if (CnvCharCheckBox->Checked) bnam = ApplyCnvCharList(bnam);
 
 		new_name = bnam;
 		if (!xnam.IsEmpty()) new_name.cat_sprintf(_T(".%s"), xnam.c_str());
 
-		//•\¦İ’è
+		//è¡¨ç¤ºè¨­å®š
 		NewNameList->Strings[i] = p_name + new_name;
 		gp->Cells[0][i] = old_name;
 		gp->Cells[2][i] = new_name;
@@ -891,16 +891,16 @@ void __fastcall TRenameDlg::UpdateNewNameList()
 	SttPrgBar->End(EmptyStr, 0);
 
 	//-------------------
-	//ƒGƒ‰[ƒ`ƒFƒbƒN
+	//ã‚¨ãƒ©ãƒ¼ãƒã‚§ãƒƒã‚¯
 	//-------------------
 	int err_cnt = 0;
 	int err_row = -1;
 
 	if (ChangeCount==0) {
-		for (int i=0; i<NewNameList->Count; i++) gp->Cells[1][i] = "";
+		for (int i=0; i<NewNameList->Count; i++) gp->Cells[1][i] = "ï¼";
 	}
 	else {
-		SttPrgBar->Begin(_T("ƒGƒ‰[ƒ`ƒFƒbƒN..."));
+		SttPrgBar->Begin(_T("ã‚¨ãƒ©ãƒ¼ãƒã‚§ãƒƒã‚¯..."));
 		for (int i=0; i<NewNameList->Count; i++) {
 			if (show_prg) {
 				SttPrgBar->SetPosI(i, NewNameList->Count);
@@ -915,11 +915,11 @@ void __fastcall TRenameDlg::UpdateNewNameList()
 
 				if (SameStr(new_name, " ")) Abort();
 
-				//‹Ö~•¶š
+				//ç¦æ­¢æ–‡å­—
 				UnicodeString ngstr = "\\/:*?\"<>|";
 				for (int j=1; j<=ngstr.Length(); j++) if (new_name.Pos(ngstr[j])) Abort();
 
-				//Šù‘¶–¼‚Æ‚ÌÕ“Ë
+				//æ—¢å­˜åã¨ã®è¡çª
 				if (CurNameList->IndexOf(NewNameList->Strings[i])!=-1) {
 					bool is_ng = true;
 					for (int j=0; j<ItemList->Count && is_ng; j++) {
@@ -929,19 +929,19 @@ void __fastcall TRenameDlg::UpdateNewNameList()
 					if (is_ng) Abort();
 				}
 
-				gp->Cells[1][i] = SameStr(old_name, new_name)? "" : "¨";
+				gp->Cells[1][i] = SameStr(old_name, new_name)? "ï¼" : "â†’";
 			}
 			catch (...) {
-				gp->Cells[1][i] = "~";
+				gp->Cells[1][i] = "Ã—";
 				err_row = i;
 				err_cnt++;
 			}
 		}
 		SttPrgBar->End(EmptyStr, 0);
 
-		//d•¡ƒ`ƒFƒbƒN
+		//é‡è¤‡ãƒã‚§ãƒƒã‚¯
 		if (IsMulti) {
-			SttPrgBar->Begin(_T("d•¡ƒ`ƒFƒbƒN..."));
+			SttPrgBar->Begin(_T("é‡è¤‡ãƒã‚§ãƒƒã‚¯..."));
 			for (int i=0; i<NewNameList->Count-1; i++) {
 				if (show_prg) {
 					SttPrgBar->SetPosI(i, NewNameList->Count);
@@ -950,8 +950,8 @@ void __fastcall TRenameDlg::UpdateNewNameList()
 
 				for (int j=i+1; j<NewNameList->Count; j++) {
 					if (SameText(NewNameList->Strings[i], NewNameList->Strings[j])) {
-						gp->Cells[1][i] = "~";
-						gp->Cells[1][j] = "~";
+						gp->Cells[1][i] = "Ã—";
+						gp->Cells[1][j] = "Ã—";
 						if (err_row==-1) err_row = i;
 						err_cnt++;
 					}
@@ -965,7 +965,7 @@ void __fastcall TRenameDlg::UpdateNewNameList()
 	RenameEdit->Font->Color = (!IsMulti && ExistErr)? col_Error : get_TextColor();
 	if (ExistErr) {
 		gp->Row = err_row;
-		StatusBar1->Panels->Items[0]->Text = "İ’è‚É–â‘è‚ª‚ ‚è‚Ü‚·B";
+		StatusBar1->Panels->Items[0]->Text = "è¨­å®šã«å•é¡ŒãŒã‚ã‚Šã¾ã™ã€‚";
 	}
 	else {
 		gp->Row = 0;
@@ -975,30 +975,30 @@ void __fastcall TRenameDlg::UpdateNewNameList()
 	gp->Color = get_WinColor(ChangeCount==0);
 	gp->UnlockDrawing();
 
-	//•¶š”î•ñ‚Ì•\¦
+	//æ–‡å­—æ•°æƒ…å ±ã®è¡¨ç¤º
 	PathInfMLabel->Font->Color = (max_plen>=MAX_PATH)? col_Error : get_TextColor();
 	NameInfMLabel->Font->Color =	  (max_flen>=256)? col_Error : get_TextColor();
 
 	UnicodeString msg;
 	if (ItemList->Count>1) {
-		PathInfMLabel->Caption = msg.sprintf(_T("ƒtƒ‹ƒpƒX–¼‚ÌÅ‘å•¶š” = %u"), max_plen);
-		NameInfMLabel->Caption = msg.sprintf(_T("–¼‘O‚ÌÅ‘å•¶š” = %u"), max_flen);
+		PathInfMLabel->Caption = msg.sprintf(_T("ãƒ•ãƒ«ãƒ‘ã‚¹åã®æœ€å¤§æ–‡å­—æ•° = %u"), max_plen);
+		NameInfMLabel->Caption = msg.sprintf(_T("åå‰ã®æœ€å¤§æ–‡å­—æ•° = %u"), max_flen);
 	}
 	else {
-		PathInfMLabel->Caption = msg.sprintf(_T("ƒtƒ‹ƒpƒX–¼‚Ì•¶š” = %u"), max_plen);
-		NameInfMLabel->Caption = msg.sprintf(_T("–¼‘O‚Ì•¶š” = %u"), max_flen);
+		PathInfMLabel->Caption = msg.sprintf(_T("ãƒ•ãƒ«ãƒ‘ã‚¹åã®æ–‡å­—æ•° = %u"), max_plen);
+		NameInfMLabel->Caption = msg.sprintf(_T("åå‰ã®æ–‡å­—æ•° = %u"), max_flen);
 	}
 
-	//ó‘Ô•\¦
-	msg.sprintf(_T("‰ü–¼:%u /%u"), ChangeCount, ItemList->Count);
-	if (IsReplaceSheet()) msg = UnicodeString().sprintf(_T("ƒ}ƒbƒ`:%u %s"), mat_cnt, msg.c_str());
+	//çŠ¶æ…‹è¡¨ç¤º
+	msg.sprintf(_T("æ”¹å:%u /%u"), ChangeCount, ItemList->Count);
+	if (IsReplaceSheet()) msg = UnicodeString().sprintf(_T("ãƒãƒƒãƒ:%u %s"), mat_cnt, msg.c_str());
 	SttInfLabel->Caption = msg;
 
 	Previewed  = true;
 	Previewing = false;
 	MainPanel->Enabled = true;
 
-	//ƒtƒH[ƒJƒXó‘Ô‚ğ•œ‹A
+	//ãƒ•ã‚©ãƒ¼ã‚«ã‚¹çŠ¶æ…‹ã‚’å¾©å¸°
 	if (last_cp && last_cp->Visible && last_cp->Enabled) {
 		last_cp->SetFocus();
 		if (last_ep) {
@@ -1031,22 +1031,22 @@ void __fastcall TRenameDlg::UpdatePreview()
 }
 
 //---------------------------------------------------------------------------
-//–¼‘O/˜A”Ô‰ü–¼‚Ì“à—e‚ª•ÏX‚³‚ê‚½
-//IIME‚É“ü—Í•¶š—ñ‚ª‚ ‚é‚Æ‚«‚ÍƒvƒŒƒrƒ…[•s‰Â
+//åå‰/é€£ç•ªæ”¹åã®å†…å®¹ãŒå¤‰æ›´ã•ã‚ŒãŸ
+//ï¼IMEã«å…¥åŠ›æ–‡å­—åˆ—ãŒã‚ã‚‹ã¨ãã¯ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ä¸å¯
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::RenameEditChange(TObject *Sender)
 {
 	if (!DlgInitialized) return;
 
 	switch (((TComponent*)Sender)->Tag) {
-	case 10: case 11: case 12: case 13:	//˜A”Ôƒtƒ@ƒCƒ‹–¼
+	case 10: case 11: case 12: case 13:	//é€£ç•ªãƒ•ã‚¡ã‚¤ãƒ«å
 		NameChanged = true;
 		PreNameEdit->Color	= get_WinColor();
 		InvColIfEmpty(SerNoEdit);
 		IncNoEdit->Color	= SerNoEdit->Color;
 		PostNameEdit->Color = get_WinColor();
 		break;
-	case 14:							//˜A”ÔŠg’£q
+	case 14:							//é€£ç•ªæ‹¡å¼µå­
 		FExtChanged    = true;
 		ExtEdit->Color = get_WinColor();
 		break;
@@ -1077,7 +1077,7 @@ void __fastcall TRenameDlg::EtcNameEditKeyDown(TObject *Sender, WORD &Key, TShif
 }
 
 //---------------------------------------------------------------------------
-//ŒŸõ—š—ğ‚Ì“ü‚êŠ·‚¦
+//æ¤œç´¢å±¥æ­´ã®å…¥ã‚Œæ›ãˆ
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::RegExCheckBoxClick(TObject *Sender)
 {
@@ -1088,7 +1088,7 @@ void __fastcall TRenameDlg::RegExCheckBoxClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//’uŠ·‰ü–¼‚Ìİ’è‚ª•ÏX‚³‚ê‚½
+//ç½®æ›æ”¹åã®è¨­å®šãŒå¤‰æ›´ã•ã‚ŒãŸ
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::ReplaceComboChange(TObject *Sender)
 {
@@ -1096,7 +1096,7 @@ void __fastcall TRenameDlg::ReplaceComboChange(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//MP3/FLAC‘®İ’è‚ª•ÏX‚³‚ê‚½
+//MP3/FLACæ›¸å¼è¨­å®šãŒå¤‰æ›´ã•ã‚ŒãŸ
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::Mp3FmtComboBoxChange(TObject *Sender)
 {
@@ -1119,7 +1119,7 @@ void __fastcall TRenameDlg::RefFmtBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//•¶šíİ’è‚ğ•ÏX‚µ‚½
+//æ–‡å­—ç¨®è¨­å®šã‚’å¤‰æ›´ã—ãŸ
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::FModRadioGroupClick(TObject *Sender)
 {
@@ -1127,14 +1127,14 @@ void __fastcall TRenameDlg::FModRadioGroupClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//‘®«İ’è‚ğ•ÏX‚µ‚½
+//å±æ€§è¨­å®šã‚’å¤‰æ›´ã—ãŸ
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::AttrCheckBoxClick(TObject *Sender)
 {
 	if (!DlgInitialized) return;
 
 	TCheckBox *cp = (TCheckBox*)Sender;
-	cp->Tag 	= 1;	//•ÏX‚ ‚è
+	cp->Tag 	= 1;	//å¤‰æ›´ã‚ã‚Š
 	AttrChanged = true;
 
 	TPanel *pp = dynamic_cast<TPanel *>(cp->Parent);
@@ -1142,7 +1142,7 @@ void __fastcall TRenameDlg::AttrCheckBoxClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒCƒ€ƒXƒ^ƒ“ƒvİ’è‚ğ•ÏX‚µ‚½
+//ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—è¨­å®šã‚’å¤‰æ›´ã—ãŸ
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::TimeMaskEditChange(TObject *Sender)
 {
@@ -1162,7 +1162,7 @@ void __fastcall TRenameDlg::ChangeTime(TDateTime dt)
 }
 
 //---------------------------------------------------------------------------
-//Œ»İ
+//ç¾åœ¨æ™‚åˆ»
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::TimeNowBtnClick(TObject *Sender)
 {
@@ -1196,7 +1196,7 @@ void __fastcall TRenameDlg::TimeX0BtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ÅV
+//æœ€æ–°
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::LatestTimeActionExecute(TObject *Sender)
 {
@@ -1213,7 +1213,7 @@ void __fastcall TRenameDlg::LatestTimeActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//˜A”Ô‘®‚ğİ’è
+//é€£ç•ªæ›¸å¼ã‚’è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::set_FmtEdit(const _TCHAR *s)
 {
@@ -1242,27 +1242,27 @@ void __fastcall TRenameDlg::set_FmtEdit(UnicodeString s)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹–¼‚Ì¶‚©‚çn•¶š
+//ãƒ•ã‚¡ã‚¤ãƒ«åã®å·¦ã‹ã‚‰næ–‡å­—
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::Fmt_L_BtnClick(TObject *Sender)
 {
 	UnicodeString tmp;
-	if (input_query_ex(USTR_InputFmtStr, _T("ƒtƒ@ƒCƒ‹–¼å•”‚Ì¶’[‚©‚çæ“¾‚·‚é•¶š”"), &tmp, 0, true)) {
+	if (input_query_ex(USTR_InputFmtStr, _T("ãƒ•ã‚¡ã‚¤ãƒ«åä¸»éƒ¨ã®å·¦ç«¯ã‹ã‚‰å–å¾—ã™ã‚‹æ–‡å­—æ•°"), &tmp, 0, true)) {
 		int n = tmp.ToIntDef(0);
 		if (n>0) set_FmtEdit(tmp.sprintf(_T("\\L(%u)"), n));
 	}
 }
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹–¼‚Ìm”Ô–Ú‚©‚çn•¶š
+//ãƒ•ã‚¡ã‚¤ãƒ«åã®mç•ªç›®ã‹ã‚‰næ–‡å­—
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::Fmt_S_Btn2Click(TObject *Sender)
 {
 	UnicodeString tmp;
-	if (input_query_ex(USTR_InputFmtStr, _T("ƒtƒ@ƒCƒ‹–¼å•”‚©‚ç‚Ìæ“¾ŠJnˆÊ’u"), &tmp, 0, true)) {
+	if (input_query_ex(USTR_InputFmtStr, _T("ãƒ•ã‚¡ã‚¤ãƒ«åä¸»éƒ¨ã‹ã‚‰ã®å–å¾—é–‹å§‹ä½ç½®"), &tmp, 0, true)) {
 		int m = tmp.ToIntDef(0);
 		if (m>0) {
 			tmp = EmptyStr;
-			if (input_query_ex(USTR_InputFmtStr, _T("æ“¾‚·‚é•¶š”"), &tmp, 0, true)) {
+			if (input_query_ex(USTR_InputFmtStr, _T("å–å¾—ã™ã‚‹æ–‡å­—æ•°"), &tmp, 0, true)) {
 				int n = tmp.ToIntDef(0);
 				if (n>0) set_FmtEdit(tmp.sprintf(_T("\\S(%u,%u)"), m, n));
 			}
@@ -1270,46 +1270,46 @@ void __fastcall TRenameDlg::Fmt_S_Btn2Click(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹–¼‚Ì‰E‚©‚çn•¶š
+//ãƒ•ã‚¡ã‚¤ãƒ«åã®å³ã‹ã‚‰næ–‡å­—
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::Fmt_R_BtnClick(TObject *Sender)
 {
 	UnicodeString tmp;
-	if (input_query_ex(USTR_InputFmtStr, _T("ƒtƒ@ƒCƒ‹–¼å•”‚Ì‰E’[‚©‚çæ“¾‚·‚é•¶š”"), &tmp, 0, true)) {
+	if (input_query_ex(USTR_InputFmtStr, _T("ãƒ•ã‚¡ã‚¤ãƒ«åä¸»éƒ¨ã®å³ç«¯ã‹ã‚‰å–å¾—ã™ã‚‹æ–‡å­—æ•°"), &tmp, 0, true)) {
 		int n = tmp.ToIntDef(0);
 		if (n>0) set_FmtEdit(tmp.sprintf(_T("\\R(%u)"), n));
 	}
 }
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹–¼‘S‘Ì
+//ãƒ•ã‚¡ã‚¤ãƒ«åå…¨ä½“
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::Fmt_A_BtnClick(TObject *Sender)
 {
 	set_FmtEdit(_T("\\A"));
 }
 //---------------------------------------------------------------------------
-//Šg’£q
+//æ‹¡å¼µå­
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::Fmt_E_BtnClick(TObject *Sender)
 {
 	set_FmtEdit(_T("\\E"));
 }
 //---------------------------------------------------------------------------
-//ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv
+//ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::Fmt_TS_BtnClick(TObject *Sender)
 {
 	set_FmtEdit(_T("\\TS(yyyymmdd-hhnnss)"));
 }
 //---------------------------------------------------------------------------
-//ExifB‰e“ú
+//Exifæ’®å½±æ—¥æ™‚
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::Fmt_XT_BtnClick(TObject *Sender)
 {
 	set_FmtEdit(_T("\\XT(yyyymmdd-hhnnss)"));
 }
 //---------------------------------------------------------------------------
-//Œ»İ“ú
+//ç¾åœ¨æ—¥æ™‚
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::Fmt_DT_BtnClick(TObject *Sender)
 {
@@ -1317,7 +1317,7 @@ void __fastcall TRenameDlg::Fmt_DT_BtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//˜A”Ô‰ü–¼‘®‚Ì•Û‘¶
+//é€£ç•ªæ”¹åæ›¸å¼ã®ä¿å­˜
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::SaveSerFmtActionExecute(TObject *Sender)
 {
@@ -1350,7 +1350,7 @@ void __fastcall TRenameDlg::SaveSerFmtActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//˜A”Ô‰ü–¼‘®‚ÌŒÄ‚Ño‚µ
+//é€£ç•ªæ”¹åæ›¸å¼ã®å‘¼ã³å‡ºã—
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::SerFmtComboBoxClick(TObject *Sender)
 {
@@ -1358,7 +1358,7 @@ void __fastcall TRenameDlg::SerFmtComboBoxClick(TObject *Sender)
 	if (idx>=0 && idx<SerFormatList->Count) {
 		TStringDynArray itm_buf = get_csv_array(SerFormatList->ValueFromIndex[idx], 5);
 		if (itm_buf.Length>=4) {
-			//å•”
+			//ä¸»éƒ¨
 			PreNameEdit->Text  = itm_buf[0];
 			SerNoEdit->Text    = itm_buf[1];
 			IncNoEdit->Text    = itm_buf[2];
@@ -1368,7 +1368,7 @@ void __fastcall TRenameDlg::SerFmtComboBoxClick(TObject *Sender)
 			InvColIfEmpty(SerNoEdit);
 			IncNoEdit->Color	= SerNoEdit->Color;
 			PostNameEdit->Color = get_WinColor();
-			//Šg’£q
+			//æ‹¡å¼µå­
 			if (itm_buf.Length==5 && ExtEdit->Enabled) {
 				ExtEdit->Text = itm_buf[4];
 				FExtChanged   = true;
@@ -1385,7 +1385,7 @@ void __fastcall TRenameDlg::SerFmtComboBoxClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//€–Ú‚Ìíœ
+//é …ç›®ã®å‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::DelItemActionExecute(TObject *Sender)
 {
@@ -1406,7 +1406,7 @@ void __fastcall TRenameDlg::DelItemActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//•¶ší‚Ì•ÏX
+//æ–‡å­—ç¨®ã®å¤‰æ›´
 //---------------------------------------------------------------------------
 UnicodeString __fastcall TRenameDlg::ConvCharType(UnicodeString s, int idx)
 {
@@ -1421,14 +1421,14 @@ UnicodeString __fastcall TRenameDlg::ConvCharType(UnicodeString s, int idx)
 				if (CnvKanaCheckBox->Checked) {
 					s = to_HalfWidth(s);
 					std::unique_ptr<TStringList> lst(new TStringList());
-					lst->Text = "\\=\n/=^\n:=F\n*=–\n?=H\n\"=h\n<=ƒ\n>=„\n|=b\n";
+					lst->Text = "\\=ï¿¥\n/=ï¼\n:=ï¼š\n*=ï¼Š\n?=ï¼Ÿ\n\"=â€\n<=ï¼œ\n>=ï¼\n|=ï½œ\n";
 					for (int i=0; i<lst->Count; i++) s = ReplaceStr(s, lst->Names[i], lst->ValueFromIndex[i]);
 				}
 				else {
 					UnicodeString full_ch =
-						"I”“•fij{C|Q‚O‚P‚Q‚R‚S‚T‚U‚V‚W‚XG—"
-						"‚`‚a‚b‚c‚d‚e‚f‚g‚h‚i‚j‚k‚l‚m‚n‚o‚p‚q‚r‚s‚t‚u‚v‚w‚x‚ymn"
-						"‚‚‚‚ƒ‚„‚…‚†‚‡‚ˆ‚‰‚Š‚‹‚Œ‚‚‚‚‚‘‚’‚“‚”‚•‚–‚—‚˜‚™‚šop`@";
+						"ï¼ï¼ƒï¼„ï¼…ï¼†â€™ï¼ˆï¼‰ï¼‹ï¼Œï¼ï¼¿ï¼ï¼‘ï¼’ï¼“ï¼”ï¼•ï¼–ï¼—ï¼˜ï¼™ï¼›ï¼ï¼ "
+						"ï¼¡ï¼¢ï¼£ï¼¤ï¼¥ï¼¦ï¼§ï¼¨ï¼©ï¼ªï¼«ï¼¬ï¼­ï¼®ï¼¯ï¼°ï¼±ï¼²ï¼³ï¼´ï¼µï¼¶ï¼·ï¼¸ï¼¹ï¼ºï¼»ï¼½"
+						"ï½ï½‚ï½ƒï½„ï½…ï½†ï½‡ï½ˆï½‰ï½Šï½‹ï½Œï½ï½ï½ï½ï½‘ï½’ï½“ï½”ï½•ï½–ï½—ï½˜ï½™ï½šï½›ï½ï½ã€€";
 					UnicodeString half_ch = "!#$%&'()+,-_0123456789;=@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghijklmnopqrstuvwxyz{}~ ";
 					for (int i=1; i<=s.Length(); i++) {
 						int p = full_ch.Pos(s[i]);
@@ -1443,7 +1443,7 @@ UnicodeString __fastcall TRenameDlg::ConvCharType(UnicodeString s, int idx)
 }
 
 //---------------------------------------------------------------------------
-//ƒvƒŒƒrƒ…[‚Ì•`‰æ
+//ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::PreviewGridDrawCell(TObject *Sender, System::LongInt ACol, System::LongInt ARow,
 	TRect &Rect, TGridDrawState State)
@@ -1457,9 +1457,9 @@ void __fastcall TRenameDlg::PreviewGridDrawCell(TObject *Sender, System::LongInt
 	UnicodeString cell_str = gp->Cells[ACol][ARow];
 	UnicodeString rel_str  = gp->Cells[1][ARow];
 	if (ACol==1 || ACol==2) {
-		if (SameStr(rel_str, ""))
+		if (SameStr(rel_str, "ï¼"))
 			cv->Font->Color = clGray;
-		else if (rel_str.IsEmpty() || SameStr(rel_str, "~"))
+		else if (rel_str.IsEmpty() || SameStr(rel_str, "Ã—"))
 			cv->Font->Color = col_Error;
 	}
 	cell_str = minimize_str(cell_str, cv, Rect.Width() - SCALED_THIS(4), OmitEndOfName);
@@ -1470,14 +1470,14 @@ void __fastcall TRenameDlg::PreviewGridDrawCell(TObject *Sender, System::LongInt
 	if(State.Contains(gdFocused)) cv->DrawFocusRect(Rect);
 }
 //---------------------------------------------------------------------------
-//ƒvƒŒƒrƒ…[‚Å‚ÌƒL[‘€ì
+//ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã§ã®ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::PreviewGridKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
 	TStringGrid *gp = (TStringGrid*)Sender;
 
 	switch (idx_of_word_i("Shift+Ctrl+DOWN|Shift+Ctrl+UP", get_KeyStr(Key, Shift))) {
-	case 0:	//€–Ú‚ğ‰º‚ÉˆÚ“®
+	case 0:	//é …ç›®ã‚’ä¸‹ã«ç§»å‹•
 		if (AutoPrvCheckBox->Checked) {
 			int idx = down_StrListItem(ItemList, gp->Row);
 			UpdateNewNameList();
@@ -1486,7 +1486,7 @@ void __fastcall TRenameDlg::PreviewGridKeyDown(TObject *Sender, WORD &Key, TShif
 		else beep_Warn();
 		Key = 0;
 		break;
-	case 1:	//€–Ú‚ğã‚ÉˆÚ“®
+	case 1:	//é …ç›®ã‚’ä¸Šã«ç§»å‹•
 		if (AutoPrvCheckBox->Checked) {
 			int idx = up_StrListItem(ItemList, gp->Row);
 			UpdateNewNameList();
@@ -1499,7 +1499,7 @@ void __fastcall TRenameDlg::PreviewGridKeyDown(TObject *Sender, WORD &Key, TShif
 }
 
 //---------------------------------------------------------------------------
-//‹Ö~•¶š’uŠ·ˆê——‚Ì•`‰æ
+//ç¦æ­¢æ–‡å­—ç½®æ›ä¸€è¦§ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::CnvCharListBoxDrawItem(TWinControl *Control, int Index,
 		TRect &Rect, TOwnerDrawState State)
@@ -1521,7 +1521,7 @@ void __fastcall TRenameDlg::CnvCharListBoxDrawItem(TWinControl *Control, int Ind
 	tmp.sprintf(_T("[%s]"), lp->Items->Names[Index].c_str());
 	SpaceTextOut(tmp, cv, x, y, cv->Font->Color, true);
 	SetHighlight(cv, State.Contains(odSelected));
-	out_TextEx(cv, x, y, " ¨ ");
+	out_TextEx(cv, x, y, " â†’ ");
 	tmp.sprintf(_T("[%s]"), lp->Items->ValueFromIndex[Index].c_str());
 	SpaceTextOut(tmp, cv, x, y, cv->Font->Color, true);
 
@@ -1549,7 +1549,7 @@ void __fastcall TRenameDlg::CnvChSEditChange(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒ†[ƒU’è‹`•¶š’uŠ·‚Ì’Ç‰Á
+//ãƒ¦ãƒ¼ã‚¶å®šç¾©æ–‡å­—ç½®æ›ã®è¿½åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::AddCnvChActionExecute(TObject *Sender)
 {
@@ -1567,7 +1567,7 @@ void __fastcall TRenameDlg::AddCnvChActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒ†[ƒU’è‹`•¶š’uŠ·‚Ì•ÏX
+//ãƒ¦ãƒ¼ã‚¶å®šç¾©æ–‡å­—ç½®æ›ã®å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::ChgCnvChActionExecute(TObject *Sender)
 {
@@ -1595,7 +1595,7 @@ void __fastcall TRenameDlg::ChgCnvChActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒ†[ƒU’è‹`•¶š’uŠ·‚Ìíœ
+//ãƒ¦ãƒ¼ã‚¶å®šç¾©æ–‡å­—ç½®æ›ã®å‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::DelCnvChActionExecute(TObject *Sender)
 {
@@ -1608,7 +1608,7 @@ void __fastcall TRenameDlg::DelCnvChActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ŠÖ˜A‰ü–¼İ’è
+//é–¢é€£æ”¹åè¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::AssRenListBoxDrawItem(TWinControl *Control, int Index,
 	TRect &Rect, TOwnerDrawState State)
@@ -1629,7 +1629,7 @@ void __fastcall TRenameDlg::AssRenListBoxDrawItem(TWinControl *Control, int Inde
 	cv->FillRect(Rect);
 	cv->TextOut(xp, yp, itm_lst[0]);	
 	xp += w_x + SCALED_THIS(16);
-	if (ContainsStr(itm_lst[2], "P")) out_Text(cv, xp, yp, _T("•”•ªˆê’v"));
+	if (ContainsStr(itm_lst[2], "P")) out_Text(cv, xp, yp, _T("éƒ¨åˆ†ä¸€è‡´"));
 }
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::AssRenListBoxClick(TObject *Sender)
@@ -1662,7 +1662,7 @@ void __fastcall TRenameDlg::AssRenListBoxKeyDown(TObject *Sender, WORD &Key, TSh
 }
 
 //---------------------------------------------------------------------------
-//“o˜^€–Ú•¶š—ñ‚ğì¬
+//ç™»éŒ²é …ç›®æ–‡å­—åˆ—ã‚’ä½œæˆ
 //---------------------------------------------------------------------------
 UnicodeString __fastcall TRenameDlg::MakeAssRenItem(int idx)
 {
@@ -1674,7 +1674,7 @@ UnicodeString __fastcall TRenameDlg::MakeAssRenItem(int idx)
 	return ret_str;
 }
 //---------------------------------------------------------------------------
-//ŠÖ˜A‰ü–¼İ’è‚Ì’Ç‰Á
+//é–¢é€£æ”¹åè¨­å®šã®è¿½åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::AddAssRenActionExecute(TObject *Sender)
 {
@@ -1689,7 +1689,7 @@ void __fastcall TRenameDlg::AddAssRenActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = !AssExtEdit->Text.IsEmpty();
 }
 //---------------------------------------------------------------------------
-//ŠÖ˜A‰ü–¼İ’è‚Ì•ÏX
+//é–¢é€£æ”¹åè¨­å®šã®å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::ChgAssRenActionExecute(TObject *Sender)
 {
@@ -1703,7 +1703,7 @@ void __fastcall TRenameDlg::ChgAssRenActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = (AssRenListBox->ItemIndex!=-1 && !AssExtEdit->Text.IsEmpty());
 }
 //---------------------------------------------------------------------------
-//ŠÖ˜A‰ü–¼İ’è‚Ìíœ
+//é–¢é€£æ”¹åè¨­å®šã®å‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::DelAssRenActionExecute(TObject *Sender)
 {
@@ -1718,7 +1718,7 @@ void __fastcall TRenameDlg::DelAssRenActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//1”Ô–Ú‚Ìƒtƒ@ƒCƒ‹–¼‚ğ“ü—Í
+//1ç•ªç›®ã®ãƒ•ã‚¡ã‚¤ãƒ«åã‚’å…¥åŠ›
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::Inp1stNameActionExecute(TObject *Sender)
 {
@@ -1749,7 +1749,7 @@ void __fastcall TRenameDlg::IniSttComboBoxClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒvƒŒƒrƒ…[
+//ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::PreviewBtnClick(TObject *Sender)
 {
@@ -1762,7 +1762,7 @@ void __fastcall TRenameDlg::AutoPrvCheckBoxClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//Šm’è
+//ç¢ºå®š
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::RenOkActionExecute(TObject *Sender)
 {
@@ -1779,17 +1779,17 @@ void __fastcall TRenameDlg::RenOkActionExecute(TObject *Sender)
 	NamePageControl->Enabled = false;
 	CommonPanel->Enabled	 = false;
 
-	//ŠÖ˜A‰ü–¼İ’è‚ğXV
+	//é–¢é€£æ”¹åè¨­å®šã‚’æ›´æ–°
 	AssRenList->Assign(AssRenListBox->Items);
 
 	try {
 		//------------------------------------------
-		//–¼‘O‚Ì•ÏX
+		//åå‰ã®å¤‰æ›´
 		//------------------------------------------
 		UnicodeString msg;
 		if (ChangeCount>0) {
-			//ŠÖ˜A‰ü–¼ƒ`ƒFƒbƒN
-			SttPrgBar->Begin(_T("ŠÖ˜A‰ü–¼ƒ`ƒFƒbƒN..."));
+			//é–¢é€£æ”¹åãƒã‚§ãƒƒã‚¯
+			SttPrgBar->Begin(_T("é–¢é€£æ”¹åãƒã‚§ãƒƒã‚¯..."));
 			int i = 0;
 			while (i<ItemList->Count) {
 				SttPrgBar->SetPosI(i, ItemList->Count);
@@ -1800,7 +1800,7 @@ void __fastcall TRenameDlg::RenOkActionExecute(TObject *Sender)
 				UnicodeString fnam0  = ItemList->Strings[i];
 				UnicodeString nnam0  = NewNameList->Strings[i];
 
-				//ŠÖ˜A‰ü–¼‚Ìƒ`ƒFƒbƒN
+				//é–¢é€£æ”¹åã®ãƒã‚§ãƒƒã‚¯
 				if (!is_dir && !SameText(fnam0, nnam0) && AssRenList->Count>0) {
 					UnicodeString fext0 = get_extension(fnam0);
 					UnicodeString pnam	= ExtractFilePath(fnam0);
@@ -1812,7 +1812,7 @@ void __fastcall TRenameDlg::RenOkActionExecute(TObject *Sender)
 						UnicodeString fnam1 = lst->Strings[j];
 						if (SameStr(fnam1, fnam0) || ItemList->IndexOf(fnam1)!=-1) continue;
 
-						//ŠÖ˜AŠg’£q‚©?
+						//é–¢é€£æ‹¡å¼µå­ã‹?
 						UnicodeString fext1 = get_extension(fnam1);
 						bool found = false;
 						UnicodeString opt;
@@ -1828,18 +1828,18 @@ void __fastcall TRenameDlg::RenOkActionExecute(TObject *Sender)
 						UnicodeString nnam1;
 						UnicodeString bnam0 = get_base_name(fnam0);
 						UnicodeString bnam1 = get_base_name(fnam1);
-						//•”•ªˆê’v
+						//éƒ¨åˆ†ä¸€è‡´
 						if (ContainsStr(opt, "P")) {
 							nnam1 = ExtractFilePath(nnam0) + ReplaceText(bnam1, bnam0, get_base_name(nnam0)) + fext1;
 						}
-						//Š®‘Sˆê’v
+						//å®Œå…¨ä¸€è‡´
 						else {
-							if (!SameText(bnam0, bnam1)) continue;	//•”•ªˆê’vƒtƒ@ƒCƒ‹‚ÍƒXƒLƒbƒv
+							if (!SameText(bnam0, bnam1)) continue;	//éƒ¨åˆ†ä¸€è‡´ãƒ•ã‚¡ã‚¤ãƒ«ã¯ã‚¹ã‚­ãƒƒãƒ—
 							nnam1 = ChangeFileExt(nnam0, fext1);
 						}
-						if (SameStr(fnam1, nnam1)) continue;		//‰ü–¼–³‚µ‚È‚çƒXƒLƒbƒv
+						if (SameStr(fnam1, nnam1)) continue;		//æ”¹åç„¡ã—ãªã‚‰ã‚¹ã‚­ãƒƒãƒ—
 
-						//“¯‰ü–¼‘ÎÛ‚ğ’Ç‰Á
+						//åŒæ™‚æ”¹åå¯¾è±¡ã‚’è¿½åŠ 
 						if (found) {
 							i++;
 							ItemList->Insert(i, fnam1);
@@ -1851,15 +1851,15 @@ void __fastcall TRenameDlg::RenOkActionExecute(TObject *Sender)
 			}
 			SttPrgBar->End();
 
-			//‰ü–¼’†‚Ìd•¡ƒ`ƒFƒbƒN
+			//æ”¹åä¸­ã®é‡è¤‡ãƒã‚§ãƒƒã‚¯
 			bool duplicated = false;
 			if (IsMulti) {
-				SttPrgBar->Begin(_T("d•¡ƒ`ƒFƒbƒN..."));
+				SttPrgBar->Begin(_T("é‡è¤‡ãƒã‚§ãƒƒã‚¯..."));
 				for (int i=0; !duplicated && i<ItemList->Count; i++) {
 					SttPrgBar->SetPosI(i, ItemList->Count);
 					Application->ProcessMessages();
 					if (SameStr(ItemList->Strings[i], NewNameList->Strings[i])) continue;
-					//‰ü–¼’†‚Ìd•¡ƒ`ƒFƒbƒN
+					//æ”¹åä¸­ã®é‡è¤‡ãƒã‚§ãƒƒã‚¯
 					for (int j=0; !duplicated && j<ItemList->Count; j++) {
 						if (i==j) continue;
 						if (SameText(ItemList->Strings[j], NewNameList->Strings[i])) duplicated = true;
@@ -1868,26 +1868,26 @@ void __fastcall TRenameDlg::RenOkActionExecute(TObject *Sender)
 				SttPrgBar->End();
 			}
 
-			//‰ü–¼ŠJn
+			//æ”¹åé–‹å§‹
 			int ok_cnt = 0, er_cnt = 0, sk_cnt = 0;
-			UnicodeString ModeStr = get_word_i_idx("|˜A”Ô|’uŠ·|MP3", NamePageControl->ActivePageIndex) + "‰ü–¼";
-			StartLog(msg.sprintf(_T("%sŠJn  %s"), ModeStr.c_str(), CurPathName.c_str()));
+			UnicodeString ModeStr = get_word_i_idx("|é€£ç•ª|ç½®æ›|MP3", NamePageControl->ActivePageIndex) + "æ”¹å";
+			StartLog(msg.sprintf(_T("%sé–‹å§‹  %s"), ModeStr.c_str(), CurPathName.c_str()));
 			Application->ProcessMessages();
 
-			//Œ³‚Ì–¼‘Oˆê——‚ğæ“¾
+			//å…ƒã®åå‰ä¸€è¦§ã‚’å–å¾—
 			std::unique_ptr<TStringList> org_lst(new TStringList());
 			org_lst->Assign(ItemList);
 
-			//d•¡‰ñ”ğ‚Ì‚½‚ß‚Ì’†ŠÔ‰ü–¼
+			//é‡è¤‡å›é¿ã®ãŸã‚ã®ä¸­é–“æ”¹å
 			if (duplicated) {
-				SttPrgBar->Begin(_T("’†ŠÔˆ—..."));
-				//ˆêƒtƒ@ƒCƒ‹‚ªc‚Á‚Ä‚¢‚È‚¢‚©ƒ`ƒFƒbƒN
+				SttPrgBar->Begin(_T("ä¸­é–“å‡¦ç†..."));
+				//ä¸€æ™‚ãƒ•ã‚¡ã‚¤ãƒ«ãŒæ®‹ã£ã¦ã„ãªã„ã‹ãƒã‚§ãƒƒã‚¯
 				std::unique_ptr<TStringList> t_lst(new TStringList());
 				get_files(ExtractFilePath(ItemList->Strings[0]), "$~NF*.~TMP", t_lst.get());
 				if (t_lst->Count>0 &&
-					msgbox_Sure(_T("ˆêƒtƒ@ƒCƒ‹($~NF*.~TMP)‚ªc‚Á‚Ä‚¢‚Ü‚·‚ªAíœ‚µ‚Ä‚à‚æ‚¢‚Å‚·‚©?")))
+					msgbox_Sure(_T("ä¸€æ™‚ãƒ•ã‚¡ã‚¤ãƒ«($~NF*.~TMP)ãŒæ®‹ã£ã¦ã„ã¾ã™ãŒã€å‰Šé™¤ã—ã¦ã‚‚ã‚ˆã„ã§ã™ã‹?")))
 						for (int i=0; i<t_lst->Count; i++) DeleteFile(t_lst->Strings[i]);
-				//’†ŠÔ‰ü–¼
+				//ä¸­é–“æ”¹å
 				for (int i=0; i<ItemList->Count; i++) {
 					SttPrgBar->SetPosI(i, ItemList->Count);
 					Application->ProcessMessages();
@@ -1896,13 +1896,13 @@ void __fastcall TRenameDlg::RenOkActionExecute(TObject *Sender)
 					if (move_FileT(ItemList->Strings[i], tmp_name))
 						ItemList->Strings[i] = tmp_name;
 					else
-						TextAbort(_T("’†ŠÔˆ—‚É¸”sA’†’f‚µ‚Ü‚µ‚½B"));
+						TextAbort(_T("ä¸­é–“å‡¦ç†ã«å¤±æ•—ã€ä¸­æ–­ã—ã¾ã—ãŸã€‚"));
 				}
 				SttPrgBar->End();
 			}
 
-			//‰ü–¼ˆ—
-			SttPrgBar->Begin(_T("–¼‘O•ÏX..."));
+			//æ”¹åå‡¦ç†
+			SttPrgBar->Begin(_T("åå‰å¤‰æ›´..."));
 			bool checked = OppPath.IsEmpty();
 			std::unique_ptr<TStringList> r_lst(new TStringList());
 			for (int i=0; i<ItemList->Count; i++) {
@@ -1913,12 +1913,12 @@ void __fastcall TRenameDlg::RenOkActionExecute(TObject *Sender)
 				UnicodeString org_name = org_lst->Strings[i];
 				UnicodeString new_name = NewNameList->Strings[i];
 				msg = make_LogHdr(_T("RENAME"), org_name);
-				//ƒXƒLƒbƒv
+				//ã‚¹ã‚­ãƒƒãƒ—
 				if (SameStr(f_name, new_name)) {
 					if (LogHideSkip) msg = EmptyStr; else msg[1] = 'S';
 					sk_cnt++;
 				}
-				//‰ü–¼
+				//æ”¹å
 				else {
 					msg.cat_sprintf(_T(" ---> %s"), ExtractFileName(new_name).c_str());
 					for (;;) {
@@ -1928,17 +1928,17 @@ void __fastcall TRenameDlg::RenOkActionExecute(TObject *Sender)
 							r_lst->Add(log_str);
 
 							UnicodeString org_fext = get_extension(org_name);
-							//ƒRƒ}ƒ“ƒhƒtƒ@ƒCƒ‹‚Ì‰ü–¼‚ğ“o˜^
+							//ã‚³ãƒãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã®æ”¹åã‚’ç™»éŒ²
 							if (test_NbtExt(org_fext) && test_NbtExt(get_extension(new_name))) {
 								RenCmdFileList->Add(log_str);
 							}
-							//ƒA[ƒJƒCƒuƒtƒ@ƒCƒ‹‚Ì‰ü–¼‚ğ“o˜^
+							//ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«ã®æ”¹åã‚’ç™»éŒ²
 							if (test_ArcExt(org_fext) && (file_GetAttr(new_name) & faDirectory)==0) {
 								RenArcFileList->Add(log_str);
 							}
-							//ƒtƒHƒ‹ƒ_ƒAƒCƒRƒ“‚Ì‰ü–¼
+							//ãƒ•ã‚©ãƒ«ãƒ€ã‚¢ã‚¤ã‚³ãƒ³ã®æ”¹å
 							rename_FolderIcon(org_name, new_name);
-							//”½‘ÎƒpƒX‚É”½‰f‚³‚ê‚é‚©‚ğƒ`ƒFƒbƒN
+							//åå¯¾ãƒ‘ã‚¹ã«åæ˜ ã•ã‚Œã‚‹ã‹ã‚’ãƒã‚§ãƒƒã‚¯
 							if (!checked && (file_GetAttr(new_name) & faDirectory)) {
 								UnicodeString org_pnam = IncludeTrailingPathDelimiter(org_lst->Strings[i]);
 								if (StartsText(org_pnam, OppPath)) {
@@ -1950,10 +1950,10 @@ void __fastcall TRenameDlg::RenOkActionExecute(TObject *Sender)
 							break;
 						}
 
-						//¸”sAÄs
+						//å¤±æ•—ã€å†è©¦è¡Œ
 						UnicodeString err_msg  = get_LogErrMsg(EmptyStr, false, f_name);
-						UnicodeString caption = "‰ü–¼‚É¸”s‚µ‚Ü‚µ‚½\r\n" + err_msg;
-						if (msgbox_Retry(caption, "ƒGƒ‰[")==IDRETRY) continue;
+						UnicodeString caption = "æ”¹åã«å¤±æ•—ã—ã¾ã—ãŸ\r\n" + err_msg;
+						if (msgbox_Retry(caption, "ã‚¨ãƒ©ãƒ¼")==IDRETRY) continue;
 						set_LogErrMsg(msg, err_msg);
 						er_cnt++;
 						break;
@@ -1964,9 +1964,9 @@ void __fastcall TRenameDlg::RenOkActionExecute(TObject *Sender)
 				Application->ProcessMessages();
 			}
 
-			//‰ü–¼ƒƒO‚Ì•Û‘¶
+			//æ”¹åãƒ­ã‚°ã®ä¿å­˜
 			if (!NoRenLogCheckBox->Checked && !save_RenLog(r_lst.get()))
-				throw EAbort(LoadUsrMsg(USTR_FaildSave, _T("‰ü–¼ƒƒO")));
+				throw EAbort(LoadUsrMsg(USTR_FaildSave, _T("æ”¹åãƒ­ã‚°")));
 
 			SttPrgBar->End();
 
@@ -1983,17 +1983,17 @@ void __fastcall TRenameDlg::RenOkActionExecute(TObject *Sender)
 				add_ComboBox_history(Mp3FmtComboBox);
 			}
 
-			AddLog(ModeStr + "I—¹" + get_ResCntStr(ok_cnt, er_cnt, sk_cnt), true);
-			if (er_cnt>0) throw EAbort(msg.sprintf(_T("%uŒÂ‚Ìƒtƒ@ƒCƒ‹‚Å‰ü–¼‚É¸”s‚µ‚Ü‚µ‚½B"), er_cnt));
+			AddLog(ModeStr + "çµ‚äº†" + get_ResCntStr(ok_cnt, er_cnt, sk_cnt), true);
+			if (er_cnt>0) throw EAbort(msg.sprintf(_T("%uå€‹ã®ãƒ•ã‚¡ã‚¤ãƒ«ã§æ”¹åã«å¤±æ•—ã—ã¾ã—ãŸã€‚"), er_cnt));
 		}
 
 		//------------------------------------------
-		//ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚Ì•ÏX
+		//ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã®å¤‰æ›´
 		//------------------------------------------
 		if (TimeChanged) {
 			TDateTime dt;
 			if (!ToDateTime(TimeMaskEdit->Text, &dt)) UserAbort(USTR_IllegalDate);
-			SttPrgBar->Begin(_T("ƒ^ƒCƒ€•ÏX..."));
+			SttPrgBar->Begin(_T("ã‚¿ã‚¤ãƒ å¤‰æ›´..."));
 			int er_cnt = 0;
 			for (int i=0; i<ItemList->Count; i++) {
 				SttPrgBar->SetPosI(i, ItemList->Count);
@@ -2003,10 +2003,10 @@ void __fastcall TRenameDlg::RenOkActionExecute(TObject *Sender)
 					UnicodeString f_name = ItemList->Strings[i];
 					if (set_file_age(f_name, dt, ForceDel)) break;
 
-					//¸”sAÄs
+					//å¤±æ•—ã€å†è©¦è¡Œ
 					UnicodeString err_msg  = get_LogErrMsg(EmptyStr, false, f_name);
-					UnicodeString caption = "ƒ^ƒCƒ€ƒXƒ^ƒ“ƒvİ’è‚É¸”s‚µ‚Ü‚µ‚½\r\n" + err_msg;
-					if (msgbox_Retry(caption, "ƒGƒ‰[")==IDRETRY) continue;
+					UnicodeString caption = "ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—è¨­å®šã«å¤±æ•—ã—ã¾ã—ãŸ\r\n" + err_msg;
+					if (msgbox_Retry(caption, "ã‚¨ãƒ©ãƒ¼")==IDRETRY) continue;
 
 					msg = make_LogHdr(_T("TIME"), ItemList->Strings[i]);
 					set_LogErrMsg(msg, err_msg);
@@ -2016,15 +2016,15 @@ void __fastcall TRenameDlg::RenOkActionExecute(TObject *Sender)
 				}
 			}
 			SttPrgBar->End();
-			if (er_cnt>0) throw EAbort(msg.sprintf(_T("%uŒÂ‚Ìƒtƒ@ƒCƒ‹‚Åƒ^ƒCƒ€ƒXƒ^ƒ“ƒv•ÏX‚É¸”s‚µ‚Ü‚µ‚½B"), er_cnt));
+			if (er_cnt>0) throw EAbort(msg.sprintf(_T("%uå€‹ã®ãƒ•ã‚¡ã‚¤ãƒ«ã§ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—å¤‰æ›´ã«å¤±æ•—ã—ã¾ã—ãŸã€‚"), er_cnt));
 		}
 
 		//------------------------------------------
-		//‘®«‚Ì•ÏX
+		//å±æ€§ã®å¤‰æ›´
 		//------------------------------------------
 		if (AttrChanged) {
 			int er_cnt = 0;
-			SttPrgBar->Begin(_T("‘®«•ÏX..."));
+			SttPrgBar->Begin(_T("å±æ€§å¤‰æ›´..."));
 			for (int i=0; i<ItemList->Count; i++) {
 				SttPrgBar->SetPosI(i, ItemList->Count);
 				Application->ProcessMessages();
@@ -2046,16 +2046,16 @@ void __fastcall TRenameDlg::RenOkActionExecute(TObject *Sender)
 					}
 					bool is_err = !file_SetAttr(f_name, attr);
 
-					//ˆ³k
+					//åœ§ç¸®
 					if (!is_err && CmpCheckBox->Tag==1 && ((attr & faCompressed) != CmpCheckBox->Checked))
 						is_err = !set_CompressAttr(f_name, CmpCheckBox->Checked);
 
 					if (!is_err) break;
 
-					//¸”sAÄs
+					//å¤±æ•—ã€å†è©¦è¡Œ
 					UnicodeString err_msg  = get_LogErrMsg(EmptyStr, false, f_name);
-					UnicodeString caption = "‘®«İ’è‚É¸”s‚µ‚Ü‚µ‚½\r\n" + err_msg;
-					if (msgbox_Retry(caption, "ƒGƒ‰[")==IDRETRY) continue;
+					UnicodeString caption = "å±æ€§è¨­å®šã«å¤±æ•—ã—ã¾ã—ãŸ\r\n" + err_msg;
+					if (msgbox_Retry(caption, "ã‚¨ãƒ©ãƒ¼")==IDRETRY) continue;
 
 					msg = make_LogHdr(_T("ATTR"), f_name);
 					set_LogErrMsg(msg, err_msg);
@@ -2065,7 +2065,7 @@ void __fastcall TRenameDlg::RenOkActionExecute(TObject *Sender)
 				}
 			}
 			SttPrgBar->End();
-			if (er_cnt>0) throw EAbort(msg.sprintf(_T("%uŒÂ‚Ìƒtƒ@ƒCƒ‹‚Å‘®«‚Ì•ÏX‚É¸”s‚µ‚Ü‚µ‚½B"), er_cnt));
+			if (er_cnt>0) throw EAbort(msg.sprintf(_T("%uå€‹ã®ãƒ•ã‚¡ã‚¤ãƒ«ã§å±æ€§ã®å¤‰æ›´ã«å¤±æ•—ã—ã¾ã—ãŸã€‚"), er_cnt));
 		}
 	}
 	catch (EAbort &e) {
@@ -2101,7 +2101,7 @@ void __fastcall TRenameDlg::RenOkActionUpdate(TObject *Sender)
 		ap->Enabled = !ExistErr && !time_ng;
 	}
 
-	//¦OnExit ‚Å‚Í ComboBox ‚Ì’¼‘O‚Ìó‘Ô‚ğæ“¾‚Å‚«‚È‚¢‚æ‚¤‚È‚Ì‚Å
+	//â€»OnExit ã§ã¯ ComboBox ã®ç›´å‰ã®çŠ¶æ…‹ã‚’å–å¾—ã§ããªã„ã‚ˆã†ãªã®ã§
 	if (Mp3FmtComboBox->Focused()) {
 		LastComboBox  = Mp3FmtComboBox;
 		LastSelStart  = Mp3FmtComboBox->SelStart;
@@ -2124,11 +2124,11 @@ void __fastcall TRenameDlg::RenListComboBoxChange(TObject *Sender)
 	if (!LoadListFile()) del_ComboBox_history(RenListComboBox);
 }
 //---------------------------------------------------------------------------
-//ƒŠƒXƒgƒtƒ@ƒCƒ‹‚Ìw’è
+//ãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®æŒ‡å®š
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::RefListBtnClick(TObject *Sender)
 {
-	UserModule->PrepareOpenDlg(_T("ƒŠƒXƒgƒtƒ@ƒCƒ‹‚Ìw’è"), F_FILTER_TXT, NULL);
+	UserModule->PrepareOpenDlg(_T("ãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®æŒ‡å®š"), F_FILTER_TXT, NULL);
 	UnicodeString fnam;
 	if (UserModule->OpenDlgToStr(fnam, true)) {
 		RenListFile = to_absolute_name(fnam);
@@ -2137,12 +2137,12 @@ void __fastcall TRenameDlg::RefListBtnClick(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//ƒŠƒXƒgƒtƒ@ƒCƒ‹‚Ì•ÒW
+//ãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®ç·¨é›†
 //---------------------------------------------------------------------------
 void __fastcall TRenameDlg::EditListActionExecute(TObject *Sender)
 {
 	if (open_by_TextEditor(RenListFile)) {
-		if (msgbox_Sure(_T("ƒŠƒXƒgƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚İ‚Ü‚·‚©?"))) LoadListFile();
+		if (msgbox_Sure(_T("ãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã¿ã¾ã™ã‹?"))) LoadListFile();
 	}
 	else msgbox_ERR(GlobalErrMsg);
 }

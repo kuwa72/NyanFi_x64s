@@ -1,6 +1,6 @@
 /**
  * @file BitmapFrm.h
- * @brief ƒrƒbƒgƒ}ƒbƒvƒrƒ…[
+ * @brief ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ãƒ“ãƒ¥ãƒ¼
  */
 //---------------------------------------------------------------------------
 #ifndef BitmapFrmH
@@ -19,11 +19,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒrƒbƒgƒ}ƒbƒvƒrƒ…[
+ * @brief ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ãƒ“ãƒ¥ãƒ¼
  */
 class TBitmapForm : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *SetEndAdrAction;
 	TAction *SetNextAdrAction;
 	TAction *SetPreAdrAction;
@@ -75,14 +75,14 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall SetEndAdrActionExecute(TObject *Sender);
 	void __fastcall SetEndAdrActionUpdate(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
-	TColor BitPallet[256];		//ƒrƒbƒgƒ}ƒbƒvƒrƒ…[—pƒpƒŒƒbƒg
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	TColor BitPallet[256];		//ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ãƒ“ãƒ¥ãƒ¼ç”¨ãƒ‘ãƒ¬ãƒƒãƒˆ
 
 	void __fastcall SetMapWidth(int w);
 	__int64 __fastcall GetMapAddr(int X, int Y);
 
-public:		// ƒ†[ƒU[éŒ¾
-	int MapWidth;				//!< ƒ}ƒbƒv‚Ì•
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	int MapWidth;				//!< ãƒãƒƒãƒ—ã®å¹…
 
 	__fastcall TBitmapForm(TComponent* Owner);
 };

@@ -1,6 +1,6 @@
 /**
  * @file SubView.h
- * @brief ƒTƒuƒCƒ[ƒWƒrƒ…[ƒA
+ * @brief ã‚µãƒ–ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢
  */
 //---------------------------------------------------------------------------
 #ifndef SubViewH
@@ -18,11 +18,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒTƒuƒCƒ[ƒWƒrƒ…[ƒA
+ * @brief ã‚µãƒ–ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢
  */
 class TSubViewer : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *FlipHorzAction;
 	TAction *FlipVertAction;
 	TAction *RotateLeftAction;
@@ -55,13 +55,13 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall RotateActionExecute(TObject *Sender);
 	void __fastcall RotateActionUpdate(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	bool hasBitmap;
 	UnicodeString TitleInf, ZoomInf;
 
 	void __fastcall WmSysCommand(TWMSysCommand & SysCom)
 	{
-		if (SysCom.CmdType==SC_CLOSE) {	//[~]ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½
+		if (SysCom.CmdType==SC_CLOSE) {	//[Ã—]ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸ
 			Close();
 			if (ScrMode==SCMD_IVIEW) ShowSubViewer = false;
 		}
@@ -72,19 +72,19 @@ private:	// ƒ†[ƒU[éŒ¾
 
 	double __fastcall GetZoomRatio();
 
-public:		// ƒ†[ƒU[éŒ¾
-	UnicodeString FileName;		//!< •\¦ƒtƒ@ƒCƒ‹–¼
-	bool formFileInf;			//!< ƒtƒ@ƒCƒ‹î•ñƒ_ƒCƒAƒƒO‚©‚ç•\¦
-	bool isClip;				//!< ƒNƒŠƒbƒvƒ{[ƒh
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	UnicodeString FileName;		//!< è¡¨ç¤ºãƒ•ã‚¡ã‚¤ãƒ«å
+	bool formFileInf;			//!< ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‹ã‚‰è¡¨ç¤º
+	bool isClip;				//!< ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰
 
 	bool FImgLocked;
 	void __fastcall SetImgLocked(bool Value);
-	/** @brief •\¦‚ÌƒƒbƒN */
+	/** @brief è¡¨ç¤ºã®ãƒ­ãƒƒã‚¯ */
 	__property bool ImgLocked = {read = FImgLocked,  write = SetImgLocked};
 
-	void __fastcall DrawImage(UnicodeString fnam = EmptyStr);	//!< ‰æ‘œ‚Ì•`‰æ
-	void __fastcall RotateImage(int rn);						//!< ‰ñ“]
-	void __fastcall LockImage();								//!< ƒƒbƒN
+	void __fastcall DrawImage(UnicodeString fnam = EmptyStr);	//!< ç”»åƒã®æç”»
+	void __fastcall RotateImage(int rn);						//!< å›è»¢
+	void __fastcall LockImage();								//!< ãƒ­ãƒƒã‚¯
 
 	__fastcall TSubViewer(TComponent* Owner);
 

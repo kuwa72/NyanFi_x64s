@@ -1,6 +1,6 @@
 /**
  * @file BtnDlg.h
- * @brief ƒc[ƒ‹ƒo[‚Ìİ’è
+ * @brief ãƒ„ãƒ¼ãƒ«ãƒãƒ¼ã®è¨­å®š
  */
 //---------------------------------------------------------------------------
 #ifndef BtnDlgH
@@ -18,11 +18,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒc[ƒ‹ƒo[‚Ìİ’èƒ_ƒCƒAƒƒO
+ * @brief ãƒ„ãƒ¼ãƒ«ãƒãƒ¼ã®è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TToolBtnDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *AddBtnAction;
 	TAction *ChgBtnAction;
 	TAction *EditFileAction;
@@ -69,15 +69,15 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall ChgBtnActionUpdate(TObject *Sender);
 
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	void __fastcall WmDropped(TMessage &msg);
 	void __fastcall WmNyanFiFlIcon(TMessage &msg) { BtnListBox->Invalidate(); }
 
 	UnicodeString __fastcall MakeCsvItem();
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	TStringList *ButtonList;
-	int IniIndex;				//!< ŠJ‚¢‚½‚Æ‚«‚Ì€–Ú‘I‘ğ‚ğw’è
+	int IniIndex;				//!< é–‹ã„ãŸã¨ãã®é …ç›®é¸æŠã‚’æŒ‡å®š
 
 	__fastcall TToolBtnDlg(TComponent* Owner);
 

@@ -1,6 +1,6 @@
 /**
  * @file MemoFrm.h
- * @brief ƒƒ‚ƒ{ƒbƒNƒX
+ * @brief ãƒ¡ãƒ¢ãƒœãƒƒã‚¯ã‚¹
  */
 //---------------------------------------------------------------------------
 #ifndef MemoFrmH
@@ -20,12 +20,12 @@
 
 //-----------------------------------------------------
 /**
- * @brief ƒƒ‚ƒ{ƒbƒNƒX
- * @details Edit ƒRƒ}ƒ“ƒh‚Å—p‚¢‚ç‚ê‚éƒƒ‚ƒ{ƒbƒNƒX‚Å‚·B
+ * @brief ãƒ¡ãƒ¢ãƒœãƒƒã‚¯ã‚¹
+ * @details Edit ã‚³ãƒãƒ³ãƒ‰ã§ç”¨ã„ã‚‰ã‚Œã‚‹ãƒ¡ãƒ¢ãƒœãƒƒã‚¯ã‚¹ã§ã™ã€‚
  */
 class TMemoForm : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *DelLineAction;
 	TAction *PasteAction;
 	TAction *UndoAction;
@@ -77,8 +77,8 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall ColFgItemClick(TObject *Sender);
 	void __fastcall ColDefItemClick(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
-	bool OptVisible;		//ƒ{ƒ^ƒ“ƒpƒlƒ‹‚Ì•\¦ó‘Ô
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	bool OptVisible;		//ãƒœã‚¿ãƒ³ãƒ‘ãƒãƒ«ã®è¡¨ç¤ºçŠ¶æ…‹
 
 	void __fastcall WmMenuChar(TMessage &msg)
 	{
@@ -87,7 +87,7 @@ private:	// ƒ†[ƒU[éŒ¾
 
 	void __fastcall WmFormShowed(TMessage &msg);
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	TStringList *LinesBuff;
 
 	__fastcall TMemoForm(TComponent* Owner);

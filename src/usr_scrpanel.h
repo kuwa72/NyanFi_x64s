@@ -1,6 +1,6 @@
 /**
  * @file usr_scrpanel.h
- * @brief ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[Eƒpƒlƒ‹
+ * @brief ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ãƒ»ãƒ‘ãƒãƒ«
  */
 //---------------------------------------------------------------------------
 #ifndef UsrScrollPanelH
@@ -12,52 +12,52 @@
 #include "usr_scale.h"
 
 //---------------------------------------------------------------------------
-/** @name Flag ‚Ìİ’èƒrƒbƒg */
-#define USCRPNL_FLAG_FL		0x0001	//!< ƒtƒ@ƒCƒ‹ƒŠƒXƒg
-#define USCRPNL_FLAG_GL		0x0002	//!< ˆê——ƒŠƒXƒg
-#define USCRPNL_FLAG_TV		0x0004	//!< ƒeƒLƒXƒgƒrƒ…[ƒA
-#define USCRPNL_FLAG_P_WP	0x0020	//!< eƒpƒlƒ‹‚Ì WindowProc “ü‚ê‘Ö‚¦
-#define USCRPNL_FLAG_L_WP	0x0040	//!< ƒŠƒXƒgƒ{ƒbƒNƒX‚Ì WindowProc “ü‚ê‘Ö‚¦
-#define USCRPNL_FLAG_G_WP	0x0080	//!< ƒOƒŠƒbƒh‚Ì WindowProc “ü‚ê‘Ö‚¦
-#define USCRPNL_FLAG_HS		0x0100	//!< …•½ƒXƒNƒ[ƒ‹ƒo[•t‚«(ListBox or Grid)
+/** @name Flag ã®è¨­å®šãƒ“ãƒƒãƒˆ */
+#define USCRPNL_FLAG_FL		0x0001	//!< ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆ
+#define USCRPNL_FLAG_GL		0x0002	//!< ä¸€è¦§ãƒªã‚¹ãƒˆ
+#define USCRPNL_FLAG_TV		0x0004	//!< ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢
+#define USCRPNL_FLAG_P_WP	0x0020	//!< è¦ªãƒ‘ãƒãƒ«ã® WindowProc å…¥ã‚Œæ›¿ãˆ
+#define USCRPNL_FLAG_L_WP	0x0040	//!< ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã® WindowProc å…¥ã‚Œæ›¿ãˆ
+#define USCRPNL_FLAG_G_WP	0x0080	//!< ã‚°ãƒªãƒƒãƒ‰ã® WindowProc å…¥ã‚Œæ›¿ãˆ
+#define USCRPNL_FLAG_HS		0x0100	//!< æ°´å¹³ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ä»˜ã(ListBox or Grid)
 
 //---------------------------------------------------------------------------
-/** @name Tag ’l */
-#define USCRPNL_SCRTYPE_V	0	//!< ‚’¼ƒXƒNƒ[ƒ‹ƒo[
-#define USCRPNL_SCRTYPE_H	1	//!< …•½ƒXƒNƒ[ƒ‹ƒo[
+/** @name Tag å€¤ */
+#define USCRPNL_SCRTYPE_V	0	//!< å‚ç›´ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
+#define USCRPNL_SCRTYPE_H	1	//!< æ°´å¹³ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 
 //---------------------------------------------------------------------------
-/** @name ƒ†[ƒU’è‹`ƒƒbƒZ[ƒW */
-#define WM_NYANFI_USCROLL	(WM_APP + 500)	//!< ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚Ìƒmƒuˆ—
-#define WM_NYANFI_UPDKNOB	(WM_APP + 501)	//!< ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚ÌƒmƒuXV
+/** @name ãƒ¦ãƒ¼ã‚¶å®šç¾©ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ */
+#define WM_NYANFI_USCROLL	(WM_APP + 500)	//!< ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã®ãƒãƒ–å‡¦ç†
+#define WM_NYANFI_UPDKNOB	(WM_APP + 501)	//!< ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã®ãƒãƒ–æ›´æ–°
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[Eƒpƒlƒ‹
- * @details ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[‚ğ•\¦‚·‚é‚½‚ß‚Ìƒpƒlƒ‹‚Å‚·B@n
- * TListBoxATStringGridATScrollBar ‚Ì‚¢‚¸‚ê‚©‚ÉŠÖ˜A•t‚¯‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·B
+ * @brief ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ãƒ»ãƒ‘ãƒãƒ«
+ * @details ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã‚’è¡¨ç¤ºã™ã‚‹ãŸã‚ã®ãƒ‘ãƒãƒ«ã§ã™ã€‚@n
+ * TListBoxã€TStringGridã€TScrollBar ã®ã„ãšã‚Œã‹ã«é–¢é€£ä»˜ã‘ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚
  */
 class UsrScrollPanel
 {
 private:
-	TPanel     *ScrPanelV;			//!< ‚’¼ƒXƒNƒ[ƒ‹ƒpƒlƒ‹
-	TPaintBox  *ScrPaintBoxV;		//!< •`‰æ—Ìˆæ
+	TPanel     *ScrPanelV;			//!< å‚ç›´ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒ‘ãƒãƒ«
+	TPaintBox  *ScrPaintBoxV;		//!< æç”»é ˜åŸŸ
 
-	TPanel     *ScrPanelH;			//!< …•½ƒXƒNƒ[ƒ‹ƒpƒlƒ‹
-	TPaintBox  *ScrPaintBoxH;		//!< •`‰æ—Ìˆæ
+	TPanel     *ScrPanelH;			//!< æ°´å¹³ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒ‘ãƒãƒ«
+	TPaintBox  *ScrPaintBoxH;		//!< æç”»é ˜åŸŸ
 
-	TRect ScrKnobRectV;				//!< ƒmƒu‚Ì’·•ûŒ`(‚’¼)
-	TRect ScrKnobRectH;				//!< ƒmƒu‚Ì’·•ûŒ`(…•½)
-	int   ScrKnobMaxY;				//!< Å‘åƒmƒuYˆÊ’u
-	int   ScrKnobMaxX;				//!< Å‘åƒmƒuXˆÊ’u
+	TRect ScrKnobRectV;				//!< ãƒãƒ–ã®é•·æ–¹å½¢(å‚ç›´)
+	TRect ScrKnobRectH;				//!< ãƒãƒ–ã®é•·æ–¹å½¢(æ°´å¹³)
+	int   ScrKnobMaxY;				//!< æœ€å¤§ãƒãƒ–Yä½ç½®
+	int   ScrKnobMaxX;				//!< æœ€å¤§ãƒãƒ–Xä½ç½®
 
-	bool  ScrCatchKnob;				//!< ƒmƒu‚ğ‚Â‚©‚ñ‚Å‚¢‚é
+	bool  ScrCatchKnob;				//!< ãƒãƒ–ã‚’ã¤ã‹ã‚“ã§ã„ã‚‹
 	int	  ScrCatchTag;
 	int   ScrCatchYp;
 	int   ScrCatchXp;
 	int   ScrPage;
 
-	int   UsKnobWidth;				//!< ƒXƒP[ƒŠƒ“ƒO100\%‚Ìƒmƒu•
+	int   UsKnobWidth;				//!< ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°100\%æ™‚ã®ãƒãƒ–å¹…
 	int   LastPPI;
 
 	TWndMethod org_ParentPanelWndProc;
@@ -118,13 +118,13 @@ private:
 	void __fastcall ScrPaintBoxMouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
 
 public:
-	TPanel			*ParentPanel;		//!< eƒpƒlƒ‹
-	TListBox		*AssoListBox;		//!< ŠÖ˜AƒŠƒXƒgƒ{ƒbƒNƒX
-	TCheckListBox	*AssoChkListBox;	//!< ŠÖ˜Aƒ`ƒFƒbƒNƒŠƒXƒgƒ{ƒbƒNƒX
-	TStringGrid		*AssoStrGrid;		//!< ŠÖ˜AƒOƒŠƒbƒh
-	TScrollBar		*AssoScrollBar;		//!< ŠÖ˜AƒXƒNƒ[ƒ‹ƒo[
+	TPanel			*ParentPanel;		//!< è¦ªãƒ‘ãƒãƒ«
+	TListBox		*AssoListBox;		//!< é–¢é€£ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹
+	TCheckListBox	*AssoChkListBox;	//!< é–¢é€£ãƒã‚§ãƒƒã‚¯ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹
+	TStringGrid		*AssoStrGrid;		//!< é–¢é€£ã‚°ãƒªãƒƒãƒ‰
+	TScrollBar		*AssoScrollBar;		//!< é–¢é€£ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 
-	int Flag;							//!< İ’èƒtƒ‰ƒO
+	int Flag;							//!< è¨­å®šãƒ•ãƒ©ã‚°
 
 	int FKnobWidth;
 	void __fastcall SetKnobWidth(int Value)
@@ -133,23 +133,23 @@ public:
 		UsKnobWidth = UnscaledInt(Value, ParentPanel);
 		LastPPI     = ParentPanel->CurrentPPI;
 	}
-	/** ƒmƒu• */
+	/** ãƒãƒ–å¹… */
 	__property int KnobWidth = {read = FKnobWidth,  write = SetKnobWidth};
 
-	Graphics::TBitmap *KnobImgBuffV;	//!< ‚’¼ƒmƒu‰æ‘œ
-	Graphics::TBitmap *KnobImgBuffH;	//!< …•½ƒmƒu‰æ‘œ
+	Graphics::TBitmap *KnobImgBuffV;	//!< å‚ç›´ãƒãƒ–ç”»åƒ
+	Graphics::TBitmap *KnobImgBuffH;	//!< æ°´å¹³ãƒãƒ–ç”»åƒ
 
-	TColor Color;						//!< ”wŒiF
-	TColor KnobColor;					//!< ƒmƒuF
-	TColor KnobBdrColor;				//!< ƒmƒu—ÖŠsF
-	TColor KnobActColor;				//!< ƒhƒ‰ƒbƒO‚ÌƒmƒuF
-	TColor HitLineColor;				//!< ƒqƒbƒgˆÊ’uF
-	TColor SelLineColor;				//!< ‘I‘ğˆÊ’uF
-	int    PosLineAlpha;				//!< ˆÊ’u•\¦ƒAƒ‹ƒtƒ@
+	TColor Color;						//!< èƒŒæ™¯è‰²
+	TColor KnobColor;					//!< ãƒãƒ–è‰²
+	TColor KnobBdrColor;				//!< ãƒãƒ–è¼ªéƒ­è‰²
+	TColor KnobActColor;				//!< ãƒ‰ãƒ©ãƒƒã‚°æ™‚ã®ãƒãƒ–è‰²
+	TColor HitLineColor;				//!< ãƒ’ãƒƒãƒˆä½ç½®è‰²
+	TColor SelLineColor;				//!< é¸æŠä½ç½®è‰²
+	int    PosLineAlpha;				//!< ä½ç½®è¡¨ç¤ºã‚¢ãƒ«ãƒ•ã‚¡
 
-	bool ListCsrVisible;				//!< ƒŠƒXƒgƒ{ƒbƒNƒX‚ÌƒJ[ƒ\ƒ‹‚ğí‚É‰Â‹—Ìˆæ‚É
+	bool ListCsrVisible;				//!< ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®ã‚«ãƒ¼ã‚½ãƒ«ã‚’å¸¸ã«å¯è¦–é ˜åŸŸã«
 
-	TMouseEvent OnRButtonUp;			//!< ‰EƒNƒŠƒbƒNƒCƒxƒ“ƒg
+	TMouseEvent OnRButtonUp;			//!< å³ã‚¯ãƒªãƒƒã‚¯ã‚¤ãƒ™ãƒ³ãƒˆ
 
 	bool FVisible;
 	void __fastcall SetVisible(bool Value)
@@ -162,11 +162,11 @@ public:
 	}
 	__property bool Visible = {read = FVisible,  write = SetVisible};
 
-	bool VisibleV;						//!< ‚’¼ƒXƒNƒ[ƒ‹ƒo[‚Ì•\¦ó‘Ô
-	bool VisibleH;						//!< …•½ƒXƒNƒ[ƒ‹ƒo[‚Ì•\¦ó‘Ô
+	bool VisibleV;						//!< å‚ç›´ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã®è¡¨ç¤ºçŠ¶æ…‹
+	bool VisibleH;						//!< æ°´å¹³ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã®è¡¨ç¤ºçŠ¶æ…‹
 
-	TStringList *HitLines;				//!< ŒŸõŒ‹‰ÊˆÊ’uƒŠƒXƒg
-	TStringList *SelLines;				//!< ‘I‘ğ€–ÚˆÊ’uƒŠƒXƒg
+	TStringList *HitLines;				//!< æ¤œç´¢çµæœä½ç½®ãƒªã‚¹ãƒˆ
+	TStringList *SelLines;				//!< é¸æŠé …ç›®ä½ç½®ãƒªã‚¹ãƒˆ
 
 	UsrScrollPanel(TPanel *pp, TListBox *lp,      int flag);
 	UsrScrollPanel(TPanel *pp, TCheckListBox *lp, int flag);

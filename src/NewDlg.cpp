@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  V‹Kƒtƒ@ƒCƒ‹‚Ìì¬ƒ_ƒCƒAƒƒO										//
+//  æ–°è¦ãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆãƒ€ã‚¤ã‚¢ãƒ­ã‚°										//
 //----------------------------------------------------------------------//
 #include "Global.h"
 #include "UserFunc.h"
@@ -32,7 +32,7 @@ void __fastcall TNewFileDlg::FormShow(TObject *Sender)
 
 	IniFile->LoadPosInfo(this, DialogCenter);
 
-	//ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚Ì’†‰›‚É•\Ž¦
+	//ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã®ä¸­å¤®ã«è¡¨ç¤º
 	TControl *cp = (TControl*)FileListBox[CurListTag];
 	TPoint p = cp->ClientToScreen(cp->ClientRect.CenteredRect(BoundsRect).Location);
 	TRect main_rc = Application->MainForm->BoundsRect;
@@ -82,19 +82,19 @@ void __fastcall TNewFileDlg::TplComboBoxDrawItem(TWinControl *Control, int Index
 	int yp = Rect.Top  + get_TopMargin(cv);
 	UnicodeString tnam = TplComboBox->Items->Strings[Index];
 
-	//ƒAƒCƒRƒ“
+	//ã‚¢ã‚¤ã‚³ãƒ³
 	draw_SmallIcon2(tnam, cv, xp, std::max(yp + (cv->TextHeight("Q") - SCALED_THIS(16))/2, 0), this);
 	xp += SCALED_THIS(20);
-	//ƒtƒ@ƒCƒ‹–¼
+	//ãƒ•ã‚¡ã‚¤ãƒ«å
 	cv->TextOut(xp, yp, ExtractFileName(tnam));
 }
 
 //---------------------------------------------------------------------------
-//ƒeƒ“ƒvƒŒ[ƒg‚Ì‘I‘ð
+//ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã®é¸æŠž
 //---------------------------------------------------------------------------
 void __fastcall TNewFileDlg::RefTplBtnClick(TObject *Sender)
 {
-	UserModule->PrepareOpenDlg(_T("ƒeƒ“ƒvƒŒ[ƒg‚Ì‘I‘ð"), F_FILTER_ALL, NULL, TplRefDir);
+	UserModule->PrepareOpenDlg(_T("ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã®é¸æŠž"), F_FILTER_ALL, NULL, TplRefDir);
 	UnicodeString fnam;
 	if (UserModule->OpenDlgToStr(fnam, true)) {
 		add_ComboBox_history(TplComboBox, fnam);

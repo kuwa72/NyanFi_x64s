@@ -1,6 +1,6 @@
 /**
  * @file InspectFrm.h
- * @brief ƒCƒ“ƒXƒyƒNƒ^
+ * @brief ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿
  */
 //---------------------------------------------------------------------------
 #ifndef InspectFrmH
@@ -23,11 +23,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒCƒ“ƒXƒyƒNƒ^
+ * @brief ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿
  */
 class TInspectForm : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *BigEndianAction;
 	TAction *UnsignedAction;
 	TActionList *ActionList1;
@@ -71,15 +71,15 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall UnsignedActionExecute(TObject *Sender);
 	void __fastcall BigEndianActionExecute(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	TColor ColorRef;
 
-public:		// ƒ†[ƒU[éŒ¾
-	UsrScrollPanel *InspectScrPanel;	//!< ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	UsrScrollPanel *InspectScrPanel;	//!< ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 	UsrScrollPanel *CodeScrPanel;
 
-	__int64 Address;	//!< ƒAƒhƒŒƒX
-	TBytes  Bytes;		//!< ƒoƒCƒgƒf[ƒ^
+	__int64 Address;	//!< ã‚¢ãƒ‰ãƒ¬ã‚¹
+	TBytes  Bytes;		//!< ãƒã‚¤ãƒˆãƒ‡ãƒ¼ã‚¿
 
 	__fastcall TInspectForm(TComponent* Owner);
 

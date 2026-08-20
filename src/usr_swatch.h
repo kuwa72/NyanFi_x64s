@@ -1,6 +1,6 @@
 /**
  * @file usr_swatch.h
- * @brief ÉXÉEÉHÉbÉ`ÉuÉbÉNÅEÉpÉlÉã
+ * @brief „Çπ„Ç¶„Ç©„ÉÉ„ÉÅ„Éñ„ÉÉ„ÇØ„Éª„Éë„Éç„É´
  */
 //---------------------------------------------------------------------------
 #ifndef UsrSwatchPanelH
@@ -8,50 +8,50 @@
 
 //---------------------------------------------------------------------------
 #define MAX_SWATCH_COLOR	128
-#define SWATCH_FILE	  "Swatchbook.INI"	//!< êFå©ñ{
+#define SWATCH_FILE	  "Swatchbook.INI"	//!< Ëâ≤Ë¶ãÊú¨
 
 //---------------------------------------------------------------------------
 extern int SWATCH_ColTable[MAX_SWATCH_COLOR];
 
 /**
- * @brief ÉXÉEÉHÉbÉ`ÉuÉbÉNÇ©ÅH
- * @param fnam ÉtÉ@ÉCÉãñº
- * @return true ÉXÉEÉHÉbÉ`ÉuÉbÉN
+ * @brief „Çπ„Ç¶„Ç©„ÉÉ„ÉÅ„Éñ„ÉÉ„ÇØ„ÅãÔºü
+ * @param fnam „Éï„Ç°„Ç§„É´Âêç
+ * @return true „Çπ„Ç¶„Ç©„ÉÉ„ÉÅ„Éñ„ÉÉ„ÇØ
  */
 bool IsSwatchbook(UnicodeString fnam);
 
 /**
- * @brief ÉXÉEÉHÉbÉ`ÉuÉbÉNÇÉtÉ@ÉCÉãÇ…ï€ë∂
- * @param fnam ÉtÉ@ÉCÉãñº
- * @return true ê¨å˜
+ * @brief „Çπ„Ç¶„Ç©„ÉÉ„ÉÅ„Éñ„ÉÉ„ÇØ„Çí„Éï„Ç°„Ç§„É´„Å´‰øùÂ≠ò
+ * @param fnam „Éï„Ç°„Ç§„É´Âêç
+ * @return true ÊàêÂäü
  */
 bool SaveSwatchbook(UnicodeString fnam);
 
 /**
- * @brief ÉXÉEÉHÉbÉ`ÉuÉbÉNÇÉtÉ@ÉCÉãÇ©ÇÁì«Ç›çûÇﬁ
- * @param fnam ÉtÉ@ÉCÉãñº
- * @param tmp_sw SWATCH_ColBuff Ç…àÍéûì«çû
- * @return int ÉJÉâÅ[êî
+ * @brief „Çπ„Ç¶„Ç©„ÉÉ„ÉÅ„Éñ„ÉÉ„ÇØ„Çí„Éï„Ç°„Ç§„É´„Åã„ÇâË™≠„ÅøËæº„ÇÄ
+ * @param fnam „Éï„Ç°„Ç§„É´Âêç
+ * @param tmp_sw SWATCH_ColBuff „Å´‰∏ÄÊôÇË™≠Ëæº
+ * @return int „Ç´„É©„ÉºÊï∞
  */
 int  LoadSwatchbook(UnicodeString fnam, bool tmp_sw = false);
 
 /**
- * @brief ÉJÉXÉ^ÉÄÉJÉâÅ[Çê›íË
+ * @brief „Ç´„Çπ„Çø„É†„Ç´„É©„Éº„ÇíË®≠ÂÆö
  * @param lst 
  */
 void SetCustomColToSwatch(TStrings *lst);
 
 /**
- * @brief ï`âÊ (16óÒ8çs)
- * @param cv ÉLÉÉÉìÉoÉX
- * @param rc ï`âÊóÃàÊ
- * @param tmp_sw SWATCH_ColBuff ÇÃì‡óeÇï`âÊ
+ * @brief ÊèèÁîª (16Âàó8Ë°å)
+ * @param cv „Ç≠„É£„É≥„Éê„Çπ
+ * @param rc ÊèèÁîªÈ†òÂüü
+ * @param tmp_sw SWATCH_ColBuff „ÅÆÂÜÖÂÆπ„ÇíÊèèÁîª
  */
 void DrawSwatchbook(TCanvas *cv, TRect rc, bool tmp_sw = false);
 
 //---------------------------------------------------------------------------
 /**
- * @brief ÉXÉEÉHÉbÉ`ÉuÉbÉNÅEÉpÉlÉã
+ * @brief „Çπ„Ç¶„Ç©„ÉÉ„ÉÅ„Éñ„ÉÉ„ÇØ„Éª„Éë„Éç„É´
  */
 class UsrSwatchPanel : public TPanel
 {
@@ -60,12 +60,12 @@ private:
 	void __fastcall SwatchPaintBoxPaint(TObject *Sender);
 
 public:
-	/** @brief ÉRÉìÉXÉgÉâÉNÉ^*/
+	/** @brief „Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø*/
 	__fastcall UsrSwatchPanel(TComponent* Owner);
 
 	/**
-	 * @brief 16óÒ8íiÇÃÉpÉlÉãÉTÉCÉYÇÉ^ÉCÉãÉTÉCÉYÇ…äÓÇ√Ç¢Çƒê›íË
-	 * @param tile_size É^ÉCÉãÉTÉCÉY
+	 * @brief 16Âàó8ÊÆµ„ÅÆ„Éë„Éç„É´„Çµ„Ç§„Ç∫„Çí„Çø„Ç§„É´„Çµ„Ç§„Ç∫„Å´Âü∫„Å•„ÅÑ„Å¶Ë®≠ÂÆö
+	 * @param tile_size „Çø„Ç§„É´„Çµ„Ç§„Ç∫
 	 */
 	void __fastcall SetPanelSize16x8(int tile_size);
 };

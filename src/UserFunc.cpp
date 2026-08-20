@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------//
-// ”Ä—p‹¤’ÊŠÖ”															//
+// æ±ç”¨å…±é€šé–¢æ•°															//
 //																		//
 //----------------------------------------------------------------------//
 #include <wininet.h>
@@ -16,7 +16,7 @@
 #pragma package(smart_init)
 
 //---------------------------------------------------------------------------
-//uƒ|ƒCƒ“ƒ^[‚ğ©“®“I‚É‹K’è‚Ìƒ{ƒ^ƒ“ã‚ÉˆÚ“®v‚ª—LŒø‰»?
+//ã€Œãƒã‚¤ãƒ³ã‚¿ãƒ¼ã‚’è‡ªå‹•çš„ã«è¦å®šã®ãƒœã‚¿ãƒ³ä¸Šã«ç§»å‹•ã€ãŒæœ‰åŠ¹åŒ–?
 //---------------------------------------------------------------------------
 bool is_SnapToDefBtn()
 {
@@ -25,7 +25,7 @@ bool is_SnapToDefBtn()
 }
 
 //---------------------------------------------------------------------------
-//ƒ}ƒEƒXƒJ[ƒ\ƒ‹ˆÊ’u‚ÌƒEƒBƒ“ƒhƒE‚ğæ“¾
+//ãƒã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’å–å¾—
 //---------------------------------------------------------------------------
 HWND get_window_from_pos()
 {
@@ -35,7 +35,7 @@ HWND get_window_from_pos()
 }
 
 //---------------------------------------------------------------------------
-//VistaˆÈ~‚ÌŠg’£ƒtƒŒ[ƒ€‚É‘Î‰‚µ‚½ƒEƒBƒ“ƒhƒE’·•ûŒ`‚Ìæ“¾
+//Vistaä»¥é™ã®æ‹¡å¼µãƒ•ãƒ¬ãƒ¼ãƒ ã«å¯¾å¿œã—ãŸã‚¦ã‚£ãƒ³ãƒ‰ã‚¦é•·æ–¹å½¢ã®å–å¾—
 //---------------------------------------------------------------------------
 TRect get_window_rect(HWND hWnd)
 {
@@ -45,7 +45,7 @@ TRect get_window_rect(HWND hWnd)
 	return rc;
 }
 //---------------------------------------------------------------------------
-//VistaˆÈ~‚ÌŠg’£ƒtƒŒ[ƒ€‚É‘Î‰‚µ‚½ƒTƒCƒYİ’è
+//Vistaä»¥é™ã®æ‹¡å¼µãƒ•ãƒ¬ãƒ¼ãƒ ã«å¯¾å¿œã—ãŸã‚µã‚¤ã‚ºè¨­å®š
 //---------------------------------------------------------------------------
 void set_window_pos_ex(HWND hWnd, TRect rc)
 {
@@ -62,7 +62,7 @@ void set_window_pos_ex(HWND hWnd, TRect rc)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒH[ƒ€‚ª•\¦ƒ‚ƒjƒ^‚©‚ç‚Í‚İo‚µ‚Ä‚¢‚½‚çû‚Ü‚é‚æ‚¤‚É’²®
+//ãƒ•ã‚©ãƒ¼ãƒ ãŒè¡¨ç¤ºãƒ¢ãƒ‹ã‚¿ã‹ã‚‰ã¯ã¿å‡ºã—ã¦ã„ãŸã‚‰åã¾ã‚‹ã‚ˆã†ã«èª¿æ•´
 //---------------------------------------------------------------------------
 void adjust_form_pos(TForm *frm)
 {
@@ -80,9 +80,9 @@ void adjust_form_pos(TForm *frm)
 }
 
 //---------------------------------------------------------------------------
-//ƒ_ƒCƒAƒƒO‚ğŒÄ‚Ño‚µŒ³ƒtƒH[ƒ€‚Ì’†‰›‚É•\¦
-//	ƒ‚ƒjƒ^‚©‚ç‚Í‚İo‚µ‚½‚çû‚Ü‚é‚æ‚¤‚É’²®
-//	‘ÎÛ‚Í Position = poDesigned
+//ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’å‘¼ã³å‡ºã—å…ƒãƒ•ã‚©ãƒ¼ãƒ ã®ä¸­å¤®ã«è¡¨ç¤º
+//	ãƒ¢ãƒ‹ã‚¿ã‹ã‚‰ã¯ã¿å‡ºã—ãŸã‚‰åã¾ã‚‹ã‚ˆã†ã«èª¿æ•´
+//	å¯¾è±¡ã¯ Position = poDesigned
 //---------------------------------------------------------------------------
 int show_ModalDlg(TForm *dlg)
 {
@@ -96,7 +96,7 @@ int show_ModalDlg(TForm *dlg)
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒ“ƒgƒ[ƒ‹‚É‰EƒNƒŠƒbƒNƒƒjƒ…[‚ğ•\¦
+//ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã«å³ã‚¯ãƒªãƒƒã‚¯ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’è¡¨ç¤º
 //---------------------------------------------------------------------------
 void show_PopupMenu(TPopupMenu *mp, TControl *cp)
 {
@@ -123,14 +123,14 @@ void show_PopupMenu(TStringGrid *gp)
 }
 
 //---------------------------------------------------------------------------
-//ListBox ‚ÉƒeƒLƒXƒg‚ğİ’è
+//ListBox ã«ãƒ†ã‚­ã‚¹ãƒˆã‚’è¨­å®š
 //---------------------------------------------------------------------------
 void set_ListBoxText(TListBox *lp, const _TCHAR *s)
 {
 	lp->Items->Text = s;
 }
 //---------------------------------------------------------------------------
-//ComboBox ‚ÉƒeƒLƒXƒg‚ğİ’è
+//ComboBox ã«ãƒ†ã‚­ã‚¹ãƒˆã‚’è¨­å®š
 //---------------------------------------------------------------------------
 void set_ComboBoxText(TComboBox *cp, const _TCHAR *s)
 {
@@ -138,7 +138,7 @@ void set_ComboBoxText(TComboBox *cp, const _TCHAR *s)
 }
 
 //---------------------------------------------------------------------------
-//ComboBox ‚É—š—ğ‚ğ’Ç‰Á
+//ComboBox ã«å±¥æ­´ã‚’è¿½åŠ 
 //---------------------------------------------------------------------------
 void add_ComboBox_history(TComboBox *cp, UnicodeString kwd)
 {
@@ -158,7 +158,7 @@ void add_ComboBox_history(TComboBox *cp, UnicodeString kwd)
 	}
 }
 //---------------------------------------------------------------------------
-//ComboBox ‚©‚ç—š—ğ‚ğíœ
+//ComboBox ã‹ã‚‰å±¥æ­´ã‚’å‰Šé™¤
 //---------------------------------------------------------------------------
 int del_ComboBox_history(TComboBox *cp, UnicodeString kwd)
 {
@@ -176,10 +176,10 @@ int del_ComboBox_history(TComboBox *cp, UnicodeString kwd)
 }
 
 //---------------------------------------------------------------------------
-//ƒNƒŠƒbƒvƒ{[ƒhEƒeƒLƒXƒg‚ğæ“¾
+//ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ãƒ»ãƒ†ã‚­ã‚¹ãƒˆã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString GetClipboardText(
-	bool top_sw)	//ˆês–Ú‚Ì‚İæ“¾	(default = false)
+	bool top_sw)	//ä¸€è¡Œç›®ã®ã¿å–å¾—	(default = false)
 {
 	UnicodeString ret_str;
 	if (Clipboard()->HasFormat(CF_TEXT)) {
@@ -196,7 +196,7 @@ UnicodeString GetClipboardText(
 }
 
 //---------------------------------------------------------------------------
-//IME‚ğŠJ‚¢‚Ä‚¢‚é‚©?
+//IMEã‚’é–‹ã„ã¦ã„ã‚‹ã‹?
 //---------------------------------------------------------------------------
 bool is_IME_Open(HWND hWnd)
 {
@@ -209,7 +209,7 @@ bool is_IME_Open(HWND hWnd)
 	return ret;
 }
 //---------------------------------------------------------------------------
-//IME“ü—Í’†?
+//IMEå…¥åŠ›ä¸­?
 //---------------------------------------------------------------------------
 bool is_IME_Typing(HWND hWnd)
 {
@@ -222,7 +222,7 @@ bool is_IME_Typing(HWND hWnd)
 	return ret;
 }
 //---------------------------------------------------------------------------
-//IME“ü—Í‚È‚µ
+//IMEå…¥åŠ›ãªã—
 //---------------------------------------------------------------------------
 bool is_IME_Empty(HWND hWnd)
 {
@@ -235,7 +235,7 @@ bool is_IME_Empty(HWND hWnd)
 	return ret;
 }
 //---------------------------------------------------------------------------
-//IME‚ğ•Â‚¶‚é
+//IMEã‚’é–‰ã˜ã‚‹
 //---------------------------------------------------------------------------
 void CloseIME(HWND hWnd)
 {
@@ -247,7 +247,7 @@ void CloseIME(HWND hWnd)
 }
 
 //---------------------------------------------------------------------------
-//ƒŠƒXƒgƒ{ƒbƒNƒX‚Ì€–ÚˆÊ’u‚Éƒ}ƒEƒXƒJ[ƒ\ƒ‹‚ğˆÚ“®
+//ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®é …ç›®ä½ç½®ã«ãƒã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«ã‚’ç§»å‹•
 //---------------------------------------------------------------------------
 TPoint get_ListItemPos(TListBox *lp, int xp)
 {
@@ -263,7 +263,7 @@ void pos_ListBoxItem(TListBox *lp, int xp)
 }
 
 //---------------------------------------------------------------------------
-//w’èƒLƒƒƒ“ƒoƒX‚ÌƒtƒHƒ“ƒg‚ª“à•”ƒŒƒfƒBƒ“ƒO‚ğ‚Á‚Ä‚¢‚é‚©H
+//æŒ‡å®šã‚­ãƒ£ãƒ³ãƒã‚¹ã®ãƒ•ã‚©ãƒ³ãƒˆãŒå†…éƒ¨ãƒ¬ãƒ‡ã‚£ãƒ³ã‚°ã‚’æŒã£ã¦ã„ã‚‹ã‹ï¼Ÿ
 //---------------------------------------------------------------------------
 bool has_Leading(TCanvas *cv)
 {
@@ -271,11 +271,11 @@ bool has_Leading(TCanvas *cv)
 }
 
 //---------------------------------------------------------------------------
-//w’èƒtƒHƒ“ƒg‚É‚æ‚é•`‰æ•‚ğæ“¾
+//æŒ‡å®šãƒ•ã‚©ãƒ³ãƒˆã«ã‚ˆã‚‹æç”»å¹…ã‚’å–å¾—
 //---------------------------------------------------------------------------
 int get_CharWidth_Font(
 	TFont *font,
-	int n)			//”¼Šp’PˆÊ‚Ì•¶š”
+	int n)			//åŠè§’å˜ä½ã®æ–‡å­—æ•°
 {
 	std::unique_ptr<Graphics::TBitmap> bmp(new Graphics::TBitmap());
 	TCanvas *cv = bmp->Canvas;
@@ -284,10 +284,10 @@ int get_CharWidth_Font(
 }
 
 //---------------------------------------------------------------------------
-//“ü—Í—“‚Ì•¶š—ñ‚ğ”’l‚É
+//å…¥åŠ›æ¬„ã®æ–‡å­—åˆ—ã‚’æ•°å€¤ã«
 //---------------------------------------------------------------------------
 int EditToInt(TLabeledEdit *ep,
-	int def)	//ƒfƒtƒHƒ‹ƒg’l (default = 0);
+	int def)	//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ (default = 0);
 {
 	return ep->Text.ToIntDef(def);
 }
@@ -298,7 +298,7 @@ int EditToInt(TEdit *ep, int def)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹–¼“ü—Í—“‚Ì‘I‘ğó‘Ô‚ğ‡‚ÉØ‚è‘Ö‚¦‚é
+//ãƒ•ã‚¡ã‚¤ãƒ«åå…¥åŠ›æ¬„ã®é¸æŠçŠ¶æ…‹ã‚’é †ã«åˆ‡ã‚Šæ›¿ãˆã‚‹
 //---------------------------------------------------------------------------
 void ChangeSelFileNameEdit(TCustomEdit *ep,
 	bool is_dir)	// (default = false)
@@ -311,23 +311,23 @@ void ChangeSelFileNameEdit(TCustomEdit *ep,
 			  (ep->SelStart==0 && ep->SelLength>=p)? 3 : 0;
 	idx = (idx + 1)%4;
 	switch (idx) {
-	case 1:		//–¼‘O‚Ìæ“ª
+	case 1:		//åå‰ã®å…ˆé ­
 		ep->SelStart = 0;
 		break;
-	case 2:		//ƒtƒ@ƒCƒ‹–¼å•”‚ğ‘I‘ğ
+	case 2:		//ãƒ•ã‚¡ã‚¤ãƒ«åä¸»éƒ¨ã‚’é¸æŠ
 		ep->SelStart  = 0;
 		ep->SelLength = p;
 		break;
-	case 3:		//ƒtƒ@ƒCƒ‹–¼‘S‘Ì‚ğ‘I‘ğ
+	case 3:		//ãƒ•ã‚¡ã‚¤ãƒ«åå…¨ä½“ã‚’é¸æŠ
 		ep->SelectAll();
 		break;
-	default:	//––”ö
+	default:	//æœ«å°¾
 		ep->SelStart = p;
 	}
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒ}ƒ“ƒh“ü—Í—“‚Ì‘I‘ğó‘Ô‚ğ‡‚ÉØ‚è‘Ö‚¦‚é
+//ã‚³ãƒãƒ³ãƒ‰å…¥åŠ›æ¬„ã®é¸æŠçŠ¶æ…‹ã‚’é †ã«åˆ‡ã‚Šæ›¿ãˆã‚‹
 //---------------------------------------------------------------------------
 void ChangeSelCmdComboBox(TComboBox *cp)
 {
@@ -348,14 +348,14 @@ void ChangeSelCmdComboBox(TComboBox *cp)
 			  			  (cp->SelStart==pos && cp->SelLength==len)? 2 : 0;
 	idx = (idx + 1)%(len>0? 3 : 2);
 	switch (idx) {
-	case 1:		//‘S‘Ì‚ğ‘I‘ğ
+	case 1:		//å…¨ä½“ã‚’é¸æŠ
 		cp->SelectAll();
 		break;
-	case 2:		//ƒpƒ‰ƒ[ƒ^‚ğ‘I‘ğ
+	case 2:		//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’é¸æŠ
 		cp->SelStart  = pos;
 		cp->SelLength = len;
 		break;
-	default:	//––”ö
+	default:	//æœ«å°¾
 		cp->SelStart = cp->Text.Length();
 	}
 }
@@ -379,21 +379,21 @@ void ChangeSelCmdEdit(TCustomEdit *ep)
 			  			  (ep->SelStart==pos && ep->SelLength==len)? 2 : 0;
 	idx = (idx + 1)%(len>0? 3 : 2);
 	switch (idx) {
-	case 1:		//‘S‘Ì‚ğ‘I‘ğ
+	case 1:		//å…¨ä½“ã‚’é¸æŠ
 		ep->SelectAll();
 		break;
-	case 2:		//ƒpƒ‰ƒ[ƒ^‚ğ‘I‘ğ
+	case 2:		//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’é¸æŠ
 		ep->SelStart  = pos;
 		ep->SelLength = len;
 		break;
-	default:	//––”ö
+	default:	//æœ«å°¾
 		ep->SelStart = ep->Text.Length();
 	}
 }
 
 //---------------------------------------------------------------------------
-//”NŒ“ú‚©‚ç TDate ‚ğæ“¾ (Œ––•â³)
-//I•s³‚È”N/Œ‚ğw’è‚·‚é‚Æ—áŠO‚ğ‘—o
+//å¹´æœˆæ—¥ã‹ã‚‰ TDate ã‚’å–å¾— (æœˆæœ«è£œæ­£)
+//ï¼ä¸æ­£ãªå¹´/æœˆã‚’æŒ‡å®šã™ã‚‹ã¨ä¾‹å¤–ã‚’é€å‡º
 //---------------------------------------------------------------------------
 TDate set_NormDay(unsigned short y, unsigned short m, unsigned short d)
 {
@@ -402,7 +402,7 @@ TDate set_NormDay(unsigned short y, unsigned short m, unsigned short d)
 }
 
 //---------------------------------------------------------------------------
-//•¶š—ñ‚ğ TDateTime ‚É•ÏŠ·
+//æ–‡å­—åˆ—ã‚’ TDateTime ã«å¤‰æ›
 //---------------------------------------------------------------------------
 bool ToDateTime(UnicodeString s, TDateTime *dt)
 {
@@ -416,11 +416,11 @@ bool ToDateTime(UnicodeString s, TDateTime *dt)
 }
 
 //---------------------------------------------------------------------------
-//“ú•¶š—ñ‚ğæ“¾
+//æ—¥æ™‚æ–‡å­—åˆ—ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString format_DateTime(
-	TDateTime dt,	//“ú
-	bool omit)		//“¯“ú‚È‚ç“ú•t‚ğÈ—ª (default = false)
+	TDateTime dt,	//æ—¥æ™‚
+	bool omit)		//åŒæ—¥ãªã‚‰æ—¥ä»˜ã‚’çœç•¥ (default = false)
 {
 	if (dt==(TDateTime)0) {
 		return UnicodeString("???\?/?\?/?? ??:??:??");
@@ -433,7 +433,7 @@ UnicodeString format_DateTime(
 	}
 }
 //---------------------------------------------------------------------------
-//“ú•t•¶š—ñ‚ğæ“¾
+//æ—¥ä»˜æ–‡å­—åˆ—ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString format_Date(TDateTime dt)
 {
@@ -441,8 +441,8 @@ UnicodeString format_Date(TDateTime dt)
 }
 
 //---------------------------------------------------------------------------
-//“ú•¶š—ñ‚ğæ“¾ (FormatDateTime ‚ÌŠg’£)
-// $EN ‚ª‚ ‚éê‡ƒƒP[ƒ‹‚ğ en-US ‚É‚·‚é
+//æ—¥æ™‚æ–‡å­—åˆ—ã‚’å–å¾— (FormatDateTime ã®æ‹¡å¼µ)
+// $EN ãŒã‚ã‚‹å ´åˆãƒ­ã‚±ãƒ¼ãƒ«ã‚’ en-US ã«ã™ã‚‹
 //---------------------------------------------------------------------------
 UnicodeString format_DateTimeEx(UnicodeString fmt, TDateTime dt)
 {
@@ -452,14 +452,14 @@ UnicodeString format_DateTimeEx(UnicodeString fmt, TDateTime dt)
 }
 
 //---------------------------------------------------------------------------
-//“ú•tğŒ‚ğæ“¾
-//@‘Š‘Îw’è: {<|=|>}-n{D|M|Y}@@(D:“úAM:ŒAY:”N)
-//@â‘Îw’è: {<|=|>}yyyy/mm/dd
-//	  	  ¡“ú•t: TD
-//  ƒJ[ƒ\ƒ‹ˆÊ’u: CP (= ct)
+//æ—¥ä»˜æ¡ä»¶ã‚’å–å¾—
+//ã€€ç›¸å¯¾æŒ‡å®š: {<|=|>}-n{D|M|Y}ã€€ã€€(D:æ—¥ã€M:æœˆã€Y:å¹´)
+//ã€€çµ¶å¯¾æŒ‡å®š: {<|=|>}yyyy/mm/dd
+//	  	  ä»Šæ—¥ä»˜: TD
+//  ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®: CP (= ct)
 //
-//  –ß‚è’l : 1: < ‚æ‚èŒÃ‚¢/ 2: = “¯‚¶/ 3: > ‚æ‚èV‚µ‚¢ 
-//			 0: ğŒ‚È‚µ/ -1: ƒGƒ‰[
+//  æˆ»ã‚Šå€¤ : 1: < ã‚ˆã‚Šå¤ã„/ 2: = åŒã˜/ 3: > ã‚ˆã‚Šæ–°ã—ã„ 
+//			 0: æ¡ä»¶ãªã—/ -1: ã‚¨ãƒ©ãƒ¼
 //---------------------------------------------------------------------------
 int get_DateCond(UnicodeString prm, TDateTime &dt, TDateTime ct)
 {
@@ -472,11 +472,11 @@ int get_DateCond(UnicodeString prm, TDateTime &dt, TDateTime ct)
 			cnd = UnicodeString("<=>").Pos(prm[1]);
 			if (cnd>0) {
 				prm.Delete(1, 1);
-				//â‘Îw’è
+				//çµ¶å¯¾æŒ‡å®š
 				if (TRegEx::IsMatch(prm, "^\\d{4}/\\d{2}/\\d{2}$")) {
 					dt = str_to_DateTime(prm);
 				}
-				//‘Š‘Îw’è
+				//ç›¸å¯¾æŒ‡å®š
 				else {
 					UnicodeString ut_str = prm.SubString(prm.Length(), 1).UpperCase();
 					if (!ContainsText("DMY", ut_str)) Abort();
@@ -505,12 +505,12 @@ int get_DateCond(UnicodeString prm, TDateTime &dt, TDateTime ct)
 }
 
 //---------------------------------------------------------------------------
-//“ú•tğŒ‚Ìƒ`ƒFƒbƒN
+//æ—¥ä»˜æ¡ä»¶ã®ãƒã‚§ãƒƒã‚¯
 //---------------------------------------------------------------------------
 bool test_DateCond(
-	int cnd,			//“ú•tğŒ
-	TDateTime dt,		//ƒ`ƒFƒbƒN‘ÎÛ‚Ì“ú•t
-	TDateTime dt_r)		//“ú•tğŒ‚Ì“ú•t
+	int cnd,			//æ—¥ä»˜æ¡ä»¶
+	TDateTime dt,		//ãƒã‚§ãƒƒã‚¯å¯¾è±¡ã®æ—¥ä»˜
+	TDateTime dt_r)		//æ—¥ä»˜æ¡ä»¶ã®æ—¥ä»˜
 {
 	bool ok = false;
 	TValueRelationship res = System::Dateutils::CompareDate(dt, dt_r);
@@ -523,20 +523,20 @@ bool test_DateCond(
 }
 
 //---------------------------------------------------------------------------
-//Œ‹‰ÊƒŠƒXƒg‚Ì®Œ`
-//  "ƒtƒ@ƒCƒ‹–¼\t“à—e" --> "ƒtƒ@ƒCƒ‹–¼   “à—e"
-//  “à—e‚É TAB ‚ªŠÜ‚Ü‚ê‚Ä‚¢‚½‚çíœ
-//  –ß‚è’l: ƒtƒ@ƒCƒ‹–¼•”•ª‚ÌÅ‘å•
+//çµæœãƒªã‚¹ãƒˆã®æ•´å½¢
+//  "ãƒ•ã‚¡ã‚¤ãƒ«å\tå†…å®¹" --> "ãƒ•ã‚¡ã‚¤ãƒ«å   å†…å®¹"
+//  å†…å®¹ã« TAB ãŒå«ã¾ã‚Œã¦ã„ãŸã‚‰å‰Šé™¤
+//  æˆ»ã‚Šå€¤: ãƒ•ã‚¡ã‚¤ãƒ«åéƒ¨åˆ†ã®æœ€å¤§å¹…
 //---------------------------------------------------------------------------
 int format_res_list(TStringList *lst, int mgn, int min_wd)
 {
-	//ƒtƒ@ƒCƒ‹–¼‚ÌÅ‘å•‚ğæ“¾
+	//ãƒ•ã‚¡ã‚¤ãƒ«åã®æœ€å¤§å¹…ã‚’å–å¾—
 	int max_len = 0;
 	for (int i=0; i<lst->Count; i++) max_len_half(max_len, get_pre_tab(lst->Strings[i]));
 	max_len += mgn;
 	if (max_len<min_wd) max_len = min_wd;
 
-	//Œ‹‰Ê‚ğ®Œ`
+	//çµæœã‚’æ•´å½¢
 	for (int i=0; i<lst->Count; i++) {
 		UnicodeString lbuf = lst->Strings[i];
 		lst->Strings[i] = align_l_str(get_pre_tab(lbuf), max_len, ReplaceStr(get_post_tab(lbuf), "\t", EmptyStr));
@@ -546,7 +546,7 @@ int format_res_list(TStringList *lst, int mgn, int min_wd)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚ÌƒvƒƒpƒeƒB‚ğ•\¦
+//ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’è¡¨ç¤º
 //---------------------------------------------------------------------------
 void ShowPropertyDialog(UnicodeString fnam)
 {
@@ -560,7 +560,7 @@ void ShowPropertyDialog(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//Œ»İˆÊ’u‚ÌƒŠƒXƒg€–Ú‚ğíœ
+//ç¾åœ¨ä½ç½®ã®ãƒªã‚¹ãƒˆé …ç›®ã‚’å‰Šé™¤
 //---------------------------------------------------------------------------
 void delete_ListItem(TCustomListBox *lp)
 {
@@ -574,7 +574,7 @@ void delete_ListItem(TCustomListBox *lp)
 }
 
 //---------------------------------------------------------------------------
-//ƒŠƒXƒgƒ{ƒbƒNƒX‚Ì€–Ú‚ÉŒrü‚ğ•`‰æ (”wŒi‚Ì”½“]F)
+//ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®é …ç›®ã«ç½«ç·šã‚’æç”» (èƒŒæ™¯ã®åè»¢è‰²)
 //---------------------------------------------------------------------------
 void draw_ListItemLine(TCustomListBox *lp, int idx)
 {
@@ -593,13 +593,13 @@ void draw_ListItemLine(TCustomListBox *lp, int idx)
 }
 
 //---------------------------------------------------------------------------
-//’[“_‚ªƒtƒ‰ƒbƒg‚Èü‚ğ•`‰æ (w=1 ‚Ìê‡‚Í‚»‚Ì‚Ü‚Ü)
+//ç«¯ç‚¹ãŒãƒ•ãƒ©ãƒƒãƒˆãªç·šã‚’æç”» (w=1 ã®å ´åˆã¯ãã®ã¾ã¾)
 //---------------------------------------------------------------------------
 void draw_Line(
 	TCanvas *cv,
 	int x0, int y0, int x1, int y1,
-	int w,				//ü•
-	TColor col, 		//F
+	int w,				//ç·šå¹…
+	TColor col, 		//è‰²
 	TPenStyle style)	// (default = psSolid)
 {
 	if (w>1) {
@@ -635,11 +635,11 @@ void draw_Line(
 }
 
 //---------------------------------------------------------------------------
-//”wŒiF(Brush)‚Ì‹P“x‚ğl—¶‚µ‚ÄƒZƒpƒŒ[ƒ^‚ğ•`‰æ
+//èƒŒæ™¯è‰²(Brush)ã®è¼åº¦ã‚’è€ƒæ…®ã—ã¦ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿ã‚’æç”»
 //---------------------------------------------------------------------------
 void draw_Separator(
 	TCanvas *cv, TRect rc,
-	TColor bg)	//”wŒiF	(default = clNone : cv->Brush->Color)
+	TColor bg)	//èƒŒæ™¯è‰²	(default = clNone : cv->Brush->Color)
 {
 	int yp = rc.Top + rc.Height()/2;
 	int x0 = rc.Left  + 4;
@@ -655,10 +655,10 @@ void draw_Separator(
 	cv->Pen->Color = c1;	cv->MoveTo(x0, yp);  cv->LineTo(x1, yp);
 }
 //---------------------------------------------------------------------------
-//”wŒiF(Brush)‚ğl—¶‚µ‚Ä•ªŠ„ü‚ğ•`‰æ
+//èƒŒæ™¯è‰²(Brush)ã‚’è€ƒæ…®ã—ã¦åˆ†å‰²ç·šã‚’æç”»
 //---------------------------------------------------------------------------
 void draw_separateLine(TCanvas *cv, TRect rc,
-	int pos)	//ˆÊ’u 0=ã•Ó/ 1=’†‰›/ 2=‰º•Ó (default = 0)
+	int pos)	//ä½ç½® 0=ä¸Šè¾º/ 1=ä¸­å¤®/ 2=ä¸‹è¾º (default = 0)
 {
 	cv->Pen->Color = SelectWorB(cv->Brush->Color, 0.25);	//***
 	cv->Pen->Style = psSolid;
@@ -680,7 +680,7 @@ void draw_separateLine(TCanvas *cv, TRect rc,
 }
 
 //---------------------------------------------------------------------------
-//k¬”ä—¦‚ğæ“¾
+//ç¸®å°æ¯”ç‡ã‚’å–å¾—
 //---------------------------------------------------------------------------
 double get_ZoomRatio(int vw, int vh, int iw, int ih, int mgn, double limit)
 {
@@ -695,10 +695,10 @@ double get_ZoomRatio(int vw, int vh, int iw, int ih, int mgn, double limit)
 	bool v_is_v = (vh>vw);
 	bool i_is_v = (ih>iw);
 	if ((v_is_v && i_is_v) || (!v_is_v && !i_is_v))
-		//c‰¡ŠÖŒW‚ª“¯‚¶
+		//ç¸¦æ¨ªé–¢ä¿‚ãŒåŒã˜
 		r = std::max(std::min(1.0 * vw/ih, 1.0 * vh/iw), std::min(1.0 * vw/iw, 1.0 * vh/ih));
 	else
-		//c‰¡ŠÖŒW‚ªˆá‚¤
+		//ç¸¦æ¨ªé–¢ä¿‚ãŒé•ã†
 		r = std::min(std::min(1.0 * vw/ih, 1.0 * vh/iw), std::min(1.0 * vw/iw, 1.0 * vh/ih));
 
 	if (r>limit) r = 1.0;
@@ -707,7 +707,7 @@ double get_ZoomRatio(int vw, int vh, int iw, int ih, int mgn, double limit)
 }
 
 //---------------------------------------------------------------------------
-//’·•ûŒ`‚ÉƒAƒ‹ƒtƒ@ƒuƒŒƒ“ƒh
+//é•·æ–¹å½¢ã«ã‚¢ãƒ«ãƒ•ã‚¡ãƒ–ãƒ¬ãƒ³ãƒ‰
 //---------------------------------------------------------------------------
 void alpha_blend_Rect(TCanvas *cv, int x, int y, int w, int h, TColor col, int alpha)
 {
@@ -731,7 +731,7 @@ void alpha_blend_Rect(TCanvas *cv, TRect rc, TColor col, int alpha)
 }
 
 //---------------------------------------------------------------------------
-//TUpDown ‚Ì‰Šú‰»
+//TUpDown ã®åˆæœŸåŒ–
 //---------------------------------------------------------------------------
 void init_UpDown(TUpDown *udp, int n)
 {
@@ -741,7 +741,7 @@ void init_UpDown(TUpDown *udp, int n)
 }
 
 //---------------------------------------------------------------------------
-//ƒOƒŠƒbƒh‚ÌƒZƒ‹•‚ğƒwƒbƒ_‚É‡‚í‚¹‚é
+//ã‚°ãƒªãƒƒãƒ‰ã®ã‚»ãƒ«å¹…ã‚’ãƒ˜ãƒƒãƒ€ã«åˆã‚ã›ã‚‹
 //---------------------------------------------------------------------------
 void set_GridFromHeader(THeaderControl *hp, TStringGrid *gp)
 {
@@ -752,13 +752,13 @@ void set_GridFromHeader(THeaderControl *hp, TStringGrid *gp)
 		wd += hp->Sections->Items[i]->Width;
 	}
 
-	//—]‚è‚ÌƒZƒNƒVƒ‡ƒ“‚Íc‚è•‚É‡‚í‚¹‚é
+	//ä½™ã‚Šã®ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã¯æ®‹ã‚Šå¹…ã«åˆã‚ã›ã‚‹
 	if (hp->Sections->Count>gp->ColCount) {
 		hp->Sections->Items[gp->ColCount]->Width = std::max(hp->Width - wd, 0);
 	}
 }
 //---------------------------------------------------------------------------
-//ƒwƒbƒ_‚Ì—ñ•‚ğƒOƒŠƒbƒh‚ÌƒZƒ‹•‚É‡‚í‚¹‚é
+//ãƒ˜ãƒƒãƒ€ã®åˆ—å¹…ã‚’ã‚°ãƒªãƒƒãƒ‰ã®ã‚»ãƒ«å¹…ã«åˆã‚ã›ã‚‹
 //---------------------------------------------------------------------------
 void set_HeaderFromGrid(TStringGrid *gp, THeaderControl *hp)
 {
@@ -769,20 +769,20 @@ void set_HeaderFromGrid(TStringGrid *gp, THeaderControl *hp)
 		wd += hp->Sections->Items[i]->Width;
 	}
 
-	//—]‚è‚ÌƒZƒNƒVƒ‡ƒ“‚Íc‚è•‚É‡‚í‚¹‚é
+	//ä½™ã‚Šã®ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã¯æ®‹ã‚Šå¹…ã«åˆã‚ã›ã‚‹
 	if (hp->Sections->Count>gp->ColCount) {
 		hp->Sections->Items[gp->ColCount]->Width = std::max(hp->Width - wd, 0);
 	}
 }
 
 //---------------------------------------------------------------------------
-//ƒwƒbƒ_‚Ì—ñ•‚ğİ’è(ŒÅ’è)
+//ãƒ˜ãƒƒãƒ€ã®åˆ—å¹…ã‚’è¨­å®š(å›ºå®š)
 //---------------------------------------------------------------------------
 void set_HeaderSecWidth(THeaderControl *hp, int cnt, ...)
 {
 	THeaderSections *sp = hp->Sections;
 
-	//ˆê’UAŒÅ’è‚ğ‰ğœ
+	//ä¸€æ—¦ã€å›ºå®šã‚’è§£é™¤
 	for (int i=0; i<sp->Count; i++) {
 		sp->Items[i]->MinWidth = 0;
 		sp->Items[i]->MaxWidth = 10000;
@@ -796,14 +796,14 @@ void set_HeaderSecWidth(THeaderControl *hp, int cnt, ...)
 	}
 	va_end(ap);
 
-	//––”ö—ñ‚ª–¢w’è‚È‚çc‚è•‚Éİ’è
+	//æœ«å°¾åˆ—ãŒæœªæŒ‡å®šãªã‚‰æ®‹ã‚Šå¹…ã«è¨­å®š
 	if (cnt == sp->Count-1) {
 		int w = hp->ClientWidth;
 		for (int i=0; i<sp->Count-1; i++) w -= sp->Items[i]->Width;
 		sp->Items[sp->Count - 1]->Width = std::max(w, 0);
 	}
 
-	//—ñ•‚ğŒÅ’è
+	//åˆ—å¹…ã‚’å›ºå®š
 	for (int i=0; i<sp->Count; i++) {
 		int w = sp->Items[i]->Width;
 		sp->Items[i]->MinWidth = w;
@@ -820,10 +820,10 @@ void adjust_HeaderSecWidth(THeaderControl *hp, int idx)
 }
 
 //---------------------------------------------------------------------------
-//ƒXƒe[ƒ^ƒXƒo[‚Ìƒpƒlƒ‹•‚ğİ’è
+//ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒãƒ¼ã®ãƒ‘ãƒãƒ«å¹…ã‚’è¨­å®š
 //---------------------------------------------------------------------------
 int set_SttBarPanelWidth(TStatusBar *sp, int idx,
-	int n)	//•¶š”(”¼Šp’PˆÊ)
+	int n)	//æ–‡å­—æ•°(åŠè§’å˜ä½)
 {
 	TCanvas *cv = sp->Canvas;
 	cv->Font->Assign(sp->Font);
@@ -833,7 +833,7 @@ int set_SttBarPanelWidth(TStatusBar *sp, int idx,
 }
 //---------------------------------------------------------------------------
 int set_SttBarPanelWidth(TStatusBar *sp, int idx,
-	UnicodeString s)	//•¶š—ñ
+	UnicodeString s)	//æ–‡å­—åˆ—
 {
 	TCanvas *cv = sp->Canvas;
 	cv->Font->Assign(sp->Font);
@@ -843,7 +843,7 @@ int set_SttBarPanelWidth(TStatusBar *sp, int idx,
 }
 
 //---------------------------------------------------------------------------
-//ƒOƒŠƒbƒh‚Ìs‚ğƒNƒŠƒA
+//ã‚°ãƒªãƒƒãƒ‰ã®è¡Œã‚’ã‚¯ãƒªã‚¢
 //---------------------------------------------------------------------------
 void clear_GridRow(TStringGrid *gp, int row, int col)
 {
@@ -853,7 +853,7 @@ void clear_GridRow(TStringGrid *gp, int row, int col)
 }
 
 //---------------------------------------------------------------------------
-//ƒOƒŠƒbƒh‚ÌŒ»İˆÊ’u‚ğƒCƒ“ƒfƒbƒNƒX‰»
+//ã‚°ãƒªãƒƒãƒ‰ã®ç¾åœ¨ä½ç½®ã‚’ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹åŒ–
 //---------------------------------------------------------------------------
 int get_GridIndex(TStringGrid *gp, int max_count)
 {
@@ -863,7 +863,7 @@ int get_GridIndex(TStringGrid *gp, int max_count)
 }
 
 //---------------------------------------------------------------------------
-//ListBox ‚ÌƒJ[ƒ\ƒ‹ˆÚ“®
+//ListBox ã®ã‚«ãƒ¼ã‚½ãƒ«ç§»å‹•
 //---------------------------------------------------------------------------
 void ListBoxCursorDown(TListBox *lp)
 {
@@ -909,7 +909,7 @@ void ListBoxEnd(TListBox *lp)
 
 //---------------------------------------------------------------------------
 void ListBoxSetIndex(TListBox *lp, int idx,
-	bool top_sw)	//ƒ}[ƒWƒ“•t‚«‚Åƒgƒbƒv‚ÉƒXƒNƒ[ƒ‹	(default = false)
+	bool top_sw)	//ãƒãƒ¼ã‚¸ãƒ³ä»˜ãã§ãƒˆãƒƒãƒ—ã«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«	(default = false)
 {
 	if (lp->Count==0) return;
 
@@ -921,7 +921,7 @@ void ListBoxSetIndex(TListBox *lp, int idx,
 		lp->ItemIndex = idx;
 	}
 	else if (idx==lp->ItemIndex) {
-		//‰Â‹—ÌˆæŠO‚¾‚Á‚½‚çƒXƒNƒ[ƒ‹
+		//å¯è¦–é ˜åŸŸå¤–ã ã£ãŸã‚‰ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«
 		int pn = lp->ClientHeight/lp->ItemHeight;
 		if (lp->ItemIndex<lp->TopIndex)
 			lp->TopIndex = std::max(lp->ItemIndex - LISTBOX_SCRMGN, 0);
@@ -930,12 +930,12 @@ void ListBoxSetIndex(TListBox *lp, int idx,
 	}
 	else {
 		if (idx>=lp->Count) idx = lp->Count - 1;
-		//ã‚Ö
+		//ä¸Šã¸
 		if (idx<lp->ItemIndex) {
 			if (idx < lp->TopIndex+LISTBOX_SCRMGN)
 				lp->TopIndex = std::max(idx - LISTBOX_SCRMGN, 0);
 		}
-		//‰º‚Ö
+		//ä¸‹ã¸
 		else {
 			int pn = lp->ClientHeight/lp->ItemHeight;
 			if (idx > (lp->TopIndex + pn - 1 - LISTBOX_SCRMGN))
@@ -945,7 +945,7 @@ void ListBoxSetIndex(TListBox *lp, int idx,
 	}
 }
 //---------------------------------------------------------------------------
-//ListBox ‚ÌƒJ[ƒ\ƒ‹‚ğ‰Â‹—Ìˆæ‚Ö
+//ListBox ã®ã‚«ãƒ¼ã‚½ãƒ«ã‚’å¯è¦–é ˜åŸŸã¸
 //---------------------------------------------------------------------------
 bool ListBoxCsrToVisible(TListBox *lp)
 {
@@ -959,10 +959,10 @@ bool ListBoxCsrToVisible(TListBox *lp)
 	return (lst_idx != lp->ItemIndex);
 }
 //---------------------------------------------------------------------------
-//ListBox ‚ÌƒXƒNƒ[ƒ‹
+//ListBox ã®ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«
 //---------------------------------------------------------------------------
 void ListBoxScrollDown(TListBox *lp, int n,
-	bool move_csr)	//ƒJ[ƒ\ƒ‹‚àˆÚ“® (default = false)
+	bool move_csr)	//ã‚«ãƒ¼ã‚½ãƒ«ã‚‚ç§»å‹• (default = false)
 {
 	int idx = lp->TopIndex;
 	lp->TopIndex = idx + n;
@@ -986,7 +986,7 @@ void ListBoxScrollDown(TListBox *lp, UnicodeString prm)
 
 //---------------------------------------------------------------------------
 void ListBoxScrollUp(TListBox *lp, int n,
-	bool move_csr)	//ƒJ[ƒ\ƒ‹‚àˆÚ“® (default = false)
+	bool move_csr)	//ã‚«ãƒ¼ã‚½ãƒ«ã‚‚ç§»å‹• (default = false)
 {
 	int idx = lp->TopIndex;
 	if (n>lp->TopIndex) lp->TopIndex = 0; else lp->TopIndex = idx - n;
@@ -1009,7 +1009,7 @@ void ListBoxScrollUp(TListBox *lp, UnicodeString prm)
 }
 
 //---------------------------------------------------------------------------
-//ListBox ‚Å‚·‚×‚Ä‚Ì€–Ú‚ğ‘I‘ğ
+//ListBox ã§ã™ã¹ã¦ã®é …ç›®ã‚’é¸æŠ
 //---------------------------------------------------------------------------
 void ListBoxSelectAll(TListBox *lp, bool sw)
 {
@@ -1017,12 +1017,12 @@ void ListBoxSelectAll(TListBox *lp, bool sw)
 }
 
 //---------------------------------------------------------------------------
-//ListBox ‚Å“ª•¶šƒT[ƒ`
+//ListBox ã§é ­æ–‡å­—ã‚µãƒ¼ãƒ
 //---------------------------------------------------------------------------
 int ListBoxInitialSearch(
 	TListBox *lp,
-	UnicodeString kptn,		//ŒŸõƒpƒ^[ƒ“
-	bool fnam_sw)			//ƒtƒ@ƒCƒ‹–¼•”•ª‚É‘Î‚µ‚Ä“K—p (default = false)
+	UnicodeString kptn,		//æ¤œç´¢ãƒ‘ã‚¿ãƒ¼ãƒ³
+	bool fnam_sw)			//ãƒ•ã‚¡ã‚¤ãƒ«åéƒ¨åˆ†ã«å¯¾ã—ã¦é©ç”¨ (default = false)
 {
 	int idx0 = -1, idx1 = -1;
 	try {
@@ -1043,14 +1043,14 @@ int ListBoxInitialSearch(
 }
 
 //---------------------------------------------------------------------------
-//ListBox ‚ÌŒ»İs•¶š—ñ‚ğæ“¾
+//ListBox ã®ç¾åœ¨è¡Œæ–‡å­—åˆ—ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString ListBoxGetStr(TListBox *lp)
 {
 	return (lp->ItemIndex!=-1)? lp->Items->Strings[lp->ItemIndex] : EmptyStr;
 } 
 //---------------------------------------------------------------------------
-//ListBox ‚ÌŒ»İs‚ÌƒIƒuƒWƒFƒNƒg‚ğæ“¾
+//ListBox ã®ç¾åœ¨è¡Œã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å–å¾—
 //---------------------------------------------------------------------------
 TObject * ListBoxGetObj(TListBox *lp)
 {
@@ -1058,7 +1058,7 @@ TObject * ListBoxGetObj(TListBox *lp)
 } 
 
 //---------------------------------------------------------------------------
-//ListBox ‚ÌŒ»İs‚©‚çƒfƒBƒŒƒNƒgƒŠ–¼‚ğæ“¾
+//ListBox ã®ç¾åœ¨è¡Œã‹ã‚‰ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString InfListBoxGetDir(TListBox *lp)
 {
@@ -1067,7 +1067,7 @@ UnicodeString InfListBoxGetDir(TListBox *lp)
 						  get_tkn_r(lp->Items->Strings[idx], ": ") : EmptyStr;
 }
 //---------------------------------------------------------------------------
-//ListBox ‚ÌŒ»İs‚©‚çURL‚ğæ“¾
+//ListBox ã®ç¾åœ¨è¡Œã‹ã‚‰URLã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString ListBoxGetURL(TListBox *lp)
 {
@@ -1075,7 +1075,7 @@ UnicodeString ListBoxGetURL(TListBox *lp)
 }
 
 //---------------------------------------------------------------------------
-//ListBox ‚Ì Objects ‚ğ®”’l‚Æ‚µ‚Äƒ`ƒFƒbƒN‚µA€–Ú˜A”Ô‚ğİ’è
+//ListBox ã® Objects ã‚’æ•´æ•°å€¤ã¨ã—ã¦ãƒã‚§ãƒƒã‚¯ã—ã€é …ç›®é€£ç•ªã‚’è¨­å®š
 //---------------------------------------------------------------------------
 void set_ListBox_ItemNo(TListBox *lp)
 {
@@ -1108,7 +1108,7 @@ void set_Strings_ItemNo(TStringList *lst)
 }
 
 //---------------------------------------------------------------------------
-//TCheckListBox ‚Åƒ`ƒFƒbƒN‚³‚ê‚Ä‚¢‚é€–Ú”‚ğæ“¾
+//TCheckListBox ã§ãƒã‚§ãƒƒã‚¯ã•ã‚Œã¦ã„ã‚‹é …ç›®æ•°ã‚’å–å¾—
 //---------------------------------------------------------------------------
 int get_CheckListCount(TCheckListBox *lp)
 {
@@ -1118,7 +1118,7 @@ int get_CheckListCount(TCheckListBox *lp)
 }
 
 //---------------------------------------------------------------------------
-//TStringGrid ‚Å‚ÌƒJ[ƒ\ƒ‹ˆÚ“®
+//TStringGrid ã§ã®ã‚«ãƒ¼ã‚½ãƒ«ç§»å‹•
 //---------------------------------------------------------------------------
 void GridCursorLeft(TStringGrid *gp)
 {
@@ -1168,7 +1168,7 @@ bool GridCursorMove(UnicodeString cmd , TStringGrid *gp)
 }
 
 //---------------------------------------------------------------------------
-//TStringList ‚Ì€–Ú‚ğ‚P‚Âã‚ÖˆÚ“®
+//TStringList ã®é …ç›®ã‚’ï¼‘ã¤ä¸Šã¸ç§»å‹•
 //---------------------------------------------------------------------------
 int up_StrListItem(TStringList *lst, int idx)
 {
@@ -1179,7 +1179,7 @@ int up_StrListItem(TStringList *lst, int idx)
 	return idx;
 }
 //---------------------------------------------------------------------------
-//TStringList ‚Ì€–Ú‚ğ‚P‚Â‰º‚ÖˆÚ“®
+//TStringList ã®é …ç›®ã‚’ï¼‘ã¤ä¸‹ã¸ç§»å‹•
 //---------------------------------------------------------------------------
 int down_StrListItem(TStringList *lst, int idx)
 {
@@ -1191,7 +1191,7 @@ int down_StrListItem(TStringList *lst, int idx)
 }
 
 //---------------------------------------------------------------------------
-//ƒAƒNƒZƒ‰ƒŒ[ƒ^ƒL[‚Ìˆê’v‚·‚éƒŠƒXƒg€–Ú‚ÌƒCƒ“ƒfƒbƒNƒX‚ğæ“¾
+//ã‚¢ã‚¯ã‚»ãƒ©ãƒ¬ãƒ¼ã‚¿ã‚­ãƒ¼ã®ä¸€è‡´ã™ã‚‹ãƒªã‚¹ãƒˆé …ç›®ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’å–å¾—
 //---------------------------------------------------------------------------
 int get_IndexFromAccKey(TStringList *lst, UnicodeString key)
 {
@@ -1204,7 +1204,7 @@ int get_IndexFromAccKey(TStringList *lst, UnicodeString key)
 }
 
 //---------------------------------------------------------------------------
-//•¶š—ñ‚©‚çURL(ƒ[ƒJƒ‹ƒtƒ@ƒCƒ‹‚ğŠÜ‚Ş)‚ğ’Šo
+//æ–‡å­—åˆ—ã‹ã‚‰URL(ãƒ­ãƒ¼ã‚«ãƒ«ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å«ã‚€)ã‚’æŠ½å‡º
 //---------------------------------------------------------------------------
 UnicodeString extract_URL(UnicodeString s)
 {
@@ -1214,7 +1214,7 @@ UnicodeString extract_URL(UnicodeString s)
 	TMatch mt = TRegEx::Match(s, URL_MATCH_PTN);
 	if (mt.Success) {
 		url = mt.Value;
-		if (!StartsStr('h', url)) url.Insert("h", 1);	//æ“ª‚É h ‚ª‚È‚©‚Á‚½‚ç•â‚¤
+		if (!StartsStr('h', url)) url.Insert("h", 1);	//å…ˆé ­ã« h ãŒãªã‹ã£ãŸã‚‰è£œã†
 	}
 	else {
 		mt = TRegEx::Match(s, MAIL_MATCH_PTN);
@@ -1230,7 +1230,7 @@ UnicodeString extract_URL(UnicodeString s)
 }
 
 //---------------------------------------------------------------------------
-//ƒCƒ“ƒ^[ƒlƒbƒgÚ‘±‚ª‚ ‚é‚©?
+//ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒƒãƒˆæ¥ç¶šãŒã‚ã‚‹ã‹?
 //---------------------------------------------------------------------------
 bool InternetConnected()
 {
@@ -1239,11 +1239,11 @@ bool InternetConnected()
 }
 
 //---------------------------------------------------------------------------
-//ƒIƒ“ƒ‰ƒCƒ“ã‚Ìƒtƒ@ƒCƒ‹‚ğæ“¾
+//ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ä¸Šã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å–å¾—
 //---------------------------------------------------------------------------
 int get_OnlineFile(UnicodeString url, UnicodeString fnam, bool *cancel,
-	TPaintBox *prg_box,		//i’»ƒo[	(default = NULL)
-	double *prg_ratio)		//i’»—¦	(default = NULL)
+	TPaintBox *prg_box,		//é€²æ—ãƒãƒ¼	(default = NULL)
+	double *prg_ratio)		//é€²æ—ç‡	(default = NULL)
 {
 	int f_size = -1;
 	if (cancel) *cancel = false;
@@ -1268,7 +1268,7 @@ int get_OnlineFile(UnicodeString url, UnicodeString fnam, bool *cancel,
 					if (dwSize==0) break;
 					ms->Write(ldbuf.get(), (System::LongInt)dwSize);
 					f_size += dwSize;
-					//i’»ƒo[
+					//é€²æ—ãƒãƒ¼
 					if (prg_box && prg_ratio && dwFsize>0) {
 						*prg_ratio = 1.0 * f_size / dwFsize;
 						prg_box->Repaint();
@@ -1285,7 +1285,7 @@ int get_OnlineFile(UnicodeString url, UnicodeString fnam, bool *cancel,
 				}
 
 				if (!cancel || !*cancel) {
-					//favicon ‚È‚çŒ`®ƒ`ƒFƒbƒN
+					//favicon ãªã‚‰å½¢å¼ãƒã‚§ãƒƒã‚¯
 					if (EndsText(":favicon", fnam) && f_size>64) {
 						//.ico ?
 						int tag = 0;
@@ -1322,7 +1322,7 @@ int get_OnlineFile(UnicodeString url, UnicodeString fnam, bool *cancel,
 }
 
 //---------------------------------------------------------------------------
-//ƒXƒvƒŠƒbƒ^•‚ğİ’è
+//ã‚¹ãƒ—ãƒªãƒƒã‚¿å¹…ã‚’è¨­å®š
 //---------------------------------------------------------------------------
 void set_SplitterWidht(TSplitter *sp, int sp_wd)
 {
@@ -1332,31 +1332,31 @@ void set_SplitterWidht(TSplitter *sp, int sp_wd)
 }
 
 //---------------------------------------------------------------------------
-//ƒpƒlƒ‹‚Ì”z’u
+//ãƒ‘ãƒãƒ«ã®é…ç½®
 //---------------------------------------------------------------------------
 void set_PanelAlign(TPanel *pp, TSplitter *sp, int mode, int sp_wd)
 {
 	int sz = ScaledInt(sp_wd, sp);
 	switch (mode) {
-	case 1:	//‰E
+	case 1:	//å³
 		sp->Align = alLeft;
 		pp->Align = alRight;
 		sp->Align = alRight;
 		sp->Width = pp->Visible? sz : 0;
 		break;
-	case 2:	//¶
+	case 2:	//å·¦
 		sp->Align = alRight;
 		pp->Align = alLeft;
 		sp->Align = alLeft;
 		sp->Width = pp->Visible? sz : 0;
 		break;
-	case 3: //ã
+	case 3: //ä¸Š
 		sp->Align  = alBottom;
 		pp->Align  = alTop;
 		sp->Align  = alTop;
 		sp->Height = pp->Visible? sz : 0;
 		break;
-	default:	//0: ‰º
+	default:	//0: ä¸‹
 		sp->Align  = alTop;
 		pp->Align  = alBottom;
 		sp->Align  = alBottom;
@@ -1377,7 +1377,7 @@ void set_PanelAlign(TPanel *pp, TSplitter *sp, TAlign al, int sp_wd)
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒ“ƒgƒ[ƒ‹‚ğ‰E‰º‹÷‚É”z’u
+//ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚’å³ä¸‹éš…ã«é…ç½®
 //---------------------------------------------------------------------------
 void set_ControlRBCorner(TControl *cp0, TControl *cp1)
 {
@@ -1389,7 +1389,7 @@ void set_ControlRBCorner(TControl *cp0, TControl *cp1)
 }
 
 //---------------------------------------------------------------------------
-//ƒoƒbƒeƒŠc—Ê(%)‚Ì•¶š—ñæ“¾
+//ãƒãƒƒãƒ†ãƒªæ®‹é‡(%)ã®æ–‡å­—åˆ—å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString get_BatteryPercentStr()
 {
@@ -1399,7 +1399,7 @@ UnicodeString get_BatteryPercentStr()
 	return UnicodeString().sprintf(_T("%3u"), ps.BatteryLifePercent);
 }
 //---------------------------------------------------------------------------
-//ƒoƒbƒeƒŠc—Ê(ŠÔ)‚Ì•¶š—ñæ“¾
+//ãƒãƒƒãƒ†ãƒªæ®‹é‡(æ™‚é–“)ã®æ–‡å­—åˆ—å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString get_BatteryTimeStr()
 {
@@ -1421,12 +1421,12 @@ UnicodeString get_BatteryTimeStr()
 }
 
 //---------------------------------------------------------------------------
-//ƒhƒ‰ƒCƒu‚Ìæ‚èŠO‚µ
-//  –ß‚è’l: æ‚èŠO‚¹‚½/æ‚èŠO‚µ‰Â”\ ‚Ìê‡ true
+//ãƒ‰ãƒ©ã‚¤ãƒ–ã®å–ã‚Šå¤–ã—
+//  æˆ»ã‚Šå€¤: å–ã‚Šå¤–ã›ãŸ/å–ã‚Šå¤–ã—å¯èƒ½ ã®å ´åˆ true
 //---------------------------------------------------------------------------
 bool EjectDrive(
-	UnicodeString drvnam,	//ƒhƒ‰ƒCƒu–¼
-	bool eject)				//true=æ‚èŠO‚µ/ false=Šm”F‚Ì‚İ
+	UnicodeString drvnam,	//ãƒ‰ãƒ©ã‚¤ãƒ–å
+	bool eject)				//true=å–ã‚Šå¤–ã—/ false=ç¢ºèªã®ã¿
 {
 	if (EjectDrive2(drvnam, eject)) return true;
 
@@ -1449,29 +1449,29 @@ bool EjectDrive(
 	if (hDrive!=INVALID_HANDLE_VALUE) {
 		if (eject) {
 			if (typ==DRIVE_CDROM) {
-				//ID=37: uæ‚èo‚µv‚ğ’¼ÚÀs
+				//ID=37: ã€Œå–ã‚Šå‡ºã—ã€ã‚’ç›´æ¥å®Ÿè¡Œ
 				ret = usr_SH->DriveContextMenu(Application->ActiveFormHandle, drvnam, NULL, 37).IsEmpty();
 			}
 			else {
-				//ƒ{ƒŠƒ…[ƒ€‚ğƒƒbƒN
+				//ãƒœãƒªãƒ¥ãƒ¼ãƒ ã‚’ãƒ­ãƒƒã‚¯
 				bool locked = false;
 				DWORD dwBytesReturned;
 				for (int i = 0; i<20; i++) {
 					if (::DeviceIoControl(hDrive, FSCTL_LOCK_VOLUME, NULL, 0, NULL, 0, &dwBytesReturned, NULL)) {
 						locked = true; break;
 					}
-					Sleep(10000/20);	//10•b/20‰ñƒŠƒgƒ‰ƒC
+					Sleep(10000/20);	//10ç§’/20å›ãƒªãƒˆãƒ©ã‚¤
 				}
 				if (locked) {
-					//ƒ}ƒEƒ“ƒg‰ğœ
+					//ãƒã‚¦ãƒ³ãƒˆè§£é™¤
 					if (::DeviceIoControl(hDrive, FSCTL_DISMOUNT_VOLUME, NULL, 0, NULL, 0, &dwBytesReturned, NULL)) {
-						//íœ‚ğ–W‚°‚é‚©‚çƒfƒoƒCƒX‚ğ’â~
+						//å‰Šé™¤ã‚’å¦¨ã’ã‚‹ã‹ã‚‰ãƒ‡ãƒã‚¤ã‚¹ã‚’åœæ­¢
 						PREVENT_MEDIA_REMOVAL PMRBuffer;
 						PMRBuffer.PreventMediaRemoval = FALSE;
 						if (::DeviceIoControl(hDrive, IOCTL_STORAGE_MEDIA_REMOVAL,
 							&PMRBuffer, sizeof(PREVENT_MEDIA_REMOVAL), NULL, 0, &dwBytesReturned, NULL))
 						{
-							//æ‚èŠO‚µ
+							//å–ã‚Šå¤–ã—
 							::DeviceIoControl(hDrive, IOCTL_STORAGE_EJECT_MEDIA, NULL, 0, NULL, 0, &dwBytesReturned, NULL);
 						}
 						ret = true;
@@ -1487,7 +1487,7 @@ bool EjectDrive(
 	return ret;
 }
 //---------------------------------------------------------------------------
-//ƒŠƒ€[ƒoƒuƒ‹/CD-ROM ˆÈŠO‚Ìæ‚èŠO‚µ
+//ãƒªãƒ ãƒ¼ãƒãƒ–ãƒ«/CD-ROM ä»¥å¤–ã®å–ã‚Šå¤–ã—
 //---------------------------------------------------------------------------
 bool EjectDrive2(UnicodeString drvnam, bool eject)
 {
@@ -1495,12 +1495,12 @@ bool EjectDrive2(UnicodeString drvnam, bool eject)
 	if (drvnam.IsEmpty()) return false;
 	drvnam = IncludeTrailingPathDelimiter(drvnam);
 
-	//ƒhƒ‰ƒCƒu‚Ìƒ{ƒŠƒ…[ƒ€–¼‚ğæ“¾
+	//ãƒ‰ãƒ©ã‚¤ãƒ–ã®ãƒœãƒªãƒ¥ãƒ¼ãƒ åã‚’å–å¾—
 	_TCHAR pszVolName[MAX_PATH];
 	if (!::GetVolumeNameForVolumeMountPoint(drvnam.c_str(), pszVolName, MAX_PATH)) return false;
 	UnicodeString vol_name = pszVolName;
 
-	//ƒ{ƒŠƒ…[ƒ€–¼‚Ìˆê’v‚·‚éƒfƒoƒCƒX‚ğŒŸõ
+	//ãƒœãƒªãƒ¥ãƒ¼ãƒ åã®ä¸€è‡´ã™ã‚‹ãƒ‡ãƒã‚¤ã‚¹ã‚’æ¤œç´¢
 	bool res = false;
 	HDEVINFO hDevInfo = ::SetupDiGetClassDevs(NULL, 0, 0, DIGCF_PRESENT|DIGCF_ALLCLASSES);
 	if (hDevInfo!=INVALID_HANDLE_VALUE) {
@@ -1551,7 +1551,7 @@ bool EjectDrive2(UnicodeString drvnam, bool eject)
 						if (!GetVolumeNameForVolumeMountPoint(strDiList.c_str(), pszVolName, MAX_PATH)) continue;
 						if (SameText(vol_name, pszVolName)) {
 							found = true;
-							//æ‚èŠO‚µ
+							//å–ã‚Šå¤–ã—
 							res = eject? (CM_Request_Device_Eject(DevInfoData.DevInst, NULL, NULL, 0, 0)==CR_SUCCESS) : true;
 						}
 					}
@@ -1564,16 +1564,16 @@ bool EjectDrive2(UnicodeString drvnam, bool eject)
 }
 
 //---------------------------------------------------------------------------
-//ƒƒjƒ…[‚Ì—]Œv‚ÈƒZƒpƒŒ[ƒ^‚ğ”ñ•\¦‚É‚·‚é
-//¦Å‰‚Ì•\¦‚Å AutoLineReduction ‚ªŒø‚©‚È‚¢–â‘è‚É‘Îˆ
+//ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®ä½™è¨ˆãªã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿ã‚’éè¡¨ç¤ºã«ã™ã‚‹
+//â€»æœ€åˆã®è¡¨ç¤ºã§ AutoLineReduction ãŒåŠ¹ã‹ãªã„å•é¡Œã«å¯¾å‡¦
 //---------------------------------------------------------------------------
 void reduction_MenuLine(TMenuItem *mp)
 {
 	if (!mp) return;
 
 	bool is_sp = false;
-	TMenuItem *ip_0 = NULL;		//Å‰‚Ì•\¦€–Ú
-	TMenuItem *ip_1 = NULL;		//ÅŒã‚Ì•\¦€–Ú
+	TMenuItem *ip_0 = NULL;		//æœ€åˆã®è¡¨ç¤ºé …ç›®
+	TMenuItem *ip_1 = NULL;		//æœ€å¾Œã®è¡¨ç¤ºé …ç›®
 
 	for (int i=0; i<mp->Count; i++) {
 		TMenuItem *ip = mp->Items[i];
@@ -1597,36 +1597,36 @@ void reduction_MenuLine(TMenuItem *mp)
 }
 
 //---------------------------------------------------------------------------
-//WebŒŸõ
+//Webæ¤œç´¢
 //---------------------------------------------------------------------------
-UnicodeString WebSeaUrl;		//WebSearch:  ŒŸõƒGƒ“ƒWƒ“URL
+UnicodeString WebSeaUrl;		//WebSearch:  æ¤œç´¢ã‚¨ãƒ³ã‚¸ãƒ³URL
 
 //---------------------------------------------------------------------------
-//WebŒŸõ•\¦•¶š—ñ‚ğæ“¾
+//Webæ¤œç´¢è¡¨ç¤ºæ–‡å­—åˆ—ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString get_WebSeaCaption(
-	UnicodeString kwd,	//ŒŸõŒê				(default = EmptyStr)
-	bool with_ak)		//ƒAƒNƒZƒ‰ƒŒ[ƒ^‚ğ•t‰Á	(default = true)
+	UnicodeString kwd,	//æ¤œç´¢èª				(default = EmptyStr)
+	bool with_ak)		//ã‚¢ã‚¯ã‚»ãƒ©ãƒ¬ãƒ¼ã‚¿ã‚’ä»˜åŠ 	(default = true)
 {
 	UnicodeString ret_str;
 	if (!kwd.IsEmpty()) {
 		kwd = Trim(get_first_line(kwd));
 		kwd = ReplaceStr(kwd, "&", "&&");
-		if (kwd.Length()>20) kwd = kwd.SubString(1, 20) + "c";
-		if (!kwd.IsEmpty()) ret_str.sprintf(_T("u%sv‚ğ "), kwd.c_str());
+		if (kwd.Length()>20) kwd = kwd.SubString(1, 20) + "â€¦";
+		if (!kwd.IsEmpty()) ret_str.sprintf(_T("ã€Œ%sã€ã‚’ "), kwd.c_str());
 	}
 
 	UnicodeString url = get_tkn_m(WebSeaUrl, "//", "/");
 	remove_top_text(url, "www.");
 	if (url.IsEmpty()) url = "Web";
-	ret_str.cat_sprintf(_T("%s ‚ÅŒŸõ"), url.c_str());
+	ret_str.cat_sprintf(_T("%s ã§æ¤œç´¢"), url.c_str());
 	if (with_ak) ret_str += "(&S)";
 
 	return ret_str;
 }
 
 //---------------------------------------------------------------------------
-//WebŒŸõ‚ğÀs
+//Webæ¤œç´¢ã‚’å®Ÿè¡Œ
 //---------------------------------------------------------------------------
 bool exe_WebSearch(UnicodeString kwd)
 {

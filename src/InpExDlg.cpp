@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ägí£ì¸óÕÉ{ÉbÉNÉX													//
-//  ÉJÉåÉìÉgÉäÉXÉgÇÃíÜâõÇ…ï\é¶											//
+//  Êã°ÂºµÂÖ•Âäõ„Éú„ÉÉ„ÇØ„Çπ													//
+//  „Ç´„É¨„É≥„Éà„É™„Çπ„Éà„ÅÆ‰∏≠Â§Æ„Å´Ë°®Á§∫											//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -36,22 +36,22 @@ void __fastcall TInputExDlg::FormShow(TObject *Sender)
 {
 	set_ComboBox_AutoComp(this);
 
-	//ägí£ÉÇÅ[ÉhÇÃÉLÉÉÉvÉVÉáÉìê›íË
+	//Êã°Âºµ„É¢„Éº„Éâ„ÅÆ„Ç≠„É£„Éó„Ç∑„Éß„É≥Ë®≠ÂÆö
 	switch (IpuntExMode) {
-	case INPEX_CRE_DIR:		 Caption = "ÉfÉBÉåÉNÉgÉäÇÃçÏê¨ - " + yen_to_delimiter(PathName);	break;
-	case INPEX_NEW_TEXTFILE: Caption = "êVãKÉeÉLÉXÉgÇÃçÏê¨";	break;
-	case INPEX_CLONE:		 Caption = "ÉNÉçÅ[ÉìçÏê¨";			break;
-	case INPEX_CRE_TESTFILE: Caption = "ÉeÉXÉgÉtÉ@ÉCÉãÇÃçÏê¨";	break;
-	case INPEX_JUMP_LINE:	 Caption = "éwíËçsî‘çÜÇ…à⁄ìÆ";		break;
-	case INPEX_JUMP_ADDR:	 Caption = "éwíËÉAÉhÉåÉXÇ…à⁄ìÆ";	break;
-	case INPEX_SET_TOPADDR:	 Caption = "êÊì™ÉAÉhÉåÉXÇê›íË";	break;
-	case INPEX_FIND_TAG:	 Caption = "É^ÉOåüçı";				break;
-	case INPEX_ADD_TAG:		 Caption = "É^ÉOÇÃí«â¡";			break;
-	case INPEX_SET_TAG:		 Caption = "É^ÉOÇÃê›íË";			break;
-	case INPEX_TAG_SELECT:	 Caption = "É^ÉOëIë";				break;
-	case INPEX_CLIP_PASTE:	 Caption = "ÉNÉäÉbÉvÉ{Å[ÉhÇ©ÇÁêVãKÉeÉLÉXÉgçÏê¨";	break;
+	case INPEX_CRE_DIR:		 Caption = "„Éá„Ç£„É¨„ÇØ„Éà„É™„ÅÆ‰ΩúÊàê - " + yen_to_delimiter(PathName);	break;
+	case INPEX_NEW_TEXTFILE: Caption = "Êñ∞Ë¶è„ÉÜ„Ç≠„Çπ„Éà„ÅÆ‰ΩúÊàê";	break;
+	case INPEX_CLONE:		 Caption = "„ÇØ„É≠„Éº„É≥‰ΩúÊàê";			break;
+	case INPEX_CRE_TESTFILE: Caption = "„ÉÜ„Çπ„Éà„Éï„Ç°„Ç§„É´„ÅÆ‰ΩúÊàê";	break;
+	case INPEX_JUMP_LINE:	 Caption = "ÊåáÂÆöË°åÁï™Âè∑„Å´ÁßªÂãï";		break;
+	case INPEX_JUMP_ADDR:	 Caption = "ÊåáÂÆö„Ç¢„Éâ„É¨„Çπ„Å´ÁßªÂãï";	break;
+	case INPEX_SET_TOPADDR:	 Caption = "ÂÖàÈ†≠„Ç¢„Éâ„É¨„Çπ„ÇíË®≠ÂÆö";	break;
+	case INPEX_FIND_TAG:	 Caption = "„Çø„Ç∞Ê§úÁ¥¢";				break;
+	case INPEX_ADD_TAG:		 Caption = "„Çø„Ç∞„ÅÆËøΩÂä†";			break;
+	case INPEX_SET_TAG:		 Caption = "„Çø„Ç∞„ÅÆË®≠ÂÆö";			break;
+	case INPEX_TAG_SELECT:	 Caption = "„Çø„Ç∞ÈÅ∏Êäû";				break;
+	case INPEX_CLIP_PASTE:	 Caption = "„ÇØ„É™„ÉÉ„Éó„Éú„Éº„Éâ„Åã„ÇâÊñ∞Ë¶è„ÉÜ„Ç≠„Çπ„Éà‰ΩúÊàê";	break;
 	default:
-		//ÉÅÉCÉìë§Ç≈ê›íË
+		//„É°„Ç§„É≥ÂÅ¥„ÅßË®≠ÂÆö
 		;
 	}
 
@@ -67,15 +67,15 @@ void __fastcall TInputExDlg::FormShow(TObject *Sender)
 	{
 		ClientWidth = 480;
 		NameLabel->Visible	   = true;
-		NameLabel->Caption	   = (IpuntExMode==INPEX_FIND_TAG || IpuntExMode==INPEX_ADD_TAG || IpuntExMode==INPEX_SET_TAG)? "É^ÉO" : "ñºëO";
+		NameLabel->Caption	   = (IpuntExMode==INPEX_FIND_TAG || IpuntExMode==INPEX_ADD_TAG || IpuntExMode==INPEX_SET_TAG)? "„Çø„Ç∞" : "ÂêçÂâç";
 		InputComboBox->Visible = true;
 		UnicodeString def_str  = InputComboBox->Text;
 
-		//É^ÉOñºÉäÉXÉg
+		//„Çø„Ç∞Âêç„É™„Çπ„Éà
 		if (IpuntExMode==INPEX_FIND_TAG || IpuntExMode==INPEX_ADD_TAG || IpuntExMode==INPEX_SET_TAG || IpuntExMode==INPEX_TAG_SELECT) {
 			InputComboBox->Items->Assign(usr_TAG->TagNameList);
 		}
-		//óöó
+		//Â±•Ê≠¥
 		else {
 			IniFile->LoadComboBoxItems(InputComboBox, (IpuntExMode==INPEX_CRE_DIR)? _T("CreateDirHistory") : _T("NewTextHistory"));
 		}
@@ -84,8 +84,8 @@ void __fastcall TInputExDlg::FormShow(TObject *Sender)
 		InputComboBox->Width = ClientWidth - InputComboBox->Left - r_mgn;
 
 		InputExDlg->InputComboBox->Hint =
-			(IpuntExMode==INPEX_FIND_TAG || IpuntExMode==INPEX_TAG_SELECT)? "; ãÊêÿÇËÇ≈ANDåüçıÅAÅbãÊêÿÇËÇ≈ORåüçı" :
-				(IpuntExMode==INPEX_ADD_TAG || IpuntExMode==INPEX_SET_TAG)? "; Ç≈ãÊêÿÇ¡Çƒï°êîéwíËâ¬î\" : "";
+			(IpuntExMode==INPEX_FIND_TAG || IpuntExMode==INPEX_TAG_SELECT)? "; Âå∫Âàá„Çä„ÅßANDÊ§úÁ¥¢„ÄÅÔΩúÂå∫Âàá„Çä„ÅßORÊ§úÁ¥¢" :
+				(IpuntExMode==INPEX_ADD_TAG || IpuntExMode==INPEX_SET_TAG)? "; „ÅßÂå∫Âàá„Å£„Å¶Ë§áÊï∞ÊåáÂÆöÂèØËÉΩ" : "";
 
 		InputComboBoxChange(NULL);
 	}
@@ -99,10 +99,10 @@ void __fastcall TInputExDlg::FormShow(TObject *Sender)
 		InputEdit->Width = ClientWidth - InputEdit->Left - r_mgn;
 	}
 
-	//ï\é¶à íuÇí≤êÆ
+	//Ë°®Á§∫‰ΩçÁΩÆ„ÇíË™øÊï¥
 	TPoint p;
 	TRect tmp_rc = BoundsRect; tmp_rc.SetHeight(SCALED_THIS(120));
-	if (Screen->ActiveForm==Application->MainForm && StartsText("ÉtÉ@ÉìÉNÉVÉáÉìÉLÅ[", Caption)) {
+	if (Screen->ActiveForm==Application->MainForm && StartsText("„Éï„Ç°„É≥„ÇØ„Ç∑„Éß„É≥„Ç≠„Éº", Caption)) {
 		int idx = (extract_int_def(InputEdit->EditLabel->Caption, 1) - 1) / 4;
 		TControl *cp = Application->MainForm;
 		p = cp->ClientToScreen(cp->ClientRect.CenteredRect(tmp_rc).Location);
@@ -243,14 +243,14 @@ void __fastcall TInputExDlg::FormClose(TObject *Sender, TCloseAction &Action)
 {
 	CloseIME(Handle);
 
-	//óöóÇÃï€ë∂
+	//Â±•Ê≠¥„ÅÆ‰øùÂ≠ò
 	if (ModalResult==mrOk && (IpuntExMode==INPEX_CRE_DIR || IpuntExMode==INPEX_NEW_TEXTFILE)) {
 		add_ComboBox_history(InputComboBox);
 		IniFile->SaveComboBoxItems(InputComboBox,
 					(IpuntExMode==INPEX_CRE_DIR)? _T("CreateDirHistory") : _T("NewTextHistory"));
 	}
 
-	//ÇªÇÃëºÇÃÉIÉvÉVÉáÉìÇÃï€ë∂
+	//„Åù„ÅÆ‰ªñ„ÅÆ„Ç™„Éó„Ç∑„Éß„É≥„ÅÆ‰øùÂ≠ò
 	if (IpuntExMode==INPEX_CRE_DIR) {
 		CreDirChg	  = DirChgCheckBox->Checked;
 		CreDirCnvChar = CnvChCheckBox->Checked;
@@ -268,7 +268,7 @@ void __fastcall TInputExDlg::FormClose(TObject *Sender, TCloseAction &Action)
 		IniFile->WriteBoolGen(_T("HexAddress"),		HexRadioBtn->Checked);
 		UnicodeString lbuf = Trim(InputEdit->Text);
 		if (HexRadioBtn->Checked) {
-			//16êiÇÃèÍçáÅA0x Çïtâ¡
+			//16ÈÄ≤„ÅÆÂ†¥Âêà„ÄÅ0x „Çí‰ªòÂä†
 			if (!lbuf.IsEmpty()) lbuf.Insert("0x", starts_tchs("+-", lbuf)? 2 : 1);
 		}
 		InputEdit->Text = lbuf;
@@ -349,19 +349,19 @@ void __fastcall TInputExDlg::InputComboBoxChange(TObject *Sender)
 		PathInfLabel->Font->Color = (p_len<248 || PathName.Pos('/'))? fg : col_Error;
 		NameInfLabel->Font->Color = (f_len<256)? fg : col_Error;
 		UnicodeString tmp;
-		PathInfLabel->Caption = tmp.sprintf(_T("ÉtÉãÉpÉXñºÇÃï∂éöêî = %u"), p_len);
-		NameInfLabel->Caption = tmp.sprintf(_T("ñºëOÇÃï∂éöêî = %u"), f_len);
+		PathInfLabel->Caption = tmp.sprintf(_T("„Éï„É´„Éë„ÇπÂêç„ÅÆÊñáÂ≠óÊï∞ = %u"), p_len);
+		NameInfLabel->Caption = tmp.sprintf(_T("ÂêçÂâç„ÅÆÊñáÂ≠óÊï∞ = %u"), f_len);
 	}
 }
 
 //---------------------------------------------------------------------------
-//InputExDlg ópä÷êî
+//InputExDlg Áî®Èñ¢Êï∞
 //---------------------------------------------------------------------------
 UnicodeString inputbox_ex(
-	const _TCHAR *tit,		//É^ÉCÉgÉã
-	const _TCHAR *prm,		//ÉvÉçÉìÉvÉg
-	UnicodeString def,		//ÉfÉtÉHÉãÉg	(default = EmptyStr)
-	bool num_only)			//êîéöÇÃÇ›ì¸óÕ	(default = false)
+	const _TCHAR *tit,		//„Çø„Ç§„Éà„É´
+	const _TCHAR *prm,		//„Éó„É≠„É≥„Éó„Éà
+	UnicodeString def,		//„Éá„Éï„Ç©„É´„Éà	(default = EmptyStr)
+	bool num_only)			//Êï∞Â≠ó„ÅÆ„ÅøÂÖ•Âäõ	(default = false)
 {
 	InputExDlg->Caption = tit;
 	InputExDlg->InputEdit->EditLabel->Caption = prm? prm : null_TCHAR;
@@ -373,19 +373,19 @@ UnicodeString inputbox_ex(
 int inputbox_ex_n(
 	const _TCHAR *tit,
 	const _TCHAR *prm,
-	UnicodeString def_s,	//ÉfÉtÉHÉãÉgï∂éöóÒ	(default = EmptyStr)
-	int def_n)				//ÉfÉtÉHÉãÉgêîíl	(default = 0)
+	UnicodeString def_s,	//„Éá„Éï„Ç©„É´„ÉàÊñáÂ≠óÂàó	(default = EmptyStr)
+	int def_n)				//„Éá„Éï„Ç©„É´„ÉàÊï∞ÂÄ§	(default = 0)
 {
 	return inputbox_ex(tit, prm, def_s, true).ToIntDef(def_n);
 }
 //---------------------------------------------------------------------------
 bool input_query_ex(
-	const _TCHAR *tit,		//É^ÉCÉgÉã
-	const _TCHAR *prm,		//ÉvÉçÉìÉvÉg
+	const _TCHAR *tit,		//„Çø„Ç§„Éà„É´
+	const _TCHAR *prm,		//„Éó„É≠„É≥„Éó„Éà
 	UnicodeString *value,
-	int width,				//ï\é¶ïùéwíË	(default = 0 : Ç»Çµ)
-	bool num_only,			//êîéöÇÃÇ›ì¸óÕ	(default = false)
-	UnicodeString hint)		//ÉqÉìÉg		(default = EmptyStr)
+	int width,				//Ë°®Á§∫ÂπÖÊåáÂÆö	(default = 0 : „Å™„Åó)
+	bool num_only,			//Êï∞Â≠ó„ÅÆ„ÅøÂÖ•Âäõ	(default = false)
+	UnicodeString hint)		//„Éí„É≥„Éà		(default = EmptyStr)
 {
 	InputExDlg->Caption = tit;
 	InputExDlg->InputEdit->EditLabel->Caption = prm;
@@ -399,7 +399,7 @@ bool input_query_ex(
 }
 //---------------------------------------------------------------------------
 bool input_query_ex(
-	int tid,				//ÉÅÉbÉZÅ[ÉWID
+	int tid,				//„É°„ÉÉ„Çª„Éº„Ç∏ID
 	const _TCHAR *prm,
 	UnicodeString *value,
 	int width,

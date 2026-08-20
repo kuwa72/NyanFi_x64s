@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒeƒLƒXƒgƒrƒ…[ƒA(ŠO•”ƒEƒBƒ“ƒhƒE)									//
+//  ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢(å¤–éƒ¨ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦)									//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -36,13 +36,13 @@ void __fastcall TExTxtViewer::FormCreate(TObject *Sender)
 	TxtViewScrPanel = new UsrScrollPanel(TxtScrollPanel, TextScrollBar, USCRPNL_FLAG_TV|USCRPNL_FLAG_L_WP);
 
 	ExViewer = new TTxtViewer(this, TextPaintBox, TextScrollBar, TxtViewScrPanel, TxtSttHeader, TextRulerBox);
-	ExViewer->isHtm2Txt   = TxtViewer->isHtm2Txt;	//“à•”ƒrƒ…[ƒA‚©‚ç”½‰f
+	ExViewer->isHtm2Txt   = TxtViewer->isHtm2Txt;	//å†…éƒ¨ãƒ“ãƒ¥ãƒ¼ã‚¢ã‹ã‚‰åæ˜ 
 	ExViewer->isFixedLen  = TxtViewer->isFixedLen;
 	ExViewer->ShowRuby	  = IniFile->ReadBoolGen(_T("ShowRuby"), true);
 	ExViewer->TopIsHeader = IniFile->ReadBoolGen(_T("TopIsHeader"));
 	ExViewer->isIncMigemo = IniFile->ReadBoolGen(_T("TvIncMigemo"));
 
-	//ƒhƒƒbƒvƒ^[ƒQƒbƒg‚ğ“o˜^
+	//ãƒ‰ãƒ­ãƒƒãƒ—ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’ç™»éŒ²
 	IDropTarget *pDropTarget = NULL;
 	TDropTarget::CreateInstance(&pDropTarget);
 	if (pDropTarget) {
@@ -62,7 +62,7 @@ void __fastcall TExTxtViewer::FormShow(TObject *Sender)
 	TxtViewPanel->Color   = get_ViewBgCol();
 	TxtScrollPanel->Color = get_ViewBgCol();
 
-	//î•ñƒwƒbƒ_
+	//æƒ…å ±ãƒ˜ãƒƒãƒ€
 	TxtSttHeader->Align = TxtSttIsBottom? alBottom : alTop;
 	AssignScaledFont(TxtSttHeader, ViewHdrFont);
 
@@ -73,7 +73,7 @@ void __fastcall TExTxtViewer::FormShow(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TExTxtViewer::WmFormShowed(TMessage &msg)
 {
-	//ƒtƒ@ƒCƒ‹
+	//ãƒ•ã‚¡ã‚¤ãƒ«
 	if (!FileName.IsEmpty()) {
 		if (!OpenViewer(false, 0, LineNo)) msgbox_ERR(USTR_FileNotOpen);
 	}
@@ -82,25 +82,25 @@ void __fastcall TExTxtViewer::WmFormShowed(TMessage &msg)
 		TxtMainPanel->Visible	= false;
 		TxtScrollPanel->Visible = false;
 		TxtViewPanel->Font->Color = col_Teal;
-		TxtViewPanel->Caption = "“Ç’†...";	TxtViewPanel->Repaint();
+		TxtViewPanel->Caption = "èª­è¾¼ä¸­...";	TxtViewPanel->Repaint();
 		ExViewer->Clear();
 		ExViewer->FileName = ExViewer->OrgName = EmptyStr;
 		UnicodeString tmp;
 
-		//ƒNƒŠƒbƒvƒ{[ƒh
+		//ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰
 		if (isClip) {
-			set_FormTitle(this, _T("ƒNƒŠƒbƒvƒ{[ƒh - ƒeƒLƒXƒgƒrƒ…[ƒA"));
+			set_FormTitle(this, _T("ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ - ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢"));
 			std::unique_ptr<TStringList> vbuf(new TStringList());
 			vbuf->Text = GetClipboardText();
 			ExViewer->isClip = isClip;
 			ExViewer->AssignText(vbuf.get());
-			ExViewer->SttHdrInf = tmp.sprintf(_T("ƒNƒŠƒbƒvƒ{[ƒh  s”:%u"), ExViewer->MaxLine);
+			ExViewer->SttHdrInf = tmp.sprintf(_T("ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰  è¡Œæ•°:%u"), ExViewer->MaxLine);
 		}
-		//ƒƒO
+		//ãƒ­ã‚°
 		else {
-			set_FormTitle(this, _T("ƒ^ƒXƒNƒƒO - ƒeƒLƒXƒgƒrƒ…[ƒA"));
+			set_FormTitle(this, _T("ã‚¿ã‚¹ã‚¯ãƒ­ã‚° - ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢"));
 			ExViewer->AssignText(LogBufList);
-			ExViewer->SttHdrInf = tmp.sprintf(_T("ƒ^ƒXƒNƒƒO  s”:%s"), get_size_str_B(ExViewer->MaxLine, 0).c_str());
+			ExViewer->SttHdrInf = tmp.sprintf(_T("ã‚¿ã‚¹ã‚¯ãƒ­ã‚°  è¡Œæ•°:%s"), get_size_str_B(ExViewer->MaxLine, 0).c_str());
 		}
 
 		ExViewer->AdjustSttHdr();
@@ -132,7 +132,7 @@ void __fastcall TExTxtViewer::FormDestroy(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒƒbƒvó‚¯“ü‚ê
+//ãƒ­ãƒƒãƒ—å—ã‘å…¥ã‚Œ
 //---------------------------------------------------------------------------
 void __fastcall TExTxtViewer::WmDropped(TMessage &msg)
 {
@@ -154,7 +154,7 @@ void __fastcall TExTxtViewer::FormDeactivate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------
-//ƒTƒCƒY•ÏXI—¹
+//ã‚µã‚¤ã‚ºå¤‰æ›´çµ‚äº†
 //---------------------------------------------------------------------
 void __fastcall TExTxtViewer::WmExitSizeMove(TMessage &msg)
 {
@@ -174,18 +174,18 @@ void __fastcall TExTxtViewer::FormResize(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒL[‘€ì
+//ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TExTxtViewer::FormKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
 	try {
 		bool hadled = true;
-		//ƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`
+		//ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ã‚¿ãƒ«ã‚µãƒ¼ãƒ
 		if (ExViewer->isIncSea) {
 			UnicodeString KeyStr = get_KeyStr(Key, Shift);		if (KeyStr.IsEmpty()) return;
 			ExViewer->IncSearch(KeyStr);
 		}
-		//’Êí
+		//é€šå¸¸
 		else {
 			UnicodeString KeyStr = TwoStrokeSeq(Key, Shift);	if (KeyStr.IsEmpty()) return;
 			UnicodeString CmdStr = Key_to_CmdV(KeyStr);
@@ -193,20 +193,20 @@ void __fastcall TExTxtViewer::FormKeyDown(TObject *Sender, WORD &Key, TShiftStat
 			CancelHelp	= !CmdStr.IsEmpty() && EndsStr("F1", KeyStr);
 			ActionParam = EmptyStr;
 
-			//ƒRƒ}ƒ“ƒhˆ—
+			//ã‚³ãƒãƒ³ãƒ‰å‡¦ç†
 			if (ExeCommandV(CmdStr)) {
 				if (!ActionOk) throw EAbort(ActionErrMsg);
 				ClearKeyBuff(true);
 			}
-			//‰EƒNƒŠƒbƒNƒƒjƒ…[
+			//å³ã‚¯ãƒªãƒƒã‚¯ãƒ¡ãƒ‹ãƒ¥ãƒ¼
 			else if (contained_wd_i(KeysStr_Popup, KeyStr)) {
 				show_PopupMenu(ViewPopupMenu, TextPaintBox);
 			}
-			//•Â‚¶‚é
+			//é–‰ã˜ã‚‹
 			else if (equal_ESC(KeyStr) || equal_ENTER(KeyStr)) {
 				ExeCommandV(_T("Close"));
 			}
-			//‚»‚Ì‘¼
+			//ãã®ä»–
 			else {
 				hadled = SpecialKeyProc(this, Key, Shift);
 				if (hadled && LastWidth!=Width) {
@@ -251,7 +251,7 @@ void __fastcall TExTxtViewer::TextScrollBarChange(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒ}ƒEƒX‘€ì
+//ãƒã‚¦ã‚¹æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TExTxtViewer::TextPaintBoxMouseDown(TObject *Sender, TMouseButton Button,
 	TShiftState Shift, int X, int Y)
@@ -279,7 +279,7 @@ void __fastcall TExTxtViewer::TextPaintBoxDblClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//î•ñƒwƒbƒ_‚Ì•`‰æ
+//æƒ…å ±ãƒ˜ãƒƒãƒ€ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TExTxtViewer::TxtSttHeaderDrawPanel(TStatusBar *StatusBar, TStatusPanel *Panel, const TRect &Rect)
 {
@@ -288,10 +288,10 @@ void __fastcall TExTxtViewer::TxtSttHeaderDrawPanel(TStatusBar *StatusBar, TStat
 
 //---------------------------------------------------------------------------
 bool __fastcall TExTxtViewer::OpenViewer(
-	bool bin_mode,		//ƒoƒCƒiƒŠ	(default = false)
-	int  code_page,		//ƒR[ƒhƒy[ƒW (default = 0 : ”»’è)
-	int  lno,			//s”Ô†	(default = 0 : —š—ğ‚ğQÆ)
-	bool force_txt)		//‹­§“I‚ÉƒeƒLƒXƒg‚Æ‚µ‚ÄŠJ‚­(bin_mode=false ‚Ìê‡ default = false)
+	bool bin_mode,		//ãƒã‚¤ãƒŠãƒª	(default = false)
+	int  code_page,		//ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸ (default = 0 : åˆ¤å®š)
+	int  lno,			//è¡Œç•ªå·	(default = 0 : å±¥æ­´ã‚’å‚ç…§)
+	bool force_txt)		//å¼·åˆ¶çš„ã«ãƒ†ã‚­ã‚¹ãƒˆã¨ã—ã¦é–‹ã(bin_mode=false ã®å ´åˆ default = false)
 {
 	GlobalErrMsg = EmptyStr;
 
@@ -300,7 +300,7 @@ bool __fastcall TExTxtViewer::OpenViewer(
 
 		if (!file_exists(FileName)) Abort();
 		UnicodeString fext = get_extension(FileName);
-		Caption = UnicodeString().sprintf(_T("%s - ƒeƒLƒXƒgƒrƒ…[ƒA"), yen_to_delimiter(OrgName).c_str());
+		Caption = UnicodeString().sprintf(_T("%s - ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢"), yen_to_delimiter(OrgName).c_str());
 
 		int cpag = 0;
 
@@ -317,7 +317,7 @@ bool __fastcall TExTxtViewer::OpenViewer(
 		ExViewer->OrgName  = OrgName;
 
 		TxtViewPanel->Font->Color = col_Teal;
-		TxtViewPanel->Caption = "“Ç’†...";	TxtViewPanel->Repaint();
+		TxtViewPanel->Caption = "èª­è¾¼ä¸­...";	TxtViewPanel->Repaint();
 
 		UnicodeString inf_str;
 		inf_str.sprintf(_T("%s  %s"), ExtractFileName(FileName).c_str(), get_FileInfStr(FileName).c_str());
@@ -332,34 +332,34 @@ bool __fastcall TExTxtViewer::OpenViewer(
 			ExViewer->LineBreakStr = EmptyStr;
 		}
 		//------------------------------
-		//ƒŠƒbƒ`ƒeƒLƒXƒg
+		//ãƒªãƒƒãƒãƒ†ã‚­ã‚¹ãƒˆ
 		//------------------------------
 		else if (isRichText) {
 			TempRichEdit->Lines->LoadFromFile(FileName);
 			ExViewer->AssignText(TempRichEdit->Lines, lno);
 		}
 		//------------------------------
-		//ƒeƒLƒXƒg•\¦
+		//ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¤º
 		//------------------------------
 		else if (isViewText) {
-			//ƒR[ƒh”»’è‚µ‚Ä“Ç(ƒTƒCƒY§ŒÀ)
+			//ã‚³ãƒ¼ãƒ‰åˆ¤å®šã—ã¦èª­è¾¼(ã‚µã‚¤ã‚ºåˆ¶é™)
 			std::unique_ptr<TStringList> vbuf(new TStringList());
 			if (code_page==0) code_page = cpag;
 			load_text_ex(FileName, vbuf.get(), code_page, ViewTxtLimitSize, force_txt, &ExViewer->LineBreakStr);
 			if (!GlobalErrMsg.IsEmpty()) Abort();
 			ExViewer->AssignText(vbuf.get(), lno);
-			//s”
+			//è¡Œæ•°
 			inf_str.cat_sprintf(_T("  %s:%s"),
-				(test_HtmlExt(fext)? _T("ƒ\[ƒXs”") : _T("s”")),
+				(test_HtmlExt(fext)? _T("ã‚½ãƒ¼ã‚¹è¡Œæ•°") : _T("è¡Œæ•°")),
 				get_size_str_B(vbuf->Count, 0).c_str());
-			if (ExViewer->isLimited) inf_str += "(•”•ª)";
+			if (ExViewer->isLimited) inf_str += "(éƒ¨åˆ†)";
 		}
 		//------------------------------
-		//ƒoƒCƒiƒŠEƒ_ƒ“ƒv•\¦
+		//ãƒã‚¤ãƒŠãƒªãƒ»ãƒ€ãƒ³ãƒ—è¡¨ç¤º
 		//------------------------------
 		else {
 			if (!ExViewer->AssignBin()) Abort();
-			if (ExViewer->isLimited) inf_str += "    (•”•ª)";
+			if (ExViewer->isLimited) inf_str += "    (éƒ¨åˆ†)";
 		}
 
 		ExViewer->AdjustSttHdr();
@@ -384,10 +384,10 @@ bool __fastcall TExTxtViewer::OpenViewer(
 }
 //---------------------------------------------------------------------------
 bool __fastcall TExTxtViewer::OpenViewer(
-	UnicodeString fnam,	//ƒtƒ@ƒCƒ‹–¼
-	bool bin_mode,		//ƒoƒCƒiƒŠ	(default = false)
-	int  code_page,		//ƒR[ƒhƒy[ƒW (default = 0 : ”»’è)
-	int  lno)			//s”Ô†	(default = 0 : —š—ğ‚ğQÆ)
+	UnicodeString fnam,	//ãƒ•ã‚¡ã‚¤ãƒ«å
+	bool bin_mode,		//ãƒã‚¤ãƒŠãƒª	(default = false)
+	int  code_page,		//ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸ (default = 0 : åˆ¤å®š)
+	int  lno)			//è¡Œç•ªå·	(default = 0 : å±¥æ­´ã‚’å‚ç…§)
 {
 	FileName = OrgName = fnam;
 	return OpenViewer(bin_mode, code_page, lno);
@@ -400,32 +400,32 @@ void __fastcall TExTxtViewer::GlobalAbort()
 }
 
 //---------------------------------------------------------------------------
-//2ƒXƒgƒ[ƒN‘€ì‚Ìˆ—
+//2ã‚¹ãƒˆãƒ­ãƒ¼ã‚¯æ“ä½œã®å‡¦ç†
 //---------------------------------------------------------------------------
 UnicodeString __fastcall TExTxtViewer::TwoStrokeSeq(WORD &Key, TShiftState Shift)
 {
 	UnicodeString key_str = get_KeyStr(Key);	if (key_str.IsEmpty()) return EmptyStr;
 	key_str = get_ShiftStr(Shift) + key_str;
 
-	//2ƒXƒgƒ[ƒN–Ú
+	//2ã‚¹ãƒˆãƒ­ãƒ¼ã‚¯ç›®
 	if (Wait2ndKey) {
 		Wait2ndKey = false;
 		key_str.sprintf(_T("%s~%s"), FirstKey.c_str(), get_KeyStr(Key).c_str());
 		CancelKeySeq();
 		if (Key_to_CmdV(key_str).IsEmpty()) Key = 0;
 	}
-	//1ƒXƒgƒ[ƒN–Ú
+	//1ã‚¹ãƒˆãƒ­ãƒ¼ã‚¯ç›®
 	else if (is_FirstKey("V", key_str)) {
 		FirstKey   = key_str;
 		Wait2ndKey = true;
-		ExViewer->SetSttInf(!FirstKey.IsEmpty()? "2ƒXƒgƒ[ƒNƒL[: " + FirstKey : EmptyStr);
+		ExViewer->SetSttInf(!FirstKey.IsEmpty()? "2ã‚¹ãƒˆãƒ­ãƒ¼ã‚¯ã‚­ãƒ¼: " + FirstKey : EmptyStr);
 		Key = 0;
 	}
 
 	return key_str;
 }
 //---------------------------------------------------------------------------
-//2ƒXƒgƒ[ƒN‘€ì‚ğ’†’f
+//2ã‚¹ãƒˆãƒ­ãƒ¼ã‚¯æ“ä½œã‚’ä¸­æ–­
 //---------------------------------------------------------------------------
 void __fastcall TExTxtViewer::CancelKeySeq()
 {
@@ -435,12 +435,12 @@ void __fastcall TExTxtViewer::CancelKeySeq()
 }
 
 //---------------------------------------------------------------------------
-//ƒ_ƒCƒŒƒNƒgƒ^ƒOƒWƒƒƒ“ƒv
-//I¸”s‚µ‚½‚ç EAbort —áŠO
+//ãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã‚¿ã‚°ã‚¸ãƒ£ãƒ³ãƒ—
+//ï¼å¤±æ•—ã—ãŸã‚‰ EAbort ä¾‹å¤–
 //---------------------------------------------------------------------------
 void __fastcall TExTxtViewer::DirectTagJumpCore(
-	bool is_edit,			//true = •ÒW/ false = ‰{——	(default = false)
-	UnicodeString prm)		//’PŒêw’è					(default = EmptyStr)
+	bool is_edit,			//true = ç·¨é›†/ false = é–²è¦§	(default = false)
+	UnicodeString prm)		//å˜èªæŒ‡å®š					(default = EmptyStr)
 {
 	UnicodeString tnam = prm.IsEmpty()? ExViewer->GetCurWord() : prm;
 	UnicodeString rnam = ExtractFilePath(ExViewer->FileName);
@@ -465,17 +465,17 @@ void __fastcall TExTxtViewer::DirectTagJumpCore(
 	if (!fnam.IsEmpty()) {
 		int lno = 1;
 		if (!divide_FileName_LineNo(fnam, lno, rnam)) throw EAbort(GlobalErrMsg);
-		//•ÒW
+		//ç·¨é›†
 		if (is_edit) {
 			if (!open_by_TextEditor(fnam, lno)) GlobalAbort();
 		}
-		//‰{——
+		//é–²è¦§
 		else {
-			//‰{——’†ƒtƒ@ƒCƒ‹“à
+			//é–²è¦§ä¸­ãƒ•ã‚¡ã‚¤ãƒ«å†…
 			if (SameText(ExViewer->FileName, fnam)) {
 				ExViewer->ToLine(lno);
 			}
-			//‚»‚Ì‘¼‚Ìƒtƒ@ƒCƒ‹
+			//ãã®ä»–ã®ãƒ•ã‚¡ã‚¤ãƒ«
 			else {
 				ExViewer->add_ViewHistory();
 				if (test_HtmlExt(get_extension(fnam)) && lno>1) ExViewer->isHtm2Txt = false;
@@ -486,7 +486,7 @@ void __fastcall TExTxtViewer::DirectTagJumpCore(
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒ}ƒ“ƒhˆ—
+//ã‚³ãƒãƒ³ãƒ‰å‡¦ç†
 //---------------------------------------------------------------------------
 bool __fastcall TExTxtViewer::ExeCommandV(UnicodeString cmd, UnicodeString prm)
 {
@@ -499,8 +499,8 @@ bool __fastcall TExTxtViewer::ExeCommandV(UnicodeString cmd, UnicodeString prm)
 
 	AddCmdHistory(cmd, ActionParam, "V",
 		!ExViewer->FileName.IsEmpty()? ExViewer->FileName :
-					 ExViewer->isClip? UnicodeString("<ƒNƒŠƒbƒvƒ{[ƒh>")
-					 				 : UnicodeString("<ƒ^ƒXƒNƒƒO>"));
+					 ExViewer->isClip? UnicodeString("<ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰>")
+					 				 : UnicodeString("<ã‚¿ã‚¹ã‚¯ãƒ­ã‚°>"));
 
 	ActionParam = extract_ExeParam(prm, &ActionDesc);
 	ActionOk	= true;
@@ -518,11 +518,11 @@ bool __fastcall TExTxtViewer::ExeCommandV(UnicodeString cmd, UnicodeString prm)
 		bool req_close = false;
 		handled = true;
 
-		//ƒNƒŠƒbƒvƒ{[ƒh‚ÉƒRƒs[
+		//ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã«ã‚³ãƒ”ãƒ¼
 		if (SameText(cmd, "ClipCopy")) {
 			ExViewer->ClipCopy(SameText(ActionParam, "AD"));
 		}
-		//‘O/Ÿ‚ÌƒEƒBƒ“ƒhƒE‚ğ•\¦
+		//å‰/æ¬¡ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’è¡¨ç¤º
 		else if (contained_wd_i("PrevFile|NextFile", cmd)) {
 			std::unique_ptr<TStringList> lst(new TStringList());
 			get_ExViewerList(lst.get());
@@ -540,45 +540,45 @@ bool __fastcall TExTxtViewer::ExeCommandV(UnicodeString cmd, UnicodeString prm)
 				((TForm *)lst->Objects[idx])->SetFocus();
 			}
 		}
-		//ƒtƒ@ƒCƒ‹‚ÌÄ“Ç‚İ‚İ
+		//ãƒ•ã‚¡ã‚¤ãƒ«ã®å†èª­ã¿è¾¼ã¿
 		else if (SameText(cmd, "ReloadFile")) {
 			if (!OpenViewer(ExViewer->isBinary)) GlobalAbort();
 		}
-		//ƒeƒLƒXƒg/ƒoƒCƒiƒŠ•\¦‚ÌØ‚èŠ·‚¦
+		//ãƒ†ã‚­ã‚¹ãƒˆ/ãƒã‚¤ãƒŠãƒªè¡¨ç¤ºã®åˆ‡ã‚Šæ›ãˆ
 		else if (SameText(cmd, "ChangeViewMode")) {
-			//ƒoƒCƒiƒŠ•\¦
+			//ãƒã‚¤ãƒŠãƒªè¡¨ç¤º
 			if (isXDoc2Txt || isRichText || isViewText) {
 				if (!OpenViewer(true)) GlobalAbort();
 			}
-			//ƒeƒLƒXƒg•\¦(‹­§)
+			//ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¤º(å¼·åˆ¶)
 			else {
 				if (!OpenViewer(false, 0, 0, true)) GlobalAbort();
 			}
 		}
-		//•¶šƒR[ƒh•ÏX
+		//æ–‡å­—ã‚³ãƒ¼ãƒ‰å¤‰æ›´
 		else if (SameText(cmd, "ChangeCodePage")) {
 			if (ExViewer->isXDoc2Txt || ExViewer->isBinary) UserAbort(USTR_InvalidCmd);
 			int code_page = ExViewer->change_CodePage(ActionParam);
 			if (code_page==0) UserAbort(USTR_IllegalParam);
 			if (!OpenViewer(false, code_page, 0, true)) GlobalAbort();
 		}
-		//•ÒW
+		//ç·¨é›†
 		else if (SameText(cmd, "FileEdit")) {
 			if (isXDoc2Txt || !ActionParam.IsEmpty()) UserAbort(USTR_OpeNotSuported);
 			req_tEdit = true;
 			req_close = true;
 		}
-		//ƒoƒCƒiƒŠ•ÒW
+		//ãƒã‚¤ãƒŠãƒªç·¨é›†
 		else if (SameText(cmd, "BinaryEdit")) {
 			if (!file_exists(get_actual_path(BinaryEditor))) UserAbort(USTR_AppNotFound);
 			req_bEdit = true;
 			req_close = true;
 		}
-		//ƒ_ƒ“ƒvƒŠƒXƒg‚ğƒtƒ@ƒCƒ‹‚É•Û‘¶
+		//ãƒ€ãƒ³ãƒ—ãƒªã‚¹ãƒˆã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã«ä¿å­˜
 		else if (SameText(cmd, "SaveDump"))	{
 			SaveDumpAction->Execute();
 		}
-		//ƒ^ƒOƒWƒƒƒ“ƒv
+		//ã‚¿ã‚°ã‚¸ãƒ£ãƒ³ãƒ—
 		else if (contained_wd_i("TagJump|TagView", cmd)) {
 			if (ExViewer->isBinary) UserAbort(USTR_InvalidCmd);
 
@@ -605,25 +605,25 @@ bool __fastcall TExTxtViewer::ExeCommandV(UnicodeString cmd, UnicodeString prm)
 			}
 			else GlobalAbort();
 		}
-		//ƒ_ƒCƒŒƒNƒgƒ^ƒOƒWƒƒƒ“ƒv
+		//ãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã‚¿ã‚°ã‚¸ãƒ£ãƒ³ãƒ—
 		else if (contained_wd_i("TagJumpDirect|TagViewDirect", cmd)) {
 			DirectTagJumpCore(ContainsText(cmd, "Jump"), ActionParam);
 		}
-		//ƒrƒ…[ƒA‚Ì—š—ğ‚ğ–ß‚é
+		//ãƒ“ãƒ¥ãƒ¼ã‚¢ã®å±¥æ­´ã‚’æˆ»ã‚‹
 		else if (SameText(cmd, "BackViewHist")) {
 			if (TextViewHistory->Count==0) Abort();
 			TStringDynArray itm_buf = get_csv_array(TextViewHistory->Strings[0], 2, true);
 			TextViewHistory->Delete(0);
 			if (!OpenViewer(itm_buf[0], false, 0, itm_buf[1].ToIntDef(0))) GlobalAbort();
 		}
-		//ƒtƒ@ƒCƒ‹–¼å•”‚ª“¯‚¶Ÿ‚Ìƒtƒ@ƒCƒ‹‚ÉØ‚è‘Ö‚¦
+		//ãƒ•ã‚¡ã‚¤ãƒ«åä¸»éƒ¨ãŒåŒã˜æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«ã«åˆ‡ã‚Šæ›¿ãˆ
 		else if (SameText(cmd, "SwitchSameName")) {
 			UnicodeString fnam = get_NextSameName(ExViewer->FileName, true);
 			if (fnam.IsEmpty()) SysErrAbort(ERROR_FILE_NOT_FOUND);
 			ExViewer->add_ViewHistory();
 			if (!OpenViewer(fnam)) GlobalAbort();
 		}
-		//ƒ\[ƒX^ƒwƒbƒ_‚ÌØ‚èŠ·‚¦
+		//ã‚½ãƒ¼ã‚¹ï¼ãƒ˜ãƒƒãƒ€ã®åˆ‡ã‚Šæ›ãˆ
 		else if (SameText(cmd, "SwitchSrcHdr")) {
 			UnicodeString kwd  = ExViewer->get_SelText();
 			UnicodeString fnam = get_SrcHdrName(ExViewer->FileName);
@@ -633,11 +633,11 @@ bool __fastcall TExTxtViewer::ExeCommandV(UnicodeString cmd, UnicodeString prm)
 			SearchOption opt; opt << soCaseSens << soFromPos;
 			if (!kwd.IsEmpty()) ExViewer->SearchDown(kwd, opt);
 		}
-		//•¶š—ñŒŸõ
+		//æ–‡å­—åˆ—æ¤œç´¢
 		else if (SameText(cmd, "FindText")) {
 			FindTextAction->Execute();
 		}
-		//ƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`‚Ö
+		//ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ã‚¿ãƒ«ã‚µãƒ¼ãƒã¸
 		else if (SameText(cmd, "IncSearch")) {
 			if (SameText(ActionParam, "MM") && usr_Migemo->DictReady)
 				ExViewer->isIncMigemo = true;
@@ -647,12 +647,12 @@ bool __fastcall TExTxtViewer::ExeCommandV(UnicodeString cmd, UnicodeString prm)
 			ExViewer->isIncSea   = true;
 			ExViewer->SetSttInf();
 		}
-		//ƒeƒLƒXƒgƒrƒ…[ƒA‚ğ•Â‚¶‚é
+		//ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã‚’é–‰ã˜ã‚‹
 		else if (SameText(cmd, "Close")) {
 			req_close = true;
 			if (SameText(ActionParam, "AL")) close_all_ExViewer(this);
 		}
-		//ƒƒCƒ“ƒtƒH[ƒ€‚Å‚ÌƒRƒ}ƒ“ƒhÀs
+		//ãƒ¡ã‚¤ãƒ³ãƒ•ã‚©ãƒ¼ãƒ ã§ã®ã‚³ãƒãƒ³ãƒ‰å®Ÿè¡Œ
 		else if (contained_wd_i("AppList|Calculator|OptionDLg|RegExChecker", cmd)) {
 			UnicodeString cmds = cmd;
 			if (!ActionParam.IsEmpty()) cmds.cat_sprintf(_T("_%s"), ActionParam.c_str());
@@ -662,24 +662,24 @@ bool __fastcall TExTxtViewer::ExeCommandV(UnicodeString cmd, UnicodeString prm)
 			cd.lpData = cmds.c_str();
 			::SendMessage(Application->MainForm->Handle, WM_COPYDATA, 0, (LPARAM)&cd);
 		}
-		//–¢‘Î‰ƒRƒ}ƒ“ƒh
+		//æœªå¯¾å¿œã‚³ãƒãƒ³ãƒ‰
 		else {
 			msgbox_WARN(LoadUsrMsg(USTR_OpeNotSuported, UnicodeString().sprintf(_T("[%s] "), cmd.c_str())));
 			handled = false;
 		}
 
 		//------------------
-		//•Â‚¶‚é
+		//é–‰ã˜ã‚‹
 		//------------------
 		if (req_close) {
 			ExViewer->add_ViewHistory();
 			ExViewer->Clear();
 
-			//ƒeƒLƒXƒg•ÒW
+			//ãƒ†ã‚­ã‚¹ãƒˆç·¨é›†
 			if (req_tEdit) {
 				if (!open_by_TextEditor(ExViewer->FileName, ExViewer->get_CurLineNo())) GlobalAbort();
 			}
-			//ƒoƒCƒiƒŠ•ÒW
+			//ãƒã‚¤ãƒŠãƒªç·¨é›†
 			else if (req_bEdit) {
 				if (!Execute_ex(get_actual_path(BinaryEditor), add_quot_if_spc(ExViewer->FileName))) UserAbort(USTR_FaildExec);
 			}
@@ -708,7 +708,7 @@ bool __fastcall TExTxtViewer::ExeCommandV(const _TCHAR *cmd)
 }
 
 //---------------------------------------------------------------------------
-//•¶š—ñŒŸõ
+//æ–‡å­—åˆ—æ¤œç´¢
 //---------------------------------------------------------------------------
 void __fastcall TExTxtViewer::FindTextActionExecute(TObject *Sender)
 {
@@ -717,7 +717,7 @@ void __fastcall TExTxtViewer::FindTextActionExecute(TObject *Sender)
 	FindTextDlg->ShowModal();
 }
 //---------------------------------------------------------------------------
-//ƒRƒs[
+//ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TExTxtViewer::CopyActionExecute(TObject *Sender)
 {
@@ -735,7 +735,7 @@ void __fastcall TExTxtViewer::CopyActionUpdate(TObject *Sender)
 	ap->Enabled = ExViewer->SelStart!=ExViewer->SelEnd;
 }
 //---------------------------------------------------------------------------
-//‚·‚×‚Ä‘I‘ğ
+//ã™ã¹ã¦é¸æŠ
 //---------------------------------------------------------------------------
 void __fastcall TExTxtViewer::SelectAllActionExecute(TObject *Sender)
 {
@@ -743,7 +743,7 @@ void __fastcall TExTxtViewer::SelectAllActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//Web ‚ÅŒŸõ
+//Web ã§æ¤œç´¢
 //---------------------------------------------------------------------------
 void __fastcall TExTxtViewer::WebSearchActionExecute(TObject *Sender)
 {
@@ -764,7 +764,7 @@ void __fastcall TExTxtViewer::PopWebSearchItemMeasureItem(TObject *Sender, TCanv
 }
 
 //---------------------------------------------------------------------------
-//ƒ\[ƒg
+//ã‚½ãƒ¼ãƒˆ
 //---------------------------------------------------------------------------
 void __fastcall TExTxtViewer::SortAscActionExecute(TObject *Sender)
 {
@@ -789,11 +789,11 @@ void __fastcall TExTxtViewer::SortActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒR[ƒhƒy[ƒW•ÏX
+//ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TExTxtViewer::PopCodePageActionExecute(TObject *Sender)
 {
-	//ƒ_ƒ~[
+	//ãƒ€ãƒŸãƒ¼
 }
 //---------------------------------------------------------------------------
 void __fastcall TExTxtViewer::CodePageActionUpdate(TObject *Sender)
@@ -815,11 +815,11 @@ void __fastcall TExTxtViewer::CP_xxx_ActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//CSV/TSVƒGƒNƒXƒ|[ƒg
+//CSV/TSVã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ
 //---------------------------------------------------------------------------
 void __fastcall TExTxtViewer::ExportCsvActionExecute(TObject *Sender)
 {
-	if (!ExpCsvDlg) ExpCsvDlg = new TExpCsvDlg(this);	//‰‰ñ‚É“®“Iì¬
+	if (!ExpCsvDlg) ExpCsvDlg = new TExpCsvDlg(this);	//åˆå›ã«å‹•çš„ä½œæˆ
 	ExpCsvDlg->Viewer = ExViewer;
 	ExpCsvDlg->ShowModal();
 }
@@ -832,11 +832,11 @@ void __fastcall TExTxtViewer::ExportCsvActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒ_ƒ“ƒvƒŠƒXƒg‚ğƒtƒ@ƒCƒ‹‚É•Û‘¶
+//ãƒ€ãƒ³ãƒ—ãƒªã‚¹ãƒˆã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã«ä¿å­˜
 //---------------------------------------------------------------------------
 void __fastcall TExTxtViewer::SaveDumpActionExecute(TObject *Sender)
 {
-	UserModule->SaveTxtDlg->Title		  = LoadUsrMsg(USTR_SaveAs, _T("ƒ_ƒ“ƒvƒŠƒXƒg"));
+	UserModule->SaveTxtDlg->Title		  = LoadUsrMsg(USTR_SaveAs, _T("ãƒ€ãƒ³ãƒ—ãƒªã‚¹ãƒˆ"));
 	UserModule->SaveTxtDlg->FileName	  = ChangeFileExt(ExViewer->FileName, ".txt");
 	UserModule->SaveTxtDlg->InitialDir	  = ExtractFileDir(ExViewer->FileName);
 	UserModule->SaveTxtDlg->EncodingIndex = SaveEncIndex;

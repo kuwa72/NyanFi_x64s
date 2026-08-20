@@ -7,15 +7,15 @@
 #define UsrXDoc2TxtH
 
 //---------------------------------------------------------------------------
-typedef int (*FUNC_ExtractText)(BSTR, bool, BSTR*);		//ÅIcdecl åƒÇ—èoÇµ
+typedef int (*FUNC_ExtractText)(BSTR, bool, BSTR*);		//ÔºÅcdecl Âëº„Å≥Âá∫„Åó
 
 //---------------------------------------------------------------------------
-//ÅI.html .eml ÇÕèúäO
+//ÔºÅ.html .eml „ÅØÈô§Â§ñ
 #define FEXT_XD2T_OPN	_T(".sxw.sxc.sxi.sxd.odt.ods.odp.odg")
 #define FEXT_XD2T_MSO	_T(".docx.docm.xlsx.xlsm.pptx.pptm.doc.xls.ppt")
 #define FEXT_XD2T_ETC	_T(".jaw.jtw.jbw.juw.jfw.jvw.jtd.jtt.oas.oa2.oa3.bun.wj2.wj3.wk3.wk4.123.pdf.mht")
-#define FEXT_XD2T_PRP	FEXT_XD2T_MSO _T(".sxw.sxc.sxi.sxd.jtd.jtt")	//!< ÉvÉçÉpÉeÉBéÊìæâ¬î\
-#define FEXT_XD2TX		FEXT_XD2T_OPN FEXT_XD2T_MSO FEXT_XD2T_ETC		//!< íäèoâ¬î\
+#define FEXT_XD2T_PRP	FEXT_XD2T_MSO _T(".sxw.sxc.sxi.sxd.jtd.jtt")	//!< „Éó„É≠„Éë„ÉÜ„Ç£ÂèñÂæóÂèØËÉΩ
+#define FEXT_XD2TX		FEXT_XD2T_OPN FEXT_XD2T_MSO FEXT_XD2T_ETC		//!< ÊäΩÂá∫ÂèØËÉΩ
 
 //---------------------------------------------------------------------------
 extern bool xd2tx_Available;
@@ -23,40 +23,40 @@ extern UnicodeString xd2tx_FileName;
 
 //---------------------------------------------------------------------------
 /**
- * @brief èâä˙âª
- * @return true xd2txlib.dll Ç™óòópâ¬î\
+ * @brief ÂàùÊúüÂåñ
+ * @return true xd2txlib.dll „ÅåÂà©Áî®ÂèØËÉΩ
  */
 bool xd2tx_Initialize();
 
 /**
- * @brief ëŒâûägí£éqÇ©ÅH
- * @param fext ägí£éq
- * @param inc_rtf .rtf .wri Çä‹Çﬁ
+ * @brief ÂØæÂøúÊã°ÂºµÂ≠ê„ÅãÔºü
+ * @param fext Êã°ÂºµÂ≠ê
+ * @param inc_rtf .rtf .wri „ÇíÂê´„ÇÄ
  */
 bool xd2tx_TestExt(UnicodeString fext, bool inc_rtf = false);
 
 /**
- * @brief ÉvÉçÉpÉeÉBéÊìæâ¬î\Ç©ÅH
- * @param fext ägí£éq
+ * @brief „Éó„É≠„Éë„ÉÜ„Ç£ÂèñÂæóÂèØËÉΩ„ÅãÔºü
+ * @param fext Êã°ÂºµÂ≠ê
  */
 bool xd2tx_PropExt(UnicodeString fext);
 
 /**
- * @brief ÉeÉLÉXÉgÇÃíäèo
- * @param fnam ÉtÉ@ÉCÉãñº
+ * @brief „ÉÜ„Ç≠„Çπ„Éà„ÅÆÊäΩÂá∫
+ * @param fnam „Éï„Ç°„Ç§„É´Âêç
  * @param[out] lst 
  * @param prop 
- * @return true ê¨å˜
- * @return false é∏îs
+ * @return true ÊàêÂäü
+ * @return false Â§±Êïó
  */
 bool xd2tx_Extract(UnicodeString fnam, TStringList *lst, bool prop = false);
 
 /**
- * @brief ÉvÉçÉpÉeÉBéÊìæ
- * @param fnam ÉtÉ@ÉCÉãñº
+ * @brief „Éó„É≠„Éë„ÉÜ„Ç£ÂèñÂæó
+ * @param fnam „Éï„Ç°„Ç§„É´Âêç
  * @param[out] lst 
- * @return true ê¨å˜
- * @return false é∏îs
+ * @return true ÊàêÂäü
+ * @return false Â§±Êïó
  */
 bool xd2tx_GetInfo(UnicodeString fnam, TStringList *lst);
 

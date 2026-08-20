@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  •¶š—ñŒŸõ(ƒeƒLƒXƒgƒrƒ…[ƒA)										//
+//  æ–‡å­—åˆ—æ¤œç´¢(ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢)										//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -111,7 +111,7 @@ void __fastcall TFindTextDlg::FormKeyDown(TObject *Sender, WORD &Key, TShiftStat
 }
 
 //---------------------------------------------------------------------------
-//ƒIƒvƒVƒ‡ƒ“‚Ì•ÏX
+//ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TFindTextDlg::FindOptChangedClick(TObject *Sender)
 {
@@ -123,7 +123,7 @@ void __fastcall TFindTextDlg::FindOptChangedClick(TObject *Sender)
 	MigemoCheckBox->Enabled = not_bytes;
 	RegExCheckBox->Enabled  = not_bytes;
 
-	set_FormTitle(this, not_bytes? _T("•¶š—ñŒŸõ") : _T("ƒoƒCƒg—ñŒŸõ"));
+	set_FormTitle(this, not_bytes? _T("æ–‡å­—åˆ—æ¤œç´¢") : _T("ãƒã‚¤ãƒˆåˆ—æ¤œç´¢"));
 	HighlightCheckBox->Enabled = not_bytes;
 	if (Viewer) Viewer->Highlight = not_bytes;
 	CodePageComboBox->Enabled  = !not_bytes;
@@ -160,7 +160,7 @@ void __fastcall TFindTextDlg::SubOptClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ŒŸõ•¶š—ñ‚ª•Ï‰»‚µ‚½‚çƒrƒ…[ƒA‚Ì•\¦‚ğXV
+//æ¤œç´¢æ–‡å­—åˆ—ãŒå¤‰åŒ–ã—ãŸã‚‰ãƒ“ãƒ¥ãƒ¼ã‚¢ã®è¡¨ç¤ºã‚’æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TFindTextDlg::FindComboBoxChange(TObject *Sender)
 {
@@ -177,11 +177,11 @@ void __fastcall TFindTextDlg::FindComboBoxChange(TObject *Sender)
 
 		UnicodeString ptn;
 		if (!Viewer->FindWord.IsEmpty()) {
-			//ƒoƒCƒg—ñ
+			//ãƒã‚¤ãƒˆåˆ—
 			if (Viewer->isBytes) {
 				ptn = Viewer->FindWord;
 				if (!StartsStr('\"', ptn) && !StartsStr('\'', ptn)) {
-					//”’lƒ`ƒFƒbƒN
+					//æ•°å€¤ãƒã‚§ãƒƒã‚¯
 					TStringDynArray b_lst = SplitString(Trim(ptn), " ");
 					try {
 						for (int i=0; i<b_lst.Length; i++) {
@@ -197,14 +197,14 @@ void __fastcall TFindTextDlg::FindComboBoxChange(TObject *Sender)
 					}
 				}
 			}
-			//•¶š—ñ
+			//æ–‡å­—åˆ—
 			else {
 				if (Viewer->isRegEx && !Viewer->isMigemo)
 					ptn = Viewer->FindWord;
 				else
 					ptn = usr_Migemo->GetRegExPtn(Viewer->isMigemo, Viewer->FindWord, 1);
 
-				//³‹K•\Œ»ƒpƒ^[ƒ“‚Ìƒ`ƒFƒbƒN
+				//æ­£è¦è¡¨ç¾ãƒ‘ã‚¿ãƒ¼ãƒ³ã®ãƒã‚§ãƒƒã‚¯
 				if (!chk_RegExPtn(ptn)) {
 					regex_ng = true;
 					ptn = EmptyStr;
@@ -222,7 +222,7 @@ void __fastcall TFindTextDlg::FindComboBoxChange(TObject *Sender)
 				ptn = FindComboBox->Text;
 			else
 				ptn = usr_Migemo->GetRegExPtn(MigemoCheckBox->Enabled && MigemoCheckBox->Checked, FindComboBox->Text, 1);
-			//³‹K•\Œ»ƒpƒ^[ƒ“‚Ìƒ`ƒFƒbƒN
+			//æ­£è¦è¡¨ç¾ãƒ‘ã‚¿ãƒ¼ãƒ³ã®ãƒã‚§ãƒƒã‚¯
 			if (!chk_RegExPtn(ptn)) {
 				regex_ng = true;
 				ptn = EmptyStr;
@@ -234,7 +234,7 @@ void __fastcall TFindTextDlg::FindComboBoxChange(TObject *Sender)
 	ErrMarkList->SetErrFrame(this, FindComboBox, regex_ng);
 }
 //---------------------------------------------------------------------------
-//ŒŸõ•¶š—ñ—“‚Å‚ÌƒL[‘€ì
+//æ¤œç´¢æ–‡å­—åˆ—æ¬„ã§ã®ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TFindTextDlg::FindComboBoxKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -278,7 +278,7 @@ void __fastcall TFindTextDlg::FindComboBoxKeyPress(TObject *Sender, System::Wide
 }
 
 //---------------------------------------------------------------------------
-//ŒŸõ
+//æ¤œç´¢
 //---------------------------------------------------------------------------
 void __fastcall TFindTextDlg::FindNextActionExecute(TObject *Sender)
 {

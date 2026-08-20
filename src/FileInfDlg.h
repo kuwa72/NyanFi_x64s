@@ -1,6 +1,6 @@
 /**
  * @file FileInfDlg.h
- * @brief ƒtƒ@ƒCƒ‹î•ñ/€–Ú‚ÌWŒv
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±/é …ç›®ã®é›†è¨ˆ
  */
 //---------------------------------------------------------------------------
 #ifndef FileInfDlgH
@@ -20,11 +20,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒtƒ@ƒCƒ‹î•ñ/€–Ú‚ÌWŒv
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±/é …ç›®ã®é›†è¨ˆ
  */
 class TFileInfoDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *CopyAction;
 	TAction *CopyInfoAction;
 	TAction *CopyValueAction;
@@ -73,10 +73,10 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall ImgPreviewActionExecute(TObject *Sender);
 	void __fastcall ImgPreviewActionUpdate(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	bool DlgInitialized;
 
-	UsrScrollPanel *ListScrPanel;	//ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[
+	UsrScrollPanel *ListScrPanel;	//ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 
 	int Max_freq;
 	int MaxColWd0;
@@ -86,25 +86,25 @@ private:	// ƒ†[ƒU[éŒ¾
 
 	bool __fastcall UpdateInfo();
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 
 	file_rec *FileRec;
 	UnicodeString CmdStr;
 
-	bool isAppInfo;					//!< ƒAƒvƒŠƒP[ƒVƒ‡ƒ“î•ñ
-	bool isGitInfo;					//!< GitƒRƒ~ƒbƒgî•ñ
-	bool inhNxtPre;					//!< Next/PreFile ‹Ö~
-	bool inhImgPrv;					//!< ƒCƒ[ƒWƒvƒŒƒrƒ…[‚Ì‹Ö~
+	bool isAppInfo;					//!< ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±
+	bool isGitInfo;					//!< Gitã‚³ãƒŸãƒƒãƒˆæƒ…å ±
+	bool inhNxtPre;					//!< Next/PreFile ç¦æ­¢
+	bool inhImgPrv;					//!< ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®ç¦æ­¢
 	bool useImgPrv;
 
-	bool isCalcItem;				//!< €–Ú‚ÌWŒv
-	int  CsvCol;					//!< ‘ÎÛCSV—ñ
-	bool TopIsHeader;				//!< æ“ªs‚Í€–Ú–¼
+	bool isCalcItem;				//!< é …ç›®ã®é›†è¨ˆ
+	int  CsvCol;					//!< å¯¾è±¡CSVåˆ—
+	bool TopIsHeader;				//!< å…ˆé ­è¡Œã¯é …ç›®å
 
 	UnicodeString JumpFileName;
 
-	TStringList *DataList;			//!< WŒvŒ³ƒf[ƒ^‚Ö‚Ìƒ|ƒCƒ“ƒ^
-	TStringList *ItemList;			//!< •\¦€–ÚƒŠƒXƒg
+	TStringList *DataList;			//!< é›†è¨ˆå…ƒãƒ‡ãƒ¼ã‚¿ã¸ã®ãƒã‚¤ãƒ³ã‚¿
+	TStringList *ItemList;			//!< è¡¨ç¤ºé …ç›®ãƒªã‚¹ãƒˆ
 
 	__fastcall TFileInfoDlg(TComponent* Owner);
 	int __fastcall ShowModalEx(UnicodeString fnam);

@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  .nyanfi ÉtÉ@ÉCÉãÇÃê›íË												//
+//  .nyanfi „Éï„Ç°„Ç§„É´„ÅÆË®≠ÂÆö												//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -34,12 +34,12 @@ void __fastcall TDotNyanDlg::FormCreate(TObject *Sender)
 	InheritList = new TStringList();
 
 	set_ComboBoxText(ColorComboBox,
-		_T("Color_bgDirInf=ÉfÉBÉåÉNÉgÉäèÓïÒÇÃîwåiêF\n")
-		_T("Color_fgDirInf=ÉfÉBÉåÉNÉgÉäèÓïÒÇÃï∂éöêF\n")
-		_T("Color_bgDrvInf=ÉhÉâÉCÉuèÓïÒÇÃîwåiêF\n")
-		_T("Color_fgDrvInf=ÉhÉâÉCÉuèÓïÒÇÃï∂éöêF\n")
-		_T("Color_Cursor=ÉâÉCÉìÉJÅ[É\ÉãÇÃêF\n")
-		_T("Color_selItem=ëIëçÄñ⁄ÇÃîwåiêF\n"));
+		_T("Color_bgDirInf=„Éá„Ç£„É¨„ÇØ„Éà„É™ÊÉÖÂ†±„ÅÆËÉåÊôØËâ≤\n")
+		_T("Color_fgDirInf=„Éá„Ç£„É¨„ÇØ„Éà„É™ÊÉÖÂ†±„ÅÆÊñáÂ≠óËâ≤\n")
+		_T("Color_bgDrvInf=„Éâ„É©„Ç§„ÉñÊÉÖÂ†±„ÅÆËÉåÊôØËâ≤\n")
+		_T("Color_fgDrvInf=„Éâ„É©„Ç§„ÉñÊÉÖÂ†±„ÅÆÊñáÂ≠óËâ≤\n")
+		_T("Color_Cursor=„É©„Ç§„É≥„Ç´„Éº„ÇΩ„É´„ÅÆËâ≤\n")
+		_T("Color_selItem=ÈÅ∏ÊäûÈ†ÖÁõÆ„ÅÆËÉåÊôØËâ≤\n"));
 
 	SwatchPanel = new UsrSwatchPanel(this);
 	SwatchPanel->Parent = this;
@@ -53,7 +53,7 @@ void __fastcall TDotNyanDlg::FormShow(TObject *Sender)
 
 	set_ComboBox_AutoComp(this);
 
-	Caption = get_MiniPathName(DotNyanName + " ÇÃê›íË", ClientWidth - SCALED_THIS(48), Font);
+	Caption = get_MiniPathName(DotNyanName + " „ÅÆË®≠ÂÆö", ClientWidth - SCALED_THIS(48), Font);
 
 	IniFile->LoadComboBoxItems(PathMaskComboBox, _T("DotMaskHistory"));
 	IniFile->LoadComboBoxItems(GrepMaskComboBox, _T("GrepMaskHistory"));
@@ -104,12 +104,12 @@ void __fastcall TDotNyanDlg::FormShow(TObject *Sender)
 		HandledCheckBox->Checked  = false;
 	}
 
-	//è„à Ç©ÇÁã≠êßìIÇ…åpè≥ì‡óeÇéÊìæ
+	//‰∏ä‰Ωç„Åã„ÇâÂº∑Âà∂ÁöÑ„Å´Á∂ôÊâøÂÜÖÂÆπ„ÇíÂèñÂæó
 	InheritList->Clear();
 	UnicodeString inam = get_dotNaynfi(ExtractFilePath(DotNyanName), true, true);
 	if (file_exists(inam)) {
 		load_text_ex(inam, InheritList);
-		InheritLabel->Caption = UnicodeString().sprintf(_T("[%s] Ç©ÇÁåpè≥â¬î\"),
+		InheritLabel->Caption = UnicodeString().sprintf(_T("[%s] „Åã„ÇâÁ∂ôÊâøÂèØËÉΩ"),
 									get_MiniPathName(ExtractFileDir(inam), 400, Font).c_str());
 	}
 }
@@ -121,7 +121,7 @@ void __fastcall TDotNyanDlg::FormDestroy(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ê›íËÇÉRÉìÉgÉçÅ[ÉãÇ…îΩâf
+//Ë®≠ÂÆö„Çí„Ç≥„É≥„Éà„É≠„Éº„É´„Å´ÂèçÊò†
 //---------------------------------------------------------------------------
 void __fastcall TDotNyanDlg::SetOderOption(TStringList *lst)
 {
@@ -183,12 +183,12 @@ void __fastcall TDotNyanDlg::NoOderCheckBoxClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ÉTÉEÉìÉhÇÃéQè∆
+//„Çµ„Ç¶„É≥„Éâ„ÅÆÂèÇÁÖß
 //---------------------------------------------------------------------------
 void __fastcall TDotNyanDlg::RefSndBtnClick(TObject *Sender)
 {
 	UnicodeString inidir = def_if_empty(ExtractFileDir(to_absolute_name(SoundEdit->Text)), ExePath);
-	UserModule->PrepareOpenDlg(_T("ÉTÉEÉìÉhÉtÉ@ÉCÉãÇÃéwíË"), F_FILTER_WAV, NULL, inidir);
+	UserModule->PrepareOpenDlg(_T("„Çµ„Ç¶„É≥„Éâ„Éï„Ç°„Ç§„É´„ÅÆÊåáÂÆö"), F_FILTER_WAV, NULL, inidir);
 	if (UserModule->OpenDlgToEdit(SoundEdit, true)) play_sound(SoundEdit->Text);
 }
 //---------------------------------------------------------------------------
@@ -198,11 +198,11 @@ void __fastcall TDotNyanDlg::TestSndBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//îwåiâÊëúÇÃéQè∆
+//ËÉåÊôØÁîªÂÉè„ÅÆÂèÇÁÖß
 //---------------------------------------------------------------------------
 void __fastcall TDotNyanDlg::RefImgBtnClick(TObject *Sender)
 {
-	UserModule->OpenImgDlg->Title = "îwåiâÊëúÇÃéwíË";
+	UserModule->OpenImgDlg->Title = "ËÉåÊôØÁîªÂÉè„ÅÆÊåáÂÆö";
 	UserModule->SetOpenImgFilter(BgImgEdit->Text);
 	UserModule->OpenImgDlg->InitialDir = to_absolute_name(ExtractFilePath(BgImgEdit->Text), ExePath);
 	UserModule->OpenImgDlg->FileName   = EmptyStr;
@@ -210,7 +210,7 @@ void __fastcall TDotNyanDlg::RefImgBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//îzêF
+//ÈÖçËâ≤
 //---------------------------------------------------------------------------
 void __fastcall TDotNyanDlg::ColorComboBoxDrawItem(TWinControl *Control, int Index,
 	TRect &Rect, TOwnerDrawState State)
@@ -226,7 +226,7 @@ void __fastcall TDotNyanDlg::ColorComboBoxDrawItem(TWinControl *Control, int Ind
 	cv->FillRect(Rect);
 	cv->TextOut(Rect.Left + SCALED_THIS(34), yp, vbuf);
 
-	//ÉJÉâÅ[
+	//„Ç´„É©„Éº
 	TRect rc = Rect;  rc.Right = rc.Left + SCALED_THIS(30);
 	cv->Brush->Color = (TColor)ColBufList->Values[col_nam].ToIntDef(col_None);
 	if (cv->Brush->Color!=col_None) {
@@ -236,7 +236,7 @@ void __fastcall TDotNyanDlg::ColorComboBoxDrawItem(TWinControl *Control, int Ind
 		cv->Brush->Color = get_PanelColor();
 		cv->FillRect(rc);
 		cv->Brush->Style = bsClear;
-		out_Text(cv, rc.Left + SCALED_THIS(2), yp, _T("ñ≥å¯"), get_LabelColor());
+		out_Text(cv, rc.Left + SCALED_THIS(2), yp, _T("ÁÑ°Âäπ"), get_LabelColor());
 	}
 }
 //---------------------------------------------------------------------------
@@ -253,7 +253,7 @@ void __fastcall TDotNyanDlg::RefColBtnClick(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//ÉXÉ|ÉCÉg
+//„Çπ„Éù„Ç§„Éà
 //---------------------------------------------------------------------------
 void __fastcall TDotNyanDlg::SpuitImageMouseDown(TObject *Sender, TMouseButton Button,
 		TShiftState Shift, int X, int Y)
@@ -261,7 +261,7 @@ void __fastcall TDotNyanDlg::SpuitImageMouseDown(TObject *Sender, TMouseButton B
 	TComboBox *cp = ColorComboBox;
 	if (Button!=mbLeft || cp->ItemIndex==-1) return;
 
-	//ÉXÉEÉHÉbÉ`ÉuÉbÉN
+	//„Çπ„Ç¶„Ç©„ÉÉ„ÉÅ„Éñ„ÉÉ„ÇØ
 	SetCustomColToSwatch(UserModule->ColorDlg->CustomColors);
 	SwatchPanel->Visible = true;
 	SwatchPanel->BringToFront();
@@ -285,7 +285,7 @@ void __fastcall TDotNyanDlg::SpuitImageMouseUp(TObject *Sender, TMouseButton But
 	}
 }
 //---------------------------------------------------------------------------
-//îzêFÇÃñ≥å¯âª
+//ÈÖçËâ≤„ÅÆÁÑ°ÂäπÂåñ
 //---------------------------------------------------------------------------
 void __fastcall TDotNyanDlg::DisableColActionExecute(TObject *Sender)
 {
@@ -302,7 +302,7 @@ void __fastcall TDotNyanDlg::DisableColActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ÉRÉ}ÉìÉhÉtÉ@ÉCÉãÇÃéQè∆
+//„Ç≥„Éû„É≥„Éâ„Éï„Ç°„Ç§„É´„ÅÆÂèÇÁÖß
 //---------------------------------------------------------------------------
 void __fastcall TDotNyanDlg::RefCmdsBtnClick(TObject *Sender)
 {
@@ -311,24 +311,24 @@ void __fastcall TDotNyanDlg::RefCmdsBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ÉLÉÉÉìÉZÉã
+//„Ç≠„É£„É≥„Çª„É´
 //---------------------------------------------------------------------------
 void __fastcall TDotNyanDlg::CancelBtnClick(TObject *Sender)
 {
-	//ÉXÉ|ÉCÉgÇÃÉLÉÉÉìÉZÉã
+	//„Çπ„Éù„Ç§„Éà„ÅÆ„Ç≠„É£„É≥„Çª„É´
 	if (UserModule->SpuitEnabled()) {
 		SwatchPanel->Visible = false;
 		UserModule->EndSpuit();
 		SpuitImage->Visible = true;
 	}
-	//ï¬Ç∂ÇÈ
+	//Èñâ„Åò„Çã
 	else {
 		ModalResult = mrCancel;
 	}
 }
 
 //---------------------------------------------------------------------------
-//çÏê¨/ïœçX
+//‰ΩúÊàê/Â§âÊõ¥
 //---------------------------------------------------------------------------
 void __fastcall TDotNyanDlg::CreNyanActionExecute(TObject *Sender)
 {
@@ -373,7 +373,7 @@ void __fastcall TDotNyanDlg::CreNyanActionExecute(TObject *Sender)
 	std::unique_ptr<TStringList> cfg_lst(new TStringList());
 	cfg_lst->Text = lbuf;
 
-	//âBÇµ/ÉVÉXÉeÉÄëÆê´ÇæÇ¡ÇΩÇÁàÍíUâèúÇµÇƒÇ©ÇÁï€ë∂ÅEçƒê›íË
+	//Èö†„Åó/„Ç∑„Çπ„ÉÜ„É†Â±ûÊÄß„Å†„Å£„Åü„Çâ‰∏ÄÊó¶Ëß£Èô§„Åó„Å¶„Åã„Çâ‰øùÂ≠ò„ÉªÂÜçË®≠ÂÆö
 	int attr = NyanExists? file_GetAttr(DotNyanName) : faArchive;
 	bool chg_atr = (attr & (faHidden | faSysFile));
 	if (chg_atr) file_SetAttr(DotNyanName, faArchive);
@@ -389,7 +389,7 @@ void __fastcall TDotNyanDlg::CreNyanActionExecute(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TDotNyanDlg::CreNyanActionUpdate(TObject *Sender)
 {
-	((TAction*)Sender)->Caption = NyanExists? "ïœçX" : "çÏê¨";
+	((TAction*)Sender)->Caption = NyanExists? "Â§âÊõ¥" : "‰ΩúÊàê";
 
 	NaturalCheckBox->Enabled = !NoOderCheckBox->Checked;
 	DscNameCheckBox->Enabled = !NoOderCheckBox->Checked;
@@ -412,7 +412,7 @@ void __fastcall TDotNyanDlg::CreNyanActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//åpè≥
+//Á∂ôÊâø
 //---------------------------------------------------------------------------
 void __fastcall TDotNyanDlg::InhSndBtnClick(TObject *Sender)
 {
@@ -453,7 +453,7 @@ void __fastcall TDotNyanDlg::InheritBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//çÌèú
+//ÂâäÈô§
 //---------------------------------------------------------------------------
 void __fastcall TDotNyanDlg::DelNyanActionExecute(TObject *Sender)
 {

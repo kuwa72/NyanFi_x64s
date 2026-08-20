@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  �摜�ϊ��_�C�A���O													//
+//  画像変換ダイアログ													//
 //----------------------------------------------------------------------//
 #include "Global.h"
 #include "UserFunc.h"
@@ -22,22 +22,22 @@ __fastcall TCvImageDlg::TCvImageDlg(TComponent* Owner)
 void __fastcall TCvImageDlg::FormCreate(TObject *Sender)
 {
 	set_ComboBoxText(ScaleModeComboBox,
-		_T("�k���E�g����s��Ȃ�\n")
-		_T("�{�����p�[�Z���g�Ŏw��\n")
-		_T("�c���̒������̃T�C�Y���w��\n")
-		_T("���T�C�Y���w��\n")
-		_T("�c�T�C�Y���w��\n")
-		_T("�w��T�C�Y���Ɏ��߂�\n")
-		_T("�w��T�C�Y�ɃX�g���b�`\n")
-		_T("�w��T�C�Y�ɗ]���t���Ŏ��߂�\n")
-		_T("�w��T�C�Y�ɍ��킹�Đ؂�o��\n"));
+		_T("縮小・拡大を行わない\n")
+		_T("倍率をパーセントで指定\n")
+		_T("縦横の長い方のサイズを指定\n")
+		_T("横サイズを指定\n")
+		_T("縦サイズを指定\n")
+		_T("指定サイズ内に収める\n")
+		_T("指定サイズにストレッチ\n")
+		_T("指定サイズに余白付きで収める\n")
+		_T("指定サイズに合わせて切り出し\n"));
 
 	set_ComboBoxText(YCrCbComboBox,
-		_T("�f�t�H���g\n4:2:0\n4:2:2\n4:4:4\n"));
+		_T("デフォルト\n4:2:0\n4:2:2\n4:4:4\n"));
 	set_ComboBoxText(CmpModeComboBox,
-		_T("�����I��\n���k�Ȃ�\nCCITT3���k\nCCITT4���k\nLZW���k\nRLE���k\nZIP���k\nLZWH�������k\n"));
+		_T("自動選択\n圧縮なし\nCCITT3圧縮\nCCITT4圧縮\nLZW圧縮\nRLE圧縮\nZIP圧縮\nLZWH差分圧縮\n"));
 	set_ComboBoxText(ChgNameComboBox,
-		_T("�t�@�C�����̐擪�ɑ}��\n�t�@�C�����啔�̖����ɒǉ�\n"));
+		_T("ファイル名の先頭に挿入\nファイル名主部の末尾に追加\n"));
 
 	ClipNameComboBox->Tag = CBTAG_HISTORY;
 }
@@ -48,7 +48,7 @@ void __fastcall TCvImageDlg::FormShow(TObject *Sender)
 
 	UnicodeString tit;
 	if (fromClip) {
-		Caption = "�N���b�v�{�[�h�摜�̕ϊ�/�ۑ�";
+		Caption = "クリップボード画像の変換/保存";
 		SubPanel->Visible  = false;
 		NamePanel->Visible = true;
 		SttLabel->Caption  = EmptyStr;
@@ -61,7 +61,7 @@ void __fastcall TCvImageDlg::FormShow(TObject *Sender)
 		(IniFile->ReadBoolGen(_T("CvClpAutoRen"))? ClipAutoBtn : ClipOWBtn)->Checked = true;
 	}
 	else {
-		Caption = "�摜�t�@�C���̕ϊ�" + TitleInf;
+		Caption = "画像ファイルの変換" + TitleInf;
 		SubPanel->Visible  = true;
 		NamePanel->Visible = false;
 		ClientHeight = MainPanel->Height + SubPanel->Height + BtnPanel->Height;
@@ -131,7 +131,7 @@ void __fastcall TCvImageDlg::FormKeyDown(TObject *Sender, WORD &Key, TShiftState
 	SpecialKeyProc(this, Key, Shift);
 }
 //---------------------------------------------------------------------------
-//�o�͌`���̕ύX
+//出力形式の変更
 //---------------------------------------------------------------------------
 void __fastcall TCvImageDlg::CvFmtRadioGroupClick(TObject *Sender)
 {
@@ -156,7 +156,7 @@ void __fastcall TCvImageDlg::CvFmtRadioGroupClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TCvImageDlg::ImgQTrackBarChange(TObject *Sender)
 {
-	ImgQLabel->Caption = UnicodeString().sprintf(_T("�i�� %3u"), ImgQTrackBar->Position);
+	ImgQLabel->Caption = UnicodeString().sprintf(_T("品質 %3u"), ImgQTrackBar->Position);
 }
 //---------------------------------------------------------------------------
 void __fastcall TCvImageDlg::GrayScaleCheckBoxClick(TObject *Sender)
@@ -165,7 +165,7 @@ void __fastcall TCvImageDlg::GrayScaleCheckBoxClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//�]���F�̎Q��
+//余白色の参照
 //---------------------------------------------------------------------------
 void __fastcall TCvImageDlg::RefMgnColBtnClick(TObject *Sender)
 {
@@ -174,7 +174,7 @@ void __fastcall TCvImageDlg::RefMgnColBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//�k���E�g����@��ύX
+//縮小・拡大方法を変更
 //---------------------------------------------------------------------------
 void __fastcall TCvImageDlg::ScaleModeComboBoxChange(TObject *Sender)
 {
@@ -184,13 +184,13 @@ void __fastcall TCvImageDlg::ScaleModeComboBoxChange(TObject *Sender)
 	UnicodeString lbl1, lbl2;
 
 	switch (ScaleModeComboBox->ItemIndex) {
-	case 1: lbl1 = "�{����";	break;
-	case 2: lbl1 = "�T�C�Y";	break;
-	case 3: lbl1 = "���T�C�Y";	break;
-	case 4: lbl1 = "�c�T�C�Y";	break;
+	case 1: lbl1 = "倍率％";	break;
+	case 2: lbl1 = "サイズ";	break;
+	case 3: lbl1 = "横サイズ";	break;
+	case 4: lbl1 = "縦サイズ";	break;
 	case 5: case 6: case 7: case 8:
-		lbl1 = "���T�C�Y";
-		lbl2 = "�c�T�C�Y";
+		lbl1 = "横サイズ";
+		lbl2 = "縦サイズ";
 		break;
 	}
 
@@ -207,7 +207,7 @@ void __fastcall TCvImageDlg::ClipNameComboBoxChange(TObject *Sender)
 	if (fromClip) {
 		SttLabel->Caption =
 			file_exists(DistPath + ClipNameComboBox->Text + FextLabel->Caption)?
-				"��������" : "";
+				"同名あり" : "";
 	}
 }
 //---------------------------------------------------------------------------

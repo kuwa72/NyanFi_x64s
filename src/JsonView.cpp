@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  JSONƒrƒ…[ƒA														//
+//  JSONãƒ“ãƒ¥ãƒ¼ã‚¢														//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -39,7 +39,7 @@ void __fastcall TJsonViewer::FormShow(TObject *Sender)
 	AssignScaledFont(JsonTreeView, ListFont);
 	AssignScaledFont(StatusBar1, SttBarFont);
 
-	Caption = (isClip? UnicodeString("ƒNƒŠƒbƒvƒ{[ƒh") : yen_to_delimiter(FileName)) + " - JSONƒrƒ…[ƒA";
+	Caption = (isClip? UnicodeString("ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰") : yen_to_delimiter(FileName)) + " - JSONãƒ“ãƒ¥ãƒ¼ã‚¢";
 
 	::PostMessage(Handle, WM_FORM_SHOWED, 0, 0);
 }
@@ -109,8 +109,8 @@ void __fastcall TJsonViewer::FormKeyDown(TObject *Sender, WORD &Key, TShiftState
 	SpecialKeyProc(this, Key, Shift);
 }
 //---------------------------------------------------------------------------
-//ƒcƒŠ[ƒrƒ…[‚ÉŠ„‚è“–‚Ä
-//	Data ‚ÉJSON•¶š—ñ‚ğİ’è
+//ãƒ„ãƒªãƒ¼ãƒ“ãƒ¥ãƒ¼ã«å‰²ã‚Šå½“ã¦
+//	Data ã«JSONæ–‡å­—åˆ—ã‚’è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall TJsonViewer::AssignJsonView(TJSONValue *val, TTreeNode *np)
 {
@@ -166,7 +166,7 @@ void __fastcall TJsonViewer::AssignJsonView(TJSONValue *val, TTreeNode *np)
 }
 
 //---------------------------------------------------------------------------
-//ViewBusy ƒvƒƒpƒeƒB
+//ViewBusy ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 //---------------------------------------------------------------------------
 void __fastcall TJsonViewer::SetViewBusy(bool Value)
 {
@@ -174,7 +174,7 @@ void __fastcall TJsonViewer::SetViewBusy(bool Value)
 
 	if (Value) {
 		cursor_HourGlass();
-		StatusBar1->Panels->Items[0]->Text = "ˆ—’†...";	StatusBar1->Repaint();
+		StatusBar1->Panels->Items[0]->Text = "å‡¦ç†ä¸­...";	StatusBar1->Repaint();
 	}
 	else {
 		StatusBar1->Panels->Items[0]->Text = GetJsonPath();
@@ -183,11 +183,11 @@ void __fastcall TJsonViewer::SetViewBusy(bool Value)
 }
 
 //---------------------------------------------------------------------------
-//€–Ú‚Ì•¶š—ñ‚ğæ“¾
+//é …ç›®ã®æ–‡å­—åˆ—ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString __fastcall TJsonViewer::GetTreeViewText(
 	TTreeNode *Node,
-	bool is_json)	//JSON•¶š—ñ‚ğæ“¾	(default = false)
+	bool is_json)	//JSONæ–‡å­—åˆ—ã‚’å–å¾—	(default = false)
 {
 	if (!Node) Node = JsonTreeView->Selected;
 	if (!Node) return EmptyStr;
@@ -195,7 +195,7 @@ UnicodeString __fastcall TJsonViewer::GetTreeViewText(
 }
 
 //---------------------------------------------------------------------------
-//ƒm[ƒh‚ÌƒpƒX‚ğæ“¾
+//ãƒãƒ¼ãƒ‰ã®ãƒ‘ã‚¹ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString __fastcall TJsonViewer::GetJsonPath(TTreeNode *Node)
 {
@@ -213,7 +213,7 @@ UnicodeString __fastcall TJsonViewer::GetJsonPath(TTreeNode *Node)
 }
 
 //---------------------------------------------------------------------------
-//ƒm[ƒh‚ªŒŸõŒê‚Éƒ}ƒbƒ`‚·‚é‚©?
+//ãƒãƒ¼ãƒ‰ãŒæ¤œç´¢èªã«ãƒãƒƒãƒã™ã‚‹ã‹?
 //---------------------------------------------------------------------------
 bool __fastcall TJsonViewer::MatchNode(TTreeNode *Node)
 {
@@ -234,7 +234,7 @@ bool __fastcall TJsonViewer::MatchNode(TTreeNode *Node)
 }
 
 //---------------------------------------------------------------------------
-//ƒŠƒXƒgƒrƒ…[‚Ì•`‰æ
+//ãƒªã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TJsonViewer::JsonTreeViewCustomDrawItem(TCustomTreeView *Sender, TTreeNode *Node,
 	TCustomDrawState State, bool &DefaultDraw)
@@ -247,17 +247,17 @@ void __fastcall TJsonViewer::JsonTreeViewCustomDrawItem(TCustomTreeView *Sender,
 	if (rc_t.Left==0 || rc_t.Width()<=0 || rc_t.Height()<=0) return;
 	TRect rc_s = Node->DisplayRect(false);
 	if (rc_s.Width()<=0 || rc_s.Height()<=0) return;
-	//¦ƒXƒP[ƒŠƒ“ƒO‚ÌˆÙ‚È‚éƒ‚ƒjƒ^ŠÔ‚Å‚ÌˆÚ“®‚ÉAˆÙí’l‚É‚È‚éê‡‚ª‚ ‚é‚±‚Æ‚Ö‚Ì‘Îô
+	//â€»ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°ã®ç•°ãªã‚‹ãƒ¢ãƒ‹ã‚¿é–“ã§ã®ç§»å‹•æ™‚ã«ã€ç•°å¸¸å€¤ã«ãªã‚‹å ´åˆãŒã‚ã‚‹ã“ã¨ã¸ã®å¯¾ç­–
 
 	TTreeView *vp = JsonTreeView;
 	TCanvas *cv   = vp->Canvas;
 	cv->Brush->Color = Node->Selected? col_selItem : get_ListBgCol();
 	cv->FillRect(rc_s);
 
-	//ƒeƒLƒXƒg
+	//ãƒ†ã‚­ã‚¹ãƒˆ
 	UnicodeString lbuf = Node->Text;
 
-	//¦Sender->Canvas ‚¾‚ÆƒtƒHƒ“ƒgF‚ğ“r’†‚Å•ÏX‚µ‚Ä‚àŒø‚©‚È‚¢‚æ‚¤‚È‚Ì‚Åˆê’Uƒoƒbƒtƒ@‚É•`‰æ
+	//â€»Sender->Canvas ã ã¨ãƒ•ã‚©ãƒ³ãƒˆè‰²ã‚’é€”ä¸­ã§å¤‰æ›´ã—ã¦ã‚‚åŠ¹ã‹ãªã„ã‚ˆã†ãªã®ã§ä¸€æ—¦ãƒãƒƒãƒ•ã‚¡ã«æç”»
 	std::unique_ptr<Graphics::TBitmap> tmp_bmp(new Graphics::TBitmap());
 	tmp_bmp->SetSize(cv->TextWidth(lbuf + (lbuf.Pos(':')? " " : "")) + SCALED_THIS(4), rc_t.Height());
 
@@ -269,28 +269,28 @@ void __fastcall TJsonViewer::JsonTreeViewCustomDrawItem(TCustomTreeView *Sender,
 
 	bool is_selfg = (Node->Selected && col_fgSelItem!=col_None);
 
-	//ƒGƒ‰[
+	//ã‚¨ãƒ©ãƒ¼
 	if ((*(UnicodeString*)Node->Data).IsEmpty()) {
 		tmp_cv->Font->Color = col_Error;
 		tmp_cv->TextOut(0, 0, lbuf);
 	}
-	//ƒm[ƒh
+	//ãƒãƒ¼ãƒ‰
 	else if (Node->Count>0) {
 		int xp = 0;
-		//–¼‘O
+		//åå‰
 		tmp_cv->Font->Color = is_selfg? col_fgSelItem : col_Reserved;
 		tmp_cv->TextOut(xp, 0, lbuf);
 	}
-	//ƒyƒA
+	//ãƒšã‚¢
 	else if (Node->Count==0) {
 		int xp = 0;
-		//–¼‘O
+		//åå‰
 		TColor fg = is_selfg? col_fgSelItem : col_Reserved;
 		out_TextEx(tmp_cv, xp, 0, get_tkn(lbuf, ':'), fg, col_None, 0);
 		//:
 		fg = is_selfg? col_fgSelItem : col_Symbol;
 		out_TextEx(tmp_cv, xp, 0, ": ", fg, col_None, 0);
-		//’l
+		//å€¤
 		UnicodeString vstr = get_tkn_r(lbuf, ':');
 		fg = is_selfg? col_fgSelItem :
 				(StartsStr("\"http", vstr) && TRegEx::Match(vstr, URL_MATCH_PTN).Success)? col_URL :
@@ -299,15 +299,15 @@ void __fastcall TJsonViewer::JsonTreeViewCustomDrawItem(TCustomTreeView *Sender,
 	}
 
 	if (State.Contains(cdsSelected)) tmp_cv->DrawFocusRect(tmp_rc);
-	//•`‰æ
+	//æç”»
 	cv->Draw(rc_t.Left, rc_t.Top, tmp_bmp.get());
 
-	//‰¡ƒXƒNƒ[ƒ‹ˆÊ’u‚ğæ“¾
+	//æ¨ªã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä½ç½®ã‚’å–å¾—
 	int scr_p = 0;
 	SCROLLINFO si = {sizeof(SCROLLINFO), SIF_TRACKPOS};
 	if (::GetScrollInfo(vp->Handle, SB_HORZ, &si)) scr_p = si.nTrackPos;
 
-	//eƒ‰ƒCƒ“
+	//è¦ªãƒ©ã‚¤ãƒ³
 	cv->Pen->Style = psSolid;
 	cv->Pen->Width = SCALED_THIS(1);
 	cv->Pen->Color = col_HR;
@@ -326,28 +326,28 @@ void __fastcall TJsonViewer::JsonTreeViewCustomDrawItem(TCustomTreeView *Sender,
 		pp = pp->Parent;
 	}
 
-	//ƒvƒ‰ƒX/ƒ}ƒCƒiƒXƒ{ƒ^ƒ“
+	//ãƒ—ãƒ©ã‚¹/ãƒã‚¤ãƒŠã‚¹ãƒœã‚¿ãƒ³
 	if (Node->HasChildren) {
 		cv->Pen->Color	 = col_HR;
 		cv->Brush->Color = col_HR;
-		int w_btn = SCALED_THIS(11);	//ƒ{ƒ^ƒ“ƒTƒCƒY
+		int w_btn = SCALED_THIS(11);	//ãƒœã‚¿ãƒ³ã‚µã‚¤ã‚º
 		int xp = rc_s.Right - SCALED_THIS(16);
 		int yp = rc_s.Top + (rc_s.Height() - w_btn)/2;
 		if ((xp + w_btn)>=0) {
 			int s_2 = SCALED_THIS(2);
-			//˜g
+			//æ 
 			cv->FrameRect(Rect (xp, yp, xp + w_btn, yp + w_btn));
-			//‰¡–_
+			//æ¨ªæ£’
 			cv->MoveTo(xp + s_2, yp + w_btn/2);
 			cv->LineTo(xp + w_btn - s_2, yp + w_btn/2);
-			//c–_
+			//ç¸¦æ£’
 			if (!Node->Expanded) {
 				cv->MoveTo(xp + w_btn/2, yp + s_2);
 				cv->LineTo(xp + w_btn/2, yp + w_btn - s_2);
 			}
 		}
 	}
-	//qƒ‰ƒCƒ“
+	//å­ãƒ©ã‚¤ãƒ³
 	else if (Node->Level>0) {
 		cv->Pen->Color = col_HR;
 		int xl = vp->Indent * Node->Level + l_ofs - scr_p;
@@ -384,9 +384,9 @@ void __fastcall TJsonViewer::JsonTreeViewDeletion(TObject *Sender, TTreeNode *No
 }
 
 //---------------------------------------------------------------------------
-//ƒXƒe[ƒ^ƒXƒo[‚Ì•`‰æ
+//ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒãƒ¼ã®æç”»
 //---------------------------------------------------------------------------
-//‚·‚×‚Ä“WŠJ
+//ã™ã¹ã¦å±•é–‹
 //---------------------------------------------------------------------------
 void __fastcall TJsonViewer::ExpandItemClick(TObject *Sender)
 {
@@ -398,14 +398,14 @@ void __fastcall TJsonViewer::ExpandItemClick(TObject *Sender)
 	ViewBusy = false;
 }
 //---------------------------------------------------------------------------
-//‚·‚×‚Äô‚Ş
+//ã™ã¹ã¦ç•³ã‚€
 //---------------------------------------------------------------------------
 void __fastcall TJsonViewer::CollapseItemClick(TObject *Sender)
 {
 	JsonTreeView->FullCollapse();
 }
 //---------------------------------------------------------------------------
-//ƒRƒs[
+//ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TJsonViewer::CopyActionExecute(TObject *Sender)
 {
@@ -418,7 +418,7 @@ void __fastcall TJsonViewer::CopyActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//JSON•¶š—ñ‚ğƒRƒs[
+//JSONæ–‡å­—åˆ—ã‚’ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TJsonViewer::CopyJsonActionExecute(TObject *Sender)
 {
@@ -431,7 +431,7 @@ void __fastcall TJsonViewer::CopyJsonActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒpƒX®‚ğƒRƒs[
+//ãƒ‘ã‚¹å¼ã‚’ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TJsonViewer::CopyJsonPathActionExecute(TObject *Sender)
 {
@@ -443,7 +443,7 @@ void __fastcall TJsonViewer::CopyJsonPathActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = !isJsonErr && JsonTreeView->Selected;
 }
 //---------------------------------------------------------------------------
-//‘S‘Ì‚ğ®Œ`‚µ‚ÄƒRƒs[
+//å…¨ä½“ã‚’æ•´å½¢ã—ã¦ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TJsonViewer::CopyFormatActionExecute(TObject *Sender)
 {
@@ -458,7 +458,7 @@ void __fastcall TJsonViewer::CopyFormatActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//URL‚ğŠJ‚­
+//URLã‚’é–‹ã
 //---------------------------------------------------------------------------
 void __fastcall TJsonViewer::OpenUrlActionExecute(TObject *Sender)
 {
@@ -471,7 +471,7 @@ void __fastcall TJsonViewer::OpenUrlActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = (vstr.Pos("://") && TRegEx::Match(vstr, "^" URL_MATCH_PTN).Success);
 }
 //---------------------------------------------------------------------------
-//ƒGƒ‰[s‚ğƒGƒfƒBƒ^‚ÅŠJ‚­
+//ã‚¨ãƒ©ãƒ¼è¡Œã‚’ã‚¨ãƒ‡ã‚£ã‚¿ã§é–‹ã
 //---------------------------------------------------------------------------
 void __fastcall TJsonViewer::EditErrActionExecute(TObject *Sender)
 {
@@ -486,7 +486,7 @@ void __fastcall TJsonViewer::EditErrActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//‰º•ûŒü‚ÉŒŸõ
+//ä¸‹æ–¹å‘ã«æ¤œç´¢
 //---------------------------------------------------------------------------
 void __fastcall TJsonViewer::FindDownActionExecute(TObject *Sender)
 {
@@ -502,7 +502,7 @@ void __fastcall TJsonViewer::FindDownActionExecute(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//ã•ûŒü‚ÉŒŸõ
+//ä¸Šæ–¹å‘ã«æ¤œç´¢
 //---------------------------------------------------------------------------
 void __fastcall TJsonViewer::FindUpActionExecute(TObject *Sender)
 {
@@ -525,7 +525,7 @@ void __fastcall TJsonViewer::FindActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//“WŠJ
+//å±•é–‹
 //---------------------------------------------------------------------------
 void __fastcall TJsonViewer::ExpandActionExecute(TObject *Sender)
 {
@@ -542,7 +542,7 @@ void __fastcall TJsonViewer::ExpandActionExecute(TObject *Sender)
 	ViewBusy = false;
 }
 //---------------------------------------------------------------------------
-//ô‚Ş
+//ç•³ã‚€
 //---------------------------------------------------------------------------
 void __fastcall TJsonViewer::CollapseActionExecute(TObject *Sender)
 {
@@ -558,7 +558,7 @@ void __fastcall TJsonViewer::CollapseActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//©“®ŠJ•Â
+//è‡ªå‹•é–‹é–‰
 //---------------------------------------------------------------------------
 void __fastcall TJsonViewer::AutoActionExecute(TObject *Sender)
 {
@@ -572,7 +572,7 @@ void __fastcall TJsonViewer::AutoActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒL[‘€ì
+//ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TJsonViewer::JsonTreeViewKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -581,7 +581,7 @@ void __fastcall TJsonViewer::JsonTreeViewKeyDown(TObject *Sender, WORD &Key, TSh
 	UnicodeString cmd_V  = Key_to_CmdV(KeyStr);
 
 	TTreeNode *sp = JsonTreeView->Selected;
-	//ˆÚ“®
+	//ç§»å‹•
 	if		(SameText(cmd_F, "CursorDown") || SameText(cmd_V, "CursorDown"))	perform_Key(JsonTreeView, VK_DOWN);
 	else if (SameText(cmd_F, "CursorUp")   || SameText(cmd_V, "CursorUp"))		perform_Key(JsonTreeView, VK_UP);
 	else if (SameText(cmd_F, "PageDown")   || SameText(cmd_V, "PageDown"))		perform_Key(JsonTreeView, VK_NEXT);
@@ -589,7 +589,7 @@ void __fastcall TJsonViewer::JsonTreeViewKeyDown(TObject *Sender, WORD &Key, TSh
 	else if (SameText(cmd_F, "CursorTop")  || SameText(cmd_V, "TextTop"))		perform_Key(JsonTreeView, VK_HOME);
 	else if (SameText(cmd_F, "CursorEnd")  || SameText(cmd_V, "TextEnd"))		perform_Key(JsonTreeView, VK_END);
 
-	//ŠJ•Â
+	//é–‹é–‰
 	else if (equal_ENTER(KeyStr)) {
 		if (sp) {
 			if (sp->HasChildren) {
@@ -616,7 +616,7 @@ void __fastcall TJsonViewer::JsonTreeViewKeyDown(TObject *Sender, WORD &Key, TSh
 			else OpenUrlAction->Execute();
 		}
 	}
-	//ŒŸõ
+	//æ¤œç´¢
 	else if (SameText(cmd_F, "FindDown") || SameText(KeyStr, "F3")) {
 		FindDownAction->Execute();
 	}
@@ -626,7 +626,7 @@ void __fastcall TJsonViewer::JsonTreeViewKeyDown(TObject *Sender, WORD &Key, TSh
 	else if (StartsText("IncSearch", cmd_F) || contained_wd_i(KeysStr_Filter, KeyStr)) {
 		FindEdit->SetFocus();
 	}
-	//•Â‚¶‚é
+	//é–‰ã˜ã‚‹
 	else if (SameText(cmd_F, "ReturnList")) {
 		ModalResult = mrCancel;
 	}

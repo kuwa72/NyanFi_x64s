@@ -1,6 +1,6 @@
 /**
  * @file DistrDlg.h
- * @brief U‚è•ª‚¯ƒ_ƒCƒAƒƒO
+ * @brief æŒ¯ã‚Šåˆ†ã‘ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 //---------------------------------------------------------------------------
 #ifndef DistrDlgH
@@ -23,11 +23,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief U‚è•ª‚¯ƒ_ƒCƒAƒƒO
+ * @brief æŒ¯ã‚Šåˆ†ã‘ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TDistributionDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *AddRegAction;
 	TAction *ChgRegAction;
 	TAction *DelRegAction;
@@ -131,12 +131,12 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall GroupCheckActionExecute(TObject *Sender);
 	void __fastcall PrvListActionExecute(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
-	SttProgressBar *SttPrgBar;		//ƒvƒƒOƒŒƒXƒo[
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	SttProgressBar *SttPrgBar;		//ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹ãƒãƒ¼
 	int PrvSortMode;
 	UnicodeString LastDistDir;
 	UnicodeString DistrFile;
-	bool RegEnabled;				//“o˜^“à—e‚Ì•ÏX‚ğ‹–‰Â
+	bool RegEnabled;				//ç™»éŒ²å†…å®¹ã®å¤‰æ›´ã‚’è¨±å¯
 
 	void __fastcall WmFormShowed(TMessage &msg);
 
@@ -149,13 +149,13 @@ private:	// ƒ†[ƒU[éŒ¾
 	bool __fastcall MatchRegMask(UnicodeString mask, UnicodeString nnam);
 	void __fastcall UpdateListItem(int idx);
 
-public:		// ƒ†[ƒU[éŒ¾
-	TStringList *ItemList;			//!< IN ‘ÎÛƒŠƒXƒg
-	TStringList *DistrList;			//!< OUT U‚è•ª‚¯ƒŠƒXƒg(ƒtƒ@ƒCƒ‹–¼ \t U‚è•ª‚¯æ)
-	UnicodeString OppPath;			//!< ”½‘ÎƒpƒX
-	bool IsMove;					//!< true=ˆÚ“®/ false=ƒRƒs[
-	bool ImmediateExe;				//!< Šm”F–³‚µ‚Å’¼‚¿‚ÉÀs
-	int  SkipCount;					//!< U‚è•ª‚¯æ•sİ‚É‚æ‚éƒXƒLƒbƒv”
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	TStringList *ItemList;			//!< IN å¯¾è±¡ãƒªã‚¹ãƒˆ
+	TStringList *DistrList;			//!< OUT æŒ¯ã‚Šåˆ†ã‘ãƒªã‚¹ãƒˆ(ãƒ•ã‚¡ã‚¤ãƒ«å \t æŒ¯ã‚Šåˆ†ã‘å…ˆ)
+	UnicodeString OppPath;			//!< åå¯¾ãƒ‘ã‚¹
+	bool IsMove;					//!< true=ç§»å‹•/ false=ã‚³ãƒ”ãƒ¼
+	bool ImmediateExe;				//!< ç¢ºèªç„¡ã—ã§ç›´ã¡ã«å®Ÿè¡Œ
+	int  SkipCount;					//!< æŒ¯ã‚Šåˆ†ã‘å…ˆä¸åœ¨ã«ã‚ˆã‚‹ã‚¹ã‚­ãƒƒãƒ—æ•°
 
 	__fastcall TDistributionDlg(TComponent* Owner);
 

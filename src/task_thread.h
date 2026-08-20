@@ -1,6 +1,6 @@
 /**
  * @file task_thread.h
- * @brief ƒ^ƒXƒNˆ—ƒXƒŒƒbƒh
+ * @brief ã‚¿ã‚¹ã‚¯å‡¦ç†ã‚¹ãƒ¬ãƒƒãƒ‰
  */
 //---------------------------------------------------------------------------
 #ifndef TaskThreadH
@@ -16,7 +16,7 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒ^ƒXƒNİ’è
+ * @brief ã‚¿ã‚¹ã‚¯è¨­å®š
  */
 class TaskConfig
 {
@@ -73,7 +73,7 @@ public:
 };
 
 //---------------------------------------------------------------------------
-//ƒ^ƒXƒNİ’èƒŠƒXƒg (TList ‚©‚çŒp³)
+//ã‚¿ã‚¹ã‚¯è¨­å®šãƒªã‚¹ãƒˆ (TList ã‹ã‚‰ç¶™æ‰¿)
 //---------------------------------------------------------------------------
 class TaskConfigList : public TList
 {
@@ -98,12 +98,12 @@ public:
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒ^ƒXƒNˆ—ƒXƒŒƒbƒh
+ * @brief ã‚¿ã‚¹ã‚¯å‡¦ç†ã‚¹ãƒ¬ãƒƒãƒ‰
  */
 class TTaskThread : public TThread
 {
 private:
-	bool IsRemote;			//ƒRƒs[/ˆÚ“®Œ³Eæ‚ªƒlƒbƒgƒ[ƒNƒhƒ‰ƒCƒu
+	bool IsRemote;			//ã‚³ãƒ”ãƒ¼/ç§»å‹•å…ƒãƒ»å…ˆãŒãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ãƒ‰ãƒ©ã‚¤ãƒ–
 
 	LARGE_INTEGER LastTransferred;
 	__int64 SmplSize;
@@ -170,7 +170,7 @@ private:
 
 	TMultiReadExclusiveWriteSynchronizer *TaskRWLock;
 
-	//ƒXƒŒƒbƒhƒZ[ƒt‚ğl—¶‚µ‚½ƒvƒƒpƒeƒB
+	//ã‚¹ãƒ¬ãƒƒãƒ‰ã‚»ãƒ¼ãƒ•ã‚’è€ƒæ…®ã—ãŸãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	bool FTaskReady;
 	bool __fastcall GetTaskReady()
 	{
@@ -248,37 +248,37 @@ private:
 
 public:
 	__property bool TaskReady	 = {read = GetTaskReady,	write = SetTaskReady};
-	__property bool TaskFinished = {read = GetTaskFinished,	write = SetTaskFinished};	//!< ƒ^ƒXƒN‚ªI—¹
-	__property bool TaskCancel	 = {read = GetTaskCancel,	write = SetTaskCancel};		//!< ’†’f
-	__property bool TaskPause	 = {read = GetTaskPause,	write = SetTaskPause};		//!< ˆê’U’â~
-	__property bool TaskAskSame  = {read = GetTaskAskSame,	write = SetTaskAskSame};	//!< “¯–¼ƒtƒ@ƒCƒ‹ˆ—‚ğ—v‹
+	__property bool TaskFinished = {read = GetTaskFinished,	write = SetTaskFinished};	//!< ã‚¿ã‚¹ã‚¯ãŒçµ‚äº†
+	__property bool TaskCancel	 = {read = GetTaskCancel,	write = SetTaskCancel};		//!< ä¸­æ–­
+	__property bool TaskPause	 = {read = GetTaskPause,	write = SetTaskPause};		//!< ä¸€æ—¦åœæ­¢
+	__property bool TaskAskSame  = {read = GetTaskAskSame,	write = SetTaskAskSame};	//!< åŒåãƒ•ã‚¡ã‚¤ãƒ«å‡¦ç†ã‚’è¦æ±‚
 
 	int Tag;
 	int ID;
 
-	bool TaskIsFast;			//!< ‚‘¬Às’†
-	bool ReqTaskSlow;			//!< ’á‘¬Às‚ğ—v‹
-	bool DirDeleted;			//!< ƒfƒBƒŒƒNƒgƒŠ‚ªíœ‚³‚ê‚½
-	bool LnkDeleted;			//!< ƒn[ƒhƒŠƒ“ƒN‚ªíœ‚³‚ê‚½
+	bool TaskIsFast;			//!< é«˜é€Ÿå®Ÿè¡Œä¸­
+	bool ReqTaskSlow;			//!< ä½é€Ÿå®Ÿè¡Œã‚’è¦æ±‚
+	bool DirDeleted;			//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒå‰Šé™¤ã•ã‚ŒãŸ
+	bool LnkDeleted;			//!< ãƒãƒ¼ãƒ‰ãƒªãƒ³ã‚¯ãŒå‰Šé™¤ã•ã‚ŒãŸ
 
 	int  TaskTime;
 	int  PreCount, SubCount, OkCount, SkipCount, RenCount, ErrCount;
 	int  StartCount;
 
-	int  Speed;					//!< “]‘—‘¬“x(byte/ms)
-	int  RemCount;				//!< c‚èŠÔ(ms)
+	int  Speed;					//!< è»¢é€é€Ÿåº¦(byte/ms)
+	int  RemCount;				//!< æ®‹ã‚Šæ™‚é–“(ms)
 	__int64 CurTotalSize;
 
-	UnicodeString CurFileName;	//!< ˆ—‘ÎÛ
-	double CurProgress;			//!< Œ»İƒRƒs[/ˆÚ“®’†ƒtƒ@ƒCƒ‹‚Ìi’»—¦
+	UnicodeString CurFileName;	//!< å‡¦ç†å¯¾è±¡
+	double CurProgress;			//!< ç¾åœ¨ã‚³ãƒ”ãƒ¼/ç§»å‹•ä¸­ãƒ•ã‚¡ã‚¤ãƒ«ã®é€²æ—ç‡
 
-	UnicodeString DstFileName;	//!< ƒRƒs[/ˆÚ“®/•ÏŠ·æ
+	UnicodeString DstFileName;	//!< ã‚³ãƒ”ãƒ¼/ç§»å‹•/å¤‰æ›å…ˆ
 
-	UnicodeString CurSrcName;	//!< ƒRƒs[/ˆÚ“®Œ³
-	UnicodeString CurDstName;	//!< ƒRƒs[/ˆÚ“®æ
+	UnicodeString CurSrcName;	//!< ã‚³ãƒ”ãƒ¼/ç§»å‹•å…ƒ
+	UnicodeString CurDstName;	//!< ã‚³ãƒ”ãƒ¼/ç§»å‹•å…ˆ
 
-	UnicodeString FirstDstName;	//!< Å‰‚ÉƒRƒs[/ˆÚ“®‚µ‚½ƒtƒ@ƒCƒ‹–¼
-	UnicodeString LastDstName;	//!< ‚»‚Ì“_‚ÅÅŒã‚ÉƒRƒs[/ˆÚ“®‚µ‚½ƒtƒ@ƒCƒ‹–¼
+	UnicodeString FirstDstName;	//!< æœ€åˆã«ã‚³ãƒ”ãƒ¼/ç§»å‹•ã—ãŸãƒ•ã‚¡ã‚¤ãƒ«å
+	UnicodeString LastDstName;	//!< ãã®æ™‚ç‚¹ã§æœ€å¾Œã«ã‚³ãƒ”ãƒ¼/ç§»å‹•ã—ãŸãƒ•ã‚¡ã‚¤ãƒ«å
 
 	TaskConfig *Config;
 
@@ -289,12 +289,12 @@ public:
 	UnicodeString CmdName;
 
 	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	 * @param CreateSuspended 
 	 */
 	__fastcall TTaskThread(bool CreateSuspended);
 
-	/** @brief ƒ^ƒXƒN‚ÌŠJn */
+	/** @brief ã‚¿ã‚¹ã‚¯ã®é–‹å§‹ */
 	bool __fastcall TaskStart();
 
 	void WaitIfPause()

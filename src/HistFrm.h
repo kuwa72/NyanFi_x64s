@@ -1,6 +1,6 @@
 /**
  * @file HistFrm.h
- * @brief ƒqƒXƒgƒOƒ‰ƒ€•\¦
+ * @brief ãƒ’ã‚¹ãƒˆã‚°ãƒ©ãƒ è¡¨ç¤º
  */
 //---------------------------------------------------------------------------
 #ifndef HistFrmH
@@ -21,28 +21,28 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒqƒXƒgƒOƒ‰ƒ€•\¦
+ * @brief ãƒ’ã‚¹ãƒˆã‚°ãƒ©ãƒ è¡¨ç¤º
  */
 class THistForm : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TImage *HistImage;
 	TPanel *HistPanel;
 
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall FormHide(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	void __fastcall WmSysCommand(TWMSysCommand & SysCom)
 	{
-		if (SysCom.CmdType==SC_CLOSE) {	//[~]ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½
+		if (SysCom.CmdType==SC_CLOSE) {	//[Ã—]ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸ
 			Close();
 			ShowHistogram = false;
 		}
 		else TForm::Dispatch(&SysCom);
 	}
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	__fastcall THistForm(TComponent* Owner);
 	void __fastcall DrawHistogram(Graphics::TBitmap *i_bmp = NULL);
 

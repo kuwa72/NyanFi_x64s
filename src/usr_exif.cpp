@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------//
-// Exif î•ñ‚Ìˆ—														//
+// Exif æƒ…å ±ã®å‡¦ç†														//
 //																		//
 //----------------------------------------------------------------------//
 #include <time.h>
@@ -21,7 +21,7 @@ float CIFF_ev(int v)
 }
 
 //---------------------------------------------------------------------------
-//IƒGƒ‰[‚É EReadError —áŠO‘—o
+//ï¼ã‚¨ãƒ©ãƒ¼æ™‚ã« EReadError ä¾‹å¤–é€å‡º
 //---------------------------------------------------------------------------
 void CIFF_parse(TFileStream *fs, TStringList *lst, int ofs, int length, bool bsw)
 {
@@ -69,11 +69,11 @@ void CIFF_parse(TFileStream *fs, TStringList *lst, int ofs, int length, bool bsw
 				}
 				//ImageSpec
 				else if (tagID==0x1810) {
-					//ƒTƒCƒY
+					//ã‚µã‚¤ã‚º
 					lst->Add(itmbuf.sprintf(_T("256=%u"), fsRead_int4(fs, bsw)));
 					lst->Add(itmbuf.sprintf(_T("257=%u"), fsRead_int4(fs, bsw)));
 					fs->Seek(4, soFromCurrent);
-					//•ûŒü
+					//æ–¹å‘
 					int a = fsRead_int4(fs, bsw);
 					a = (a==90)? 6 : (a==180)? 3 : (a==270)? 8 : 1;
 					lst->Add(itmbuf.sprintf(_T("274=%u"), a));
@@ -142,7 +142,7 @@ void CIFF_parse(TFileStream *fs, TStringList *lst, int ofs, int length, bool bsw
 						}
 					}
 					if (!vstr.IsEmpty()) lst->Add("CameraISO=" + vstr);
-					//Index=23 ƒŒƒ“ƒY
+					//Index=23 ãƒ¬ãƒ³ã‚º
 					fs->Seek(aoff + 23*2, soFromBeginning);
 					lst->Add(itmbuf.sprintf(_T("CN:1.23=%u"), fsRead_int2(fs, bsw)));
 					lst->Add(itmbuf.sprintf(_T("CN:1.24=%u"), fsRead_int2(fs, bsw)));
@@ -155,11 +155,11 @@ void CIFF_parse(TFileStream *fs, TStringList *lst, int ofs, int length, bool bsw
 }
 
 //---------------------------------------------------------------------------
-// w’èƒtƒ@ƒCƒ‹‚Ì CIFF î•ñ‚ğæ“¾‚µ‚Ä Exif ˆê——‚É•ÏŠ·
+// æŒ‡å®šãƒ•ã‚¡ã‚¤ãƒ«ã® CIFF æƒ…å ±ã‚’å–å¾—ã—ã¦ Exif ä¸€è¦§ã«å¤‰æ›
 //---------------------------------------------------------------------------
 bool CIFF_GetInf(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	TStringList *lst)		//Œ‹‰ÊŠi”[ƒŠƒXƒg
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	TStringList *lst)		//çµæœæ ¼ç´ãƒªã‚¹ãƒˆ
 {
 	lst->Clear();
 	if (!file_exists(fnam)) return false;
@@ -198,25 +198,25 @@ bool CIFF_GetInf(
 }
 
 //---------------------------------------------------------------------------
-//IFD‚©‚çî•ñ‚ğæ“¾
-//IƒGƒ‰[‚É EReadError —áŠO‘—o
+//IFDã‹ã‚‰æƒ…å ±ã‚’å–å¾—
+//ï¼ã‚¨ãƒ©ãƒ¼æ™‚ã« EReadError ä¾‹å¤–é€å‡º
 //---------------------------------------------------------------------------
 void EXIF_get_idf_inf(
 	TFileStream *fs,
 	int  top,
-	bool bsw,			//BigEndian ‚©H
-	TStringList *lst,	//Œ‹‰ÊŠi”[ƒŠƒXƒg
-	UnicodeString id)	//’Ç‰ÁID	(default=EmptyStr)
+	bool bsw,			//BigEndian ã‹ï¼Ÿ
+	TStringList *lst,	//çµæœæ ¼ç´ãƒªã‚¹ãƒˆ
+	UnicodeString id)	//è¿½åŠ ID	(default=EmptyStr)
 {
 	unsigned char vbuf[8];
 	UnicodeString tmp;
 
 	unsigned short entn = fsRead_int2(fs, bsw);
 	for (unsigned short i=0; i<entn; i++) {
-		int tag   = fsRead_int2(fs, bsw);	//ƒ^ƒO
-		int dtype = fsRead_int2(fs, bsw);	//’l‚Ìƒ^ƒCƒv
-		int count = fsRead_int4(fs, bsw);	//’l‚Ì”
-		fs->ReadBuffer(vbuf, 4);			//’l‚Ü‚½‚Í’l‚Ö‚ÌƒIƒtƒZƒbƒg
+		int tag   = fsRead_int2(fs, bsw);	//ã‚¿ã‚°
+		int dtype = fsRead_int2(fs, bsw);	//å€¤ã®ã‚¿ã‚¤ãƒ—
+		int count = fsRead_int4(fs, bsw);	//å€¤ã®æ•°
+		fs->ReadBuffer(vbuf, 4);			//å€¤ã¾ãŸã¯å€¤ã¸ã®ã‚ªãƒ•ã‚»ãƒƒãƒˆ
 
 		unsigned short v_s0 = bsw ? (unsigned short)((vbuf[0] << 8)|vbuf[1])
 								  : (unsigned short)((vbuf[1] << 8)|vbuf[0]);
@@ -231,7 +231,7 @@ void EXIF_get_idf_inf(
 		UnicodeString val_str;
 		int p;
 
-		if (tag==37500) {	//ƒ[ƒJ[ƒm[ƒg
+		if (tag==37500) {	//ãƒ¡ãƒ¼ã‚«ãƒ¼ãƒãƒ¼ãƒˆ
 			val_str = v_ui;
 		}
 		else {
@@ -295,7 +295,7 @@ void EXIF_get_idf_inf(
 					fs->Seek(p, soFromBeginning);
 					val_str = sbuf.get();
 				}
-				if (tag==36867 && val_str.Length()==19) {	// B‰e“ú
+				if (tag==36867 && val_str.Length()==19) {	// æ’®å½±æ—¥æ™‚
 					val_str[5] = '/';  val_str[8] = '/';
 				}
 				break;
@@ -310,12 +310,12 @@ void EXIF_get_idf_inf(
 						val_str.cat_sprintf(_T("%.8f"), (n0>0 && n1>0)? 1.0*n0/n1 : 0.0);
 					else if (tag==33437)		//F
 						val_str.cat_sprintf(_T("%.1f"), (n0>0 && n1>0)? 1.0*n0/n1 : 0.0);
-					else if (tag==37386)		//Å“_‹——£
+					else if (tag==37386)		//ç„¦ç‚¹è·é›¢
 						val_str.cat_sprintf(_T("%umm"), (n0>0 && n1>0)? (int)((1.0*n0/n1) + 0.5) : 0);
-					else if (SameStr(id, "NK:") && tag==132) {	//ƒŒƒ“ƒY
+					else if (SameStr(id, "NK:") && tag==132) {	//ãƒ¬ãƒ³ã‚º
 						if (n0>0 && n1>0) {
 							if (i<2)
-								val_str.cat_sprintf(_T("%u"), (n0>0 && n1>0)? (int)((1.0*n0/n1)+0.5) : 0);	//Å“_‹——£
+								val_str.cat_sprintf(_T("%u"), (n0>0 && n1>0)? (int)((1.0*n0/n1)+0.5) : 0);	//ç„¦ç‚¹è·é›¢
 							else
 								val_str.cat_sprintf(_T("%.1f"), (n0>0 && n1>0)? 1.0*n0/n1 : 0.0);			//F
 						}
@@ -382,7 +382,7 @@ void EXIF_get_idf_inf(
 						}
 					}
 
-					if (tag==37380) {	//˜IŒõ•â³
+					if (tag==37380) {	//éœ²å…‰è£œæ­£
 						if (n0==0 || n1==0)
 							val_str += "0.0";
 						else
@@ -428,7 +428,7 @@ void EXIF_get_idf_inf(
 }
 
 //---------------------------------------------------------------------------
-//€–Ú“à—e‚Ì‘®‚ğ®‚¦‚é
+//é …ç›®å†…å®¹ã®æ›¸å¼ã‚’æ•´ãˆã‚‹
 //---------------------------------------------------------------------------
 void EXIF_format_inf(UnicodeString fext, TStringList *lst)
 {
@@ -439,7 +439,7 @@ void EXIF_format_inf(UnicodeString fext, TStringList *lst)
 	if (idx!=-1) {
 		vstr = lst->Values[vnam];
 		if (!vstr.IsEmpty()) {
-			vstr = get_word_i_idx("0 ?|1 ‰¡(‚»‚Ì‚Ü‚Ü)|2 ‰¡(¶‰E”½“])|3 ‰¡(180“x‰ñ“])|4 ‰¡(ã‰º”½“])|5 c(¶‰E”½“] + 270“x‰ñ“])|6 c(90“x‰ñ“])|7 c(¶‰E”½“] + 90“x‰ñ“])|8 c(270“x‰ñ“])", vstr.ToIntDef(0));
+			vstr = get_word_i_idx("0 ?|1 æ¨ª(ãã®ã¾ã¾)|2 æ¨ª(å·¦å³åè»¢)|3 æ¨ª(180åº¦å›è»¢)|4 æ¨ª(ä¸Šä¸‹åè»¢)|5 ç¸¦(å·¦å³åè»¢ + 270åº¦å›è»¢)|6 ç¸¦(90åº¦å›è»¢)|7 ç¸¦(å·¦å³åè»¢ + 90åº¦å›è»¢)|8 ç¸¦(270åº¦å›è»¢)", vstr.ToIntDef(0));
 			lst->Add(tmp.sprintf(_T("%sL=%s"), vnam.c_str(), vstr.c_str()));
 		}
 	}
@@ -456,12 +456,12 @@ void EXIF_format_inf(UnicodeString fext, TStringList *lst)
 		else		 lst->Add(tmp.sprintf(_T("%s=%s"), vnam.c_str(), vstr.c_str()));
 	}
 
-	//˜IoŠÔ
+	//éœ²å‡ºæ™‚é–“
 	vnam = "33434";
 	vstr = lst->Values[vnam];
-	if (!vstr.IsEmpty()) lst->Add(tmp.sprintf(_T("%sU=%s•b"), vnam.c_str(), vstr.c_str()));
+	if (!vstr.IsEmpty()) lst->Add(tmp.sprintf(_T("%sU=%sç§’"), vnam.c_str(), vstr.c_str()));
 
-	//˜IoƒvƒƒOƒ‰ƒ€
+	//éœ²å‡ºãƒ—ãƒ­ã‚°ãƒ©ãƒ 
 	vnam = "34850";
 	idx  = lst->IndexOfName(vnam);
 	if (idx!=-1) {
@@ -469,13 +469,13 @@ void EXIF_format_inf(UnicodeString fext, TStringList *lst)
 		if (!vstr.IsEmpty()) {
 			int n = vstr.ToIntDef(0);
 			vstr = get_word_i_idx(
-				"•s–¾|ƒ}ƒjƒ…ƒAƒ‹|ƒm[ƒ}ƒ‹|i‚è—Dæ|ƒVƒƒƒbƒ^[—Dæ|Creative|Action|ƒ|[ƒgƒŒ[ƒg|ƒ‰ƒ“ƒhƒXƒP[ƒv", n);
-			if (vstr.IsEmpty()) vstr = "•s–¾";
+				"ä¸æ˜|ãƒãƒ‹ãƒ¥ã‚¢ãƒ«|ãƒãƒ¼ãƒãƒ«|çµã‚Šå„ªå…ˆ|ã‚·ãƒ£ãƒƒã‚¿ãƒ¼å„ªå…ˆ|Creative|Action|ãƒãƒ¼ãƒˆãƒ¬ãƒ¼ãƒˆ|ãƒ©ãƒ³ãƒ‰ã‚¹ã‚±ãƒ¼ãƒ—", n);
+			if (vstr.IsEmpty()) vstr = "ä¸æ˜";
 			lst->Add(tmp.sprintf(_T("%sL=%s"), vnam.c_str(), vstr.c_str()));
 		}
 	}
 
-	//‘ªŒõ•û®
+	//æ¸¬å…‰æ–¹å¼
 	vnam = "37383";
 	idx  = lst->IndexOfName(vnam);
 	if (idx!=-1) {
@@ -483,17 +483,17 @@ void EXIF_format_inf(UnicodeString fext, TStringList *lst)
 		if (!vstr.IsEmpty()) {
 			int n = vstr.ToIntDef(0);
 			if (n==255) {
-				vstr = "‚»‚Ì‘¼";
+				vstr = "ãã®ä»–";
 			}
 			else {
-				vstr = get_word_i_idx("•s–¾|•½‹Ï|’†‰›d‹|ƒXƒ|ƒbƒg|ƒ}ƒ‹ƒ`ƒXƒ|ƒbƒg|•ªŠ„‘ªŒõ|•”•ª‘ªŒõ", n);
-				if (vstr.IsEmpty()) vstr = "•s–¾";
+				vstr = get_word_i_idx("ä¸æ˜|å¹³å‡|ä¸­å¤®é‡è¦–|ã‚¹ãƒãƒƒãƒˆ|ãƒãƒ«ãƒã‚¹ãƒãƒƒãƒˆ|åˆ†å‰²æ¸¬å…‰|éƒ¨åˆ†æ¸¬å…‰", n);
+				if (vstr.IsEmpty()) vstr = "ä¸æ˜";
 			}
 			lst->ValueFromIndex[idx] = vstr;
 		}
 	}
 
-	//ƒtƒ‰ƒbƒVƒ…
+	//ãƒ•ãƒ©ãƒƒã‚·ãƒ¥
 	vnam = "37385";
 	idx  = lst->IndexOfName(vnam);
 	if (idx!=-1) {
@@ -522,12 +522,12 @@ void EXIF_format_inf(UnicodeString fext, TStringList *lst)
 		//Nikon
 		vstr = lst->Values["NK:132"];
 		if (vstr.IsEmpty()) {
-			//Canon (Å“_‹——£‚Ì‚İ)
+			//Canon (ç„¦ç‚¹è·é›¢ã®ã¿)
 			vstr = lst->Values["CN:1.23"];
 			if (!vstr.IsEmpty()) {
-				int t = vstr.ToIntDef(0);				//T’[
-				int w = get_ListIntVal(lst, "CN:1.24");	//W’[
-				int u = get_ListIntVal(lst, "CN:1.25");	//Š·Z’PˆÊ
+				int t = vstr.ToIntDef(0);				//Tç«¯
+				int w = get_ListIntVal(lst, "CN:1.24");	//Wç«¯
+				int u = get_ListIntVal(lst, "CN:1.25");	//æ›ç®—å˜ä½
 				if (t>0 && w>0 && u>0) {
 					t /=u; w /= u;
 					vstr = w;
@@ -561,7 +561,7 @@ void EXIF_format_inf(UnicodeString fext, TStringList *lst)
 			//DMS
 			m += modf(d, &d) * 60;
 			s += modf(m, &m) * 60;
-			vstr.cat_sprintf(_T("%s%.0f‹%.0fŒ%.2f)"), ref.c_str(), d, m, s);
+			vstr.cat_sprintf(_T("%s%.0fÂ°%.0fâ€²%.2fâ€³)"), ref.c_str(), d, m, s);
 		}
 		catch (...) {
 			vstr = EmptyStr;
@@ -572,11 +572,11 @@ void EXIF_format_inf(UnicodeString fext, TStringList *lst)
 }
 
 //---------------------------------------------------------------------------
-// w’èƒtƒ@ƒCƒ‹‚Ì Exif î•ñˆê——‚ğæ“¾
+// æŒ‡å®šãƒ•ã‚¡ã‚¤ãƒ«ã® Exif æƒ…å ±ä¸€è¦§ã‚’å–å¾—
 //---------------------------------------------------------------------------
 bool EXIF_GetInf(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	TStringList *lst)		//Œ‹‰ÊŠi”[ƒŠƒXƒg(ƒ^ƒONo.=•¶š—ñ Œ`®)
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	TStringList *lst)		//çµæœæ ¼ç´ãƒªã‚¹ãƒˆ(ã‚¿ã‚°No.=æ–‡å­—åˆ— å½¢å¼)
 {
 	lst->Clear();
 	if (!file_exists(fnam)) return false;
@@ -646,16 +646,16 @@ bool EXIF_GetInf(
 			else if (isJpeg) {
 				if (fs->Read(xbuf, 4)<4) Abort();
 				if (xbuf[0]!=0xff || xbuf[1]!=0xd8 || xbuf[2]!=0xff) Abort();
-				//æ“ª‚ªAPP0
+				//å…ˆé ­ãŒAPP0
 				if (xbuf[3]==0xe0) {
-					//APP0‚ğƒXƒLƒbƒv
+					//APP0ã‚’ã‚¹ã‚­ãƒƒãƒ—
 					int len = fsRead_int2(fsp, true);
 					fs->Seek(len - 2, soFromCurrent);
 					//APP1
 					if (fs->Read(xbuf, 2)<2) Abort();
 					if (xbuf[0]!=0xff || xbuf[1]!=0xe1) Abort();
 				}
-				//æ“ª‚ªAPP1
+				//å…ˆé ­ãŒAPP1
 				else if (xbuf[3]==0xe1) {
 					fs->Seek(2, soFromCurrent);
 					if (!fsRead_check_char(fsp, "Exif")) Abort();
@@ -665,7 +665,7 @@ bool EXIF_GetInf(
 				else Abort();
 			}
 			else if (isHeic) {
-				int bsz = fsRead_int4(fsp, true);	//BoxƒTƒCƒY
+				int bsz = fsRead_int4(fsp, true);	//Boxã‚µã‚¤ã‚º
 				if (bsz!=24) Abort();
 				if (!fsRead_check_char(fsp, "ftyp")) Abort();
 				//meta
@@ -731,7 +731,7 @@ bool EXIF_GetInf(
 				if (idf_ofs>0) {
 					fs->Seek(top + idf_ofs, soFromBeginning);
 					EXIF_get_idf_inf(fsp, top, BigEndian, lst, "S0:");
-					//ƒvƒŒƒrƒ…[‰æ‘œî•ñ
+					//ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ç”»åƒæƒ…å ±
 					int typ  = get_ListIntVal(lst, "S0:259");
 					int ptr  = get_ListIntVal(lst, "S0:513");
 					int size = get_ListIntVal(lst, "S0:514");
@@ -742,7 +742,7 @@ bool EXIF_GetInf(
 							if (xbuf[0]!=0xff) continue;
 							if (fs->Read(xbuf, 1)<1) break;
 							int mark = xbuf[0];
-							if (mark>=0xd0 && mark<=0xd9) continue;	//SOI,EOI,RSTn‚ÍƒXƒLƒbƒv
+							if (mark>=0xd0 && mark<=0xd9) continue;	//SOI,EOI,RSTnã¯ã‚¹ã‚­ãƒƒãƒ—
 							int seglen = fsRead_int2(fsp, true);
 							if (mark>=0xc0 && mark<=0xcf && mark!=0xc4 && mark!=0xc8) {
 								//SOF
@@ -775,7 +775,7 @@ bool EXIF_GetInf(
 				}
 			}
 
-			//ƒ[ƒJ[ƒm[ƒg
+			//ãƒ¡ãƒ¼ã‚«ãƒ¼ãƒãƒ¼ãƒˆ
 			tmpstr = lst->Values["37500"];
 			if (!tmpstr.IsEmpty()) {
 				idf_ofs = tmpstr.ToIntDef(0);
@@ -816,7 +816,7 @@ bool EXIF_GetInf(
 				for (int i=0; i<n; i++) {
 					int tag = fsRead_int2(fsp, true);	if (tag==0) break;
 					int siz = fsRead_int2(fsp, true);	if (siz==0) break;
-					if (tag==0x111) {	//ŒöÌRAW‰æ‘œƒTƒCƒY
+					if (tag==0x111) {	//å…¬ç§°RAWç”»åƒã‚µã‚¤ã‚º
 						if (siz==4) {
 							lst->Add(itmbuf.sprintf(_T("CFA:257=%u"), fsRead_int2(fsp, true)));
 							lst->Add(itmbuf.sprintf(_T("CFA:256=%u"), fsRead_int2(fsp, true)));
@@ -848,7 +848,7 @@ bool EXIF_GetInf(
 }
 
 //---------------------------------------------------------------------------
-//ExifƒŠƒXƒg‚©‚ç‰æ‘œƒTƒCƒY‚ğæ“¾
+//Exifãƒªã‚¹ãƒˆã‹ã‚‰ç”»åƒã‚µã‚¤ã‚ºã‚’å–å¾—
 //---------------------------------------------------------------------------
 bool Exif_GetImgSize(TStringList *lst, UnicodeString fext, unsigned int *w, unsigned int *h)
 {
@@ -905,7 +905,7 @@ bool Exif_GetImgSize(TStringList *lst, UnicodeString fext, unsigned int *w, unsi
 	if (w_str.IsEmpty() || h_str.IsEmpty()) return false;
 
 	//NEF,NRW
-	//ÀŒøƒTƒCƒY‚ÆƒTƒ€ƒlƒCƒ‹ƒTƒCƒY‚ğ”äŠr‚µ‚Ä‰æ‘œƒTƒCƒY‚ğİ’è
+	//å®ŸåŠ¹ã‚µã‚¤ã‚ºã¨ã‚µãƒ ãƒã‚¤ãƒ«ã‚µã‚¤ã‚ºã‚’æ¯”è¼ƒã—ã¦ç”»åƒã‚µã‚¤ã‚ºã‚’è¨­å®š
 	if (test_FileExt(fext, ".nef.nrw") && !ListVal_is_empty(lst, "SOF:256")) {
 		float s0 = w_str.ToIntDef(0) * h_str.ToIntDef(0);
 		float s1 = get_ListIntVal(lst, "SOF:256") * get_ListIntVal(lst, "SOF:257");
@@ -915,7 +915,7 @@ bool Exif_GetImgSize(TStringList *lst, UnicodeString fext, unsigned int *w, unsi
 		}
 	}
 
-	//•ûŒü
+	//æ–¹å‘
 	if (!test_FileExt(fext, ".3fr")) {
 		int ori = get_ListIntVal(lst, "274");
 		if (ori==6 || ori==8) std::swap(w_str, h_str);
@@ -927,14 +927,14 @@ bool Exif_GetImgSize(TStringList *lst, UnicodeString fext, unsigned int *w, unsi
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚ÌExifB‰e“ú‚ğæ“¾
+//ãƒ•ã‚¡ã‚¤ãƒ«ã®Exifæ’®å½±æ—¥æ™‚ã‚’å–å¾—
 //---------------------------------------------------------------------------
 bool EXIF_GetExifTime(UnicodeString fnam, TDateTime &dt)
 {
 	bool res = false;
 	std::unique_ptr<TStringList> taglst(new TStringList());
 	if (EXIF_GetInf(fnam, taglst.get())) {
-		UnicodeString tstr = taglst->Values["36867"];	// = B‰e“ú
+		UnicodeString tstr = taglst->Values["36867"];	// = æ’®å½±æ—¥æ™‚
 		if (tstr.Length()==19) {
 			try {
 				dt	= str_to_DateTime(tstr);
@@ -949,7 +949,7 @@ bool EXIF_GetExifTime(UnicodeString fnam, TDateTime &dt)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚ÌExifB‰e“ú‚ğw’è‘®‚Åæ“¾
+//ãƒ•ã‚¡ã‚¤ãƒ«ã®Exifæ’®å½±æ—¥æ™‚ã‚’æŒ‡å®šæ›¸å¼ã§å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString EXIF_GetExifTimeStr(UnicodeString fnam, UnicodeString format)
 {
@@ -960,14 +960,14 @@ UnicodeString EXIF_GetExifTimeStr(UnicodeString fnam, UnicodeString format)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚Ìƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚ğ Exif B‰e“ú‚É
+//ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã‚’ Exif æ’®å½±æ—¥æ™‚ã«
 //---------------------------------------------------------------------------
 bool EXIF_SetExifTime(UnicodeString fnam)
 {
 	bool ret = false;
 	std::unique_ptr<TStringList> taglst(new TStringList());
 	if (EXIF_GetInf(fnam, taglst.get())) {
-		UnicodeString tstr = taglst->Values["36867"];	// = B‰e“ú
+		UnicodeString tstr = taglst->Values["36867"];	// = æ’®å½±æ—¥æ™‚
 		if (tstr.Length()==19) {
 			TDateTime dt;
 			try {
@@ -983,18 +983,18 @@ bool EXIF_SetExifTime(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//Jpegƒtƒ@ƒCƒ‹‚©‚çExifî•ñ‚ğíœ
-//  –ß‚è’l:  0=¬Œ÷ -1=¸”s 1=Exif‚È‚µ
+//Jpegãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰Exifæƒ…å ±ã‚’å‰Šé™¤
+//  æˆ»ã‚Šå€¤:  0=æˆåŠŸ -1=å¤±æ•— 1=Exifãªã—
 //---------------------------------------------------------------------------
 int EXIF_DelJpgExif(
-	UnicodeString fnam,		//‘ÎÛƒtƒ@ƒCƒ‹–¼
-	UnicodeString onam,		//o—Íƒtƒ@ƒCƒ‹–¼
-	bool keep_time)			//ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚ğˆÛ
+	UnicodeString fnam,		//å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«å
+	UnicodeString onam,		//å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«å
+	bool keep_time)			//ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã‚’ç¶­æŒ
 {
 	try {
 		if (!file_exists(fnam)) Abort();
 
-		//ˆ—‘O‚Éƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚ğæ‚Á‚Ä‚¨‚­
+		//å‡¦ç†å‰ã«ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã‚’å–ã£ã¦ãŠã
 		TDateTime ft;
 		if (keep_time) ft = get_file_age(fnam);
 
@@ -1034,46 +1034,46 @@ int EXIF_DelJpgExif(
 		std::unique_ptr<TStringList> i_lst(new TStringList());
 		EXIF_get_idf_inf(isp, top, BigEndian, i_lst.get());
 
-		//‰ğ‘œ“x‚ğæ“¾
-		int rm = 2, rx = 72, ry = 72;	//ƒfƒtƒHƒ‹ƒg 72dpi
+		//è§£åƒåº¦ã‚’å–å¾—
+		int rm = 2, rx = 72, ry = 72;	//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ 72dpi
 		if (!ListVal_is_empty(i_lst.get(), "296")) {
 			rm = get_ListIntVal(i_lst.get(), "296", 2);	//dpi
 			rx = get_ListIntVal(i_lst.get(), "282", 72);
 			ry = get_ListIntVal(i_lst.get(), "283", 72);
 		}
-		if (rm==3) rm = 2; else rm = 1;	//APP1—p‚É•ÏŠ·
+		if (rm==3) rm = 2; else rm = 1;	//APP1ç”¨ã«å¤‰æ›
 
-		//APP1‚ğƒXƒLƒbƒv
+		//APP1ã‚’ã‚¹ã‚­ãƒƒãƒ—
 		i_fs->Seek(app1_ofs, soFromBeginning);
-		//ƒƒ‚ƒŠƒXƒgƒŠ[ƒ€‚ÉƒCƒ[ƒW‚ğƒRƒs[
+		//ãƒ¡ãƒ¢ãƒªã‚¹ãƒˆãƒªãƒ¼ãƒ ã«ã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’ã‚³ãƒ”ãƒ¼
 		std::unique_ptr<TMemoryStream> ms(new TMemoryStream());
 		if (ms->CopyFrom(isp, img_size)<img_size) Abort();
-		//“ü—ÍƒXƒgƒŠ[ƒ€‚ğ”jŠü
+		//å…¥åŠ›ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚’ç ´æ£„
 		TFileStream *sp = i_fs.release();
 		delete sp;
 
-		//APP0‚ğì¬‚µ‚Ä‘‚«‚İ
+		//APP0ã‚’ä½œæˆã—ã¦æ›¸ãè¾¼ã¿
 		if (!file_exists(onam)) {
 			if (!create_EmptyFile(onam)) Abort();
 		}
 		std::unique_ptr<TFileStream> o_fs(new TFileStream(onam, fmCreate));
 		xbuf[0]  = 0xff; xbuf[1] = 0xd8;		//SOI
-		xbuf[2]  = 0xff; xbuf[3] = 0xe0;		//APP0ƒ}[ƒJ
+		xbuf[2]  = 0xff; xbuf[3] = 0xe0;		//APP0ãƒãƒ¼ã‚«
 		xbuf[4]  = 0x00; xbuf[5] = 0x10;
 		xbuf[6]  = 'J'; xbuf[7] = 'F'; xbuf[8] = 'I'; xbuf[9] = 'F'; xbuf[10] = 0x00;
-		xbuf[11] = 0x01; xbuf[12] = 0x01;		//ƒo[ƒWƒ‡ƒ“1.01
-		xbuf[13] = rm;							//‰ğ‘œ“x
+		xbuf[11] = 0x01; xbuf[12] = 0x01;		//ãƒãƒ¼ã‚¸ãƒ§ãƒ³1.01
+		xbuf[13] = rm;							//è§£åƒåº¦
 		xbuf[14] = rx/256; xbuf[15] = rx%256;
 		xbuf[16] = ry/256; xbuf[17] = ry%256;
-		xbuf[18] = 0x00; xbuf[19] = 0x00;		//ƒTƒ€ƒlƒCƒ‹‚È‚µ
+		xbuf[18] = 0x00; xbuf[19] = 0x00;		//ã‚µãƒ ãƒã‚¤ãƒ«ãªã—
 		o_fs->Write(xbuf.get(), 20);
-		//ƒCƒ[ƒW‚ğ‘‚«‚İ
+		//ã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’æ›¸ãè¾¼ã¿
 		o_fs->Write(ms->Memory, ms->Size);
-		//o—ÍƒXƒgƒŠ[ƒ€‚ğ”jŠü
+		//å‡ºåŠ›ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚’ç ´æ£„
 		sp = o_fs.release();
 		delete sp;
 
-		//ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚ğİ’è
+		//ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã‚’è¨­å®š
 		if (keep_time && (int)ft>0) set_file_age(onam, ft);
 
 		return 0;
@@ -1082,7 +1082,7 @@ int EXIF_DelJpgExif(
 		return SameText(e.Message, "NoExif")? 1 : -1;
 	}
 	catch (...) {
-		//ƒGƒ‰[
+		//ã‚¨ãƒ©ãƒ¼
 		return -1;
 	}
 }

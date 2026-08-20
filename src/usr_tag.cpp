@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------//
-// ƒ^ƒOŠÇ—ƒ†ƒjƒbƒg														//
+// ã‚¿ã‚°ç®¡ç†ãƒ¦ãƒ‹ãƒƒãƒˆ														//
 //																		//
 //----------------------------------------------------------------------//
 #include "usr_file_ex.h"
@@ -41,8 +41,8 @@ TagManager::~TagManager()
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹EƒCƒ“ƒfƒbƒNƒX‚ğæ“¾
-//ITagRWLock “à‚Åg—p‚·‚é‚±‚Æ
+//ãƒ•ã‚¡ã‚¤ãƒ«ãƒ»ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’å–å¾—
+//ï¼TagRWLock å†…ã§ä½¿ç”¨ã™ã‚‹ã“ã¨
 //---------------------------------------------------------------------------
 int TagManager::GetIndex(UnicodeString fnam)
 {
@@ -59,7 +59,7 @@ int TagManager::GetIndex(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚ğXV
+//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ›´æ–°
 //---------------------------------------------------------------------------
 bool TagManager::UpdateFile()
 {
@@ -80,7 +80,7 @@ bool TagManager::UpdateFile()
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒO–¼ƒŠƒXƒgì¬
+//ã‚¿ã‚°åãƒªã‚¹ãƒˆä½œæˆ
 //---------------------------------------------------------------------------
 void TagManager::MakeTagNameList()
 {
@@ -98,7 +98,7 @@ void TagManager::MakeTagNameList()
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚ª•Ï‰»‚µ‚Ä‚¢‚½‚çÄ“Ç‚İ‚İ
+//ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ãŒå¤‰åŒ–ã—ã¦ã„ãŸã‚‰å†èª­ã¿è¾¼ã¿
 //---------------------------------------------------------------------------
 bool TagManager::Recycle()
 {
@@ -121,7 +121,7 @@ bool TagManager::Recycle()
 }
 
 //---------------------------------------------------------------------------
-//‘¶İ‚µ‚È‚¢€–Ú‚Ìƒ^ƒOƒf[ƒ^‚ğ®—
+//å­˜åœ¨ã—ãªã„é …ç›®ã®ã‚¿ã‚°ãƒ‡ãƒ¼ã‚¿ã‚’æ•´ç†
 //---------------------------------------------------------------------------
 int TagManager::TrimData()
 {
@@ -144,7 +144,7 @@ int TagManager::TrimData()
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒO‚ğæ“¾
+//ã‚¿ã‚°ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString TagManager::GetTags(UnicodeString fnam)
 {
@@ -156,12 +156,12 @@ UnicodeString TagManager::GetTags(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒO‚Ì‘å¬•¶š‚ğŠù‘¶‚Ì‚à‚Ì‚É‡‚í‚¹A‹óƒ^ƒO‚ğœ‹
-//Šù‘¶‚É‚È‚¯‚ê‚Î’Ç‰Á
+//ã‚¿ã‚°ã®å¤§å°æ–‡å­—ã‚’æ—¢å­˜ã®ã‚‚ã®ã«åˆã‚ã›ã€ç©ºã‚¿ã‚°ã‚’é™¤å»
+//æ—¢å­˜ã«ãªã‘ã‚Œã°è¿½åŠ 
 //---------------------------------------------------------------------------
 UnicodeString TagManager::NormTags(
 	UnicodeString tags,
-	bool sw_add)			//–³‚¯‚ê‚Î’Ç‰Á	(default = true)
+	bool sw_add)			//ç„¡ã‘ã‚Œã°è¿½åŠ 	(default = true)
 {
 	UnicodeString ret_str;
 
@@ -186,7 +186,7 @@ UnicodeString TagManager::NormTags(
 }
 
 //---------------------------------------------------------------------------
-//w’èƒtƒ@ƒCƒ‹‚Ìƒ^ƒOî•ñ‚ğíœ
+//æŒ‡å®šãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¿ã‚°æƒ…å ±ã‚’å‰Šé™¤
 //---------------------------------------------------------------------------
 void TagManager::DelItem(UnicodeString fnam)
 {
@@ -200,11 +200,11 @@ void TagManager::DelItem(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒO‚Ìİ’è
+//ã‚¿ã‚°ã®è¨­å®š
 //---------------------------------------------------------------------------
 void TagManager::SetTags(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹
-	UnicodeString tags)		//’Ç‰Áƒ^ƒO(;‹æØ‚è)
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«
+	UnicodeString tags)		//è¿½åŠ ã‚¿ã‚°(;åŒºåˆ‡ã‚Š)
 {
 	fnam = ExcludeTrailingPathDelimiter(fnam);
 
@@ -225,11 +225,11 @@ void TagManager::SetTags(
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒO‚Ì’Ç‰Á
+//ã‚¿ã‚°ã®è¿½åŠ 
 //---------------------------------------------------------------------------
 void TagManager::AddTags(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹
-	UnicodeString tags)		//’Ç‰Áƒ^ƒO(;‹æØ‚è)
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«
+	UnicodeString tags)		//è¿½åŠ ã‚¿ã‚°(;åŒºåˆ‡ã‚Š)
 {
 	if (tags.IsEmpty()) return;
 
@@ -266,7 +266,7 @@ void TagManager::AddTags(
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹/ƒfƒBƒŒƒNƒgƒŠ–¼‚Ì•ÏX
+//ãƒ•ã‚¡ã‚¤ãƒ«/ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåã®å¤‰æ›´
 //---------------------------------------------------------------------------
 void TagManager::Rename(UnicodeString old_nam, UnicodeString new_nam)
 {
@@ -294,7 +294,7 @@ void TagManager::Rename(UnicodeString old_nam, UnicodeString new_nam)
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒO‚ÌƒRƒs[
+//ã‚¿ã‚°ã®ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void TagManager::Copy(UnicodeString from_nam, UnicodeString to_nam)
 {
@@ -303,7 +303,7 @@ void TagManager::Copy(UnicodeString from_nam, UnicodeString to_nam)
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒO‚Ì‰ü–¼
+//ã‚¿ã‚°ã®æ”¹å
 //---------------------------------------------------------------------------
 int TagManager::RenTag(UnicodeString old_tag, UnicodeString new_tag)
 {
@@ -311,12 +311,12 @@ int TagManager::RenTag(UnicodeString old_tag, UnicodeString new_tag)
 	int idx_c = TagColList->IndexOfName(old_tag);
 	if (idx_o!=-1) {
 		int idx_n = TagNameList->IndexOf(new_tag);
-		//“‡
+		//çµ±åˆ
 		if (idx_n!=-1 && idx_n!=idx_o) {
 			TagNameList->Delete(idx_o);
 			if (idx_c!=-1) TagColList->Delete(idx_c);
 		}
-		//‰ü–¼
+		//æ”¹å
 		else {
 			TagNameList->Strings[idx_o] = new_tag;
 			if (idx_c!=-1) TagColList->Strings[idx_c] = new_tag + "=" + TagColList->ValueFromIndex[idx_c];
@@ -354,7 +354,7 @@ int TagManager::RenTag(UnicodeString old_tag, UnicodeString new_tag)
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒOƒf[ƒ^‚Ìíœ
+//ã‚¿ã‚°ãƒ‡ãƒ¼ã‚¿ã®å‰Šé™¤
 //---------------------------------------------------------------------------
 int TagManager::DelTagData(UnicodeString tag)
 {
@@ -398,13 +398,13 @@ int TagManager::DelTagData(UnicodeString tag)
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒOƒ`ƒFƒbƒNƒŠƒXƒg‚Ì‰Šú‰»
-//–ß‚è’l: ƒ^ƒO‚ÌÅ‘å•\¦•
+//ã‚¿ã‚°ãƒã‚§ãƒƒã‚¯ãƒªã‚¹ãƒˆã®åˆæœŸåŒ–
+//æˆ»ã‚Šå€¤: ã‚¿ã‚°ã®æœ€å¤§è¡¨ç¤ºå¹…
 //---------------------------------------------------------------------------
 int TagManager::IniCheckList(
 	TCheckListBox *lp,
-	UnicodeString tnam,		//‘I‘ğ‚·‚éƒ^ƒO		(default = EmptyStr)
-	bool count_sw)			//g—p”‚ğƒJƒEƒ“ƒg	(default = false)
+	UnicodeString tnam,		//é¸æŠã™ã‚‹ã‚¿ã‚°		(default = EmptyStr)
+	bool count_sw)			//ä½¿ç”¨æ•°ã‚’ã‚«ã‚¦ãƒ³ãƒˆ	(default = false)
 {
 	lp->Items->Assign(TagNameList);
 
@@ -422,7 +422,7 @@ int TagManager::IniCheckList(
 }
 
 //---------------------------------------------------------------------------
-//ƒŠƒXƒgƒ`ƒFƒbƒNƒ{ƒbƒNƒX‚©‚çƒ^ƒO•¶š—ñ‚Ö‚Ì”½‰f
+//ãƒªã‚¹ãƒˆãƒã‚§ãƒƒã‚¯ãƒœãƒƒã‚¯ã‚¹ã‹ã‚‰ã‚¿ã‚°æ–‡å­—åˆ—ã¸ã®åæ˜ 
 //---------------------------------------------------------------------------
 UnicodeString TagManager::CheckToTags(TCheckListBox *lp, UnicodeString tags)
 {
@@ -458,10 +458,10 @@ UnicodeString TagManager::CheckToTags(TCheckListBox *lp, UnicodeString tags)
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒO‚Ìg—p”‚ğƒJƒEƒ“ƒg
+//ã‚¿ã‚°ã®ä½¿ç”¨æ•°ã‚’ã‚«ã‚¦ãƒ³ãƒˆ
 //---------------------------------------------------------------------------
 void TagManager::CountTags(TCheckListBox *lp,
-	bool clr_sw)	//tru = ƒNƒŠƒA‚Ì‚İ (default = false)
+	bool clr_sw)	//tru = ã‚¯ãƒªã‚¢ã®ã¿ (default = false)
 {
 	for (int i=0; i<lp->Count; i++) lp->Items->Objects[i] = (TObject*)0;
 
@@ -481,12 +481,12 @@ void TagManager::CountTags(TCheckListBox *lp,
 }
 
 //---------------------------------------------------------------------------
-//w’èƒ^ƒO‚Éƒ}ƒbƒ`‚·‚éƒŠƒXƒg‚ğæ“¾
+//æŒ‡å®šã‚¿ã‚°ã«ãƒãƒƒãƒã™ã‚‹ãƒªã‚¹ãƒˆã‚’å–å¾—
 //---------------------------------------------------------------------------
 int TagManager::GetMatchList(
-	UnicodeString tags,	//ƒ^ƒO
-	bool and_sw,		//ANDŒŸõ
-	TStringList *lst)	//Œ‹‰ÊƒŠƒXƒg
+	UnicodeString tags,	//ã‚¿ã‚°
+	bool and_sw,		//ANDæ¤œç´¢
+	TStringList *lst)	//çµæœãƒªã‚¹ãƒˆ
 {
 	TagRWLock->BeginRead();
 	for (int i=0; i<TagDataList->Count; i++) {
@@ -517,7 +517,7 @@ int TagManager::GetMatchList(
 	return lst->Count;
 }
 //---------------------------------------------------------------------------
-//‚·‚×‚Ä‚Ìƒ^ƒO€–Ú‚ÌƒŠƒXƒg‚ğæ“¾
+//ã™ã¹ã¦ã®ã‚¿ã‚°é …ç›®ã®ãƒªã‚¹ãƒˆã‚’å–å¾—
 //---------------------------------------------------------------------------
 int TagManager::GetAllList(TStringList *lst)
 {
@@ -529,7 +529,7 @@ int TagManager::GetAllList(TStringList *lst)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚Éƒ^ƒO‚ª•t‚¯‚ç‚ê‚Ä‚¢‚é‚©?
+//ãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚¿ã‚°ãŒä»˜ã‘ã‚‰ã‚Œã¦ã„ã‚‹ã‹?
 //---------------------------------------------------------------------------
 bool TagManager::HasTag(UnicodeString fnam)
 {
@@ -540,12 +540,12 @@ bool TagManager::HasTag(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚ªw’èƒ^ƒO‚Éƒ}ƒbƒ`‚·‚é‚©?
+//ãƒ•ã‚¡ã‚¤ãƒ«ãŒæŒ‡å®šã‚¿ã‚°ã«ãƒãƒƒãƒã™ã‚‹ã‹?
 //---------------------------------------------------------------------------
 bool TagManager::Match(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	UnicodeString ktags,	//ƒ^ƒO
-	bool and_sw)			//ANDŒŸõ
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	UnicodeString ktags,	//ã‚¿ã‚°
+	bool and_sw)			//ANDæ¤œç´¢
 {
 	TagRWLock->BeginRead();
 	UnicodeString ftags = GetDataTags(GetIndex(fnam));
@@ -575,7 +575,7 @@ bool TagManager::Match(
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒO•ÊƒJƒ‰[‚ğæ“¾
+//ã‚¿ã‚°åˆ¥ã‚«ãƒ©ãƒ¼ã‚’å–å¾—
 //---------------------------------------------------------------------------
 TColor TagManager::GetColor(UnicodeString tag, TColor col_def)
 {
@@ -588,9 +588,9 @@ TColor TagManager::GetColor(UnicodeString tag, TColor col_def)
 	return col;
 }
 //---------------------------------------------------------------------------
-//ƒ^ƒO•ÊƒJƒ‰[‚ğİ’è
-// tag : ƒ^ƒO–¼ (EmptyStr ‚Ìê‡ DefColor ‚ğİ’è)
-// col : F
+//ã‚¿ã‚°åˆ¥ã‚«ãƒ©ãƒ¼ã‚’è¨­å®š
+// tag : ã‚¿ã‚°å (EmptyStr ã®å ´åˆ DefColor ã‚’è¨­å®š)
+// col : è‰²
 //---------------------------------------------------------------------------
 void TagManager::SetColor(UnicodeString tag, TColor col)
 {
@@ -607,15 +607,15 @@ void TagManager::SetColor(UnicodeString tag, TColor col)
 		TagColList->Add(tmp.sprintf(_T("%s=%d"), tag.c_str(), col));
 }
 //---------------------------------------------------------------------------
-//ƒ^ƒO‚Ì•`‰æ
-//  #: ‚Ån‚Ü‚éê‡ AND/OR •t‚«
+//ã‚¿ã‚°ã®æç”»
+//  #: ã§å§‹ã¾ã‚‹å ´åˆ AND/OR ä»˜ã
 //---------------------------------------------------------------------------
 void TagManager::DrawTags(
 	UnicodeString tags,
 	TCanvas *cv,
-	int x, int y,		//•\¦ˆÊ’u
-	TColor col_rev,		//w’è”wŒiF‚Å”½“]•\¦	(default = clNone : ’Êí•\¦)
-	bool blk_sw)		//ƒuƒƒbƒN‹L†‚ğ•\¦	(default = false)
+	int x, int y,		//è¡¨ç¤ºä½ç½®
+	TColor col_rev,		//æŒ‡å®šèƒŒæ™¯è‰²ã§åè»¢è¡¨ç¤º	(default = clNone : é€šå¸¸è¡¨ç¤º)
+	bool blk_sw)		//ãƒ–ãƒ­ãƒƒã‚¯è¨˜å·ã‚’è¡¨ç¤º	(default = false)
 {
 	UnicodeString tag_hd = "#:";
 	UnicodeString tag_opt;

@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒOƒ‰ƒt•\¦															//
+//  ã‚°ãƒ©ãƒ•è¡¨ç¤º															//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "Global.h"
@@ -51,11 +51,11 @@ void __fastcall TGraphForm::FormShow(TObject *Sender)
 		if (CsvCol==-1) CsvCol = 0;
 		if (CsvCol<0 || CsvCol>=top_buf.Length) Abort();
 
-		UnicodeString tmp = UnicodeString(IsCSV? "CSV" : "TSV") + "€–Ú‚ÌƒOƒ‰ƒt - [";
+		UnicodeString tmp = UnicodeString(IsCSV? "CSV" : "TSV") + "é …ç›®ã®ã‚°ãƒ©ãƒ• - [";
 		if (TopIsHeader)
 			tmp += IsCSV? get_csv_item(top_str, CsvCol) : get_tsv_item(top_str, CsvCol);
 		else
-			tmp.cat_sprintf(_T("€–Ú%u"), CsvCol + 1);
+			tmp.cat_sprintf(_T("é …ç›®%u"), CsvCol + 1);
 		Caption = tmp + "]";
 
 		long double total = 0.0;
@@ -91,7 +91,7 @@ void __fastcall TGraphForm::FormShow(TObject *Sender)
 		AveItemValue = total/ValueList->Count;
 	}
 	catch (...) {
-		msgbox_ERR("—LŒø‚È”’l€–Ú‚ª‚ ‚è‚Ü‚¹‚ñ");
+		msgbox_ERR("æœ‰åŠ¹ãªæ•°å€¤é …ç›®ãŒã‚ã‚Šã¾ã›ã‚“");
 		::PostMessage(Handle, WM_CLOSE, 0, 0);
 	}
 }
@@ -124,7 +124,7 @@ void __fastcall TGraphForm::FormKeyDown(TObject *Sender, WORD &Key, TShiftState 
 }
 
 //---------------------------------------------------------------------------
-//ƒOƒ‰ƒt‚Ì•`‰æ
+//ã‚°ãƒ©ãƒ•ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TGraphForm::PaintBox1Paint(TObject *Sender)
 {
@@ -152,22 +152,22 @@ void __fastcall TGraphForm::PaintBox1Paint(TObject *Sender)
 	cv->MoveTo(pp->Width - x_Margin, 0);
 	cv->LineTo(pp->Width - x_Margin, pp->Height);
 
-	//Å‘å’l
-	int y_hi = pp->Height*0.1;	//ãŒÀ
+	//æœ€å¤§å€¤
+	int y_hi = pp->Height*0.1;	//ä¸Šé™
 	if (ShowMaxAction->Checked) {
 		cv->MoveTo(x_Margin, y_hi);	cv->LineTo(pp->Width - x_Margin, y_hi);
 		cv->TextOut(x_Margin + SCALED_THIS(4), y_hi - SCALED_THIS(16),
-						"Å‘å’l=" + ldouble_to_str(MaxItemValue, f_Width));
+						"æœ€å¤§å€¤=" + ldouble_to_str(MaxItemValue, f_Width));
 	}
-	//Å¬’l
-	int y_lo = pp->Height*0.9;	//‰ºŒÀ
+	//æœ€å°å€¤
+	int y_lo = pp->Height*0.9;	//ä¸‹é™
 	if (ShowMinAction->Checked) {
 		cv->MoveTo(x_Margin, y_lo);	cv->LineTo(pp->Width - x_Margin, y_lo);
 		cv->TextOut(x_Margin + SCALED_THIS(4), y_lo + SCALED_THIS(4),
-						"Å¬’l=" + ldouble_to_str(MinItemValue, f_Width));
+						"æœ€å°å€¤=" + ldouble_to_str(MinItemValue, f_Width));
 	}
 
-	//ƒOƒ‰ƒt
+	//ã‚°ãƒ©ãƒ•
 	int y_w = pp->Height*0.8;
 	int x_w = pp->Width - 2*x_Margin;
 	long double r_w = MaxItemValue - MinItemValue;
@@ -180,18 +180,18 @@ void __fastcall TGraphForm::PaintBox1Paint(TObject *Sender)
 		if (i==0) cv->MoveTo(xp, yp); else cv->LineTo(xp, yp);
 	}
 
-	//•½‹Ï’l
+	//å¹³å‡å€¤
 	if (ShowAveAction->Checked) {
 		int y_av = y_lo - (y_w * ((AveItemValue - MinItemValue) / r_w));
 		cv->Pen->Color = col_GrGrid;
 		cv->MoveTo(x_Margin, y_av);	cv->LineTo(pp->Width - x_Margin, y_av);
 		cv->TextOut(x_Margin + SCALED_THIS(4), y_av - SCALED_THIS(16),
-						"•½‹Ï’l=" + ldouble_to_str(AveItemValue, f_Width + 1));
+						"å¹³å‡å€¤=" + ldouble_to_str(AveItemValue, f_Width + 1));
 	}
 }
 
 //---------------------------------------------------------------------------
-//€–ÚˆÊ’u‚ÉˆÚ“®
+//é …ç›®ä½ç½®ã«ç§»å‹•
 //---------------------------------------------------------------------------
 void __fastcall TGraphForm::PaintBox1MouseDown(TObject *Sender, TMouseButton Button,
 	TShiftState Shift, int X, int Y)
@@ -205,7 +205,7 @@ void __fastcall TGraphForm::PaintBox1MouseDown(TObject *Sender, TMouseButton But
 }
 
 //---------------------------------------------------------------------------
-//‰æ‘œ‚Æ‚µ‚ÄƒRƒs[
+//ç”»åƒã¨ã—ã¦ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TGraphForm::CopyImgItemClick(TObject *Sender)
 {
@@ -218,7 +218,7 @@ void __fastcall TGraphForm::CopyImgItemClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//Å‘å’l/•½‹Ï’l/Å¬’l‚Ì•\¦
+//æœ€å¤§å€¤/å¹³å‡å€¤/æœ€å°å€¤ã®è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TGraphForm::ShowInfActionExecute(TObject *Sender)
 {

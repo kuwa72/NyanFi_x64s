@@ -1,6 +1,6 @@
 /**
  * @file usr_excmd.h
- * @brief ExeCommands ópä÷êî
+ * @brief ExeCommands Áî®Èñ¢Êï∞
  */
 //---------------------------------------------------------------------------
 #ifndef UsrExeCmdsH
@@ -10,11 +10,11 @@
 #include "Global.h"
 
 //---------------------------------------------------------------------------
-#define MAX_REPEAT_LEVEL 8	//!< Repeatï∂ÇÃç≈ëÂëΩèdÉåÉxÉã
+#define MAX_REPEAT_LEVEL 8	//!< RepeatÊñá„ÅÆÊúÄÂ§ßÂ§öÈáç„É¨„Éô„É´
 
 //---------------------------------------------------------------------------
 /**
- * @brief ExeCommands ÇÃèàóù
+ * @brief ExeCommands „ÅÆÂá¶ÁêÜ
  */
 class ExeCmdsList
 {
@@ -30,10 +30,10 @@ public:
 	UnicodeString CmdStr;
 	bool EndOfCmds;
 
-	int RepLevel;					//!< Repeat ÉåÉxÉã -1:Ç»Çµ
-	int RepCnt[MAX_REPEAT_LEVEL];	//!<   åJÇËï‘Çµêî  -1:YN/ -2:ñ≥å¿
-	int RepTop[MAX_REPEAT_LEVEL];	//!<   åJÇËï‘ÇµêÊì™à íu
-	int IfCnt;						//!< Ifï∂ì‡
+	int RepLevel;					//!< Repeat „É¨„Éô„É´ -1:„Å™„Åó
+	int RepCnt[MAX_REPEAT_LEVEL];	//!<   Áπ∞„ÇäËøî„ÅóÊï∞  -1:YN/ -2:ÁÑ°Èôê
+	int RepTop[MAX_REPEAT_LEVEL];	//!<   Áπ∞„ÇäËøî„ÅóÂÖàÈ†≠‰ΩçÁΩÆ
+	int IfCnt;						//!< IfÊñáÂÜÖ
 
 	UnicodeString ErrMsg;
 
@@ -41,10 +41,10 @@ public:
 	~ExeCmdsList();
 
 	/**
-	 * @brief ëOèàóùÅAÉRÉ}ÉìÉh/ÉpÉâÉÅÅ[É^ÇÃéÊÇËèoÇµ
-	 * @param[out] cmd ÉRÉ}ÉìÉh
-	 * @param[out] prm ÉpÉâÉÅÅ[É^
-	 * @return true ÉRÉ}ÉìÉhÇÃèIÇÌÇË
+	 * @brief ÂâçÂá¶ÁêÜ„ÄÅ„Ç≥„Éû„É≥„Éâ/„Éë„É©„É°„Éº„Çø„ÅÆÂèñ„ÇäÂá∫„Åó
+	 * @param[out] cmd „Ç≥„Éû„É≥„Éâ
+	 * @param[out] prm „Éë„É©„É°„Éº„Çø
+	 * @return true „Ç≥„Éû„É≥„Éâ„ÅÆÁµÇ„Çè„Çä
 	 * @return false
 	 */
 	bool Preproc(UnicodeString &cmd, UnicodeString &prm);
@@ -57,7 +57,7 @@ public:
 };
 
 //---------------------------------------------------------------------------
-/** ï‚èïÉRÉ}ÉìÉhÉäÉXÉg */
+/** Ë£úÂä©„Ç≥„Éû„É≥„Éâ„É™„Çπ„Éà */
 extern const UnicodeString XCMD_SubCmds;
 #define XCMDID_ActivateWnd		0
 #define XCMDID_Add				1
@@ -140,23 +140,23 @@ extern const UnicodeString XCMD_SubCmds;
 #define XCMDID_WriteINI			78
 
 //---------------------------------------------------------------------------
-extern bool XCMD_IsBusy;				//!< ExeCommands é¿çsíÜ (NyanFiForm->ExeCmdsBusyÇîΩâf)
-extern bool XCMD_Aborted;				//!< ExeCommands íÜífóvãÅ
-extern bool XCMD_MsgOff;				//!< ämîFÇ»Çµ
-extern bool XCMD_BufChanged;			//!< Buffer Ç™ïœçXÇ≥ÇÍÇΩ
-extern bool XCMD_FileChanged;			//!< ÉJÉåÉìÉgÉtÉ@ÉCÉãÇ™ïœçXÇ≥ÇÍÇΩ
+extern bool XCMD_IsBusy;				//!< ExeCommands ÂÆüË°å‰∏≠ (NyanFiForm->ExeCmdsBusy„ÇíÂèçÊò†)
+extern bool XCMD_Aborted;				//!< ExeCommands ‰∏≠Êñ≠Ë¶ÅÊ±Ç
+extern bool XCMD_MsgOff;				//!< Á¢∫Ë™ç„Å™„Åó
+extern bool XCMD_BufChanged;			//!< Buffer „ÅåÂ§âÊõ¥„Åï„Çå„Åü
+extern bool XCMD_FileChanged;			//!< „Ç´„É¨„É≥„Éà„Éï„Ç°„Ç§„É´„ÅåÂ§âÊõ¥„Åï„Çå„Åü
 
-extern TForm *LastModalForm;			//!< ç≈å„Ç…äJÇ©ÇÍÇΩÉÇÅ[É_ÉãÉtÉHÅ[ÉÄ
+extern TForm *LastModalForm;			//!< ÊúÄÂæå„Å´Èñã„Åã„Çå„Åü„É¢„Éº„ÉÄ„É´„Éï„Ç©„Éº„É†
 extern TModalResult XCMD_ModalResult;
 
-extern bool XCMD_Debugging;				//!< ÉfÉoÉbÉOÉÇÅ[Éh
+extern bool XCMD_Debugging;				//!< „Éá„Éê„ÉÉ„Ç∞„É¢„Éº„Éâ
 extern bool XCMD_Debug_Step, XCMD_Debug_Go, XCMD_Debug_List, XCMD_Debug_Exit, XCMD_Debug_Quit, XCMD_Debug_Help;
 
-extern TStringList *XCMD_XList;			//!< ÉRÉ}ÉìÉhÉäÉXÉgÇÃÉäÉXÉg
-extern TStringList *XCMD_WatchList;		//!< äƒéãïœêîÉäÉXÉg
-extern TStringList *XCMD_IdxStack;		//!< ÉCÉìÉfÉbÉNÉXÅEÉXÉ^ÉbÉN
-extern TStringList *XCMD_TopIdxStack;	//!< ÉgÉbÉvÉCÉìÉfÉbÉNÉXÅEÉXÉ^ÉbÉN
-extern TStringList *XCMD_VarStack;		//!< ïœêîÉXÉ^ÉbÉN
+extern TStringList *XCMD_XList;			//!< „Ç≥„Éû„É≥„Éâ„É™„Çπ„Éà„ÅÆ„É™„Çπ„Éà
+extern TStringList *XCMD_WatchList;		//!< Áõ£Ë¶ñÂ§âÊï∞„É™„Çπ„Éà
+extern TStringList *XCMD_IdxStack;		//!< „Ç§„É≥„Éá„ÉÉ„ÇØ„Çπ„Éª„Çπ„Çø„ÉÉ„ÇØ
+extern TStringList *XCMD_TopIdxStack;	//!< „Éà„ÉÉ„Éó„Ç§„É≥„Éá„ÉÉ„ÇØ„Çπ„Éª„Çπ„Çø„ÉÉ„ÇØ
+extern TStringList *XCMD_VarStack;		//!< Â§âÊï∞„Çπ„Çø„ÉÉ„ÇØ
 
 extern ExeCmdsList *XCMD_xlp;
 extern UnicodeString XCMD_cmd, XCMD_prm;
@@ -166,11 +166,11 @@ extern int XCMD_tim_cnt;
 extern int XCMD_start_cnt;
 extern TDateTime XCMD_tim_t;
 
-extern bool XCMD_echo_on;				//!< ÉGÉRÅ[Ç™óLå¯
-extern bool XCMD_echo_lno;				//!< ÉGÉRÅ[Ç≈ÉRÉ}ÉìÉhÉtÉ@ÉCÉãÇÃçsî‘çÜÇïtâ¡
-extern bool XCMD_view_log;				//!< ÉeÉLÉXÉgÉrÉÖÅ[ÉAÇ≈ÉçÉOÇäJÇ≠ç€ÇÃÉCÉxÉìÉg
-extern bool XCMD_view_clip;				//!< ÉeÉLÉXÉgÉrÉÖÅ[ÉAÇ≈ÉNÉäÉbÉvÉ{Å[ÉhÇäJÇ≠ç€ÇÃÉCÉxÉìÉg
-extern bool XCMD_clip_changed;			//!< ÉNÉäÉbÉvÉ{Å[ÉhÇÃÉeÉLÉXÉgì‡óeÇ™ïœçXÇ≥ÇÍÇΩ
+extern bool XCMD_echo_on;				//!< „Ç®„Ç≥„Éº„ÅåÊúâÂäπ
+extern bool XCMD_echo_lno;				//!< „Ç®„Ç≥„Éº„Åß„Ç≥„Éû„É≥„Éâ„Éï„Ç°„Ç§„É´„ÅÆË°åÁï™Âè∑„Çí‰ªòÂä†
+extern bool XCMD_view_log;				//!< „ÉÜ„Ç≠„Çπ„Éà„Éì„É•„Éº„Ç¢„Åß„É≠„Ç∞„ÇíÈñã„ÅèÈöõ„ÅÆ„Ç§„Éô„É≥„Éà
+extern bool XCMD_view_clip;				//!< „ÉÜ„Ç≠„Çπ„Éà„Éì„É•„Éº„Ç¢„Åß„ÇØ„É™„ÉÉ„Éó„Éú„Éº„Éâ„ÇíÈñã„ÅèÈöõ„ÅÆ„Ç§„Éô„É≥„Éà
+extern bool XCMD_clip_changed;			//!< „ÇØ„É™„ÉÉ„Éó„Éú„Éº„Éâ„ÅÆ„ÉÜ„Ç≠„Çπ„ÉàÂÜÖÂÆπ„ÅåÂ§âÊõ¥„Åï„Çå„Åü
 
 extern file_rec *XCMD_cfp;
 
@@ -181,19 +181,19 @@ extern bool XCMD_matched, XCMD_marked;
 extern bool XCMD_is_top, XCMD_is_end;
 extern bool XCMD_fromGrep;
 extern int  XCMD_box_res;
-extern bool XCMD_chg_CodePage;			//!< ÉRÅ[ÉhÉyÅ[ÉWÇ™ïœçXÇ≥ÇÍÇΩ(TVÉÇÅ[ÉhÇ≈ÇÃëŒçÙ)
+extern bool XCMD_chg_CodePage;			//!< „Ç≥„Éº„Éâ„Éö„Éº„Ç∏„ÅåÂ§âÊõ¥„Åï„Çå„Åü(TV„É¢„Éº„Éâ„Åß„ÅÆÂØæÁ≠ñ)
 extern __int64   XCMD_f_size;
 extern TDateTime XCMD_f_time;
 
 //---------------------------------------------------------------------------
 /**
- * @brief èâä˙âª
+ * @brief ÂàùÊúüÂåñ
  * @param opt
  */
 void XCMD_Initialize(UnicodeString &opt);
 
 /**
- * @brief èIóπèàóù
+ * @brief ÁµÇ‰∫ÜÂá¶ÁêÜ
  */
 void XCMD_Uninitialize();
 
@@ -203,7 +203,7 @@ void XCMD_set_Var(const _TCHAR *name, UnicodeString v);
 void XCMD_set_Var(const _TCHAR *name, int v);
 
 /**
- * @brief ÉRÉ}ÉìÉhÉäÉXÉgÇí«â¡
+ * @brief „Ç≥„Éû„É≥„Éâ„É™„Çπ„Éà„ÇíËøΩÂä†
  * @param cmds
  * @param is_call
  * @return ExeCmdsList*
@@ -211,13 +211,13 @@ void XCMD_set_Var(const _TCHAR *name, int v);
 ExeCmdsList *XCMD_AddCmdsList(UnicodeString cmds, bool is_call = true);
 
 /**
- * @brief åƒÇ—èoÇµå≥Ç…ñﬂÇÈ
+ * @brief Âëº„Å≥Âá∫„ÅóÂÖÉ„Å´Êàª„Çã
  * @return ExeCmdsList*
  */
 ExeCmdsList *XCMD_Return();
 
 /**
- * @brief ÉJÉåÉìÉgÇÃÉtÉ@ÉCÉãçÄñ⁄Çê›íË
+ * @brief „Ç´„É¨„É≥„Éà„ÅÆ„Éï„Ç°„Ç§„É´È†ÖÁõÆ„ÇíË®≠ÂÆö
  * @param fnam
  * @param cnam
  * @param cfp
@@ -226,30 +226,30 @@ ExeCmdsList *XCMD_Return();
 file_rec *XCMD_set_cfp(UnicodeString fnam, UnicodeString cnam, file_rec *cfp);
 
 /**
- * @brief ïœêîÇÃâåà
+ * @brief Â§âÊï∞„ÅÆËß£Ê±∫
  * @param prm
  * @return UnicodeString
  */
 UnicodeString XCMD_eval_Var(UnicodeString prm);
 
 /**
- * @brief íËã`çœÇ›ïœêîÇÃçXêV
+ * @brief ÂÆöÁæ©Ê∏à„ÅøÂ§âÊï∞„ÅÆÊõ¥Êñ∞
  */
 void XCMD_upd_Var();
 
 /**
- * @brief çsÉGÉRÅ[
+ * @brief Ë°å„Ç®„Ç≥„Éº
  */
 void XCMD_EchoLn();
 
 /**
- * @brief ÉfÉoÉbÉOèÓïÒÇÃï\é¶
- * @param err ÉGÉâÅ[
+ * @brief „Éá„Éê„ÉÉ„Ç∞ÊÉÖÂ†±„ÅÆË°®Á§∫
+ * @param err „Ç®„É©„Éº
  */
 void XCMD_ShowDebugInf(UnicodeString err = EmptyStr);
 
 /**
- * @brief ò_óùéÆÇÃï]âø
+ * @brief Ë´ñÁêÜÂºè„ÅÆË©ï‰æ°
  * @param lst
  * @return true
  * @return false
@@ -257,14 +257,14 @@ void XCMD_ShowDebugInf(UnicodeString err = EmptyStr);
 bool XCMD_EvalCnd(TStringDynArray lst);
 
 /**
- * @brief Ifï∂ÇÃèàóù
+ * @brief IfÊñá„ÅÆÂá¶ÁêÜ
  * @return true 
  * @return false 
  */
 bool XCMD_Control();
 
 /**
- * @brief ï∂éöóÒÉ}ÉbÉ`
+ * @brief ÊñáÂ≠óÂàó„Éû„ÉÉ„ÉÅ
  * @param prm 
  * @param s 
  */

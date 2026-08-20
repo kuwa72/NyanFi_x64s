@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------//
-// ŠeíƒtƒH[ƒ}ƒbƒg‚Ìƒtƒ@ƒCƒ‹î•ñæ“¾									//
+// å„ç¨®ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã®ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±å–å¾—									//
 //																		//
 //----------------------------------------------------------------------//
 #include <ks.h>
@@ -23,119 +23,119 @@
 #pragma package(smart_init)
 
 //---------------------------------------------------------------------------
-//Exifî•ñæ“¾‰Â”\‚ÌŠg’£q‚©?
+//Exifæƒ…å ±å–å¾—å¯èƒ½ã®æ‹¡å¼µå­ã‹?
 //---------------------------------------------------------------------------
 bool test_ExifExt(UnicodeString fext)
 {
 	return test_FileExt(fext, FEXT_EXIF);
 }
 //---------------------------------------------------------------------------
-//HTML•¶‘‚ÌŠg’£q‚©?
+//HTMLæ–‡æ›¸ã®æ‹¡å¼µå­ã‹?
 //---------------------------------------------------------------------------
 bool test_HtmlExt(UnicodeString fext)
 {
 	return test_FileExt(fext, FEXT_HTML);
 }
 //---------------------------------------------------------------------------
-//ƒtƒHƒ“ƒg‚ÌŠg’£q‚©?
+//ãƒ•ã‚©ãƒ³ãƒˆã®æ‹¡å¼µå­ã‹?
 //---------------------------------------------------------------------------
 bool test_FontExt(UnicodeString fext)
 {
 	return test_FileExt(fext, FEXT_FONT);
 }
 //---------------------------------------------------------------------------
-//ƒ‰ƒCƒuƒ‰ƒŠ‚ÌŠg’£q‚©?
+//ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®æ‹¡å¼µå­ã‹?
 //---------------------------------------------------------------------------
 bool test_LibExt(UnicodeString fext)
 {
 	return SameText(fext, ".library-ms");
 }
 //---------------------------------------------------------------------------
-//.exe ‚©?
+//.exe ã‹?
 //---------------------------------------------------------------------------
 bool test_ExeExt(UnicodeString fext)
 {
 	return SameText(fext, ".exe");
 }
 //---------------------------------------------------------------------------
-//ƒVƒ‡[ƒgƒJƒbƒg‚ÌŠg’£q‚©?
+//ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã®æ‹¡å¼µå­ã‹?
 //---------------------------------------------------------------------------
 bool test_LnkExt(UnicodeString fext)
 {
 	return SameText(fext, ".lnk");
 }
 //---------------------------------------------------------------------------
-//ƒAƒCƒRƒ“‚ÌŠg’£q‚©?
+//ã‚¢ã‚¤ã‚³ãƒ³ã®æ‹¡å¼µå­ã‹?
 //---------------------------------------------------------------------------
 bool test_IcoExt(UnicodeString fext)
 {
 	return SameText(fext, ".ico");
 }
 //---------------------------------------------------------------------------
-//ƒJ[ƒ\ƒ‹‚ÌŠg’£q‚©?
+//ã‚«ãƒ¼ã‚½ãƒ«ã®æ‹¡å¼µå­ã‹?
 //---------------------------------------------------------------------------
 bool test_CurExt(UnicodeString fext)
 {
 	return SameText(fext, ".cur");
 }
 //---------------------------------------------------------------------------
-//ƒAƒjƒ[ƒVƒ‡ƒ“ƒJ[ƒ\ƒ‹‚ÌŠg’£q‚©?
+//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚«ãƒ¼ã‚½ãƒ«ã®æ‹¡å¼µå­ã‹?
 //---------------------------------------------------------------------------
 bool test_AniExt(UnicodeString fext)
 {
 	return SameText(fext, ".ani");
 }
 //---------------------------------------------------------------------------
-//Jpeg‚ÌŠg’£q‚©?
+//Jpegã®æ‹¡å¼µå­ã‹?
 //---------------------------------------------------------------------------
 bool test_JpgExt(UnicodeString fext)
 {
 	return test_FileExt(fext, FEXT_JPEG);
 }
 //---------------------------------------------------------------------------
-//GIF‚ÌŠg’£q‚©?
+//GIFã®æ‹¡å¼µå­ã‹?
 //---------------------------------------------------------------------------
 bool test_GifExt(UnicodeString fext)
 {
 	return SameText(fext, ".gif");
 }
 //---------------------------------------------------------------------------
-//PNG‚ÌŠg’£q‚©?
+//PNGã®æ‹¡å¼µå­ã‹?
 //---------------------------------------------------------------------------
 bool test_PngExt(UnicodeString fext)
 {
 	return SameText(fext, ".png");
 }
 //---------------------------------------------------------------------------
-//PSP‚ÌŠg’£q‚©?
+//PSPã®æ‹¡å¼µå­ã‹?
 //---------------------------------------------------------------------------
 bool test_PspExt(UnicodeString fext)
 {
 	return test_FileExt(fext, FEXT_PSP);
 }
 //---------------------------------------------------------------------------
-//ƒƒ^ƒtƒ@ƒCƒ‹‚ÌŠg’£q‚©?
+//ãƒ¡ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«ã®æ‹¡å¼µå­ã‹?
 //---------------------------------------------------------------------------
 bool test_MetaExt(UnicodeString fext)
 {
 	return test_FileExt(fext, FEXT_META);
 }
 //---------------------------------------------------------------------------
-//MP3‚ÌŠg’£q‚©?
+//MP3ã®æ‹¡å¼µå­ã‹?
 //---------------------------------------------------------------------------
 bool test_Mp3Ext(UnicodeString fext)
 {
 	return SameText(fext, ".mp3");
 }
 //---------------------------------------------------------------------------
-//FLAC‚ÌŠg’£q‚©?
+//FLACã®æ‹¡å¼µå­ã‹?
 //---------------------------------------------------------------------------
 bool test_FlacExt(UnicodeString fext)
 {
 	return SameText(fext, ".flac");
 }
 //---------------------------------------------------------------------------
-//MSI‘Î‰ƒTƒEƒ“ƒh‚ÌŠg’£q‚©?
+//MSIå¯¾å¿œã‚µã‚¦ãƒ³ãƒ‰ã®æ‹¡å¼µå­ã‹?
 //---------------------------------------------------------------------------
 bool test_MciSndExt(UnicodeString fext)
 {
@@ -143,14 +143,14 @@ bool test_MciSndExt(UnicodeString fext)
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒ}ƒ“ƒhƒtƒ@ƒCƒ‹‚ÌŠg’£q‚©?
+//ã‚³ãƒãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã®æ‹¡å¼µå­ã‹?
 //---------------------------------------------------------------------------
 bool test_NbtExt(UnicodeString fext)
 {
 	return SameText(fext, ".nbt");
 }
 //---------------------------------------------------------------------------
-//ƒ[ƒNƒŠƒXƒg‚ÌŠg’£q‚©?
+//ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã®æ‹¡å¼µå­ã‹?
 //---------------------------------------------------------------------------
 bool test_NwlExt(UnicodeString fext)
 {
@@ -158,7 +158,7 @@ bool test_NwlExt(UnicodeString fext)
 }
 
 //---------------------------------------------------------------------------
-//ƒeƒLƒXƒg‚ÌŠg’£q‚©?
+//ãƒ†ã‚­ã‚¹ãƒˆã®æ‹¡å¼µå­ã‹?
 //---------------------------------------------------------------------------
 bool test_TxtExt(UnicodeString fext)
 {
@@ -166,7 +166,7 @@ bool test_TxtExt(UnicodeString fext)
 }
 
 //---------------------------------------------------------------------------
-//ƒAƒvƒŠî•ñæ“¾‰Â”\‚ÈŠg’£q‚©?
+//ã‚¢ãƒ—ãƒªæƒ…å ±å–å¾—å¯èƒ½ãªæ‹¡å¼µå­ã‹?
 //---------------------------------------------------------------------------
 bool test_AppInfExt(UnicodeString fext)
 {
@@ -174,27 +174,27 @@ bool test_AppInfExt(UnicodeString fext)
 }
 
 //---------------------------------------------------------------------------
-//ƒŠƒXƒg‚ÉƒGƒ‰[ƒƒbƒZ[ƒW("ƒGƒ‰[: ƒƒbƒZ[ƒW") ‚ğ’Ç‰Á
+//ãƒªã‚¹ãƒˆã«ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸("ã‚¨ãƒ©ãƒ¼: ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸") ã‚’è¿½åŠ 
 //---------------------------------------------------------------------------
 void add_list_errmsg(
-	TStringList *lst,		//[o] NULL‚Å‚à‰Â
+	TStringList *lst,		//[o] NULLã§ã‚‚å¯
 	UnicodeString msg)
 {
-	if (lst) add_PropLine_if(_T("ƒGƒ‰["), msg, lst, LBFLG_ERR_FIF);
+	if (lst) add_PropLine_if(_T("ã‚¨ãƒ©ãƒ¼"), msg, lst, LBFLG_ERR_FIF);
 }
 
 //---------------------------------------------------------------------------
-//ƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚Ìæ“ªs‚ğæ“¾
+//ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®å…ˆé ­è¡Œã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString get_top_line(UnicodeString fnam,
-	int code_page)	//ƒR[ƒhƒy[ƒW	(default = 0 : æ“¾)
+	int code_page)	//ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸	(default = 0 : å–å¾—)
 {
 	UnicodeString ret_str;
 	try {
 		if (!file_exists(fnam)) Abort();
 		std::unique_ptr<TFileStream> fs(new TFileStream(fnam, fmOpenRead | fmShareDenyNone));
 
-		//ƒR[ƒhƒy[ƒWæ“¾
+		//ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸å–å¾—
 		std::unique_ptr<TMemoryStream> ms(new TMemoryStream());
 		bool has_bom;
 		ms->CopyFrom(fs.get(), std::min<__int64>(fs->Size, TXT_DETECT_SIZE));
@@ -203,7 +203,7 @@ UnicodeString get_top_line(UnicodeString fnam,
 			if (code_page<=0) Abort();
 		}
 
-		//æ“ªs‚ÌƒTƒCƒYæ“¾
+		//å…ˆé ­è¡Œã®ã‚µã‚¤ã‚ºå–å¾—
 		bool is_BE = (code_page==1201);
 		int  ch_sz = (code_page==1200 || code_page==1201)? 2 : 1;
 		BYTE cbuf[2]; cbuf[1] = 0;
@@ -219,13 +219,13 @@ UnicodeString get_top_line(UnicodeString fnam,
 		}
 		if (size==0) Abort();
 
-		//ƒoƒbƒtƒ@‚É“Ç‚İ‚İ
+		//ãƒãƒƒãƒ•ã‚¡ã«èª­ã¿è¾¼ã¿
 		TBytes Bytes;
 		Bytes.Length = size;
 		ms->Seek(top_p, soFromBeginning);
 		ms->Read(Bytes, size);
 
-		//ƒGƒ“ƒR[ƒh
+		//ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰
 		std::unique_ptr<TEncoding> enc(TEncoding::GetEncoding(code_page));
 		ret_str = enc->GetString(Bytes, 0, Bytes.Length);
 	}
@@ -237,8 +237,8 @@ UnicodeString get_top_line(UnicodeString fnam,
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚ÌŒ»İˆÊ’u‚©‚ç4•¶š‚Ì¯•Êq‚ğæ“¾
-//  –ß‚è’l: ¯•Êq		EmptyStr: ƒGƒ‰[
+//ãƒ•ã‚¡ã‚¤ãƒ«ã®ç¾åœ¨ä½ç½®ã‹ã‚‰4æ–‡å­—ã®è­˜åˆ¥å­ã‚’å–å¾—
+//  æˆ»ã‚Šå€¤: è­˜åˆ¥å­		EmptyStr: ã‚¨ãƒ©ãƒ¼
 //---------------------------------------------------------------------------
 UnicodeString get_id_str4(TFileStream *fs)
 {
@@ -255,8 +255,8 @@ UnicodeString get_id_str4(TFileStream *fs)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚ÌŒ»İˆÊ’u‚©‚çƒ`ƒƒƒ“ƒN‚ğŒŸõ
-//  ‚ ‚ê‚Î’¼ŒãˆÊ’u(ƒTƒCƒY)‚Ö
+//ãƒ•ã‚¡ã‚¤ãƒ«ã®ç¾åœ¨ä½ç½®ã‹ã‚‰ãƒãƒ£ãƒ³ã‚¯ã‚’æ¤œç´¢
+//  ã‚ã‚Œã°ç›´å¾Œä½ç½®(ã‚µã‚¤ã‚º)ã¸
 //---------------------------------------------------------------------------
 bool sea_chunk(TFileStream *fs, const char *s)
 {
@@ -289,12 +289,12 @@ bool sea_chunk(TFileStream *fs, const char *s)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚ÌŒ»İˆÊ’u‚©‚çƒ`ƒƒƒ“ƒNî•ñ‚ğæ“¾
-//  –ß‚è’l: ¯•Êq		EmptyStr: ƒGƒ‰[
+//ãƒ•ã‚¡ã‚¤ãƒ«ã®ç¾åœ¨ä½ç½®ã‹ã‚‰ãƒãƒ£ãƒ³ã‚¯æƒ…å ±ã‚’å–å¾—
+//  æˆ»ã‚Šå€¤: è­˜åˆ¥å­		EmptyStr: ã‚¨ãƒ©ãƒ¼
 //---------------------------------------------------------------------------
 UnicodeString get_chunk_hdr(
 	TFileStream *fs,
-	unsigned int *size)		//[o] ƒ`ƒƒƒ“ƒNƒTƒCƒY
+	unsigned int *size)		//[o] ãƒãƒ£ãƒ³ã‚¯ã‚µã‚¤ã‚º
 {
 	try {
 		BYTE buf[8];
@@ -313,10 +313,10 @@ UnicodeString get_chunk_hdr(
 }
 
 //---------------------------------------------------------------------------
-//RIFF‚Ìƒ`ƒƒƒ“ƒN‚ğ—ñ‹“
+//RIFFã®ãƒãƒ£ãƒ³ã‚¯ã‚’åˆ—æŒ™
 //---------------------------------------------------------------------------
 UnicodeString get_chunk_list(TFileStream *fs,
-	__int64 p)		//ŠJnˆÊ’u	(default = 12);
+	__int64 p)		//é–‹å§‹ä½ç½®	(default = 12);
 {
 	UnicodeString ret_str;
 	fs->Seek(p, soBeginning);
@@ -344,18 +344,18 @@ UnicodeString get_chunk_list(TFileStream *fs,
 		fs->Seek(p, soFromBeginning);
 	}
 
-	//ANMF ‚Ì˜A‘±‚ğ‚Ü‚Æ‚ß‚é
+	//ANMF ã®é€£ç¶šã‚’ã¾ã¨ã‚ã‚‹
 	if (anmf_cnt>1) {
 		TMatch mt = TRegEx::Match(ret_str, "(,ANMF){2,}");
 		if (mt.Success) {
-			ret_str = ReplaceStr(ret_str, mt.Value, mt.Groups.Item[1].Value + "~" + IntToStr(anmf_cnt));
+			ret_str = ReplaceStr(ret_str, mt.Value, mt.Groups.Item[1].Value + "Ã—" + IntToStr(anmf_cnt));
 		}
 	}
 	return ret_str;
 }
 //---------------------------------------------------------------------------
 UnicodeString get_chunk_list(UnicodeString fnam,
-	__int64 p)		//ŠJnˆÊ’u	(default = 12);
+	__int64 p)		//é–‹å§‹ä½ç½®	(default = 12);
 {
 	try {
 		std::unique_ptr<TFileStream> fs(new TFileStream(fnam, fmOpenRead | fmShareDenyNone));
@@ -367,11 +367,11 @@ UnicodeString get_chunk_list(UnicodeString fnam,
 }
 
 //---------------------------------------------------------------------------
-//WAVƒtƒ@ƒCƒ‹‚Ìî•ñ‚ğæ“¾
+//WAVãƒ•ã‚¡ã‚¤ãƒ«ã®æƒ…å ±ã‚’å–å¾—
 //---------------------------------------------------------------------------
 void get_WavInf(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	TStringList *lst)		//[o] î•ñƒŠƒXƒg
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	TStringList *lst)		//[o] æƒ…å ±ãƒªã‚¹ãƒˆ
 {
 	try {
 		if (!file_exists(fnam)) Abort();
@@ -380,13 +380,13 @@ void get_WavInf(
 		if (!SameStr(get_chunk_hdr(fs.get()), "RIFF") || !fsRead_check_char(fs.get(), "WAVE")) UserAbort(USTR_IllegalFormat);
 		if (!sea_chunk(fs.get(),  "fmt "))	UserAbort(USTR_IllegalFormat);
 
-		//ƒtƒH[ƒ}ƒbƒgî•ñ‚ğæ“¾
+		//ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆæƒ…å ±ã‚’å–å¾—
 		DWORD fmt_len;
 		fs->ReadBuffer(&fmt_len, 4);
 		WAVEFORMATEXTENSIBLE wfx;
 		fs->ReadBuffer(&wfx, fmt_len);
 		if (wfx.Format.wFormatTag==WAVE_FORMAT_PCM || wfx.Format.wFormatTag==WAVE_FORMAT_EXTENSIBLE) {
-			if (wfx.Format.nChannels==0) TextAbort(_T("•s³‚Èƒ`ƒƒƒ“ƒlƒ‹”‚Å‚·B"));
+			if (wfx.Format.nChannels==0) TextAbort(_T("ä¸æ­£ãªãƒãƒ£ãƒ³ãƒãƒ«æ•°ã§ã™ã€‚"));
 			int chn    = wfx.Format.nChannels;
 			int s_rate = wfx.Format.nSamplesPerSec;
 			int s_byte = wfx.Format.nBlockAlign/chn;
@@ -397,15 +397,15 @@ void get_WavInf(
 				fs->ReadBuffer(&dwBuf, 4);
 				int length = (int)(dwBuf/(s_byte*chn)/(s_rate/1000.0));
 
-				UnicodeString lbuf = get_PropTitle(_T("Œ`®")).cat_sprintf(_T("%uHz %ubit "), s_rate, s_bit);
+				UnicodeString lbuf = get_PropTitle(_T("å½¢å¼")).cat_sprintf(_T("%uHz %ubit "), s_rate, s_bit);
 				if (chn<=2)
-					lbuf.cat_sprintf(_T("%s"), (chn==2)? _T("ƒXƒeƒŒƒI") : _T("ƒ‚ƒm"));
+					lbuf.cat_sprintf(_T("%s"), (chn==2)? _T("ã‚¹ãƒ†ãƒ¬ã‚ª") : _T("ãƒ¢ãƒ"));
 				else
 					lbuf.cat_sprintf(_T("%uch"), chn);
 				lst->Add(lbuf);
-				add_PropLine(_T("’·‚³"), mSecToTStr(length), lst);
+				add_PropLine(_T("é•·ã•"), mSecToTStr(length), lst);
 
-				//ƒ`ƒƒƒ“ƒlƒ‹ƒ}ƒXƒN
+				//ãƒãƒ£ãƒ³ãƒãƒ«ãƒã‚¹ã‚¯
 				if (wfx.Format.wFormatTag==WAVE_FORMAT_EXTENSIBLE) {
 					UnicodeString cm;
 					cm.sprintf(_T("0x%08X"), wfx.dwChannelMask);
@@ -421,22 +421,22 @@ void get_WavInf(
 					case KSAUDIO_SPEAKER_DIRECTOUT:	cm += " (DirectOut)";	break;
 					default:						cm += " (Others)";
 					}
-					add_PropLine(_T("ƒ`ƒƒƒlƒ‹ƒ}ƒXƒN"), cm, lst);
+					add_PropLine(_T("ãƒãƒ£ãƒãƒ«ãƒã‚¹ã‚¯"), cm, lst);
 				}
 			}
 			else {
-				add_list_errmsg(lst, "dataƒ`ƒƒƒ“ƒN‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB");
+				add_list_errmsg(lst, "dataãƒãƒ£ãƒ³ã‚¯ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚");
 			}
 		}
 		else if (wfx.Format.wFormatTag==WAVE_FORMAT_MPEGLAYER3) {
-			add_PropLine(_T("Œ`®"), "MPEG 3 Layer 1", lst);
+			add_PropLine(_T("å½¢å¼"), "MPEG 3 Layer 1", lst);
 		}
 		else {
-			lst->Add(get_PropTitle(_T("Œ`®")).cat_sprintf(_T("‚»‚Ì‘¼(0x%04X)"), wfx.Format.wFormatTag));
+			lst->Add(get_PropTitle(_T("å½¢å¼")).cat_sprintf(_T("ãã®ä»–(0x%04X)"), wfx.Format.wFormatTag));
 		}
 
-		//ƒ`ƒƒƒ“ƒN
-		add_PropLine(_T("ƒ`ƒƒƒ“ƒN"), get_chunk_list(fs.get()), lst);
+		//ãƒãƒ£ãƒ³ã‚¯
+		add_PropLine(_T("ãƒãƒ£ãƒ³ã‚¯"), get_chunk_list(fs.get()), lst);
 	}
 	catch (EAbort &e) {
 		add_list_errmsg(lst, e.Message);
@@ -450,7 +450,7 @@ void get_WavInf(
 }
 
 //---------------------------------------------------------------------------
-//Opusƒtƒ@ƒCƒ‹‚Ìî•ñ‚ğæ“¾
+//Opusãƒ•ã‚¡ã‚¤ãƒ«ã®æƒ…å ±ã‚’å–å¾—
 //---------------------------------------------------------------------------
 unsigned int get_Ogg_seg_size(TFileStream *fs)
 {
@@ -466,8 +466,8 @@ unsigned int get_Ogg_seg_size(TFileStream *fs)
 }
 //---------------------------------------------------------------------------
 void get_OpusInf(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	TStringList *lst)		//[o] î•ñƒŠƒXƒg
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	TStringList *lst)		//[o] æƒ…å ±ãƒªã‚¹ãƒˆ
 {
 	try {
 		if (!file_exists(fnam)) Abort();
@@ -483,11 +483,11 @@ void get_OpusInf(
 		fs->Seek(1, soFromCurrent);		//version
 		BYTE chn;
 		fs->ReadBuffer(&chn, 1);
-		add_PropLine(_T("ƒ`ƒƒƒ“ƒlƒ‹”"), chn, lst);
+		add_PropLine(_T("ãƒãƒ£ãƒ³ãƒãƒ«æ•°"), chn, lst);
 		fs->Seek(2, soFromCurrent);		//pre-skip
 		DWORD i_rate;
 		fs->ReadBuffer(&i_rate, 4);
-		add_PropLine(_T("ƒTƒ“ƒvƒ‹ƒŒ[ƒg"), UnicodeString().sprintf(_T("%uHz"), i_rate), lst);
+		add_PropLine(_T("ã‚µãƒ³ãƒ—ãƒ«ãƒ¬ãƒ¼ãƒˆ"), UnicodeString().sprintf(_T("%uHz"), i_rate), lst);
 
 		fs->Seek(p + seg_sz, soFromBeginning);
 		if (fsRead_check_char(fs.get(), "OggS")) fs->Seek(22, soFromCurrent);
@@ -517,12 +517,12 @@ void get_OpusInf(
 }
 
 //---------------------------------------------------------------------------
-//CDAƒtƒ@ƒCƒ‹‚Ìî•ñ‚ğæ“¾
+//CDAãƒ•ã‚¡ã‚¤ãƒ«ã®æƒ…å ±ã‚’å–å¾—
 //---------------------------------------------------------------------------
 bool get_CdaInf(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	TStringList *lst,		//[o] î•ñƒŠƒXƒg	(NULL‚Å‚à‰Â)
-	int *len)				//[o] ’·‚³
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	TStringList *lst,		//[o] æƒ…å ±ãƒªã‚¹ãƒˆ	(NULLã§ã‚‚å¯)
+	int *len)				//[o] é•·ã•
 {
 	bool ret = false;
 	try {
@@ -533,19 +533,19 @@ bool get_CdaInf(
 		if (!sea_chunk(fs.get(), "fmt ")) Abort();
 		if (fsRead_int4(fs.get())!=24) Abort();
 		fs->Seek(2, soFromCurrent);
-		//ƒgƒ‰ƒbƒN”
+		//ãƒˆãƒ©ãƒƒã‚¯ï¼ƒ
 		int n = fsRead_int2(fs.get());
-		if (lst) add_PropLine(_T("ƒgƒ‰ƒbƒN”"), n, lst);
+		if (lst) add_PropLine(_T("ãƒˆãƒ©ãƒƒã‚¯ï¼ƒ"), n, lst);
 		fs->Seek(4, soFromCurrent);
-		//ŠJnˆÊ’u
-		int t = fsRead_int4(fs.get())*1000/75;	//= ƒZƒNƒ^”*1000/75 (75=1•bŠÔ‚ÌƒZƒNƒ^”)
-		if (lst) add_PropLine(_T("ŠJnˆÊ’u"), mSecToTStr(t), lst);
-		//’·‚³
-		t = fsRead_int4(fs.get())*1000/75;		//= ƒZƒNƒ^”*1000/75 (75=1•bŠÔ‚ÌƒZƒNƒ^”)
+		//é–‹å§‹ä½ç½®
+		int t = fsRead_int4(fs.get())*1000/75;	//= ã‚»ã‚¯ã‚¿æ•°*1000/75 (75=1ç§’é–“ã®ã‚»ã‚¯ã‚¿æ•°)
+		if (lst) add_PropLine(_T("é–‹å§‹ä½ç½®"), mSecToTStr(t), lst);
+		//é•·ã•
+		t = fsRead_int4(fs.get())*1000/75;		//= ã‚»ã‚¯ã‚¿æ•°*1000/75 (75=1ç§’é–“ã®ã‚»ã‚¯ã‚¿æ•°)
 		if (len) *len = t;
-		if (lst) add_PropLine(_T("’·‚³"), mSecToTStr(t), lst);
-		//ƒ`ƒƒƒ“ƒN
-		add_PropLine(_T("ƒ`ƒƒƒ“ƒN"), get_chunk_list(fs.get()), lst);
+		if (lst) add_PropLine(_T("é•·ã•"), mSecToTStr(t), lst);
+		//ãƒãƒ£ãƒ³ã‚¯
+		add_PropLine(_T("ãƒãƒ£ãƒ³ã‚¯"), get_chunk_list(fs.get()), lst);
 		ret = true;
 	}
 	catch (EAbort &e) {
@@ -561,13 +561,13 @@ bool get_CdaInf(
 }
 
 //---------------------------------------------------------------------------
-//FLACƒtƒ@ƒCƒ‹‚Ìî•ñ‚ğæ“¾
+//FLACãƒ•ã‚¡ã‚¤ãƒ«ã®æƒ…å ±ã‚’å–å¾—
 //---------------------------------------------------------------------------
 bool get_FlacInf(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	TStringList *lst,		//Œ‹‰ÊƒŠƒXƒg(€–Ú=“à—e ‚ÌŒ`®‚ÅŠi”[)	(default = NULL)
-	int *len,				//[o] ’·‚³								(default = NULL)
-	bool id_min)			//î•ñ‚ğ –¼‘O=’l Œ`®‚Åæ“¾				(default = false)
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	TStringList *lst,		//çµæœãƒªã‚¹ãƒˆ(é …ç›®=å†…å®¹ ã®å½¢å¼ã§æ ¼ç´)	(default = NULL)
+	int *len,				//[o] é•·ã•								(default = NULL)
+	bool id_min)			//æƒ…å ±ã‚’ åå‰=å€¤ å½¢å¼ã§å–å¾—				(default = false)
 {
 	bool ret = false;
 	try {
@@ -591,26 +591,26 @@ bool get_FlacInf(
 				fs->Seek(10, soFromCurrent);
 				fs->ReadBuffer(xbuf, 4);
 				{
-					//Œ`®
+					//å½¢å¼
 					unsigned int s_rate = ((xbuf[0]<<16) | (xbuf[1]<<8) | xbuf[2])>>4;
 					unsigned int s_bit	= ((xbuf[2] & 0x01)<<4) + (xbuf[3]>>4) + 1;
 					unsigned int chn	= ((xbuf[2]>>1) & 0x07) + 1;
 					UnicodeString tmp;
 					if (lst) {
-						UnicodeString lbuf = get_PropTitle(_T("Œ`®")).cat_sprintf(_T("%uHz %ubit "), s_rate, s_bit);
+						UnicodeString lbuf = get_PropTitle(_T("å½¢å¼")).cat_sprintf(_T("%uHz %ubit "), s_rate, s_bit);
 						if (chn<=2)
-							lbuf.cat_sprintf(_T("%s"), (chn==2)? _T("ƒXƒeƒŒƒI") : _T("ƒ‚ƒm"));
+							lbuf.cat_sprintf(_T("%s"), (chn==2)? _T("ã‚¹ãƒ†ãƒ¬ã‚ª") : _T("ãƒ¢ãƒ"));
 						else
 							lbuf.cat_sprintf(_T("%uch"), chn);
 						lst->Add(lbuf);
 					}
-					//’·‚³
+					//é•·ã•
 					unsigned __int64 total = (__int64)(xbuf[2] & 0x04)<<32;
 					fs->ReadBuffer(xbuf, 4);
 					total += (unsigned int)((xbuf[0] << 24) | (xbuf[1] << 16) | (xbuf[2] << 8) | xbuf[3]);
 					if (s_rate>0 && total>0) {
 						unsigned int ms = total/s_rate*1000;
-						if (lst) add_PropLine(_T("’·‚³"), mSecToTStr(ms, false), lst);
+						if (lst) add_PropLine(_T("é•·ã•"), mSecToTStr(ms, false), lst);
 						if (len) *len = ms;
 					}
 				}
@@ -649,12 +649,12 @@ bool get_FlacInf(
 }
 
 //---------------------------------------------------------------------------
-//FLACƒtƒ@ƒCƒ‹‚©‚ç–„‚ß‚İ‰æ‘œ‚ğƒrƒbƒgƒ}ƒbƒv‚Åæ“¾ or ƒtƒ@ƒCƒ‹‚Éo—Í
+//FLACãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰åŸ‹ã‚è¾¼ã¿ç”»åƒã‚’ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã§å–å¾— or ãƒ•ã‚¡ã‚¤ãƒ«ã«å‡ºåŠ›
 //---------------------------------------------------------------------------
 bool get_FlacImage(
-	UnicodeString fnam,			//ƒtƒ@ƒCƒ‹–¼
-	Graphics::TBitmap *bmpimg,	//o—Íƒrƒbƒgƒ}ƒbƒv	(default = NULL)
-	UnicodeString o_fnam)		//o—Íƒtƒ@ƒCƒ‹–¼	(default = EmptyStr)
+	UnicodeString fnam,			//ãƒ•ã‚¡ã‚¤ãƒ«å
+	Graphics::TBitmap *bmpimg,	//å‡ºåŠ›ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—	(default = NULL)
+	UnicodeString o_fnam)		//å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«å	(default = EmptyStr)
 {
 	bool ok = false;
 	try {
@@ -674,17 +674,17 @@ bool get_FlacImage(
 
 			if (xbuf[0]==6) {	//PICTURE
 				fs->Seek(4, soFromCurrent);
-				//MIMEƒ^ƒCƒv
+				//MIMEã‚¿ã‚¤ãƒ—
 				int len = fsRead_int4(fs.get(), true);
 				std::unique_ptr<char[]> sbuf(new char[len + 1]);
 				fs->ReadBuffer(sbuf.get(), len);
 				sbuf[len] = 0x00;
 				UnicodeString img_typ = sbuf.get();
-				//•s—pî•ñ‚ğƒXƒLƒbƒv
+				//ä¸ç”¨æƒ…å ±ã‚’ã‚¹ã‚­ãƒƒãƒ—
 				len = fsRead_int4(fs.get(), true);
 				fs->Seek((int)(len + 16), soFromCurrent);
 
-				//ƒCƒ[ƒW
+				//ã‚¤ãƒ¡ãƒ¼ã‚¸
 				int size = fsRead_int4(fs.get(), true);
 				std::unique_ptr<TMemoryStream> ms(new TMemoryStream());
 				if (ms->CopyFrom(fs.get(), size)<size) Abort();
@@ -728,30 +728,30 @@ bool get_FlacImage(
 }
 
 //---------------------------------------------------------------------------
-//• ~ ‚ •¶š—ñ‚ğæ“¾
+//å¹… Ã— é«˜ æ–‡å­—åˆ—ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString get_wd_x_hi_str(int w, int h)
 {
-	return UnicodeString().sprintf(_T("%u ~ %u"), w, h);
+	return UnicodeString().sprintf(_T("%u Ã— %u"), w, h);
 }
 
 //---------------------------------------------------------------------------
-//‰æ‘œƒTƒCƒYî•ñ•¶š—ñ‚ğæ“¾
+//ç”»åƒã‚µã‚¤ã‚ºæƒ…å ±æ–‡å­—åˆ—ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString get_img_size_str(int w, int h, UnicodeString name)
 {
-	if (name.IsEmpty()) name = "‰æ‘œƒTƒCƒY";
+	if (name.IsEmpty()) name = "ç”»åƒã‚µã‚¤ã‚º";
 	UnicodeString infstr = make_PropLine(name, get_wd_x_hi_str(w, h));
-	if (w>0 && h>0) infstr.cat_sprintf(_T("  (%s)"), get_AspectStr(w, h).c_str());	//ƒAƒXƒyƒNƒg”ä
+	if (w>0 && h>0) infstr.cat_sprintf(_T("  (%s)"), get_AspectStr(w, h).c_str());	//ã‚¢ã‚¹ãƒšã‚¯ãƒˆæ¯”
 	return infstr;
 }
 
 //---------------------------------------------------------------------------
-//Jpeg î•ñ(Œ`®AƒJƒ‰[‚È‚Ç)‚ğæ“¾
+//Jpeg æƒ…å ±(å½¢å¼ã€ã‚«ãƒ©ãƒ¼ãªã©)ã‚’å–å¾—
 //---------------------------------------------------------------------------
 void get_JpgExInf(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	TStringList *lst)		//[o] î•ñƒŠƒXƒg
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	TStringList *lst)		//[o] æƒ…å ±ãƒªã‚¹ãƒˆ
 {
 	try {
 		if (!file_exists(fnam)) Abort();
@@ -769,19 +769,19 @@ void get_JpgExInf(
 			int slen = fsRead_int2(fs.get(), true);
 			//SOF0
 			if (mkr==0xffc0 || mkr==0xffc2) {
-				add_PropLine(_T("Œ`®"), ((mkr==0xffc0)? "ƒx[ƒXƒ‰ƒCƒ“" : "ƒvƒƒOƒŒƒbƒVƒu"), lst);
+				add_PropLine(_T("å½¢å¼"), ((mkr==0xffc0)? "ãƒ™ãƒ¼ã‚¹ãƒ©ã‚¤ãƒ³" : "ãƒ—ãƒ­ã‚°ãƒ¬ãƒƒã‚·ãƒ–"), lst);
 				fs->Seek(5, soFromCurrent);
 
-				BYTE n;	//\¬—v‘f”
+				BYTE n;	//æ§‹æˆè¦ç´ æ•°
 				fs->ReadBuffer(&n, 1);
-				//ƒOƒŒ[ƒXƒP[ƒ‹
+				//ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«
 				if (n==1) {
-					add_PropLine(_T("ƒJƒ‰["), "ƒOƒŒ[ƒXƒP[ƒ‹", lst);
+					add_PropLine(_T("ã‚«ãƒ©ãƒ¼"), "ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«", lst);
 				}
 				//YCbCr
 				else if (n==3) {
-					BYTE hn[3] = {0};	//…•½ƒTƒ“ƒvƒŠƒ“ƒO’l
-					BYTE vn[3] = {0};	//‚’¼ƒTƒ“ƒvƒŠƒ“ƒO’l
+					BYTE hn[3] = {0};	//æ°´å¹³ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°å€¤
+					BYTE vn[3] = {0};	//å‚ç›´ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°å€¤
 					for (int j=0; j<3; j++) {
 						fs->ReadBuffer(buf.get(), 3);
 						int id = buf[0];	if (id<1 || id>3) Abort();
@@ -794,7 +794,7 @@ void get_JpgExInf(
 					for (int j=0; j<3; j++) lbuf.cat_sprintf(_T("%*ux%u"), ((j>0)? 2 : 1), hn[j], vn[j]);
 					lbuf += ")";
 
-					//¦CbCr‚ª11‚Å‚È‚¢ê‡‚É‘Î‰(‚±‚±‚Í‚¿‚å‚Á‚Æ‰ö‚µ‚¢)
+					//â€»CbCrãŒ11ã§ãªã„å ´åˆã«å¯¾å¿œ(ã“ã“ã¯ã¡ã‚‡ã£ã¨æ€ªã—ã„)
 					if (hn[0]%2==0 && hn[1]%2==0 && hn[2]%2==0) for (int j=0; j<3; j++) hn[j] /= 2;
 					if (vn[0]%2==0 && vn[1]%2==0 && vn[2]%2==0) for (int j=0; j<3; j++) vn[j] /= 2;
 
@@ -816,7 +816,7 @@ void get_JpgExInf(
 				}
 				//CMYK
 				else if (n==4) {
-					add_PropLine(_T("ƒJƒ‰["), "CMYK", lst);
+					add_PropLine(_T("ã‚«ãƒ©ãƒ¼"), "CMYK", lst);
 				}
 				else Abort();
 				break;
@@ -836,14 +836,14 @@ void get_JpgExInf(
 }
 
 //---------------------------------------------------------------------------
-//Exifî•ñ‚Ìæ“¾
+//Exifæƒ…å ±ã®å–å¾—
 //---------------------------------------------------------------------------
 bool get_ExifInf(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	TStringList *lst,		//[o] î•ñƒŠƒXƒg
-	int *ori,				//[o] •ûŒü	(default = NULL)
-	unsigned int *i_wd,		//[o] •	(default = NULL)
-	unsigned int *i_hi)		//[o] ‚‚³	(default = NULL)
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	TStringList *lst,		//[o] æƒ…å ±ãƒªã‚¹ãƒˆ
+	int *ori,				//[o] æ–¹å‘	(default = NULL)
+	unsigned int *i_wd,		//[o] å¹…	(default = NULL)
+	unsigned int *i_hi)		//[o] é«˜ã•	(default = NULL)
 {
 	int lst_cnt = lst->Count;
 
@@ -859,26 +859,26 @@ bool get_ExifInf(
 
 	std::unique_ptr<TStringList> d_lst(new TStringList());
 	d_lst->Text =
-		"271=ƒ[ƒJ[–¼\n"
-		"272=ƒ‚ƒfƒ‹\n"
-		"36867=B‰e“ú\n"
-		"33437=i‚è’l\n"
-		"33434U=˜IoŠÔ\n"
-		"37380=˜IŒõ•â³\n"
-		"34850L=˜IoƒvƒƒOƒ‰ƒ€\n"
-		"34855=ISOŠ´“x\n"
-		"37383=‘ªŒõ•û®\n"
-		"37386=Å“_‹——£\n"
-		"NK:5=‚v‚a\n"
-		"CN:4.7=‚v‚a\n"
-		"37385=ƒtƒ‰ƒbƒVƒ…\n"
-		"274L=‰æ‘œ•ûŒü\n"
-		"NK:7=ƒtƒH[ƒJƒX\n"
-		"42036=ƒŒƒ“ƒY\n"
-		"305=ƒ\ƒtƒg–¼\n"
+		"271=ãƒ¡ãƒ¼ã‚«ãƒ¼å\n"
+		"272=ãƒ¢ãƒ‡ãƒ«\n"
+		"36867=æ’®å½±æ—¥æ™‚\n"
+		"33437=çµã‚Šå€¤\n"
+		"33434U=éœ²å‡ºæ™‚é–“\n"
+		"37380=éœ²å…‰è£œæ­£\n"
+		"34850L=éœ²å‡ºãƒ—ãƒ­ã‚°ãƒ©ãƒ \n"
+		"34855=ISOæ„Ÿåº¦\n"
+		"37383=æ¸¬å…‰æ–¹å¼\n"
+		"37386=ç„¦ç‚¹è·é›¢\n"
+		"NK:5=ï¼·ï¼¢\n"
+		"CN:4.7=ï¼·ï¼¢\n"
+		"37385=ãƒ•ãƒ©ãƒƒã‚·ãƒ¥\n"
+		"274L=ç”»åƒæ–¹å‘\n"
+		"NK:7=ãƒ•ã‚©ãƒ¼ã‚«ã‚¹\n"
+		"42036=ãƒ¬ãƒ³ã‚º\n"
+		"305=ã‚½ãƒ•ãƒˆå\n"
 		"FOVbVer=FOVb Ver.\n"
-		"GPS:2=GPSˆÜ“x\n"
-		"GPS:4=GPSŒo“x\n";
+		"GPS:2=GPSç·¯åº¦\n"
+		"GPS:4=GPSçµŒåº¦\n";
 
 	for (int i=0; i<d_lst->Count; i++)
 		add_PropLine_if(d_lst->ValueFromIndex[i].c_str(), i_lst->Values[d_lst->Names[i]], lst);
@@ -889,13 +889,13 @@ bool get_ExifInf(
 }
 
 //---------------------------------------------------------------------------
-//Exifî•ñ•¶š—ñ(ŠÈ—ª)‚Ìæ“¾
+//Exifæƒ…å ±æ–‡å­—åˆ—(ç°¡ç•¥)ã®å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString get_ExifInfStr(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	int *ori,				//[o] •ûŒü	(default = NULL)
-	unsigned int *i_wd,		//[o] •	(default = NULL)
-	unsigned int *i_hi)		//[o] ‚‚³	(default = NULL)
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	int *ori,				//[o] æ–¹å‘	(default = NULL)
+	unsigned int *i_wd,		//[o] å¹…	(default = NULL)
+	unsigned int *i_hi)		//[o] é«˜ã•	(default = NULL)
 {
 	std::unique_ptr<TStringList> i_lst(new TStringList());
 	if (!EXIF_GetInf(fnam, i_lst.get())) return EmptyStr;
@@ -923,11 +923,11 @@ UnicodeString get_ExifInfStr(
 }
 
 //---------------------------------------------------------------------------
-//Exifî•ñ•¶š—ñ(ƒTƒ€ƒlƒCƒ‹—p)‚Ìæ“¾
+//Exifæƒ…å ±æ–‡å­—åˆ—(ã‚µãƒ ãƒã‚¤ãƒ«ç”¨)ã®å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString get_ExifInfThumb(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	int *ori)				//[o] •ûŒü
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	int *ori)				//[o] æ–¹å‘
 {
 	std::unique_ptr<TStringList> i_lst(new TStringList());
 	if (!EXIF_GetInf(fnam, i_lst.get())) return EmptyStr;
@@ -946,24 +946,24 @@ UnicodeString get_ExifInfThumb(
 		if (!vstr.IsEmpty()) ret_str.cat_sprintf(inf_list[i].fmt, vstr.c_str());
 	}
 
-	//•ûŒü
+	//æ–¹å‘
 	if (ori) *ori = get_ListIntVal(i_lst.get(), "274");
 
 	return ret_str;
 }
 
 //---------------------------------------------------------------------------
-//GPSî•ñ(ˆÜ“xAŒo“x)‚ğæ“¾
+//GPSæƒ…å ±(ç·¯åº¦ã€çµŒåº¦)ã‚’å–å¾—
 //---------------------------------------------------------------------------
 bool get_GpsInf(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	double *lat,			//[o] ˆÜ“x
-	double *lng)			//[o] Œo“x
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	double *lat,			//[o] ç·¯åº¦
+	double *lng)			//[o] çµŒåº¦
 {
 	std::unique_ptr<TStringList> xlst(new TStringList());
 	if (!EXIF_GetInf(fnam, xlst.get())) return false;
-	UnicodeString lat_str = Trim(get_tkn(xlst->Values["GPS:2"], '('));	//ˆÜ“x
-	UnicodeString lng_str = Trim(get_tkn(xlst->Values["GPS:4"], '('));	//Œo“x
+	UnicodeString lat_str = Trim(get_tkn(xlst->Values["GPS:2"], '('));	//ç·¯åº¦
+	UnicodeString lng_str = Trim(get_tkn(xlst->Values["GPS:4"], '('));	//çµŒåº¦
 	if (lat_str.IsEmpty() || lng_str.IsEmpty()) return false;
 
 	try {
@@ -977,18 +977,18 @@ bool get_GpsInf(
 }
 
 //---------------------------------------------------------------------------
-//ƒƒ^ƒtƒ@ƒCƒ‹‚Ìî•ñ‚ğæ“¾
+//ãƒ¡ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«ã®æƒ…å ±ã‚’å–å¾—
 //---------------------------------------------------------------------------
 void get_MetafileInf(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	TStringList *lst)		//[o] î•ñƒŠƒXƒg
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	TStringList *lst)		//[o] æƒ…å ±ãƒªã‚¹ãƒˆ
 {
 	try {
 		std::unique_ptr<TMetafile> mbuf(new TMetafile());
 		mbuf->LoadFromFile(fnam);
-		lst->Add(get_img_size_str(mbuf->Width, mbuf->Height, "ƒTƒCƒY"));
-		add_PropLine_if(_T("ì¬Ò"), mbuf->CreatedBy,   lst);
-		add_PropLine_if(_T("à–¾"),   mbuf->Description, lst);
+		lst->Add(get_img_size_str(mbuf->Width, mbuf->Height, "ã‚µã‚¤ã‚º"));
+		add_PropLine_if(_T("ä½œæˆè€…"), mbuf->CreatedBy,   lst);
+		add_PropLine_if(_T("èª¬æ˜"),   mbuf->Description, lst);
 	}
 	catch (Exception &e) {
 		add_list_errmsg(lst, e.Message);
@@ -996,7 +996,7 @@ void get_MetafileInf(
 }
 
 //---------------------------------------------------------------------------
-//PNG‚©?
+//PNGã‹?
 //---------------------------------------------------------------------------
 bool test_Png(UnicodeString fnam)
 {
@@ -1014,13 +1014,13 @@ bool test_Png(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//PNGƒtƒ@ƒCƒ‹‚Ìî•ñ‚ğæ“¾
+//PNGãƒ•ã‚¡ã‚¤ãƒ«ã®æƒ…å ±ã‚’å–å¾—
 //---------------------------------------------------------------------------
 bool get_PngInf(
-	UnicodeString fnam, 	//ƒtƒ@ƒCƒ‹–¼
-	TStringList *lst,		//[o] î•ñƒŠƒXƒg
-	unsigned int *i_wd,		//[o] •	(default = NULL)
-	unsigned int *i_hi)		//[o] ‚‚³	(default = NULL)
+	UnicodeString fnam, 	//ãƒ•ã‚¡ã‚¤ãƒ«å
+	TStringList *lst,		//[o] æƒ…å ±ãƒªã‚¹ãƒˆ
+	unsigned int *i_wd,		//[o] å¹…	(default = NULL)
+	unsigned int *i_hi)		//[o] é«˜ã•	(default = NULL)
 {
 	bool ret = false;
 	try {
@@ -1028,39 +1028,39 @@ bool get_PngInf(
 		std::unique_ptr<TFileStream> fs(new TFileStream(fnam, fmOpenRead | fmShareDenyNone));
 		std::unique_ptr<BYTE[]> buf(new BYTE[16]);
 
-		//¯•Ê•”
+		//è­˜åˆ¥éƒ¨
 		fs->ReadBuffer(buf.get(), 1);
 		if (buf[0]!=0x89)									Abort();
 		if (!fsRead_check_char(fs.get(), "PNG\r\n\x1a\n"))	Abort();
-		//ƒ`ƒƒƒ“ƒN‰ğÍ
+		//ãƒãƒ£ãƒ³ã‚¯è§£æ
 		for (;;) {
 			int size = fsRead_int4(fs.get(), true);
 			UnicodeString name = get_id_str4(fs.get());
 			if (SameStr(name, "IEND")) break;
-			//ƒCƒ[ƒWƒwƒbƒ_
+			//ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ˜ãƒƒãƒ€
 			if (SameStr(name, "IHDR")) {
-				//ƒTƒCƒY
+				//ã‚µã‚¤ã‚º
 				int iw = fsRead_int4(fs.get(), true);
 				int ih = fsRead_int4(fs.get(), true);
 				lst->Add(get_img_size_str(iw, ih));
 				if (i_wd && i_hi) { *i_wd = iw; *i_hi = ih; }
-				//ƒrƒbƒg[“x
+				//ãƒ“ãƒƒãƒˆæ·±åº¦
 				fs->ReadBuffer(buf.get(), 1);
-				add_PropLine(_T("ƒrƒbƒg[“x"), (int)buf[0], lst);
-				//ƒJƒ‰[ƒ^ƒCƒv
+				add_PropLine(_T("ãƒ“ãƒƒãƒˆæ·±åº¦"), (int)buf[0], lst);
+				//ã‚«ãƒ©ãƒ¼ã‚¿ã‚¤ãƒ—
 				fs->ReadBuffer(buf.get(), 1);
-				UnicodeString coltyp = get_PropTitle(_T("ƒJƒ‰[ƒ^ƒCƒv"));
+				UnicodeString coltyp = get_PropTitle(_T("ã‚«ãƒ©ãƒ¼ã‚¿ã‚¤ãƒ—"));
 				switch (buf[0]) {
-				case 0: coltyp += "ƒOƒŒ[ƒXƒP[ƒ‹";				break;
-				case 2: coltyp += "ƒgƒDƒ‹[ƒJƒ‰[";				break;
-				case 3: coltyp += "ƒCƒ“ƒfƒbƒNƒXƒJƒ‰[";			break;
-				case 4: coltyp += "ƒOƒŒ[ƒXƒP[ƒ‹ + ƒAƒ‹ƒtƒ@";	break;
-				case 6: coltyp += "ƒgƒDƒ‹[ƒJƒ‰[ + ƒAƒ‹ƒtƒ@";	break;
+				case 0: coltyp += "ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«";				break;
+				case 2: coltyp += "ãƒˆã‚¥ãƒ«ãƒ¼ã‚«ãƒ©ãƒ¼";				break;
+				case 3: coltyp += "ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚«ãƒ©ãƒ¼";			break;
+				case 4: coltyp += "ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ« + ã‚¢ãƒ«ãƒ•ã‚¡";	break;
+				case 6: coltyp += "ãƒˆã‚¥ãƒ«ãƒ¼ã‚«ãƒ©ãƒ¼ + ã‚¢ãƒ«ãƒ•ã‚¡";	break;
 				}
 				lst->Add(coltyp);
 				fs->Seek(3, soFromCurrent);
 			}
-			//ƒeƒLƒXƒg
+			//ãƒ†ã‚­ã‚¹ãƒˆ
 			else if (SameStr(name, "tEXt")) {
 				std::unique_ptr<BYTE[]> sbuf(new BYTE[size + 2]);
 				fs->ReadBuffer(sbuf.get(), size);
@@ -1079,22 +1079,22 @@ bool get_PngInf(
 					add_PropLine((char*)&sbuf[0], s, lst);
 				}
 			}
-			//ƒCƒ[ƒWƒKƒ“ƒ}
+			//ã‚¤ãƒ¡ãƒ¼ã‚¸ã‚¬ãƒ³ãƒ
 			else if (SameStr(name, "gAMA")) {
-				lst->Add(get_PropTitle(_T("ƒCƒ[ƒWƒKƒ“ƒ}")).cat_sprintf(
+				lst->Add(get_PropTitle(_T("ã‚¤ãƒ¡ãƒ¼ã‚¸ã‚¬ãƒ³ãƒ")).cat_sprintf(
 										_T("%-7.6g"), fsRead_int4(fs.get(), true)/100000.0));
 			}
-			//ICCƒvƒƒtƒ@ƒCƒ‹
+			//ICCãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
 			else if (SameStr(name, "iCCP")) {
 				std::unique_ptr<BYTE[]> sbuf(new BYTE[size]);
 				fs->ReadBuffer(sbuf.get(), size);
-				add_PropLine(_T("ICCƒvƒƒtƒ@ƒCƒ‹"), (char*)&sbuf[0], lst);
+				add_PropLine(_T("ICCãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«"), (char*)&sbuf[0], lst);
 			}
 			else {
 				fs->Seek(size, soFromCurrent);
 			}
 
-			//CRC ‚ğƒXƒLƒbƒv
+			//CRC ã‚’ã‚¹ã‚­ãƒƒãƒ—
 			fs->Seek(4, soFromCurrent);
 		}
 
@@ -1112,12 +1112,12 @@ bool get_PngInf(
 	return ret;
 }
 //---------------------------------------------------------------------------
-//PNGî•ñ•¶š—ñ(ŠÈ—ª)‚Ìæ“¾
+//PNGæƒ…å ±æ–‡å­—åˆ—(ç°¡ç•¥)ã®å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString get_PngInfStr(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	unsigned int *i_wd,		//[o] •	(default = NULL)
-	unsigned int *i_hi)		//[o] ‚‚³	(default = NULL)
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	unsigned int *i_wd,		//[o] å¹…	(default = NULL)
+	unsigned int *i_hi)		//[o] é«˜ã•	(default = NULL)
 {
 	UnicodeString ret_str;
 
@@ -1136,8 +1136,8 @@ UnicodeString get_PngInfStr(
 	UnicodeString col_s, bit_s;
 	for (int i=0; i<i_lst->Count; i++) {
 		UnicodeString lbuf = i_lst->Strings[i];
-		if		(ContainsStr(lbuf, "ƒJƒ‰[ƒ^ƒCƒv: ")) col_s = Trim(get_tkn_r(lbuf, ':'));
-		else if (ContainsStr(lbuf, "ƒrƒbƒg[“x: "))	  bit_s = "  [“x:" + Trim(get_tkn_r(lbuf, ':'));
+		if		(ContainsStr(lbuf, "ã‚«ãƒ©ãƒ¼ã‚¿ã‚¤ãƒ—: ")) col_s = Trim(get_tkn_r(lbuf, ':'));
+		else if (ContainsStr(lbuf, "ãƒ“ãƒƒãƒˆæ·±åº¦: "))	  bit_s = "  æ·±åº¦:" + Trim(get_tkn_r(lbuf, ':'));
 	}
 
 	ret_str += (col_s + bit_s);
@@ -1145,14 +1145,14 @@ UnicodeString get_PngInfStr(
 }
 
 //---------------------------------------------------------------------------
-//Gifƒtƒ@ƒCƒ‹‚Ìî•ñ‚ğæ“¾
+//Gifãƒ•ã‚¡ã‚¤ãƒ«ã®æƒ…å ±ã‚’å–å¾—
 //---------------------------------------------------------------------------
 bool get_GifInf(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	TStringList  *lst,		//[o] î•ñƒŠƒXƒg	(NULL‚Å‚à‰Â)
-	unsigned int *i_wd,		//[o] •			(default = NULL)
-	unsigned int *i_hi,		//[o] ‚‚³			(default = NULL)
-	int			 *i_cnt)	//[o] ƒtƒŒ[ƒ€”	(default = NULL)
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	TStringList  *lst,		//[o] æƒ…å ±ãƒªã‚¹ãƒˆ	(NULLã§ã‚‚å¯)
+	unsigned int *i_wd,		//[o] å¹…			(default = NULL)
+	unsigned int *i_hi,		//[o] é«˜ã•			(default = NULL)
+	int			 *i_cnt)	//[o] ãƒ•ãƒ¬ãƒ¼ãƒ æ•°	(default = NULL)
 {
 	bool ret = false;
 	try {
@@ -1162,37 +1162,37 @@ bool get_GifInf(
 
 		std::unique_ptr<BYTE[]> buf(new BYTE[16]);
 		BYTE bt;
-		//ƒo[ƒWƒ‡ƒ“
+		//ãƒãƒ¼ã‚¸ãƒ§ãƒ³
 		fs->ReadBuffer(buf.get(), 6);
 		buf[6] = '\0';
 		UnicodeString vstr = (char*)buf.get();
 		if (!StartsStr("GIF", vstr)) Abort();
-		//ƒTƒCƒY
+		//ã‚µã‚¤ã‚º
 		fs->ReadBuffer(buf.get(), 4);
 		unsigned int iw = (buf[1] << 8) + buf[0];
 		unsigned int ih = (buf[3] << 8) + buf[2];
 		if (i_wd && i_hi) { *i_wd = iw; *i_hi = ih; }
-		//ƒpƒŒƒbƒgî•ñ
+		//ãƒ‘ãƒ¬ãƒƒãƒˆæƒ…å ±
 		fs->ReadBuffer(&bt, 1);
 		bool has_ct = (bt & 0x80);
 		int ct_size = 2 << (bt & 0x07);
 		if (lst) {
-			add_PropLine(_T("ƒo[ƒWƒ‡ƒ“"), vstr, lst);
-			lst->Add(get_img_size_str(iw, ih));	//"‰æ‘œƒTƒCƒY"
-			lst->Add(get_PropTitle(_T("ƒJƒ‰[ƒe[ƒuƒ‹")).cat_sprintf(_T("%s"), has_ct? _T("‚ ‚è") : _T("‚È‚µ")));
-			add_PropLine(_T("ƒrƒbƒg‚Ì[‚³"), ((bt >> 4) & 0x07) + 1, lst);
-			add_PropLine(_T("F”"), ct_size, lst);
+			add_PropLine(_T("ãƒãƒ¼ã‚¸ãƒ§ãƒ³"), vstr, lst);
+			lst->Add(get_img_size_str(iw, ih));	//"ç”»åƒã‚µã‚¤ã‚º"
+			lst->Add(get_PropTitle(_T("ã‚«ãƒ©ãƒ¼ãƒ†ãƒ¼ãƒ–ãƒ«")).cat_sprintf(_T("%s"), has_ct? _T("ã‚ã‚Š") : _T("ãªã—")));
+			add_PropLine(_T("ãƒ“ãƒƒãƒˆã®æ·±ã•"), ((bt >> 4) & 0x07) + 1, lst);
+			add_PropLine(_T("è‰²æ•°"), ct_size, lst);
 		}
 		fs->Seek(2, soFromCurrent);
 		if (has_ct) fs->Seek(ct_size * 3, soFromCurrent);
 
-		//ƒuƒƒbƒN
+		//ãƒ–ãƒ­ãƒƒã‚¯
 		int img_cnt = 0;
 		int t_cnt	= 0;
 		for (;;) {
 			BYTE blk_sz;
 			fs->ReadBuffer(&bt, 1);
-			//Šg’£ƒuƒƒbƒN
+			//æ‹¡å¼µãƒ–ãƒ­ãƒƒã‚¯
 			if (bt==0x21) {
 				fs->ReadBuffer(&bt, 1);
 				if (bt==0xf9) {	//Graphic Control Extension
@@ -1207,7 +1207,7 @@ bool get_GifInf(
 					fs->Seek(blk_sz, soFromCurrent);
 				}
 			}
-			//ƒf[ƒ^ƒuƒƒbƒN
+			//ãƒ‡ãƒ¼ã‚¿ãƒ–ãƒ­ãƒƒã‚¯
 			else if (bt==0x2c) {
 				img_cnt++;
 				fs->Seek(8, soFromCurrent);
@@ -1224,8 +1224,8 @@ bool get_GifInf(
 		}
 
 		if (lst) {
-			if (img_cnt>1) add_PropLine(_T("ƒtƒŒ[ƒ€”"), img_cnt, lst);
-			if (t_cnt>0)   lst->Add(get_PropTitle(_T("’·‚³")).cat_sprintf(_T("%.2f •b"), t_cnt/100.0));
+			if (img_cnt>1) add_PropLine(_T("ãƒ•ãƒ¬ãƒ¼ãƒ æ•°"), img_cnt, lst);
+			if (t_cnt>0)   lst->Add(get_PropTitle(_T("é•·ã•")).cat_sprintf(_T("%.2f ç§’"), t_cnt/100.0));
 		}
 
 		if (i_cnt) *i_cnt = img_cnt;
@@ -1245,14 +1245,14 @@ bool get_GifInf(
 }
 
 //---------------------------------------------------------------------------
-//WebPƒtƒ@ƒCƒ‹‚Ìî•ñ‚ğæ“¾
-//  Ql: https://developers.google.com/speed/webp/docs/riff_container
+//WebPãƒ•ã‚¡ã‚¤ãƒ«ã®æƒ…å ±ã‚’å–å¾—
+//  å‚è€ƒ: https://developers.google.com/speed/webp/docs/riff_container
 //---------------------------------------------------------------------------
 bool get_WebpInf(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	TStringList *lst,		//[o] î•ñƒŠƒXƒg
-	unsigned int *i_wd,		//[o] •
-	unsigned int *i_hi)		//[o] ‚‚³
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	TStringList *lst,		//[o] æƒ…å ±ãƒªã‚¹ãƒˆ
+	unsigned int *i_wd,		//[o] å¹…
+	unsigned int *i_hi)		//[o] é«˜ã•
 {
 	bool ret = false;
 	try {
@@ -1276,7 +1276,7 @@ bool get_WebpInf(
 			int p = fs->Seek(0, soFromCurrent);
 
 			if (SameText(chunk, "VP8 ")) {
-				fmt = "ƒƒbƒV[";
+				fmt = "ãƒ­ãƒƒã‚·ãƒ¼";
 				fs->Seek(6, soFromCurrent);
 				if (iw==0) {
 					fs->ReadBuffer(&ui_buf, 4);
@@ -1285,7 +1285,7 @@ bool get_WebpInf(
 				}
 			}
 			else if (SameText(chunk, "VP8L")) {
-				fmt = "ƒƒXƒŒƒX";
+				fmt = "ãƒ­ã‚¹ãƒ¬ã‚¹";
 				fs->ReadBuffer(buf.get(), 1);
 				if (buf[0]!=0x2f) Abort();
 				if (iw==0) {
@@ -1303,14 +1303,14 @@ bool get_WebpInf(
 				}
 			}
 			else if (SameText(chunk, "ICCP")) {
-				lst->Add(get_PropTitle(_T("ICCP")) + "—L‚è");
+				lst->Add(get_PropTitle(_T("ICCP")) + "æœ‰ã‚Š");
 			}
 			else if (SameText(chunk, "ALPH")) {
 				has_alph = true;
-				/* ¦d—l‚Æ‡‚í‚È‚¢?
+				/* â€»ä»•æ§˜ã¨åˆã‚ãªã„?
 				fs->ReadBuffer(buf.get(), 4);
 				tmp = ((buf[0]>>2) & 0x01)? "Level Reduction" : "None";
-				add_PropLine(_T("ƒ¿‘Oˆ—"), tmp, lst);
+				add_PropLine(_T("Î±å‰å‡¦ç†"), tmp, lst);
 
 				switch ((buf[0]>>4) & 0x03) {
 				case  1: tmp = "Horizontal"; break;
@@ -1318,20 +1318,20 @@ bool get_WebpInf(
 				case  3: tmp = "Gradient"; break;
 				default: tmp = "None";
 				}
-				add_PropLine(_T("ƒ¿ƒtƒBƒ‹ƒ^"), tmp, lst);
+				add_PropLine(_T("Î±ãƒ•ã‚£ãƒ«ã‚¿"), tmp, lst);
 
 				tmp = ((buf[0]>>6) & 0x01)? "Lossless" : "None";
-				add_PropLine(_T("ƒ¿ˆ³k"), tmp, lst);
+				add_PropLine(_T("Î±åœ§ç¸®"), tmp, lst);
 				*/
 			}
 			else if (SameText(chunk, "ANIM")) {
-				fmt = "ƒAƒjƒ[ƒVƒ‡ƒ“";
+				fmt = "ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³";
 				fs->ReadBuffer(buf.get(), 4);
-				lst->Add(get_PropTitle(_T("”wŒiF")).cat_sprintf(_T("R%u G%u B%u A%u"), buf[2], buf[1], buf[0], buf[3]));
+				lst->Add(get_PropTitle(_T("èƒŒæ™¯è‰²")).cat_sprintf(_T("R%u G%u B%u A%u"), buf[2], buf[1], buf[0], buf[3]));
 				fs->ReadBuffer(&us_buf, 2);
-				tmp = get_PropTitle(_T("ƒ‹[ƒv‰ñ”"));
+				tmp = get_PropTitle(_T("ãƒ«ãƒ¼ãƒ—å›æ•°"));
 				if (us_buf==0)
-					lst->Add(tmp + "–³ŒÀ");
+					lst->Add(tmp + "ç„¡é™");
 				else
 					lst->Add(tmp.cat_sprintf(_T("%u"), us_buf));
 			}
@@ -1352,29 +1352,29 @@ bool get_WebpInf(
 			fs->Seek((int)(chunk_sz + (chunk_sz%2)), soFromCurrent);
 		}
 
-		//ƒTƒCƒY
+		//ã‚µã‚¤ã‚º
 		if (iw>0 && ih>0) {
 			tmp = get_img_size_str(iw, ih);
 			if (lst_top==lst->Count) lst->Add(tmp); else lst->Insert(lst_top, tmp);
 			lst_top++;
 			if (i_wd && i_hi) { *i_wd = iw; *i_hi = ih; }
 		}
-		//Œ`®
+		//å½¢å¼
 		if (!fmt.IsEmpty()) {
-			tmp = make_PropLine(_T("Œ`®"), fmt);
-			if (has_alph) tmp += " + ƒAƒ‹ƒtƒ@";
+			tmp = make_PropLine(_T("å½¢å¼"), fmt);
+			if (has_alph) tmp += " + ã‚¢ãƒ«ãƒ•ã‚¡";
 			if (lst_top==lst->Count) lst->Add(tmp); else lst->Insert(lst_top, tmp);
 		}
-		//ƒtƒŒ[ƒ€”
+		//ãƒ•ãƒ¬ãƒ¼ãƒ æ•°
 		if (i_cnt>0) {
-			add_PropLine(_T("ƒtƒŒ[ƒ€”"), i_cnt, lst);
-			lst->Add(get_PropTitle(_T("’·‚³")).cat_sprintf(_T("%.2f •b"), t_cnt/1000.0));
+			add_PropLine(_T("ãƒ•ãƒ¬ãƒ¼ãƒ æ•°"), i_cnt, lst);
+			lst->Add(get_PropTitle(_T("é•·ã•")).cat_sprintf(_T("%.2f ç§’"), t_cnt/1000.0));
 		}
-		//ƒƒ^ƒf[ƒ^
-		add_PropLine_if(_T("ƒƒ^ƒf[ƒ^"), meta, lst);
+		//ãƒ¡ã‚¿ãƒ‡ãƒ¼ã‚¿
+		add_PropLine_if(_T("ãƒ¡ã‚¿ãƒ‡ãƒ¼ã‚¿"), meta, lst);
 
-		//ƒ`ƒƒƒ“ƒN
-		add_PropLine(_T("ƒ`ƒƒƒ“ƒN"), get_chunk_list(fs.get()), lst);
+		//ãƒãƒ£ãƒ³ã‚¯
+		add_PropLine(_T("ãƒãƒ£ãƒ³ã‚¯"), get_chunk_list(fs.get()), lst);
 
 		ret = true;
 	}
@@ -1390,12 +1390,12 @@ bool get_WebpInf(
 	return ret;
 }
 //---------------------------------------------------------------------------
-//WebPî•ñ•¶š—ñ(ŠÈ—ª)‚Ìæ“¾
+//WebPæƒ…å ±æ–‡å­—åˆ—(ç°¡ç•¥)ã®å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString get_WebpInfStr(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	unsigned int *i_wd,		//[o] •
-	unsigned int *i_hi)		//[o] ‚‚³
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	unsigned int *i_wd,		//[o] å¹…
+	unsigned int *i_hi)		//[o] é«˜ã•
 {
 	UnicodeString ret_str;
 
@@ -1413,7 +1413,7 @@ UnicodeString get_WebpInfStr(
 	UnicodeString col_s, bit_s;
 	for (int i=0; i<i_lst->Count; i++) {
 		UnicodeString lbuf = i_lst->Strings[i];
-		if (ContainsStr(lbuf, "Œ`®: ")) {
+		if (ContainsStr(lbuf, "å½¢å¼: ")) {
 			ret_str += Trim(get_tkn_r(lbuf, ':'));
 			break;
 		}
@@ -1423,13 +1423,13 @@ UnicodeString get_WebpInfStr(
 }
 
 //---------------------------------------------------------------------------
-//PSPƒtƒ@ƒCƒ‹‚Ìî•ñ‚ğæ“¾
+//PSPãƒ•ã‚¡ã‚¤ãƒ«ã®æƒ…å ±ã‚’å–å¾—
 //---------------------------------------------------------------------------
 bool get_PspInf(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	TStringList  *lst,		//[o] î•ñƒŠƒXƒg	(NULL‚Å‚à‰Â)
-	unsigned int *i_wd,		//[o] •			(default = NULL)
-	unsigned int *i_hi)		//[o] ‚‚³			(default = NULL)
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	TStringList  *lst,		//[o] æƒ…å ±ãƒªã‚¹ãƒˆ	(NULLã§ã‚‚å¯)
+	unsigned int *i_wd,		//[o] å¹…			(default = NULL)
+	unsigned int *i_hi)		//[o] é«˜ã•			(default = NULL)
 {
 	bool ret = false;
 	try {
@@ -1438,7 +1438,7 @@ bool get_PspInf(
 
 		if (!StartsStr(fsRead_char(fs.get(), 32), "Paint Shop Pro Image File\x0a\x1a")) Abort();
 		int vno = fsRead_int4(fs.get());
-		if (lst) lst->Add(get_PropTitle(_T("ƒtƒ@ƒCƒ‹Ver.")).cat_sprintf(_T("%u.0"), vno));
+		if (lst) lst->Add(get_PropTitle(_T("ãƒ•ã‚¡ã‚¤ãƒ«Ver.")).cat_sprintf(_T("%u.0"), vno));
 
 		for (;;) {
 			if (!SameStr(fsRead_char(fs.get(), 4), "~BK")) break;
@@ -1451,28 +1451,28 @@ bool get_PspInf(
 
 			//Image Block
 			if (tag==0) {
-				//ƒTƒCƒY
+				//ã‚µã‚¤ã‚º
 				unsigned int iw = fsRead_int4(fs.get());
 				unsigned int ih = fsRead_int4(fs.get());
 				if (i_wd && i_hi) { *i_wd = iw; *i_hi = ih; }
 
 				if (lst) {
-					UnicodeString lbuf = get_PropTitle("‰æ‘œƒTƒCƒY").cat_sprintf(_T("%u ~ %u"), iw, ih);
+					UnicodeString lbuf = get_PropTitle("ç”»åƒã‚µã‚¤ã‚º").cat_sprintf(_T("%u Ã— %u"), iw, ih);
 					if (iw>0 && ih>0) lbuf.cat_sprintf(_T("  (%s)"), get_AspectStr(iw, ih).c_str());
 					lst->Add(lbuf);
-					//‰ğ‘œ“x
+					//è§£åƒåº¦
 					double r = fsRead_double(fs.get());
 					BYTE b	 = fsRead_byte(fs.get());
 					switch (b) {
 					case 1: lst->Add(get_PropTitle(_T("pixel/inch")).cat_sprintf(_T("%g"), r)); break;
 					case 2: lst->Add(get_PropTitle(_T("pixel/cm")).cat_sprintf(_T("%g"), r));	 break;
 					}
-					//‚»‚Ì‘¼
+					//ãã®ä»–
 					int cmp = fsRead_int2(fs.get());
-					lst->Add(make_PropLine(_T("ˆ³k"), (cmp==1)? "RLE" : (cmp==2)? "LZ77" : (cmp==3)? "JPEG" : "None"));
+					lst->Add(make_PropLine(_T("åœ§ç¸®"), (cmp==1)? "RLE" : (cmp==2)? "LZ77" : (cmp==3)? "JPEG" : "None"));
 					lst->Add(get_PropTitle(_T("Bit/Sample")).cat_sprintf(_T("%u"), fsRead_int2(fs.get())));
 					fs->Seek(2, soFromCurrent);	//Planes
-					lst->Add(get_PropTitle(_T("F”")).cat_sprintf(_T("%u"), fsRead_int4(fs.get())));
+					lst->Add(get_PropTitle(_T("è‰²æ•°")).cat_sprintf(_T("%u"), fsRead_int4(fs.get())));
 				}
 				ret = true;
 				break;
@@ -1489,11 +1489,11 @@ bool get_PspInf(
 }
 
 //---------------------------------------------------------------------------
-//PSPƒtƒ@ƒCƒ‹‚ÌƒTƒ€ƒlƒCƒ‹‰æ‘œ‚ğæ“¾
+//PSPãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚µãƒ ãƒã‚¤ãƒ«ç”»åƒã‚’å–å¾—
 //---------------------------------------------------------------------------
 bool get_PspThumbnail(
-	UnicodeString fnam,			//ƒtƒ@ƒCƒ‹–¼
-	Graphics::TBitmap *bmpimg)	//o—Íƒrƒbƒgƒ}ƒbƒv (default = NULL)
+	UnicodeString fnam,			//ãƒ•ã‚¡ã‚¤ãƒ«å
+	Graphics::TBitmap *bmpimg)	//å‡ºåŠ›ãƒ“ãƒƒãƒˆãƒãƒƒãƒ— (default = NULL)
 {
 	try {
 		if (!file_exists(fnam)) Abort();
@@ -1533,10 +1533,10 @@ bool get_PspThumbnail(
 }
 
 //---------------------------------------------------------------------------
-//ƒAƒCƒRƒ“‚©? (ƒTƒCƒYw’è‰Â”\)
+//ã‚¢ã‚¤ã‚³ãƒ³ã‹? (ã‚µã‚¤ã‚ºæŒ‡å®šå¯èƒ½)
 //---------------------------------------------------------------------------
 bool test_Icon(UnicodeString fnam,
-	int size)	//ƒTƒCƒY	(default = 0 : ”CˆÓ)
+	int size)	//ã‚µã‚¤ã‚º	(default = 0 : ä»»æ„)
 {
 	try {
 		if (!file_exists(fnam)) Abort();
@@ -1573,12 +1573,12 @@ bool test_Icon(UnicodeString fnam,
 	}
 }
 //---------------------------------------------------------------------------
-//ƒAƒCƒRƒ“ƒtƒ@ƒCƒ‹‚Ìî•ñ‚ğæ“¾
+//ã‚¢ã‚¤ã‚³ãƒ³ãƒ•ã‚¡ã‚¤ãƒ«ã®æƒ…å ±ã‚’å–å¾—
 //---------------------------------------------------------------------------
 void get_IconInf(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	TStringList *lst,		//[o] î•ñƒŠƒXƒg		(NULL‚Å‚à‰Â)
-	int *ico_n)				//[o] ƒAƒCƒRƒ“/‰æ‘œ”	(default = NULL)
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	TStringList *lst,		//[o] æƒ…å ±ãƒªã‚¹ãƒˆ		(NULLã§ã‚‚å¯)
+	int *ico_n)				//[o] ã‚¢ã‚¤ã‚³ãƒ³/ç”»åƒæ•°	(default = NULL)
 {
 	try {
 		if (!file_exists(fnam)) Abort();
@@ -1597,10 +1597,10 @@ void get_IconInf(
 		if (ico_n) *ico_n = n;
 
 		if (lst) {
-			add_PropLine(is_cur? _T("‰æ‘œ”") : _T("ƒAƒCƒRƒ“”"), n, lst);
+			add_PropLine(is_cur? _T("ç”»åƒæ•°") : _T("ã‚¢ã‚¤ã‚³ãƒ³æ•°"), n, lst);
 
 			for (int i=0; i<n; i++) {
-				//ƒTƒCƒY
+				//ã‚µã‚¤ã‚º
 				unsigned char b_buf;
 				fs->ReadBuffer(&b_buf, 1);
 				int wd = (b_buf==0)? 256 : b_buf;
@@ -1608,7 +1608,7 @@ void get_IconInf(
 				int hi = (b_buf==0)? 256 : b_buf;
 				UnicodeString lbuf;
 				lbuf.sprintf(_T("%*u: %s"), FPRP_NAM_WD, i + 1, get_wd_x_hi_str(wd, hi).c_str());
-				//ƒJ[ƒ\ƒ‹
+				//ã‚«ãƒ¼ã‚½ãƒ«
 				if (is_cur) {
 					fs->Seek(2, soFromCurrent);
 					fs->ReadBuffer(&us_buf, 2);
@@ -1618,14 +1618,14 @@ void get_IconInf(
 					lbuf.cat_sprintf(_T("  Hotspot=(x:%u y:%u)"), hp_x, hp_y);
 					fs->Seek(8, soFromCurrent);
 				}
-				//ƒAƒCƒRƒ“
+				//ã‚¢ã‚¤ã‚³ãƒ³
 				else {
-					//F
+					//è‰²
 					fs->ReadBuffer(&b_buf, 1);
 					if (b_buf==0)
-				 		lbuf += "  256FˆÈã";
+				 		lbuf += "  256è‰²ä»¥ä¸Š";
 					else
-				 		lbuf.cat_sprintf(_T("  %uF"), b_buf);
+				 		lbuf.cat_sprintf(_T("  %uè‰²"), b_buf);
 					fs->Seek(13, soFromCurrent);
 				}
 				lst->Add(lbuf);
@@ -1644,11 +1644,11 @@ void get_IconInf(
 }
 
 //---------------------------------------------------------------------------
-//ƒAƒjƒ[ƒVƒ‡ƒ“ƒJ[ƒ\ƒ‹ƒtƒ@ƒCƒ‹‚Ìî•ñ‚ğæ“¾
+//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚«ãƒ¼ã‚½ãƒ«ãƒ•ã‚¡ã‚¤ãƒ«ã®æƒ…å ±ã‚’å–å¾—
 //---------------------------------------------------------------------------
 bool get_AniInf(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	TStringList *lst)		//[o] î•ñƒŠƒXƒg
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	TStringList *lst)		//[o] æƒ…å ±ãƒªã‚¹ãƒˆ
 {
 	bool ret = false;
 
@@ -1657,7 +1657,7 @@ bool get_AniInf(
 		std::unique_ptr<TFileStream> fs(new TFileStream(fnam, fmOpenRead | fmShareDenyNone));
 
 		if (!SameStr(get_id_str4(fs.get()), "RIFF")) UserAbort(USTR_IllegalFormat);
-		fs->Seek(4, soFromCurrent);		//ƒf[ƒ^’·
+		fs->Seek(4, soFromCurrent);		//ãƒ‡ãƒ¼ã‚¿é•·
 		if (!SameStr(get_id_str4(fs.get()), "ACON")) UserAbort(USTR_IllegalFormat);
 
 		for (;;) {
@@ -1674,13 +1674,13 @@ bool get_AniInf(
 					if (SameStr(id_str, "INAM")) {
 						d_size = fsRead_int4(fs.get());
 						UnicodeString lbuf = fsRead_char(fs.get(), d_size);
-						if (!lbuf.IsEmpty()) add_PropLine(_T("ƒ^ƒCƒgƒ‹"), lbuf, lst);
-						fs->Seek(d_size%2, soFromCurrent);	//ƒpƒfƒBƒ“ƒO
+						if (!lbuf.IsEmpty()) add_PropLine(_T("ã‚¿ã‚¤ãƒˆãƒ«"), lbuf, lst);
+						fs->Seek(d_size%2, soFromCurrent);	//ãƒ‘ãƒ‡ã‚£ãƒ³ã‚°
 						id_str = get_id_str4(fs.get());
 						if (SameStr(id_str, "IART")) {
 							d_size = fsRead_int4(fs.get());
 							UnicodeString lbuf = fsRead_char(fs.get(), d_size);
-							if (!lbuf.IsEmpty()) add_PropLine(_T("ì¬Ò"), lbuf, lst);
+							if (!lbuf.IsEmpty()) add_PropLine(_T("ä½œæˆè€…"), lbuf, lst);
 						}
 					}
 				}
@@ -1699,8 +1699,8 @@ bool get_AniInf(
 				} ah;
 
 				fs->ReadBuffer(&ah, sizeof(ah));
-				add_PropLine(_T("ƒtƒŒ[ƒ€”"), ah.cFrames, lst);
-				add_PropLine(_T("ƒXƒeƒbƒv”"), ah.cSteps,  lst);
+				add_PropLine(_T("ãƒ•ãƒ¬ãƒ¼ãƒ æ•°"), ah.cFrames, lst);
+				add_PropLine(_T("ã‚¹ãƒ†ãƒƒãƒ—æ•°"), ah.cSteps,  lst);
 			}
 			else if (contained_wd_i(_T("rate|seq "), id_str)) {
 				;
@@ -1710,8 +1710,8 @@ bool get_AniInf(
 			fs->Seek(next_p, soFromBeginning);
 		}
 
-		//ƒ`ƒƒƒ“ƒN
-		add_PropLine(_T("ƒ`ƒƒƒ“ƒN"), get_chunk_list(fs.get()), lst);
+		//ãƒãƒ£ãƒ³ã‚¯
+		add_PropLine(_T("ãƒãƒ£ãƒ³ã‚¯"), get_chunk_list(fs.get()), lst);
 		ret = true;
 	}
 	catch (EAbort &e) {
@@ -1727,14 +1727,14 @@ bool get_AniInf(
 }
 
 //---------------------------------------------------------------------------
-//ƒAƒvƒŠƒP[ƒVƒ‡ƒ“î•ñ‚ğæ“¾
+//ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã‚’å–å¾—
 //---------------------------------------------------------------------------
 void get_AppInf(
-	UnicodeString fnam,	//ƒtƒ@ƒCƒ‹–¼
-	TStringList *lst,	//[o] î•ñƒŠƒXƒg
-	bool check)			//ƒwƒbƒ_‚ğƒ`ƒFƒbƒNAƒ}ƒVƒ“î•ñæ“¾ (default = true)
+	UnicodeString fnam,	//ãƒ•ã‚¡ã‚¤ãƒ«å
+	TStringList *lst,	//[o] æƒ…å ±ãƒªã‚¹ãƒˆ
+	bool check)			//ãƒ˜ãƒƒãƒ€ã‚’ãƒã‚§ãƒƒã‚¯ã€ãƒã‚·ãƒ³æƒ…å ±å–å¾— (default = true)
 {
-	//‘Î‰ƒ}ƒVƒ“
+	//å¯¾å¿œãƒã‚·ãƒ³
 	if (check) {
 		UnicodeString warn_msg;
 		try {
@@ -1749,7 +1749,7 @@ void get_AppInf(
 				Abort();
 			}
 			if (DOS_hdr.e_lfarlc<0x40 || fs->Size<(DOS_hdr.e_lfanew + sizeof(IMAGE_FILE_HEADER))) {
-				warn_msg = "PEANEALEˆÈŠO‚ÌƒtƒH[ƒ}ƒbƒg‚Å‚·B";
+				warn_msg = "PEã€NEã€LEä»¥å¤–ã®ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã§ã™ã€‚";
 				Abort();
 			}
 
@@ -1769,18 +1769,18 @@ void get_AppInf(
 					(fh->Machine==0xaa64)? "arm64" : "???";
 
 				if (SameStr(vstr, "x86") && (fh->Characteristics & 0x20)) vstr += " (Large Address Aware)";
-				add_PropLine(_T("ƒ}ƒVƒ“"), vstr, lst);
+				add_PropLine(_T("ãƒã‚·ãƒ³"), vstr, lst);
 			}
 			else {
 				switch (NT_hdr.Signature & 0x0000ffff) {
 				case IMAGE_OS2_SIGNATURE:		//NE
-					warn_msg = "NEƒtƒH[ƒ}ƒbƒg(Win16)‚Å‚·B";
+					warn_msg = "NEãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ(Win16)ã§ã™ã€‚";
 					Abort();
 				case IMAGE_OS2_SIGNATURE_LE:	//LE
-					warn_msg = "LEƒtƒH[ƒ}ƒbƒg(VXD)‚Å‚·B";
+					warn_msg = "LEãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ(VXD)ã§ã™ã€‚";
 					Abort();
 				default:
-					warn_msg = "PEANEALEˆÈŠO‚ÌƒtƒH[ƒ}ƒbƒg‚Å‚·B";
+					warn_msg = "PEã€NEã€LEä»¥å¤–ã®ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã§ã™ã€‚";
 					Abort();
 				}
 			}
@@ -1791,7 +1791,7 @@ void get_AppInf(
 		}
 	}
 
-	//ƒAƒvƒŠƒP[ƒVƒ‡ƒ“î•ñ
+	//ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±
 	DWORD dwReserved;
 	DWORD dwSize = ::GetFileVersionInfoSize(fnam.c_str(), &dwReserved);
 	if (dwSize==0) return;
@@ -1806,16 +1806,16 @@ void get_AppInf(
 			substr.sprintf(_T("\\StringFileInfo\\%04x%04x\\"), *lpTranslate, *(lpTranslate + 1));
 			std::unique_ptr<TStringList> s_lst(new TStringList());
 			s_lst->Text =
-				"FileDescription=à–¾\n"
-				"FileVersion=ƒtƒ@ƒCƒ‹Ver.\n"
-				"ProductName=»•i–¼\n"
-				"ProductVersion=»•iVer.\n"
-				"LegalCopyright=’˜ìŒ \n"
-				"CompanyName=‰ïĞ–¼\n"
-				"LegalTrademarks=¤•W\n"
-				"Comments=ƒRƒƒ“ƒg\n"
-				"OriginalFilename=Œ³‚Ìƒtƒ@ƒCƒ‹–¼\n"
-				"InternalName=“à•”–¼\n";
+				"FileDescription=èª¬æ˜\n"
+				"FileVersion=ãƒ•ã‚¡ã‚¤ãƒ«Ver.\n"
+				"ProductName=è£½å“å\n"
+				"ProductVersion=è£½å“Ver.\n"
+				"LegalCopyright=è‘—ä½œæ¨©\n"
+				"CompanyName=ä¼šç¤¾å\n"
+				"LegalTrademarks=å•†æ¨™\n"
+				"Comments=ã‚³ãƒ¡ãƒ³ãƒˆ\n"
+				"OriginalFilename=å…ƒã®ãƒ•ã‚¡ã‚¤ãƒ«å\n"
+				"InternalName=å†…éƒ¨å\n";
 
 			int l_cnt = 0;
 			for (int j=0; j<s_lst->Count; j++) {
@@ -1831,24 +1831,24 @@ void get_AppInf(
 				}
 			}
 
-			//æ“¾‚Å‚«‚È‚¯‚ê‚ÎƒvƒƒpƒeƒB‚©‚ç
+			//å–å¾—ã§ããªã‘ã‚Œã°ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‹ã‚‰
 			if (l_cnt==0) usr_SH->get_PropInf(fnam, lst);
 		}
 	}
 
-	//ƒAƒCƒRƒ“”
+	//ã‚¢ã‚¤ã‚³ãƒ³æ•°
 	int ixn = (int)::ExtractIcon(HInstance, fnam.c_str(), -1);
-	if (ixn>1) add_PropLine(_T("ƒAƒCƒRƒ“”"), ixn, lst);
+	if (ixn>1) add_PropLine(_T("ã‚¢ã‚¤ã‚³ãƒ³æ•°"), ixn, lst);
 }
 
 //---------------------------------------------------------------------------
-//DLL‚ÌƒGƒNƒXƒ|[ƒgŠÖ”ˆê——‚ğæ“¾
+//DLLã®ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆé–¢æ•°ä¸€è¦§ã‚’å–å¾—
 //---------------------------------------------------------------------------
 bool get_DllExpFunc(
-	AnsiString fnam, 	//ƒtƒ@ƒCƒ‹–¼
-	TStringList *lst,	//[o] ŠÖ”ƒŠƒXƒg
-	int sort_mode,		//0:˜”‡(default)/ 1:ƒCƒ“ƒfƒbƒNƒX‡/ 2: RVA‡/ 3:–¼‘O‡
-	int list_mode)		//0:•\¦—p(default)/ 1:CSV/ 2:TSV
+	AnsiString fnam, 	//ãƒ•ã‚¡ã‚¤ãƒ«å
+	TStringList *lst,	//[o] é–¢æ•°ãƒªã‚¹ãƒˆ
+	int sort_mode,		//0:åºæ•°é †(default)/ 1:ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹é †/ 2: RVAé †/ 3:åå‰é †
+	int list_mode)		//0:è¡¨ç¤ºç”¨(default)/ 1:CSV/ 2:TSV
 {
 	bool ret = false;
 
@@ -1873,24 +1873,24 @@ bool get_DllExpFunc(
 				//Hint [TAB] RVA [TAB] Name
 				UnicodeString name = (char *)ImageRvaToVa(LoadedImage.FileHeader, img_base, dNameRVAs[i], NULL);
 				tmp.sprintf(_T("%04X\t%08X\t%s"), i, dFuncRVAs[dOrdRVAs[i]], name.c_str());
-				flst->AddObject(tmp, (TObject*)(NativeInt)(dOrdRVAs[i] + pImgExpDir->Base));	//Obj=˜”
+				flst->AddObject(tmp, (TObject*)(NativeInt)(dOrdRVAs[i] + pImgExpDir->Base));	//Obj=åºæ•°
 			}
 
-			//ƒ\[ƒg
+			//ã‚½ãƒ¼ãƒˆ
 			USR_CsvTopIsHdr = false;
 			USR_CsvSortMode = 1;
 			switch (sort_mode) {
-			case 1:		//ƒCƒ“ƒfƒbƒNƒX‡
+			case 1:		//ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹é †
 				break;
-			case 2:		//RVA‡
+			case 2:		//RVAé †
 				USR_CsvCol = 1;
 				flst->CustomSort(comp_TsvTextOrder);
 				break;
-			case 3:		//–¼‘O‡
+			case 3:		//åå‰é †
 				USR_CsvCol = 2;
 				flst->CustomSort(comp_TsvNaturalOrder);
 				break;
-			default:	//˜”‡
+			default:	//åºæ•°é †
 				flst->CustomSort(comp_ObjectsOrder);
 			}
 
@@ -1907,7 +1907,7 @@ bool get_DllExpFunc(
 				lst->Add((list_mode==1)? "Ordinal,Hint,RVA,Name" : "Ordinal\tHint\tRVA\tName");
 				lst->AddStrings(flst.get());
 			}
-			//’Êí‚Ìˆê——
+			//é€šå¸¸ã®ä¸€è¦§
 			else {
 				int max_w = 4;
 				for (int i=0; i<flst->Count; i++) {
@@ -1937,17 +1937,17 @@ bool get_DllExpFunc(
 }
 
 //---------------------------------------------------------------------------
-//Borland ƒvƒƒWƒFƒNƒgî•ñ‚ğæ“¾
+//Borland ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆæƒ…å ±ã‚’å–å¾—
 //---------------------------------------------------------------------------
 void get_BorlandInf(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	TStringList *lst)		//[o] î•ñƒŠƒXƒg
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	TStringList *lst)		//[o] æƒ…å ±ãƒªã‚¹ãƒˆ
 {
 	if (!file_exists(fnam)) return;
 
 	UnicodeString fext = get_extension(fnam);
 
-	//ƒvƒƒWƒFƒNƒg
+	//ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆ
 	if (test_FileExt(fext, ".cbproj.dproj")) {
 		std::unique_ptr<TStringList> fbuf(new TStringList());
 		fbuf->LoadFromFile(fnam);
@@ -1978,7 +1978,7 @@ void get_BorlandInf(
 		}
 		lst->Add(EmptyStr);
 	}
-	//ƒ\[ƒX
+	//ã‚½ãƒ¼ã‚¹
 	else if (test_FileExt(fext, ".cpp.pas.dfm.fmx.h")) {
 		UnicodeString fm_nam = ChangeFileExt(fnam, ".dfm");
 		if (!file_exists(fm_nam)) fm_nam = ChangeFileExt(fnam, ".fmx");
@@ -2033,11 +2033,11 @@ void get_BorlandInf(
 }
 
 //---------------------------------------------------------------------------
-//tags ƒtƒ@ƒCƒ‹î•ñ‚ğæ“¾
+//tags ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã‚’å–å¾—
 //---------------------------------------------------------------------------
 void get_TagsInf(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	TStringList *lst)		//[o] î•ñƒŠƒXƒg
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	TStringList *lst)		//[o] æƒ…å ±ãƒªã‚¹ãƒˆ
 {
 	if (!file_exists(fnam)) return;
 
@@ -2065,18 +2065,18 @@ void get_TagsInf(
 }
 
 //---------------------------------------------------------------------------
-//PDF‚Ìƒo[ƒWƒ‡ƒ“‚ğæ“¾
+//PDFã®ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã‚’å–å¾—
 //---------------------------------------------------------------------------
 void get_PdfVer(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	TStringList  *lst)		//[o] î•ñƒŠƒXƒg
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	TStringList  *lst)		//[o] æƒ…å ±ãƒªã‚¹ãƒˆ
 {
 	try {
 		if (!file_exists(fnam)) Abort();
 
 		std::unique_ptr<TFileStream> fs(new TFileStream(fnam, fmOpenRead | fmShareDenyNone));
 		UnicodeString lbuf = fsRead_char(fs.get(), 8);
-		if (StartsStr("%PDF-", lbuf)) add_PropLine(_T("PDFƒo[ƒWƒ‡ƒ“"), lbuf.SubString(6, 3).c_str(), lst);
+		if (StartsStr("%PDF-", lbuf)) add_PropLine(_T("PDFãƒãƒ¼ã‚¸ãƒ§ãƒ³"), lbuf.SubString(6, 3).c_str(), lst);
 	}
 	catch (...) {
 		;
@@ -2084,7 +2084,7 @@ void get_PdfVer(
 }
 
 //---------------------------------------------------------------------------
-//HTML•¶‘‚Ìƒwƒbƒ_•¶š—ñ‚ğæ“¾
+//HTMLæ–‡æ›¸ã®ãƒ˜ãƒƒãƒ€æ–‡å­—åˆ—ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString get_html_header(UnicodeString fnam, int code_page)
 {
@@ -2111,20 +2111,20 @@ UnicodeString get_html_header(UnicodeString fnam, int code_page)
 }
 
 //---------------------------------------------------------------------------
-//HTML•¶‘‚Ìƒwƒbƒ_î•ñ(charset, TITLE, META)‚ğæ“¾
+//HTMLæ–‡æ›¸ã®ãƒ˜ãƒƒãƒ€æƒ…å ±(charset, TITLE, META)ã‚’å–å¾—
 //---------------------------------------------------------------------------
 void get_HtmlInf(
-	UnicodeString fnam,		//HTMLƒtƒ@ƒCƒ‹–¼
-	TStringList *lst)		//[o] î•ñƒŠƒXƒg(–¼‘O=’l ‚ÌŒ`®‚ÅŠi”[)
+	UnicodeString fnam,		//HTMLãƒ•ã‚¡ã‚¤ãƒ«å
+	TStringList *lst)		//[o] æƒ…å ±ãƒªã‚¹ãƒˆ(åå‰=å€¤ ã®å½¢å¼ã§æ ¼ç´)
 {
 	if (!file_exists(fnam)) return;
 
-	//ƒwƒbƒ_•”•ª‚ğæ“¾
+	//ãƒ˜ãƒƒãƒ€éƒ¨åˆ†ã‚’å–å¾—
 	UnicodeString headstr = get_html_header(fnam);
 	if (!headstr.IsEmpty()) {
 		UnicodeString itmbuf;
 
-		//•¶‘Œ^éŒ¾
+		//æ–‡æ›¸å‹å®£è¨€
 		UnicodeString dtd_str = get_tkn(get_tkn_r(headstr, "<!DOCTYPE "), '>');
 		int p = pos_i("//DTD ",  dtd_str);
 		if (p>0) dtd_str = get_tkn_m(dtd_str, "//DTD ", "//");
@@ -2133,7 +2133,7 @@ void get_HtmlInf(
 			lst->Add(itmbuf.sprintf(_T("%*s: %s"), FPRP_NAM_WD, _T("DOCTYPE"), dtd_str.c_str()));
 		}
 
-		//charset ‚ğƒ`ƒFƒbƒN
+		//charset ã‚’ãƒã‚§ãƒƒã‚¯
 		UnicodeString charset;
 		p = pos_i("charset", headstr);
 		if (p>0) {
@@ -2144,13 +2144,13 @@ void get_HtmlInf(
 				lst->Add(itmbuf.sprintf(_T("%*s: %s"), FPRP_NAM_WD, _T("charset"), charset.c_str()));
 		}
 
-		//ƒGƒ“ƒR[ƒfƒBƒ“ƒO‚ğw’è‚µ‚ÄÄ“Ç‚İ‚İ
+		//ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ã‚’æŒ‡å®šã—ã¦å†èª­ã¿è¾¼ã¿
 		if (!charset.IsEmpty()) {
 			int code_page = get_CodePageOfName(charset);
 			if (code_page>0) headstr = get_html_header(fnam, code_page);
 		}
 
-		//ƒRƒƒ“ƒg•”•ª‚ğíœ
+		//ã‚³ãƒ¡ãƒ³ãƒˆéƒ¨åˆ†ã‚’å‰Šé™¤
 		int p0, p1;
 		p0 = headstr.Pos("<!--");
 		while (p0>0) {
@@ -2164,7 +2164,7 @@ void get_HtmlInf(
 			}
 		}
 
-		//ƒ^ƒCƒgƒ‹
+		//ã‚¿ã‚¤ãƒˆãƒ«
 		p0 = pos_i("<TITLE>",  headstr);
 		p1 = pos_i("</TITLE>", headstr);
 		if (p0>0 && p1>p0) {
@@ -2172,7 +2172,7 @@ void get_HtmlInf(
 			if (!tit.IsEmpty()) lst->Add(itmbuf.sprintf(_T("%*s: %s"), FPRP_NAM_WD, _T("title"), tit.c_str()));
 		}
 
-		//ƒƒ^î•ñ
+		//ãƒ¡ã‚¿æƒ…å ±
 		std::unique_ptr<HtmConv> htmcnv(new HtmConv());
 		UnicodeString tmp = headstr;
 		while (!tmp.IsEmpty()) {
@@ -2192,17 +2192,17 @@ void get_HtmlInf(
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚ÌCRC32•¶š—ñ‚ğæ“¾
+//ãƒ•ã‚¡ã‚¤ãƒ«ã®CRC32æ–‡å­—åˆ—ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString get_CRC32_str(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	bool only_1blk,			//æ“ª‚Ì‚PƒuƒƒbƒN(32KB)‚Ì‚İ	(default = false)
-	bool prc_msg)			//ƒƒbƒZ[ƒW‚ğˆ—				(default = false)
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	bool only_1blk,			//å…ˆé ­ã®ï¼‘ãƒ–ãƒ­ãƒƒã‚¯(32KB)ã®ã¿	(default = false)
+	bool prc_msg)			//ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å‡¦ç†				(default = false)
 {
 	static uint32_t table[256];
 	static bool has_tbl = false;
 
-	//ƒe[ƒuƒ‹‚Ì‰Šú‰»
+	//ãƒ†ãƒ¼ãƒ–ãƒ«ã®åˆæœŸåŒ–
 	if (!has_tbl) {
 		for (int i=0; i<256; i++) {
 			uint32_t rem = i;
@@ -2259,13 +2259,13 @@ UnicodeString get_CRC32_str(
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚ÌƒnƒbƒVƒ…•¶š—ñ‚ğæ“¾
+//ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒãƒƒã‚·ãƒ¥æ–‡å­—åˆ—ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString get_HashStr(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	ALG_ID algid,			//ƒAƒ‹ƒSƒŠƒYƒ€ CALG_MD5/ CALG_SHA1/ CALG_SHA_256/384/512
-	bool only_1blk,			//æ“ª‚Ì‚PƒuƒƒbƒN(32KB)‚Ì‚İ	(default = false)
-	bool prc_msg)			//ƒƒbƒZ[ƒW‚ğˆ—				(default = false)
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	ALG_ID algid,			//ã‚¢ãƒ«ã‚´ãƒªã‚ºãƒ  CALG_MD5/ CALG_SHA1/ CALG_SHA_256/384/512
+	bool only_1blk,			//å…ˆé ­ã®ï¼‘ãƒ–ãƒ­ãƒƒã‚¯(32KB)ã®ã¿	(default = false)
+	bool prc_msg)			//ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å‡¦ç†				(default = false)
 {
 	HCRYPTPROV hProv;
 	HCRYPTHASH hHash;
@@ -2324,9 +2324,9 @@ UnicodeString get_HashStr(
 //---------------------------------------------------------------------------
 UnicodeString get_HashStr(
 	UnicodeString fnam,
-	UnicodeString idstr,	//ƒAƒ‹ƒSƒŠƒYƒ€¯•Ê–¼
-	bool only_1blk,			//æ“ª‚Ì‚PƒuƒƒbƒN‚Ì‚İ	(default = false)
-	bool prc_msg)			//ƒƒbƒZ[ƒW‚ğˆ—		(default = false)
+	UnicodeString idstr,	//ã‚¢ãƒ«ã‚´ãƒªã‚ºãƒ è­˜åˆ¥å
+	bool only_1blk,			//å…ˆé ­ã®ï¼‘ãƒ–ãƒ­ãƒƒã‚¯ã®ã¿	(default = false)
+	bool prc_msg)			//ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å‡¦ç†		(default = false)
 {
 	switch (idx_of_word_i(HASH_ID_STR, idstr)) {
 	case  0: return get_HashStr(fnam, CALG_MD5,		only_1blk, prc_msg);
@@ -2339,12 +2339,12 @@ UnicodeString get_HashStr(
 	}
 }
 //---------------------------------------------------------------------------
-//•¶š—ñ‚ÌƒnƒbƒVƒ…•¶š—ñ‚ğæ“¾
-//  ƒ}ƒ‹ƒ`ƒoƒCƒg•¶š‚ÍUTF-8‚Æ‚µ‚Äˆ—
+//æ–‡å­—åˆ—ã®ãƒãƒƒã‚·ãƒ¥æ–‡å­—åˆ—ã‚’å–å¾—
+//  ãƒãƒ«ãƒãƒã‚¤ãƒˆæ–‡å­—ã¯UTF-8ã¨ã—ã¦å‡¦ç†
 //---------------------------------------------------------------------------
 UnicodeString get_TextHashStr(
-	UnicodeString s,		//•¶š—ñ
-	ALG_ID algid)			//ƒAƒ‹ƒSƒŠƒYƒ€ CALG_MD5/ CALG_SHA1/ CALG_SHA_256/384/512
+	UnicodeString s,		//æ–‡å­—åˆ—
+	ALG_ID algid)			//ã‚¢ãƒ«ã‚´ãƒªã‚ºãƒ  CALG_MD5/ CALG_SHA1/ CALG_SHA_256/384/512
 {
 	if (s.IsEmpty()) return EmptyStr;
 
@@ -2389,7 +2389,7 @@ UnicodeString get_TextHashStr(
 //---------------------------------------------------------------------------
 UnicodeString get_TextHashStr(
 	UnicodeString s,
-	UnicodeString idstr)	//ƒAƒ‹ƒSƒŠƒYƒ€¯•Ê–¼
+	UnicodeString idstr)	//ã‚¢ãƒ«ã‚´ãƒªã‚ºãƒ è­˜åˆ¥å
 {
 	switch (idx_of_word_i(HASH_ID_STR, idstr)) {
 	case  0: return get_TextHashStr(s, CALG_MD5);
@@ -2402,7 +2402,7 @@ UnicodeString get_TextHashStr(
 }
 
 //---------------------------------------------------------------------------
-//ƒI[ƒfƒBƒI/ƒrƒfƒIƒtƒ@ƒCƒ‹‚Ì’·‚³(ms)‚ğæ“¾
+//ã‚ªãƒ¼ãƒ‡ã‚£ã‚ª/ãƒ“ãƒ‡ã‚ªãƒ•ã‚¡ã‚¤ãƒ«ã®é•·ã•(ms)ã‚’å–å¾—
 //---------------------------------------------------------------------------
 int get_duration(UnicodeString fnam)
 {
@@ -2429,58 +2429,58 @@ int get_duration(UnicodeString fnam)
 		}
 	}
 
-	//ƒvƒƒpƒeƒB‚©‚çæ“¾
+	//ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‹ã‚‰å–å¾—
 	if (t==-1) t = usr_SH->get_Duration(fnam) * 1000;
 
 	return t;
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹–¼‚ÉŠÖ‚·‚éŒx‚ğæ“¾
-//  –ß‚è’l: Œx”
+//ãƒ•ã‚¡ã‚¤ãƒ«åã«é–¢ã™ã‚‹è­¦å‘Šã‚’å–å¾—
+//  æˆ»ã‚Šå€¤: è­¦å‘Šæ•°
 //---------------------------------------------------------------------------
 int get_filename_warn(
-	UnicodeString fnam,		//(ƒpƒX•t‚«)ƒtƒ@ƒCƒ‹–¼
-	TStringList *lst,		//[o] î•ñƒŠƒXƒg		(default = NULL)
-	bool is_dir)			//true = ƒfƒBƒŒƒNƒgƒŠ	(default = false);
+	UnicodeString fnam,		//(ãƒ‘ã‚¹ä»˜ã)ãƒ•ã‚¡ã‚¤ãƒ«å
+	TStringList *lst,		//[o] æƒ…å ±ãƒªã‚¹ãƒˆ		(default = NULL)
+	bool is_dir)			//true = ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª	(default = false);
 {
 	std::unique_ptr<TStringList> wlst(new TStringList());
 	UnicodeString tmp;
 
-	//ƒpƒX–¼
-	if (fnam.Length()>=MAX_PATH)		add_WarnLine(tmp.sprintf(_T("ƒpƒX–¼‚ª’·‚·‚¬‚Ü‚·(%u)B"), fnam.Length()), wlst.get());
+	//ãƒ‘ã‚¹å
+	if (fnam.Length()>=MAX_PATH)		add_WarnLine(tmp.sprintf(_T("ãƒ‘ã‚¹åãŒé•·ã™ãã¾ã™(%u)ã€‚"), fnam.Length()), wlst.get());
 
-	//–¼‘O
+	//åå‰
 	UnicodeString nnam = ExtractFileName(fnam);
-	if (nnam.Length()>=256) 			add_WarnLine(tmp.sprintf(_T("–¼‘O‚ª’·‚·‚¬‚Ü‚·(%u)B"), nnam.Length()), wlst.get());
-	if (ContainsStr(nnam, L"\u202e"))	add_WarnLine("–¼‘O‚É§Œä•¶šuRLOv‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·B", wlst.get());
+	if (nnam.Length()>=256) 			add_WarnLine(tmp.sprintf(_T("åå‰ãŒé•·ã™ãã¾ã™(%u)ã€‚"), nnam.Length()), wlst.get());
+	if (ContainsStr(nnam, L"\u202e"))	add_WarnLine("åå‰ã«åˆ¶å¾¡æ–‡å­—ã€ŒRLOã€ãŒå«ã¾ã‚Œã¦ã„ã¾ã™ã€‚", wlst.get());
 
-	//å•”
+	//ä¸»éƒ¨
 	UnicodeString bnam = is_dir? nnam : get_base_name(fnam);
-	if (StartsStr(' ', bnam))			add_WarnLine("–¼‘O‚Ìæ“ª‚É‹ó”’‚ª‚ ‚è‚Ü‚·B", 		wlst.get());
-	if (StartsStr("@", bnam))			add_WarnLine("–¼‘O‚Ìæ“ª‚É‘SŠp‹ó”’‚ª‚ ‚è‚Ü‚·B", 	wlst.get());
+	if (StartsStr(' ', bnam))			add_WarnLine("åå‰ã®å…ˆé ­ã«ç©ºç™½ãŒã‚ã‚Šã¾ã™ã€‚", 		wlst.get());
+	if (StartsStr("ã€€", bnam))			add_WarnLine("åå‰ã®å…ˆé ­ã«å…¨è§’ç©ºç™½ãŒã‚ã‚Šã¾ã™ã€‚", 	wlst.get());
 	if (bnam.Length()>1) {
-		if (EndsStr(' ', bnam))			add_WarnLine("–¼‘O‚Ì––”ö‚É‹ó”’‚ª‚ ‚è‚Ü‚·B", 		wlst.get());
-		if (EndsStr("@", bnam))		add_WarnLine("–¼‘O‚Ì––”ö‚É‘SŠp‹ó”’‚ª‚ ‚è‚Ü‚·B", 	wlst.get());
-		if (ContainsStr(bnam, "  "))	add_WarnLine("–¼‘O‚É˜A‘±‚µ‚½‹ó”’‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·B",wlst.get());
+		if (EndsStr(' ', bnam))			add_WarnLine("åå‰ã®æœ«å°¾ã«ç©ºç™½ãŒã‚ã‚Šã¾ã™ã€‚", 		wlst.get());
+		if (EndsStr("ã€€", bnam))		add_WarnLine("åå‰ã®æœ«å°¾ã«å…¨è§’ç©ºç™½ãŒã‚ã‚Šã¾ã™ã€‚", 	wlst.get());
+		if (ContainsStr(bnam, "  "))	add_WarnLine("åå‰ã«é€£ç¶šã—ãŸç©ºç™½ãŒå«ã¾ã‚Œã¦ã„ã¾ã™ã€‚",wlst.get());
 	}
 
 	UnicodeString s = check_EnvDepandChars(bnam);
-	if (!s.IsEmpty()) add_WarnLine(tmp.sprintf(_T("–¼‘O‚ÉŠÂ‹«ˆË‘¶•¶š‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·(%s)B"), s.c_str()), wlst.get());
+	if (!s.IsEmpty()) add_WarnLine(tmp.sprintf(_T("åå‰ã«ç’°å¢ƒä¾å­˜æ–‡å­—ãŒå«ã¾ã‚Œã¦ã„ã¾ã™(%s)ã€‚"), s.c_str()), wlst.get());
 
 	s = check_Surrogates(bnam);
-	if (!s.IsEmpty()) add_WarnLine(tmp.sprintf(_T("–¼‘O‚ÉƒTƒƒQ[ƒgƒyƒA‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·(%s)B"), s.c_str()), wlst.get());
+	if (!s.IsEmpty()) add_WarnLine(tmp.sprintf(_T("åå‰ã«ã‚µãƒ­ã‚²ãƒ¼ãƒˆãƒšã‚¢ãŒå«ã¾ã‚Œã¦ã„ã¾ã™(%s)ã€‚"), s.c_str()), wlst.get());
 
-	//Šg’£q
+	//æ‹¡å¼µå­
 	if (!is_dir) {
 		UnicodeString xnam = get_tkn_r(get_extension(fnam), '.');
-		if (StartsStr(' ', xnam))		add_WarnLine("Šg’£q‚Ìæ“ª‚É‹ó”’‚ª‚ ‚è‚Ü‚·B",		wlst.get());
-		if (StartsStr("@", xnam))		add_WarnLine("Šg’£q‚Ìæ“ª‚É‘SŠp‹ó”’‚ª‚ ‚è‚Ü‚·B",	wlst.get());
+		if (StartsStr(' ', xnam))		add_WarnLine("æ‹¡å¼µå­ã®å…ˆé ­ã«ç©ºç™½ãŒã‚ã‚Šã¾ã™ã€‚",		wlst.get());
+		if (StartsStr("ã€€", xnam))		add_WarnLine("æ‹¡å¼µå­ã®å…ˆé ­ã«å…¨è§’ç©ºç™½ãŒã‚ã‚Šã¾ã™ã€‚",	wlst.get());
 
 		if (xnam.Length()>1) {
-			if (EndsStr(' ', xnam))		add_WarnLine("Šg’£q‚Ì––”ö‚É‹ó”’‚ª‚ ‚è‚Ü‚·B", 		wlst.get());
-			if (EndsStr("@", xnam))	add_WarnLine("Šg’£q‚Ì––”ö‚É‘SŠp‹ó”’‚ª‚ ‚è‚Ü‚·B",	wlst.get());
-			if (ContainsStr(xnam, "  "))	add_WarnLine("Šg’£q‚É˜A‘±‚µ‚½‹ó”’‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·B", wlst.get());
+			if (EndsStr(' ', xnam))		add_WarnLine("æ‹¡å¼µå­ã®æœ«å°¾ã«ç©ºç™½ãŒã‚ã‚Šã¾ã™ã€‚", 		wlst.get());
+			if (EndsStr("ã€€", xnam))	add_WarnLine("æ‹¡å¼µå­ã®æœ«å°¾ã«å…¨è§’ç©ºç™½ãŒã‚ã‚Šã¾ã™ã€‚",	wlst.get());
+			if (ContainsStr(xnam, "  "))	add_WarnLine("æ‹¡å¼µå­ã«é€£ç¶šã—ãŸç©ºç™½ãŒå«ã¾ã‚Œã¦ã„ã¾ã™ã€‚", wlst.get());
 		}
 	}
 
@@ -2490,7 +2490,7 @@ int get_filename_warn(
 }
 
 //---------------------------------------------------------------------------
-//‘ã‘Öƒf[ƒ^ƒXƒgƒŠ[ƒ€‚Ì”‚ğæ“¾
+//ä»£æ›¿ãƒ‡ãƒ¼ã‚¿ã‚¹ãƒˆãƒªãƒ¼ãƒ ã®æ•°ã‚’å–å¾—
 //---------------------------------------------------------------------------
 int get_ADS_count(UnicodeString fnam)
 {
@@ -2509,7 +2509,7 @@ int get_ADS_count(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//‘ã‘Öƒf[ƒ^ƒXƒgƒŠ[ƒ€î•ñ‚ğæ“¾
+//ä»£æ›¿ãƒ‡ãƒ¼ã‚¿ã‚¹ãƒˆãƒªãƒ¼ãƒ æƒ…å ±ã‚’å–å¾—
 //---------------------------------------------------------------------------
 void get_ADS_Inf(UnicodeString fnam, TStringList *lst)
 {
@@ -2524,9 +2524,9 @@ void get_ADS_Inf(UnicodeString fnam, TStringList *lst)
 			if (!snam.IsEmpty()) {
 				__int64 sz = ((__int64)sd.StreamSize.HighPart<<32) + sd.StreamSize.LowPart;
 				total += sz;
-				UnicodeString lbuf = get_PropTitle(UnicodeString().sprintf(_T("ƒXƒgƒŠ[ƒ€%u"), ++cnt));
+				UnicodeString lbuf = get_PropTitle(UnicodeString().sprintf(_T("ã‚¹ãƒˆãƒªãƒ¼ãƒ %u"), ++cnt));
 				lst->Add(lbuf.cat_sprintf(_T("%-18s  (%s)"), snam.c_str(), FormatFloat(",0", (double)sz).c_str()));
-				//Zone.Identifier ‚Ì“à—e
+				//Zone.Identifier ã®å†…å®¹
 				if (SameText(snam, "Zone.Identifier")) {
 					try {
 						std::unique_ptr<TFileStream>   fs(new TFileStream(fnam + ":" + snam, fmOpenRead | fmShareDenyNone));
@@ -2568,20 +2568,20 @@ void get_ADS_Inf(UnicodeString fnam, TStringList *lst)
 		::FindClose(hFS);
 
 		if (cnt>1) {
-			lst->Add(get_PropTitle(_T("‡ŒvƒTƒCƒY")).cat_sprintf(_T("%s (%s)"),
+			lst->Add(get_PropTitle(_T("åˆè¨ˆã‚µã‚¤ã‚º")).cat_sprintf(_T("%s (%s)"),
 						get_size_str_G(total, 10, 2, 1).c_str(), get_size_str_B(total, 0).c_str()));
 		}
 	}
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚ğg—p’†‚ÌƒvƒƒZƒXˆê——‚ğæ“¾
-//  –ß‚è’l: g—p’†‚ÌƒvƒƒZƒX”
+//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½¿ç”¨ä¸­ã®ãƒ—ãƒ­ã‚»ã‚¹ä¸€è¦§ã‚’å–å¾—
+//  æˆ»ã‚Šå€¤: ä½¿ç”¨ä¸­ã®ãƒ—ãƒ­ã‚»ã‚¹æ•°
 //---------------------------------------------------------------------------
 int get_ProcessingInf(
-	UnicodeString fnam,		//‘ÎÛƒtƒ@ƒCƒ‹–¼
-	TStringList *lst,		//[o] î•ñƒŠƒXƒg		(default = NULL)
-	bool only_fnam)			//Àsƒtƒ@ƒCƒ‹–¼‚Ì‚İ	(default = false)
+	UnicodeString fnam,		//å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«å
+	TStringList *lst,		//[o] æƒ…å ±ãƒªã‚¹ãƒˆ		(default = NULL)
+	bool only_fnam)			//å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«åã®ã¿	(default = false)
 {
 	int ret_cnt = 0;
 
@@ -2603,7 +2603,7 @@ int get_ProcessingInf(
 							if (i>0 && !only_fnam) lst->Add(EmptyStr);
 
 							if (!only_fnam)
-								add_PropLine(tmp.sprintf(_T("%2uFƒvƒƒZƒX–¼"), i + 1), Trim(rm_pi[i].strAppName).c_str(), lst);
+								add_PropLine(tmp.sprintf(_T("%2uï¼šãƒ—ãƒ­ã‚»ã‚¹å"), i + 1), Trim(rm_pi[i].strAppName).c_str(), lst);
 
 							int pid = rm_pi[i].Process.dwProcessId;
 							HANDLE hProcess = ::OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pid);
@@ -2616,7 +2616,7 @@ int get_ProcessingInf(
 									if (only_fnam)
 										lst->Add(fnam);
 									else
-										add_PropLine(_T("Àsƒtƒ@ƒCƒ‹"), fnam, lst, LBFLG_PATH_FIF);
+										add_PropLine(_T("å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«"), fnam, lst, LBFLG_PATH_FIF);
 								}
 							}
 
@@ -2631,7 +2631,7 @@ int get_ProcessingInf(
 							}
 
 							if (!only_fnam)
-								add_PropLine(_T("ƒvƒƒZƒXID"), tmp.sprintf(_T("%u (Type=%s)"), pid, tmp.c_str()), lst);
+								add_PropLine(_T("ãƒ—ãƒ­ã‚»ã‚¹ID"), tmp.sprintf(_T("%u (Type=%s)"), pid, tmp.c_str()), lst);
 						}
 					}
 				}
@@ -2643,7 +2643,7 @@ int get_ProcessingInf(
 	return ret_cnt;
 }
 //---------------------------------------------------------------------------
-//Šg’£q‚ÉŠÖ˜A•t‚¯‚ç‚ê‚½Àsƒtƒ@ƒCƒ‹‚ğæ“¾
+//æ‹¡å¼µå­ã«é–¢é€£ä»˜ã‘ã‚‰ã‚ŒãŸå®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString get_AssocExeName(UnicodeString fext)  
 {  

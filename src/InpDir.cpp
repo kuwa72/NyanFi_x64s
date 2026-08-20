@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ÉfÉBÉåÉNÉgÉäÇäJÇ≠/ Webåüçı											//
+//  „Éá„Ç£„É¨„ÇØ„Éà„É™„ÇíÈñã„Åè/ WebÊ§úÁ¥¢											//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -104,7 +104,7 @@ void __fastcall TInpDirDlg::FormKeyDown(TObject *Sender, WORD &Key, TShiftState 
 }
 
 //---------------------------------------------------------------------------
-//éQè∆
+//ÂèÇÁÖß
 //---------------------------------------------------------------------------
 void __fastcall TInpDirDlg::RefDirBtnClick(TObject *Sender)
 {
@@ -113,7 +113,7 @@ void __fastcall TInpDirDlg::RefDirBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ì¸óÕï∂éöóÒÇÉpÉXñºÇ…ïœä∑
+//ÂÖ•ÂäõÊñáÂ≠óÂàó„Çí„Éë„ÇπÂêç„Å´Â§âÊèõ
 //---------------------------------------------------------------------------
 UnicodeString __fastcall TInpDirDlg::GetInpWord(bool path_sw)
 {
@@ -128,7 +128,7 @@ UnicodeString __fastcall TInpDirDlg::GetInpWord(bool path_sw)
 }
 
 //---------------------------------------------------------------------------
-//åÛï‚ÉäÉXÉgÇê›íË
+//ÂÄôË£ú„É™„Çπ„Éà„ÇíË®≠ÂÆö
 //---------------------------------------------------------------------------
 void __fastcall TInpDirDlg::SetList()
 {
@@ -158,7 +158,7 @@ void __fastcall TInpDirDlg::SetList()
 	}
 }
 //---------------------------------------------------------------------------
-//ÉtÉBÉãÉ^
+//„Éï„Ç£„É´„Çø
 //---------------------------------------------------------------------------
 void __fastcall TInpDirDlg::Filter()
 {
@@ -168,19 +168,19 @@ void __fastcall TInpDirDlg::Filter()
 		InhFilter = false; return;
 	}
 
-	//ÉLÅ[ÉèÅ[ÉhéÊìæ
+	//„Ç≠„Éº„ÉØ„Éº„ÉâÂèñÂæó
 	UnicodeString kwd = GetInpWord();
 	try {
 		if (kwd.IsEmpty() || ItemList->Count==0) Abort();
 
-		//çiÇËçûÇ›
+		//Áµû„ÇäËæº„Åø
 		std::unique_ptr<TStringList> lst(new TStringList());
 		lst->Assign(ItemList);
 		int i=0;
 		while (i<lst->Count) if (!StartsText(kwd, lst->Strings[i])) lst->Delete(i); else i++;
 		if (lst->Count==0) Abort();
 
-		//ó†ÉRÉìÉ{É{ÉbÉNÉXÇ…äÑÇËìñÇƒ
+		//Ë£è„Ç≥„É≥„Éú„Éú„ÉÉ„ÇØ„Çπ„Å´Ââ≤„ÇäÂΩì„Å¶
 		cursor_Default();
 		SubComboBox->LockDrawing();
 		SubComboBox->DroppedDown = false;
@@ -189,7 +189,7 @@ void __fastcall TInpDirDlg::Filter()
 		SubComboBox->ItemIndex	 = 0;
 		SubComboBox->Enabled	 = true;
 		SubComboBox->UnlockDrawing();
-		Screen->Cursor = crArrow;	//Å¶ÉhÉçÉbÉvÉ_ÉEÉìéûÇ…ÉJÅ[É\ÉãÇ™è¡Ç¶ÇÈåªè€Ç÷ÇÃëŒçÙ
+		Screen->Cursor = crArrow;	//‚Äª„Éâ„É≠„ÉÉ„Éó„ÉÄ„Ç¶„É≥ÊôÇ„Å´„Ç´„Éº„ÇΩ„É´„ÅåÊ∂à„Åà„ÇãÁèæË±°„Å∏„ÅÆÂØæÁ≠ñ
 	}
 	catch (...) {
 		SubComboBox->DroppedDown = false;
@@ -205,7 +205,7 @@ void __fastcall TInpDirDlg::Filter()
 }
 
 //---------------------------------------------------------------------------
-//ÉLÅ[ëÄçÏ
+//„Ç≠„ÉºÊìç‰Ωú
 //---------------------------------------------------------------------------
 void __fastcall TInpDirDlg::InpDirComboBoxKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {

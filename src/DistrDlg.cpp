@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  U‚è•ª‚¯ƒ_ƒCƒAƒƒO													//
+//  æŒ¯ã‚Šåˆ†ã‘ãƒ€ã‚¤ã‚¢ãƒ­ã‚°													//
 //----------------------------------------------------------------------//
 #include "Global.h"
 #include "UserFunc.h"
@@ -13,9 +13,9 @@
 TDistributionDlg *DistributionDlg = NULL;
 
 //---------------------------------------------------------------------------
-//ƒvƒŒƒrƒ…[ˆê——ƒ\[ƒg—p”äŠrŠÖ”
+//ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ä¸€è¦§ã‚½ãƒ¼ãƒˆç”¨æ¯”è¼ƒé–¢æ•°
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹–¼
+//ãƒ•ã‚¡ã‚¤ãƒ«å
 int __fastcall DistrCmp_Name(TStringList *List, int Index1, int Index2)
 {
 	UnicodeString name1 = get_dir_name(get_pre_tab(List->Strings[Index1]));
@@ -23,7 +23,7 @@ int __fastcall DistrCmp_Name(TStringList *List, int Index1, int Index2)
 	return StrCmpLogicalW(name1.c_str(), name2.c_str());
 }
 //---------------------------------------------------------------------------
-//U‚è•ª‚¯æ
+//æŒ¯ã‚Šåˆ†ã‘å…ˆ
 int __fastcall DistrCmp_Dest(TStringList *List, int Index1, int Index2)
 {
 	UnicodeString dst1 = get_post_tab(List->Strings[Index1]);
@@ -33,7 +33,7 @@ int __fastcall DistrCmp_Dest(TStringList *List, int Index1, int Index2)
 }
 
 //---------------------------------------------------------------------------
-// TDistributionDlg ƒNƒ‰ƒX
+// TDistributionDlg ã‚¯ãƒ©ã‚¹
 //---------------------------------------------------------------------------
 __fastcall TDistributionDlg::TDistributionDlg(TComponent* Owner)
 	: TForm(Owner)
@@ -50,10 +50,10 @@ void __fastcall TDistributionDlg::FormCreate(TObject *Sender)
 	DistrList = new TStringList();
 
 	set_ComboBoxText(SameNameComboBox,
-		_T("‹­§ã‘‚«\n")
-		_T("ÅV‚È‚çã‘‚«\n")
-		_T("ƒXƒLƒbƒv\n")
-		_T("©“®“I‚É–¼‘O‚ğ•ÏX\n"));
+		_T("å¼·åˆ¶ä¸Šæ›¸ã\n")
+		_T("æœ€æ–°ãªã‚‰ä¸Šæ›¸ã\n")
+		_T("ã‚¹ã‚­ãƒƒãƒ—\n")
+		_T("è‡ªå‹•çš„ã«åå‰ã‚’å¤‰æ›´\n"));
 
 	SttPrgBar = new SttProgressBar(StatusBar1, 2);
 	SttPrgBar->MsgIndex = 1;
@@ -64,16 +64,16 @@ void __fastcall TDistributionDlg::FormShow(TObject *Sender)
 {
 	IniFile->LoadPosInfo(this, DialogCenter);
 
-	UnicodeString tit = "U‚è•ª‚¯ - ";
+	UnicodeString tit = "æŒ¯ã‚Šåˆ†ã‘ - ";
 
-	//“o˜^ƒtƒ@ƒCƒ‹‚ª‚ ‚ê‚Î‚»‚ê‚ğ“Ç‚İ‚Ş
+	//ç™»éŒ²ãƒ•ã‚¡ã‚¤ãƒ«ãŒã‚ã‚Œã°ãã‚Œã‚’èª­ã¿è¾¼ã‚€
 	DistrFile = to_absolute_name(IniFile->ReadStrGen(_T("DistrDlgFileName"),	DISTR_FILE));
 	if (file_exists(DistrFile)) {
 		LoadDistrFile();
 		tit += ExtractFileName(DistrFile);
 	}
 	else {
-		//“o˜^ƒtƒ@ƒCƒ‹‚ª‚È‚¢ê‡A“ñd‹N“®‘¤‚Å‚ÍŒ»“_‚ÌINIƒtƒ@ƒCƒ‹‚©‚çæ“¾
+		//ç™»éŒ²ãƒ•ã‚¡ã‚¤ãƒ«ãŒãªã„å ´åˆã€äºŒé‡èµ·å‹•å´ã§ã¯ç¾æ™‚ç‚¹ã®INIãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰å–å¾—
 		if (!IsPrimary) {
 			std::unique_ptr<UsrIniFile> tmp_ini_file(new UsrIniFile(IniFile->FileName));
 			DistrDefList->Clear();
@@ -115,7 +115,7 @@ void __fastcall TDistributionDlg::FormShow(TObject *Sender)
 		ListSplitter->Align   = alRight;
 	}
 
-	InitializeListHeader(PrvListHeader, _T("ƒtƒ@ƒCƒ‹–¼|U‚è•ª‚¯æ"));
+	InitializeListHeader(PrvListHeader, _T("ãƒ•ã‚¡ã‚¤ãƒ«å|æŒ¯ã‚Šåˆ†ã‘å…ˆ"));
 	PrvListHeader->Sections->Items[0]->Width = IniFile->ReadScaledIntGen(_T("DistrDlgPrvHdrW0"), 300, this);
 	PrvListHeader->Sections->Items[1]->Width = ClientWidth - PrvListHeader->Sections->Items[0]->Width;
 	PrvSortMode = IniFile->ReadIntGen(_T("DistrDlgSortMode"));
@@ -140,7 +140,7 @@ void __fastcall TDistributionDlg::WmFormShowed(TMessage &msg)
 	Repaint();
 	UpdatePreview();
 
-	//’¼‚¿‚ÉÀs
+	//ç›´ã¡ã«å®Ÿè¡Œ
 	if (ImmediateExe) {
 		ImmediateExe = false;
 		ModalResult  = mrOk;
@@ -169,11 +169,11 @@ void __fastcall TDistributionDlg::FormClose(TObject *Sender, TCloseAction &Actio
 	IniFile->WriteIntGen( _T("DistrDlgSortMode"),		PrvSortMode);
 	IniFile->WriteStrGen( _T("DistrDlgLastDir"),		LastDistDir);
 
-	//“o˜^ƒtƒ@ƒCƒ‹‚ª‚ ‚ê‚Î‚»‚ê‚ğXV
+	//ç™»éŒ²ãƒ•ã‚¡ã‚¤ãƒ«ãŒã‚ã‚Œã°ãã‚Œã‚’æ›´æ–°
 	if (file_exists(DistrFile)) {
 		SaveDistrFile();
 	}
-	//“o˜^ƒtƒ@ƒCƒ‹‚ª‚È‚¢ê‡AƒƒCƒ“‘¤‚Å‚ÍINIƒtƒ@ƒCƒ‹‚É•Û‘¶
+	//ç™»éŒ²ãƒ•ã‚¡ã‚¤ãƒ«ãŒãªã„å ´åˆã€ãƒ¡ã‚¤ãƒ³å´ã§ã¯INIãƒ•ã‚¡ã‚¤ãƒ«ã«ä¿å­˜
 	else if (IsPrimary) {
 		SaveOptions();
 		UpdateIniFile(IniFile);
@@ -201,9 +201,9 @@ void __fastcall TDistributionDlg::FormKeyDown(TObject *Sender, WORD &Key, TShift
 	SpecialKeyProc(this, Key, Shift);
 }
 //---------------------------------------------------------------------------
-//ƒXƒe[ƒ^ƒXƒo[‚Ì•`‰æ
+//ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒãƒ¼ã®æç”»
 //---------------------------------------------------------------------------
-//“o˜^“à—e‚ğƒŠƒXƒgƒ{ƒbƒNƒX‚ÉŠ„‚è“–‚Ä
+//ç™»éŒ²å†…å®¹ã‚’ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã«å‰²ã‚Šå½“ã¦
 //---------------------------------------------------------------------------
 void __fastcall TDistributionDlg::AssignRegListBox()
 {
@@ -211,14 +211,14 @@ void __fastcall TDistributionDlg::AssignRegListBox()
 	lp->Tag = RegEnabled? 0 : LBTAG_OPT_INHI;
 	lp->Items->Assign(DistrDefList);
 	for (int i=0; i<lp->Count; i++) {
-		//ƒ^ƒCƒgƒ‹,—LŒø,ƒ}ƒXƒN,U‚è•ª‚¯æ
+		//ã‚¿ã‚¤ãƒˆãƒ«,æœ‰åŠ¹,ãƒã‚¹ã‚¯,æŒ¯ã‚Šåˆ†ã‘å…ˆ
 		lp->Checked[i] = equal_1(get_csv_item(lp->Items->Strings[i], 1));
 	}
 	lp->ItemIndex = -1;
 }
 
 //---------------------------------------------------------------------------
-//U‚è•ª‚¯“o˜^ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ
+//æŒ¯ã‚Šåˆ†ã‘ç™»éŒ²ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿
 //---------------------------------------------------------------------------
 bool __fastcall TDistributionDlg::LoadDistrFile()
 {
@@ -231,11 +231,11 @@ bool __fastcall TDistributionDlg::LoadDistrFile()
 		return true;
 	}
 
-	msgbox_ERR("•s³‚ÈU‚è•ª‚¯“o˜^ƒtƒ@ƒCƒ‹‚Å‚·B");
+	msgbox_ERR("ä¸æ­£ãªæŒ¯ã‚Šåˆ†ã‘ç™»éŒ²ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚");
 	return false;
 }
 //---------------------------------------------------------------------------
-//U‚è•ª‚¯“o˜^ƒtƒ@ƒCƒ‹‚Ì•Û‘¶
+//æŒ¯ã‚Šåˆ†ã‘ç™»éŒ²ãƒ•ã‚¡ã‚¤ãƒ«ã®ä¿å­˜
 //---------------------------------------------------------------------------
 bool __fastcall TDistributionDlg::SaveDistrFile()
 {
@@ -248,7 +248,7 @@ bool __fastcall TDistributionDlg::SaveDistrFile()
 }
 
 //---------------------------------------------------------------------------
-//ƒvƒŒƒrƒ…[‚Ìƒwƒbƒ_
+//ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®ãƒ˜ãƒƒãƒ€
 //---------------------------------------------------------------------------
 void __fastcall TDistributionDlg::PrvListHeaderDrawSection(THeaderControl *HeaderControl,
 	THeaderSection *Section, const TRect &Rect, bool Pressed)
@@ -273,14 +273,14 @@ void __fastcall TDistributionDlg::PrvListHeaderSectionClick(THeaderControl *Head
 }
 
 //---------------------------------------------------------------------------
-//ƒvƒŒƒrƒ…[•\¦‚ÌXV
+//ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼è¡¨ç¤ºã®æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TDistributionDlg::UpdatePreview(bool upd)
 {
 	SkipCount = 0;
 
 	StatusBar1->Panels->Items[0]->Text =
-		UnicodeString().sprintf(_T("“o˜^:%u/%u"), get_CheckListCount(RegListBox), RegListBox->Count);
+		UnicodeString().sprintf(_T("ç™»éŒ²:%u/%u"), get_CheckListCount(RegListBox), RegListBox->Count);
 
 	if (!upd) return;
 
@@ -293,9 +293,9 @@ void __fastcall TDistributionDlg::UpdatePreview(bool upd)
 	UnicodeString tmp;
 
 	cursor_HourGlass();
-	SttPrgBar->Begin(_T("ŒŸõ’†..."));
+	SttPrgBar->Begin(_T("æ¤œç´¢ä¸­..."));
 
-	//“K—pƒ‹[ƒ‹‚Ì’Šo
+	//é©ç”¨ãƒ«ãƒ¼ãƒ«ã®æŠ½å‡º
 	TCheckListBox *cp = RegListBox;
 	std::unique_ptr<TList> def_lst(new TList());
 	for (int i=0; i<cp->Count; i++) {
@@ -303,7 +303,7 @@ void __fastcall TDistributionDlg::UpdatePreview(bool upd)
 		TStringDynArray itm_buf = get_csv_array(cp->Items->Strings[i], DISTRLS_CSVITMCNT, true);
 		UnicodeString mask = itm_buf[2];
 		UnicodeString dnam = itm_buf[3];
-		//ƒŠƒXƒgƒtƒ@ƒCƒ‹
+		//ãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«
 		if (remove_top_AT(mask)) {
 			std::unique_ptr<TStringList> fbuf(new TStringList());
 			if (load_text_ex(to_absolute_name(mask), fbuf.get())==0) continue;
@@ -326,7 +326,7 @@ void __fastcall TDistributionDlg::UpdatePreview(bool upd)
 				}
 			}
 		}
-		//’Êí€–Ú
+		//é€šå¸¸é …ç›®
 		else {
 			bool is_regex = is_regex_slash(mask);
 			if (is_regex) {
@@ -341,7 +341,7 @@ void __fastcall TDistributionDlg::UpdatePreview(bool upd)
 		}
 	}
 
-	//ƒŠƒXƒg‚ğƒNƒŠƒA
+	//ãƒªã‚¹ãƒˆã‚’ã‚¯ãƒªã‚¢
 	TListBox *lp = PrvListBox;
 	lp->Count = 0;
 	TStringList *lst = DistrList;
@@ -361,11 +361,11 @@ void __fastcall TDistributionDlg::UpdatePreview(bool upd)
 		for (int j=0; j<def_lst->Count; j++) {
 			def_rec *dp = (def_rec*)def_lst->Items[j];
 			UnicodeString dnam = dp->dnam;
-			//³‹K•\Œ»
+			//æ­£è¦è¡¨ç¾
 			if (dp->is_regex) {
 				TMatch mt = TRegEx::Match(nnam, dp->mask, opt);
 				if (!mt.Success) continue;
-				//\1,\2...‚ğ’uŠ·
+				//\1,\2...ã‚’ç½®æ›
 				for (int k=1; k<mt.Groups.Count; k++) {
 					if (mt.Groups.Item[k].Success) {
 						UnicodeString v = mt.Groups.Item[k].Value;
@@ -373,7 +373,7 @@ void __fastcall TDistributionDlg::UpdatePreview(bool upd)
 					}
 				}
 			}
-			//ƒ}ƒXƒNƒ}ƒbƒ`
+			//ãƒã‚¹ã‚¯ãƒãƒƒãƒ
 			else if (!str_match(dp->mask, nnam)) {
 				continue;
 			}
@@ -394,11 +394,11 @@ void __fastcall TDistributionDlg::UpdatePreview(bool upd)
 
 	for (int i=0; i<def_lst->Count; i++) delete (def_rec*)def_lst->Items[i];
 
-	//ƒŠƒXƒgƒ{ƒbƒNƒX‚ÉŠ„‚è“–‚Ä(‰¼‘z)
+	//ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã«å‰²ã‚Šå½“ã¦(ä»®æƒ³)
 	lp->Count = DistrList->Count;
 
-	//ó‘Ô•\¦
-	tmp.sprintf(_T("ƒ}ƒbƒ`:%u/%u (%u Dirs/ %u Files"), m_cnt, ItemList->Count, d_cnt, f_cnt);
+	//çŠ¶æ…‹è¡¨ç¤º
+	tmp.sprintf(_T("ãƒãƒƒãƒ:%u/%u (%u Dirs/ %u Files"), m_cnt, ItemList->Count, d_cnt, f_cnt);
 	if (SkipCount>0) tmp.cat_sprintf(_T("  Skip:%u"), SkipCount);
 	tmp += ")";
 	SttPrgBar->End(tmp);
@@ -407,7 +407,7 @@ void __fastcall TDistributionDlg::UpdatePreview(bool upd)
 }
 
 //---------------------------------------------------------------------------
-//U‚è•ª‚¯’è‹`ƒŠƒXƒg‚Ì•`‰æ
+//æŒ¯ã‚Šåˆ†ã‘å®šç¾©ãƒªã‚¹ãƒˆã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TDistributionDlg::RegListBoxDrawItem(TWinControl *Control, int Index,
 	TRect &Rect, TOwnerDrawState State)
@@ -435,19 +435,19 @@ void __fastcall TDistributionDlg::RegListBoxDrawItem(TWinControl *Control, int I
 	cv->TextOut(xp, yp, cur_buf[0]);	xp += w_tit + SCALED_THIS(8);
 	cv->TextOut(xp, yp, cur_buf[2]);	xp += w_msk + SCALED_THIS(4);
 	if (!starts_AT(cur_buf[2])) {
-		out_Text(cv, xp, yp, _T("¨"));	xp += cv->TextWidth("¨") + SCALED_THIS(4);
+		out_Text(cv, xp, yp, _T("â†’"));	xp += cv->TextWidth("â†’") + SCALED_THIS(4);
 		cv->TextOut(xp, yp, cur_buf[3]);
 	}
 }
 //---------------------------------------------------------------------------
 void __fastcall TDistributionDlg::RegListBoxClickCheck(TObject *Sender)
 {
-	//ƒ`ƒFƒbƒNó‘Ô‚ğ”½‰f
+	//ãƒã‚§ãƒƒã‚¯çŠ¶æ…‹ã‚’åæ˜ 
 	TCheckListBox *lp = RegListBox;
 	int idx = lp->ItemIndex;
 	if (idx!=-1) {
 		UpdateListItem(idx);
-		//“¯ˆêƒ^ƒCƒgƒ‹‚ğ“¯‚Éƒ`ƒFƒbƒN
+		//åŒä¸€ã‚¿ã‚¤ãƒˆãƒ«ã‚’åŒæ™‚ã«ãƒã‚§ãƒƒã‚¯
 		if (GroupCheckAction->Checked) {
 			TStringDynArray itm_buf = get_csv_array(lp->Items->Strings[idx], DISTRLS_CSVITMCNT, true);
 			UnicodeString tit = itm_buf[0];
@@ -475,7 +475,7 @@ void __fastcall TDistributionDlg::RegListBoxClick(TObject *Sender)
 		DistrMaskEdit->Text = itm_buf[2];
 		DistrDirEdit->Text	= itm_buf[3];
 
-		//ƒŠƒXƒgƒtƒ@ƒCƒ‹‚ÌƒvƒŒƒrƒ…[
+		//ãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼
 		TListBox *lp = ListListBox;
 		lp->Clear();
 		if (lp->Visible) {
@@ -495,14 +495,14 @@ void __fastcall TDistributionDlg::RegListBoxClick(TObject *Sender)
 								if (split_strings_tab(lbuf).Length==2) ok_cnt++; else ng_cnt++;
 							}
 							if (ng_cnt>0)
-								TextAbort(_T("ƒŠƒXƒgƒtƒ@ƒCƒ‹‚Ì‘®‚ªŠÔˆá‚Á‚Ä‚¢‚Ü‚·B\n")
-										  _T("ƒ}ƒXƒN/ƒpƒ^[ƒ“‚ÆU‚è•ª‚¯æ‚ğƒ^ƒu‚Å‹æØ‚Á‚Ä‹Lq‚µ‚Ä‚­‚¾‚³‚¢B"));
+								TextAbort(_T("ãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®æ›¸å¼ãŒé–“é•ã£ã¦ã„ã¾ã™ã€‚\n")
+										  _T("ãƒã‚¹ã‚¯/ãƒ‘ã‚¿ãƒ¼ãƒ³ã¨æŒ¯ã‚Šåˆ†ã‘å…ˆã‚’ã‚¿ãƒ–ã§åŒºåˆ‡ã£ã¦è¨˜è¿°ã—ã¦ãã ã•ã„ã€‚"));
 							else if (ok_cnt==0)
-								TextAbort(_T("ƒŠƒXƒgƒtƒ@ƒCƒ‹‚É—LŒø‚È“o˜^“à—e‚ª‚ ‚è‚Ü‚¹‚ñB"));
+								TextAbort(_T("ãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã«æœ‰åŠ¹ãªç™»éŒ²å†…å®¹ãŒã‚ã‚Šã¾ã›ã‚“ã€‚"));
 						}
 						else UserAbort(USTR_FaildLoad);
 					}
-					else throw EAbort(LoadUsrMsg(USTR_NotFound, _T("ƒŠƒXƒgƒtƒ@ƒCƒ‹")));
+					else throw EAbort(LoadUsrMsg(USTR_NotFound, _T("ãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«")));
 				}
 				catch (EAbort &e) {
 					lp->EndDrag(false);
@@ -536,7 +536,7 @@ void __fastcall TDistributionDlg::RegListBoxKeyDown(TObject *Sender, WORD &Key, 
 }
 
 //---------------------------------------------------------------------------
-//ƒŠƒXƒgƒtƒ@ƒCƒ‹‚ÌƒvƒŒƒrƒ…[‚ğ•`‰æ
+//ãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚’æç”»
 //---------------------------------------------------------------------------
 void __fastcall TDistributionDlg::ListListBoxDrawItem(TWinControl *Control, int Index,
 	TRect &Rect, TOwnerDrawState State)
@@ -572,7 +572,7 @@ void __fastcall TDistributionDlg::ListListBoxKeyDown(TObject *Sender, WORD &Key,
 }
 
 //---------------------------------------------------------------------------
-//ƒvƒŒƒrƒ…[‚Ì•`‰æ
+//ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TDistributionDlg::PrvListBoxDrawItem(TWinControl *Control, int Index,
 	TRect &Rect, TOwnerDrawState State)
@@ -597,8 +597,8 @@ void __fastcall TDistributionDlg::PrvListBoxDrawItem(TWinControl *Control, int I
 	int wd = sp->Items[0]->Width;
 	cv->TextOut(xp, yp, minimize_str(fnam, cv, wd, OmitEndOfName));
 	xp += wd + SCALED_THIS(4);
-	out_Text(cv, xp, yp, _T("¨"));
-	xp += cv->TextWidth("¨") + SCALED_THIS(4);
+	out_Text(cv, xp, yp, _T("â†’"));
+	xp += cv->TextWidth("â†’") + SCALED_THIS(4);
 
 	cv->Font->Color = (SameText(pnam, anam) || (!CreDistrDirCheckBox->Checked && !dir_exists(anam)))? col_Error : get_TextColor();
 	cv->TextOut(xp, yp, yen_to_delimiter(dnam));
@@ -612,7 +612,7 @@ void __fastcall TDistributionDlg::PrvListBoxData(TWinControl *Control, int Index
 //---------------------------------------------------------------------------
 void __fastcall TDistributionDlg::PrvListBoxDblClick(TObject *Sender)
 {
-	//ŠY“–‚·‚é“o˜^€–Ú‚ğŒŸõ
+	//è©²å½“ã™ã‚‹ç™»éŒ²é …ç›®ã‚’æ¤œç´¢
 	UnicodeString nnam = get_dir_name(get_pre_tab(ListBoxGetStr(PrvListBox)));
 	if (!nnam.IsEmpty()) {
 		TCheckListBox *cp = RegListBox;
@@ -620,7 +620,7 @@ void __fastcall TDistributionDlg::PrvListBoxDblClick(TObject *Sender)
 		for (int i=0; i<cp->Count && cp->ItemIndex==-1; i++) {
 			if (!cp->Checked[i]) continue;
 			UnicodeString mask = get_csv_item(cp->Items->Strings[i], 2);
-			//ƒŠƒXƒgƒtƒ@ƒCƒ‹
+			//ãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«
 			if (remove_top_AT(mask)) {
 				UnicodeString lnam = to_absolute_name(mask);
 				std::unique_ptr<TStringList> fbuf(new TStringList());
@@ -636,7 +636,7 @@ void __fastcall TDistributionDlg::PrvListBoxDblClick(TObject *Sender)
 					}
 				}
 			}
-			//’Êí€–Ú
+			//é€šå¸¸é …ç›®
 			else if (MatchRegMask(mask, nnam)) {
 				cp->ItemIndex = i;
 				RegListBoxClick(NULL);
@@ -645,11 +645,11 @@ void __fastcall TDistributionDlg::PrvListBoxDblClick(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹–¼‚ªƒ}ƒXƒN‚Éƒ}ƒbƒ`‚·‚é‚©?
+//ãƒ•ã‚¡ã‚¤ãƒ«åãŒãƒã‚¹ã‚¯ã«ãƒãƒƒãƒã™ã‚‹ã‹?
 //---------------------------------------------------------------------------
 bool __fastcall TDistributionDlg::MatchRegMask(
-	UnicodeString mask,		//ƒ}ƒXƒN
-	UnicodeString nnam)		//ƒtƒ@ƒCƒ‹–¼
+	UnicodeString mask,		//ãƒã‚¹ã‚¯
+	UnicodeString nnam)		//ãƒ•ã‚¡ã‚¤ãƒ«å
 {
 	if (is_regex_slash(mask)) {
 		mask = exclude_top_end(mask);
@@ -662,7 +662,7 @@ bool __fastcall TDistributionDlg::MatchRegMask(
 }
 
 //---------------------------------------------------------------------------
-//ƒ`ƒFƒbƒNó‘Ô‚ğƒf[ƒ^‚É”½‰f
+//ãƒã‚§ãƒƒã‚¯çŠ¶æ…‹ã‚’ãƒ‡ãƒ¼ã‚¿ã«åæ˜ 
 //---------------------------------------------------------------------------
 void __fastcall TDistributionDlg::UpdateListItem(int idx)
 {
@@ -685,7 +685,7 @@ void __fastcall TDistributionDlg::CheckBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//“o˜^€–Ú•¶š—ñ‚ğì¬
+//ç™»éŒ²é …ç›®æ–‡å­—åˆ—ã‚’ä½œæˆ
 //---------------------------------------------------------------------------
 UnicodeString __fastcall TDistributionDlg::MakeRegItem(int idx)
 {
@@ -697,7 +697,7 @@ UnicodeString __fastcall TDistributionDlg::MakeRegItem(int idx)
 }
 
 //---------------------------------------------------------------------------
-//“o˜^
+//ç™»éŒ²
 //---------------------------------------------------------------------------
 void __fastcall TDistributionDlg::AddRegActionExecute(TObject *Sender)
 {
@@ -733,7 +733,7 @@ void __fastcall TDistributionDlg::AddRegActionUpdate(TObject *Sender)
 		(RegEnabled && !TitleEdit->Text.IsEmpty() && !mask.IsEmpty() && !regex_ng && !lstfl_ng && RegListBox->Count<200);	//***
 }
 //---------------------------------------------------------------------------
-//•ÏX
+//å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TDistributionDlg::ChgRegActionExecute(TObject *Sender)
 {
@@ -745,7 +745,7 @@ void __fastcall TDistributionDlg::ChgRegActionExecute(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//íœ
+//å‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TDistributionDlg::DelRegActionExecute(TObject *Sender)
 {
@@ -765,7 +765,7 @@ void __fastcall TDistributionDlg::ChgRegActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒŠƒXƒgƒtƒ@ƒCƒ‹‚Ì•ÒW
+//ãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®ç·¨é›†
 //---------------------------------------------------------------------------
 void __fastcall TDistributionDlg::EditListActionExecute(TObject *Sender)
 {
@@ -796,11 +796,11 @@ void __fastcall TDistributionDlg::EditListActionUpdate(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//ƒŠƒXƒgƒtƒ@ƒCƒ‹‚ÌQÆ
+//ãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TDistributionDlg::RefListBtnClick(TObject *Sender)
 {
-	UserModule->PrepareOpenDlg(_T("ƒŠƒXƒgƒtƒ@ƒCƒ‹‚Ìw’è"), F_FILTER_TXT, NULL);
+	UserModule->PrepareOpenDlg(_T("ãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®æŒ‡å®š"), F_FILTER_TXT, NULL);
 	UnicodeString fnam;
 	if (UserModule->OpenDlgToStr(fnam, true)) {
 		DistrMaskEdit->Text = "@" + fnam;
@@ -808,16 +808,16 @@ void __fastcall TDistributionDlg::RefListBtnClick(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//U‚è•ª‚¯æ‚ÌQÆ
+//æŒ¯ã‚Šåˆ†ã‘å…ˆã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TDistributionDlg::RefDirButtonClick(TObject *Sender)
 {
-	if (UserModule->SelectDirEx(_T("U‚è•ª‚¯æ"), LastDistDir))
+	if (UserModule->SelectDirEx(_T("æŒ¯ã‚Šåˆ†ã‘å…ˆ"), LastDistDir))
 		DistrDirEdit->Text = ReplaceStr(ExcludeTrailingPathDelimiter(LastDistDir), "\\", "\\\\");
 }
 
 //---------------------------------------------------------------------------
-//“o˜^€–Ú‚ÌŒŸõ
+//ç™»éŒ²é …ç›®ã®æ¤œç´¢
 //---------------------------------------------------------------------------
 bool __fastcall TDistributionDlg::MatchRegItem(int idx)
 {
@@ -846,7 +846,7 @@ void __fastcall TDistributionDlg::FindEditKeyDown(TObject *Sender, WORD &Key, TS
 	else if (Key==VK_DOWN)	{ FindDownAction->Execute();	Key = 0; }
 }
 //---------------------------------------------------------------------------
-//‰º•ûŒü‚ÉŒŸõ
+//ä¸‹æ–¹å‘ã«æ¤œç´¢
 //---------------------------------------------------------------------------
 void __fastcall TDistributionDlg::FindDownActionExecute(TObject *Sender)
 {
@@ -868,7 +868,7 @@ void __fastcall TDistributionDlg::FindDownActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = (idx!=-1 && idx>lp->ItemIndex);
 }
 //---------------------------------------------------------------------------
-//ã•ûŒü‚ÉŒŸõ
+//ä¸Šæ–¹å‘ã«æ¤œç´¢
 //---------------------------------------------------------------------------
 void __fastcall TDistributionDlg::FindUpActionExecute(TObject *Sender)
 {
@@ -897,21 +897,21 @@ void __fastcall TDistributionDlg::CreDistrDirCheckBoxClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒs[ŠJn
+//ã‚³ãƒ”ãƒ¼é–‹å§‹
 //---------------------------------------------------------------------------
 void __fastcall TDistributionDlg::ExeCopyActionExecute(TObject *Sender)
 {
-	if (msgbox_Sure(_T("U‚è•ª‚¯(ƒRƒs[)‚ğŠJn‚µ‚Ü‚·‚©?"), SureCopy)) {
+	if (msgbox_Sure(_T("æŒ¯ã‚Šåˆ†ã‘(ã‚³ãƒ”ãƒ¼)ã‚’é–‹å§‹ã—ã¾ã™ã‹?"), SureCopy)) {
 		IsMove		= false;
 		ModalResult = mrOk;
 	}
 }
 //---------------------------------------------------------------------------
-//ˆÚ“®ŠJn
+//ç§»å‹•é–‹å§‹
 //---------------------------------------------------------------------------
 void __fastcall TDistributionDlg::ExeMoveActionExecute(TObject *Sender)
 {
-	if (msgbox_Sure(_T("U‚è•ª‚¯(ˆÚ“®)‚ğŠJn‚µ‚Ü‚·‚©?"), SureMove)) {
+	if (msgbox_Sure(_T("æŒ¯ã‚Šåˆ†ã‘(ç§»å‹•)ã‚’é–‹å§‹ã—ã¾ã™ã‹?"), SureMove)) {
 		IsMove		= true;
 		ModalResult = mrOk;
 	}
@@ -923,33 +923,33 @@ void __fastcall TDistributionDlg::ExeActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//U‚è•ª‚¯“o˜^ƒtƒ@ƒCƒ‹‚ğì¬
+//æŒ¯ã‚Šåˆ†ã‘ç™»éŒ²ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆ
 //---------------------------------------------------------------------------
 void __fastcall TDistributionDlg::MakeFileActionExecute(TObject *Sender)
 {
-	UserModule->PrepareSaveDlg(_T("U‚è•ª‚¯“o˜^ƒtƒ@ƒCƒ‹‚Ìì¬"), F_FILTER_INI, _T(DISTR_FILE));
+	UserModule->PrepareSaveDlg(_T("æŒ¯ã‚Šåˆ†ã‘ç™»éŒ²ãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆ"), F_FILTER_INI, _T(DISTR_FILE));
 	UnicodeString fnam = UserModule->SaveDlgExecute();
 	if (!fnam.IsEmpty()) {
 		DistrFile = fnam;
 		if (SaveDistrFile()) {
 			IniFile->WriteStrGen(_T("DistrDlgFileName"),	to_relative_name(DistrFile));
-			Caption = "U‚è•ª‚¯ - " + ExtractFileName(DistrFile);
+			Caption = "æŒ¯ã‚Šåˆ†ã‘ - " + ExtractFileName(DistrFile);
 			msgbox_OK(UnicodeString().sprintf(
-				_T("U‚è•ª‚¯“o˜^ƒtƒ@ƒCƒ‹ %s ‚ğì¬‚µ‚Ü‚µ‚½B"), ExtractFileName(DistrFile).c_str()));
+				_T("æŒ¯ã‚Šåˆ†ã‘ç™»éŒ²ãƒ•ã‚¡ã‚¤ãƒ« %s ã‚’ä½œæˆã—ã¾ã—ãŸã€‚"), ExtractFileName(DistrFile).c_str()));
 		}
 	}
 }
 //---------------------------------------------------------------------------
-//U‚è•ª‚¯“o˜^ƒtƒ@ƒCƒ‹‚ğ‘I‘ğ
+//æŒ¯ã‚Šåˆ†ã‘ç™»éŒ²ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é¸æŠ
 //---------------------------------------------------------------------------
 void __fastcall TDistributionDlg::SelFileActionExecute(TObject *Sender)
 {
-	UserModule->PrepareOpenDlg(_T("U‚è•ª‚¯“o˜^ƒtƒ@ƒCƒ‹‚Ì‘I‘ğ"), F_FILTER_INI, _T("*.INI"));
+	UserModule->PrepareOpenDlg(_T("æŒ¯ã‚Šåˆ†ã‘ç™»éŒ²ãƒ•ã‚¡ã‚¤ãƒ«ã®é¸æŠ"), F_FILTER_INI, _T("*.INI"));
 	UnicodeString fnam = UserModule->OpenDlgExecute();
 	if (!fnam.IsEmpty()) {
 		DistrFile = fnam;
 		if (LoadDistrFile()) {
-			Caption = "U‚è•ª‚¯ - " + ExtractFileName(DistrFile);
+			Caption = "æŒ¯ã‚Šåˆ†ã‘ - " + ExtractFileName(DistrFile);
 			AssignRegListBox();
 			UpdatePreview();
 		}
@@ -957,7 +957,7 @@ void __fastcall TDistributionDlg::SelFileActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//“¯ˆêƒ^ƒCƒgƒ‹‚ğ“¯‚Éİ’è
+//åŒä¸€ã‚¿ã‚¤ãƒˆãƒ«ã‚’åŒæ™‚ã«è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall TDistributionDlg::GroupCheckActionExecute(TObject *Sender)
 {
@@ -965,7 +965,7 @@ void __fastcall TDistributionDlg::GroupCheckActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒŠƒXƒgƒtƒ@ƒCƒ‹‚ÌƒvƒŒƒrƒ…[‚ğ•\¦
+//ãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚’è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TDistributionDlg::PrvListActionExecute(TObject *Sender)
 {

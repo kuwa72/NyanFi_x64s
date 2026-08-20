@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ê›íËçÄñ⁄ÇÃï“èWÉ_ÉCÉAÉçÉO											//
+//  Ë®≠ÂÆöÈ†ÖÁõÆ„ÅÆÁ∑®ÈõÜ„ÉÄ„Ç§„Ç¢„É≠„Ç∞											//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -40,7 +40,7 @@ void __fastcall TEditItemDlg::FormClose(TObject *Sender, TCloseAction &Action)
 	RetStr = EmptyStr;
 	if (ModalResult==mrOk) {
 		UnicodeString tit = ItemEdit->EditLabel->Caption;
-		if (remove_top_s(tit, "ÉpÉXÉ}ÉXÉN")) {
+		if (remove_top_s(tit, "„Éë„Çπ„Éû„Çπ„ÇØ")) {
 			UnicodeString dsc = get_tkn(get_tkn_r(tit, ':'), ':');
 			if (!dsc.IsEmpty()) RetStr.cat_sprintf(_T(":%s:"), dsc.c_str());
 		}
@@ -83,7 +83,7 @@ void __fastcall TEditItemDlg::AssignItems(TControl *cp)
 		lbuf = ((TCustomEdit *)cp)->Text;
 	}
 	else if (class_is_ComboBox(cp)) {
-		//àÍî‘ãﬂÇ¢ÉâÉxÉãÇå©Ç¬ÇØÇÈ
+		//‰∏ÄÁï™Ëøë„ÅÑ„É©„Éô„É´„ÇíË¶ã„Å§„Åë„Çã
 		TWinControl *wp = cp->Parent;
 		if (wp) {
 			double min_s = 9999;
@@ -107,7 +107,7 @@ void __fastcall TEditItemDlg::AssignItems(TControl *cp)
 		tit = (Screen->ActiveForm!=Application->MainForm)? Screen->ActiveForm->Caption : EmptyStr;
 
 	UnicodeString dsc = split_dsc(lbuf);
-	if (StartsStr("ÉpÉXÉ}ÉXÉN", tit) && !dsc.IsEmpty()) tit.cat_sprintf(_T(" :%s:"), dsc.c_str());
+	if (StartsStr("„Éë„Çπ„Éû„Çπ„ÇØ", tit) && !dsc.IsEmpty()) tit.cat_sprintf(_T(" :%s:"), dsc.c_str());
 	ItemEdit->EditLabel->Caption = tit;
 
 	ItemDelimiter = StartsStr('.', cp->Hint)? "." : ";";
@@ -118,9 +118,9 @@ void __fastcall TEditItemDlg::AssignItems(TControl *cp)
 
 //---------------------------------------------------------------------------
 void __fastcall TEditItemDlg::AssignText(
-	UnicodeString tit,				//ÉvÉçÉìÉvÉg
-	UnicodeString s,				//ê›íËï∂éöóÒ
-	UnicodeString delimiter)		//ãÊêÿÇË	(default = ";")
+	UnicodeString tit,				//„Éó„É≠„É≥„Éó„Éà
+	UnicodeString s,				//Ë®≠ÂÆöÊñáÂ≠óÂàó
+	UnicodeString delimiter)		//Âå∫Âàá„Çä	(default = ";")
 {
 	ItemEdit->EditLabel->Caption = tit;
 	ItemDelimiter = delimiter;
@@ -130,7 +130,7 @@ void __fastcall TEditItemDlg::AssignText(
 }
 
 //---------------------------------------------------------------------------
-//í«â¡
+//ËøΩÂä†
 //---------------------------------------------------------------------------
 void __fastcall TEditItemDlg::AddItemActionExecute(TObject *Sender)
 {
@@ -152,7 +152,7 @@ void __fastcall TEditItemDlg::AddItemActionUpdate(TObject *Sender)
 	((TAction *)Sender)->Enabled = !ItemEdit->Text.IsEmpty();
 }
 //---------------------------------------------------------------------------
-//ïœçX
+//Â§âÊõ¥
 //---------------------------------------------------------------------------
 void __fastcall TEditItemDlg::ChgItemActionExecute(TObject *Sender)
 {
@@ -169,7 +169,7 @@ void __fastcall TEditItemDlg::ChgItemActionUpdate(TObject *Sender)
 	((TAction *)Sender)->Enabled = (ItemListBox->ItemIndex!=-1) && !ItemEdit->Text.IsEmpty();
 }
 //---------------------------------------------------------------------------
-//É\Å[Ég
+//„ÇΩ„Éº„Éà
 //---------------------------------------------------------------------------
 void __fastcall TEditItemDlg::SortItemActionExecute(TObject *Sender)
 {

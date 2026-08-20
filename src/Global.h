@@ -1,6 +1,6 @@
 /**
  * @file Global.h
- * @brief ƒOƒ[ƒoƒ‹•Ï”/ŠÖ”
+ * @brief ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°/é–¢æ•°
  */
 //---------------------------------------------------------------------------
 #ifndef GlobalH
@@ -32,79 +32,79 @@
 #include "thumb_thread.h"
 
 //---------------------------------------------------------------------------
-/** @defgroup DEFINE ’è‹` */
+/** @defgroup DEFINE å®šç¾© */
 /** @{ */
 //---------------------------------------------------------------------------
 #define SUPPORT_URL	"https://github.com/Nekomimi1958/NyanFi_x64s"
 #define RELEASE_URL	"https://api.github.com/repos/Nekomimi1958/NyanFi_x64s/releases/latest"
 
 //---------------------------------------------------------------------------
-#define WM_FORM_SHOWED		(WM_APP + 1)	//!< ƒtƒH[ƒ€‚ª•\¦‚³‚ê‚½
-#define WM_NYANFI_APPEAR	(WM_APP + 100)	//!< ƒfƒUƒCƒ“AƒtƒHƒ“ƒgA”zF‚ª•ÏX‚³‚ê‚½
-#define WM_NYANFI_FLICON	(WM_APP + 101)	//!< ƒAƒCƒRƒ“‚ğæ“¾‚µ‚½
-#define WM_NYANFI_THUMBNAIL	(WM_APP + 102)	//!< ƒTƒ€ƒlƒCƒ‹‚ğæ“¾‚µ‚½
-#define WM_NYANFI_CLPCOPIED	(WM_APP + 103)	//!< ƒNƒŠƒbƒvƒ{[ƒh‚ÉƒRƒs[‚µ‚½
-#define WM_NYANFI_PLAYLIST	(WM_APP + 104)	//!< ƒvƒŒƒCƒŠƒXƒg’Ê’m
-#define WM_NYANFI_LOCKKEY	(WM_APP + 105)	//!< LockKeyMouse “®ì’†‚ÌƒL[ˆ—
-#define WM_NYANFI_CLSEDITM	(WM_APP + 106)	//!< İ’è€–Ú‚Ì•ÒWƒ_ƒCƒAƒƒO‚ğ•Â‚¶‚½
-#define WM_NYANFI_GREP_END	(WM_APP + 110)	//!< GREPŠ®—¹
+#define WM_FORM_SHOWED		(WM_APP + 1)	//!< ãƒ•ã‚©ãƒ¼ãƒ ãŒè¡¨ç¤ºã•ã‚ŒãŸ
+#define WM_NYANFI_APPEAR	(WM_APP + 100)	//!< ãƒ‡ã‚¶ã‚¤ãƒ³ã€ãƒ•ã‚©ãƒ³ãƒˆã€é…è‰²ãŒå¤‰æ›´ã•ã‚ŒãŸ
+#define WM_NYANFI_FLICON	(WM_APP + 101)	//!< ã‚¢ã‚¤ã‚³ãƒ³ã‚’å–å¾—ã—ãŸ
+#define WM_NYANFI_THUMBNAIL	(WM_APP + 102)	//!< ã‚µãƒ ãƒã‚¤ãƒ«ã‚’å–å¾—ã—ãŸ
+#define WM_NYANFI_CLPCOPIED	(WM_APP + 103)	//!< ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã«ã‚³ãƒ”ãƒ¼ã—ãŸ
+#define WM_NYANFI_PLAYLIST	(WM_APP + 104)	//!< ãƒ—ãƒ¬ã‚¤ãƒªã‚¹ãƒˆé€šçŸ¥
+#define WM_NYANFI_LOCKKEY	(WM_APP + 105)	//!< LockKeyMouse å‹•ä½œä¸­ã®ã‚­ãƒ¼å‡¦ç†
+#define WM_NYANFI_CLSEDITM	(WM_APP + 106)	//!< è¨­å®šé …ç›®ã®ç·¨é›†ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’é–‰ã˜ãŸ
+#define WM_NYANFI_GREP_END	(WM_APP + 110)	//!< GREPå®Œäº†
 
 //---------------------------------------------------------------------------
-//WM_COPYDATA ƒƒbƒZ[ƒW‚Ì¯•Ê”Ô†
-#define CPYDTID_OPTIONS	1		//!< ‹N“®ƒIƒvƒVƒ‡ƒ“
-#define CPYDTID_DPL_INF	2		//!< “ñd‹N“®‘¤‚©‚ç‚Ì‰æ–Êî•ñ
-#define CPYDTID_DPL_MSG	3		//!< “ñd‹N“®‘¤‚©‚ç‚Ì’Ê’mƒƒbƒZ[ƒW
-#define CPYDTID_TXTVIEW	4		//!< ƒeƒLƒXƒgƒrƒ…[ƒA‚ÅŠJ‚­
-#define CPYDTID_IMGVIEW	5		//!< ƒCƒ[ƒWƒrƒ…[ƒA‚ÅŠJ‚­
-#define CPYDTID_EXECMDS	6		//!< ƒRƒ}ƒ“ƒh‚ğÀs
+//WM_COPYDATA ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®è­˜åˆ¥ç•ªå·
+#define CPYDTID_OPTIONS	1		//!< èµ·å‹•ã‚ªãƒ—ã‚·ãƒ§ãƒ³
+#define CPYDTID_DPL_INF	2		//!< äºŒé‡èµ·å‹•å´ã‹ã‚‰ã®ç”»é¢æƒ…å ±
+#define CPYDTID_DPL_MSG	3		//!< äºŒé‡èµ·å‹•å´ã‹ã‚‰ã®é€šçŸ¥ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
+#define CPYDTID_TXTVIEW	4		//!< ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã§é–‹ã
+#define CPYDTID_IMGVIEW	5		//!< ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢ã§é–‹ã
+#define CPYDTID_EXECMDS	6		//!< ã‚³ãƒãƒ³ãƒ‰ã‚’å®Ÿè¡Œ
 /** @} */
 
 //---------------------------------------------------------------------------
-//‹N“®—pƒoƒbƒ`ƒtƒ@ƒCƒ‹
-extern UnicodeString RstBatName;		//!< Ä‹N“®—pƒoƒbƒ`ƒtƒ@ƒCƒ‹–¼
+//èµ·å‹•ç”¨ãƒãƒƒãƒãƒ•ã‚¡ã‚¤ãƒ«
+extern UnicodeString RstBatName;		//!< å†èµ·å‹•ç”¨ãƒãƒƒãƒãƒ•ã‚¡ã‚¤ãƒ«å
 
 //---------------------------------------------------------------------------
-//HTMLƒwƒ‹ƒv
-extern bool CancelHelp;					//!< [F1]‚ÉƒRƒ}ƒ“ƒh‚ªŠ„‚è“–‚Ä‚ç‚ê‚Ä‚¢‚½‚çƒwƒ‹ƒv‚ğ—}~
+//HTMLãƒ˜ãƒ«ãƒ—
+extern bool CancelHelp;					//!< [F1]ã«ã‚³ãƒãƒ³ãƒ‰ãŒå‰²ã‚Šå½“ã¦ã‚‰ã‚Œã¦ã„ãŸã‚‰ãƒ˜ãƒ«ãƒ—ã‚’æŠ‘æ­¢
 
 /**
- * @brief ƒwƒ‹ƒvƒgƒsƒbƒN‚ğŠJ‚­
- * @param topic ƒgƒsƒbƒN
+ * @brief ãƒ˜ãƒ«ãƒ—ãƒˆãƒ”ãƒƒã‚¯ã‚’é–‹ã
+ * @param topic ãƒˆãƒ”ãƒƒã‚¯
  */
 void HtmlHelpTopic(const _TCHAR *topic);
 
 /**
- * @brief ƒwƒ‹ƒv‚ğŠJ‚­
- * @param idx ƒRƒ“ƒeƒLƒXƒg
+ * @brief ãƒ˜ãƒ«ãƒ—ã‚’é–‹ã
+ * @param idx ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ
  */
 void HtmlHelpContext(int idx);
 
 /**
- * @brief ƒtƒ@ƒCƒ‹/ƒL[ƒ[ƒh‚ğw’è‚µ‚Äƒwƒ‹ƒv‚ğŠJ‚­(hhh.exe)
- * @param fnam ƒwƒ‹ƒvƒtƒ@ƒCƒ‹–¼
- * @param kwd ƒL[ƒ[ƒh
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«/ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ã‚’æŒ‡å®šã—ã¦ãƒ˜ãƒ«ãƒ—ã‚’é–‹ã(hhh.exe)
+ * @param fnam ãƒ˜ãƒ«ãƒ—ãƒ•ã‚¡ã‚¤ãƒ«å
+ * @param kwd ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰
  */
 void HtmlHelpKeyword(UnicodeString fnam, UnicodeString kwd);
 
-/** @brief ƒwƒ‹ƒv‚ğ•Â‚¶‚é */
+/** @brief ãƒ˜ãƒ«ãƒ—ã‚’é–‰ã˜ã‚‹ */
 void CloseHelpWnd();
 
-#define HELPTOPIC_TOP	"hid00001.htm"		//!< •\†
-#define HELPTOPIC_FL	"hid00005.htm"		//!< ƒtƒ@ƒCƒ‰[ - ƒRƒ}ƒ“ƒh
-#define HELPTOPIC_TV	"hid00006.htm"		//!< ƒeƒLƒXƒgƒrƒ…[ƒA
-#define HELPTOPIC_IV	"hid00007.htm"		//!< ƒCƒ[ƒWƒrƒ…[ƒA
-#define HELPTOPIC_IS	"hid00050.htm"		//!< ƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`
-#define HELPTOPIC_CI	"hid00100.htm"		//!< ƒRƒ}ƒ“ƒh‚Ìõˆø
-#define HELPTOPIC_CILW	"hid00100.htm#LW"	//!< ƒRƒ}ƒ“ƒh‚Ìõˆø(ƒƒOƒEƒBƒ“ƒhƒE)
-#define HELPTOPIC_FI	"hid00101.htm"		//!< ƒRƒ}ƒ“ƒh‚Ìõˆø(‹@”\•Ê)
-#define HELPTOPIC_XC	"hid00063.htm"		//!< ExeCommands ƒRƒ}ƒ“ƒh
-#define HELPTOPIC_GR	"hid00056.htm"		//!< •¶š—ñŒŸõ(GREP)
-#define HELPTOPIC_RP	"hid00061.htm"		//!< •¶š—ñ’uŠ·
-#define HELPTOPIC_GIT	"hid00090.htm"		//!< Git‚Ì—˜—p
-#define HELPTOPIC_CH	"hid00109.htm"		//!< •ÏX—š—ğ
+#define HELPTOPIC_TOP	"hid00001.htm"		//!< è¡¨ç´™
+#define HELPTOPIC_FL	"hid00005.htm"		//!< ãƒ•ã‚¡ã‚¤ãƒ©ãƒ¼ - ã‚³ãƒãƒ³ãƒ‰
+#define HELPTOPIC_TV	"hid00006.htm"		//!< ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢
+#define HELPTOPIC_IV	"hid00007.htm"		//!< ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢
+#define HELPTOPIC_IS	"hid00050.htm"		//!< ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ã‚¿ãƒ«ã‚µãƒ¼ãƒ
+#define HELPTOPIC_CI	"hid00100.htm"		//!< ã‚³ãƒãƒ³ãƒ‰ã®ç´¢å¼•
+#define HELPTOPIC_CILW	"hid00100.htm#LW"	//!< ã‚³ãƒãƒ³ãƒ‰ã®ç´¢å¼•(ãƒ­ã‚°ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦)
+#define HELPTOPIC_FI	"hid00101.htm"		//!< ã‚³ãƒãƒ³ãƒ‰ã®ç´¢å¼•(æ©Ÿèƒ½åˆ¥)
+#define HELPTOPIC_XC	"hid00063.htm"		//!< ExeCommands ã‚³ãƒãƒ³ãƒ‰
+#define HELPTOPIC_GR	"hid00056.htm"		//!< æ–‡å­—åˆ—æ¤œç´¢(GREP)
+#define HELPTOPIC_RP	"hid00061.htm"		//!< æ–‡å­—åˆ—ç½®æ›
+#define HELPTOPIC_GIT	"hid00090.htm"		//!< Gitã®åˆ©ç”¨
+#define HELPTOPIC_CH	"hid00109.htm"		//!< å¤‰æ›´å±¥æ­´
 
 //---------------------------------------------------------------------------
-//”ñŒöŠJAPI
+//éå…¬é–‹API
 typedef BOOL (WINAPI *FUNC_GetFontResourceInfo)(LPCWSTR, DWORD*, LPVOID, DWORD);
 extern  HMODULE hGdi32;
 extern  FUNC_GetFontResourceInfo	lpfGetFontResourceInfo;
@@ -116,66 +116,66 @@ extern  FUNC_GetFontResourceInfo	lpfGetFontResourceInfo;
 #define DEF_WIN_WIDTH	800
 #define DEF_WIN_HEIGHT	600
 
-/** @defgroup DEF_SCR_MODE ‰æ–Êƒ‚[ƒh(ScrMode) */
+/** @defgroup DEF_SCR_MODE ç”»é¢ãƒ¢ãƒ¼ãƒ‰(ScrMode) */
 /** @{ */
-#define SCMD_FLIST	1					//!< ƒtƒ@ƒCƒ‰[
-#define SCMD_TVIEW	2					//!< ƒeƒLƒXƒgƒrƒ…[ƒA
-#define SCMD_IVIEW	4					//!< ƒCƒ[ƒWƒrƒ…[ƒA
+#define SCMD_FLIST	1					//!< ãƒ•ã‚¡ã‚¤ãƒ©ãƒ¼
+#define SCMD_TVIEW	2					//!< ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢
+#define SCMD_IVIEW	4					//!< ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢
 #define SCMD_GREP	8					//!< GREP
 /** @} */
 
-#define MAX_FILELIST	 2				//!< ƒtƒ@ƒCƒ‹ƒŠƒXƒg” (¶‰E)
-#define MAX_TASK_THREAD	 6				//!< Å‘åƒ^ƒXƒN” = 4 + 2(Š„Às—p)
+#define MAX_FILELIST	 2				//!< ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆæ•° (å·¦å³)
+#define MAX_TASK_THREAD	 6				//!< æœ€å¤§ã‚¿ã‚¹ã‚¯æ•° = 4 + 2(å‰²è¾¼å®Ÿè¡Œç”¨)
 
-#define MAX_BGIMAGE		 6				//!< ”wŒi‰æ‘œ”(”wŒi*2/ ‹«ŠE*2/ ƒmƒu*2)
+#define MAX_BGIMAGE		 6				//!< èƒŒæ™¯ç”»åƒæ•°(èƒŒæ™¯*2/ å¢ƒç•Œ*2/ ãƒãƒ–*2)
 #define BGIMGID_KNOB_V	 4
 #define BGIMGID_KNOB_H	 5
 
-#define MAX_TABLIST	 	30				//!< Å‘åƒ^ƒu”
+#define MAX_TABLIST	 	30				//!< æœ€å¤§ã‚¿ãƒ–æ•°
 
-#define MAX_FNTZOOM_SZ	72				//!< Å‘åƒtƒHƒ“ƒgƒTƒCƒY
-#define MIN_FNTZOOM_SZ	2				//!< Å¬ƒtƒHƒ“ƒgƒTƒCƒY
+#define MAX_FNTZOOM_SZ	72				//!< æœ€å¤§ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚º
+#define MIN_FNTZOOM_SZ	2				//!< æœ€å°ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚º
 
-#define MAX_WORKHISTORY 50				//!< Å‘åƒ[ƒNƒŠƒXƒg—š—ğ”
-#define MAX_CMD_HISTORY 1000			//!< Å‘åƒRƒ}ƒ“ƒh—š—ğ”
-#define MAX_FNCPY_HISTORY 50			//!< ƒRƒs[‚µ‚½ƒtƒ@ƒCƒ‹–¼‚ÌÅ‘å—š—ğ”
+#define MAX_WORKHISTORY 50				//!< æœ€å¤§ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆå±¥æ­´æ•°
+#define MAX_CMD_HISTORY 1000			//!< æœ€å¤§ã‚³ãƒãƒ³ãƒ‰å±¥æ­´æ•°
+#define MAX_FNCPY_HISTORY 50			//!< ã‚³ãƒ”ãƒ¼ã—ãŸãƒ•ã‚¡ã‚¤ãƒ«åã®æœ€å¤§å±¥æ­´æ•°
 
-#define CMPDEL_BUFF_SIZE 2048			//!< Š®‘Síœ‚Ìƒoƒbƒtƒ@ƒTƒCƒY
-#define CRLF_DETECT_LINE 1000			//!< ‰üsƒR[ƒh”»’è‚Ìs”
+#define CMPDEL_BUFF_SIZE 2048			//!< å®Œå…¨å‰Šé™¤ã®ãƒãƒƒãƒ•ã‚¡ã‚µã‚¤ã‚º
+#define CRLF_DETECT_LINE 1000			//!< æ”¹è¡Œã‚³ãƒ¼ãƒ‰åˆ¤å®šã®è¡Œæ•°
 
 #define ID_CALL_HOTKEY	101
 #define ID_APP_HOTKEY	102
 
-#define TMP_ARC_F	"ARC~%04u"			//!< ƒA[ƒJƒCƒu—pˆêƒfƒBƒŒƒNƒgƒŠ‚Ì‘®
-#define TMP_ARC_P	"ARC~????"			//!< ƒA[ƒJƒCƒu—pˆêƒfƒBƒŒƒNƒgƒŠ‚ÌŒŸõƒpƒ^[ƒ“
-#define TMP_FTP_D	"FTP~0000"			//!< FTP—pˆêƒfƒBƒŒƒNƒgƒŠ
+#define TMP_ARC_F	"ARC~%04u"			//!< ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ç”¨ä¸€æ™‚ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®æ›¸å¼
+#define TMP_ARC_P	"ARC~????"			//!< ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ç”¨ä¸€æ™‚ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®æ¤œç´¢ãƒ‘ã‚¿ãƒ¼ãƒ³
+#define TMP_FTP_D	"FTP~0000"			//!< FTPç”¨ä¸€æ™‚ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 
-#define FICO_INI_FILE "FolderIcon.INI"	//!< ƒtƒHƒ‹ƒ_ƒAƒCƒRƒ“’è‹`
-#define HILT_INI_FILE "Highlight.INI"	//!< \•¶‹­’²•\¦’è‹`
-#define DIR_HIST_FILE "DirHistory.INI"	//!< ƒfƒBƒŒƒNƒgƒŠ‘S‘Ì—š—ğ
-#define CALC_INI_FILE "Calculator.INI"	//!< “d‘ì‚Ì’è‹`
-#define TAGDATA_FILE  "TAGDATA.TXT"		//!< ƒ^ƒOƒf[ƒ^
-#define DRVLOG_FILE   "DriveLog.csv"	//!< ƒhƒ‰ƒCƒu—e—ÊƒƒO
-#define RENLOG_FILE   "renamelog.txt"	//!< ‰ü–¼ƒƒO
-#define RENLIST_FILE  "renamelist.txt"	//!< ‰ü–¼ƒŠƒXƒg
-#define CLIP_BMP_FILE "CLIPBOARD.BMP"	//!< ƒNƒŠƒbƒvƒ{[ƒh‚Ìˆê•Û‘¶
+#define FICO_INI_FILE "FolderIcon.INI"	//!< ãƒ•ã‚©ãƒ«ãƒ€ã‚¢ã‚¤ã‚³ãƒ³å®šç¾©
+#define HILT_INI_FILE "Highlight.INI"	//!< æ§‹æ–‡å¼·èª¿è¡¨ç¤ºå®šç¾©
+#define DIR_HIST_FILE "DirHistory.INI"	//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå…¨ä½“å±¥æ­´
+#define CALC_INI_FILE "Calculator.INI"	//!< é›»å“ã®å®šç¾©
+#define TAGDATA_FILE  "TAGDATA.TXT"		//!< ã‚¿ã‚°ãƒ‡ãƒ¼ã‚¿
+#define DRVLOG_FILE   "DriveLog.csv"	//!< ãƒ‰ãƒ©ã‚¤ãƒ–å®¹é‡ãƒ­ã‚°
+#define RENLOG_FILE   "renamelog.txt"	//!< æ”¹åãƒ­ã‚°
+#define RENLIST_FILE  "renamelist.txt"	//!< æ”¹åãƒªã‚¹ãƒˆ
+#define CLIP_BMP_FILE "CLIPBOARD.BMP"	//!< ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã®ä¸€æ™‚ä¿å­˜
 
-#define WEBMAP_FILE	  "$~WEBMAP.HTM"	//!< Webƒ}ƒbƒv•\¦—pƒtƒ@ƒCƒ‹
-#define WEBMAP_TPLT	  "WEBMAP.HTM"		//!< Webƒ}ƒbƒv•\¦—pƒeƒ“ƒvƒŒ[ƒg
+#define WEBMAP_FILE	  "$~WEBMAP.HTM"	//!< Webãƒãƒƒãƒ—è¡¨ç¤ºç”¨ãƒ•ã‚¡ã‚¤ãƒ«
+#define WEBMAP_TPLT	  "WEBMAP.HTM"		//!< Webãƒãƒƒãƒ—è¡¨ç¤ºç”¨ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ
 
-#define RESPONSE_FILE "$~LISTFILE.TXT"	//!< ƒŒƒXƒ|ƒ“ƒXƒtƒ@ƒCƒ‹–¼
+#define RESPONSE_FILE "$~LISTFILE.TXT"	//!< ãƒ¬ã‚¹ãƒãƒ³ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«å
 #define RESPONSE_ERR  "ERROR"
 
-#define DISTR_FILE	  "Distribute.INI"	//!< U‚è•ª‚¯“o˜^ƒtƒ@ƒCƒ‹
+#define DISTR_FILE	  "Distribute.INI"	//!< æŒ¯ã‚Šåˆ†ã‘ç™»éŒ²ãƒ•ã‚¡ã‚¤ãƒ«
 
-#define FONTSMPL_FILE "FontSample.INI"	//!< ƒtƒHƒ“ƒgŒ©–{
+#define FONTSMPL_FILE "FontSample.INI"	//!< ãƒ•ã‚©ãƒ³ãƒˆè¦‹æœ¬
 
-#define SFX_AUTOREN   "_\\SN(1)"		//!< ƒfƒtƒHƒ‹ƒg‚Ì©“®‰ü–¼‘®(ƒTƒtƒBƒbƒNƒX)
-#define FMT_AUTO_REN  "\\N" SFX_AUTOREN	//!< ƒfƒtƒHƒ‹ƒg‚Ì©“®‰ü–¼‘®
+#define SFX_AUTOREN   "_\\SN(1)"		//!< ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®è‡ªå‹•æ”¹åæ›¸å¼(ã‚µãƒ•ã‚£ãƒƒã‚¯ã‚¹)
+#define FMT_AUTO_REN  "\\N" SFX_AUTOREN	//!< ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®è‡ªå‹•æ”¹åæ›¸å¼
 
 #define LOG_ALL_TASK_RDY	"All Task Ready"
 
-/** @defgroup DEF_CSVITMCNT CSV‚Ì€–Ú” */
+/** @defgroup DEF_CSVITMCNT CSVã®é …ç›®æ•° */
 /** @{ */
 #define EXTMENU_CSVITMCNT	6			//!< caption,cmd,prm,alias,show,icon
 #define EXTTOOL_CSVITMCNT	6			//!< caption,exe,prm,wk_dir,alias,show
@@ -185,56 +185,56 @@ extern  FUNC_GetFontResourceInfo	lpfGetFontResourceInfo;
 #define MAX_CSV_ITEM	  255
 /** @} */
 
-/** @defgroup DEF_LISTBOX_TAG ƒŠƒXƒgƒ{ƒbƒNƒX—pƒIƒvƒVƒ‡ƒ“ƒtƒ‰ƒO
- * @details ListBox->Tag ‚Éİ’è‚µ‚Ü‚·B@n
- * ‰ºˆÊ2ƒoƒCƒg = ƒtƒ@ƒCƒ‹î•ñ:€–Ú–¼Å‘å•/ “o˜^ƒfƒBƒŒƒNƒgƒŠ:uêŠv‚Ì•\¦ˆÊ’u@n
- * ãˆÊ4ƒrƒbƒg‚Í UserMdl ‚Åg—p
+/** @defgroup DEF_LISTBOX_TAG ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ç”¨ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãƒ•ãƒ©ã‚°
+ * @details ListBox->Tag ã«è¨­å®šã—ã¾ã™ã€‚@n
+ * ä¸‹ä½2ãƒã‚¤ãƒˆ = ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±:é …ç›®åæœ€å¤§å¹…/ ç™»éŒ²ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª:ã€Œå ´æ‰€ã€ã®è¡¨ç¤ºä½ç½®@n
+ * ä¸Šä½4ãƒ“ãƒƒãƒˆã¯ UserMdl ã§ä½¿ç”¨
  */
 /** @{ */
-#define LBTAG_OPT_FIF1	0x00010000		//!< ƒtƒ@ƒCƒ‹î•ñ(Å‰‚Ì3s‚ÍŠî–{î•ñ)
-#define LBTAG_OPT_FIF2	0x00020000		//!< ƒtƒ@ƒCƒ‹î•ñ
-#define LBTAG_OPT_SDIR	0x00040000		//!< “ÁêƒtƒHƒ‹ƒ_ˆê——(ŠÂ‹«•Ï”g—p)
-#define LBTAG_OPT_TREE	0x00080000		//!< ƒcƒŠ[•\¦
-#define LBTAG_OPT_ZOOM	0x00100000		//!< ƒY[ƒ€‰Â”\
-#define LBTAG_OPT_LNNO	0x00200000		//!< s”Ô†•\¦
-#define LBTAG_OPT_LCPY	0x00400000		//!< 1sƒRƒs[‰Â”\
-#define LBTAG_OPT_LOOP	0x00800000		//!< ƒ‹[ƒvˆÚ“®
-#define LBTAG_GEN_LIST	0x01000000		//!< ˆê——ƒ_ƒCƒAƒƒO
-#define LBTAG_FIF_LIST	0x02000000		//!< ƒtƒ@ƒCƒ‹î•ñƒ_ƒCƒAƒƒO
-#define LBTAG_TAB_FNAM	0x04000000		//!< ƒ^ƒuˆÈ~‚Éƒtƒ@ƒCƒ‹–¼‚ğ‚Â
-#define LBTAG_VAR_LIST	0x08000000		//!< u–¼‘O=’lvŒ`®
+#define LBTAG_OPT_FIF1	0x00010000		//!< ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±(æœ€åˆã®3è¡Œã¯åŸºæœ¬æƒ…å ±)
+#define LBTAG_OPT_FIF2	0x00020000		//!< ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±
+#define LBTAG_OPT_SDIR	0x00040000		//!< ç‰¹æ®Šãƒ•ã‚©ãƒ«ãƒ€ä¸€è¦§(ç’°å¢ƒå¤‰æ•°ä½¿ç”¨æ™‚)
+#define LBTAG_OPT_TREE	0x00080000		//!< ãƒ„ãƒªãƒ¼è¡¨ç¤º
+#define LBTAG_OPT_ZOOM	0x00100000		//!< ã‚ºãƒ¼ãƒ å¯èƒ½
+#define LBTAG_OPT_LNNO	0x00200000		//!< è¡Œç•ªå·è¡¨ç¤º
+#define LBTAG_OPT_LCPY	0x00400000		//!< 1è¡Œã‚³ãƒ”ãƒ¼å¯èƒ½
+#define LBTAG_OPT_LOOP	0x00800000		//!< ãƒ«ãƒ¼ãƒ—ç§»å‹•
+#define LBTAG_GEN_LIST	0x01000000		//!< ä¸€è¦§ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
+#define LBTAG_FIF_LIST	0x02000000		//!< ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
+#define LBTAG_TAB_FNAM	0x04000000		//!< ã‚¿ãƒ–ä»¥é™ã«ãƒ•ã‚¡ã‚¤ãƒ«åã‚’æŒã¤
+#define LBTAG_VAR_LIST	0x08000000		//!< ã€Œåå‰=å€¤ã€å½¢å¼
 /** @} */
 
 //---------------------------------------------------------------------------
 #define SHOW_WARN_TAG	-1
 
 //---------------------------------------------------------------------------
-//ŒŸõ’†‚Éó‚¯•t‚¯‚éƒRƒ}ƒ“ƒh
+//æ¤œç´¢ä¸­ã«å—ã‘ä»˜ã‘ã‚‹ã‚³ãƒãƒ³ãƒ‰
 #define ONFIND_CMD	"CursorUp|CursorDown|PageUp|PageDown|CurrToOpp|FileEdit|BinaryEdit|OpenByApp|OpenByWin|OpenStandard|Select"
 
 //---------------------------------------------------------------------------
-//load_ImageFile ‚Ì–ß‚è’l
-#define LOADED_BY_STD	1		//!< WIC•W€
-#define LOADED_BY_WIC	2		//!< WIC‚»‚Ì‘¼
+//load_ImageFile ã®æˆ»ã‚Šå€¤
+#define LOADED_BY_STD	1		//!< WICæ¨™æº–
+#define LOADED_BY_WIC	2		//!< WICãã®ä»–
 
 //---------------------------------------------------------------------------
 enum SeaOpt {soMigemo, soRegEx, soAndOr, soFuzzy, soCaseSens, soWord, soBytes, soFromPos,
 			 soCSV, soTSV, soTree, soGitGrep, soGrep, soGrepS, soGrepF};
-typedef Set <SeaOpt, soMigemo, soGrepF> SearchOption;	//!< ŒŸõ—pƒIƒvƒVƒ‡ƒ“
+typedef Set <SeaOpt, soMigemo, soGrepF> SearchOption;	//!< æ¤œç´¢ç”¨ã‚ªãƒ—ã‚·ãƒ§ãƒ³
 
 /** @} */
 
 //---------------------------------------------------------------------------
-/** @brief “ñd‹N“®I—¹‚Ì‰æ–Êî•ñ */
+/** @brief äºŒé‡èµ·å‹•çµ‚äº†æ™‚ã®ç”»é¢æƒ…å ± */
 struct win_dat {
-//ƒƒCƒ“ƒEƒBƒ“ƒhƒE
+//ãƒ¡ã‚¤ãƒ³ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦
 	int WinTop;
 	int WinLeft;
 	int WinWidth;
 	int WinHeight;
 	TWindowState WinState;
 	int WinPPI;
-//ƒTƒuƒpƒlƒ‹
+//ã‚µãƒ–ãƒ‘ãƒãƒ«
 	int SubHeight;
 	int SubWidth;
 	int InfWidth;
@@ -242,12 +242,12 @@ struct win_dat {
 	int ImageWidth;
 	int ImageHeight;
 	int TailHeight;
-//‚»‚Ì‘¼
+//ãã®ä»–
 	bool ShowFileListOnly;
 };
 
 //---------------------------------------------------------------------------
-extern TCursor crTmpPrev;		//!< ƒJ[ƒ\ƒ‹‚ÌƒvƒŒƒrƒ…[—p
+extern TCursor crTmpPrev;		//!< ã‚«ãƒ¼ã‚½ãƒ«ã®ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ç”¨
 
 //---------------------------------------------------------------------------
 extern UnicodeString KeyStr_SELECT;
@@ -270,27 +270,27 @@ extern UnicodeString KeysStr_PgDown;
 extern UnicodeString KeysStr_PgUp;
 extern UnicodeString KeysStr_Popup;
 
-extern UnicodeString TabPinMark;		//!< ƒ^ƒuŒÅ’èƒsƒ“ƒ}[ƒN
-extern UnicodeString HEAD_Mark;			//!< git HEAD ƒ}[ƒN
-extern UnicodeString PLAY_Mark;			//!< Ä¶’†ƒ}[ƒN
+extern UnicodeString TabPinMark;		//!< ã‚¿ãƒ–å›ºå®šãƒ”ãƒ³ãƒãƒ¼ã‚¯
+extern UnicodeString HEAD_Mark;			//!< git HEAD ãƒãƒ¼ã‚¯
+extern UnicodeString PLAY_Mark;			//!< å†ç”Ÿä¸­ãƒãƒ¼ã‚¯
 
 extern UnicodeString SortIdStr;
 
 //---------------------------------------------------------------------------
-extern HWND   MainHandle;				//!< ƒƒCƒ“ƒEƒBƒ“ƒhƒE‚Ìƒnƒ“ƒhƒ‹
-extern DWORD  ProcessId;				//!< ƒvƒƒZƒXID
-extern bool   IsAdmin;					//!< ŠÇ—ÒŒ ŒÀ
-extern bool   IsPrimary;				//!< Å‰‚É‹N“®‚³‚ê‚½
-extern bool   GitExists;				//!< Git ‚ªƒCƒ“ƒXƒg[ƒ‹‚³‚ê‚Ä‚¢‚é
-extern bool   GrepExists;				//!< grep.exe ‚ªƒCƒ“ƒXƒg[ƒ‹‚³‚ê‚Ä‚¢‚é
-extern bool   IsMuted;					//!< ‰¹—Êƒ~ƒ…[ƒg
-extern int    StartedCount;				//!< ÀsŠJnƒJƒEƒ“ƒg(m•b)
-extern int    NyanFiIdNo;				//!< ‘½d NyanFi ¯•ÊID
-extern bool   NoRoundWin;				//!< ŠpŠÛƒEƒBƒ“ƒhƒE—}~
+extern HWND   MainHandle;				//!< ãƒ¡ã‚¤ãƒ³ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ãƒãƒ³ãƒ‰ãƒ«
+extern DWORD  ProcessId;				//!< ãƒ—ãƒ­ã‚»ã‚¹ID
+extern bool   IsAdmin;					//!< ç®¡ç†è€…æ¨©é™
+extern bool   IsPrimary;				//!< æœ€åˆã«èµ·å‹•ã•ã‚ŒãŸ
+extern bool   GitExists;				//!< Git ãŒã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã•ã‚Œã¦ã„ã‚‹
+extern bool   GrepExists;				//!< grep.exe ãŒã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã•ã‚Œã¦ã„ã‚‹
+extern bool   IsMuted;					//!< éŸ³é‡ãƒŸãƒ¥ãƒ¼ãƒˆ
+extern int    StartedCount;				//!< å®Ÿè¡Œé–‹å§‹ã‚«ã‚¦ãƒ³ãƒˆ(mç§’)
+extern int    NyanFiIdNo;				//!< å¤šé‡ NyanFi è­˜åˆ¥ID
+extern bool   NoRoundWin;				//!< è§’ä¸¸ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦æŠ‘æ­¢
 
-extern int    ScrMode;					//!< ‰æ–Êƒ‚[ƒh
+extern int    ScrMode;					//!< ç”»é¢ãƒ¢ãƒ¼ãƒ‰
 
-extern UnicodeString VclStyle;			//!< VCLƒXƒ^ƒCƒ‹
+extern UnicodeString VclStyle;			//!< VCLã‚¹ã‚¿ã‚¤ãƒ«
 
 extern MarkList *ErrMarkList;
 
@@ -298,35 +298,35 @@ extern TRect  FileListRect;
 
 extern TRichEdit *TempRichEdit;
 
-extern TTaskThread *TaskThread[MAX_TASK_THREAD];	//!< ƒ^ƒXƒNˆ—ƒXƒŒƒbƒh
+extern TTaskThread *TaskThread[MAX_TASK_THREAD];	//!< ã‚¿ã‚¹ã‚¯å‡¦ç†ã‚¹ãƒ¬ãƒƒãƒ‰
 extern bool gTaskCancel[MAX_TASK_THREAD];
 extern bool gTaskPause[MAX_TASK_THREAD];
-extern int  MaxTasks;						//!< Å‘åƒ^ƒXƒN”
-extern bool RsvSuspended;					//!< —\–ñ‚Ì•Û—¯
-extern TaskConfigList *TaskReserveList;		//!< ƒ^ƒXƒN—\–ñƒŠƒXƒg
-extern int  LastOpCount;					//!< ÅŒã‚É‘€ì‚µ‚½‚Æ‚«‚ÌƒJƒEƒ“ƒg’l
+extern int  MaxTasks;						//!< æœ€å¤§ã‚¿ã‚¹ã‚¯æ•°
+extern bool RsvSuspended;					//!< äºˆç´„ã®ä¿ç•™
+extern TaskConfigList *TaskReserveList;		//!< ã‚¿ã‚¹ã‚¯äºˆç´„ãƒªã‚¹ãƒˆ
+extern int  LastOpCount;					//!< æœ€å¾Œã«æ“ä½œã—ãŸã¨ãã®ã‚«ã‚¦ãƒ³ãƒˆå€¤
 
-extern TImgViewThread   *ImgViewThread;		//!< ‰æ‘œƒrƒ…[ˆ—ƒXƒŒƒbƒh
-extern TThumbnailThread *ThumbnailThread;	//!< ƒTƒ€ƒlƒCƒ‹æ“¾ƒXƒŒƒbƒh
-extern TGetIconThread   *GetIconThread;		//!< ƒAƒCƒRƒ“æ“¾ƒXƒŒƒbƒh
+extern TImgViewThread   *ImgViewThread;		//!< ç”»åƒãƒ“ãƒ¥ãƒ¼å‡¦ç†ã‚¹ãƒ¬ãƒƒãƒ‰
+extern TThumbnailThread *ThumbnailThread;	//!< ã‚µãƒ ãƒã‚¤ãƒ«å–å¾—ã‚¹ãƒ¬ãƒƒãƒ‰
+extern TGetIconThread   *GetIconThread;		//!< ã‚¢ã‚¤ã‚³ãƒ³å–å¾—ã‚¹ãƒ¬ãƒƒãƒ‰
 
-extern UserArcUnit *usr_ARC;				//!< ƒA[ƒJƒCƒuˆ—ƒ†ƒjƒbƒg
-extern UnicodeString FExt7zDll;				//!< 7z.dll ‚Å‘Î‰‚·‚éŠg’£q
+extern UserArcUnit *usr_ARC;				//!< ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–å‡¦ç†ãƒ¦ãƒ‹ãƒƒãƒˆ
+extern UnicodeString FExt7zDll;				//!< 7z.dll ã§å¯¾å¿œã™ã‚‹æ‹¡å¼µå­
 
-extern MigemoUnit  *usr_Migemo;				//!< Migemo ˆ—ƒ†ƒjƒbƒg
-extern UnicodeString MigemoPath;			//!< Migemo ƒfƒBƒŒƒNƒgƒŠ
+extern MigemoUnit  *usr_Migemo;				//!< Migemo å‡¦ç†ãƒ¦ãƒ‹ãƒƒãƒˆ
+extern UnicodeString MigemoPath;			//!< Migemo ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 extern bool LastMigemoMode;
 extern bool LastMigemoModeF;
 
-extern int  WicScaleOpt;			//!< WIC‚Ìk¬EŠg‘åƒAƒ‹ƒSƒŠƒYƒ€
-extern UnicodeString WicFextStr;	//!< WIC‚ª‘Î‰‚µ‚Ä‚¢‚éŠg’£q
+extern int  WicScaleOpt;			//!< WICã®ç¸®å°ãƒ»æ‹¡å¤§ã‚¢ãƒ«ã‚´ãƒªã‚ºãƒ 
+extern UnicodeString WicFextStr;	//!< WICãŒå¯¾å¿œã—ã¦ã„ã‚‹æ‹¡å¼µå­
 
 extern bool gCopyAll;
 extern bool gCopyCancel;
 
-extern int  gCopyMode;				//!< ¶‰E‚ª•ÊƒfƒBƒŒƒNƒgƒŠ‚Ìê‡‚ÌƒRƒs[ƒ‚[ƒh
-extern int  gCopyMode2;				//!< ¶‰E‚ª“¯ˆêƒfƒBƒŒƒNƒgƒŠ‚Ìê‡‚ÌƒRƒs[ƒ‚[ƒh
-extern int  xCopyMode;				//!< ExeCommand “à‚Å—p‚¢‚é‹­§ƒ‚[ƒh
+extern int  gCopyMode;				//!< å·¦å³ãŒåˆ¥ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å ´åˆã®ã‚³ãƒ”ãƒ¼ãƒ¢ãƒ¼ãƒ‰
+extern int  gCopyMode2;				//!< å·¦å³ãŒåŒä¸€ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å ´åˆã®ã‚³ãƒ”ãƒ¼ãƒ¢ãƒ¼ãƒ‰
+extern int  xCopyMode;				//!< ExeCommand å†…ã§ç”¨ã„ã‚‹å¼·åˆ¶ãƒ¢ãƒ¼ãƒ‰
 
 #define CPYMD_OW			0
 #define CPYMD_NEW			1
@@ -338,419 +338,419 @@ extern int  xCopyMode;				//!< ExeCommand “à‚Å—p‚¢‚é‹­§ƒ‚[ƒh
 
 extern UnicodeString gCopyFmt;
 
-extern int OptionPageIndex;			//!< ƒIƒvƒVƒ‡ƒ“İ’èƒ_ƒCƒAƒƒO‚Ìƒy[ƒWƒCƒ“ƒfƒbƒNƒX
+extern int OptionPageIndex;			//!< ã‚ªãƒ—ã‚·ãƒ§ãƒ³è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®ãƒšãƒ¼ã‚¸ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
 
-extern bool SyncLR;					//!< ¶‰E‚ÌƒfƒBƒŒƒNƒgƒŠ•ÏX‚ğ“¯Šú
+extern bool SyncLR;					//!< å·¦å³ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå¤‰æ›´ã‚’åŒæœŸ
 
 extern UnicodeString GlobalErrMsg;
 
-extern bool Initialized;			//!< ‰Šú‰»‚ªŠ®—¹‚µ‚½
-extern bool UnInitializing;			//!< I—¹ˆ—‚ªŠJn‚³‚ê‚½
-extern bool Closing;				//!< I—¹ˆ—’†
+extern bool Initialized;			//!< åˆæœŸåŒ–ãŒå®Œäº†ã—ãŸ
+extern bool UnInitializing;			//!< çµ‚äº†å‡¦ç†ãŒé–‹å§‹ã•ã‚ŒãŸ
+extern bool Closing;				//!< çµ‚äº†å‡¦ç†ä¸­
 
-extern int  InhReload;				//!< Reload ‚Ì—}~
-extern bool DisReload;				//!< Reload ‚Ì–³Œø‰»
+extern int  InhReload;				//!< Reload ã®æŠ‘æ­¢
+extern bool DisReload;				//!< Reload ã®ç„¡åŠ¹åŒ–
 
-extern bool InhUpdate;			  	//!< UpdateList —}~
-extern bool InhCmdHistory;  		//!< ƒRƒ}ƒ“ƒh—š—ğ‚Ì—}~
+extern bool InhUpdate;			  	//!< UpdateList æŠ‘æ­¢
+extern bool InhCmdHistory;  		//!< ã‚³ãƒãƒ³ãƒ‰å±¥æ­´ã®æŠ‘æ­¢
 
 extern UnicodeString FindPath;
-extern bool FindAborted;			//!< ŒŸõ’†’f—v‹
-extern bool FindDiff;				//!< DiffDir Às’†
+extern bool FindAborted;			//!< æ¤œç´¢ä¸­æ–­è¦æ±‚
+extern bool FindDiff;				//!< DiffDir å®Ÿè¡Œä¸­
 extern int  FindTag;
-extern int  FindCount;				//!< ƒ}ƒbƒ`”
+extern int  FindCount;				//!< ãƒãƒƒãƒæ•°
 
-extern bool CalcAborted;			//!< ŒvZ’†’f—v‹
+extern bool CalcAborted;			//!< è¨ˆç®—ä¸­æ–­è¦æ±‚
 extern int  CalcTag;
 
-extern bool GitGrepAborted;			//!< GitGrep ‚Ì’†’f—v‹
+extern bool GitGrepAborted;			//!< GitGrep ã®ä¸­æ–­è¦æ±‚
 
 //---------------------------------------------------------------------------
-extern bool MultiInstance;			//!< “ñd‹N“®‚ğ‹–‚·
-extern bool CloseOthers;			//!< ‘¼‚ÌNyanFi‚ğI—¹
-extern bool StoreTaskTray;			//!< Å¬‰»‚Éƒ^ƒXƒNƒgƒŒƒC‚ÉŠi”[
-extern bool ShowDirType;			//!< DIRí•Ê‚ğ•\¦
-extern bool ShowSpace;				//!< ‹ó”’‚ğ•\¦
-extern bool UseIndIcon;				//!< ƒtƒ@ƒCƒ‹ŒÅ—L‚ÌƒAƒCƒRƒ“‚ğg—p
-extern bool ShowHideAtr;			//!< ‰B‚µƒtƒ@ƒCƒ‹‚ğ•\¦
-extern bool ShowSystemAtr;			//!< ƒVƒXƒeƒ€ƒtƒ@ƒCƒ‹‚ğ•\¦
-extern bool DispRegName;			//!< ƒpƒX‚Ì•\¦‚É“o˜^–¼‚ğ—p‚¢‚é
-extern bool UncToNetDrive;			//!< UNC‚ğƒlƒbƒgƒ[ƒNƒhƒ‰ƒCƒu–¼‚É
-extern bool CompInTitleBar;			//!< ƒ^ƒCƒgƒ‹ƒo[‚ÉƒRƒ“ƒsƒ…[ƒ^–¼‚ğ•\¦
-extern bool PathInTitleBar;			//!< ƒ^ƒCƒgƒ‹ƒo[‚ÉƒJƒŒƒ“ƒgƒpƒX‚ğ•\¦
-extern bool TabGrInTitleBar;		//!< ƒ^ƒCƒgƒ‹ƒo[‚Éƒ^ƒOƒOƒ‹[ƒv–¼‚ğ•\¦
-extern bool OmitEndOfName;			//!< ’·‚¢–¼‘O‚Í––”ö‚ğÈ—ª
-extern bool ShowAdsInf;				//!< ‘ã‘Öƒf[ƒ^ƒXƒgƒŠ[ƒ€î•ñ‚ğ•\¦
-extern bool ShowUseProcInf;			//!< ƒvƒƒZƒXg—pî•ñ‚ğ•\¦
-extern bool ShowDirJumboIco;		//!< ƒfƒBƒŒƒNƒgƒŠ‚Í“Á‘åƒAƒCƒRƒ“‚ğ•\¦
-extern bool ShowInZipImg;			//!< ZIP“à‚Ì‰æ‘œ‚ğ•\¦
-extern bool PreviewAniGif;			//!< ƒAƒjƒ[ƒVƒ‡ƒ“GIF‚ÌƒvƒŒƒrƒ…[
-extern bool SetPrvCursor;			//!< ƒvƒŒƒrƒ…[“à‚Åƒ}ƒEƒXƒJ[ƒ\ƒ‹‚ğİ’è
-extern bool ForceDel;				//!< “Çê—pƒtƒ@ƒCƒ‹‚à‹­§“I‚Éã‘‚«Eíœ
-extern bool RemoveCdReadOnly;		//!< CD-ROM‚©‚ç‚ÌƒRƒs[‚É“Çê—p‘®«‚ğ‰ğœ
-extern bool CopyTags;				//!< ƒ^ƒO‚ğƒRƒs[
-extern bool CopyNoBuffering;		//!< ƒoƒbƒtƒ@[‚È‚µI/O‚ğg—p‚µ‚ÄƒRƒs[
+extern bool MultiInstance;			//!< äºŒé‡èµ·å‹•ã‚’è¨±ã™
+extern bool CloseOthers;			//!< ä»–ã®NyanFiã‚’çµ‚äº†
+extern bool StoreTaskTray;			//!< æœ€å°åŒ–æ™‚ã«ã‚¿ã‚¹ã‚¯ãƒˆãƒ¬ã‚¤ã«æ ¼ç´
+extern bool ShowDirType;			//!< DIRç¨®åˆ¥ã‚’è¡¨ç¤º
+extern bool ShowSpace;				//!< ç©ºç™½ã‚’è¡¨ç¤º
+extern bool UseIndIcon;				//!< ãƒ•ã‚¡ã‚¤ãƒ«å›ºæœ‰ã®ã‚¢ã‚¤ã‚³ãƒ³ã‚’ä½¿ç”¨
+extern bool ShowHideAtr;			//!< éš ã—ãƒ•ã‚¡ã‚¤ãƒ«ã‚’è¡¨ç¤º
+extern bool ShowSystemAtr;			//!< ã‚·ã‚¹ãƒ†ãƒ ãƒ•ã‚¡ã‚¤ãƒ«ã‚’è¡¨ç¤º
+extern bool DispRegName;			//!< ãƒ‘ã‚¹ã®è¡¨ç¤ºã«ç™»éŒ²åã‚’ç”¨ã„ã‚‹
+extern bool UncToNetDrive;			//!< UNCã‚’ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ãƒ‰ãƒ©ã‚¤ãƒ–åã«
+extern bool CompInTitleBar;			//!< ã‚¿ã‚¤ãƒˆãƒ«ãƒãƒ¼ã«ã‚³ãƒ³ãƒ”ãƒ¥ãƒ¼ã‚¿åã‚’è¡¨ç¤º
+extern bool PathInTitleBar;			//!< ã‚¿ã‚¤ãƒˆãƒ«ãƒãƒ¼ã«ã‚«ãƒ¬ãƒ³ãƒˆãƒ‘ã‚¹ã‚’è¡¨ç¤º
+extern bool TabGrInTitleBar;		//!< ã‚¿ã‚¤ãƒˆãƒ«ãƒãƒ¼ã«ã‚¿ã‚°ã‚°ãƒ«ãƒ¼ãƒ—åã‚’è¡¨ç¤º
+extern bool OmitEndOfName;			//!< é•·ã„åå‰ã¯æœ«å°¾ã‚’çœç•¥
+extern bool ShowAdsInf;				//!< ä»£æ›¿ãƒ‡ãƒ¼ã‚¿ã‚¹ãƒˆãƒªãƒ¼ãƒ æƒ…å ±ã‚’è¡¨ç¤º
+extern bool ShowUseProcInf;			//!< ãƒ—ãƒ­ã‚»ã‚¹ä½¿ç”¨æƒ…å ±ã‚’è¡¨ç¤º
+extern bool ShowDirJumboIco;		//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¯ç‰¹å¤§ã‚¢ã‚¤ã‚³ãƒ³ã‚’è¡¨ç¤º
+extern bool ShowInZipImg;			//!< ZIPå†…ã®ç”»åƒã‚’è¡¨ç¤º
+extern bool PreviewAniGif;			//!< ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³GIFã®ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼
+extern bool SetPrvCursor;			//!< ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼å†…ã§ãƒã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«ã‚’è¨­å®š
+extern bool ForceDel;				//!< èª­è¾¼å°‚ç”¨ãƒ•ã‚¡ã‚¤ãƒ«ã‚‚å¼·åˆ¶çš„ã«ä¸Šæ›¸ããƒ»å‰Šé™¤
+extern bool RemoveCdReadOnly;		//!< CD-ROMã‹ã‚‰ã®ã‚³ãƒ”ãƒ¼æ™‚ã«èª­è¾¼å°‚ç”¨å±æ€§ã‚’è§£é™¤
+extern bool CopyTags;				//!< ã‚¿ã‚°ã‚’ã‚³ãƒ”ãƒ¼
+extern bool CopyNoBuffering;		//!< ãƒãƒƒãƒ•ã‚¡ãƒ¼ãªã—I/Oã‚’ä½¿ç”¨ã—ã¦ã‚³ãƒ”ãƒ¼
 extern bool ShowArcCopyProg;
-extern bool DelUseTrash;			//!< ƒtƒ@ƒCƒ‹‚Ìíœ‚ÉƒSƒ~” ‚ğg‚¤
-extern bool EditNewText;			//!< V‹KƒeƒLƒXƒgì¬Œã‚ÉƒGƒfƒBƒ^‚ÅŠJ‚­
-extern bool ViewArcInf;				//!< ƒA[ƒJƒCƒu“à‚Ìƒtƒ@ƒCƒ‹î•ñ‚ğ•\¦
-extern bool CheckTS;				//!< Šg’£q .ts (MPEG2-TS/TypeScript)‚Ì”»•Ê‚ğs‚¤
-extern bool ReloadOnActive;			//!< ƒAƒNƒeƒBƒu‚ÉÅV‚Ìî•ñ‚É
-extern bool OpenAddedDrive;			//!< ƒhƒ‰ƒCƒu‚ª’Ç‰Á‚³‚ê‚½‚çƒJƒŒƒ“ƒg‚É•\¦
-extern bool CheckUnc;				//!< UNCƒpƒX‚ğƒ`ƒFƒbƒN
-extern bool ShowMsgHint;			//!< Œx‚È‚Ç‚ğƒqƒ“ƒg•\¦
-extern bool ShowKeyHint;			//!< 2ƒXƒgƒ[ƒN‘€ì‚Ìƒqƒ“ƒg•\¦
-extern bool ShowNoKeyHint;			//!< –³Œø‚È2ƒXƒgƒ[ƒN‘€ì‚ÌŒx‚ğo‚·
-extern bool ShowCopyHint;			//!< ƒNƒŠƒbƒvƒ{[ƒh‚Ö‚ÌƒRƒs[î•ñ‚ğƒqƒ“ƒg•\¦
-extern bool ShowDuplNotify;			//!< “ñd‹N“®‚³‚ê‚½NyanFi‚©‚ç‚Ì’Ê’m‚ğ•\¦
-extern bool ShowTooltip;			//!< ƒc[ƒ‹ƒ`ƒbƒv‚ğ•\¦
-extern bool LogErrOnly;				//!< ƒ^ƒXƒN‚ÅƒGƒ‰[‰ÓŠ‚Ì‚İ‚ğƒƒO•\¦
-extern bool LogErrMsg;				//!< ƒƒO‚ÉƒGƒ‰[ƒƒbƒZ[ƒW‚ğo—Í
-extern bool LogDebugInf;			//!< ƒƒO‚ÉƒfƒoƒbƒOî•ñ‚ğo—Í
-extern bool LogHideSkip;			//!< ƒƒO‚ÉƒXƒLƒbƒv€–Ú‚ğo—Í‚µ‚È‚¢
-extern bool LogFullPath;			//!< ƒƒO‚Ìˆ—“à—e‚ğƒtƒ‹ƒpƒX‚Å•\¦
-extern bool LogDestination;			//!< ƒƒO‚Éˆ—æ‚ğ•\¦
-extern bool SaveLog;				//!< I—¹‚ÉƒƒO‚ğ•Û‘¶
-extern bool AppendLog;				//!< “¯“ú‚ÌƒƒO‚Í’Ç‹L•Û‘¶
-extern bool NotSortWorkList;		//!< ƒ[ƒNƒŠƒXƒg€–Ú‚ğƒ\[ƒg‚µ‚È‚¢
-extern bool RegWorkCsrPos;			//!< ƒJ[ƒ\ƒ‹ˆÊ’u‚É“o˜^
-extern bool AutoDelWorkList;		//!< ‘¶İ‚µ‚È‚¢€–Ú‚ğ©“®íœ
-extern bool NoCheckWorkUnc;			//!< ƒ[ƒNƒŠƒXƒg‚ÌUNC‚ğƒ`ƒFƒbƒN‚µ‚È‚¢
-extern bool AddToRecent;			//!< Å‹ßg‚Á‚½€–Ú‚É’Ç‰Á
-extern bool NoCheckRecentUnc;		//!< UNCƒpƒX‚ğƒ`ƒFƒbƒN‚µ‚È‚¢
-extern bool DirHistCsrPos;			//!< ƒfƒBƒŒƒNƒgƒŠ—š—ğ‚ÅƒJ[ƒ\ƒ‹ˆÊ’u‚ğ‹L‰¯
-extern bool DirHistSortMode;		//!< ƒfƒBƒŒƒNƒgƒŠ—š—ğ‚Åƒ\[ƒg•û–@‚ğ‹L‰¯
-extern bool DelDplDirHist;			//!< d•¡‚·‚éƒfƒBƒŒƒNƒgƒŠ—š—ğ‚ğíœ
-extern bool WorkToDirHist;			//!< ƒ[ƒNƒŠƒXƒg‚ğ—š—ğ‚ÉŠÜ‚ß‚é
-extern bool NoCheckDirHist;			//!< ƒfƒBƒŒƒNƒgƒŠ—š—ğ‚Ì‘¶İƒ`ƒFƒbƒN‚ğs‚í‚È‚¢
-extern bool ExtSaveDirHist;			//!< ‘S‘Ì—š—ğ‚ğ•Êƒtƒ@ƒCƒ‹‚É•Û‘¶
-extern bool LoopFilerCursor;		//!< ƒtƒ@ƒCƒ‰[‚ÅƒJ[ƒ\ƒ‹‚ğƒ‹[ƒvˆÚ“®
-extern bool FlCursorVisible;		//!< ƒtƒ@ƒCƒ‰[‚ÅƒJ[ƒ\ƒ‹‚ğí‚É‰Â‹—Ìˆæ‚É
-extern bool AutoCompComboBox;		//!< ƒRƒ“ƒ{ƒ{ƒbƒNƒX“ü—Í‚ğ©“®•âŠ®
-extern bool DialogCenter;			//!< ƒ_ƒCƒAƒƒO‚ğƒƒCƒ“‰æ–Ê‚Ì’†‰›‚É
-extern bool InhbitAltMenu;			//!< ALTƒL[‚Åƒƒjƒ…[‚ÉƒtƒH[ƒJƒX‚µ‚È‚¢
-extern bool SelectByMouse;			//!< ƒ}ƒEƒX‚Åƒtƒ@ƒCƒ‰[‚Ì€–Ú‚ğ‘I‘ğ
-extern bool SelectBaseOnly;			//!< ƒtƒ@ƒCƒ‹–¼å•”‚Å‚Ì‚İ‘I‘ğ
-extern bool SelectIconSngl;			//!< ƒAƒCƒRƒ“•”•ª‚ÅŒÂ•Ê‚É‘I‘ğ
-extern bool TimColEnabled;			//!< ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚Ì”zF‚ğ—LŒø
-extern bool PriorFExtCol;			//!< Šg’£q•”•ª‚Í‘®«F‚æ‚è—Dæ
-extern bool ColorOnlyFExt;			//!< Šg’£q•Ê”zF‚ÍŠg’£q•”•ª‚Ì‚İ‚É“K—p
-extern bool SymColorToName;			//!< ƒtƒ@ƒCƒ‹–¼å•”‚ÉƒVƒ“ƒ{ƒŠƒbƒNƒŠƒ“ƒNF‚ğ“K—p
-extern bool RevTagColor;			//!< ƒ^ƒOF‚Ì”½“]•\¦
-extern bool InactiveGray;			//!< ”ñƒAƒNƒeƒBƒu‚ÈƒƒCƒ“‰æ–Ê‚Ìˆê•”‚ğƒOƒŒ[‰»
-extern bool ShowMainMenu;			//!< ƒƒCƒ“ƒƒjƒ…[‚ğ•\¦
-extern bool ShowImgPreview;			//!< ƒCƒ[ƒWƒvƒŒƒrƒ…[‚ğ•\¦
-extern bool ShowProperty;			//!< ƒtƒ@ƒCƒ‹î•ñ‚ğ•\¦
-extern bool ShowLogWin;				//!< ƒƒOƒEƒBƒ“ƒhƒE‚ğ•\¦
-extern bool ShowFileListOnly;		//!< ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚Ì‚İ‚ğ•\¦
+extern bool DelUseTrash;			//!< ãƒ•ã‚¡ã‚¤ãƒ«ã®å‰Šé™¤ã«ã‚´ãƒŸç®±ã‚’ä½¿ã†
+extern bool EditNewText;			//!< æ–°è¦ãƒ†ã‚­ã‚¹ãƒˆä½œæˆå¾Œã«ã‚¨ãƒ‡ã‚£ã‚¿ã§é–‹ã
+extern bool ViewArcInf;				//!< ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–å†…ã®ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã‚’è¡¨ç¤º
+extern bool CheckTS;				//!< æ‹¡å¼µå­ .ts (MPEG2-TS/TypeScript)ã®åˆ¤åˆ¥ã‚’è¡Œã†
+extern bool ReloadOnActive;			//!< ã‚¢ã‚¯ãƒ†ã‚£ãƒ–æ™‚ã«æœ€æ–°ã®æƒ…å ±ã«
+extern bool OpenAddedDrive;			//!< ãƒ‰ãƒ©ã‚¤ãƒ–ãŒè¿½åŠ ã•ã‚ŒãŸã‚‰ã‚«ãƒ¬ãƒ³ãƒˆã«è¡¨ç¤º
+extern bool CheckUnc;				//!< UNCãƒ‘ã‚¹ã‚’ãƒã‚§ãƒƒã‚¯
+extern bool ShowMsgHint;			//!< è­¦å‘Šãªã©ã‚’ãƒ’ãƒ³ãƒˆè¡¨ç¤º
+extern bool ShowKeyHint;			//!< 2ã‚¹ãƒˆãƒ­ãƒ¼ã‚¯æ“ä½œã®ãƒ’ãƒ³ãƒˆè¡¨ç¤º
+extern bool ShowNoKeyHint;			//!< ç„¡åŠ¹ãª2ã‚¹ãƒˆãƒ­ãƒ¼ã‚¯æ“ä½œã®è­¦å‘Šã‚’å‡ºã™
+extern bool ShowCopyHint;			//!< ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã¸ã®ã‚³ãƒ”ãƒ¼æƒ…å ±ã‚’ãƒ’ãƒ³ãƒˆè¡¨ç¤º
+extern bool ShowDuplNotify;			//!< äºŒé‡èµ·å‹•ã•ã‚ŒãŸNyanFiã‹ã‚‰ã®é€šçŸ¥ã‚’è¡¨ç¤º
+extern bool ShowTooltip;			//!< ãƒ„ãƒ¼ãƒ«ãƒãƒƒãƒ—ã‚’è¡¨ç¤º
+extern bool LogErrOnly;				//!< ã‚¿ã‚¹ã‚¯ã§ã‚¨ãƒ©ãƒ¼ç®‡æ‰€ã®ã¿ã‚’ãƒ­ã‚°è¡¨ç¤º
+extern bool LogErrMsg;				//!< ãƒ­ã‚°ã«ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å‡ºåŠ›
+extern bool LogDebugInf;			//!< ãƒ­ã‚°ã«ãƒ‡ãƒãƒƒã‚°æƒ…å ±ã‚’å‡ºåŠ›
+extern bool LogHideSkip;			//!< ãƒ­ã‚°ã«ã‚¹ã‚­ãƒƒãƒ—é …ç›®ã‚’å‡ºåŠ›ã—ãªã„
+extern bool LogFullPath;			//!< ãƒ­ã‚°ã®å‡¦ç†å†…å®¹ã‚’ãƒ•ãƒ«ãƒ‘ã‚¹ã§è¡¨ç¤º
+extern bool LogDestination;			//!< ãƒ­ã‚°ã«å‡¦ç†å…ˆã‚’è¡¨ç¤º
+extern bool SaveLog;				//!< çµ‚äº†æ™‚ã«ãƒ­ã‚°ã‚’ä¿å­˜
+extern bool AppendLog;				//!< åŒæ—¥ã®ãƒ­ã‚°ã¯è¿½è¨˜ä¿å­˜
+extern bool NotSortWorkList;		//!< ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆé …ç›®ã‚’ã‚½ãƒ¼ãƒˆã—ãªã„
+extern bool RegWorkCsrPos;			//!< ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã«ç™»éŒ²
+extern bool AutoDelWorkList;		//!< å­˜åœ¨ã—ãªã„é …ç›®ã‚’è‡ªå‹•å‰Šé™¤
+extern bool NoCheckWorkUnc;			//!< ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã®UNCã‚’ãƒã‚§ãƒƒã‚¯ã—ãªã„
+extern bool AddToRecent;			//!< æœ€è¿‘ä½¿ã£ãŸé …ç›®ã«è¿½åŠ 
+extern bool NoCheckRecentUnc;		//!< UNCãƒ‘ã‚¹ã‚’ãƒã‚§ãƒƒã‚¯ã—ãªã„
+extern bool DirHistCsrPos;			//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå±¥æ­´ã§ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã‚’è¨˜æ†¶
+extern bool DirHistSortMode;		//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå±¥æ­´ã§ã‚½ãƒ¼ãƒˆæ–¹æ³•ã‚’è¨˜æ†¶
+extern bool DelDplDirHist;			//!< é‡è¤‡ã™ã‚‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå±¥æ­´ã‚’å‰Šé™¤
+extern bool WorkToDirHist;			//!< ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã‚’å±¥æ­´ã«å«ã‚ã‚‹
+extern bool NoCheckDirHist;			//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå±¥æ­´ã®å­˜åœ¨ãƒã‚§ãƒƒã‚¯ã‚’è¡Œã‚ãªã„
+extern bool ExtSaveDirHist;			//!< å…¨ä½“å±¥æ­´ã‚’åˆ¥ãƒ•ã‚¡ã‚¤ãƒ«ã«ä¿å­˜
+extern bool LoopFilerCursor;		//!< ãƒ•ã‚¡ã‚¤ãƒ©ãƒ¼ã§ã‚«ãƒ¼ã‚½ãƒ«ã‚’ãƒ«ãƒ¼ãƒ—ç§»å‹•
+extern bool FlCursorVisible;		//!< ãƒ•ã‚¡ã‚¤ãƒ©ãƒ¼ã§ã‚«ãƒ¼ã‚½ãƒ«ã‚’å¸¸ã«å¯è¦–é ˜åŸŸã«
+extern bool AutoCompComboBox;		//!< ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹å…¥åŠ›ã‚’è‡ªå‹•è£œå®Œ
+extern bool DialogCenter;			//!< ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’ãƒ¡ã‚¤ãƒ³ç”»é¢ã®ä¸­å¤®ã«
+extern bool InhbitAltMenu;			//!< ALTã‚­ãƒ¼ã§ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã«ãƒ•ã‚©ãƒ¼ã‚«ã‚¹ã—ãªã„
+extern bool SelectByMouse;			//!< ãƒã‚¦ã‚¹ã§ãƒ•ã‚¡ã‚¤ãƒ©ãƒ¼ã®é …ç›®ã‚’é¸æŠ
+extern bool SelectBaseOnly;			//!< ãƒ•ã‚¡ã‚¤ãƒ«åä¸»éƒ¨ã§ã®ã¿é¸æŠ
+extern bool SelectIconSngl;			//!< ã‚¢ã‚¤ã‚³ãƒ³éƒ¨åˆ†ã§å€‹åˆ¥ã«é¸æŠ
+extern bool TimColEnabled;			//!< ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã®é…è‰²ã‚’æœ‰åŠ¹
+extern bool PriorFExtCol;			//!< æ‹¡å¼µå­éƒ¨åˆ†ã¯å±æ€§è‰²ã‚ˆã‚Šå„ªå…ˆ
+extern bool ColorOnlyFExt;			//!< æ‹¡å¼µå­åˆ¥é…è‰²ã¯æ‹¡å¼µå­éƒ¨åˆ†ã®ã¿ã«é©ç”¨
+extern bool SymColorToName;			//!< ãƒ•ã‚¡ã‚¤ãƒ«åä¸»éƒ¨ã«ã‚·ãƒ³ãƒœãƒªãƒƒã‚¯ãƒªãƒ³ã‚¯è‰²ã‚’é©ç”¨
+extern bool RevTagColor;			//!< ã‚¿ã‚°è‰²ã®åè»¢è¡¨ç¤º
+extern bool InactiveGray;			//!< éã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªãƒ¡ã‚¤ãƒ³ç”»é¢ã®ä¸€éƒ¨ã‚’ã‚°ãƒ¬ãƒ¼åŒ–
+extern bool ShowMainMenu;			//!< ãƒ¡ã‚¤ãƒ³ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’è¡¨ç¤º
+extern bool ShowImgPreview;			//!< ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚’è¡¨ç¤º
+extern bool ShowProperty;			//!< ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã‚’è¡¨ç¤º
+extern bool ShowLogWin;				//!< ãƒ­ã‚°ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’è¡¨ç¤º
+extern bool ShowFileListOnly;		//!< ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã®ã¿ã‚’è¡¨ç¤º
 extern bool ShowFileListOnly2;
-extern bool ShowSttBar;				//!< ƒXƒe[ƒ^ƒXƒo[‚ğ•\¦
-extern bool ShowToolBar;			//!< ƒc[ƒ‹ƒo[‚ğ•\¦(ƒtƒ@ƒCƒ‰[)
-extern bool ShowToolBarV;			//!< ƒc[ƒ‹ƒo[‚ğ•\¦(ƒeƒLƒXƒgƒrƒ…[ƒA)
-extern bool ShowToolBarI;			//!< ƒc[ƒ‹ƒo[‚ğ•\¦(ƒCƒ[ƒWƒrƒ…[ƒA)
-extern bool ToolBarISide;			//!< ƒc[ƒ‹ƒo[‚ğƒTƒCƒhƒo[ã‚É•\¦(ƒCƒ[ƒWƒrƒ…[ƒA)
-extern bool ShowTabBar;				//!< ƒ^ƒuƒo[‚ğ•\¦
-extern bool ShowFKeyBar;			//!< ƒtƒ@ƒ“ƒNƒVƒ‡ƒ“ƒL[ƒo[‚ğ•\¦
-extern bool ShowClsTabBtn;			//!< ƒ^ƒu‚Ì•Â‚¶‚éƒ{ƒ^ƒ“‚ğ•\¦
-extern bool ShowPopTabBtn;			//!< ƒ^ƒu‚Ì¥ƒ{ƒ^ƒ“‚ğ•\¦
-extern bool ShowPopDirBtn;			//!< ƒfƒBƒŒƒNƒgƒŠî•ñ‚Ì¥ƒ{ƒ^ƒ“‚ğ•\¦
-extern bool HideScrBar;				//!< cƒXƒNƒ[ƒ‹ƒo[‚ğ‰B‚·
-extern bool ShowByteSize;			//!< ƒoƒCƒg’PˆÊ•\¦
-extern bool ShowTargetInf;			//!< À‘Ì‚Ìî•ñ‚Å•\¦
-extern bool ShowHeader;				//!< ƒwƒbƒ_‚ğ•\¦
-extern bool FixListWidth;			//!< ƒŠƒXƒg•‚ğŒÅ’è
-extern bool KeepOnResize;			//!< ƒEƒBƒ“ƒhƒEƒTƒCƒY•ÏX‚É”ä—¦‚ğˆÛ
-extern bool KeepCurListWidth;		//!< ƒJƒŒƒ“ƒg‘¤‚ÌƒŠƒXƒg•‚ğˆÛ
-extern bool NoSpaceFExt;			//!< Šg’£q‚ğ•ª—£‚µ‚È‚¢
-extern bool HideTitleMenu;			//!< Å‘å‰»‚Éƒ^ƒCƒgƒ‹ƒo[‚Æƒƒjƒ…[‚ğ‰B‚·
-extern bool ShowLineNo;				//!< s”Ô†‚ğ•\¦
-extern bool ShowLineCursor;			//!< sƒJ[ƒ\ƒ‹‚ğ•\¦
-extern bool ShowTAB;				//!< ƒ^ƒu‚ğ•\¦
-extern bool ShowCR;					//!< ‰üs‚ğ•\¦
-extern bool ShowIndent;				//!< ƒCƒ“ƒfƒ“ƒgƒKƒCƒh‚ğ•\¦
-extern bool ShowTextRuler;			//!< ƒ‹[ƒ‰‚ğ•\¦
-extern bool ShowSticky;				//!< ƒXƒeƒBƒbƒL[‚ğ•\¦
-extern bool ScrBarToFoldPos;		//!< ƒXƒNƒ[ƒ‹ƒo[‚ğÜ‚è•Ô‚µˆÊ’u‚É•\¦
-extern bool TxtSttIsBottom;			//!< î•ñƒwƒbƒ_‚ğ‰º•”‚É•\¦(TV)
-extern bool ChkAozora;				//!< Â‹ó•¶ŒÉŒ`®‚ğl—¶‚·‚é
-extern bool UseXd2tx;				//!< xd2txlib.dll ‚ÅƒeƒLƒXƒg•\¦
-extern bool ClickableUrl;			//!< ƒ_ƒuƒ‹ƒNƒŠƒbƒN‚ÅURL‚ğŠJ‚­
-extern bool RestoreViewLine;		//!< ƒrƒ…[ƒA‚ÅƒJ[ƒ\ƒ‹‚ÌsˆÊ’u‚ğ•œŒ³
-extern bool EmpComment;				//!< ƒRƒƒ“ƒg‚ğ‹­’²•\¦
-extern bool EmpStrings;				//!< •¶š—ñ‚ğ‹­’²•\¦
-extern bool EmpReserved;			//!< —\–ñŒê‚ğ‹­’²•\¦
-extern bool EmpSymbol;				//!< ƒVƒ“ƒ{ƒ‹‚ğ‹­’²•\¦
-extern bool EmpNumeric;				//!< ”’l‚ğ‹­’²•\¦
-extern bool EmpHeadline;			//!< Œ©o‚µ‚ğ‹­’²•\¦
-extern bool EmpRuby;				//!< ƒ‹ƒr‚ğ‹­’²•\¦
-extern bool RotViewImg;				//!< Exifî•ñ‚É‚µ‚½‚ª‚Á‚Ä‰æ‘œ‚ğ‰ñ“]
-extern bool KeepZoomRatio;			//!< •Ê‚Ì‰æ‘œ‚ÉˆÚ‚Á‚½‚ÉƒY[ƒ€”{—¦‚ğˆÛ‚·‚é
-extern bool ShowThumbName;			//!< ƒTƒ€ƒlƒCƒ‹‚Éƒtƒ@ƒCƒ‹–¼‚ğ•\¦
-extern bool ShowThumbExif;			//!< ƒTƒ€ƒlƒCƒ‹‚ÉŠÈˆÕExifî•ñ‚ğ•\¦
-extern bool ShowThumbTags;			//!< ƒTƒ€ƒlƒCƒ‹‚Éƒ^ƒO‚ğ•\¦
-extern bool ShowThumbFExt;			//!< ƒTƒ€ƒlƒCƒ‹‚ÉŠg’£q‚ğ‹­’²•\¦
-extern bool NotThumbIfArc;			//!< ƒA[ƒJƒCƒu“à‚ÍˆêŠ‡æ“¾‚µ‚È‚¢
-extern bool CacheThumbADS;			//!< ƒTƒ€ƒlƒCƒ‹‚ğADS‚ÉƒLƒƒƒbƒVƒ…‚·‚é
-extern bool LoopViewCursor;			//!< ƒCƒ[ƒWƒrƒ…[ƒA‚ÅƒJ[ƒ\ƒ‹‚ğƒ‹[ƒvˆÚ“®
-extern bool HintTopEndImg;			//!< æ“ªEÅŒã‚Åƒqƒ“ƒg•\¦
-extern bool BeepTopEndImg;			//!< Œx‰¹
-extern bool ImgSttIsBottom;			//!< î•ñƒwƒbƒ_‚ğ‰º•”‚É•\¦(IV)
-extern bool SeekBindDir;			//!< ƒV[ƒNƒo[‚Ìn“_‚ğ’Ô‚¶•ûŒü‚É‡‚í‚¹‚é
-extern bool SeekSwapNxtPrv;			//!< ‰E’Ô‚¶‚ÅNext/PrevFile“ü‘Ö
-extern bool HideCsrInFull;			//!< ‘S‰æ–Ê•\¦‚Åƒ}ƒEƒXƒJ[ƒ\ƒ‹‚ğ‰B‚·
-extern bool HideThumbInFull;		//!< ‘S‰æ–Ê•\¦‚ÅƒTƒ€ƒlƒCƒ‹‚ğ‰B‚·
-extern bool AnimateGif;				//!< ƒCƒ[ƒWƒrƒ…[ƒA‚ÅƒAƒjƒ[ƒVƒ‡ƒ“GIF‚ğ•\¦
-extern bool ShowThumbScroll;		//!< ƒTƒ€ƒlƒCƒ‹‚ÌƒXƒNƒ[ƒ‹ƒo[‚ğ•\¦
-extern bool ShowHistogram;			//!< ƒqƒXƒgƒOƒ‰ƒ€‚ğ•\¦
-extern bool ShowLoupe;				//!< ƒ‹[ƒy‚ğ•\¦
-extern bool ShowSubViewer;			//!< GIFƒrƒ…[ƒA‚ğ•\¦
-extern bool ShowSeekBar;			//!< ƒV[ƒNƒo[‚ğ•\¦
-extern bool WarnHighlight;			//!< ”’”ò‚ÑŒx
-extern bool DoublePage;				//!< Œ©ŠJ‚«•\¦
-extern bool RightBind;				//!< ‰E’Ô‚¶
+extern bool ShowSttBar;				//!< ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒãƒ¼ã‚’è¡¨ç¤º
+extern bool ShowToolBar;			//!< ãƒ„ãƒ¼ãƒ«ãƒãƒ¼ã‚’è¡¨ç¤º(ãƒ•ã‚¡ã‚¤ãƒ©ãƒ¼)
+extern bool ShowToolBarV;			//!< ãƒ„ãƒ¼ãƒ«ãƒãƒ¼ã‚’è¡¨ç¤º(ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢)
+extern bool ShowToolBarI;			//!< ãƒ„ãƒ¼ãƒ«ãƒãƒ¼ã‚’è¡¨ç¤º(ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢)
+extern bool ToolBarISide;			//!< ãƒ„ãƒ¼ãƒ«ãƒãƒ¼ã‚’ã‚µã‚¤ãƒ‰ãƒãƒ¼ä¸Šã«è¡¨ç¤º(ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢)
+extern bool ShowTabBar;				//!< ã‚¿ãƒ–ãƒãƒ¼ã‚’è¡¨ç¤º
+extern bool ShowFKeyBar;			//!< ãƒ•ã‚¡ãƒ³ã‚¯ã‚·ãƒ§ãƒ³ã‚­ãƒ¼ãƒãƒ¼ã‚’è¡¨ç¤º
+extern bool ShowClsTabBtn;			//!< ã‚¿ãƒ–ã®é–‰ã˜ã‚‹ãƒœã‚¿ãƒ³ã‚’è¡¨ç¤º
+extern bool ShowPopTabBtn;			//!< ã‚¿ãƒ–ã®â–¼ãƒœã‚¿ãƒ³ã‚’è¡¨ç¤º
+extern bool ShowPopDirBtn;			//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæƒ…å ±ã®â–¼ãƒœã‚¿ãƒ³ã‚’è¡¨ç¤º
+extern bool HideScrBar;				//!< ç¸¦ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã‚’éš ã™
+extern bool ShowByteSize;			//!< ãƒã‚¤ãƒˆå˜ä½è¡¨ç¤º
+extern bool ShowTargetInf;			//!< å®Ÿä½“ã®æƒ…å ±ã§è¡¨ç¤º
+extern bool ShowHeader;				//!< ãƒ˜ãƒƒãƒ€ã‚’è¡¨ç¤º
+extern bool FixListWidth;			//!< ãƒªã‚¹ãƒˆå¹…ã‚’å›ºå®š
+extern bool KeepOnResize;			//!< ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚µã‚¤ã‚ºå¤‰æ›´æ™‚ã«æ¯”ç‡ã‚’ç¶­æŒ
+extern bool KeepCurListWidth;		//!< ã‚«ãƒ¬ãƒ³ãƒˆå´ã®ãƒªã‚¹ãƒˆå¹…ã‚’ç¶­æŒ
+extern bool NoSpaceFExt;			//!< æ‹¡å¼µå­ã‚’åˆ†é›¢ã—ãªã„
+extern bool HideTitleMenu;			//!< æœ€å¤§åŒ–æ™‚ã«ã‚¿ã‚¤ãƒˆãƒ«ãƒãƒ¼ã¨ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’éš ã™
+extern bool ShowLineNo;				//!< è¡Œç•ªå·ã‚’è¡¨ç¤º
+extern bool ShowLineCursor;			//!< è¡Œã‚«ãƒ¼ã‚½ãƒ«ã‚’è¡¨ç¤º
+extern bool ShowTAB;				//!< ã‚¿ãƒ–ã‚’è¡¨ç¤º
+extern bool ShowCR;					//!< æ”¹è¡Œã‚’è¡¨ç¤º
+extern bool ShowIndent;				//!< ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã‚¬ã‚¤ãƒ‰ã‚’è¡¨ç¤º
+extern bool ShowTextRuler;			//!< ãƒ«ãƒ¼ãƒ©ã‚’è¡¨ç¤º
+extern bool ShowSticky;				//!< ã‚¹ãƒ†ã‚£ãƒƒã‚­ãƒ¼ã‚’è¡¨ç¤º
+extern bool ScrBarToFoldPos;		//!< ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã‚’æŠ˜ã‚Šè¿”ã—ä½ç½®ã«è¡¨ç¤º
+extern bool TxtSttIsBottom;			//!< æƒ…å ±ãƒ˜ãƒƒãƒ€ã‚’ä¸‹éƒ¨ã«è¡¨ç¤º(TV)
+extern bool ChkAozora;				//!< é’ç©ºæ–‡åº«å½¢å¼ã‚’è€ƒæ…®ã™ã‚‹
+extern bool UseXd2tx;				//!< xd2txlib.dll ã§ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¤º
+extern bool ClickableUrl;			//!< ãƒ€ãƒ–ãƒ«ã‚¯ãƒªãƒƒã‚¯ã§URLã‚’é–‹ã
+extern bool RestoreViewLine;		//!< ãƒ“ãƒ¥ãƒ¼ã‚¢ã§ã‚«ãƒ¼ã‚½ãƒ«ã®è¡Œä½ç½®ã‚’å¾©å…ƒ
+extern bool EmpComment;				//!< ã‚³ãƒ¡ãƒ³ãƒˆã‚’å¼·èª¿è¡¨ç¤º
+extern bool EmpStrings;				//!< æ–‡å­—åˆ—ã‚’å¼·èª¿è¡¨ç¤º
+extern bool EmpReserved;			//!< äºˆç´„èªã‚’å¼·èª¿è¡¨ç¤º
+extern bool EmpSymbol;				//!< ã‚·ãƒ³ãƒœãƒ«ã‚’å¼·èª¿è¡¨ç¤º
+extern bool EmpNumeric;				//!< æ•°å€¤ã‚’å¼·èª¿è¡¨ç¤º
+extern bool EmpHeadline;			//!< è¦‹å‡ºã—ã‚’å¼·èª¿è¡¨ç¤º
+extern bool EmpRuby;				//!< ãƒ«ãƒ“ã‚’å¼·èª¿è¡¨ç¤º
+extern bool RotViewImg;				//!< Exifæƒ…å ±ã«ã—ãŸãŒã£ã¦ç”»åƒã‚’å›è»¢
+extern bool KeepZoomRatio;			//!< åˆ¥ã®ç”»åƒã«ç§»ã£ãŸæ™‚ã«ã‚ºãƒ¼ãƒ å€ç‡ã‚’ç¶­æŒã™ã‚‹
+extern bool ShowThumbName;			//!< ã‚µãƒ ãƒã‚¤ãƒ«ã«ãƒ•ã‚¡ã‚¤ãƒ«åã‚’è¡¨ç¤º
+extern bool ShowThumbExif;			//!< ã‚µãƒ ãƒã‚¤ãƒ«ã«ç°¡æ˜“Exifæƒ…å ±ã‚’è¡¨ç¤º
+extern bool ShowThumbTags;			//!< ã‚µãƒ ãƒã‚¤ãƒ«ã«ã‚¿ã‚°ã‚’è¡¨ç¤º
+extern bool ShowThumbFExt;			//!< ã‚µãƒ ãƒã‚¤ãƒ«ã«æ‹¡å¼µå­ã‚’å¼·èª¿è¡¨ç¤º
+extern bool NotThumbIfArc;			//!< ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–å†…ã¯ä¸€æ‹¬å–å¾—ã—ãªã„
+extern bool CacheThumbADS;			//!< ã‚µãƒ ãƒã‚¤ãƒ«ã‚’ADSã«ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã™ã‚‹
+extern bool LoopViewCursor;			//!< ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢ã§ã‚«ãƒ¼ã‚½ãƒ«ã‚’ãƒ«ãƒ¼ãƒ—ç§»å‹•
+extern bool HintTopEndImg;			//!< å…ˆé ­ãƒ»æœ€å¾Œã§ãƒ’ãƒ³ãƒˆè¡¨ç¤º
+extern bool BeepTopEndImg;			//!< è­¦å‘ŠéŸ³
+extern bool ImgSttIsBottom;			//!< æƒ…å ±ãƒ˜ãƒƒãƒ€ã‚’ä¸‹éƒ¨ã«è¡¨ç¤º(IV)
+extern bool SeekBindDir;			//!< ã‚·ãƒ¼ã‚¯ãƒãƒ¼ã®å§‹ç‚¹ã‚’ç¶´ã˜æ–¹å‘ã«åˆã‚ã›ã‚‹
+extern bool SeekSwapNxtPrv;			//!< å³ç¶´ã˜ã§Next/PrevFileå…¥æ›¿
+extern bool HideCsrInFull;			//!< å…¨ç”»é¢è¡¨ç¤ºã§ãƒã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«ã‚’éš ã™
+extern bool HideThumbInFull;		//!< å…¨ç”»é¢è¡¨ç¤ºã§ã‚µãƒ ãƒã‚¤ãƒ«ã‚’éš ã™
+extern bool AnimateGif;				//!< ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢ã§ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³GIFã‚’è¡¨ç¤º
+extern bool ShowThumbScroll;		//!< ã‚µãƒ ãƒã‚¤ãƒ«ã®ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã‚’è¡¨ç¤º
+extern bool ShowHistogram;			//!< ãƒ’ã‚¹ãƒˆã‚°ãƒ©ãƒ ã‚’è¡¨ç¤º
+extern bool ShowLoupe;				//!< ãƒ«ãƒ¼ãƒšã‚’è¡¨ç¤º
+extern bool ShowSubViewer;			//!< GIFãƒ“ãƒ¥ãƒ¼ã‚¢ã‚’è¡¨ç¤º
+extern bool ShowSeekBar;			//!< ã‚·ãƒ¼ã‚¯ãƒãƒ¼ã‚’è¡¨ç¤º
+extern bool WarnHighlight;			//!< ç™½é£›ã³è­¦å‘Š
+extern bool DoublePage;				//!< è¦‹é–‹ãè¡¨ç¤º
+extern bool RightBind;				//!< å³ç¶´ã˜
 
-extern UnicodeString JpWrapChar1;	//!< s“ª‹Ö‘¥•¶š
-extern UnicodeString JpWrapChar2;	//!< s––‹Ö‘¥•¶š
-extern bool WordWrap;				//!< ƒ[ƒhƒ‰ƒbƒv
+extern UnicodeString JpWrapChar1;	//!< è¡Œé ­ç¦å‰‡æ–‡å­—
+extern UnicodeString JpWrapChar2;	//!< è¡Œæœ«ç¦å‰‡æ–‡å­—
+extern bool WordWrap;				//!< ãƒ¯ãƒ¼ãƒ‰ãƒ©ãƒƒãƒ—
 
-extern bool PermitDotCmds;			//!< .nyanfi ‚ÅƒRƒ}ƒ“ƒhÀs‚ğ‹–‰Â
-extern bool InheritDotNyan;			//!< ãˆÊƒfƒBƒŒƒNƒgƒŠ‚©‚ç .nyanfi ‚ğŒp³
-extern bool DotNyanPerUser;			//!< ƒ†[ƒU–¼•Ê‚É .nyanfi ‚ğì¬
-extern int  InitialModeI;			//!< ƒCƒ[ƒWƒrƒ…[ƒA‚ğŠJ‚¢‚½‚Ì‰Šúó‘Ô
-extern int  LastZoomRatio;			//!< ‘O‰ñ‚ÌƒY[ƒ€
+extern bool PermitDotCmds;			//!< .nyanfi ã§ã‚³ãƒãƒ³ãƒ‰å®Ÿè¡Œã‚’è¨±å¯
+extern bool InheritDotNyan;			//!< ä¸Šä½ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰ .nyanfi ã‚’ç¶™æ‰¿
+extern bool DotNyanPerUser;			//!< ãƒ¦ãƒ¼ã‚¶ååˆ¥ã« .nyanfi ã‚’ä½œæˆ
+extern int  InitialModeI;			//!< ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢ã‚’é–‹ã„ãŸæ™‚ã®åˆæœŸçŠ¶æ…‹
+extern int  LastZoomRatio;			//!< å‰å›ã®ã‚ºãƒ¼ãƒ 
 
-extern bool MarkImgClose;			//!< ƒCƒ[ƒWƒrƒ…[ƒA‚ğ•Â‚¶‚é‚Éxƒ}[ƒN‚ğİ’è
-extern UnicodeString MarkImgPath;	//!< ƒ}[ƒN‚·‚éƒpƒX
-extern UnicodeString MarkImgFExt;	//!< ƒ}[ƒN‚·‚éŠg’£q
+extern bool MarkImgClose;			//!< ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢ã‚’é–‰ã˜ã‚‹æ™‚ã«æ ãƒãƒ¼ã‚¯ã‚’è¨­å®š
+extern UnicodeString MarkImgPath;	//!< ãƒãƒ¼ã‚¯ã™ã‚‹ãƒ‘ã‚¹
+extern UnicodeString MarkImgFExt;	//!< ãƒãƒ¼ã‚¯ã™ã‚‹æ‹¡å¼µå­
 extern UnicodeString MarkImgMemo;
 
-extern int  IconMode;				//!< ƒAƒCƒRƒ“‚Ì•\¦ƒ‚[ƒh		0:”ñ•\¦/ 1:•\¦/ 2:ƒfƒBƒŒƒNƒgƒŠ‚Ì‚İ•\¦
-extern int  ScrBarStyle;			//!< ƒXƒNƒ[ƒ‹ƒo[EƒXƒ^ƒCƒ‹	0:•W€/ 1:ƒVƒ“ƒvƒ‹/ 2:3/4•/ 3:1/2•/ 4:‰æ‘œ
+extern int  IconMode;				//!< ã‚¢ã‚¤ã‚³ãƒ³ã®è¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰		0:éè¡¨ç¤º/ 1:è¡¨ç¤º/ 2:ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ã¿è¡¨ç¤º
+extern int  ScrBarStyle;			//!< ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ãƒ»ã‚¹ã‚¿ã‚¤ãƒ«	0:æ¨™æº–/ 1:ã‚·ãƒ³ãƒ—ãƒ«/ 2:3/4å¹…/ 3:1/2å¹…/ 4:ç”»åƒ
 
-extern bool ModalScreen;			//!< ƒ‚[ƒ_ƒ‹•\¦Œø‰Ê
-extern int  ModalScrAlpha;			//!< ƒXƒNƒŠ[ƒ“‚Ì“§–¾“x
-extern TColor col_ModalScr;			//!< ƒ‚[ƒ_ƒ‹•\¦Œø‰ÊF
+extern bool ModalScreen;			//!< ãƒ¢ãƒ¼ãƒ€ãƒ«è¡¨ç¤ºåŠ¹æœ
+extern int  ModalScrAlpha;			//!< ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã®é€æ˜åº¦
+extern TColor col_ModalScr;			//!< ãƒ¢ãƒ¼ãƒ€ãƒ«è¡¨ç¤ºåŠ¹æœè‰²
 
-extern TColor col_bgOptTab;			//!< ƒAƒNƒeƒBƒu‚Èİ’èƒ^ƒu‚Ì”wŒiF
-extern TColor col_fgOptTab;			//!< ƒAƒNƒeƒBƒu‚Èİ’èƒ^ƒu‚Ì•¶šF
+extern TColor col_bgOptTab;			//!< ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªè¨­å®šã‚¿ãƒ–ã®èƒŒæ™¯è‰²
+extern TColor col_fgOptTab;			//!< ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªè¨­å®šã‚¿ãƒ–ã®æ–‡å­—è‰²
 
-extern int TlWinBorderWidth;		//!< ƒc[ƒ‹ƒEƒCƒ“ƒhƒE‚Ì‹«ŠEü•
+extern int TlWinBorderWidth;		//!< ãƒ„ãƒ¼ãƒ«ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ã®å¢ƒç•Œç·šå¹…
 
-extern UnicodeString DlgMoveShift;	//!< ƒ_ƒCƒAƒƒOˆÚ“®‚ÌƒVƒtƒgƒL[
-extern UnicodeString DlgSizeShift;	//!< ƒ_ƒCƒAƒƒO‚ÌƒTƒCƒY•ÏX‚ÌƒVƒtƒgƒL[
+extern UnicodeString DlgMoveShift;	//!< ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ç§»å‹•ã®ã‚·ãƒ•ãƒˆã‚­ãƒ¼
+extern UnicodeString DlgSizeShift;	//!< ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®ã‚µã‚¤ã‚ºå¤‰æ›´ã®ã‚·ãƒ•ãƒˆã‚­ãƒ¼
 extern int DlgMovePrm;
 extern int DlgSizePrm;
 
-extern int DblClickFlMode;				//!< ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚Å‚Ìƒ_ƒuƒ‹ƒNƒŠƒbƒN
+extern int DblClickFlMode;				//!< ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã§ã®ãƒ€ãƒ–ãƒ«ã‚¯ãƒªãƒƒã‚¯
 
-extern UnicodeString WheelCmdF[4];		//!< ƒzƒC[ƒ‹ƒRƒ}ƒ“ƒh
+extern UnicodeString WheelCmdF[4];		//!< ãƒ›ã‚¤ãƒ¼ãƒ«ã‚³ãƒãƒ³ãƒ‰
 extern UnicodeString WheelCmdV[4];
 extern UnicodeString WheelCmdI[4];
 
-extern UnicodeString WheelBtnCmdF[4];	//!< ƒzƒC[ƒ‹ƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚½‚Æ‚«‚ÌƒRƒ}ƒ“ƒh
+extern UnicodeString WheelBtnCmdF[4];	//!< ãƒ›ã‚¤ãƒ¼ãƒ«ãƒœã‚¿ãƒ³ã‚’æŠ¼ã—ãŸã¨ãã®ã‚³ãƒãƒ³ãƒ‰
 extern UnicodeString WheelBtnCmdV;
 extern UnicodeString WheelBtnCmdI;
 
-extern UnicodeString X1BtnCmdF;			//!< X1ƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚½‚Æ‚«‚ÌƒRƒ}ƒ“ƒh
-extern UnicodeString X2BtnCmdF;			//!< X2ƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚½‚Æ‚«‚ÌƒRƒ}ƒ“ƒh
+extern UnicodeString X1BtnCmdF;			//!< X1ãƒœã‚¿ãƒ³ã‚’æŠ¼ã—ãŸã¨ãã®ã‚³ãƒãƒ³ãƒ‰
+extern UnicodeString X2BtnCmdF;			//!< X2ãƒœã‚¿ãƒ³ã‚’æŠ¼ã—ãŸã¨ãã®ã‚³ãƒãƒ³ãƒ‰
 extern UnicodeString X1BtnCmdV;
 extern UnicodeString X2BtnCmdV;
 extern UnicodeString X1BtnCmdI;
 extern UnicodeString X2BtnCmdI;
 
-extern UnicodeString EmpBinPtn1;		//!< ƒoƒCƒiƒŠ‹­’²ƒpƒ^[ƒ“1
-extern UnicodeString EmpBinPtn2;		//!< ƒoƒCƒiƒŠ‹­’²ƒpƒ^[ƒ“2
-extern UnicodeString EmpBinPtn3;		//!< ƒoƒCƒiƒŠ‹­’²ƒpƒ^[ƒ“3
+extern UnicodeString EmpBinPtn1;		//!< ãƒã‚¤ãƒŠãƒªå¼·èª¿ãƒ‘ã‚¿ãƒ¼ãƒ³1
+extern UnicodeString EmpBinPtn2;		//!< ãƒã‚¤ãƒŠãƒªå¼·èª¿ãƒ‘ã‚¿ãƒ¼ãƒ³2
+extern UnicodeString EmpBinPtn3;		//!< ãƒã‚¤ãƒŠãƒªå¼·èª¿ãƒ‘ã‚¿ãƒ¼ãƒ³3
 
-extern UnicodeString HtmInsHrCls;		//!< ƒuƒƒbƒN‚Ì‘O‚ÉŒrü‚ğ‘}“ü‚·‚éƒNƒ‰ƒX
-extern UnicodeString HtmHdrStr;			//!< Œ©o‚µ•¶š
-extern bool HtmInsHrSct;				//!< <section>‚Ì‘O‚ÉŒrü‘}“ü
-extern bool HtmInsHrArt;				//!< <article>‚Ì‘O‚ÉŒrü‘}“ü
-extern bool HtmInsHrNav;				//!< <nav>‚Ì‘O‚ÉŒrü‘}“ü
-extern bool ToMarkdown;					//!< Markdown‹L–@‚É•ÏŠ·
-extern UnicodeString HtmDelBlkCls;		//!< íœ‚·‚éƒuƒƒbƒN‚Ì class
-extern UnicodeString HtmDelBlkId;		//!< íœ‚·‚éƒuƒƒbƒN‚Ì id
+extern UnicodeString HtmInsHrCls;		//!< ãƒ–ãƒ­ãƒƒã‚¯ã®å‰ã«ç½«ç·šã‚’æŒ¿å…¥ã™ã‚‹ã‚¯ãƒ©ã‚¹
+extern UnicodeString HtmHdrStr;			//!< è¦‹å‡ºã—æ–‡å­—
+extern bool HtmInsHrSct;				//!< <section>ã®å‰ã«ç½«ç·šæŒ¿å…¥
+extern bool HtmInsHrArt;				//!< <article>ã®å‰ã«ç½«ç·šæŒ¿å…¥
+extern bool HtmInsHrNav;				//!< <nav>ã®å‰ã«ç½«ç·šæŒ¿å…¥
+extern bool ToMarkdown;					//!< Markdownè¨˜æ³•ã«å¤‰æ›
+extern UnicodeString HtmDelBlkCls;		//!< å‰Šé™¤ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã® class
+extern UnicodeString HtmDelBlkId;		//!< å‰Šé™¤ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã® id
 
-extern UnicodeString NoWatchPath;		//!< ƒfƒBƒŒƒNƒgƒŠŠÄ‹‚©‚çœŠO‚·‚éƒpƒX
+extern UnicodeString NoWatchPath;		//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªç›£è¦–ã‹ã‚‰é™¤å¤–ã™ã‚‹ãƒ‘ã‚¹
 
-extern UnicodeString FExtGetInf;		//!< ƒtƒ@ƒCƒ‹î•ñ‚ğæ“¾‚·‚éŠg’£q
-extern UnicodeString FExtNoInf;			//!< ƒtƒ@ƒCƒ‹î•ñ‚ğæ“¾‚µ‚È‚¢Šg’£q
-extern UnicodeString NoInfPath;			//!< ƒtƒ@ƒCƒ‹î•ñ‚ğæ“¾‚µ‚È‚¢ƒpƒX
-extern UnicodeString EmpInfItems;		//!< ‹­’²•\¦‚·‚éƒtƒ@ƒCƒ‹î•ñ€–Ú(|‹æØ‚è)
-extern TStringList  *HideInfItems;		//!< ‰B‚·ƒtƒ@ƒCƒ‹î•ñ€–Ú(Šg’£q=|‹æØ‚èŒ`®‚ÌƒŠƒXƒg)
+extern UnicodeString FExtGetInf;		//!< ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã‚’å–å¾—ã™ã‚‹æ‹¡å¼µå­
+extern UnicodeString FExtNoInf;			//!< ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã‚’å–å¾—ã—ãªã„æ‹¡å¼µå­
+extern UnicodeString NoInfPath;			//!< ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã‚’å–å¾—ã—ãªã„ãƒ‘ã‚¹
+extern UnicodeString EmpInfItems;		//!< å¼·èª¿è¡¨ç¤ºã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±é …ç›®(|åŒºåˆ‡ã‚Š)
+extern TStringList  *HideInfItems;		//!< éš ã™ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±é …ç›®(æ‹¡å¼µå­=|åŒºåˆ‡ã‚Šå½¢å¼ã®ãƒªã‚¹ãƒˆ)
 
-extern UnicodeString FExtImgPrv;		//!< ƒCƒ[ƒWƒvƒŒƒrƒ…[‚ğs‚¤Šg’£q
-extern UnicodeString FExtNoImgPrv;		//!< ƒCƒ[ƒWƒvƒŒƒrƒ…[‚ğs‚í‚È‚¢Šg’£q
-extern UnicodeString NoImgPrvPath;		//!< ƒCƒ[ƒWƒvƒŒƒrƒ…[‚ğs‚í‚È‚¢ƒpƒXƒŠƒXƒg
+extern UnicodeString FExtImgPrv;		//!< ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚’è¡Œã†æ‹¡å¼µå­
+extern UnicodeString FExtNoImgPrv;		//!< ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚’è¡Œã‚ãªã„æ‹¡å¼µå­
+extern UnicodeString NoImgPrvPath;		//!< ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚’è¡Œã‚ãªã„ãƒ‘ã‚¹ãƒªã‚¹ãƒˆ
 
-extern UnicodeString FExtNoIView;		//!< ƒCƒ[ƒWƒrƒ…[ƒA‚Å‰{——‚µ‚È‚¢Šg’£q
-extern UnicodeString NoCachePath;		//!< ƒTƒ€ƒlƒCƒ‹ƒLƒƒƒbƒVƒ…‚µ‚È‚¢ƒpƒX
+extern UnicodeString FExtNoIView;		//!< ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢ã§é–²è¦§ã—ãªã„æ‹¡å¼µå­
+extern UnicodeString NoCachePath;		//!< ã‚µãƒ ãƒã‚¤ãƒ«ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã—ãªã„ãƒ‘ã‚¹
 
-extern UnicodeString DrvInfFmtR;		//!< ƒhƒ‰ƒCƒuî•ñ‚Ì‘® : ƒ‹[ƒg
-extern UnicodeString DrvInfFmtS;		//!< ƒhƒ‰ƒCƒuî•ñ‚Ì‘® : ‘I‘ğ
-extern UnicodeString DrvInfFmtN;		//!< ƒhƒ‰ƒCƒuî•ñ‚Ì‘® : ‚»‚Ì‘¼
+extern UnicodeString DrvInfFmtR;		//!< ãƒ‰ãƒ©ã‚¤ãƒ–æƒ…å ±ã®æ›¸å¼ : ãƒ«ãƒ¼ãƒˆ
+extern UnicodeString DrvInfFmtS;		//!< ãƒ‰ãƒ©ã‚¤ãƒ–æƒ…å ±ã®æ›¸å¼ : é¸æŠæ™‚
+extern UnicodeString DrvInfFmtN;		//!< ãƒ‰ãƒ©ã‚¤ãƒ–æƒ…å ±ã®æ›¸å¼ : ãã®ä»–
 
-extern UnicodeString SttBarFmt;			//!< ƒXƒe[ƒ^ƒXƒo[‚Ì‘®
-extern UnicodeString SttClockFmt;		//!< Œv‚Ì‘®
+extern UnicodeString SttBarFmt;			//!< ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒãƒ¼ã®æ›¸å¼
+extern UnicodeString SttClockFmt;		//!< æ™‚è¨ˆã®æ›¸å¼
 
-extern int  MaxLogFiles;				//!< ƒƒOƒtƒ@ƒCƒ‹‚Ì•Û‘¶¢‘ã”
-extern int  MaxDirHistory;				//!< ƒfƒBƒŒƒNƒgƒŠ—š—ğ‚Ì•Û‘¶”
+extern int  MaxLogFiles;				//!< ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã®ä¿å­˜ä¸–ä»£æ•°
+extern int  MaxDirHistory;				//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå±¥æ­´ã®ä¿å­˜æ•°
 
-extern int  ProtectDirMode;				//!< ƒfƒBƒŒƒNƒgƒŠ‚Ìíœ§ŒÀƒ‚[ƒh
-extern bool ProtectSubDir;				//!< ‰ºˆÊƒfƒBƒŒƒNƒgƒŠ‚à§ŒÀ
-extern bool ProtectFile;				//!< ƒtƒ@ƒCƒ‹‚à§ŒÀ
+extern int  ProtectDirMode;				//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å‰Šé™¤åˆ¶é™ãƒ¢ãƒ¼ãƒ‰
+extern bool ProtectSubDir;				//!< ä¸‹ä½ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚‚åˆ¶é™
+extern bool ProtectFile;				//!< ãƒ•ã‚¡ã‚¤ãƒ«ã‚‚åˆ¶é™
 
-extern bool WarnPowerFail;				//!< “dŒ¹Ø’fŒx
-extern bool WarnDisconnect;				//!< ƒCƒ“ƒ^[ƒlƒbƒgÚ‘±Ø‚ê
-extern bool WarnLowBattery;				//!< ƒoƒbƒeƒŠ[’á‰º
+extern bool WarnPowerFail;				//!< é›»æºåˆ‡æ–­è­¦å‘Š
+extern bool WarnDisconnect;				//!< ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒƒãƒˆæ¥ç¶šåˆ‡ã‚Œ
+extern bool WarnLowBattery;				//!< ãƒãƒƒãƒ†ãƒªãƒ¼ä½ä¸‹
 extern int  BatLowerLimit;
 
-extern int  BorderMoveWidth;			//!< BorderLeftABorderRight: ‚P‰ñ‚ÌˆÚ“®•
-extern UnicodeString AutoRenFmt;		//!< CopyAMove: “¯–¼‚Ì©“®‰ü–¼‘®
-extern int  RemoteWaitTime;				//!< ƒR[ƒ‹ƒoƒbƒN‚ÌƒEƒFƒCƒgƒ^ƒCƒ€
+extern int  BorderMoveWidth;			//!< BorderLeftã€BorderRight: ï¼‘å›ã®ç§»å‹•å¹…
+extern UnicodeString AutoRenFmt;		//!< Copyã€Move: åŒåæ™‚ã®è‡ªå‹•æ”¹åæ›¸å¼
+extern int  RemoteWaitTime;				//!< ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯æ™‚ã®ã‚¦ã‚§ã‚¤ãƒˆã‚¿ã‚¤ãƒ 
 extern int  NormalWaitTime;
-extern int  NopDtctTime;				//!< –³‘€ì‚¾‚Æ‚İ‚È‚·ŠÔ
-extern int  TimeTolerance;				//!< ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚Ì‹–—eŒë·
+extern int  NopDtctTime;				//!< ç„¡æ“ä½œã ã¨ã¿ãªã™æ™‚é–“
+extern int  TimeTolerance;				//!< ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã®è¨±å®¹èª¤å·®
 
-extern bool AppListChgMin;				//!< AppList:   ‘¼ƒAƒvƒŠ‚ÉØ‚è‘Ö‚¦‚½‚Æ‚«‚ÉÅ¬‰»
-extern bool CreDirChg;					//!< CreateDir: ƒfƒBƒŒƒNƒgƒŠì¬Œã‚ÉƒJƒŒƒ“ƒg•ÏX
-extern bool CreDirCnvChar;				//!< CreateDir: •¶š’uŠ·‚ğ“K—p
-extern UnicodeString FExtExeFile;		//!< ExeCommandLine: Àsƒtƒ@ƒCƒ‹‚Æ‚İ‚È‚·Šg’£q
-extern bool OpenOnlyCurEdit;			//!< FileEdit:  ‘I‘ğó‘Ô‚É‚©‚©‚í‚ç‚¸ƒJ[ƒ\ƒ‹ˆÊ’u‚Ì‚İ‚ğŠJ‚­
-extern bool DontClrSelEdit;				//!< FileEdit:  ‘I‘ğ‚ğ‰ğœ‚µ‚È‚¢
-extern int  OpenByMode;					//!< OpenByApp:  ŠÖ˜A•t‚¯‚³‚ê‚Ä‚¢‚È‚¢ê‡‚Ì“®ìƒ‚[ƒh
-extern bool OpenDirByStd;				//!< OpenByApp:  ƒfƒBƒŒƒNƒgƒŠ‚Å‚Í•W€ Enter ƒL[“®ì
-extern bool OpenOnlyCurApp;				//!< OpenByApp:  ‘I‘ğó‘Ô‚É‚©‚©‚í‚ç‚¸ƒJ[ƒ\ƒ‹ˆÊ’u‚Ì‚İ‚ğŠJ‚­
-extern bool DontClrSelApp;				//!< OpenByApp:  ‘I‘ğ‚ğ‰ğœ‚µ‚È‚¢
-extern bool OpenOnlyCurWin;				//!< OpenByWin:  ‘I‘ğó‘Ô‚É‚©‚©‚í‚ç‚¸ƒJ[ƒ\ƒ‹ˆÊ’u‚Ì‚İ‚ğŠJ‚­
-extern bool DontClrSelWin;				//!< OpenByWin:  ‘I‘ğ‚ğ‰ğœ‚µ‚È‚¢
-extern bool OpenStdTabGroup;			//!< OpenStandard: ƒ^ƒuƒOƒ‹[ƒv‚ğŠJ‚­
-extern bool OpenStdMenuFile;			//!< OpenStandard: ƒƒjƒ…[ƒtƒ@ƒCƒ‹‚ğŠJ‚­
-extern bool OpenStdResultList;			//!< OpenStandard: Œ‹‰ÊƒŠƒXƒg‚ğŠJ‚­
-extern bool OpenStdFindSet;				//!< OpenStandard: ŒŸõİ’è‚ğŠJ‚­
-extern bool DownAfterOpenStd;			//!< OpenStandard: ÀsŒã‚ÉƒJ[ƒ\ƒ‹‚ğ‰º‚ÉˆÚ“®
-extern bool OpenStdOnResList;			//!< OpenStandard: Œ‹‰ÊƒŠƒXƒg‚Å‚à’Êí“®ì
-extern UnicodeString IniSeaShift;		//!< IniSearch:  “ª•¶šƒT[ƒ`‚ÌƒVƒtƒgƒL[
-extern bool IniSeaByNum;				//!<   ”šƒL[‚Å‚à“ª•¶šƒT[ƒ`
-extern bool IniSeaBySign;				//!<   Shift+”šƒL[‚Ì‹L†‚àƒT[ƒ`
-extern bool IncSeaCaseSens;				//!< IncSearch: ‘å¬•¶š‚ğ‹æ•Ê
-extern bool IncSeaFuzzy;				//!< IncSearch: ‚ ‚¢‚Ü‚¢ŒŸõ
-extern bool IncSeaLoop;					//!< IncSearch: ã‰º’[‚Åƒ‹[ƒv
-extern bool IncSeaMatch1Exit;			//!< IncSearch: ƒ}ƒbƒ`”1‚Å”²‚¯‚é
-extern int  IncSeaMigemoMin;			//!< IncSearch: Migemo ‚ÌŒŸõŠJn•¶š”
-extern bool SyncItem;					//!< SyncLR : €–ÚˆÊ’u‚à“¯Šú
-extern bool NotShowNoTask;				//!< TaskMan: ƒ^ƒXƒN‚ğÀs‚µ‚Ä‚¢‚È‚¢‚Æ‚«‚Íƒ}ƒl[ƒWƒƒ‚ğ•\¦‚µ‚È‚¢
-extern UnicodeString GetFaviconUrl;		//!< favicon æ“¾API
+extern bool AppListChgMin;				//!< AppList:   ä»–ã‚¢ãƒ—ãƒªã«åˆ‡ã‚Šæ›¿ãˆãŸã¨ãã«æœ€å°åŒ–
+extern bool CreDirChg;					//!< CreateDir: ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä½œæˆå¾Œã«ã‚«ãƒ¬ãƒ³ãƒˆå¤‰æ›´
+extern bool CreDirCnvChar;				//!< CreateDir: æ–‡å­—ç½®æ›ã‚’é©ç”¨
+extern UnicodeString FExtExeFile;		//!< ExeCommandLine: å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«ã¨ã¿ãªã™æ‹¡å¼µå­
+extern bool OpenOnlyCurEdit;			//!< FileEdit:  é¸æŠçŠ¶æ…‹ã«ã‹ã‹ã‚ã‚‰ãšã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®ã¿ã‚’é–‹ã
+extern bool DontClrSelEdit;				//!< FileEdit:  é¸æŠã‚’è§£é™¤ã—ãªã„
+extern int  OpenByMode;					//!< OpenByApp:  é–¢é€£ä»˜ã‘ã•ã‚Œã¦ã„ãªã„å ´åˆã®å‹•ä½œãƒ¢ãƒ¼ãƒ‰
+extern bool OpenDirByStd;				//!< OpenByApp:  ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã§ã¯æ¨™æº– Enter ã‚­ãƒ¼å‹•ä½œ
+extern bool OpenOnlyCurApp;				//!< OpenByApp:  é¸æŠçŠ¶æ…‹ã«ã‹ã‹ã‚ã‚‰ãšã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®ã¿ã‚’é–‹ã
+extern bool DontClrSelApp;				//!< OpenByApp:  é¸æŠã‚’è§£é™¤ã—ãªã„
+extern bool OpenOnlyCurWin;				//!< OpenByWin:  é¸æŠçŠ¶æ…‹ã«ã‹ã‹ã‚ã‚‰ãšã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®ã¿ã‚’é–‹ã
+extern bool DontClrSelWin;				//!< OpenByWin:  é¸æŠã‚’è§£é™¤ã—ãªã„
+extern bool OpenStdTabGroup;			//!< OpenStandard: ã‚¿ãƒ–ã‚°ãƒ«ãƒ¼ãƒ—ã‚’é–‹ã
+extern bool OpenStdMenuFile;			//!< OpenStandard: ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã
+extern bool OpenStdResultList;			//!< OpenStandard: çµæœãƒªã‚¹ãƒˆã‚’é–‹ã
+extern bool OpenStdFindSet;				//!< OpenStandard: æ¤œç´¢è¨­å®šã‚’é–‹ã
+extern bool DownAfterOpenStd;			//!< OpenStandard: å®Ÿè¡Œå¾Œã«ã‚«ãƒ¼ã‚½ãƒ«ã‚’ä¸‹ã«ç§»å‹•
+extern bool OpenStdOnResList;			//!< OpenStandard: çµæœãƒªã‚¹ãƒˆã§ã‚‚é€šå¸¸å‹•ä½œ
+extern UnicodeString IniSeaShift;		//!< IniSearch:  é ­æ–‡å­—ã‚µãƒ¼ãƒã®ã‚·ãƒ•ãƒˆã‚­ãƒ¼
+extern bool IniSeaByNum;				//!<   æ•°å­—ã‚­ãƒ¼ã§ã‚‚é ­æ–‡å­—ã‚µãƒ¼ãƒ
+extern bool IniSeaBySign;				//!<   Shift+æ•°å­—ã‚­ãƒ¼ã®è¨˜å·ã‚‚ã‚µãƒ¼ãƒ
+extern bool IncSeaCaseSens;				//!< IncSearch: å¤§å°æ–‡å­—ã‚’åŒºåˆ¥
+extern bool IncSeaFuzzy;				//!< IncSearch: ã‚ã„ã¾ã„æ¤œç´¢
+extern bool IncSeaLoop;					//!< IncSearch: ä¸Šä¸‹ç«¯ã§ãƒ«ãƒ¼ãƒ—
+extern bool IncSeaMatch1Exit;			//!< IncSearch: ãƒãƒƒãƒæ•°1ã§æŠœã‘ã‚‹
+extern int  IncSeaMigemoMin;			//!< IncSearch: Migemo ã®æ¤œç´¢é–‹å§‹æ–‡å­—æ•°
+extern bool SyncItem;					//!< SyncLR : é …ç›®ä½ç½®ã‚‚åŒæœŸ
+extern bool NotShowNoTask;				//!< TaskMan: ã‚¿ã‚¹ã‚¯ã‚’å®Ÿè¡Œã—ã¦ã„ãªã„ã¨ãã¯ãƒãƒãƒ¼ã‚¸ãƒ£ã‚’è¡¨ç¤ºã—ãªã„
+extern UnicodeString GetFaviconUrl;		//!< favicon å–å¾—API
 
-extern bool FindPathColumn;				//!< Œ‹‰ÊƒŠƒXƒg‚ÉuêŠv—ñ‚ğ•\¦
-extern int  FindPathWidth;				//!< uêŠv‚ÌÅ¬—ñ•
-extern bool FindTagsColumn;				//!< Œ‹‰ÊƒŠƒXƒg‚Éuƒ^ƒOv—ñ‚ğ•\¦
-extern int  FindTagsWidth;				//!< uƒ^ƒOv‚ÌÅ¬—ñ•
+extern bool FindPathColumn;				//!< çµæœãƒªã‚¹ãƒˆã«ã€Œå ´æ‰€ã€åˆ—ã‚’è¡¨ç¤º
+extern int  FindPathWidth;				//!< ã€Œå ´æ‰€ã€ã®æœ€å°åˆ—å¹…
+extern bool FindTagsColumn;				//!< çµæœãƒªã‚¹ãƒˆã«ã€Œã‚¿ã‚°ã€åˆ—ã‚’è¡¨ç¤º
+extern int  FindTagsWidth;				//!< ã€Œã‚¿ã‚°ã€ã®æœ€å°åˆ—å¹…
 
-extern bool GrepNotUpdList;				//!< GREPŒŸõ’†‚ÉŒ‹‰ÊƒŠƒXƒg‚ğXV‚µ‚È‚¢
-extern bool RepNotUpdList;				//!< ˆêŠ‡’uŠ·’†‚ÉŒ‹‰ÊƒŠƒXƒg‚ğXV‚µ‚È‚¢
-extern bool GrepShowItemNo;				//!< GREPŒ‹‰Ê‚É€–Ú”Ô†‚ğ•\¦
-extern bool GrepFileItemNo;				//!< €–Ú”Ô†‚ğƒtƒ@ƒCƒ‹’PˆÊ‚Å•\¦
-extern bool GrepShowSubDir;				//!< GREPŒ‹‰Ê‚ÉƒTƒuƒfƒBƒŒƒNƒgƒŠ–¼‚ğ•\¦
-extern bool GrepTrimTop;				//!< GREPŒ‹‰Ê‚Ås“ª‚Ìƒ^ƒu‚â‹ó”’‚ğíœ
-extern bool GrepOmitTop;				//!< GREPŒ‹‰Ê‚Åƒ}ƒbƒ`Œê‚ªŒ©‚¦‚È‚¢‚Æ‚«‘O•”•ª‚ğÈ—ª
-extern bool GrepEmFilter;				//!< GREPŒ‹‰Ê‚ÅƒtƒBƒ‹ƒ^‚ÌŒê‚ğ‹­’²•\¦
-extern bool GrepAdjNextLn;				//!< GREPŒ‹‰Ê‚ÅŸs•\¦•”•ª‚Ì–¾“x‚ğ‰ÁŒ¸
-extern int  GrepOutMode;				//!< GREP o—Íæ	0:–³‚µ/ 1:ƒtƒ@ƒCƒ‹/ 2:ƒNƒŠƒbƒvƒ{[ƒh
-extern UnicodeString GrepFileName;		//!< o—Íƒtƒ@ƒCƒ‹–¼
-extern UnicodeString GrepAppName;		//!< ‹N“®ƒAƒvƒŠ–¼
-extern UnicodeString GrepAppParam;		//!< ƒAƒvƒŠ‚Ì‹N“®ƒpƒ‰ƒ[ƒ^
-extern UnicodeString GrepAppDir;		//!< ƒAƒvƒŠ‚Ìì‹ÆƒfƒBƒŒƒNƒgƒŠ
-extern bool GrepAppEnabled;				//!< ƒAƒvƒŠ—LŒø
-extern bool GrepAppend;					//!< Šù‘¶ƒtƒ@ƒCƒ‹‚É’Ç‰Á
-extern UnicodeString GrepFileFmt;		//!< ƒtƒ@ƒCƒ‹î•ñ‚Ì‘®
-extern UnicodeString GrepInsStrW;		//!< ƒ}ƒbƒ`Œê‘O‚Ì‘}“ü•¶š—ñ
-extern UnicodeString GrepInsStrW2;		//!< ƒ}ƒbƒ`ŒêŒã‚Ì‘}“ü•¶š—ñ
-extern bool GrepTrimLeft;				//!< s“ª‚Ìƒ^ƒu‚â‹ó”’‚ğíœ
-extern bool GrepReplaceTab;				//!< ƒ^ƒu‚ğ‹ó”’1•¶š‚É’uŠ·
-extern bool GrepReplaceCr;				//!< ‰üs‚ğ•¶š—ñ‚É’uŠ·
-extern UnicodeString GrepRepCrStr;		//!< ‰üs‚Ì’uŠ·•¶š—ñ
-extern bool BackupReplace;				//!< ’uŠ·ƒoƒbƒNƒAƒbƒvì¬
-extern UnicodeString FExtRepBackup;		//!< ’uŠ·ƒoƒbƒNƒAƒbƒv‚ÌŠg’£q
-extern UnicodeString RepBackupDir;		//!< ’uŠ·ƒoƒbƒNƒAƒbƒvæ
-extern UnicodeString ReplaceLogName;	//!< ’uŠ·ƒƒOƒtƒ@ƒCƒ‹–¼
-extern bool SaveReplaceLog;				//!< ’uŠ·ƒƒO‚ğ•Û‘¶
-extern bool ReplaceAppend;				//!< Šù‘¶ƒtƒ@ƒCƒ‹‚É’Ç‰Á
-extern bool OpenReplaceLog;				//!< ƒƒO‚ğƒeƒLƒXƒgƒGƒfƒBƒ^‚ÅŠJ‚­
+extern bool GrepNotUpdList;				//!< GREPæ¤œç´¢ä¸­ã«çµæœãƒªã‚¹ãƒˆã‚’æ›´æ–°ã—ãªã„
+extern bool RepNotUpdList;				//!< ä¸€æ‹¬ç½®æ›ä¸­ã«çµæœãƒªã‚¹ãƒˆã‚’æ›´æ–°ã—ãªã„
+extern bool GrepShowItemNo;				//!< GREPçµæœã«é …ç›®ç•ªå·ã‚’è¡¨ç¤º
+extern bool GrepFileItemNo;				//!< é …ç›®ç•ªå·ã‚’ãƒ•ã‚¡ã‚¤ãƒ«å˜ä½ã§è¡¨ç¤º
+extern bool GrepShowSubDir;				//!< GREPçµæœã«ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåã‚’è¡¨ç¤º
+extern bool GrepTrimTop;				//!< GREPçµæœã§è¡Œé ­ã®ã‚¿ãƒ–ã‚„ç©ºç™½ã‚’å‰Šé™¤
+extern bool GrepOmitTop;				//!< GREPçµæœã§ãƒãƒƒãƒèªãŒè¦‹ãˆãªã„ã¨ãå‰éƒ¨åˆ†ã‚’çœç•¥
+extern bool GrepEmFilter;				//!< GREPçµæœã§ãƒ•ã‚£ãƒ«ã‚¿ã®èªã‚’å¼·èª¿è¡¨ç¤º
+extern bool GrepAdjNextLn;				//!< GREPçµæœã§æ¬¡è¡Œè¡¨ç¤ºéƒ¨åˆ†ã®æ˜åº¦ã‚’åŠ æ¸›
+extern int  GrepOutMode;				//!< GREP å‡ºåŠ›å…ˆ	0:ç„¡ã—/ 1:ãƒ•ã‚¡ã‚¤ãƒ«/ 2:ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰
+extern UnicodeString GrepFileName;		//!< å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«å
+extern UnicodeString GrepAppName;		//!< èµ·å‹•ã‚¢ãƒ—ãƒªå
+extern UnicodeString GrepAppParam;		//!< ã‚¢ãƒ—ãƒªã®èµ·å‹•ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
+extern UnicodeString GrepAppDir;		//!< ã‚¢ãƒ—ãƒªã®ä½œæ¥­ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+extern bool GrepAppEnabled;				//!< ã‚¢ãƒ—ãƒªæœ‰åŠ¹
+extern bool GrepAppend;					//!< æ—¢å­˜ãƒ•ã‚¡ã‚¤ãƒ«ã«è¿½åŠ 
+extern UnicodeString GrepFileFmt;		//!< ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã®æ›¸å¼
+extern UnicodeString GrepInsStrW;		//!< ãƒãƒƒãƒèªå‰ã®æŒ¿å…¥æ–‡å­—åˆ—
+extern UnicodeString GrepInsStrW2;		//!< ãƒãƒƒãƒèªå¾Œã®æŒ¿å…¥æ–‡å­—åˆ—
+extern bool GrepTrimLeft;				//!< è¡Œé ­ã®ã‚¿ãƒ–ã‚„ç©ºç™½ã‚’å‰Šé™¤
+extern bool GrepReplaceTab;				//!< ã‚¿ãƒ–ã‚’ç©ºç™½1æ–‡å­—ã«ç½®æ›
+extern bool GrepReplaceCr;				//!< æ”¹è¡Œã‚’æ–‡å­—åˆ—ã«ç½®æ›
+extern UnicodeString GrepRepCrStr;		//!< æ”¹è¡Œã®ç½®æ›æ–‡å­—åˆ—
+extern bool BackupReplace;				//!< ç½®æ›ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ä½œæˆ
+extern UnicodeString FExtRepBackup;		//!< ç½®æ›ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã®æ‹¡å¼µå­
+extern UnicodeString RepBackupDir;		//!< ç½®æ›ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—å…ˆ
+extern UnicodeString ReplaceLogName;	//!< ç½®æ›ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«å
+extern bool SaveReplaceLog;				//!< ç½®æ›ãƒ­ã‚°ã‚’ä¿å­˜
+extern bool ReplaceAppend;				//!< æ—¢å­˜ãƒ•ã‚¡ã‚¤ãƒ«ã«è¿½åŠ 
+extern bool OpenReplaceLog;				//!< ãƒ­ã‚°ã‚’ãƒ†ã‚­ã‚¹ãƒˆã‚¨ãƒ‡ã‚£ã‚¿ã§é–‹ã
 
-extern UnicodeString UserName;			//!< ƒ†[ƒU–¼
-extern UnicodeString TempPath;			//!< ˆêƒfƒBƒŒƒNƒgƒŠ
-extern UnicodeString TempPathA;			//!< ˆêƒfƒBƒŒƒNƒgƒŠ(â‘Î)
-extern UnicodeString TempPathFTP;		//!< FTP—pˆêƒfƒBƒŒƒNƒgƒŠ(â‘Î)
+extern UnicodeString UserName;			//!< ãƒ¦ãƒ¼ã‚¶å
+extern UnicodeString TempPath;			//!< ä¸€æ™‚ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+extern UnicodeString TempPathA;			//!< ä¸€æ™‚ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª(çµ¶å¯¾)
+extern UnicodeString TempPathFTP;		//!< FTPç”¨ä¸€æ™‚ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª(çµ¶å¯¾)
 
-extern UnicodeString DownloadPath;		//!< ƒ_ƒEƒ“ƒ[ƒh—p
-extern UnicodeString LibraryPath;		//!< ƒ‰ƒCƒuƒ‰ƒŠ
-extern UnicodeString WorkListPath;		//!< ƒ[ƒNƒŠƒXƒgQÆƒpƒX
-extern UnicodeString ResultListPath;	//!< Œ‹‰ÊƒŠƒXƒgQÆƒpƒX
-extern UnicodeString ListFilePath;		//!< ƒŠƒXƒgƒtƒ@ƒCƒ‹QÆƒpƒX
-extern UnicodeString FindSetPath;		//!< ŒŸõŒ‹‰ÊQÆƒpƒX
-extern UnicodeString RefParamPath;		//!< ƒpƒ‰ƒ[ƒ^QÆƒpƒX
-extern UnicodeString CmdFilePath;		//!< ƒRƒ}ƒ“ƒhƒtƒ@ƒCƒ‹QÆƒpƒX
+extern UnicodeString DownloadPath;		//!< ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰ç”¨
+extern UnicodeString LibraryPath;		//!< ãƒ©ã‚¤ãƒ–ãƒ©ãƒª
+extern UnicodeString WorkListPath;		//!< ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆå‚ç…§ãƒ‘ã‚¹
+extern UnicodeString ResultListPath;	//!< çµæœãƒªã‚¹ãƒˆå‚ç…§ãƒ‘ã‚¹
+extern UnicodeString ListFilePath;		//!< ãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«å‚ç…§ãƒ‘ã‚¹
+extern UnicodeString FindSetPath;		//!< æ¤œç´¢çµæœå‚ç…§ãƒ‘ã‚¹
+extern UnicodeString RefParamPath;		//!< ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å‚ç…§ãƒ‘ã‚¹
+extern UnicodeString CmdFilePath;		//!< ã‚³ãƒãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«å‚ç…§ãƒ‘ã‚¹
 extern UnicodeString CmdGitExe;			//!< git.exe
 extern UnicodeString GitBashExe;		//!< git-bash.exe
 extern UnicodeString GitGuiExe;			//!< git-gui.exe
 extern UnicodeString CmdGrepExe;		//!< grep.exe
 
 extern int VersionNo;
-extern UnicodeString VersionStr;		//!< ƒo[ƒWƒ‡ƒ“•\¦
-extern UnicodeString OSVerInfStr;		//!< OSƒo[ƒWƒ‡ƒ“î•ñ
-extern bool IsWin11;					//!< Windows 11 ‚©H
+extern UnicodeString VersionStr;		//!< ãƒãƒ¼ã‚¸ãƒ§ãƒ³è¡¨ç¤º
+extern UnicodeString OSVerInfStr;		//!< OSãƒãƒ¼ã‚¸ãƒ§ãƒ³æƒ…å ±
+extern bool IsWin11;					//!< Windows 11 ã‹ï¼Ÿ
 
-extern UnicodeString DirBraStr;			//!< ƒfƒBƒŒƒNƒgƒŠŠ‡ŒÊ•¶š
+extern UnicodeString DirBraStr;			//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæ‹¬å¼§æ–‡å­—
 extern UnicodeString DirKetStr;
-extern UnicodeString TimeStampFmt;		//!< ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚Ì•\¦‘®
+extern UnicodeString TimeStampFmt;		//!< ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã®è¡¨ç¤ºæ›¸å¼
 
-extern UnicodeString CallHotKey;		//!< ŒÄ‚Ño‚µƒzƒbƒgƒL[
-extern UnicodeString AppListHotKey;		//!< ƒAƒvƒŠˆê——ƒzƒbƒgƒL[
-extern UnicodeString AppListHotPrm;		//!< ƒAƒvƒŠˆê——ƒpƒ‰ƒ[ƒ^
+extern UnicodeString CallHotKey;		//!< å‘¼ã³å‡ºã—ãƒ›ãƒƒãƒˆã‚­ãƒ¼
+extern UnicodeString AppListHotKey;		//!< ã‚¢ãƒ—ãƒªä¸€è¦§ãƒ›ãƒƒãƒˆã‚­ãƒ¼
+extern UnicodeString AppListHotPrm;		//!< ã‚¢ãƒ—ãƒªä¸€è¦§ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 
-extern UnicodeString SaveTxtPath;		//!< ƒeƒLƒXƒg•Û‘¶ƒpƒX
-extern int SaveEncIndex;				//!< ƒGƒ“ƒR[ƒfƒBƒ“ƒO‚ÌƒCƒ“ƒfƒbƒNƒX
+extern UnicodeString SaveTxtPath;		//!< ãƒ†ã‚­ã‚¹ãƒˆä¿å­˜ãƒ‘ã‚¹
+extern int SaveEncIndex;				//!< ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
 
-extern UnicodeString NoDirHistPath;		//!< ƒfƒBƒŒƒNƒgƒŠ—š—ğ‚É“ü‚ê‚È‚¢ƒpƒX
-extern UnicodeString NoEditHistPath;	//!< •ÒW—š—ğ‚É“ü‚ê‚È‚¢ƒpƒX
-extern UnicodeString NoViewHistPath;	//!< ‰{———š—ğ‚É“ü‚ê‚È‚¢ƒpƒX
-extern UnicodeString NoRepoListPath;	//!< ƒŠƒ|ƒWƒgƒŠˆê——‚É•\¦‚µ‚È‚¢ƒpƒX
+extern UnicodeString NoDirHistPath;		//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå±¥æ­´ã«å…¥ã‚Œãªã„ãƒ‘ã‚¹
+extern UnicodeString NoEditHistPath;	//!< ç·¨é›†å±¥æ­´ã«å…¥ã‚Œãªã„ãƒ‘ã‚¹
+extern UnicodeString NoViewHistPath;	//!< é–²è¦§å±¥æ­´ã«å…¥ã‚Œãªã„ãƒ‘ã‚¹
+extern UnicodeString NoRepoListPath;	//!< ãƒªãƒã‚¸ãƒˆãƒªä¸€è¦§ã«è¡¨ç¤ºã—ãªã„ãƒ‘ã‚¹
 
-extern UnicodeString DirDelimiter;		//!< ƒfƒBƒŒƒNƒgƒŠ‹æØ‚è‚Ì•\¦•¶š
+extern UnicodeString DirDelimiter;		//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåŒºåˆ‡ã‚Šã®è¡¨ç¤ºæ–‡å­—
 
-extern bool NoCheckUncRPT;				//!< UNCƒpƒX‚ÌƒŠƒp[ƒXƒ|ƒCƒ“ƒgî•ñ‚ğƒ`ƒFƒbƒN‚µ‚È‚¢
+extern bool NoCheckUncRPT;				//!< UNCãƒ‘ã‚¹ã®ãƒªãƒ‘ãƒ¼ã‚¹ãƒã‚¤ãƒ³ãƒˆæƒ…å ±ã‚’ãƒã‚§ãƒƒã‚¯ã—ãªã„
 
-extern int  InactiveAdjust;				//!< ”ñƒAƒNƒeƒBƒuƒOƒŒ[‰»‚ÌÅ‚Ì‰ÁŒ¸’l
+extern int  InactiveAdjust;				//!< éã‚¢ã‚¯ãƒ†ã‚£ãƒ–æ™‚ã‚°ãƒ¬ãƒ¼åŒ–ã®æœ€ã®åŠ æ¸›å€¤
 
-extern int CurTabIndex;					//!< ƒ^ƒuƒCƒ“ƒfƒbƒNƒX(0`)
+extern int CurTabIndex;					//!< ã‚¿ãƒ–ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹(0ï½)
 
 extern UnicodeString CurPathName;
-extern int CurListTag;					//!< ƒJƒŒƒ“ƒg‘¤ƒ^ƒO  0:¶/ 1:‰E
-extern int OppListTag;					//!< ”½‘Î‘¤ƒ^ƒO
-extern int LastCurTag;					//!< ‘O‰ñI—¹‚ÌƒJƒŒƒ“ƒg
-extern int WorkingTag;					//!< ì‹Æ‘¤‚Ìƒ^ƒO(CurWorking = true )
+extern int CurListTag;					//!< ã‚«ãƒ¬ãƒ³ãƒˆå´ã‚¿ã‚°  0:å·¦/ 1:å³
+extern int OppListTag;					//!< åå¯¾å´ã‚¿ã‚°
+extern int LastCurTag;					//!< å‰å›çµ‚äº†æ™‚ã®ã‚«ãƒ¬ãƒ³ãƒˆ
+extern int WorkingTag;					//!< ä½œæ¥­å´ã®ã‚¿ã‚°(CurWorking = true æ™‚)
 
-extern UnicodeString FTPTextModeFExt;	//!< ƒeƒLƒXƒgƒ‚[ƒh‚Å“]‘—‚·‚éŠg’£q
-extern bool FTPDlKeepTime;				//!< ƒ_ƒEƒ“ƒ[ƒhƒtƒ@ƒCƒ‹‚Ìƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚ğˆÛ
-extern bool FTPUpKeepTime;				//!< ƒAƒbƒvƒ[ƒhƒtƒ@ƒCƒ‹‚Ìƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚ğˆÛ
-extern bool FTPUpToLower;				//!< ƒtƒ@ƒCƒ‹–¼‚ğ¬•¶š‰»‚µ‚ÄƒAƒbƒvƒ[ƒh‚·‚é
-extern bool FTPLogResponse;				//!< ‰“šƒƒbƒZ[ƒW‚ğƒƒO‚É•\¦
-extern int  FTPRemoteSide;				//!< ƒŠƒ‚[ƒg‘¤ 0:ƒJƒŒƒ“ƒg/ 1:¶/ 2:‰E
-extern int  FTPDisconTimeout;			//!< FTP‚ª–³‘€ì‚Ìê‡Ø’f‚·‚éŠÔ
+extern UnicodeString FTPTextModeFExt;	//!< ãƒ†ã‚­ã‚¹ãƒˆãƒ¢ãƒ¼ãƒ‰ã§è»¢é€ã™ã‚‹æ‹¡å¼µå­
+extern bool FTPDlKeepTime;				//!< ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã‚’ç¶­æŒ
+extern bool FTPUpKeepTime;				//!< ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã‚’ç¶­æŒ
+extern bool FTPUpToLower;				//!< ãƒ•ã‚¡ã‚¤ãƒ«åã‚’å°æ–‡å­—åŒ–ã—ã¦ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰ã™ã‚‹
+extern bool FTPLogResponse;				//!< å¿œç­”ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ãƒ­ã‚°ã«è¡¨ç¤º
+extern int  FTPRemoteSide;				//!< ãƒªãƒ¢ãƒ¼ãƒˆå´ 0:ã‚«ãƒ¬ãƒ³ãƒˆ/ 1:å·¦/ 2:å³
+extern int  FTPDisconTimeout;			//!< FTPãŒç„¡æ“ä½œã®å ´åˆåˆ‡æ–­ã™ã‚‹æ™‚é–“
 
-extern UnicodeString FTPSndConnect;		//!< Ú‘±‚Ì’Ê’m‰¹
-extern UnicodeString FTPSndDiscon;		//!< Ø’f‚Ì’Ê’m‰¹
-extern UnicodeString FTPSndTransfer;	//!< “]‘—Š®—¹‚Ì’Ê’m‰¹
+extern UnicodeString FTPSndConnect;		//!< æ¥ç¶šæ™‚ã®é€šçŸ¥éŸ³
+extern UnicodeString FTPSndDiscon;		//!< åˆ‡æ–­æ™‚ã®é€šçŸ¥éŸ³
+extern UnicodeString FTPSndTransfer;	//!< è»¢é€å®Œäº†æ™‚ã®é€šçŸ¥éŸ³
 
 extern UnicodeString FTPPathName;
 
-extern TListBox *FileListBox[MAX_FILELIST];		//!< ƒtƒ@ƒCƒ‹ƒŠƒXƒgƒ{ƒbƒNƒX
+extern TListBox *FileListBox[MAX_FILELIST];		//!< ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹
 extern TPanel	*FileListPanel[MAX_FILELIST];
 
-extern UnicodeString ViewFileName;		//!< •\¦’†‚Ìƒtƒ@ƒCƒ‹–¼
+extern UnicodeString ViewFileName;		//!< è¡¨ç¤ºä¸­ã®ãƒ•ã‚¡ã‚¤ãƒ«å
 extern UnicodeString ViewFileName2;
-extern bool ViewFromArc;				//!< ƒA[ƒJƒCƒu‚©‚ç•\¦
+extern bool ViewFromArc;				//!< ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ã‹ã‚‰è¡¨ç¤º
 
 //---------------------------------------------------------------------------
 #define GENLST_FILELIST	1
@@ -760,123 +760,123 @@ extern bool ViewFromArc;				//!< ƒA[ƒJƒCƒu‚©‚ç•\¦
 #define GENLST_ICON		5
 #define GENLST_FONT		6
 
-extern TStringList *GeneralList;		//!< TStringList ‚ÌƒŠƒXƒg(ˆêŠ‡”jŠü—p)
+extern TStringList *GeneralList;		//!< TStringList ã®ãƒªã‚¹ãƒˆ(ä¸€æ‹¬ç ´æ£„ç”¨)
 
 //---------------------------------------------------------------------------
-/** @defgroup FILELIST ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚Ì‘€ì */
+/** @defgroup FILELIST ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã®æ“ä½œ */
 /** @{ */
-extern TStringList *FileList[MAX_FILELIST];			//!< ƒtƒ@ƒCƒ‹ƒŠƒXƒg
-extern TStringList *ArcFileList[MAX_FILELIST];		//!< ‰¼‘zƒfƒBƒŒƒNƒgƒŠ‚Ìƒtƒ@ƒCƒ‹ƒŠƒXƒg
-extern TStringList *AdsFileList[MAX_FILELIST];		//!< ‘ã‘Öƒf[ƒ^ƒXƒgƒŠ[ƒ€‚Ìƒtƒ@ƒCƒ‹ƒŠƒXƒg
-extern TStringList *ResultList[MAX_FILELIST];		//!< ŒŸõŒ‹‰ÊƒŠƒXƒg
-extern TStringList *SelMaskList[MAX_FILELIST];		//!< ‘I‘ğƒ}ƒXƒNƒŠƒXƒg
-extern TStringList *TmpBufList[MAX_FILELIST];		//!< ˆê‘Ş”ğƒŠƒXƒg
+extern TStringList *FileList[MAX_FILELIST];			//!< ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆ
+extern TStringList *ArcFileList[MAX_FILELIST];		//!< ä»®æƒ³ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆ
+extern TStringList *AdsFileList[MAX_FILELIST];		//!< ä»£æ›¿ãƒ‡ãƒ¼ã‚¿ã‚¹ãƒˆãƒªãƒ¼ãƒ ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆ
+extern TStringList *ResultList[MAX_FILELIST];		//!< æ¤œç´¢çµæœãƒªã‚¹ãƒˆ
+extern TStringList *SelMaskList[MAX_FILELIST];		//!< é¸æŠãƒã‚¹ã‚¯ãƒªã‚¹ãƒˆ
+extern TStringList *TmpBufList[MAX_FILELIST];		//!< ä¸€æ™‚é€€é¿ãƒªã‚¹ãƒˆ
 /** @} */
 
-extern TStringList *DriveInfoList;		//!< ƒhƒ‰ƒCƒuî•ñ
-extern TStringList *DriveLogList;		//!< ƒhƒ‰ƒCƒu—e—ÊƒƒO
-extern UnicodeString DriveLogName;		//!< ƒhƒ‰ƒCƒu—e—ÊƒƒO‚Ìƒtƒ@ƒCƒ‹–¼
+extern TStringList *DriveInfoList;		//!< ãƒ‰ãƒ©ã‚¤ãƒ–æƒ…å ±
+extern TStringList *DriveLogList;		//!< ãƒ‰ãƒ©ã‚¤ãƒ–å®¹é‡ãƒ­ã‚°
+extern UnicodeString DriveLogName;		//!< ãƒ‰ãƒ©ã‚¤ãƒ–å®¹é‡ãƒ­ã‚°ã®ãƒ•ã‚¡ã‚¤ãƒ«å
 
-extern TStringList *WatchTailList;		//!< ––”öŠÄ‹ƒŠƒXƒg
-extern UnicodeString LastWatchLog;		//!< ’¼‘O‚ÌŠÄ‹ƒƒO
+extern TStringList *WatchTailList;		//!< æœ«å°¾ç›£è¦–ãƒªã‚¹ãƒˆ
+extern UnicodeString LastWatchLog;		//!< ç›´å‰ã®ç›£è¦–ãƒ­ã‚°
 
-extern TStringList *InvalidUncList;		//!< –³Œø‚ÈUNCƒŠƒXƒg
+extern TStringList *InvalidUncList;		//!< ç„¡åŠ¹ãªUNCãƒªã‚¹ãƒˆ
 
-extern TStringList *GitCfgUrlList;		//!< .Git\config - URL ‘Î‰ƒŠƒXƒg (ƒtƒ@ƒCƒ‹–¼=URL \t yyyy/mm/dd hh:nn:ss)
-extern TStringList *GitInfList;			//!< Gitî•ñ‚ÌƒLƒƒƒbƒVƒ…
+extern TStringList *GitCfgUrlList;		//!< .Git\config - URL å¯¾å¿œãƒªã‚¹ãƒˆ (ãƒ•ã‚¡ã‚¤ãƒ«å=URL \t yyyy/mm/dd hh:nn:ss)
+extern TStringList *GitInfList;			//!< Gitæƒ…å ±ã®ã‚­ãƒ£ãƒƒã‚·ãƒ¥
 
-extern TStringList *TabList;			//!< ƒ^ƒuƒŠƒXƒg
-extern TStringList *TabBuff;			//!< ŒÅ’è•œ‹A—pƒoƒbƒtƒ@
-extern int FlTabWidth;					//!< ƒ^ƒu‚Ì•
-extern int FlTabStyle;					//!< ƒ^ƒu‚ÌƒXƒ^ƒCƒ‹
-extern UnicodeString TabGroupName;		//!< ƒ^ƒuƒOƒ‹[ƒvEƒtƒ@ƒCƒ‹–¼
+extern TStringList *TabList;			//!< ã‚¿ãƒ–ãƒªã‚¹ãƒˆ
+extern TStringList *TabBuff;			//!< å›ºå®šå¾©å¸°ç”¨ãƒãƒƒãƒ•ã‚¡
+extern int FlTabWidth;					//!< ã‚¿ãƒ–ã®å¹…
+extern int FlTabStyle;					//!< ã‚¿ãƒ–ã®ã‚¹ã‚¿ã‚¤ãƒ«
+extern UnicodeString TabGroupName;		//!< ã‚¿ãƒ–ã‚°ãƒ«ãƒ¼ãƒ—ãƒ»ãƒ•ã‚¡ã‚¤ãƒ«å
 
-extern TStringList *CachedIcoList;		//!< ƒtƒ@ƒCƒ‹ŒÅ—LƒAƒCƒRƒ“‚ÌƒLƒƒƒbƒVƒ… (IconRWLock ‚Å•ÛŒì‚·‚é‚±‚Æ)
+extern TStringList *CachedIcoList;		//!< ãƒ•ã‚¡ã‚¤ãƒ«å›ºæœ‰ã‚¢ã‚¤ã‚³ãƒ³ã®ã‚­ãƒ£ãƒƒã‚·ãƒ¥ (IconRWLock ã§ä¿è­·ã™ã‚‹ã“ã¨)
 extern TMultiReadExclusiveWriteSynchronizer *IconRWLock;
-extern int IconCache;					//!< ƒAƒCƒRƒ“ƒLƒƒƒVƒ…”
+extern int IconCache;					//!< ã‚¢ã‚¤ã‚³ãƒ³ã‚­ãƒ£ã‚·ãƒ¥æ•°
 
-extern UsrIniFile  *FolderIconFile;		//!< ƒtƒHƒ‹ƒ_ƒAƒCƒRƒ“İ’èƒtƒ@ƒCƒ‹
-extern TStringList *FolderIconList;		//!< ƒtƒHƒ‹ƒ_ƒAƒCƒRƒ“ƒŠƒXƒg
+extern UsrIniFile  *FolderIconFile;		//!< ãƒ•ã‚©ãƒ«ãƒ€ã‚¢ã‚¤ã‚³ãƒ³è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«
+extern TStringList *FolderIconList;		//!< ãƒ•ã‚©ãƒ«ãƒ€ã‚¢ã‚¤ã‚³ãƒ³ãƒªã‚¹ãƒˆ
 extern TMultiReadExclusiveWriteSynchronizer *FldIcoRWLock;
-extern UnicodeString DefFldIcoName;		//!< ƒfƒtƒHƒ‹ƒg‚ÌƒtƒHƒ‹ƒ_ƒAƒCƒRƒ“
-extern HICON hLinkIcon;					//!< ƒŠƒ“ƒNƒ}[ƒN(Shell32.dll,29)
+extern UnicodeString DefFldIcoName;		//!< ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ãƒ•ã‚©ãƒ«ãƒ€ã‚¢ã‚¤ã‚³ãƒ³
+extern HICON hLinkIcon;					//!< ãƒªãƒ³ã‚¯ãƒãƒ¼ã‚¯(Shell32.dll,29)
 
-extern TStringList *GeneralIconList;	//!< ƒtƒ@ƒCƒ‹ƒŠƒXƒg•\¦—p‚Ìˆê”ÊƒAƒCƒRƒ“
+extern TStringList *GeneralIconList;	//!< ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆè¡¨ç¤ºç”¨ã®ä¸€èˆ¬ã‚¢ã‚¤ã‚³ãƒ³
 extern TStringList *MenuBtnIcoList;
-extern TStringList *UsrIcoList;			//!< ƒƒjƒ…[Aƒc[ƒ‹ƒ{ƒ^ƒ“—pƒAƒCƒRƒ“
-extern TStringList *DrvIcoList;			//!< ƒhƒ‰ƒCƒu‚ÌƒAƒCƒRƒ“ƒŠƒXƒg
+extern TStringList *UsrIcoList;			//!< ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã€ãƒ„ãƒ¼ãƒ«ãƒœã‚¿ãƒ³ç”¨ã‚¢ã‚¤ã‚³ãƒ³
+extern TStringList *DrvIcoList;			//!< ãƒ‰ãƒ©ã‚¤ãƒ–ã®ã‚¢ã‚¤ã‚³ãƒ³ãƒªã‚¹ãƒˆ
 
-extern TStringList *BakSetupList;		//!< ƒoƒbƒNƒAƒbƒvİ’èƒŠƒXƒg
-extern TStringList *SyncDirList;		//!< “¯ŠúƒRƒs[æƒŠƒXƒg
-extern TStringList *AssRenList;			//!< ŠÖ˜Aƒtƒ@ƒCƒ‹“¯‰ü–¼İ’èƒŠƒXƒg
-extern TStringList *DistrDefList;		//!< U‚è•ª‚¯³‹`ƒŠƒXƒg
+extern TStringList *BakSetupList;		//!< ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—è¨­å®šãƒªã‚¹ãƒˆ
+extern TStringList *SyncDirList;		//!< åŒæœŸã‚³ãƒ”ãƒ¼å…ˆãƒªã‚¹ãƒˆ
+extern TStringList *AssRenList;			//!< é–¢é€£ãƒ•ã‚¡ã‚¤ãƒ«åŒæ™‚æ”¹åè¨­å®šãƒªã‚¹ãƒˆ
+extern TStringList *DistrDefList;		//!< æŒ¯ã‚Šåˆ†ã‘æ­£ç¾©ãƒªã‚¹ãƒˆ
 
-extern TStringList *GrepPathList;		//!< GREP ‘ÎÛƒpƒX‚ÌƒŠƒXƒg
-extern TStringList *GrepFileList;		//!< GREP ‘ÎÛƒtƒ@ƒCƒ‹ƒŠƒXƒg
-extern TStringList *GrepResultBuff;		//!< GREP Œ‹‰ÊƒŠƒXƒg•\¦—pƒoƒbƒtƒ@
-extern TStringList *GrepResultList;		//!< GREP ‚ÌŒ‹‰ÊƒŠƒXƒg
-extern TStringList *GrepStashBuff;		//!< GREP Œ‹‰Ê‚Ì‘Ş”ğƒoƒbƒtƒ@
-extern TStringList *GrepUnsortBuff;		//!< GREP ƒ\[ƒg‘Oƒoƒbƒtƒ@
-extern TStringList *GrepMatchList;		//!< GREP ƒtƒ@ƒCƒ‹•Êƒ}ƒbƒ`”ƒŠƒXƒg
-extern int  ResultListMode;				//!< Œ‹‰ÊƒŠƒXƒg‚Ì“à—e	0:–¢’è/ 1:GREP/ 2:’uŠ·
+extern TStringList *GrepPathList;		//!< GREP å¯¾è±¡ãƒ‘ã‚¹ã®ãƒªã‚¹ãƒˆ
+extern TStringList *GrepFileList;		//!< GREP å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆ
+extern TStringList *GrepResultBuff;		//!< GREP çµæœãƒªã‚¹ãƒˆè¡¨ç¤ºç”¨ãƒãƒƒãƒ•ã‚¡
+extern TStringList *GrepResultList;		//!< GREP ã®çµæœãƒªã‚¹ãƒˆ
+extern TStringList *GrepStashBuff;		//!< GREP çµæœã®é€€é¿ãƒãƒƒãƒ•ã‚¡
+extern TStringList *GrepUnsortBuff;		//!< GREP ã‚½ãƒ¼ãƒˆå‰ãƒãƒƒãƒ•ã‚¡
+extern TStringList *GrepMatchList;		//!< GREP ãƒ•ã‚¡ã‚¤ãƒ«åˆ¥ãƒãƒƒãƒæ•°ãƒªã‚¹ãƒˆ
+extern int  ResultListMode;				//!< çµæœãƒªã‚¹ãƒˆã®å†…å®¹	0:æœªå®š/ 1:GREP/ 2:ç½®æ›
 
-extern TStringList *ViewFileList;		//!< ƒCƒ[ƒWƒrƒ…[ƒA‚Å‚Ìƒtƒ@ƒCƒ‹–¼ƒŠƒXƒg
-extern bool isViewIcon;					//!< ƒCƒ[ƒWƒrƒ…[ƒA‚ÅƒAƒCƒRƒ“‚ğ•\¦’†
-extern bool isViewAGif;					//!< ƒCƒ[ƒWƒrƒ…[ƒA‚ÅƒAƒjƒ[ƒVƒ‡ƒ“GIF‚ğ•\¦’†
-extern bool isViewClip;					//!< ƒCƒ[ƒWƒrƒ…[ƒA‚ÅƒNƒŠƒbƒvƒ{[ƒh‚ğ•\¦’†
-extern bool isViewFTP;					//!< ƒCƒ[ƒWƒrƒ…[ƒA‚ÅFTP‚Ìƒtƒ@ƒCƒ‹‚ğ•\¦’†
-extern bool rqThumbnail;				//!< ƒNƒŠƒbƒvƒ{[ƒh/FTP‰{——Œã‚ÌƒTƒ€ƒlƒCƒ‹•œ‹A—v‹
-extern bool nrmThumbnail;				//!< ’Êí‰æ–Ê‚ÌƒTƒ€ƒlƒCƒ‹•\¦
+extern TStringList *ViewFileList;		//!< ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢ã§ã®ãƒ•ã‚¡ã‚¤ãƒ«åãƒªã‚¹ãƒˆ
+extern bool isViewIcon;					//!< ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢ã§ã‚¢ã‚¤ã‚³ãƒ³ã‚’è¡¨ç¤ºä¸­
+extern bool isViewAGif;					//!< ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢ã§ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³GIFã‚’è¡¨ç¤ºä¸­
+extern bool isViewClip;					//!< ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢ã§ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã‚’è¡¨ç¤ºä¸­
+extern bool isViewFTP;					//!< ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢ã§FTPã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’è¡¨ç¤ºä¸­
+extern bool rqThumbnail;				//!< ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰/FTPé–²è¦§å¾Œã®ã‚µãƒ ãƒã‚¤ãƒ«å¾©å¸°è¦æ±‚
+extern bool nrmThumbnail;				//!< é€šå¸¸ç”»é¢æ™‚ã®ã‚µãƒ ãƒã‚¤ãƒ«è¡¨ç¤º
 
-extern TStringList *LaunchList;			//!< ƒ‰ƒ“ƒ`ƒƒ[ƒŠƒXƒg(ƒAƒvƒŠƒP[ƒVƒ‡ƒ“ˆê——)
+extern TStringList *LaunchList;			//!< ãƒ©ãƒ³ãƒãƒ£ãƒ¼ãƒªã‚¹ãƒˆ(ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ä¸€è¦§)
 
-extern UnicodeString PathMask[MAX_FILELIST];	//!< ƒpƒXƒ}ƒXƒN
-extern UnicodeString DriveInf[MAX_FILELIST];	//!< ƒhƒ‰ƒCƒuî•ñ
+extern UnicodeString PathMask[MAX_FILELIST];	//!< ãƒ‘ã‚¹ãƒã‚¹ã‚¯
+extern UnicodeString DriveInf[MAX_FILELIST];	//!< ãƒ‰ãƒ©ã‚¤ãƒ–æƒ…å ±
 
-extern TStringList *WorkList;			//!< ƒ[ƒNƒŠƒXƒg
-extern UnicodeString WorkListName;		//!< ƒ[ƒNƒŠƒXƒg‚Ìƒtƒ@ƒCƒ‹–¼
-extern TDateTime WorkListTime;			//!< ƒ[ƒNƒŠƒXƒg‚Ìƒ^ƒCƒ€ƒXƒ^ƒ“ƒv
-extern bool WorkListChanged;			//!< ƒ[ƒNƒŠƒXƒg‚Ì“à—e‚ª•ÏX‚³‚ê‚½
-extern bool WorkListFiltered;			//!< ƒ[ƒNƒŠƒXƒg‚ÉƒtƒBƒ‹ƒ^‚ª“K—p‚³‚ê‚Ä‚¢‚é
-extern bool WorkListHasSep;				//!< ƒ[ƒNƒŠƒXƒg‚ÉƒZƒpƒŒ[ƒ^‚ª‚ ‚é
-extern bool rqWorkListDirInf;			//!< ƒ[ƒNƒŠƒXƒg‚ÌƒfƒBƒŒƒNƒgƒŠî•ñXV‚ğ—v‹
+extern TStringList *WorkList;			//!< ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆ
+extern UnicodeString WorkListName;		//!< ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã®ãƒ•ã‚¡ã‚¤ãƒ«å
+extern TDateTime WorkListTime;			//!< ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã®ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—
+extern bool WorkListChanged;			//!< ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã®å†…å®¹ãŒå¤‰æ›´ã•ã‚ŒãŸ
+extern bool WorkListFiltered;			//!< ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã«ãƒ•ã‚£ãƒ«ã‚¿ãŒé©ç”¨ã•ã‚Œã¦ã„ã‚‹
+extern bool WorkListHasSep;				//!< ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã«ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿ãŒã‚ã‚‹
+extern bool rqWorkListDirInf;			//!< ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæƒ…å ±æ›´æ–°ã‚’è¦æ±‚
 
-extern TStringList *PlayList;			//!< ƒvƒŒƒCƒŠƒXƒg
-extern UnicodeString PlayListFile;		//!< ƒvƒŒƒCƒŠƒXƒg‚Ìƒtƒ@ƒCƒ‹–¼
-extern UnicodeString PlayFile;			//!< Ä¶’†ƒtƒ@ƒCƒ‹–¼
+extern TStringList *PlayList;			//!< ãƒ—ãƒ¬ã‚¤ãƒªã‚¹ãƒˆ
+extern UnicodeString PlayListFile;		//!< ãƒ—ãƒ¬ã‚¤ãƒªã‚¹ãƒˆã®ãƒ•ã‚¡ã‚¤ãƒ«å
+extern UnicodeString PlayFile;			//!< å†ç”Ÿä¸­ãƒ•ã‚¡ã‚¤ãƒ«å
 extern int  PlayStbIdx;
-extern bool PlayRepeat;					//!< ƒŠƒs[ƒgÄ¶
-extern bool PlayShuffle;				//!< ƒVƒƒƒbƒtƒ‹Ä¶
-extern bool ListShuffled;				//!< ƒVƒƒƒbƒtƒ‹‚³‚ê‚½
+extern bool PlayRepeat;					//!< ãƒªãƒ”ãƒ¼ãƒˆå†ç”Ÿ
+extern bool PlayShuffle;				//!< ã‚·ãƒ£ãƒƒãƒ•ãƒ«å†ç”Ÿ
+extern bool ListShuffled;				//!< ã‚·ãƒ£ãƒƒãƒ•ãƒ«ã•ã‚ŒãŸ
 
-extern int  IniPathMode[MAX_FILELIST];				//!< ‹N“®ƒpƒXƒ‚[ƒh
-extern UnicodeString InitialPath[MAX_FILELIST];		//!< ‹N“®ƒpƒX
-extern UnicodeString InitialMask[MAX_FILELIST];		//!< ‹N“®ƒ}ƒXƒN
-extern int  IniSortMode[MAX_FILELIST];				//!< ‹N“®ƒ\[ƒg•û–@
+extern int  IniPathMode[MAX_FILELIST];				//!< èµ·å‹•æ™‚ãƒ‘ã‚¹ãƒ¢ãƒ¼ãƒ‰
+extern UnicodeString InitialPath[MAX_FILELIST];		//!< èµ·å‹•æ™‚ãƒ‘ã‚¹
+extern UnicodeString InitialMask[MAX_FILELIST];		//!< èµ·å‹•æ™‚ãƒã‚¹ã‚¯
+extern int  IniSortMode[MAX_FILELIST];				//!< èµ·å‹•æ™‚ã‚½ãƒ¼ãƒˆæ–¹æ³•
 
-extern int  IniWorkMode;				//!< ƒ[ƒNƒŠƒXƒg 0:‘O‰ñ/ 1:w’è
+extern int  IniWorkMode;				//!< ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆ 0:å‰å›/ 1:æŒ‡å®š
 extern UnicodeString HomeWorkList;
 
-extern TStringList *PopMenuList;		//!< ExeMenuFile ƒRƒ}ƒ“ƒh—pƒƒjƒ…[€–Ú
-extern TStringList *ToolBtnList;		//!< ƒc[ƒ‹ƒ{ƒ^ƒ“’è‹`ƒŠƒXƒg(ƒtƒ@ƒCƒ‰[)
-extern TStringList *ToolBtnListV;		//!< ƒc[ƒ‹ƒ{ƒ^ƒ“’è‹`ƒŠƒXƒg(ƒeƒLƒXƒgƒrƒ…[ƒA)
-extern TStringList *ToolBtnListI;		//!< ƒc[ƒ‹ƒ{ƒ^ƒ“’è‹`ƒŠƒXƒg(ƒCƒ[ƒWƒrƒ…[ƒA)
+extern TStringList *PopMenuList;		//!< ExeMenuFile ã‚³ãƒãƒ³ãƒ‰ç”¨ãƒ¡ãƒ‹ãƒ¥ãƒ¼é …ç›®
+extern TStringList *ToolBtnList;		//!< ãƒ„ãƒ¼ãƒ«ãƒœã‚¿ãƒ³å®šç¾©ãƒªã‚¹ãƒˆ(ãƒ•ã‚¡ã‚¤ãƒ©ãƒ¼)
+extern TStringList *ToolBtnListV;		//!< ãƒ„ãƒ¼ãƒ«ãƒœã‚¿ãƒ³å®šç¾©ãƒªã‚¹ãƒˆ(ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢)
+extern TStringList *ToolBtnListI;		//!< ãƒ„ãƒ¼ãƒ«ãƒœã‚¿ãƒ³å®šç¾©ãƒªã‚¹ãƒˆ(ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢)
 
-extern int  IniWinMode;					//!< ƒTƒCƒYƒ‚[ƒh 0:‘O‰ñ/ 1:w’è
+extern int  IniWinMode;					//!< ã‚µã‚¤ã‚ºãƒ¢ãƒ¼ãƒ‰ 0:å‰å›/ 1:æŒ‡å®š
 extern int  IniWinLeft, IniWinTop, IniWinWidth, IniWinHeight;
-extern bool FixWinPos;					//!< ƒEƒBƒ“ƒhƒEƒTƒCƒY‚ğŒÅ’è
-extern bool IniPathToTab1;				//!< ‰ŠúƒpƒX‚ğƒ^ƒu1‚Éİ’è
-extern bool IniTabHomeAll;				//!< ‰ŠúƒpƒXˆÈŠO‚Ìƒ^ƒu‚ğƒz[ƒ€‚É–ß‚·
-extern bool ShowSplash;					//!< ƒXƒvƒ‰ƒbƒVƒ…‚ğ•\¦
+extern bool FixWinPos;					//!< ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚µã‚¤ã‚ºã‚’å›ºå®š
+extern bool IniPathToTab1;				//!< åˆæœŸãƒ‘ã‚¹ã‚’ã‚¿ãƒ–1ã«è¨­å®š
+extern bool IniTabHomeAll;				//!< åˆæœŸãƒ‘ã‚¹ä»¥å¤–ã®ã‚¿ãƒ–ã‚’ãƒ›ãƒ¼ãƒ ã«æˆ»ã™
+extern bool ShowSplash;					//!< ã‚¹ãƒ—ãƒ©ãƒƒã‚·ãƒ¥ã‚’è¡¨ç¤º
 
 //---------------------------------------------------------------------------
 /**
- * @defgroup OPTION_EVENT_CMDS ƒIƒvƒVƒ‡ƒ“İ’è - ƒCƒxƒ“ƒg
- * @brief ƒCƒxƒ“ƒg”­¶‚ÉÀs‚·‚éƒRƒ}ƒ“ƒh
+ * @defgroup OPTION_EVENT_CMDS ã‚ªãƒ—ã‚·ãƒ§ãƒ³è¨­å®š - ã‚¤ãƒ™ãƒ³ãƒˆ
+ * @brief ã‚¤ãƒ™ãƒ³ãƒˆç™ºç”Ÿæ™‚ã«å®Ÿè¡Œã™ã‚‹ã‚³ãƒãƒ³ãƒ‰
 */
 
 /** @{ */
-#define MAX_EVENT_CMD	66	//!< Å‘åƒCƒxƒ“ƒg”
+#define MAX_EVENT_CMD	66	//!< æœ€å¤§ã‚¤ãƒ™ãƒ³ãƒˆæ•°
 
 extern UnicodeString OnAppStart;
 extern UnicodeString OnAppClose;
@@ -946,12 +946,12 @@ extern UnicodeString OnClipText;
 extern UnicodeString OnUnlocked;
 
 struct event_rec {
-	UnicodeString *sp;	//!< •Ï”‚Ìƒ|ƒCƒ“ƒ^
-	const _TCHAR *key;	//!< ƒL[–¼
-	const _TCHAR *dsc;	//!< à–¾
+	UnicodeString *sp;	//!< å¤‰æ•°ã®ãƒã‚¤ãƒ³ã‚¿
+	const _TCHAR *key;	//!< ã‚­ãƒ¼å
+	const _TCHAR *dsc;	//!< èª¬æ˜
 };
 
-extern const event_rec EventCmdList[MAX_EVENT_CMD];	//!< ƒCƒxƒ“ƒgƒRƒ}ƒ“ƒhƒŠƒXƒg
+extern const event_rec EventCmdList[MAX_EVENT_CMD];	//!< ã‚¤ãƒ™ãƒ³ãƒˆã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆ
 
 /** @} */
 
@@ -966,588 +966,588 @@ extern UnicodeString Timer_Condition[MAX_TIMER_EVENT];
 extern UnicodeString OnTimerEvent[MAX_TIMER_EVENT];
 
 //---------------------------------------------------------------------------
-extern int  SortMode[MAX_FILELIST];			/**< ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚Ìƒ\[ƒg•û–@@n
-											 * 0:–¼‘O/ 1:Šg’£q/ 2:XV“ú/ 3:ƒTƒCƒY/ 4:‘®«/ 5:‚È‚µ */
-extern int  DirSortMode[MAX_FILELIST];		/**< ƒfƒBƒŒƒNƒgƒŠ‚Ìƒ\[ƒg•û–@@n
-											 * 0:ƒtƒ@ƒCƒ‹‚Æ“¯‚¶/ 1:–¼‘O/ 2:XV“ú/ 3:ƒTƒCƒY/ 4:‘®«/
-											 * 5:ƒfƒBƒŒƒNƒgƒŠ‚ğ‹æ•Ê‚µ‚È‚¢/ 6:ƒtƒHƒ‹ƒ_ƒAƒCƒRƒ“ */
-extern int  SubSortMode[5];					//!< ‘æ2ƒ\[ƒgƒ‚[ƒh
-extern int  PrimeSortMode;					//!< ‘æ1ƒ\[ƒgƒ‚[ƒh
+extern int  SortMode[MAX_FILELIST];			/**< ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã®ã‚½ãƒ¼ãƒˆæ–¹æ³•@n
+											 * 0:åå‰/ 1:æ‹¡å¼µå­/ 2:æ›´æ–°æ—¥æ™‚/ 3:ã‚µã‚¤ã‚º/ 4:å±æ€§/ 5:ãªã— */
+extern int  DirSortMode[MAX_FILELIST];		/**< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ã‚½ãƒ¼ãƒˆæ–¹æ³•@n
+											 * 0:ãƒ•ã‚¡ã‚¤ãƒ«ã¨åŒã˜/ 1:åå‰/ 2:æ›´æ–°æ—¥æ™‚/ 3:ã‚µã‚¤ã‚º/ 4:å±æ€§/
+											 * 5:ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’åŒºåˆ¥ã—ãªã„/ 6:ãƒ•ã‚©ãƒ«ãƒ€ã‚¢ã‚¤ã‚³ãƒ³ */
+extern int  SubSortMode[5];					//!< ç¬¬2ã‚½ãƒ¼ãƒˆãƒ¢ãƒ¼ãƒ‰
+extern int  PrimeSortMode;					//!< ç¬¬1ã‚½ãƒ¼ãƒˆãƒ¢ãƒ¼ãƒ‰
 
-extern bool FlOdrNatural[MAX_FILELIST];		//!< ©‘R‡
-extern bool FlOdrDscName[MAX_FILELIST];		//!< ~‡
-extern bool FlOdrSmall[MAX_FILELIST];		//!< ¬‚³‚¢‡
-extern bool FlOdrOld[MAX_FILELIST];			//!< ŒÃ‚¢‡
-extern bool FlOdrDscAttr[MAX_FILELIST];		//!< ‘®«~‡
-extern bool FlOdrDscPath[MAX_FILELIST];		//!< êŠ~‡
+extern bool FlOdrNatural[MAX_FILELIST];		//!< è‡ªç„¶é †
+extern bool FlOdrDscName[MAX_FILELIST];		//!< é™é †
+extern bool FlOdrSmall[MAX_FILELIST];		//!< å°ã•ã„é †
+extern bool FlOdrOld[MAX_FILELIST];			//!< å¤ã„é †
+extern bool FlOdrDscAttr[MAX_FILELIST];		//!< å±æ€§é™é †
+extern bool FlOdrDscPath[MAX_FILELIST];		//!< å ´æ‰€é™é †
 
-extern bool NaturalOrder;					//!< ”äŠrŠÖ” - ©‘R‡
-extern bool DscNameOrder;					//!< ”äŠrŠÖ” - –¼‘O~‡
-extern bool SmallOrder;						//!< ”äŠrŠÖ” - ¬‚³‚¢‡
-extern bool OldOrder;						//!< ”äŠrŠÖ” - ŒÃ‚¢‡
-extern bool DscAttrOrder;					//!< ”äŠrŠÖ” - ‘®«~‡
-extern bool DscPathOrder;					//!< ”äŠrŠÖ” - êŠ~‡
+extern bool NaturalOrder;					//!< æ¯”è¼ƒé–¢æ•° - è‡ªç„¶é †
+extern bool DscNameOrder;					//!< æ¯”è¼ƒé–¢æ•° - åå‰é™é †
+extern bool SmallOrder;						//!< æ¯”è¼ƒé–¢æ•° - å°ã•ã„é †
+extern bool OldOrder;						//!< æ¯”è¼ƒé–¢æ•° - å¤ã„é †
+extern bool DscAttrOrder;					//!< æ¯”è¼ƒé–¢æ•° - å±æ€§é™é †
+extern bool DscPathOrder;					//!< æ¯”è¼ƒé–¢æ•° - å ´æ‰€é™é †
 
 extern bool TopSymbol;
-extern bool SortBoth;						//!< ¶‰E‚Æ‚à•ÏX
-extern bool SortLogical;					//!< ˜_—ƒ\[ƒg(©‘R‡ƒ\[ƒg–³Œø)
+extern bool SortBoth;						//!< å·¦å³ã¨ã‚‚å¤‰æ›´
+extern bool SortLogical;					//!< è«–ç†ã‚½ãƒ¼ãƒˆ(è‡ªç„¶é †ã‚½ãƒ¼ãƒˆç„¡åŠ¹æ™‚)
 extern UnicodeString SortSymList;
-extern UnicodeString SortExtList;			//!< Šg’£q‡‚Å—Dæ‚·‚éŠg’£q
+extern UnicodeString SortExtList;			//!< æ‹¡å¼µå­é †ã§å„ªå…ˆã™ã‚‹æ‹¡å¼µå­
 
-extern TStringList *OptionList;				//!< ƒIƒvƒVƒ‡ƒ“
-extern TStringList *KeyFuncList;			//!< ƒL[Š„‚è“–‚Ä
-extern TStringList *FKeyLabelList;			//!< ƒtƒ@ƒ“ƒNƒVƒ‡ƒ“ƒL[–¼
-extern TStringList *HotKeyList;				//!< ƒzƒbƒgƒL[
-extern TStringList *DirStack;				//!< ƒfƒBƒŒƒNƒgƒŠƒXƒ^ƒbƒN
-extern TStringList *PathMaskList;			//!< ƒpƒXƒ}ƒXƒNƒŠƒXƒg
-extern TStringList *RegDirList;				//!< “o˜^ƒfƒBƒŒƒNƒgƒŠ
-extern TStringList *ProtectDirList;			//!< íœ§ŒÀƒfƒBƒŒƒNƒgƒŠ
-extern TStringList *VirDriveList;			//!< ‰¼‘zƒhƒ‰ƒCƒuƒŠƒXƒg
-extern TStringList *ColorList;				//!< ”zF
-extern TStringList *ExtColList;				//!< Šg’£q•Ê”zF
-extern TStringList *AssociateList;			//!< ŠÖ˜A•t‚¯
-extern TStringList *OpenStdCmdList;			//!< OpenStandard ‚ÌƒRƒ}ƒ“ƒhŠÖ˜A•t‚¯
-extern TStringList *EtcEditorList;			//!< ‚»‚Ì‘¼‚ÌƒGƒfƒBƒ^ƒŠƒXƒg
-extern TStringList *ExtToolList;			//!< ŠO•”ƒc[ƒ‹
-extern TStringList *ExtMenuList;			//!< ’Ç‰Áƒƒjƒ…[
-extern TStringList *CommandList;			//!< ƒRƒ}ƒ“ƒhƒŠƒXƒg
-extern TStringList *CmdSetList;				//!< ƒRƒ}ƒ“ƒhˆê——ƒŠƒXƒg
-extern TStringList *TaskCmdList;			//!< ƒ^ƒXƒNƒRƒ}ƒ“ƒh–¼ƒŠƒXƒg
-extern TStringList *DriveList;				//!< •Ï‰»ŠÄ‹—pƒhƒ‰ƒCƒuƒŠƒXƒg
-extern TStringList *NetDriveList;			//!< Œ»İ—LŒø‚Èƒlƒbƒgƒhƒ‰ƒCƒuƒŠƒXƒg
-extern TStringList *AllDirHistory;			//!< ‘S‘Ì‚ÌƒfƒBƒŒƒNƒgƒŠ—š—ğ
-extern TStringList *TextViewHistory;		//!< ƒeƒLƒXƒg‰{———š—ğ
-extern TStringList *TextEditHistory;		//!< ƒeƒLƒXƒg•ÒW—š—ğ
-extern TStringList *WorkListHistory;		//!< ƒ[ƒNƒŠƒXƒg—š—ğ
-extern TStringList *CopyPathHistory;		//!< ƒRƒs[‚µ‚½ƒpƒX–¼‚Ì—š—ğ
-extern TStringList *InputDirHistory;		//!< ƒfƒBƒŒƒNƒgƒŠ“ü—Í‚Ì—š—ğ
-extern TStringList *InputCmdsHistory;		//!< ƒRƒ}ƒ“ƒh“ü—Í‚Ì—š—ğ(ƒtƒ@ƒCƒ‰[)
-extern TStringList *InputCmdsHistoryV;		//!< ƒRƒ}ƒ“ƒh“ü—Í‚Ì—š—ğ(ƒeƒLƒXƒgƒrƒ…[ƒA)
-extern TStringList *InputCmdsHistoryI;		//!< ƒRƒ}ƒ“ƒh“ü—Í‚Ì—š—ğ(ƒCƒ[ƒWƒrƒ…[ƒA)
-extern TStringList *IncSeaHistory;			//!< ƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`‚ÌƒL[ƒ[ƒh—š—ğ
-extern TStringList *FilterHistory;			//!< ƒtƒBƒ‹ƒ^‚ÌƒL[ƒ[ƒh—š—ğ
-extern TStringList *WebSeaHistory;			//!< WebŒŸõŒê‚Ì—š—ğ
-extern TStringList *LatLngHistory;			//!< ˆÜ“xŒo“xŒŸõ‚Ì—š—ğ
-extern TStringList *HeadlineList;			//!< Œ©o‚µƒŠƒXƒg (Šg’£q=³‹K•\Œ»ƒpƒ^[ƒ“)
-extern TStringList *ZoomRatioList;			//!< ƒY[ƒ€”{—¦ƒŠƒXƒg
-extern TStringList *InterpolationList;		//!< k¬EŠg‘åƒAƒ‹ƒSƒŠƒYƒ€‚ÌƒŠƒXƒg
-extern TStringList *CnvCharList;			//!< ‹Ö~•¶š^ƒ†[ƒU’è‹`•¶š•ÏŠ·ƒŠƒXƒg
-extern TStringList *RenCmdFileList;			//!< ‰ü–¼‚µ‚½ƒRƒ}ƒ“ƒhƒtƒ@ƒCƒ‹‚ÌƒŠƒXƒg
-extern TStringList *RenArcFileList;			//!< ‰ü–¼‚µ‚½ƒA[ƒJƒCƒuƒtƒ@ƒCƒ‹‚ÌƒŠƒXƒg
-extern TStringList *RedrawList;				//!< •`‰æ—}~—pƒŠƒXƒg
-extern TStringList *CmdRequestList;			//!< ƒRƒ}ƒ“ƒh—v‹ƒŠƒXƒg
-extern TStringList *CommandHistory;			//!< ƒRƒ}ƒ“ƒh—š—ğ
+extern TStringList *OptionList;				//!< ã‚ªãƒ—ã‚·ãƒ§ãƒ³
+extern TStringList *KeyFuncList;			//!< ã‚­ãƒ¼å‰²ã‚Šå½“ã¦
+extern TStringList *FKeyLabelList;			//!< ãƒ•ã‚¡ãƒ³ã‚¯ã‚·ãƒ§ãƒ³ã‚­ãƒ¼å
+extern TStringList *HotKeyList;				//!< ãƒ›ãƒƒãƒˆã‚­ãƒ¼
+extern TStringList *DirStack;				//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚¹ã‚¿ãƒƒã‚¯
+extern TStringList *PathMaskList;			//!< ãƒ‘ã‚¹ãƒã‚¹ã‚¯ãƒªã‚¹ãƒˆ
+extern TStringList *RegDirList;				//!< ç™»éŒ²ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+extern TStringList *ProtectDirList;			//!< å‰Šé™¤åˆ¶é™ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+extern TStringList *VirDriveList;			//!< ä»®æƒ³ãƒ‰ãƒ©ã‚¤ãƒ–ãƒªã‚¹ãƒˆ
+extern TStringList *ColorList;				//!< é…è‰²
+extern TStringList *ExtColList;				//!< æ‹¡å¼µå­åˆ¥é…è‰²
+extern TStringList *AssociateList;			//!< é–¢é€£ä»˜ã‘
+extern TStringList *OpenStdCmdList;			//!< OpenStandard ã®ã‚³ãƒãƒ³ãƒ‰é–¢é€£ä»˜ã‘
+extern TStringList *EtcEditorList;			//!< ãã®ä»–ã®ã‚¨ãƒ‡ã‚£ã‚¿ãƒªã‚¹ãƒˆ
+extern TStringList *ExtToolList;			//!< å¤–éƒ¨ãƒ„ãƒ¼ãƒ«
+extern TStringList *ExtMenuList;			//!< è¿½åŠ ãƒ¡ãƒ‹ãƒ¥ãƒ¼
+extern TStringList *CommandList;			//!< ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆ
+extern TStringList *CmdSetList;				//!< ã‚³ãƒãƒ³ãƒ‰ä¸€è¦§ãƒªã‚¹ãƒˆ
+extern TStringList *TaskCmdList;			//!< ã‚¿ã‚¹ã‚¯ã‚³ãƒãƒ³ãƒ‰åãƒªã‚¹ãƒˆ
+extern TStringList *DriveList;				//!< å¤‰åŒ–ç›£è¦–ç”¨ãƒ‰ãƒ©ã‚¤ãƒ–ãƒªã‚¹ãƒˆ
+extern TStringList *NetDriveList;			//!< ç¾åœ¨æœ‰åŠ¹ãªãƒãƒƒãƒˆãƒ‰ãƒ©ã‚¤ãƒ–ãƒªã‚¹ãƒˆ
+extern TStringList *AllDirHistory;			//!< å…¨ä½“ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå±¥æ­´
+extern TStringList *TextViewHistory;		//!< ãƒ†ã‚­ã‚¹ãƒˆé–²è¦§å±¥æ­´
+extern TStringList *TextEditHistory;		//!< ãƒ†ã‚­ã‚¹ãƒˆç·¨é›†å±¥æ­´
+extern TStringList *WorkListHistory;		//!< ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆå±¥æ­´
+extern TStringList *CopyPathHistory;		//!< ã‚³ãƒ”ãƒ¼ã—ãŸãƒ‘ã‚¹åã®å±¥æ­´
+extern TStringList *InputDirHistory;		//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå…¥åŠ›ã®å±¥æ­´
+extern TStringList *InputCmdsHistory;		//!< ã‚³ãƒãƒ³ãƒ‰å…¥åŠ›ã®å±¥æ­´(ãƒ•ã‚¡ã‚¤ãƒ©ãƒ¼)
+extern TStringList *InputCmdsHistoryV;		//!< ã‚³ãƒãƒ³ãƒ‰å…¥åŠ›ã®å±¥æ­´(ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢)
+extern TStringList *InputCmdsHistoryI;		//!< ã‚³ãƒãƒ³ãƒ‰å…¥åŠ›ã®å±¥æ­´(ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢)
+extern TStringList *IncSeaHistory;			//!< ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ã‚¿ãƒ«ã‚µãƒ¼ãƒã®ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰å±¥æ­´
+extern TStringList *FilterHistory;			//!< ãƒ•ã‚£ãƒ«ã‚¿ã®ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰å±¥æ­´
+extern TStringList *WebSeaHistory;			//!< Webæ¤œç´¢èªã®å±¥æ­´
+extern TStringList *LatLngHistory;			//!< ç·¯åº¦çµŒåº¦æ¤œç´¢ã®å±¥æ­´
+extern TStringList *HeadlineList;			//!< è¦‹å‡ºã—ãƒªã‚¹ãƒˆ (æ‹¡å¼µå­=æ­£è¦è¡¨ç¾ãƒ‘ã‚¿ãƒ¼ãƒ³)
+extern TStringList *ZoomRatioList;			//!< ã‚ºãƒ¼ãƒ å€ç‡ãƒªã‚¹ãƒˆ
+extern TStringList *InterpolationList;		//!< ç¸®å°ãƒ»æ‹¡å¤§ã‚¢ãƒ«ã‚´ãƒªã‚ºãƒ ã®ãƒªã‚¹ãƒˆ
+extern TStringList *CnvCharList;			//!< ç¦æ­¢æ–‡å­—ï¼ãƒ¦ãƒ¼ã‚¶å®šç¾©æ–‡å­—å¤‰æ›ãƒªã‚¹ãƒˆ
+extern TStringList *RenCmdFileList;			//!< æ”¹åã—ãŸã‚³ãƒãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒªã‚¹ãƒˆ
+extern TStringList *RenArcFileList;			//!< æ”¹åã—ãŸã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒªã‚¹ãƒˆ
+extern TStringList *RedrawList;				//!< æç”»æŠ‘æ­¢ç”¨ãƒªã‚¹ãƒˆ
+extern TStringList *CmdRequestList;			//!< ã‚³ãƒãƒ³ãƒ‰è¦æ±‚ãƒªã‚¹ãƒˆ
+extern TStringList *CommandHistory;			//!< ã‚³ãƒãƒ³ãƒ‰å±¥æ­´
 
-extern UnicodeString LogBufStr;				//!< ƒ^ƒXƒN‚©‚ç‚ÌƒƒO‘ƒoƒbƒtƒ@ (LogRWLock ‚Å•ÛŒì‚·‚é‚±‚Æ)
+extern UnicodeString LogBufStr;				//!< ã‚¿ã‚¹ã‚¯ã‹ã‚‰ã®ãƒ­ã‚°æ›¸è¾¼ãƒãƒƒãƒ•ã‚¡ (LogRWLock ã§ä¿è­·ã™ã‚‹ã“ã¨)
 extern TMultiReadExclusiveWriteSynchronizer *LogRWLock;
 
-extern TListBox     *LogWndListBox;			//!< ƒƒOƒEƒBƒ“ƒhƒE—pƒŠƒXƒgƒ{ƒbƒNƒX
-extern TStringList  *LogBufList;			//!< ƒƒOƒŠƒXƒgƒ{ƒbƒNƒX(‰¼‘z)—pƒoƒbƒtƒ@
-extern UsrScrollPanel *LogWndScrPanel;		//!< ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[
+extern TListBox     *LogWndListBox;			//!< ãƒ­ã‚°ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ç”¨ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹
+extern TStringList  *LogBufList;			//!< ãƒ­ã‚°ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹(ä»®æƒ³)ç”¨ãƒãƒƒãƒ•ã‚¡
+extern UsrScrollPanel *LogWndScrPanel;		//!< ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 
-extern int  LayoutMode;			//!< ‰æ–ÊƒŒƒCƒAƒEƒgƒ‚[ƒh
-extern bool DivFileListUD;		//!< ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚ğã‰º‚É•ªŠ„
-extern bool DivDirInfUD;		//!< ƒfƒBƒŒƒNƒgƒŠî•ñ‚ğã‰º‚É•ªŠ„
+extern int  LayoutMode;			//!< ç”»é¢ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆãƒ¢ãƒ¼ãƒ‰
+extern bool DivFileListUD;		//!< ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã‚’ä¸Šä¸‹ã«åˆ†å‰²
+extern bool DivDirInfUD;		//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæƒ…å ±ã‚’ä¸Šä¸‹ã«åˆ†å‰²
 
-extern TFont *ListFont;			//!< ƒtƒ@ƒCƒ‹ƒŠƒXƒg“™
-extern TFont *FileInfFont;		//!< ƒtƒ@ƒCƒ‹î•ñ
-extern TFont *TxtPrvFont;		//!< ƒeƒLƒXƒgƒvƒŒƒrƒ…[
-extern TFont *LogFont;			//!< ƒƒO
-extern TFont *ViewerFont;		//!< ƒeƒLƒXƒgƒrƒ…[ƒA
-extern TFont *GrepResFont;		//!< GREPŒ‹‰ÊƒŠƒXƒg
-extern TFont *DirInfFont;		//!< ƒfƒBƒŒƒNƒgƒŠî•ñ
-extern TFont *DrvInfFont;		//!< ƒhƒ‰ƒCƒuî•ñ
-extern TFont *LstHdrFont;		//!< ˆê——‚Ìƒwƒbƒ_
-extern TFont *ViewHdrFont;		//!< ƒrƒ…[ƒAî•ñƒwƒbƒ_
-extern TFont *GenListFont;		//!< ˆê——ƒ_ƒCƒAƒƒO
-extern TFont *HintFont;			//!< ƒqƒ“ƒg
-extern TFont *SttBarFont;		//!< ƒXƒe[ƒ^ƒXƒo[
-extern TFont *CalcFont;			//!< “d‘ì
-extern TFont *ToolBarFont;		//!< ƒc[ƒ‹ƒo[
-extern TFont *TabBarFont;		//!< ƒ^ƒuƒo[
-extern TFont *CharInfFont;		//!< •¶šî•ñ
-extern TStringList *FontList;	//!< ƒJƒ‰[
+extern TFont *ListFont;			//!< ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆç­‰
+extern TFont *FileInfFont;		//!< ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±
+extern TFont *TxtPrvFont;		//!< ãƒ†ã‚­ã‚¹ãƒˆãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼
+extern TFont *LogFont;			//!< ãƒ­ã‚°
+extern TFont *ViewerFont;		//!< ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢
+extern TFont *GrepResFont;		//!< GREPçµæœãƒªã‚¹ãƒˆ
+extern TFont *DirInfFont;		//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæƒ…å ±
+extern TFont *DrvInfFont;		//!< ãƒ‰ãƒ©ã‚¤ãƒ–æƒ…å ±
+extern TFont *LstHdrFont;		//!< ä¸€è¦§ã®ãƒ˜ãƒƒãƒ€
+extern TFont *ViewHdrFont;		//!< ãƒ“ãƒ¥ãƒ¼ã‚¢æƒ…å ±ãƒ˜ãƒƒãƒ€
+extern TFont *GenListFont;		//!< ä¸€è¦§ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
+extern TFont *HintFont;			//!< ãƒ’ãƒ³ãƒˆ
+extern TFont *SttBarFont;		//!< ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒãƒ¼
+extern TFont *CalcFont;			//!< é›»å“
+extern TFont *ToolBarFont;		//!< ãƒ„ãƒ¼ãƒ«ãƒãƒ¼
+extern TFont *TabBarFont;		//!< ã‚¿ãƒ–ãƒãƒ¼
+extern TFont *CharInfFont;		//!< æ–‡å­—æƒ…å ±
+extern TStringList *FontList;	//!< ã‚«ãƒ©ãƒ¼
 
-/** @defgroup GLOBAL_COLORS ”zF */
+/** @defgroup GLOBAL_COLORS é…è‰² */
 /** @{ */
-/** @defgroup OPTION_COLORS ƒIƒvƒVƒ‡ƒ“İ’è */
+/** @defgroup OPTION_COLORS ã‚ªãƒ—ã‚·ãƒ§ãƒ³è¨­å®š */
 /** @{ */
-extern TColor col_bgList;		//!< ˆê——‚Ì”wŒiF
-extern TColor col_bgList2;		//!< ˆê——‚Ì”wŒiF(ŒğŒİ)
-extern TColor col_fgList;		//!< ˆê——‚Ì•¶šF
-extern TColor col_Splitter;		//!< •ªŠ„‹«ŠEü
-extern TColor col_bgArc;		//!< ‰¼‘zƒfƒBƒŒƒNƒgƒŠ‚Ì”wŒiF
-extern TColor col_bgFind;		//!< ŒŸõŒ‹‰ÊƒŠƒXƒg‚Ì”wŒiF
-extern TColor col_bgWork;		//!< ƒ[ƒNƒŠƒXƒg‚Ì”wŒiF
-extern TColor col_bgFTP;		//!< FTPƒŠƒ‚[ƒg‘¤‚Ì”wŒiF
-extern TColor col_bgADS;		//!< ‘ã‘Öƒf[ƒ^ƒXƒgƒŠ[ƒ€ˆê——‚Ì”wŒiF
-extern TColor col_selItem;		//!< ‘I‘ğ€–Ú‚Ì”wŒiF
-extern TColor col_oppItem;		//!< ”½‘ÎƒpƒX‘I‘ğ€–Ú‚Ì”wŒiF
-extern TColor col_fgSelItem;	//!< ‘I‘ğ€–Ú‚Ì•¶šF
-extern TColor col_bgMark;		//!< xƒ}[ƒN€–Ú‚Ì”wŒiF
-extern TColor col_matchItem;	//!< INC.ƒT[ƒ`‚Ìƒ}ƒbƒ`€–Ú”wŒiF
-extern TColor col_Differ;		//!< Œ‹‰ÊƒŠƒXƒg‚Ì‘Šˆá‰ÓŠ”wŒiF
-extern TColor col_DifferN;		//!< Œ‹‰ÊƒŠƒXƒg‚Ì’–Ú‰ÓŠ”wŒiF
-extern TColor col_Cursor;		//!< ƒ‰ƒCƒ“ƒJ[ƒ\ƒ‹‚ÌF
-extern TColor col_bgScrBar;		//!< ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[‚Ì”wŒiF
-extern TColor col_bgScrKnob;	//!< ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒmƒu‚ÌF
-extern TColor col_frScrKnob;	//!< ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒmƒu‚Ì—ÖŠsF
-extern TColor col_bgActKnob;	//!< ƒhƒ‰ƒbƒO‚ÌƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒmƒuF
-extern TColor col_lnScrHit;		//!< ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[‚ÌƒqƒbƒgsF
-extern TColor col_lnScrSel;		//!< ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[‚Ì‘I‘ğsF
-extern TColor col_Folder;		//!< ƒfƒBƒŒƒNƒgƒŠ‚Ì•¶šF
-extern TColor col_SymLink;		//!< ƒVƒ“ƒ{ƒŠƒbƒNƒŠƒ“ƒN/ƒWƒƒƒ“ƒNƒVƒ‡ƒ“‚Ì•¶šF
-extern TColor col_Protect;		//!< íœ§ŒÀƒfƒBƒŒƒNƒgƒŠ‚Ì•¶šF
-extern TColor col_ReadOnly;		//!< “Ç‚İ‚İê—p‘®«‚Ì•¶šF
-extern TColor col_Compress;		//!< ˆ³k‘®«‚Ì•¶šF
-extern TColor col_Hidden;		//!< ‰B‚µ‘®«‚Ì•¶šF
-extern TColor col_System;		//!< ƒVƒXƒeƒ€‘®«‚Ì•¶šF
-extern TColor col_fgSpace;		//!< ‹ó”’‹L†‚Ì•¶šF
-extern TColor col_fgTagNam;		//!< ƒfƒtƒHƒ‹ƒg‚Ìƒ^ƒOF
-extern TColor col_InvItem;		//!< –³Œø‚È€–Ú‚Ì•¶šF
-extern TColor col_bgTabBar;		//!< ƒ^ƒuƒo[‚Ì”wŒiF
-extern TColor col_bgActTab;		//!< ƒAƒNƒeƒBƒu‚Èƒ^ƒu‚Ì”wŒiF
-extern TColor col_bgInAcTab;	//!< ”ñƒAƒNƒeƒBƒu‚Èƒ^ƒu‚Ì”wŒiF
-extern TColor col_frmTab;		//!< ƒ^ƒu‚Ì—ÖŠsF
-extern TColor col_fgTab;		//!< ƒ^ƒu‚Ì•¶šF
-extern TColor col_bgListHdr;	//!< ƒŠƒXƒgƒwƒbƒ_‚Ì”wŒiF
-extern TColor col_fgListHdr;	//!< ƒŠƒXƒgƒwƒbƒ_‚Ì•¶šF
-extern TColor col_bgDirInf;		//!< ƒfƒBƒŒƒNƒgƒŠî•ñ‚Ì”wŒiF
-extern TColor col_fgDirInf;		//!< ƒfƒBƒŒƒNƒgƒŠî•ñ‚Ì•¶šF
-extern TColor col_bgDirRel;		//!< ƒfƒBƒŒƒNƒgƒŠŠÖŒW‚Ì”wŒiF
-extern TColor col_fgDirRel;		//!< ƒfƒBƒŒƒNƒgƒŠŠÖŒW‚Ì•¶šF
-extern TColor col_bdrDirB;		//!< ƒfƒBƒŒƒNƒgƒŠî•ñ‚Ì‰º‹«ŠEü
-extern TColor col_bgDrvInf;		//!< ƒhƒ‰ƒCƒuî•ñ‚Ì”wŒiF
-extern TColor col_fgDrvInf;		//!< ƒhƒ‰ƒCƒuî•ñ‚Ì•¶šF
-extern TColor col_bdrDrvT;		//!< ƒhƒ‰ƒCƒuî•ñ‚Ìã‹«ŠEü
-extern TColor col_bgInf;		//!< ƒtƒ@ƒCƒ‹î•ñ‚Ì”wŒiF
-extern TColor col_fgInf;		//!< ƒtƒ@ƒCƒ‹î•ñ‚Ì•¶šF
-extern TColor col_fgInfNam;		//!< ƒtƒ@ƒCƒ‹î•ñ‚Ì€–Ú–¼•¶šF
-extern TColor col_fgInfEmp;		//!< ƒtƒ@ƒCƒ‹î•ñ‚Ì‹­’²•¶šF
-extern TColor col_bgTxtPrv;		//!< ƒeƒLƒXƒgƒvƒŒƒrƒ…[‚Ì”wŒiF
-extern TColor col_fgTxtPrv;		//!< ƒeƒLƒXƒgƒvƒŒƒrƒ…[‚Ì•¶šF
-extern TColor col_bgLog;		//!< ƒƒO‚Ì”wŒiF
-extern TColor col_fgLog;		//!< ƒƒO‚Ì•¶šF
-extern TColor col_bgTask;		//!< ƒ^ƒXƒNó‘Ô•\¦‚Ì”wŒiF
-extern TColor col_fgPrgBar;		//!< ƒ^ƒXƒNi’»ƒo[F
-extern TColor col_bgPrgBar;		//!< ƒ^ƒXƒNi’»”wŒiF
-extern TColor col_Error;		//!< ƒGƒ‰[/’ˆÓ‚Ì•¶šF
-extern TColor col_TlBorder;		//!< ƒc[ƒ‹ƒEƒCƒ“ƒhƒE‚Ì‹«ŠEü
+extern TColor col_bgList;		//!< ä¸€è¦§ã®èƒŒæ™¯è‰²
+extern TColor col_bgList2;		//!< ä¸€è¦§ã®èƒŒæ™¯è‰²(äº¤äº’)
+extern TColor col_fgList;		//!< ä¸€è¦§ã®æ–‡å­—è‰²
+extern TColor col_Splitter;		//!< åˆ†å‰²å¢ƒç•Œç·š
+extern TColor col_bgArc;		//!< ä»®æƒ³ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®èƒŒæ™¯è‰²
+extern TColor col_bgFind;		//!< æ¤œç´¢çµæœãƒªã‚¹ãƒˆã®èƒŒæ™¯è‰²
+extern TColor col_bgWork;		//!< ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã®èƒŒæ™¯è‰²
+extern TColor col_bgFTP;		//!< FTPãƒªãƒ¢ãƒ¼ãƒˆå´ã®èƒŒæ™¯è‰²
+extern TColor col_bgADS;		//!< ä»£æ›¿ãƒ‡ãƒ¼ã‚¿ã‚¹ãƒˆãƒªãƒ¼ãƒ ä¸€è¦§ã®èƒŒæ™¯è‰²
+extern TColor col_selItem;		//!< é¸æŠé …ç›®ã®èƒŒæ™¯è‰²
+extern TColor col_oppItem;		//!< åå¯¾ãƒ‘ã‚¹é¸æŠé …ç›®ã®èƒŒæ™¯è‰²
+extern TColor col_fgSelItem;	//!< é¸æŠé …ç›®ã®æ–‡å­—è‰²
+extern TColor col_bgMark;		//!< æ ãƒãƒ¼ã‚¯é …ç›®ã®èƒŒæ™¯è‰²
+extern TColor col_matchItem;	//!< INC.ã‚µãƒ¼ãƒã®ãƒãƒƒãƒé …ç›®èƒŒæ™¯è‰²
+extern TColor col_Differ;		//!< çµæœãƒªã‚¹ãƒˆã®ç›¸é•ç®‡æ‰€èƒŒæ™¯è‰²
+extern TColor col_DifferN;		//!< çµæœãƒªã‚¹ãƒˆã®æ³¨ç›®ç®‡æ‰€èƒŒæ™¯è‰²
+extern TColor col_Cursor;		//!< ãƒ©ã‚¤ãƒ³ã‚«ãƒ¼ã‚½ãƒ«ã®è‰²
+extern TColor col_bgScrBar;		//!< ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã®èƒŒæ™¯è‰²
+extern TColor col_bgScrKnob;	//!< ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ–ã®è‰²
+extern TColor col_frScrKnob;	//!< ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ–ã®è¼ªéƒ­è‰²
+extern TColor col_bgActKnob;	//!< ãƒ‰ãƒ©ãƒƒã‚°æ™‚ã®ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ–è‰²
+extern TColor col_lnScrHit;		//!< ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã®ãƒ’ãƒƒãƒˆè¡Œè‰²
+extern TColor col_lnScrSel;		//!< ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã®é¸æŠè¡Œè‰²
+extern TColor col_Folder;		//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®æ–‡å­—è‰²
+extern TColor col_SymLink;		//!< ã‚·ãƒ³ãƒœãƒªãƒƒã‚¯ãƒªãƒ³ã‚¯/ã‚¸ãƒ£ãƒ³ã‚¯ã‚·ãƒ§ãƒ³ã®æ–‡å­—è‰²
+extern TColor col_Protect;		//!< å‰Šé™¤åˆ¶é™ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®æ–‡å­—è‰²
+extern TColor col_ReadOnly;		//!< èª­ã¿è¾¼ã¿å°‚ç”¨å±æ€§ã®æ–‡å­—è‰²
+extern TColor col_Compress;		//!< åœ§ç¸®å±æ€§ã®æ–‡å­—è‰²
+extern TColor col_Hidden;		//!< éš ã—å±æ€§ã®æ–‡å­—è‰²
+extern TColor col_System;		//!< ã‚·ã‚¹ãƒ†ãƒ å±æ€§ã®æ–‡å­—è‰²
+extern TColor col_fgSpace;		//!< ç©ºç™½è¨˜å·ã®æ–‡å­—è‰²
+extern TColor col_fgTagNam;		//!< ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã‚¿ã‚°è‰²
+extern TColor col_InvItem;		//!< ç„¡åŠ¹ãªé …ç›®ã®æ–‡å­—è‰²
+extern TColor col_bgTabBar;		//!< ã‚¿ãƒ–ãƒãƒ¼ã®èƒŒæ™¯è‰²
+extern TColor col_bgActTab;		//!< ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªã‚¿ãƒ–ã®èƒŒæ™¯è‰²
+extern TColor col_bgInAcTab;	//!< éã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªã‚¿ãƒ–ã®èƒŒæ™¯è‰²
+extern TColor col_frmTab;		//!< ã‚¿ãƒ–ã®è¼ªéƒ­è‰²
+extern TColor col_fgTab;		//!< ã‚¿ãƒ–ã®æ–‡å­—è‰²
+extern TColor col_bgListHdr;	//!< ãƒªã‚¹ãƒˆãƒ˜ãƒƒãƒ€ã®èƒŒæ™¯è‰²
+extern TColor col_fgListHdr;	//!< ãƒªã‚¹ãƒˆãƒ˜ãƒƒãƒ€ã®æ–‡å­—è‰²
+extern TColor col_bgDirInf;		//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæƒ…å ±ã®èƒŒæ™¯è‰²
+extern TColor col_fgDirInf;		//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæƒ…å ±ã®æ–‡å­—è‰²
+extern TColor col_bgDirRel;		//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªé–¢ä¿‚ã®èƒŒæ™¯è‰²
+extern TColor col_fgDirRel;		//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªé–¢ä¿‚ã®æ–‡å­—è‰²
+extern TColor col_bdrDirB;		//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæƒ…å ±ã®ä¸‹å¢ƒç•Œç·š
+extern TColor col_bgDrvInf;		//!< ãƒ‰ãƒ©ã‚¤ãƒ–æƒ…å ±ã®èƒŒæ™¯è‰²
+extern TColor col_fgDrvInf;		//!< ãƒ‰ãƒ©ã‚¤ãƒ–æƒ…å ±ã®æ–‡å­—è‰²
+extern TColor col_bdrDrvT;		//!< ãƒ‰ãƒ©ã‚¤ãƒ–æƒ…å ±ã®ä¸Šå¢ƒç•Œç·š
+extern TColor col_bgInf;		//!< ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã®èƒŒæ™¯è‰²
+extern TColor col_fgInf;		//!< ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã®æ–‡å­—è‰²
+extern TColor col_fgInfNam;		//!< ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã®é …ç›®åæ–‡å­—è‰²
+extern TColor col_fgInfEmp;		//!< ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã®å¼·èª¿æ–‡å­—è‰²
+extern TColor col_bgTxtPrv;		//!< ãƒ†ã‚­ã‚¹ãƒˆãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®èƒŒæ™¯è‰²
+extern TColor col_fgTxtPrv;		//!< ãƒ†ã‚­ã‚¹ãƒˆãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®æ–‡å­—è‰²
+extern TColor col_bgLog;		//!< ãƒ­ã‚°ã®èƒŒæ™¯è‰²
+extern TColor col_fgLog;		//!< ãƒ­ã‚°ã®æ–‡å­—è‰²
+extern TColor col_bgTask;		//!< ã‚¿ã‚¹ã‚¯çŠ¶æ…‹è¡¨ç¤ºã®èƒŒæ™¯è‰²
+extern TColor col_fgPrgBar;		//!< ã‚¿ã‚¹ã‚¯é€²æ—ãƒãƒ¼è‰²
+extern TColor col_bgPrgBar;		//!< ã‚¿ã‚¹ã‚¯é€²æ—èƒŒæ™¯è‰²
+extern TColor col_Error;		//!< ã‚¨ãƒ©ãƒ¼/æ³¨æ„ã®æ–‡å­—è‰²
+extern TColor col_TlBorder;		//!< ãƒ„ãƒ¼ãƒ«ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ã®å¢ƒç•Œç·š
 
-extern TColor col_bgView;		//!< ƒeƒLƒXƒgƒrƒ…[ƒA‚Ì”wŒiF
-extern TColor col_fgView;		//!< ƒeƒLƒXƒgƒrƒ…[ƒA‚Ì•¶šF
-extern TColor col_Margin;		//!< ƒeƒLƒXƒgƒrƒ…[ƒA‚Ì—]”’”’
-extern TColor col_bgRuler;		//!< ƒ‹[ƒ‰‚Ì”wŒiF
-extern TColor col_fgRuler;		//!< ƒ‹[ƒ‰‚Ì–Ú·F
-extern TColor col_bgLineNo;		//!< s”Ô†”wŒiF
-extern TColor col_LineNo;		//!< s”Ô†•¶šF
-extern TColor col_Mark;			//!< sƒ}[ƒN
-extern TColor col_bdrLine;		//!< s”Ô†‚Ì‹«ŠEü
-extern TColor col_bdrFold;		//!< Ü‚è•Ô‚µ‹«ŠEü
-extern TColor col_bdrFixed;		//!< ŒÅ’è’·•\¦‚ÌcŒrü
-extern TColor col_Indent;		//!< ƒCƒ“ƒfƒ“ƒgƒKƒCƒh
-extern TColor col_Indent2;		//!< ƒCƒ“ƒfƒ“ƒgƒKƒCƒh(ŒğŒİ)
-extern TColor col_Comment;		//!< ƒRƒƒ“ƒg‚Ì•¶šF
-extern TColor col_Strings;		//!< •¶š—ñ‚Ì•¶šF
-extern TColor col_Reserved;		//!< —\–ñŒê‚Ì•¶šF
-extern TColor col_Symbol;		//!< ƒVƒ“ƒ{ƒ‹‚Ì•¶šF
-extern TColor col_Numeric;		//!< ”’l‚Ì•¶šF
-extern TColor col_fgEmpBin1;	//!< ƒoƒCƒiƒŠ‹­’²•¶šF1
-extern TColor col_fgEmpBin2;	//!< ƒoƒCƒiƒŠ‹­’²•¶šF2
-extern TColor col_fgEmpBin3;	//!< ƒoƒCƒiƒŠ‹­’²•¶šF3
-extern TColor col_Headline;		//!< Œ©o‚µ‚Ì•¶šF
-extern TColor col_URL;			//!< URL‚Ì•¶šF
-extern TColor col_LocalLink;	//!< ƒ[ƒJƒ‹ƒtƒ@ƒCƒ‹‚Ö‚ÌƒŠƒ“ƒN
-extern TColor col_bgImage;		//!< ‰æ‘œ‚Ì”wŒiF
-extern TColor col_bgDblPg;		//!< Œ©ŠJ‚«•\¦‚Ì—]”’F
-extern TColor col_bgWMF;		//!< ƒƒ^ƒtƒ@ƒCƒ‹‚Ì”wŒiF
-extern TColor col_bgTips;		//!< ƒc[ƒ‹ƒ`ƒbƒv‚Ì”wŒiF
-extern TColor col_fgTips;		//!< ƒc[ƒ‹ƒ`ƒbƒv‚Ì•¶šF
-extern TColor col_bgHint;		//!< ƒqƒ“ƒg•\¦‚Ì”wŒiF
-extern TColor col_fgHint;		//!< ƒqƒ“ƒg•\¦‚Ì•¶šF
-extern TColor col_bgWarn;		//!< Œx•\¦‚Ì”wŒiF
-extern TColor col_fgEmp;		//!< ‹­’²•¶šF
-extern TColor col_bgEmp;		//!< ‹­’²”wŒiF
-extern TColor col_Ruby;			//!< ƒ‹ƒr
-extern TColor col_TAB;			//!< ƒ^ƒu•\¦F
-extern TColor col_CR;			//!< ‰üs•\¦F
-extern TColor col_HR;			//!< Œrü‚ÌF
-extern TColor col_Ctrl;			//!< ƒRƒ“ƒgƒ[ƒ‹ƒR[ƒh
-extern TColor col_fgPair;		//!< ‘Î‰‚·‚éŠ‡ŒÊ‚Ì•¶šF
+extern TColor col_bgView;		//!< ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã®èƒŒæ™¯è‰²
+extern TColor col_fgView;		//!< ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã®æ–‡å­—è‰²
+extern TColor col_Margin;		//!< ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã®ä½™ç™½ç™½
+extern TColor col_bgRuler;		//!< ãƒ«ãƒ¼ãƒ©ã®èƒŒæ™¯è‰²
+extern TColor col_fgRuler;		//!< ãƒ«ãƒ¼ãƒ©ã®ç›®ç››è‰²
+extern TColor col_bgLineNo;		//!< è¡Œç•ªå·èƒŒæ™¯è‰²
+extern TColor col_LineNo;		//!< è¡Œç•ªå·æ–‡å­—è‰²
+extern TColor col_Mark;			//!< è¡Œãƒãƒ¼ã‚¯
+extern TColor col_bdrLine;		//!< è¡Œç•ªå·ã®å¢ƒç•Œç·š
+extern TColor col_bdrFold;		//!< æŠ˜ã‚Šè¿”ã—å¢ƒç•Œç·š
+extern TColor col_bdrFixed;		//!< å›ºå®šé•·è¡¨ç¤ºã®ç¸¦ç½«ç·š
+extern TColor col_Indent;		//!< ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã‚¬ã‚¤ãƒ‰
+extern TColor col_Indent2;		//!< ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã‚¬ã‚¤ãƒ‰(äº¤äº’)
+extern TColor col_Comment;		//!< ã‚³ãƒ¡ãƒ³ãƒˆã®æ–‡å­—è‰²
+extern TColor col_Strings;		//!< æ–‡å­—åˆ—ã®æ–‡å­—è‰²
+extern TColor col_Reserved;		//!< äºˆç´„èªã®æ–‡å­—è‰²
+extern TColor col_Symbol;		//!< ã‚·ãƒ³ãƒœãƒ«ã®æ–‡å­—è‰²
+extern TColor col_Numeric;		//!< æ•°å€¤ã®æ–‡å­—è‰²
+extern TColor col_fgEmpBin1;	//!< ãƒã‚¤ãƒŠãƒªå¼·èª¿æ–‡å­—è‰²1
+extern TColor col_fgEmpBin2;	//!< ãƒã‚¤ãƒŠãƒªå¼·èª¿æ–‡å­—è‰²2
+extern TColor col_fgEmpBin3;	//!< ãƒã‚¤ãƒŠãƒªå¼·èª¿æ–‡å­—è‰²3
+extern TColor col_Headline;		//!< è¦‹å‡ºã—ã®æ–‡å­—è‰²
+extern TColor col_URL;			//!< URLã®æ–‡å­—è‰²
+extern TColor col_LocalLink;	//!< ãƒ­ãƒ¼ã‚«ãƒ«ãƒ•ã‚¡ã‚¤ãƒ«ã¸ã®ãƒªãƒ³ã‚¯
+extern TColor col_bgImage;		//!< ç”»åƒã®èƒŒæ™¯è‰²
+extern TColor col_bgDblPg;		//!< è¦‹é–‹ãè¡¨ç¤ºã®ä½™ç™½è‰²
+extern TColor col_bgWMF;		//!< ãƒ¡ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«ã®èƒŒæ™¯è‰²
+extern TColor col_bgTips;		//!< ãƒ„ãƒ¼ãƒ«ãƒãƒƒãƒ—ã®èƒŒæ™¯è‰²
+extern TColor col_fgTips;		//!< ãƒ„ãƒ¼ãƒ«ãƒãƒƒãƒ—ã®æ–‡å­—è‰²
+extern TColor col_bgHint;		//!< ãƒ’ãƒ³ãƒˆè¡¨ç¤ºã®èƒŒæ™¯è‰²
+extern TColor col_fgHint;		//!< ãƒ’ãƒ³ãƒˆè¡¨ç¤ºã®æ–‡å­—è‰²
+extern TColor col_bgWarn;		//!< è­¦å‘Šè¡¨ç¤ºã®èƒŒæ™¯è‰²
+extern TColor col_fgEmp;		//!< å¼·èª¿æ–‡å­—è‰²
+extern TColor col_bgEmp;		//!< å¼·èª¿èƒŒæ™¯è‰²
+extern TColor col_Ruby;			//!< ãƒ«ãƒ“
+extern TColor col_TAB;			//!< ã‚¿ãƒ–è¡¨ç¤ºè‰²
+extern TColor col_CR;			//!< æ”¹è¡Œè¡¨ç¤ºè‰²
+extern TColor col_HR;			//!< ç½«ç·šã®è‰²
+extern TColor col_Ctrl;			//!< ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚³ãƒ¼ãƒ‰
+extern TColor col_fgPair;		//!< å¯¾å¿œã™ã‚‹æ‹¬å¼§ã®æ–‡å­—è‰²
 
-extern TColor col_bdrThumb;		//!< ƒTƒ€ƒlƒCƒ‹‚Ì‹«ŠEü
-extern TColor col_ThumbExif;	//!< ƒTƒ€ƒlƒCƒ‹‚ÌEixfî•ñ
-extern TColor col_ImgGrid;		//!< ‰æ‘œ•ªŠ„ƒOƒŠƒbƒh
-extern TColor col_OptFind;		//!< ƒIƒvƒVƒ‡ƒ“İ’è‚ÌŒŸõŒ‹‰Ê
-extern TColor col_Tim1H;		//!< 1ŠÔˆÈ“à‚Ìƒ^ƒCƒ€ƒXƒ^ƒ“ƒvF
-extern TColor col_Tim3H;		//!< 3ŠÔˆÈ“à‚Ì`
-extern TColor col_Tim6H;		//!< 6ŠÔˆÈ“à‚Ì`
-extern TColor col_Tim1D;		//!< 1“úˆÈ“à‚Ì`
-extern TColor col_Tim3D;		//!< 3“úˆÈ“à‚Ì`
-extern TColor col_Tim7D;		//!< 7“úˆÈ“à‚Ì`
-extern TColor col_Tim1M;		//!< 1ƒ–ŒˆÈ“à‚Ì`
-extern TColor col_Tim3M;		//!< 3ƒ–ŒˆÈ“à‚Ì`
-extern TColor col_Tim6M;		//!< 6ƒ–ŒˆÈ“à‚Ì`
-extern TColor col_Tim1Y;		//!< 1”NˆÈ“à‚Ì`
-extern TColor col_Tim3Y;		//!< 3”NˆÈ“à‚Ì`
-extern TColor col_TimOld;		//!< ‚»‚ê‚æ‚è‘O‚Ì`
-extern TColor col_Size4G;		//!< 4GBˆÈã
-extern TColor col_Size2G;		//!< 2GBˆÈã
-extern TColor col_Size1G;		//!< 1GBˆÈã
-extern TColor col_Size512M;		//!< 512MBˆÈã
-extern TColor col_Size256M;		//!< 256MBˆÈã
-extern TColor col_Size128M;		//!< 128MBˆÈã
-extern TColor col_Size64M;		//!< 64MBˆÈã
-extern TColor col_Size32M;		//!< 32MBˆÈã
-extern TColor col_Size16M;		//!< 16MBˆÈã
-extern TColor col_Size1M;		//!< 1MBˆÈã
-extern TColor col_Size1K;		//!< 1KBˆÈã
-extern TColor col_SizeLT;		//!< 1KB–¢–
+extern TColor col_bdrThumb;		//!< ã‚µãƒ ãƒã‚¤ãƒ«ã®å¢ƒç•Œç·š
+extern TColor col_ThumbExif;	//!< ã‚µãƒ ãƒã‚¤ãƒ«ã®Eixfæƒ…å ±
+extern TColor col_ImgGrid;		//!< ç”»åƒåˆ†å‰²ã‚°ãƒªãƒƒãƒ‰
+extern TColor col_OptFind;		//!< ã‚ªãƒ—ã‚·ãƒ§ãƒ³è¨­å®šã®æ¤œç´¢çµæœ
+extern TColor col_Tim1H;		//!< 1æ™‚é–“ä»¥å†…ã®ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—è‰²
+extern TColor col_Tim3H;		//!< 3æ™‚é–“ä»¥å†…ã®ï½
+extern TColor col_Tim6H;		//!< 6æ™‚é–“ä»¥å†…ã®ï½
+extern TColor col_Tim1D;		//!< 1æ—¥ä»¥å†…ã®ï½
+extern TColor col_Tim3D;		//!< 3æ—¥ä»¥å†…ã®ï½
+extern TColor col_Tim7D;		//!< 7æ—¥ä»¥å†…ã®ï½
+extern TColor col_Tim1M;		//!< 1ãƒ¶æœˆä»¥å†…ã®ï½
+extern TColor col_Tim3M;		//!< 3ãƒ¶æœˆä»¥å†…ã®ï½
+extern TColor col_Tim6M;		//!< 6ãƒ¶æœˆä»¥å†…ã®ï½
+extern TColor col_Tim1Y;		//!< 1å¹´ä»¥å†…ã®ï½
+extern TColor col_Tim3Y;		//!< 3å¹´ä»¥å†…ã®ï½
+extern TColor col_TimOld;		//!< ãã‚Œã‚ˆã‚Šå‰ã®ï½
+extern TColor col_Size4G;		//!< 4GBä»¥ä¸Š
+extern TColor col_Size2G;		//!< 2GBä»¥ä¸Š
+extern TColor col_Size1G;		//!< 1GBä»¥ä¸Š
+extern TColor col_Size512M;		//!< 512MBä»¥ä¸Š
+extern TColor col_Size256M;		//!< 256MBä»¥ä¸Š
+extern TColor col_Size128M;		//!< 128MBä»¥ä¸Š
+extern TColor col_Size64M;		//!< 64MBä»¥ä¸Š
+extern TColor col_Size32M;		//!< 32MBä»¥ä¸Š
+extern TColor col_Size16M;		//!< 16MBä»¥ä¸Š
+extern TColor col_Size1M;		//!< 1MBä»¥ä¸Š
+extern TColor col_Size1K;		//!< 1KBä»¥ä¸Š
+extern TColor col_SizeLT;		//!< 1KBæœªæº€
 extern TColor col_Size0;		//!< 0
 
-extern TColor col_GrBack;		//!< ƒOƒ‰ƒt‚Ì”wŒiF
-extern TColor col_GrLine;		//!< ƒOƒ‰ƒt‚Ìƒ‰ƒCƒ“
-extern TColor col_GrGrid;		//!< ƒOƒ‰ƒt‚ÌƒOƒŠƒbƒh
-extern TColor col_GrText;		//!< ƒOƒ‰ƒt‚Ì•¶šF
+extern TColor col_GrBack;		//!< ã‚°ãƒ©ãƒ•ã®èƒŒæ™¯è‰²
+extern TColor col_GrLine;		//!< ã‚°ãƒ©ãƒ•ã®ãƒ©ã‚¤ãƒ³
+extern TColor col_GrGrid;		//!< ã‚°ãƒ©ãƒ•ã®ã‚°ãƒªãƒƒãƒ‰
+extern TColor col_GrText;		//!< ã‚°ãƒ©ãƒ•ã®æ–‡å­—è‰²
 
-extern TColor col_GitHEAD;		//!< Gitƒrƒ…[ƒA : ƒwƒbƒh
-extern TColor col_GitMark;		//!<   ƒOƒ‰ƒtƒ}[ƒN
-extern TColor col_GitBra;		//!<   ƒuƒ‰ƒ“ƒ`
-extern TColor col_GitBraR;		//!<   ƒŠƒ‚[ƒgƒuƒ‰ƒ“ƒ`
-extern TColor col_GitTag;		//!<   ƒ^ƒO
-extern TColor col_GitHash;		//!<   ƒnƒbƒVƒ…
-extern TColor col_GitIns;		//!<   - s
-extern TColor col_GitDel;		//!<   + s
+extern TColor col_GitHEAD;		//!< Gitãƒ“ãƒ¥ãƒ¼ã‚¢ : ãƒ˜ãƒƒãƒ‰
+extern TColor col_GitMark;		//!<   ã‚°ãƒ©ãƒ•ãƒãƒ¼ã‚¯
+extern TColor col_GitBra;		//!<   ãƒ–ãƒ©ãƒ³ãƒ
+extern TColor col_GitBraR;		//!<   ãƒªãƒ¢ãƒ¼ãƒˆãƒ–ãƒ©ãƒ³ãƒ
+extern TColor col_GitTag;		//!<   ã‚¿ã‚°
+extern TColor col_GitHash;		//!<   ãƒãƒƒã‚·ãƒ¥
+extern TColor col_GitIns;		//!<   - è¡Œ
+extern TColor col_GitDel;		//!<   + è¡Œ
 
-extern TColor col_bgTlBar1;		//!< ƒc[ƒ‹ƒo[‚ÌƒOƒ‰ƒf[ƒVƒ‡ƒ“ŠJnF
-extern TColor col_bgTlBar2;		//!< ƒc[ƒ‹ƒo[‚ÌƒOƒ‰ƒf[ƒVƒ‡ƒ“I—¹F
-extern TColor col_fgTlBar;		//!< ƒc[ƒ‹ƒo[‚Ì•¶šF
-extern TColor col_htTlBar;		//!< ƒc[ƒ‹ƒo[‚Ìƒzƒbƒgƒgƒ‰ƒbƒLƒ“ƒOF
-extern TColor col_bgInfHdr;		//!< î•ñƒwƒbƒ_‚Ì”wŒiF
-extern TColor col_fgInfHdr;		//!< î•ñƒwƒbƒ_‚Ì•¶šF
+extern TColor col_bgTlBar1;		//!< ãƒ„ãƒ¼ãƒ«ãƒãƒ¼ã®ã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³é–‹å§‹è‰²
+extern TColor col_bgTlBar2;		//!< ãƒ„ãƒ¼ãƒ«ãƒãƒ¼ã®ã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³çµ‚äº†è‰²
+extern TColor col_fgTlBar;		//!< ãƒ„ãƒ¼ãƒ«ãƒãƒ¼ã®æ–‡å­—è‰²
+extern TColor col_htTlBar;		//!< ãƒ„ãƒ¼ãƒ«ãƒãƒ¼ã®ãƒ›ãƒƒãƒˆãƒˆãƒ©ãƒƒã‚­ãƒ³ã‚°è‰²
+extern TColor col_bgInfHdr;		//!< æƒ…å ±ãƒ˜ãƒƒãƒ€ã®èƒŒæ™¯è‰²
+extern TColor col_fgInfHdr;		//!< æƒ…å ±ãƒ˜ãƒƒãƒ€ã®æ–‡å­—è‰²
 
-extern TColor col_bgChInf;		//!< •¶šî•ñƒTƒ“ƒvƒ‹‚Ì”wŒiF
-extern TColor col_fgChInf;		//!< •¶šî•ñƒTƒ“ƒvƒ‹‚Ì•¶šF
-extern TColor col_bgEdBox;		//!< Edit ƒ{ƒbƒNƒX‚Ì”wŒiF
-extern TColor col_fgEdBox;		//!< Edit ƒ{ƒbƒNƒX‚Ì•¶šF
+extern TColor col_bgChInf;		//!< æ–‡å­—æƒ…å ±ã‚µãƒ³ãƒ—ãƒ«ã®èƒŒæ™¯è‰²
+extern TColor col_fgChInf;		//!< æ–‡å­—æƒ…å ±ã‚µãƒ³ãƒ—ãƒ«ã®æ–‡å­—è‰²
+extern TColor col_bgEdBox;		//!< Edit ãƒœãƒƒã‚¯ã‚¹ã®èƒŒæ™¯è‰²
+extern TColor col_fgEdBox;		//!< Edit ãƒœãƒƒã‚¯ã‚¹ã®æ–‡å­—è‰²
 /** @} */
 /** @} */
 
-extern UnicodeString BgImgName[MAX_BGIMAGE];		//!< ”wŒi‰æ‘œƒtƒ@ƒCƒ‹–¼
-extern Graphics::TBitmap *BgImgBuff[MAX_BGIMAGE];	//!< ”wŒi‰æ‘œƒoƒbƒtƒ@
+extern UnicodeString BgImgName[MAX_BGIMAGE];		//!< èƒŒæ™¯ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«å
+extern Graphics::TBitmap *BgImgBuff[MAX_BGIMAGE];	//!< èƒŒæ™¯ç”»åƒãƒãƒƒãƒ•ã‚¡
 
-extern int  BgImgMode;			//!< ”wŒi‰æ‘œ•\¦ƒ‚[ƒh
+extern int  BgImgMode;			//!< èƒŒæ™¯ç”»åƒè¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰
 extern int  BgImgSubMode;
-extern int  BgColAlpha;			//!< ”wŒiFƒAƒ‹ƒtƒ@
-extern bool BgImgGray;			//!< ƒOƒŒ[ƒXƒP[ƒ‹‰»
-extern bool BgImgHideScr;		//!< ƒXƒNƒ[ƒ‹‚É‰B‚·
-extern int  BgHideTime;			//!< •œ‹AŠÔ
-extern bool BgImgTileIf;		//!< w’èƒTƒCƒYˆÈ‰º‚È‚ç•À‚×‚Ä•\¦
+extern int  BgColAlpha;			//!< èƒŒæ™¯è‰²ã‚¢ãƒ«ãƒ•ã‚¡
+extern bool BgImgGray;			//!< ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«åŒ–
+extern bool BgImgHideScr;		//!< ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«æ™‚ã«éš ã™
+extern int  BgHideTime;			//!< å¾©å¸°æ™‚é–“
+extern bool BgImgTileIf;		//!< æŒ‡å®šã‚µã‚¤ã‚ºä»¥ä¸‹ãªã‚‰ä¸¦ã¹ã¦è¡¨ç¤º
 extern int  BgTileSize;
 
-extern bool AlphaForm;			//!< ƒƒCƒ“‰æ–Ê‚ğ“§–¾‚É
-extern int  AlphaValue;			//!< ƒƒCƒ“‰æ–ÊƒAƒ‹ƒtƒ@
+extern bool AlphaForm;			//!< ãƒ¡ã‚¤ãƒ³ç”»é¢ã‚’é€æ˜ã«
+extern int  AlphaValue;			//!< ãƒ¡ã‚¤ãƒ³ç”»é¢ã‚¢ãƒ«ãƒ•ã‚¡
 
-extern UnicodeString FontSampleTxt;		//!< ƒtƒHƒ“ƒg‚ÌƒTƒ“ƒvƒ‹•\¦•¶š—ñ
-extern UnicodeString FontSampleSym;		//!< ƒtƒHƒ“ƒg‚ÌƒTƒ“ƒvƒ‹•\¦ƒVƒ“ƒ{ƒ‹
-extern int FontSampleSize;				//!< •\¦ƒTƒCƒY
-extern TColor FontSampleFgCol;			//!< •¶šF
-extern TColor FontSampleBgCol;			//!< ”wŒiF
-extern TColor FontSampleGridCol;		//!< Šî€üF
-extern bool   FontSampleShowGrid;		//!< Šî€ü‚ğ•\¦
+extern UnicodeString FontSampleTxt;		//!< ãƒ•ã‚©ãƒ³ãƒˆã®ã‚µãƒ³ãƒ—ãƒ«è¡¨ç¤ºæ–‡å­—åˆ—
+extern UnicodeString FontSampleSym;		//!< ãƒ•ã‚©ãƒ³ãƒˆã®ã‚µãƒ³ãƒ—ãƒ«è¡¨ç¤ºã‚·ãƒ³ãƒœãƒ«
+extern int FontSampleSize;				//!< è¡¨ç¤ºã‚µã‚¤ã‚º
+extern TColor FontSampleFgCol;			//!< æ–‡å­—è‰²
+extern TColor FontSampleBgCol;			//!< èƒŒæ™¯è‰²
+extern TColor FontSampleGridCol;		//!< åŸºæº–ç·šè‰²
+extern bool   FontSampleShowGrid;		//!< åŸºæº–ç·šã‚’è¡¨ç¤º
 
-extern UnicodeString TextEditor;		//!< ƒeƒLƒXƒgƒGƒfƒBƒ^
-extern UnicodeString TextEditorFrmt;	//!< ƒpƒ‰ƒ[ƒ^(Grep—p)
-extern UnicodeString TextEditorFrmt2;	//!< ƒpƒ‰ƒ[ƒ^(ƒtƒ@ƒ‰[—p)
+extern UnicodeString TextEditor;		//!< ãƒ†ã‚­ã‚¹ãƒˆã‚¨ãƒ‡ã‚£ã‚¿
+extern UnicodeString TextEditorFrmt;	//!< ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿(Grepç”¨)
+extern UnicodeString TextEditorFrmt2;	//!< ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿(ãƒ•ã‚¡ãƒ©ãƒ¼ç”¨)
 
-extern UnicodeString ImageEditor;		//!< ƒCƒ[ƒWƒGƒfƒBƒ^
-extern UnicodeString FExtImgEidt;		//!< ƒCƒ[ƒWƒGƒfƒBƒ^‚Ì‘Î‰Šg’£q
-extern bool ImageEditSgl;				//!< ƒCƒ[ƒWƒGƒfƒBƒ^‚ğƒtƒ@ƒCƒ‹–ˆ‚ÉŒÂ•Ê‹N“®
+extern UnicodeString ImageEditor;		//!< ã‚¤ãƒ¡ãƒ¼ã‚¸ã‚¨ãƒ‡ã‚£ã‚¿
+extern UnicodeString FExtImgEidt;		//!< ã‚¤ãƒ¡ãƒ¼ã‚¸ã‚¨ãƒ‡ã‚£ã‚¿ã®å¯¾å¿œæ‹¡å¼µå­
+extern bool ImageEditSgl;				//!< ã‚¤ãƒ¡ãƒ¼ã‚¸ã‚¨ãƒ‡ã‚£ã‚¿ã‚’ãƒ•ã‚¡ã‚¤ãƒ«æ¯ã«å€‹åˆ¥èµ·å‹•
 
-extern UnicodeString FExtViewTab4;		//!< ƒ^ƒu4‚ÌŠg’£q
-extern UnicodeString FExtViewTabX;		//!< ”CˆÓƒ^ƒu•‚ÌŠg’£q
-extern int  ViewTabWidthX;				//!< ”CˆÓƒ^ƒu•
+extern UnicodeString FExtViewTab4;		//!< ã‚¿ãƒ–4ã®æ‹¡å¼µå­
+extern UnicodeString FExtViewTabX;		//!< ä»»æ„ã‚¿ãƒ–å¹…ã®æ‹¡å¼µå­
+extern int  ViewTabWidthX;				//!< ä»»æ„ã‚¿ãƒ–å¹…
 
-extern UnicodeString BinaryEditor;		//!< ƒoƒCƒiƒŠƒGƒfƒBƒ^
-extern UnicodeString SoundTaskFin;		//!< ƒ^ƒXƒNI—¹‚Ì’Ê’m‰¹
-extern UnicodeString SoundFindFin;		//!< ŒŸõI—¹‚Ì’Ê’m‰¹
-extern UnicodeString SoundWarning;		//!< Œx‰¹
-extern UnicodeString SoundWatch;		//!< ƒtƒ@ƒCƒ‹ŠÄ‹
+extern UnicodeString BinaryEditor;		//!< ãƒã‚¤ãƒŠãƒªã‚¨ãƒ‡ã‚£ã‚¿
+extern UnicodeString SoundTaskFin;		//!< ã‚¿ã‚¹ã‚¯çµ‚äº†æ™‚ã®é€šçŸ¥éŸ³
+extern UnicodeString SoundFindFin;		//!< æ¤œç´¢çµ‚äº†æ™‚ã®é€šçŸ¥éŸ³
+extern UnicodeString SoundWarning;		//!< è­¦å‘ŠéŸ³
+extern UnicodeString SoundWatch;		//!< ãƒ•ã‚¡ã‚¤ãƒ«ç›£è¦–
 
-extern int  FlashCntWarning;			//!< Œx‚Ì“_–Å‰ñ”
-extern int  FlashTimeWarning;			//!< Œx‚Ì“_–ÅŠÔŠu
-extern int  FlashCntTaskfin;			//!< ƒ^ƒXƒNI—¹‚Ì“_–Å‰ñ”
-extern int  FlashTimeTaskfin;			//!< ƒ^ƒXƒNI—¹‚Ì“_–ÅŠÔŠu
+extern int  FlashCntWarning;			//!< è­¦å‘Šã®ç‚¹æ»…å›æ•°
+extern int  FlashTimeWarning;			//!< è­¦å‘Šã®ç‚¹æ»…é–“éš”
+extern int  FlashCntTaskfin;			//!< ã‚¿ã‚¹ã‚¯çµ‚äº†æ™‚ã®ç‚¹æ»…å›æ•°
+extern int  FlashTimeTaskfin;			//!< ã‚¿ã‚¹ã‚¯çµ‚äº†æ™‚ã®ç‚¹æ»…é–“éš”
 
-extern int  MaxLogLines;				//!< ƒƒO‚ÌÅ‘ås”
-extern int  MsgHintTime;				//!< ƒqƒ“ƒg‚Ì•\¦ŠÔ
-extern int  KeyHintTime;				//!< 2ƒXƒgƒ[ƒNƒqƒ“ƒg‚Ì‘Ò‹@ŠÔ
-extern int  NotifyTaskTime;				//!< `•bˆÈã‚©‚©‚Á‚½ƒ^ƒXƒN‚ÌI—¹‚É–Â‚ç‚·
-extern int  CmpDelOwCnt;				//!< Š®‘Síœ‚Ìã‘‚«‰ñ”
-extern int  ViewTxtInterLn;				//!< ƒrƒ…[ƒA‚ÌsŠÔ
-extern int  ViewLeftMargin;				//!< ƒrƒ…[ƒA‚Ì¶—]”’
-extern int  ViewFoldWidth;				//!< Ü‚è•Ô‚µ•(”¼Šp’PˆÊ)
-extern bool ViewFoldFitWin;				//!< Ü‚è•Ô‚µ‚ğƒEƒBƒ“ƒhƒE•‚É‡‚í‚¹‚é
-extern bool TvCursorVisible;			//!< ƒrƒ…[ƒA‚ÅƒJ[ƒ\ƒ‹‚ğí‚É‰Â‹—Ìˆæ‚É
-extern bool LimitBinCsr;				//!< ƒoƒCƒiƒŠ•\¦‚ÅƒJ[ƒ\ƒ‹ˆÚ“®‚ğ§ŒÀ
-extern bool TxtColorHint;				//!< ƒJ[ƒ\ƒ‹ˆÊ’u”’l‚ÌƒJƒ‰[‚ğƒqƒ“ƒg•\¦
-extern bool AltBackSlash;				//!< \ ‚ğ _(U+2216)‚Å•\¦
-extern bool FormatJson;					//!< .json ƒtƒ@ƒCƒ‹‚ğ®Œ`
-extern bool DecodeDfmStr;				//!< .dfm ƒtƒ@ƒCƒ‹‚Ì•¶š—ñ‚ğƒfƒR[ƒh
-extern bool BinMemMaped;				//!< ƒoƒCƒiƒŠ‚Å‚Íƒƒ‚ƒŠƒ}ƒbƒvƒhƒtƒ@ƒCƒ‹‚Æ‚µ‚ÄŠJ‚­
-extern int  ViewFixedLimit;				//!< ŒÅ’è’·•\¦‚ÌÅ‘å•
-extern int  ViewTxtLimitSize;			//!< ƒeƒLƒXƒg‚ÌÅ‘å“ÇƒTƒCƒY
-extern int  ViewBinLimitSize;			//!< ƒoƒCƒiƒŠ‚ÌÅ‘å“Ç(or ƒ}ƒbƒv)ƒTƒCƒY
-extern int  ListWheelScrLn;				//!< ƒzƒC[ƒ‹‚É‚æ‚éƒXƒNƒ[ƒ‹s”(ƒŠƒXƒg)
-extern int  ViewWheelScrLn;				//!< ƒzƒC[ƒ‹‚É‚æ‚éƒXƒNƒ[ƒ‹s”(ƒrƒ…[ƒA)
-extern int  PlaySndLimitTime;			//!< ƒTƒEƒ“ƒhÄ¶ƒ^ƒCƒ€§ŒÀ
-extern bool ShowTextPreview;			//!< ƒeƒLƒXƒgƒvƒŒƒrƒ…[‚ğ•\¦
-extern int  PrvTxtInfLn;				//!< ƒeƒLƒXƒgƒvƒŒƒrƒ…[‚Ìs”
-extern bool ShowTailPreview;			//!< ––”öƒvƒŒƒrƒ…[‚ğ•\¦
-extern int  PrvTxtTailLn;				//!< ––”öƒvƒŒƒrƒ…[s”
-extern int  PrvActTailLn;				//!< ––”öƒvƒŒƒrƒ…[‚ğ—LŒø‚É‚·‚és”
-extern int  WatchInterval;				//!< ƒfƒBƒŒƒNƒgƒŠŠÄ‹ŠÔŠu
-extern int  InfPrvWait;					//!< î•ñæ“¾/ƒvƒŒƒrƒ…[‚Ì’x‰„
-extern int  LogInterval;				//!< ƒƒO‚ÌXVŠÔŠu
-extern int  ListInterLn;				//!< ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚ÌsŠÔ
-extern int  CursorWidth;				//!< ƒJ[ƒ\ƒ‹ü‚Ì•
-extern int  CursorAlpha;				//!< ƒJ[ƒ\ƒ‹s”wŒiƒAƒ‹ƒtƒ@
-extern int  CellAlpha;					//!< ƒZƒ‹‚Ì”wŒiƒAƒ‹ƒtƒ@
-extern int  SplitterWidth;				//!< ‹«ŠEü‚Ì•
+extern int  MaxLogLines;				//!< ãƒ­ã‚°ã®æœ€å¤§è¡Œæ•°
+extern int  MsgHintTime;				//!< ãƒ’ãƒ³ãƒˆã®è¡¨ç¤ºæ™‚é–“
+extern int  KeyHintTime;				//!< 2ã‚¹ãƒˆãƒ­ãƒ¼ã‚¯ãƒ’ãƒ³ãƒˆã®å¾…æ©Ÿæ™‚é–“
+extern int  NotifyTaskTime;				//!< ï½ç§’ä»¥ä¸Šã‹ã‹ã£ãŸã‚¿ã‚¹ã‚¯ã®çµ‚äº†æ™‚ã«é³´ã‚‰ã™
+extern int  CmpDelOwCnt;				//!< å®Œå…¨å‰Šé™¤ã®ä¸Šæ›¸ãå›æ•°
+extern int  ViewTxtInterLn;				//!< ãƒ“ãƒ¥ãƒ¼ã‚¢ã®è¡Œé–“
+extern int  ViewLeftMargin;				//!< ãƒ“ãƒ¥ãƒ¼ã‚¢ã®å·¦ä½™ç™½
+extern int  ViewFoldWidth;				//!< æŠ˜ã‚Šè¿”ã—å¹…(åŠè§’å˜ä½)
+extern bool ViewFoldFitWin;				//!< æŠ˜ã‚Šè¿”ã—ã‚’ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦å¹…ã«åˆã‚ã›ã‚‹
+extern bool TvCursorVisible;			//!< ãƒ“ãƒ¥ãƒ¼ã‚¢ã§ã‚«ãƒ¼ã‚½ãƒ«ã‚’å¸¸ã«å¯è¦–é ˜åŸŸã«
+extern bool LimitBinCsr;				//!< ãƒã‚¤ãƒŠãƒªè¡¨ç¤ºã§ã‚«ãƒ¼ã‚½ãƒ«ç§»å‹•ã‚’åˆ¶é™
+extern bool TxtColorHint;				//!< ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®æ•°å€¤ã®ã‚«ãƒ©ãƒ¼ã‚’ãƒ’ãƒ³ãƒˆè¡¨ç¤º
+extern bool AltBackSlash;				//!< \ ã‚’ ï¼¼(U+2216)ã§è¡¨ç¤º
+extern bool FormatJson;					//!< .json ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ•´å½¢
+extern bool DecodeDfmStr;				//!< .dfm ãƒ•ã‚¡ã‚¤ãƒ«ã®æ–‡å­—åˆ—ã‚’ãƒ‡ã‚³ãƒ¼ãƒ‰
+extern bool BinMemMaped;				//!< ãƒã‚¤ãƒŠãƒªã§ã¯ãƒ¡ãƒ¢ãƒªãƒãƒƒãƒ—ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã¨ã—ã¦é–‹ã
+extern int  ViewFixedLimit;				//!< å›ºå®šé•·è¡¨ç¤ºã®æœ€å¤§å¹…
+extern int  ViewTxtLimitSize;			//!< ãƒ†ã‚­ã‚¹ãƒˆã®æœ€å¤§èª­è¾¼ã‚µã‚¤ã‚º
+extern int  ViewBinLimitSize;			//!< ãƒã‚¤ãƒŠãƒªã®æœ€å¤§èª­è¾¼(or ãƒãƒƒãƒ—)ã‚µã‚¤ã‚º
+extern int  ListWheelScrLn;				//!< ãƒ›ã‚¤ãƒ¼ãƒ«ã«ã‚ˆã‚‹ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«è¡Œæ•°(ãƒªã‚¹ãƒˆ)
+extern int  ViewWheelScrLn;				//!< ãƒ›ã‚¤ãƒ¼ãƒ«ã«ã‚ˆã‚‹ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«è¡Œæ•°(ãƒ“ãƒ¥ãƒ¼ã‚¢)
+extern int  PlaySndLimitTime;			//!< ã‚µã‚¦ãƒ³ãƒ‰å†ç”Ÿã‚¿ã‚¤ãƒ åˆ¶é™
+extern bool ShowTextPreview;			//!< ãƒ†ã‚­ã‚¹ãƒˆãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚’è¡¨ç¤º
+extern int  PrvTxtInfLn;				//!< ãƒ†ã‚­ã‚¹ãƒˆãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®è¡Œæ•°
+extern bool ShowTailPreview;			//!< æœ«å°¾ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚’è¡¨ç¤º
+extern int  PrvTxtTailLn;				//!< æœ«å°¾ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼è¡Œæ•°
+extern int  PrvActTailLn;				//!< æœ«å°¾ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚’æœ‰åŠ¹ã«ã™ã‚‹è¡Œæ•°
+extern int  WatchInterval;				//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªç›£è¦–é–“éš”
+extern int  InfPrvWait;					//!< æƒ…å ±å–å¾—/ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®é…å»¶
+extern int  LogInterval;				//!< ãƒ­ã‚°ã®æ›´æ–°é–“éš”
+extern int  ListInterLn;				//!< ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã®è¡Œé–“
+extern int  CursorWidth;				//!< ã‚«ãƒ¼ã‚½ãƒ«ç·šã®å¹…
+extern int  CursorAlpha;				//!< ã‚«ãƒ¼ã‚½ãƒ«è¡ŒèƒŒæ™¯ã‚¢ãƒ«ãƒ•ã‚¡
+extern int  CellAlpha;					//!< ã‚»ãƒ«ã®èƒŒæ™¯ã‚¢ãƒ«ãƒ•ã‚¡
+extern int  SplitterWidth;				//!< å¢ƒç•Œç·šã®å¹…
 extern int  SplitterWidth2;
-extern int  FExtMaxWidth;				//!< Šg’£q‚ÌÅ‘å•¶š”
+extern int  FExtMaxWidth;				//!< æ‹¡å¼µå­ã®æœ€å¤§æ–‡å­—æ•°
 extern int  SizeFormatMode;
-extern int  SizeDecDigits;				//!< ƒTƒCƒY•\¦‚É‚¨‚¯‚é¬”“_ˆÈ‰º‚ÌŒ…”
-extern int  ListPercent;				//!< ƒtƒ@ƒCƒ‹ƒŠƒXƒg•‚Ì”ä—¦
-extern int  ImgFrameMargin;				//!< ƒtƒBƒbƒg•\¦‚Ì—]”’•
-extern int  ImgFitMaxZoom;				//!< ƒtƒBƒbƒg•\¦‚Ì‹–—e”{—¦
-extern int  ImgGridHorzN;				//!< ƒOƒŠƒbƒh‚Ì‰¡•ªŠ„”
-extern int  ImgGridVertN;				//!< ƒOƒŠƒbƒh‚Ìc•ªŠ„”
-extern int  MinShowTime;				//!< Å¬•\¦ƒ^ƒCƒ€
-extern int  ThumbnailSize;				//!< ƒTƒ€ƒlƒCƒ‹‚ÌƒTƒCƒY
-extern int  ThumbBdrWidth;				//!< ƒTƒ€ƒlƒCƒ‹‚Ì‹«ŠEü•
-extern int  ThumbScaleOpt;				//!< ƒTƒ€ƒlƒCƒ‹‚Ìk¬ƒAƒ‹ƒSƒŠƒYƒ€
-extern int  ThumbnailPos;				//!< ƒTƒ€ƒlƒCƒ‹‚Ì•\¦ˆÊ’u
-extern int  ImgDblMargin;				//!< Œ©ŠJ‚«ŠÔŠu
+extern int  SizeDecDigits;				//!< ã‚µã‚¤ã‚ºè¡¨ç¤ºã«ãŠã‘ã‚‹å°æ•°ç‚¹ä»¥ä¸‹ã®æ¡æ•°
+extern int  ListPercent;				//!< ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆå¹…ã®æ¯”ç‡
+extern int  ImgFrameMargin;				//!< ãƒ•ã‚£ãƒƒãƒˆè¡¨ç¤ºæ™‚ã®ä½™ç™½å¹…
+extern int  ImgFitMaxZoom;				//!< ãƒ•ã‚£ãƒƒãƒˆè¡¨ç¤ºæ™‚ã®è¨±å®¹å€ç‡
+extern int  ImgGridHorzN;				//!< ã‚°ãƒªãƒƒãƒ‰ã®æ¨ªåˆ†å‰²æ•°
+extern int  ImgGridVertN;				//!< ã‚°ãƒªãƒƒãƒ‰ã®ç¸¦åˆ†å‰²æ•°
+extern int  MinShowTime;				//!< æœ€å°è¡¨ç¤ºã‚¿ã‚¤ãƒ 
+extern int  ThumbnailSize;				//!< ã‚µãƒ ãƒã‚¤ãƒ«ã®ã‚µã‚¤ã‚º
+extern int  ThumbBdrWidth;				//!< ã‚µãƒ ãƒã‚¤ãƒ«ã®å¢ƒç•Œç·šå¹…
+extern int  ThumbScaleOpt;				//!< ã‚µãƒ ãƒã‚¤ãƒ«ã®ç¸®å°ã‚¢ãƒ«ã‚´ãƒªã‚ºãƒ 
+extern int  ThumbnailPos;				//!< ã‚µãƒ ãƒã‚¤ãƒ«ã®è¡¨ç¤ºä½ç½®
+extern int  ImgDblMargin;				//!< è¦‹é–‹ãé–“éš”
 
-extern bool ShowImgSidebar;				//!< ƒTƒCƒhƒo[‚ğ•\¦
-extern bool ImgSidebarIsLeft;			//!< ƒTƒCƒhƒo[‚Í¶
+extern bool ShowImgSidebar;				//!< ã‚µã‚¤ãƒ‰ãƒãƒ¼ã‚’è¡¨ç¤º
+extern bool ImgSidebarIsLeft;			//!< ã‚µã‚¤ãƒ‰ãƒãƒ¼ã¯å·¦
 
-extern bool HasCallHotkey;				//!< ŒÄ‚Ño‚µƒzƒbƒgƒL[‚ª‚ ‚é‚©H
+extern bool HasCallHotkey;				//!< å‘¼ã³å‡ºã—ãƒ›ãƒƒãƒˆã‚­ãƒ¼ãŒã‚ã‚‹ã‹ï¼Ÿ
 
-extern bool HideSizeTime;				//!< ƒTƒCƒY‚ÆXV“ú‚ğ‰B‚·
+extern bool HideSizeTime;				//!< ã‚µã‚¤ã‚ºã¨æ›´æ–°æ—¥æ™‚ã‚’éš ã™
 
 //---------------------------------------------------------------------------
 /** @addtogroup FILELIST */
 /** @{ */
 
 /**
- * @brief ƒtƒ@ƒCƒ‹ƒŠƒXƒg€–Ú
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆé …ç›®
  */
 struct file_rec {
-	UnicodeString f_name;		//!< ƒpƒX•tƒtƒ@ƒCƒ‹–¼
-	UnicodeString p_name;		//!< ƒpƒX–¼
-	UnicodeString n_name;		//!< ƒpƒX–³ƒtƒ@ƒCƒ‹–¼
-	UnicodeString b_name;		//!< ƒtƒ@ƒCƒ‹–¼å•”
-	UnicodeString f_ext;		//!< Šg’£q
-	UnicodeString attr_str;		//!< ‘®«•¶š—ñ
-	UnicodeString alias;		//!< ƒGƒCƒŠƒAƒX
-	UnicodeString arc_name;		//!< ƒA[ƒJƒCƒu–¼
-	UnicodeString tmp_name;		//!< ˆê‰ğ“€–¼
-	UnicodeString r_name;		//!< •\¦–¼
-	UnicodeString l_name;		//!< ƒŠƒ“ƒNæ
-	UnicodeString tags;			//!< ƒ^ƒO
-	UnicodeString hash;			//!< ƒnƒbƒVƒ…/ ‰æ‘œƒnƒbƒVƒ…(—Ş—«ƒ\[ƒg)
-	UnicodeString vctr;			//!< ‰æ‘œ:ƒxƒNƒgƒ‹(—Ş—«ƒ\[ƒg)
-	UnicodeString memo;			//!< xƒ}[ƒNˆê——:   ƒƒ‚(“à—e \t İ’è“ú)@n
-								//!< ƒŠƒ|ƒWƒgƒŠˆê——: î•ñ(ƒRƒ~ƒbƒg \t ó‘Ô)
+	UnicodeString f_name;		//!< ãƒ‘ã‚¹ä»˜ãƒ•ã‚¡ã‚¤ãƒ«å
+	UnicodeString p_name;		//!< ãƒ‘ã‚¹å
+	UnicodeString n_name;		//!< ãƒ‘ã‚¹ç„¡ãƒ•ã‚¡ã‚¤ãƒ«å
+	UnicodeString b_name;		//!< ãƒ•ã‚¡ã‚¤ãƒ«åä¸»éƒ¨
+	UnicodeString f_ext;		//!< æ‹¡å¼µå­
+	UnicodeString attr_str;		//!< å±æ€§æ–‡å­—åˆ—
+	UnicodeString alias;		//!< ã‚¨ã‚¤ãƒªã‚¢ã‚¹
+	UnicodeString arc_name;		//!< ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–å
+	UnicodeString tmp_name;		//!< ä¸€æ™‚è§£å‡å
+	UnicodeString r_name;		//!< è¡¨ç¤ºå
+	UnicodeString l_name;		//!< ãƒªãƒ³ã‚¯å…ˆ
+	UnicodeString tags;			//!< ã‚¿ã‚°
+	UnicodeString hash;			//!< ãƒãƒƒã‚·ãƒ¥/ ç”»åƒãƒãƒƒã‚·ãƒ¥(é¡ä¼¼æ€§ã‚½ãƒ¼ãƒˆ)
+	UnicodeString vctr;			//!< ç”»åƒ:ãƒ™ã‚¯ãƒˆãƒ«(é¡ä¼¼æ€§ã‚½ãƒ¼ãƒˆ)
+	UnicodeString memo;			//!< æ ãƒãƒ¼ã‚¯ä¸€è¦§:   ãƒ¡ãƒ¢(å†…å®¹ \t è¨­å®šæ—¥æ™‚)@n
+								//!< ãƒªãƒã‚¸ãƒˆãƒªä¸€è¦§: æƒ…å ±(ã‚³ãƒŸãƒƒãƒˆ \t çŠ¶æ…‹)
 
-	int  tag;					//!< 0: ¶/ 1: ‰E
+	int  tag;					//!< 0: å·¦/ 1: å³
 	bool is_up;					//!< ..
-	bool is_dir;				//!< ƒfƒBƒŒƒNƒgƒŠ
-	bool is_sym;				//!< ƒŠƒp[ƒXƒ|ƒCƒ“ƒg
-	bool is_jct;				//!< ƒWƒƒƒ“ƒNƒVƒ‡ƒ“
-	bool is_virtual;			//!< ‰¼‘zƒfƒBƒŒƒNƒgƒŠ“à‚Ìƒtƒ@ƒCƒ‹
+	bool is_dir;				//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+	bool is_sym;				//!< ãƒªãƒ‘ãƒ¼ã‚¹ãƒã‚¤ãƒ³ãƒˆ
+	bool is_jct;				//!< ã‚¸ãƒ£ãƒ³ã‚¯ã‚·ãƒ§ãƒ³
+	bool is_virtual;			//!< ä»®æƒ³ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå†…ã®ãƒ•ã‚¡ã‚¤ãƒ«
 	bool is_ftp;				//!< FTP
-	bool is_ads;				//!< ‘ã‘Öƒf[ƒ^ƒXƒgƒŠ[ƒ€
-	bool is_dummy;				//!< ƒ_ƒ~[(‹ó‚Ìƒhƒ‰ƒCƒuAƒ[ƒNƒŠƒXƒg‚ÌƒZƒpƒŒ[ƒ^A”äŠrŒ‹‰Ê‚Ì•sİ€–Ú‚È‚Ç)
-	bool selected;				//!< ‘I‘ğ’†
-	bool failed;				//!< ƒtƒ@ƒCƒ‰[: ˆê‰ğ“€¸”s/  ƒCƒ[ƒWƒrƒ…[ƒA: “Ç¸”s
+	bool is_ads;				//!< ä»£æ›¿ãƒ‡ãƒ¼ã‚¿ã‚¹ãƒˆãƒªãƒ¼ãƒ 
+	bool is_dummy;				//!< ãƒ€ãƒŸãƒ¼(ç©ºã®ãƒ‰ãƒ©ã‚¤ãƒ–ã€ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã®ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿ã€æ¯”è¼ƒçµæœã®ä¸åœ¨é …ç›®ãªã©)
+	bool selected;				//!< é¸æŠä¸­
+	bool failed;				//!< ãƒ•ã‚¡ã‚¤ãƒ©ãƒ¼: ä¸€æ™‚è§£å‡å¤±æ•—/  ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢: èª­è¾¼å¤±æ•—
 
-	__int64 f_size;				//!< ƒTƒCƒY
-	__int64 o_size;				//!< ƒfƒBƒXƒNã‚Ìè—LƒTƒCƒY
-	__int64 c_size;				//!< ˆ³kƒTƒCƒY
+	__int64 f_size;				//!< ã‚µã‚¤ã‚º
+	__int64 o_size;				//!< ãƒ‡ã‚£ã‚¹ã‚¯ä¸Šã®å æœ‰ã‚µã‚¤ã‚º
+	__int64 c_size;				//!< åœ§ç¸®ã‚µã‚¤ã‚º
 
-	int  f_attr;				//!< ‘®«
-	TDateTime f_time;			//!< ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv
-	int  f_count;				//!< ƒtƒ@ƒCƒ‹”
-	int  d_count;				//!< ƒfƒBƒŒƒNƒgƒŠ”
-	int  img_ori;				//!< ‰æ‘œ•ûŒü
-	int  distance;				//!< •ÒW‹——£ƒ\[ƒg’l
-	bool is_video;				//!< “®‰æ
+	int  f_attr;				//!< å±æ€§
+	TDateTime f_time;			//!< ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—
+	int  f_count;				//!< ãƒ•ã‚¡ã‚¤ãƒ«æ•°
+	int  d_count;				//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæ•°
+	int  img_ori;				//!< ç”»åƒæ–¹å‘
+	int  distance;				//!< ç·¨é›†è·é›¢ã‚½ãƒ¼ãƒˆå€¤
+	bool is_video;				//!< å‹•ç”»
 
-	int  base_end_x;			//!< ƒtƒ@ƒCƒ‹–¼å•”‚Ì––”öˆÊ’u(•`‰æ‚Éİ’èAƒ}ƒEƒX‘I‘ğ‚Å—˜—p)
-	bool matched;				//!< ƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹‚Åƒ}ƒbƒ`
+	int  base_end_x;			//!< ãƒ•ã‚¡ã‚¤ãƒ«åä¸»éƒ¨ã®æœ«å°¾ä½ç½®(æç”»æ™‚ã«è¨­å®šã€ãƒã‚¦ã‚¹é¸æŠã§åˆ©ç”¨)
+	bool matched;				//!< ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ã‚¿ãƒ«ã§ãƒãƒƒãƒ
 
-	TStringList *inf_list;		//!< î•ñƒŠƒXƒg
-	UnicodeString prv_text;		//!< ƒeƒLƒXƒgƒvƒŒƒrƒ…[
-	UnicodeString tail_text;	//!< ƒeƒLƒXƒgƒvƒŒƒrƒ…[(––”ö)
-	int  code_page;				//!< ƒR[ƒhƒy[ƒW
+	TStringList *inf_list;		//!< æƒ…å ±ãƒªã‚¹ãƒˆ
+	UnicodeString prv_text;		//!< ãƒ†ã‚­ã‚¹ãƒˆãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼
+	UnicodeString tail_text;	//!< ãƒ†ã‚­ã‚¹ãƒˆãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼(æœ«å°¾)
+	int  code_page;				//!< ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸
 };
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚Ìó‘Ô
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã®çŠ¶æ…‹
  */
 struct flist_stt {
-	UnicodeString vol_name;		//!< ƒ{ƒŠƒ…[ƒ€–¼
-	__int64 drive_Used;			//!< ƒhƒ‰ƒCƒug—p—e—Ê
-	__int64 drive_Free;			//!< ƒhƒ‰ƒCƒu‹ó‚«—e—Ê
-	__int64 drive_Total;		//!< ƒhƒ‰ƒCƒu‘S‘Ì—e—Ê
-	__int64 cur_total;			//!< ƒJƒŒƒ“ƒg‚Ì‡ŒvƒTƒCƒY
-	__int64 occ_total;			//!< ƒJƒŒƒ“ƒg‚Ìè—LƒTƒCƒY
-	__int64 cmp_total;			//!< ƒJƒŒƒ“ƒg‚Ìˆ³kƒTƒCƒY
-	int clu_size;				//!< ƒNƒ‰ƒXƒ^ƒTƒCƒY
+	UnicodeString vol_name;		//!< ãƒœãƒªãƒ¥ãƒ¼ãƒ å
+	__int64 drive_Used;			//!< ãƒ‰ãƒ©ã‚¤ãƒ–ä½¿ç”¨å®¹é‡
+	__int64 drive_Free;			//!< ãƒ‰ãƒ©ã‚¤ãƒ–ç©ºãå®¹é‡
+	__int64 drive_Total;		//!< ãƒ‰ãƒ©ã‚¤ãƒ–å…¨ä½“å®¹é‡
+	__int64 cur_total;			//!< ã‚«ãƒ¬ãƒ³ãƒˆã®åˆè¨ˆã‚µã‚¤ã‚º
+	__int64 occ_total;			//!< ã‚«ãƒ¬ãƒ³ãƒˆã®å æœ‰ã‚µã‚¤ã‚º
+	__int64 cmp_total;			//!< ã‚«ãƒ¬ãƒ³ãƒˆã®åœ§ç¸®ã‚µã‚¤ã‚º
+	int clu_size;				//!< ã‚¯ãƒ©ã‚¹ã‚¿ã‚µã‚¤ã‚º
 
-	int f_cnt;					//!< ƒtƒ@ƒCƒ‹”
-	int d_cnt;					//!< ƒfƒBƒŒƒNƒgƒŠ”
+	int f_cnt;					//!< ãƒ•ã‚¡ã‚¤ãƒ«æ•°
+	int d_cnt;					//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæ•°
 	int f_cnt_total;
 	int d_cnt_total;
-	int sel_f_cnt;				//!< ‘I‘ğƒtƒ@ƒCƒ‹”
-	int sel_d_cnt;				//!< ‘I‘ğƒfƒBƒŒƒNƒgƒŠ”
-	__int64 sel_size;			//!< ‘I‘ğƒTƒCƒY
+	int sel_f_cnt;				//!< é¸æŠãƒ•ã‚¡ã‚¤ãƒ«æ•°
+	int sel_d_cnt;				//!< é¸æŠãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæ•°
+	__int64 sel_size;			//!< é¸æŠã‚µã‚¤ã‚º
 
-	int last_fl_idx;			//!< ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚É•œ‹A‚µ‚½‚Æ‚«‚ÌƒJ[ƒ\ƒ‹ˆÊ’u
+	int last_fl_idx;			//!< ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã«å¾©å¸°ã—ãŸã¨ãã®ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®
 
-	bool show_f_d_cnt;			//!< ƒtƒ@ƒCƒ‹AƒfƒBƒŒƒNƒgƒŠ”‚ğ•\¦
-	bool dir_graph;				//!< ƒfƒBƒŒƒNƒgƒŠ—e—Ê‚ğƒOƒ‰ƒt•\¦(‘ÎƒJƒŒƒ“ƒg)
-	bool dsk_graph;				//!< ƒfƒBƒŒƒNƒgƒŠ—e—Ê‚ğƒOƒ‰ƒt•\¦(‘Îƒhƒ‰ƒCƒu)
-	bool sub_counted;			//!< ƒTƒuƒfƒBƒŒƒNƒgƒŠ“à‚ğ‚·‚×‚ÄƒJƒEƒ“ƒgÏ‚İ
+	bool show_f_d_cnt;			//!< ãƒ•ã‚¡ã‚¤ãƒ«ã€ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæ•°ã‚’è¡¨ç¤º
+	bool dir_graph;				//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå®¹é‡ã‚’ã‚°ãƒ©ãƒ•è¡¨ç¤º(å¯¾ã‚«ãƒ¬ãƒ³ãƒˆ)
+	bool dsk_graph;				//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå®¹é‡ã‚’ã‚°ãƒ©ãƒ•è¡¨ç¤º(å¯¾ãƒ‰ãƒ©ã‚¤ãƒ–)
+	bool sub_counted;			//!< ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå†…ã‚’ã™ã¹ã¦ã‚«ã‚¦ãƒ³ãƒˆæ¸ˆã¿
 
-	int lwd_half;				//!< "X" ‚Ì•
-	int lwd_fext_max;			//!< ".WWWWWWWWWWWW" ‚Ì•
-	int lwd_fext;				//!< Šg’£q‚Ì•\¦•
-	int lwd_size;				//!< ƒTƒCƒY‚Ì•\¦•
-	int lwd_time;				//!< ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚Ì•\¦•
-	int lwd_path;				//!< êŠ‚Ì•\¦•(ŒŸõƒŠƒXƒg)
+	int lwd_half;				//!< "X" ã®å¹…
+	int lwd_fext_max;			//!< ".WWWWWWWWWWWW" ã®å¹…
+	int lwd_fext;				//!< æ‹¡å¼µå­ã®è¡¨ç¤ºå¹…
+	int lwd_size;				//!< ã‚µã‚¤ã‚ºã®è¡¨ç¤ºå¹…
+	int lwd_time;				//!< ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã®è¡¨ç¤ºå¹…
+	int lwd_path;				//!< å ´æ‰€ã®è¡¨ç¤ºå¹…(æ¤œç´¢ãƒªã‚¹ãƒˆ)
 
-	int lxp_fext;				//!< Šg’£q‚Ì•\¦ˆÊ’u
-	int lxp_size;				//!< ƒTƒCƒY‚Ì•\¦ˆÊ’u
-	int lxp_time;				//!< ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚Ì•\¦ˆÊ’u
-	int lxp_path;				//!< êŠ‚Ì•\¦ˆÊ’u
-	int lxp_right;				//!< ¶’[ˆÊ’u
+	int lxp_fext;				//!< æ‹¡å¼µå­ã®è¡¨ç¤ºä½ç½®
+	int lxp_size;				//!< ã‚µã‚¤ã‚ºã®è¡¨ç¤ºä½ç½®
+	int lxp_time;				//!< ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã®è¡¨ç¤ºä½ç½®
+	int lxp_path;				//!< å ´æ‰€ã®è¡¨ç¤ºä½ç½®
+	int lxp_right;				//!< å·¦ç«¯ä½ç½®
 
-	TColor color_bgDirInf;		//!< .NyanFi ‚É‚æ‚éŒÂ•ÊF
+	TColor color_bgDirInf;		//!< .NyanFi ã«ã‚ˆã‚‹å€‹åˆ¥è‰²
 	TColor color_fgDirInf;
 	TColor color_bgDrvInf;
 	TColor color_fgDrvInf;
 	TColor color_Cursor;
 	TColor color_selItem;
 
-	bool is_TabFixed;			//!< ƒ^ƒu•ÏX‚É‘Î‚µ‚ÄƒpƒXŒÅ’è
+	bool is_TabFixed;			//!< ã‚¿ãƒ–å¤‰æ›´ã«å¯¾ã—ã¦ãƒ‘ã‚¹å›ºå®š
 
-	bool git_checked;			//!< [..]‚ÅGitî•ñ‚ğæ“¾‚µ‚½
+	bool git_checked;			//!< [..]ã§Gitæƒ…å ±ã‚’å–å¾—ã—ãŸ
 
-	bool is_Work;				//!< ƒ[ƒNƒŠƒXƒg
-	bool is_FTP;				//!< FTPƒŠƒ‚[ƒg‘¤
+	bool is_Work;				//!< ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆ
+	bool is_FTP;				//!< FTPãƒªãƒ¢ãƒ¼ãƒˆå´
 
-	bool is_Arc;				//!< ‰¼‘zƒfƒBƒŒƒNƒgƒŠ
-	UnicodeString arc_DspPath;	//!< ƒA[ƒJƒCƒu‚Ì•\¦ƒpƒX
-	UnicodeString arc_SubPath;	//!< ƒA[ƒJƒCƒuˆÈ‰º‚ÌƒTƒuƒfƒBƒŒƒNƒgƒŠ
-	UnicodeString arc_Name;		//!< ƒA[ƒJƒCƒuƒtƒ@ƒCƒ‹–¼(temp)
-	TStringList  *arc_RetList;	//!< ‘½dƒA[ƒJƒCƒu—p‚Ì–ß‚èƒŠƒXƒg
-	TStringList  *arc_TmpList;	//!< ˆê‰ğ“€ƒfƒBƒŒƒNƒgƒŠƒŠƒXƒg
+	bool is_Arc;				//!< ä»®æƒ³ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+	UnicodeString arc_DspPath;	//!< ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ã®è¡¨ç¤ºãƒ‘ã‚¹
+	UnicodeString arc_SubPath;	//!< ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ä»¥ä¸‹ã®ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+	UnicodeString arc_Name;		//!< ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«å(temp)
+	TStringList  *arc_RetList;	//!< å¤šé‡ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ç”¨ã®æˆ»ã‚Šãƒªã‚¹ãƒˆ
+	TStringList  *arc_TmpList;	//!< ä¸€æ™‚è§£å‡ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãƒªã‚¹ãƒˆ
 
-	bool is_ADS;				//!< ‘ã‘Öƒf[ƒ^ƒXƒgƒŠ[ƒ€
-	UnicodeString ads_Name;		//!< ƒƒCƒ“ƒXƒgƒŠ[ƒ€‚Ìƒtƒ@ƒCƒ‹–¼
+	bool is_ADS;				//!< ä»£æ›¿ãƒ‡ãƒ¼ã‚¿ã‚¹ãƒˆãƒªãƒ¼ãƒ 
+	UnicodeString ads_Name;		//!< ãƒ¡ã‚¤ãƒ³ã‚¹ãƒˆãƒªãƒ¼ãƒ ã®ãƒ•ã‚¡ã‚¤ãƒ«å
 
-	UnicodeString LibraryInfo;	//!< ƒ‰ƒCƒuƒ‰ƒŠƒtƒ@ƒCƒ‹–¼ \t ƒpƒX
+	UnicodeString LibraryInfo;	//!< ãƒ©ã‚¤ãƒ–ãƒ©ãƒªãƒ•ã‚¡ã‚¤ãƒ«å \t ãƒ‘ã‚¹
 	UnicodeString LibSubPath;
 
-	bool is_Find;				//!< ŒŸõŒ‹‰ÊƒŠƒXƒg
-	bool is_narrow;				//!< i‚è‚İ
-	bool find_Loaded;			//!< ƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚ñ‚¾ƒŠƒXƒg
-	bool find_UseSet;			//!< ŒŸõİ’èƒtƒ@ƒCƒ‹‚ğg—p
-	int  find_SortMode;			//!< ŒŸõİ’èƒtƒ@ƒCƒ‹‚É‚æ‚éƒ\[ƒgƒ‚[ƒhİ’è
+	bool is_Find;				//!< æ¤œç´¢çµæœãƒªã‚¹ãƒˆ
+	bool is_narrow;				//!< çµã‚Šè¾¼ã¿
+	bool find_Loaded;			//!< ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã‚“ã ãƒªã‚¹ãƒˆ
+	bool find_UseSet;			//!< æ¤œç´¢è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½¿ç”¨
+	int  find_SortMode;			//!< æ¤œç´¢è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚ˆã‚‹ã‚½ãƒ¼ãƒˆãƒ¢ãƒ¼ãƒ‰è¨­å®š
 
-	bool find_Dir;				//!< ƒfƒBƒŒƒNƒgƒŠŒŸõ
-	bool find_Both;				//!< ƒtƒ@ƒCƒ‹EƒfƒBƒŒƒNƒgƒŠŒŸõ
-	bool find_SubDir;			//!< ƒTƒuƒfƒBƒŒƒNƒgƒŠ‚àŒŸõ
-	bool find_Arc;				//!< ƒA[ƒJƒCƒu“à‚àŒŸõ
-	bool find_xTrash;			//!< ‚²‚İ” “à‚ÍŒŸõ‚µ‚È‚¢
+	bool find_Dir;				//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæ¤œç´¢
+	bool find_Both;				//!< ãƒ•ã‚¡ã‚¤ãƒ«ãƒ»ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæ¤œç´¢
+	bool find_SubDir;			//!< ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚‚æ¤œç´¢
+	bool find_Arc;				//!< ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–å†…ã‚‚æ¤œç´¢
+	bool find_xTrash;			//!< ã”ã¿ç®±å†…ã¯æ¤œç´¢ã—ãªã„
 
-	bool find_MARK;				//!< ƒ}[ƒNŒŸõ
-	bool find_TAG;				//!< ƒ^ƒOŒŸõ
-	bool find_TAG_all;			//!< ‚·‚×‚Ä‚Ìƒ^ƒO‚Éƒ}ƒbƒ`
-	bool find_DICON;			//!< ƒtƒHƒ‹ƒ_ƒAƒCƒRƒ“ŒŸõ
-	bool find_DUPL;				//!< d•¡ƒtƒ@ƒCƒ‹‚ÌŒŸõ
-	bool find_HLINK;			//!< ƒn[ƒhƒŠƒ“ƒN—ñ‹“
+	bool find_MARK;				//!< ãƒãƒ¼ã‚¯æ¤œç´¢
+	bool find_TAG;				//!< ã‚¿ã‚°æ¤œç´¢
+	bool find_TAG_all;			//!< ã™ã¹ã¦ã®ã‚¿ã‚°ã«ãƒãƒƒãƒ
+	bool find_DICON;			//!< ãƒ•ã‚©ãƒ«ãƒ€ã‚¢ã‚¤ã‚³ãƒ³æ¤œç´¢
+	bool find_DUPL;				//!< é‡è¤‡ãƒ•ã‚¡ã‚¤ãƒ«ã®æ¤œç´¢
+	bool find_HLINK;			//!< ãƒãƒ¼ãƒ‰ãƒªãƒ³ã‚¯åˆ—æŒ™
 
-	bool find_RegEx;			//!< ³‹K•\Œ»
-	bool find_And;				//!< ANDŒŸõ
-	bool find_Case;				//!< ‘å¬•¶š‹æ•Ê
+	bool find_RegEx;			//!< æ­£è¦è¡¨ç¾
+	bool find_And;				//!< ANDæ¤œç´¢
+	bool find_Case;				//!< å¤§å°æ–‡å­—åŒºåˆ¥
 
-	bool find_Warn;				//!< D‚Ü‚µ‚­‚È‚¢ƒtƒ@ƒCƒ‹–¼
-	bool find_hasAds;			//!< ‘ã‘Öƒf[ƒ^ƒXƒgƒŠ[ƒ€‚ğ‚Â
-	bool find_useProc;			//!< •ÊƒvƒƒZƒX‚ªg—p’†
+	bool find_Warn;				//!< å¥½ã¾ã—ããªã„ãƒ•ã‚¡ã‚¤ãƒ«å
+	bool find_hasAds;			//!< ä»£æ›¿ãƒ‡ãƒ¼ã‚¿ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚’æŒã¤
+	bool find_useProc;			//!< åˆ¥ãƒ—ãƒ­ã‚»ã‚¹ãŒä½¿ç”¨ä¸­
 
-	bool find_ResLink;			//!< Œ‹‰ÊƒŠƒXƒg‚©‚ç”½‘Î‘¤‚Ö”½‰f
-	bool find_DirLink;			//!< ƒfƒBƒŒƒNƒgƒŠ–¼‚ğ”½‰f
-	bool find_PathSort;			//!< êŠ‡‚Åƒ\[ƒg
+	bool find_ResLink;			//!< çµæœãƒªã‚¹ãƒˆã‹ã‚‰åå¯¾å´ã¸åæ˜ 
+	bool find_DirLink;			//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåã‚’åæ˜ 
+	bool find_PathSort;			//!< å ´æ‰€é †ã§ã‚½ãƒ¼ãƒˆ
 
-	UnicodeString find_Path;	//!< ŒŸõƒpƒX
-	UnicodeString find_DirList;	//!< ŒŸõƒfƒBƒŒƒNƒgƒŠEƒŠƒXƒg
-	UnicodeString find_SkipDir;	//!< œŠOƒfƒBƒŒƒNƒgƒŠ(;‹æØ‚è)
-	UnicodeString find_Name;	//!< ŒŸõ–¼(ƒn[ƒhƒŠƒ“ƒN—p)
-	UnicodeString find_Mask;	//!< ƒ}ƒXƒN
-	UnicodeString find_Keywd;	//!< ƒL[ƒ[ƒh
-	UnicodeString find_Tags;	//!< ƒ^ƒO
-	UnicodeString find_Icons;	//!< ƒtƒHƒ‹ƒ_ƒAƒCƒRƒ“(‰üs‹æØ‚è)
+	UnicodeString find_Path;	//!< æ¤œç´¢ãƒ‘ã‚¹
+	UnicodeString find_DirList;	//!< æ¤œç´¢ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãƒ»ãƒªã‚¹ãƒˆ
+	UnicodeString find_SkipDir;	//!< é™¤å¤–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª(;åŒºåˆ‡ã‚Š)
+	UnicodeString find_Name;	//!< æ¤œç´¢å(ãƒãƒ¼ãƒ‰ãƒªãƒ³ã‚¯ç”¨)
+	UnicodeString find_Mask;	//!< ãƒã‚¹ã‚¯
+	UnicodeString find_Keywd;	//!< ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰
+	UnicodeString find_Tags;	//!< ã‚¿ã‚°
+	UnicodeString find_Icons;	//!< ãƒ•ã‚©ãƒ«ãƒ€ã‚¢ã‚¤ã‚³ãƒ³(æ”¹è¡ŒåŒºåˆ‡ã‚Š)
 
-	TStringList  *find_SubList;	//!< ‘I‘ğƒTƒuƒfƒBƒŒƒNƒgƒŠ
+	TStringList  *find_SubList;	//!< é¸æŠã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 
-	int  find_DT_mode;			//!< “ú•tğŒ
+	int  find_DT_mode;			//!< æ—¥ä»˜æ¡ä»¶
 	TDateTime find_DT_value;
 	UnicodeString find_DT_str;
-	int  find_DT_rel;			//!< ‘Š‘Îw’è’l
+	int  find_DT_rel;			//!< ç›¸å¯¾æŒ‡å®šå€¤
 
-	int  find_SZ_mode;			//!< ƒTƒCƒYğŒ
+	int  find_SZ_mode;			//!< ã‚µã‚¤ã‚ºæ¡ä»¶
 	__int64 find_SZ_value;
-	int  find_CT_mode;			//!< “à—eğŒ
-	int  find_AT_mode;			//!< ‘®«ğŒ
+	int  find_CT_mode;			//!< å†…å®¹æ¡ä»¶
+	int  find_AT_mode;			//!< å±æ€§æ¡ä»¶
 	int  find_AT_value;
 
-	int  find_TM_mode;			//!< ƒ^ƒCƒ€
+	int  find_TM_mode;			//!< ã‚¿ã‚¤ãƒ 
 	TTime find_TM_value;
 
-	int  find_codepage;			//!< ƒR[ƒhƒy[ƒW
-	UnicodeString find_LineBrk;	//!< ‰üsƒR[ƒh
+	int  find_codepage;			//!< ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸
+	UnicodeString find_LineBrk;	//!< æ”¹è¡Œã‚³ãƒ¼ãƒ‰
 	int  find_BOM_mode;			//!< BOM
 
-	int  find_RT_mode;			//!< ƒŒƒCƒg
+	int  find_RT_mode;			//!< ãƒ¬ã‚¤ãƒˆ
 	int  find_RT_value;
-	int  find_FS_mode;			//!< ƒtƒŒ[ƒ€—¦
+	int  find_FS_mode;			//!< ãƒ•ãƒ¬ãƒ¼ãƒ ç‡
 	int  find_FS_value;
-	int  find_FW_mode;			//!< ƒtƒŒ[ƒ€•
+	int  find_FW_mode;			//!< ãƒ•ãƒ¬ãƒ¼ãƒ å¹…
 	int  find_FW_value;
-	int  find_FH_mode;			//!< ƒtƒŒ[ƒ€‚
+	int  find_FH_mode;			//!< ãƒ•ãƒ¬ãƒ¼ãƒ é«˜
 	int  find_FH_value;
 
-	int  find_IW_mode;			//!< ‰æ‘œƒTƒCƒY
+	int  find_IW_mode;			//!< ç”»åƒã‚µã‚¤ã‚º
 	unsigned int find_IW_value;
 	int  find_IH_mode;
 	unsigned int find_IH_value;
 	bool find_IWH_max;
 
-	int  find_SR_mode;			//!< ƒTƒ“ƒvƒŠƒ“ƒOƒŒ[ƒg
+	int  find_SR_mode;			//!< ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ãƒ¬ãƒ¼ãƒˆ
 	int  find_SR_value;
-	int  find_BT_mode;			//!< ƒrƒbƒg
-	int  find_CH_mode;			//!< ƒ`ƒƒƒ“ƒlƒ‹
+	int  find_BT_mode;			//!< ãƒ“ãƒƒãƒˆ
+	int  find_CH_mode;			//!< ãƒãƒ£ãƒ³ãƒãƒ«
 
-	int  find_IC_mode;			//!< ƒAƒCƒRƒ“
+	int  find_IC_mode;			//!< ã‚¢ã‚¤ã‚³ãƒ³
 	int  find_IC_value;
 
-	int  find_HL_mode;			//!< ƒŠƒ“ƒNƒJƒEƒ“ƒg”
+	int  find_HL_mode;			//!< ãƒªãƒ³ã‚¯ã‚«ã‚¦ãƒ³ãƒˆæ•°
 	int  find_HL_value;
 
 	UnicodeString find_PrpKwd;
@@ -1570,11 +1570,11 @@ struct flist_stt {
 	double find_GpsLng;
 	int    find_GpsRange;
 
-	bool is_IncSea;				//!< ƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`’†
-	bool is_Migemo;				//!< Migemoƒ‚[ƒh
-	bool is_Filter;				//!< ƒtƒBƒ‹ƒ^ƒ‚[ƒh
-	bool is_Fuzzy;				//!< ‚ ‚¢‚Ü‚¢ƒ‚[ƒh
-	bool filter_csns;			//!< ƒtƒBƒ‹ƒ^‚Å‘å¬•¶š‚ğ‹æ•Ê
+	bool is_IncSea;				//!< ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ã‚¿ãƒ«ã‚µãƒ¼ãƒä¸­
+	bool is_Migemo;				//!< Migemoãƒ¢ãƒ¼ãƒ‰
+	bool is_Filter;				//!< ãƒ•ã‚£ãƒ«ã‚¿ãƒ¢ãƒ¼ãƒ‰
+	bool is_Fuzzy;				//!< ã‚ã„ã¾ã„ãƒ¢ãƒ¼ãƒ‰
+	bool filter_csns;			//!< ãƒ•ã‚£ãƒ«ã‚¿ã§å¤§å°æ–‡å­—ã‚’åŒºåˆ¥
 
 	UnicodeString incsea_Word;
 	UnicodeString incsea_Ptn;
@@ -1586,10 +1586,10 @@ extern flist_stt *OppStt;
 /** @} */
 
 //---------------------------------------------------------------------------
-//ƒhƒ‰ƒCƒuî•ñ
+//ãƒ‰ãƒ©ã‚¤ãƒ–æƒ…å ±
 //---------------------------------------------------------------------------
 /**
- * @brief ƒhƒ‰ƒCƒuî•ñ
+ * @brief ãƒ‰ãƒ©ã‚¤ãƒ–æƒ…å ±
  */
 struct drive_info {
 	UnicodeString drive_str;
@@ -1597,13 +1597,13 @@ struct drive_info {
 	bool		  ejectable;
 	bool		  is_virtual;
 	int			  drv_type;
-	UnicodeString type_str;		//!< í—Ş
-	UnicodeString volume;		//!< ƒ{ƒŠƒ…[ƒ€–¼
-	UnicodeString unc;			//!< ƒlƒbƒgƒ[ƒNƒhƒ‰ƒCƒu‚ÌUNCƒpƒX
-	UnicodeString mnt_dir;		//!< ‰¼‘zƒhƒ‰ƒCƒu‚Ìƒ}ƒEƒ“ƒgƒpƒX
-	UnicodeString f_system;		//!< ƒtƒ@ƒCƒ‹ƒVƒXƒeƒ€
-	UnicodeString bus_type;		//!< Ú‘±I/F
-	UnicodeString label;		//!< •\¦—pƒ‰ƒxƒ‹
+	UnicodeString type_str;		//!< ç¨®é¡
+	UnicodeString volume;		//!< ãƒœãƒªãƒ¥ãƒ¼ãƒ å
+	UnicodeString unc;			//!< ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ãƒ‰ãƒ©ã‚¤ãƒ–ã®UNCãƒ‘ã‚¹
+	UnicodeString mnt_dir;		//!< ä»®æƒ³ãƒ‰ãƒ©ã‚¤ãƒ–ã®ãƒã‚¦ãƒ³ãƒˆãƒ‘ã‚¹
+	UnicodeString f_system;		//!< ãƒ•ã‚¡ã‚¤ãƒ«ã‚·ã‚¹ãƒ†ãƒ 
+	UnicodeString bus_type;		//!< æ¥ç¶šI/F
+	UnicodeString label;		//!< è¡¨ç¤ºç”¨ãƒ©ãƒ™ãƒ«
 	bool		  is_NTFS;
 	bool		  is_SSD;
 	bool		  is_RAM;
@@ -1613,29 +1613,29 @@ struct drive_info {
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒ^ƒuî•ñ
+ * @brief ã‚¿ãƒ–æƒ…å ±
  */
 struct tab_info {
-	TRect rc;	//•`‰æ—Ìˆæ
-	TStringList *sel_list[MAX_FILELIST];	//!< ‘I‘ğó‘Ô
-	TStringList *dir_hist[MAX_FILELIST];	//!< ƒfƒBƒŒƒNƒgƒŠ—š—ğ
-	int			 dir_hist_p[MAX_FILELIST];	//!< —š—ğˆÊ’u
-	int			 sort_mode[MAX_FILELIST];	//!< ƒ\[ƒgƒ‚[ƒh
-	bool		 sync_lr;					//!< ŠK‘w“¯Šú
+	TRect rc;	//æç”»é ˜åŸŸ
+	TStringList *sel_list[MAX_FILELIST];	//!< é¸æŠçŠ¶æ…‹
+	TStringList *dir_hist[MAX_FILELIST];	//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå±¥æ­´
+	int			 dir_hist_p[MAX_FILELIST];	//!< å±¥æ­´ä½ç½®
+	int			 sort_mode[MAX_FILELIST];	//!< ã‚½ãƒ¼ãƒˆãƒ¢ãƒ¼ãƒ‰
+	bool		 sync_lr;					//!< éšå±¤åŒæœŸ
 };
 
 //---------------------------------------------------------------------------
-//ƒRƒ}ƒ“ƒhƒtƒ@ƒCƒ‹ƒŠƒXƒg
+//ã‚³ãƒãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆ
 //---------------------------------------------------------------------------
 struct cmdf_rec {
-	TDateTime   f_time;				//!< ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv
-	TStringList *file_buf;			//!< ƒtƒ@ƒCƒ‹“à—e
-	TStringList *cmd_list;			//!< ƒRƒ}ƒ“ƒhƒŠƒXƒg
-	int exe_count;					//!< Às‰ñ”
-	bool noreload;					//!< Ä“Ç‚İ‚İ‚µ‚È‚¢
+	TDateTime   f_time;				//!< ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—
+	TStringList *file_buf;			//!< ãƒ•ã‚¡ã‚¤ãƒ«å†…å®¹
+	TStringList *cmd_list;			//!< ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆ
+	int exe_count;					//!< å®Ÿè¡Œå›æ•°
+	bool noreload;					//!< å†èª­ã¿è¾¼ã¿ã—ãªã„
 };
-extern TStringList *CmdFileList;	//!< ƒRƒ}ƒ“ƒhƒtƒ@ƒCƒ‹‚ÌƒŠƒXƒg
-extern TStringList *XCMD_VarList;	//!< •Ï”ƒŠƒXƒg
+extern TStringList *CmdFileList;	//!< ã‚³ãƒãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒªã‚¹ãƒˆ
+extern TStringList *XCMD_VarList;	//!< å¤‰æ•°ãƒªã‚¹ãƒˆ
 
 //---------------------------------------------------------------------------
 inline void InvalidateFileList(int tag = CurListTag)
@@ -1644,7 +1644,7 @@ inline void InvalidateFileList(int tag = CurListTag)
 }
 
 //---------------------------------------------------------------------------
-/** @brief VCLƒXƒ^ƒCƒ‹‚ğg—p‚µ‚Ä‚¢‚é‚©H */
+/** @brief VCLã‚¹ã‚¿ã‚¤ãƒ«ã‚’ä½¿ç”¨ã—ã¦ã„ã‚‹ã‹ï¼Ÿ */
 inline bool use_VclStyle()
 {
 	return !SameText(TStyleManager::ActiveStyle->Name, "Windows");
@@ -1820,7 +1820,7 @@ inline bool is_SearchMatch(UnicodeString s, UnicodeString ptn, SearchOption opt)
 }
 
 //---------------------------------------------------------------------------
-//ƒ\[ƒgƒ‚[ƒh
+//ã‚½ãƒ¼ãƒˆãƒ¢ãƒ¼ãƒ‰
 inline int CurSortMode()
 {
 	return (CurStt->is_Find && CurStt->find_PathSort)? 6 : SortMode[CurListTag];
@@ -1925,75 +1925,75 @@ TStringList *GetCurBtnList(int scr_mode = ScrMode);
 /** @{ */
 
 /**
- * @brief ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚ğæ“¾
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã‚’å–å¾—
  * @param tag
  * @return TStringList*
  */
 TStringList* GetFileList(int tag);
 
 /**
- * @brief ƒJƒŒƒ“ƒg‚ÌƒŠƒXƒg‚ğæ“¾
- * @param only_filer ƒtƒ@ƒCƒ‰[‚Ì‚İ‚ğ‘ÎÛ
+ * @brief ã‚«ãƒ¬ãƒ³ãƒˆã®ãƒªã‚¹ãƒˆã‚’å–å¾—
+ * @param only_filer ãƒ•ã‚¡ã‚¤ãƒ©ãƒ¼ã®ã¿ã‚’å¯¾è±¡
  * @return TStringList*
  */
 TStringList* GetCurList(bool only_filer = false);
 
 /**
- * @brief ”½‘Î‘¤‚ÌƒŠƒXƒg‚ğæ“¾
+ * @brief åå¯¾å´ã®ãƒªã‚¹ãƒˆã‚’å–å¾—
  * @return TStringList*
  */
 TStringList* GetOppList();
 
 /**
- * @brief ‘I‘ğ—L‚è?
- * @param lst ‘ÎÛƒŠƒXƒg
+ * @brief é¸æŠæœ‰ã‚Š?
+ * @param lst å¯¾è±¡ãƒªã‚¹ãƒˆ
  * @return true
  * @return false
  */
 bool ListSelected(TStringList *lst);
 
 /**
- * @brief ‘I‘ğ’†‚Ì€–Ú”‚ğæ“¾
- * @param lst ‘ÎÛƒŠƒXƒg
- * @return int ‘I‘ğ’†‚Ì€–Ú”
+ * @brief é¸æŠä¸­ã®é …ç›®æ•°ã‚’å–å¾—
+ * @param lst å¯¾è±¡ãƒªã‚¹ãƒˆ
+ * @return int é¸æŠä¸­ã®é …ç›®æ•°
  */
 int GetSelCount(TStringList *lst);
 
 /**
- * @brief ‘I‘ğ’†€–Ú–¼ƒŠƒXƒg‚ğæ“¾
- * @param lst ‘ÎÛƒŠƒXƒg
- * @param[out] sel_lst ‘I‘ğ€–ÚƒŠƒXƒg
- * @param with_path ƒpƒX•t‚«‚Åæ“¾
- * @param with_obj Objects ‚àæ“¾
+ * @brief é¸æŠä¸­é …ç›®åãƒªã‚¹ãƒˆã‚’å–å¾—
+ * @param lst å¯¾è±¡ãƒªã‚¹ãƒˆ
+ * @param[out] sel_lst é¸æŠé …ç›®ãƒªã‚¹ãƒˆ
+ * @param with_path ãƒ‘ã‚¹ä»˜ãã§å–å¾—
+ * @param with_obj Objects ã‚‚å–å¾—
  */
 void GetSelList(TStringList *lst, TStringList *sel_lst, bool with_path = true, bool with_obj = false);
 
 /**
- * @brief ‘I‘ğó‘Ô‚ğ‰ğœ
- * @param lst ‘ÎÛƒŠƒXƒg
+ * @brief é¸æŠçŠ¶æ…‹ã‚’è§£é™¤
+ * @param lst å¯¾è±¡ãƒªã‚¹ãƒˆ
  */
 void ClrSelect(TStringList *lst = NULL);
 
 /**
- * @brief ƒ}ƒbƒ`€–Ú”‚ğæ“¾
- * @param lst ‘ÎÛƒŠƒXƒg
- * @return int ƒ}ƒbƒ`€–Ú”
+ * @brief ãƒãƒƒãƒé …ç›®æ•°ã‚’å–å¾—
+ * @param lst å¯¾è±¡ãƒªã‚¹ãƒˆ
+ * @return int ãƒãƒƒãƒé …ç›®æ•°
  */
 int  GetMatchCount(TStringList *lst);
 
 /**
- * @brief ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚Ìƒ\[ƒg
- * @param lst ‘ÎÛƒŠƒXƒg
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã®ã‚½ãƒ¼ãƒˆ
+ * @param lst å¯¾è±¡ãƒªã‚¹ãƒˆ
  * @param tag
  */
 void SortList(TStringList *lst, int tag = CurListTag);
 
 /**
- * @brief ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚Å€–Ú‚ğŒ©‚Â‚¯‚é
- * @param fnam ƒtƒ@ƒCƒ‹–¼
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã§é …ç›®ã‚’è¦‹ã¤ã‘ã‚‹
+ * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
  * @param tag
- * @param top_idx æ“ªƒCƒ“ƒfƒbƒNƒX
- * @return int ƒCƒ“ƒfƒbƒNƒX(Œ©‚Â‚©‚ç‚È‚¢ê‡‚Í -1)
+ * @param top_idx å…ˆé ­ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
+ * @return int ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹(è¦‹ã¤ã‹ã‚‰ãªã„å ´åˆã¯ -1)
  */
 int  IndexOfFileList(UnicodeString fnam, int tag = CurListTag, int top_idx = -1);
 
@@ -2002,87 +2002,87 @@ file_rec* ExistsInList(UnicodeString fnam, TStringList *lst);
 UnicodeString GetSelFileStr(TStringList *lst, bool use_tmp = false, bool inc_dir = false, TStringList *s_lst = NULL);
 
 /**
- * @brief file_rec ‚ğì¬‚µ‚Ä‰Šú‰»
- * @details file_rec ‚ğì¬‚µ‚Ä‰Šú‰»‚µ‚Ü‚·Bcopy_fp ‚ğw’è‚·‚é‚ÆA‚»‚Ì“à—e‚ªƒRƒs[‚³‚ê‚Ü‚·B
+ * @brief file_rec ã‚’ä½œæˆã—ã¦åˆæœŸåŒ–
+ * @details file_rec ã‚’ä½œæˆã—ã¦åˆæœŸåŒ–ã—ã¾ã™ã€‚copy_fp ã‚’æŒ‡å®šã™ã‚‹ã¨ã€ãã®å†…å®¹ãŒã‚³ãƒ”ãƒ¼ã•ã‚Œã¾ã™ã€‚
  * @param copy_fp
  * @return file_rec*
  */
 file_rec* cre_new_file_rec(file_rec *copy_fp = NULL);
 
 /**
- * @brief ƒtƒ@ƒCƒ‹–¼‚©‚ç file_rec ‚ğì¬
- * @param fnam ƒtƒ@ƒCƒ‹–¼(––”ö‚ª \ ‚Ìê‡‚ÍƒfƒBƒŒƒNƒgƒŠ–¼)
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«åã‹ã‚‰ file_rec ã‚’ä½œæˆ
+ * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å(æœ«å°¾ãŒ \ ã®å ´åˆã¯ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå)
  * @param tag
- * @param force ‘¶İ‚µ‚È‚¢ê‡‚à‹­§“I‚Éİ’è
+ * @param force å­˜åœ¨ã—ãªã„å ´åˆã‚‚å¼·åˆ¶çš„ã«è¨­å®š
  * @return file_rec*
  */
 file_rec* cre_new_file_rec(UnicodeString fnam, int tag = -1, bool force = false);
 
 /**
- * @brief [..]‚Ì file_rec ‚ğì¬
+ * @brief [..]ã® file_rec ã‚’ä½œæˆ
  * @param tag
  * @return file_rec*
  */
 file_rec* cre_new_up_rec(int tag);
 
 /**
- * @brief file_rec ‚ÌƒRƒs[
- * @param s_fp ƒRƒs[Œ³
- * @param d_fp ƒRƒs[æ
+ * @brief file_rec ã®ã‚³ãƒ”ãƒ¼
+ * @param s_fp ã‚³ãƒ”ãƒ¼å…ƒ
+ * @param d_fp ã‚³ãƒ”ãƒ¼å…ˆ
  */
 void copy_file_rec(file_rec *s_fp, file_rec *d_fp);
 
 /**
- * @brief file_rec ‚Ìíœ
- * @param fp íœ‘ÎÛ
+ * @brief file_rec ã®å‰Šé™¤
+ * @param fp å‰Šé™¤å¯¾è±¡
  */
 void del_file_rec(file_rec *fp);
 
 void inv_file_rec(file_rec *fp);
 
 /**
- * @brief €–Ú‚Í‘I‘ğ‰Â”\‚©H
- * @param fp ‘ÎÛ€–Ú
+ * @brief é …ç›®ã¯é¸æŠå¯èƒ½ã‹ï¼Ÿ
+ * @param fp å¯¾è±¡é …ç›®
  * @return true
  * @return false
  */
 bool is_selectable(file_rec *fp);
 
 /**
- * @brief ‘I‘ğ‰Â”\‚È€–Ú‚Ì‘I‘ğó‘Ô‚ğİ’è
- * @param fp ‘ÎÛ€–Ú
- * @param sw ‘I‘ğ
+ * @brief é¸æŠå¯èƒ½ãªé …ç›®ã®é¸æŠçŠ¶æ…‹ã‚’è¨­å®š
+ * @param fp å¯¾è±¡é …ç›®
+ * @param sw é¸æŠ
  * @return true
  * @return false
  */
 bool set_select(file_rec *fp, bool sw = true);
 
 /**
- * @brief ‘I‘ğ‰Â”\‚È€–Ú‚Ì‘I‘ğó‘Ô‚ğ”½“]
- * @param fp ‘ÎÛ€–Ú
+ * @brief é¸æŠå¯èƒ½ãªé …ç›®ã®é¸æŠçŠ¶æ…‹ã‚’åè»¢
+ * @param fp å¯¾è±¡é …ç›®
  * @return true
  * @return false
  */
 bool set_select_r(file_rec *fp);
 
 /**
- * @brief ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚ÌƒNƒŠƒA
- * @param lst ‘ÎÛƒŠƒXƒg
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã®ã‚¯ãƒªã‚¢
+ * @param lst å¯¾è±¡ãƒªã‚¹ãƒˆ
  */
 void clear_FileList(TStringList *lst);
 
 /**
- * @brief ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚Ì€–Úíœ
- * @param lst ‘ÎÛƒŠƒXƒg
- * @param idx íœƒCƒ“ƒfƒbƒNƒX
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã®é …ç›®å‰Šé™¤
+ * @param lst å¯¾è±¡ãƒªã‚¹ãƒˆ
+ * @param idx å‰Šé™¤ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
  */
 void del_FileListItem(TStringList *lst, int idx);
 
 /**
- * @brief ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚Ì“à—e‚ğ“ü‚ê‘Ö‚¦‚é
- * @param lst1 ƒŠƒXƒg1
- * @param lst2 ƒŠƒXƒg2
- * @param swap_tag ƒ^ƒO‚à“ü‚ê‘Ö‚¦‚é
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã®å†…å®¹ã‚’å…¥ã‚Œæ›¿ãˆã‚‹
+ * @param lst1 ãƒªã‚¹ãƒˆ1
+ * @param lst2 ãƒªã‚¹ãƒˆ2
+ * @param swap_tag ã‚¿ã‚°ã‚‚å…¥ã‚Œæ›¿ãˆã‚‹
  */
 void swap_FileList(TStringList *lst1, TStringList *lst2, bool swap_tag = true);
 /** @} */
@@ -2100,14 +2100,14 @@ void save_DirHistory(UsrIniFile *ini_file);
 bool save_TagGroup(UnicodeString fnam);
 
 /**
- * @brief ŒŸõİ’è‚ÌƒNƒŠƒA
+ * @brief æ¤œç´¢è¨­å®šã®ã‚¯ãƒªã‚¢
  * @param lst_stt
  */
 void clear_FindStt(flist_stt *lst_stt);
 
 /**
- * @brief ŒŸõİ’è‚Ì•Û‘¶
- * @param fnam ƒtƒ@ƒCƒ‹–¼
+ * @brief æ¤œç´¢è¨­å®šã®ä¿å­˜
+ * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
  * @param lst_stt
  * @return true
  * @return false
@@ -2115,8 +2115,8 @@ void clear_FindStt(flist_stt *lst_stt);
 bool save_FindSettings(UnicodeString fnam, flist_stt *lst_stt);
 
 /**
- * @brief ŒŸõİ’è‚Ì“Ç
- * @param fnam ƒtƒ@ƒCƒ‹–¼
+ * @brief æ¤œç´¢è¨­å®šã®èª­è¾¼
+ * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
  * @param lst_stt
  * @return true
  * @return false
@@ -2124,14 +2124,14 @@ bool save_FindSettings(UnicodeString fnam, flist_stt *lst_stt);
 bool load_FindSettings(UnicodeString fnam, flist_stt *lst_stt);
 
 /**
- * @brief ŒŸõİ’èî•ñ‚Ìæ“¾
- * @param fnam ƒtƒ@ƒCƒ‹–¼
- * @param[out] lst î•ñƒŠƒXƒg
+ * @brief æ¤œç´¢è¨­å®šæƒ…å ±ã®å–å¾—
+ * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+ * @param[out] lst æƒ…å ±ãƒªã‚¹ãƒˆ
  */
 void get_FindSetInf(UnicodeString fnam, TStringList *lst);
 
 /**
- * @brief ŒŸõ‘ÎÛ‚ª‘S‘Ì‚©H
+ * @brief æ¤œç´¢å¯¾è±¡ãŒå…¨ä½“ã‹ï¼Ÿ
  * @param lst_stt
  * @return true
  * @return false
@@ -2139,8 +2139,8 @@ void get_FindSetInf(UnicodeString fnam, TStringList *lst);
 bool is_FindAll(flist_stt *lst_stt);
 
 /**
- * @brief ŒŸõƒŠƒXƒgî•ñ•¶š—ñ‚ğæ“¾
- * @param pnam_sw ƒpƒX–¼‚È‚Ç‚ğ•t‰Á
+ * @brief æ¤œç´¢ãƒªã‚¹ãƒˆæƒ…å ±æ–‡å­—åˆ—ã‚’å–å¾—
+ * @param pnam_sw ãƒ‘ã‚¹åãªã©ã‚’ä»˜åŠ 
  * @return UnicodeString
  */
 UnicodeString get_FindInfStr(bool pnam_sw);
@@ -2149,32 +2149,32 @@ bool check_int(int v0, int v1, int mode);
 bool check_prop(UnicodeString fnam, UnicodeString prop, int v, int mode);
 
 /**
- * @brief •W€ƒtƒ@ƒCƒ‹ŒŸõ
- * @attention •s³‚È³‹K•\Œ»ƒpƒ^[ƒ“‚ğ—p‚¢‚È‚¢‚±‚Æ(—v–‘Oƒ`ƒFƒbƒN)
- * @param fnam ƒpƒX–³‚µƒtƒ@ƒCƒ‹–¼
- * @param f_tm ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv
- * @param f_sz ƒTƒCƒY
- * @param f_atr ‘®«
+ * @brief æ¨™æº–ãƒ•ã‚¡ã‚¤ãƒ«æ¤œç´¢
+ * @attention ä¸æ­£ãªæ­£è¦è¡¨ç¾ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’ç”¨ã„ãªã„ã“ã¨(è¦äº‹å‰ãƒã‚§ãƒƒã‚¯)
+ * @param fnam ãƒ‘ã‚¹ç„¡ã—ãƒ•ã‚¡ã‚¤ãƒ«å
+ * @param f_tm ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—
+ * @param f_sz ã‚µã‚¤ã‚º
+ * @param f_atr å±æ€§
  * @param lst_stt
- * @return true ƒ}ƒbƒ`
+ * @return true ãƒãƒƒãƒ
  * @return false
  */
 bool check_file_std(UnicodeString fnam, TDateTime f_tm, __int64 f_sz, int f_atr, flist_stt *lst_stt);
 
 /**
- * @brief Šg’£ƒtƒ@ƒCƒ‹ŒŸõ
- * @param fnam ƒpƒX–³‚µƒtƒ@ƒCƒ‹–¼
+ * @brief æ‹¡å¼µãƒ•ã‚¡ã‚¤ãƒ«æ¤œç´¢
+ * @param fnam ãƒ‘ã‚¹ç„¡ã—ãƒ•ã‚¡ã‚¤ãƒ«å
  * @param lst_stt
- * @return true ƒ}ƒbƒ`
+ * @return true ãƒãƒƒãƒ
  * @return false
  */
 bool check_file_ex(UnicodeString fnam, flist_stt *lst_stt);
 
 /**
- * @brief ƒtƒHƒ“ƒgî•ñ‚ğæ“¾
- * @param fnam ƒtƒ@ƒCƒ‹–¼
- * @param[out] lst î•ñƒŠƒXƒg
- * @return UnicodeString ƒtƒHƒ“ƒg–¼
+ * @brief ãƒ•ã‚©ãƒ³ãƒˆæƒ…å ±ã‚’å–å¾—
+ * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+ * @param[out] lst æƒ…å ±ãƒªã‚¹ãƒˆ
+ * @return UnicodeString ãƒ•ã‚©ãƒ³ãƒˆå
  */
 UnicodeString get_FontInf(UnicodeString fnam, TStringList *lst = NULL);
 
@@ -2214,9 +2214,9 @@ bool get_Files_objSize(UnicodeString pnam, TStrings *lst, bool exc_sym);
 bool get_NameList_objSize(TStringList *lst, TStringList *o_lst, bool sub_sw, bool exc_sym);
 
 /**
- * @brief “ÁêƒfƒBƒŒƒNƒgƒŠ‚ÌƒŠƒXƒg‚ğæ“¾
+ * @brief ç‰¹æ®Šãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ãƒªã‚¹ãƒˆã‚’å–å¾—
  * @param id
- * @param[out] o_lst ƒŠƒXƒg
+ * @param[out] o_lst ãƒªã‚¹ãƒˆ
  * @return true
  * @return false
  */
@@ -2226,12 +2226,12 @@ void get_FindListF(UnicodeString pnam, flist_stt *lst_stt, TStrings *lst, int ta
 void get_FindListD(UnicodeString pnam, flist_stt *lst_stt, TStrings *lst, int tag);
 
 /**
- * @brief ‚·‚×‚Ä‚ÌƒTƒuƒfƒBƒŒƒNƒgƒŠ‚ğæ“¾
- * @param pnam Šî€ƒfƒBƒŒƒNƒgƒŠ
- * @param[out] lst ƒfƒBƒŒƒNƒgƒŠ–¼ƒŠƒXƒg
- * @param stt_bar Œo‰ß•\¦—pƒXƒe[ƒ^ƒXƒo[
- * @param stt_idx •\¦ƒpƒlƒ‹‚ÌƒCƒ“ƒfƒbƒNƒX
- * @param proc_msg ƒƒbƒZ[ƒWƒLƒ…[‚ğˆ—
+ * @brief ã™ã¹ã¦ã®ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’å–å¾—
+ * @param pnam åŸºæº–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+ * @param[out] lst ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåãƒªã‚¹ãƒˆ
+ * @param stt_bar çµŒéè¡¨ç¤ºç”¨ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒãƒ¼
+ * @param stt_idx è¡¨ç¤ºãƒ‘ãƒãƒ«ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
+ * @param proc_msg ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚­ãƒ¥ãƒ¼ã‚’å‡¦ç†
  */
 void get_SubDirs(UnicodeString pnam, TStrings *lst, TStatusBar *stt_bar = NULL, int stt_idx = 0, bool proc_msg = false);
 
@@ -2275,7 +2275,7 @@ int  to_NextSelItem(TStringList *lst, int idx);
 int  to_PrevSelItem(TStringList *lst, int idx);
 
 /**
- * @brief ViewFileList ‚Å—LŒø‚È€–Ú”‚ğæ“¾
+ * @brief ViewFileList ã§æœ‰åŠ¹ãªé …ç›®æ•°ã‚’å–å¾—
  * @return int
  */
 int  get_ViewCount();
@@ -2291,10 +2291,10 @@ int eval_HistgramVector(UnicodeString r_vct, UnicodeString o_vct);
 int get_HammingDistance(UnicodeString vct0, UnicodeString vct1);
 
 /**
- * @brief ƒtƒ@ƒCƒ‹‚Ìíœ
- * @param fnam ƒtƒ@ƒCƒ‹–¼
- * @param use_trash ‚²‚İ” ‚ğg—p
- * @return true ¬Œ÷
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«ã®å‰Šé™¤
+ * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+ * @param use_trash ã”ã¿ç®±ã‚’ä½¿ç”¨
+ * @return true æˆåŠŸ
  * @return false
  */
 bool delete_File(UnicodeString fnam, bool use_trash = false);
@@ -2304,86 +2304,86 @@ void delete_FileIf(UnicodeString fnam);
 bool delete_DirEx(UnicodeString pnam, bool use_trash = false, bool force = false);
 
 /**
- * @brief ƒtƒ@ƒCƒ‹‚ÌˆÚ“®(ƒ^ƒO/ƒtƒHƒ‹ƒ_ƒAƒCƒRƒ“‚ğl—¶)
- * @param old_nam ˆÚ“®Œ³‚Ìƒtƒ@ƒCƒ‹–¼
- * @param new_nam ˆÚ“®æ‚Ìƒtƒ@ƒCƒ‹–¼
- * @return true ¬Œ÷
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«ã®ç§»å‹•(ã‚¿ã‚°/ãƒ•ã‚©ãƒ«ãƒ€ã‚¢ã‚¤ã‚³ãƒ³ã‚’è€ƒæ…®)
+ * @param old_nam ç§»å‹•å…ƒã®ãƒ•ã‚¡ã‚¤ãƒ«å
+ * @param new_nam ç§»å‹•å…ˆã®ãƒ•ã‚¡ã‚¤ãƒ«å
+ * @return true æˆåŠŸ
  * @return false
  */
 bool move_FileT(UnicodeString old_nam, UnicodeString new_nam);
 
 /**
- * @brief ƒtƒHƒ‹ƒ_ƒAƒCƒRƒ“‚ÌˆÚ“®
+ * @brief ãƒ•ã‚©ãƒ«ãƒ€ã‚¢ã‚¤ã‚³ãƒ³ã®ç§»å‹•
  * @param old_dnam
  * @param new_dnam
  */
 void move_FolderIcon(UnicodeString old_dnam, UnicodeString new_dnam);
 
 /**
- * @brief ƒtƒHƒ‹ƒ_ƒAƒCƒRƒ“‚ÌƒRƒs[
+ * @brief ãƒ•ã‚©ãƒ«ãƒ€ã‚¢ã‚¤ã‚³ãƒ³ã®ã‚³ãƒ”ãƒ¼
  * @param src_dnam
  * @param dst_dnam
  */
 void copy_FolderIcon(UnicodeString src_dnam, UnicodeString dst_dnam);
 
 /**
- * @brief ƒtƒHƒ‹ƒ_ƒAƒCƒRƒ“ƒtƒ@ƒCƒ‹‚Ìæ“¾
+ * @brief ãƒ•ã‚©ãƒ«ãƒ€ã‚¢ã‚¤ã‚³ãƒ³ãƒ•ã‚¡ã‚¤ãƒ«ã®å–å¾—
  * @param dnam
  * @return UnicodeString
  */
 UnicodeString get_FolderIconName(UnicodeString dnam);
 
 /**
- * @brief ƒtƒHƒ‹ƒ_ƒAƒCƒRƒ“‚Ìİ’è
- * @param dnam ƒfƒBƒŒƒNƒgƒŠ–¼
- * @param inam ƒAƒCƒRƒ“ƒtƒ@ƒCƒ‹–¼ (EmptyStr: ‰ğœ)
+ * @brief ãƒ•ã‚©ãƒ«ãƒ€ã‚¢ã‚¤ã‚³ãƒ³ã®è¨­å®š
+ * @param dnam ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå
+ * @param inam ã‚¢ã‚¤ã‚³ãƒ³ãƒ•ã‚¡ã‚¤ãƒ«å (EmptyStr: è§£é™¤)
  */
 void set_FolderIcon(UnicodeString dnam, UnicodeString inam = EmptyStr);
 
 /**
- * @brief ƒtƒHƒ‹ƒ_ƒAƒCƒRƒ“ˆê——‚ğæ“¾
- * @param[out] lst ƒŠƒXƒg
+ * @brief ãƒ•ã‚©ãƒ«ãƒ€ã‚¢ã‚¤ã‚³ãƒ³ä¸€è¦§ã‚’å–å¾—
+ * @param[out] lst ãƒªã‚¹ãƒˆ
  */
 void get_FolderIconList(TStringList *lst);
 
 /**
- * @brief ƒtƒHƒ‹ƒ_ƒAƒCƒRƒ“‚Ì‰ü–¼
+ * @brief ãƒ•ã‚©ãƒ«ãƒ€ã‚¢ã‚¤ã‚³ãƒ³ã®æ”¹å
  * @param old_nam
  * @param new_nam
  */
 void rename_FolderIcon(UnicodeString old_nam, UnicodeString new_nam);
 
 /**
- * @brief ‘¶İ‚µ‚È‚¢ƒtƒHƒ‹ƒ_ƒAƒCƒRƒ“İ’è‚ğ®—
+ * @brief å­˜åœ¨ã—ãªã„ãƒ•ã‚©ãƒ«ãƒ€ã‚¢ã‚¤ã‚³ãƒ³è¨­å®šã‚’æ•´ç†
  */
 void chk_FolderIcon();
 
 /**
- * @brief Šg’£q‚ÉŠÖ˜A•t‚¯‚³‚ê‚Ä‚¢‚éƒAƒvƒŠ‚ÌƒŠƒXƒg‚ğæ“¾
- * @param fext Šg’£q
+ * @brief æ‹¡å¼µå­ã«é–¢é€£ä»˜ã‘ã•ã‚Œã¦ã„ã‚‹ã‚¢ãƒ—ãƒªã®ãƒªã‚¹ãƒˆã‚’å–å¾—
+ * @param fext æ‹¡å¼µå­
  * @return TStringDynArray
  */
 TStringDynArray get_AssociatedApps(UnicodeString fext);
 
 /**
- * @brief ŠÖ˜A•t‚¯ƒŠƒXƒg‚©‚çƒƒjƒ…[—pƒŠƒXƒg‚ğì¬
- * @param[in] app_lst ŠÖ˜A•t‚¯ƒŠƒXƒg
- * @param[out] lst ƒƒjƒ…[—pƒŠƒXƒg
+ * @brief é–¢é€£ä»˜ã‘ãƒªã‚¹ãƒˆã‹ã‚‰ãƒ¡ãƒ‹ãƒ¥ãƒ¼ç”¨ãƒªã‚¹ãƒˆã‚’ä½œæˆ
+ * @param[in] app_lst é–¢é€£ä»˜ã‘ãƒªã‚¹ãƒˆ
+ * @param[out] lst ãƒ¡ãƒ‹ãƒ¥ãƒ¼ç”¨ãƒªã‚¹ãƒˆ
  */
 void make_AssoMenuList(TStringDynArray app_lst, TStringList *lst);
 
 /** @addtogroup GLOBAL_COLORS */
 /** @{ */
 /**
- * @brief ƒtƒ@ƒCƒ‹ƒŠƒXƒg€–Ú‚Ì”wŒiF‚ğæ“¾
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆé …ç›®ã®èƒŒæ™¯è‰²ã‚’å–å¾—
  * @param lst_stt
- * @param idx ƒCƒ“ƒfƒbƒNƒX
+ * @param idx ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
  * @return TColor
  */
 TColor get_FlBgColor(flist_stt *lst_stt, int idx = 0);
 
 /**
- * @brief ƒtƒ@ƒCƒ‹–¼‚Ì•¶šF‚ğæ“¾
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«åã®æ–‡å­—è‰²ã‚’å–å¾—
  * @param fp
  * @param col_x
  * @return TColor
@@ -2391,32 +2391,32 @@ TColor get_FlBgColor(flist_stt *lst_stt, int idx = 0);
 TColor get_FileColor(file_rec *fp, TColor col_x);
 
 /**
- * @brief Šg’£q•ÊƒJƒ‰[‚ğæ“¾
- * @param fext Šg’£q
- * @param col ƒfƒtƒHƒ‹ƒg•¶šF
+ * @brief æ‹¡å¼µå­åˆ¥ã‚«ãƒ©ãƒ¼ã‚’å–å¾—
+ * @param fext æ‹¡å¼µå­
+ * @param col ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆæ–‡å­—è‰²
  * @return TColor
  */
 TColor get_ExtColor(UnicodeString fext, TColor col = col_fgList);
 
 /**
- * @brief ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚Ì•¶šF‚ğæ“¾
- * @param dt ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv
- * @param col_def ƒfƒtƒHƒ‹ƒg•¶šF
+ * @brief ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã®æ–‡å­—è‰²ã‚’å–å¾—
+ * @param dt ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—
+ * @param col_def ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆæ–‡å­—è‰²
  * @return TColor
  */
 TColor get_TimeColor(TDateTime dt, TColor col_def);
 
 /**
- * @brief ƒTƒCƒY‚Ì•¶šF‚ğæ“¾
- * @param size ƒTƒCƒY
- * @param col_def ƒfƒtƒHƒ‹ƒg•¶šF
+ * @brief ã‚µã‚¤ã‚ºã®æ–‡å­—è‰²ã‚’å–å¾—
+ * @param size ã‚µã‚¤ã‚º
+ * @param col_def ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆæ–‡å­—è‰²
  * @return TColor
  */
 TColor get_SizeColor(__int64 size, TColor col_def);
 
 /**
- * @brief ƒƒO‚Ì•¶šF‚ğæ“¾
- * @param s •¶š—ñ
+ * @brief ãƒ­ã‚°ã®æ–‡å­—è‰²ã‚’å–å¾—
+ * @param s æ–‡å­—åˆ—
  * @return TColor
  */
 TColor get_LogColor(UnicodeString s);
@@ -2434,7 +2434,7 @@ void move_top_RegDirItem(int idx);
 UnicodeString get_LRUD_str(int tag = CurListTag, bool both = false);
 
 /**
- * @brief íœ§ŒÀ‚³‚ê‚½ƒfƒBƒŒƒNƒgƒŠ‚©H
+ * @brief å‰Šé™¤åˆ¶é™ã•ã‚ŒãŸãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ï¼Ÿ
  * @param dnam
  * @return true
  * @return false
@@ -2442,17 +2442,17 @@ UnicodeString get_LRUD_str(int tag = CurListTag, bool both = false);
 bool is_ProtectDir(UnicodeString dnam);
 
 /**
- * @brief ƒtƒ@ƒCƒ‹î•ñƒŠƒXƒg‚ğæ“¾
- * @param fp æ“¾‘ÎÛ
- * @param force ‹­§“I‚Éæ“¾
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ãƒªã‚¹ãƒˆã‚’å–å¾—
+ * @param fp å–å¾—å¯¾è±¡
+ * @param force å¼·åˆ¶çš„ã«å–å¾—
  */
 void GetFileInfList(file_rec *fp, bool force = false);
 
 /**
- * @brief w’è‚µ‚½ƒtƒ@ƒCƒ‹î•ñ‚Ì’l•¶š—ñ‚ğæ“¾
- * @param fp æ“¾‘ÎÛ
- * @param tit ƒ^ƒCƒgƒ‹
- * @param dlmt ’l‚Ì‹æØ‚è•¶š
+ * @brief æŒ‡å®šã—ãŸãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã®å€¤æ–‡å­—åˆ—ã‚’å–å¾—
+ * @param fp å–å¾—å¯¾è±¡
+ * @param tit ã‚¿ã‚¤ãƒˆãƒ«
+ * @param dlmt å€¤ã®åŒºåˆ‡ã‚Šæ–‡å­—
  * @return UnicodeString
  */
 UnicodeString get_FileInfValue(file_rec *fp, UnicodeString tit, UnicodeString dlmt = EmptyStr);
@@ -2464,7 +2464,7 @@ void draw_ColorListBox(TListBox *lp, TRect &Rect, int Index, TOwnerDrawState Sta
 void draw_InputPaintBox(TPaintBox *pp, UnicodeString s);
 
 /**
- * @brief ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚Ì•\¦•¶š—ñ‚ğæ“¾
+ * @brief ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã®è¡¨ç¤ºæ–‡å­—åˆ—ã‚’å–å¾—
  * @param dt
  * @return UnicodeString
  */
@@ -2477,190 +2477,190 @@ UnicodeString get_FileInfStr(UnicodeString fnam, bool with_atr = true);
 void get_FileNamePathInf(UnicodeString fnam, TStringList *lst, bool get_app = false);
 
 /**
- * @brief ƒtƒ@ƒCƒ‹î•ñƒŠƒXƒg‚ğæ“¾
- * @param fp æ“¾‘ÎÛ
- * @param[out] lst î•ñƒŠƒXƒg
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ãƒªã‚¹ãƒˆã‚’å–å¾—
+ * @param fp å–å¾—å¯¾è±¡
+ * @param[out] lst æƒ…å ±ãƒªã‚¹ãƒˆ
  * @return true
  * @return false
  */
 bool get_FileInfList(file_rec *fp, TStringList *lst);
 
 /**
- * @brief ƒtƒ@ƒCƒ‹‚ªˆ—’†‚©H
- * @param fp ‘ÎÛ
- * @param[out] err_msg ƒGƒ‰[ƒƒbƒZ[ƒW
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«ãŒå‡¦ç†ä¸­ã‹ï¼Ÿ
+ * @param fp å¯¾è±¡
+ * @param[out] err_msg ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
  * @return true
  * @return false
  */
 bool is_Processing(file_rec *fp, UnicodeString *err_msg = NULL);
 
 /**
- * @brief ƒtƒ@ƒCƒ‹‚ªˆ—’†‚©H
- * @param fnam ƒtƒ@ƒCƒ‹–¼
- * @param is_video “®‰æ(‘‚àƒ`ƒFƒbƒN)
- * @param[out] err_msg ƒGƒ‰[ƒƒbƒZ[ƒW
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«ãŒå‡¦ç†ä¸­ã‹ï¼Ÿ
+ * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+ * @param is_video å‹•ç”»(æ›¸è¾¼ã‚‚ãƒã‚§ãƒƒã‚¯)
+ * @param[out] err_msg ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
  * @return true
  * @return false
  */
 bool is_Processing(UnicodeString fnam, bool is_video = false, UnicodeString *err_msg = NULL);
 
 /**
- * @brief æ“¾‚ª—}~‚³‚ê‚Ä‚¢‚éƒpƒX‚©H
- * @param pnam ƒpƒX–¼
- * @param no_path æ“¾‚µ‚È‚¢ƒpƒX‚ÌƒŠƒXƒg(ŠÂ‹«•Ï”A%ExePath% ‘Î‰)
+ * @brief å–å¾—ãŒæŠ‘æ­¢ã•ã‚Œã¦ã„ã‚‹ãƒ‘ã‚¹ã‹ï¼Ÿ
+ * @param pnam ãƒ‘ã‚¹å
+ * @param no_path å–å¾—ã—ãªã„ãƒ‘ã‚¹ã®ãƒªã‚¹ãƒˆ(ç’°å¢ƒå¤‰æ•°ã€%ExePath% å¯¾å¿œ)
  * @return true
  * @return false
  */
 bool is_NoInfPath(UnicodeString pnam, UnicodeString no_path);
 
 /**
- * @brief ƒXƒgƒŠ[ƒ€‚Ì‰üsƒR[ƒh‚ğæ“¾
- * @param ms ƒƒ‚ƒŠƒXƒgƒŠ[ƒ€
- * @param code_page ƒR[ƒhƒy[ƒW
- * @param strict Š®‘Sƒ`ƒFƒbƒN
+ * @brief ã‚¹ãƒˆãƒªãƒ¼ãƒ ã®æ”¹è¡Œã‚³ãƒ¼ãƒ‰ã‚’å–å¾—
+ * @param ms ãƒ¡ãƒ¢ãƒªã‚¹ãƒˆãƒªãƒ¼ãƒ 
+ * @param code_page ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸
+ * @param strict å®Œå…¨ãƒã‚§ãƒƒã‚¯
  * @return UnicodeString
  */
 UnicodeString get_StreamLineBreak(TStream *ms, int code_page, bool strict = false);
 
 /**
- * @brief ƒtƒ@ƒCƒ‹‚ÌƒR[ƒhƒy[ƒW‚ğæ“¾
- * @param fnam ƒtƒ@ƒCƒ‹–¼
- * @param[out] line_brk ‰üs
- * @param[out] has_bom BOM—L‚è
- * @return int ƒR[ƒhƒy[ƒW (0: •s–¾)
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸ã‚’å–å¾—
+ * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+ * @param[out] line_brk æ”¹è¡Œ
+ * @param[out] has_bom BOMæœ‰ã‚Š
+ * @return int ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸ (0: ä¸æ˜)
  */
 int get_FileCodePage(UnicodeString fnam, UnicodeString *line_brk = NULL, bool *has_bom = NULL);
 
 /**
- * @brief ƒtƒ@ƒCƒ‹‚ÍƒeƒLƒXƒg‚©H
- * @param fnam ƒtƒ@ƒCƒ‹–¼
- * @param[out] code_page ƒR[ƒhƒy[ƒW
- * @param[out] line_brk ‰üs
- * @param[out] has_bom BOM—L‚è
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«ã¯ãƒ†ã‚­ã‚¹ãƒˆã‹ï¼Ÿ
+ * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+ * @param[out] code_page ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸
+ * @param[out] line_brk æ”¹è¡Œ
+ * @param[out] has_bom BOMæœ‰ã‚Š
  * @return true
  * @return false
  */
 bool is_TextFile(UnicodeString fnam, int *code_page = NULL, UnicodeString *line_brk = NULL, bool *has_bom = NULL);
 
 /**
- * @brief •¶š—ñƒŠƒXƒg‚Ìs”AƒRƒƒ“ƒgA‹ó”’s‚ğƒJƒEƒ“ƒg
- * @param lst •¶š—ñƒŠƒXƒg
- * @param fnam ƒtƒ@ƒCƒ‹–¼
- * @param[out] rem_cnt ƒRƒƒ“ƒgs”
- * @param[out] blk_cnt ‹ó”’s”
- * @return int ‘s”
+ * @brief æ–‡å­—åˆ—ãƒªã‚¹ãƒˆã®è¡Œæ•°ã€ã‚³ãƒ¡ãƒ³ãƒˆã€ç©ºç™½è¡Œã‚’ã‚«ã‚¦ãƒ³ãƒˆ
+ * @param lst æ–‡å­—åˆ—ãƒªã‚¹ãƒˆ
+ * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+ * @param[out] rem_cnt ã‚³ãƒ¡ãƒ³ãƒˆè¡Œæ•°
+ * @param[out] blk_cnt ç©ºç™½è¡Œæ•°
+ * @return int ç·è¡Œæ•°
  */
 int CountListLines(TStringList *lst, UnicodeString fnam, int *rem_cnt, int *blk_cnt);
 
 /**
- * @brief INIƒtƒ@ƒCƒ‹‚Ìƒ^ƒCƒv•¶š—ñ‚ğæ“¾
- * @param fp ‘ÎÛ
- * @return UnicodeString ƒ^ƒCƒv•¶š—ñ
+ * @brief INIãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¿ã‚¤ãƒ—æ–‡å­—åˆ—ã‚’å–å¾—
+ * @param fp å¯¾è±¡
+ * @return UnicodeString ã‚¿ã‚¤ãƒ—æ–‡å­—åˆ—
  */
 UnicodeString get_IniTypeStr(file_rec *fp);
 
 /**
- * @brief ŒŸõİ’èƒtƒ@ƒCƒ‹‚©H
- * @param fp ‘ÎÛ
+ * @brief æ¤œç´¢è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‹ï¼Ÿ
+ * @param fp å¯¾è±¡
  * @return true
  * @return false
  */
 bool is_FindSet(file_rec *fp);
 
 /**
- * @brief ƒƒjƒ…[ƒtƒ@ƒCƒ‹‚©H
- * @param fp ‘ÎÛ
+ * @brief ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã‹ï¼Ÿ
+ * @param fp å¯¾è±¡
  * @return true
  * @return false
  */
 bool is_MenuFile(file_rec *fp);
 
 /**
- * @brief Œ‹‰ÊƒŠƒXƒgƒtƒ@ƒCƒ‹‚©H
- * @param fp ‘ÎÛ
+ * @brief çµæœãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã‹ï¼Ÿ
+ * @param fp å¯¾è±¡
  * @return true
  * @return false
  */
 bool is_ResultList(file_rec *fp);
 
-bool is_AudioVideo(UnicodeString fnam);		//!< ƒrƒfƒI/ƒI[ƒfƒBƒIEƒtƒ@ƒCƒ‹‚©H
-bool is_MPEG2_TS(UnicodeString fnam);		//!< MPEG-2 TS ƒtƒ@ƒCƒ‹‚©H
-bool is_SoundID(UnicodeString s);			//!< ƒTƒEƒ“ƒh¯•Êq‚©H
-bool is_ViewableFext(UnicodeString fext);	//!< ƒrƒ…[ƒA‚Å•\¦‰Â”\‚©(ƒAƒCƒRƒ“‚Íœ‚­)H
+bool is_AudioVideo(UnicodeString fnam);		//!< ãƒ“ãƒ‡ã‚ª/ã‚ªãƒ¼ãƒ‡ã‚£ã‚ªãƒ»ãƒ•ã‚¡ã‚¤ãƒ«ã‹ï¼Ÿ
+bool is_MPEG2_TS(UnicodeString fnam);		//!< MPEG-2 TS ãƒ•ã‚¡ã‚¤ãƒ«ã‹ï¼Ÿ
+bool is_SoundID(UnicodeString s);			//!< ã‚µã‚¦ãƒ³ãƒ‰è­˜åˆ¥å­ã‹ï¼Ÿ
+bool is_ViewableFext(UnicodeString fext);	//!< ãƒ“ãƒ¥ãƒ¼ã‚¢ã§è¡¨ç¤ºå¯èƒ½ã‹(ã‚¢ã‚¤ã‚³ãƒ³ã¯é™¤ã)ï¼Ÿ
 bool is_Viewable(file_rec *fp);
-bool is_ExtractIcon(file_rec *fp);			//!< ƒAƒCƒRƒ“’Šo‰Â”\‚©H
-bool test_ArcExt(UnicodeString fext);		//!< ƒA[ƒJƒCƒo‚Ì‘Î‰Šg’£q‚©H
-bool is_AvailableArc(UnicodeString fnam, bool ex_sw = false);	//!< —˜—p‰Â”\‚ÈƒA[ƒJƒCƒu‚©H
+bool is_ExtractIcon(file_rec *fp);			//!< ã‚¢ã‚¤ã‚³ãƒ³æŠ½å‡ºå¯èƒ½ã‹ï¼Ÿ
+bool test_ArcExt(UnicodeString fext);		//!< ã‚¢ãƒ¼ã‚«ã‚¤ãƒã®å¯¾å¿œæ‹¡å¼µå­ã‹ï¼Ÿ
+bool is_AvailableArc(UnicodeString fnam, bool ex_sw = false);	//!< åˆ©ç”¨å¯èƒ½ãªã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ã‹ï¼Ÿ
 
-bool test_TxtFile(UnicodeString fnam);		//!< ƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚©H
-bool test_NonTxtExt(UnicodeString fext);	//!< ”ñƒeƒLƒXƒg‚ÌŠg’£q‚©H
+bool test_TxtFile(UnicodeString fnam);		//!< ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã‹ï¼Ÿ
+bool test_NonTxtExt(UnicodeString fext);	//!< éãƒ†ã‚­ã‚¹ãƒˆã®æ‹¡å¼µå­ã‹ï¼Ÿ
 
-UnicodeString get_img_fext();				//!< ‰æ‘œ‚ÌŠg’£q‚ğæ“¾
+UnicodeString get_img_fext();				//!< ç”»åƒã®æ‹¡å¼µå­ã‚’å–å¾—
 
 /**
- * @brief Šg’£q•Êƒtƒ@ƒCƒ‹”î•ñ‚ğ’Ç‰Á
- * @param f_lst ƒtƒ@ƒCƒ‹–¼ƒŠƒXƒg
- * @param[out] lst î•ñƒŠƒXƒg
+ * @brief æ‹¡å¼µå­åˆ¥ãƒ•ã‚¡ã‚¤ãƒ«æ•°æƒ…å ±ã‚’è¿½åŠ 
+ * @param f_lst ãƒ•ã‚¡ã‚¤ãƒ«åãƒªã‚¹ãƒˆ
+ * @param[out] lst æƒ…å ±ãƒªã‚¹ãƒˆ
  */
 void add_FExtInfList(TStringList *f_lst, TStringList *lst);
 
 /**
- * @brief ƒtƒ@ƒCƒ‹‚©‚ç‰æ‘œƒTƒCƒY‚ğæ“¾
- * @param fnam ƒtƒ@ƒCƒ‹–¼
- * @param[out] wd •
- * @param[out] hi ‚‚³
- * @return true ¬Œ÷
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ç”»åƒã‚µã‚¤ã‚ºã‚’å–å¾—
+ * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+ * @param[out] wd å¹…
+ * @param[out] hi é«˜ã•
+ * @return true æˆåŠŸ
  * @return false
  */
 bool get_img_size(UnicodeString fnam, unsigned int *wd, unsigned int *hi);
 
 /**
- * @brief ‰æ‘œƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚Ş
- * @param fnam ƒtƒ@ƒCƒ‹–¼
- * @param[out] o_bmp ƒrƒbƒgƒ}ƒbƒv
+ * @brief ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚€
+ * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+ * @param[out] o_bmp ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—
  * @param img_type
- * @param trans_bg “§‰ß”wŒiF
+ * @param trans_bg é€éèƒŒæ™¯è‰²
  * @return int
  */
 int  load_ImageFile(UnicodeString fnam, Graphics::TBitmap *o_bmp, int img_type = WICIMG_PREVIEW, TColor trans_bg = col_None);
 
 /**
- * @brief ƒTƒ€ƒlƒCƒ‹ƒLƒƒƒbƒVƒ…‚ğæ“¾
- * @param fnam ƒtƒ@ƒCƒ‹–¼
- * @param[out] o_bmp ƒrƒbƒgƒ}ƒbƒv
- * @return UnicodeString ƒtƒ@ƒCƒ‹–¼ [TAB] •\¦î•ñ
+ * @brief ã‚µãƒ ãƒã‚¤ãƒ«ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’å–å¾—
+ * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+ * @param[out] o_bmp ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—
+ * @return UnicodeString ãƒ•ã‚¡ã‚¤ãƒ«å [TAB] è¡¨ç¤ºæƒ…å ±
  */
 UnicodeString load_ImageThumbCache(UnicodeString fnam, Graphics::TBitmap *o_bmp);
 
 /**
- * @brief ƒOƒ[ƒoƒ‹•Ï”‚È‚Ç‚Ì‰Šú‰»
+ * @brief ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°ãªã©ã®åˆæœŸåŒ–
  */
 void InitializeGlobal();
 
 /**
- * @brief Œã•Ğ•t‚¯
+ * @brief å¾Œç‰‡ä»˜ã‘
  */
 void EndGlobal();
 
 /**
- * @brief OSƒo[ƒWƒ‡ƒ“î•ñ‚ğæ“¾
+ * @brief OSãƒãƒ¼ã‚¸ãƒ§ãƒ³æƒ…å ±ã‚’å–å¾—
  * @return UnicodeString
  */
 UnicodeString get_OsVerInfStr();
 
-/** @brief ƒ^ƒCƒ}[İ’è‚ÌXV */
+/** @brief ã‚¿ã‚¤ãƒãƒ¼è¨­å®šã®æ›´æ–° */
 void SetupTimer();
 
-/** @brief –³‘€ìó‘Ô‚Ì‰ğœ */
+/** @brief ç„¡æ“ä½œçŠ¶æ…‹ã®è§£é™¤ */
 void ClearNopStt();
 
-/** @brief ƒIƒvƒVƒ‡ƒ“İ’è‚Ì“Ç‚İ‚İ */
+/** @brief ã‚ªãƒ—ã‚·ãƒ§ãƒ³è¨­å®šã®èª­ã¿è¾¼ã¿ */
 void LoadOptions();
 
-/** @brief ƒIƒvƒVƒ‡ƒ“İ’è‚Ì•Û‘¶ */
+/** @brief ã‚ªãƒ—ã‚·ãƒ§ãƒ³è¨­å®šã®ä¿å­˜ */
 void SaveOptions();
 
-/** @brief INIƒtƒ@ƒCƒ‹‚ğXV */
+/** @brief INIãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ›´æ–° */
 void UpdateIniFile(UsrIniFile *ini_file);
 
 void BringOptionByTag(TForm *fp);
@@ -2672,10 +2672,10 @@ void ApplyOptionByTag(TPanel *pp);
 
 void SetToolWinBorder(TForm *fp, bool sw = true, TColor col = col_TlBorder);
 
-/** @brief ˆê———pƒOƒŠƒbƒh‚Ì‰Šú‰» */
+/** @brief ä¸€è¦§ç”¨ã‚°ãƒªãƒƒãƒ‰ã®åˆæœŸåŒ– */
 void InitializeListGrid(TStringGrid *gp, TFont *font = NULL);
 
-/** @brief ˆê———pƒwƒbƒ_‚Ì‰Šú‰» */
+/** @brief ä¸€è¦§ç”¨ãƒ˜ãƒƒãƒ€ã®åˆæœŸåŒ– */
 void InitializeListHeader(THeaderControl *hp, const _TCHAR *hdr, TFont *font = NULL);
 
 void set_ComboBox_AutoComp(TForm *frm);
@@ -2684,60 +2684,60 @@ void set_MigemoAction(TAction *ap, const _TCHAR *key, UnicodeString sct = EmptyS
 void change_ComboBoxHistory(TComboBox *cp, const _TCHAR *nrm_sct, const _TCHAR *reg_sct, bool reg_sw);
 
 /**
- * @brief ƒŠƒXƒg‚Ìi‚è‚İ
- * @param i_lst ‘ÎÛƒŠƒXƒg
- * @param[out] o_lst Œ‹‰ÊƒŠƒXƒg
- * @param kwd ŒŸõŒê
- * @param opt ŒŸõƒIƒvƒVƒ‡ƒ“
+ * @brief ãƒªã‚¹ãƒˆã®çµã‚Šè¾¼ã¿
+ * @param i_lst å¯¾è±¡ãƒªã‚¹ãƒˆ
+ * @param[out] o_lst çµæœãƒªã‚¹ãƒˆ
+ * @param kwd æ¤œç´¢èª
+ * @param opt æ¤œç´¢ã‚ªãƒ—ã‚·ãƒ§ãƒ³
  */
 void filter_List(TStringList *i_lst, TStringList *o_lst, UnicodeString kwd, SearchOption opt);
 
-/** @brief ƒL[‚ÉŠ„‚è“–‚Ä‚ç‚ê‚Ä‚¢‚éƒtƒ@ƒCƒ‰[EƒRƒ}ƒ“ƒh‚ğæ“¾ */
+/** @brief ã‚­ãƒ¼ã«å‰²ã‚Šå½“ã¦ã‚‰ã‚Œã¦ã„ã‚‹ãƒ•ã‚¡ã‚¤ãƒ©ãƒ¼ãƒ»ã‚³ãƒãƒ³ãƒ‰ã‚’å–å¾— */
 UnicodeString Key_to_CmdF(UnicodeString key);
 
-/** @brief ƒL[‚ÉŠ„‚è“–‚Ä‚ç‚ê‚Ä‚¢‚éƒeƒLƒXƒgƒrƒ…[ƒAEƒRƒ}ƒ“ƒh‚ğæ“¾ */
+/** @brief ã‚­ãƒ¼ã«å‰²ã‚Šå½“ã¦ã‚‰ã‚Œã¦ã„ã‚‹ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ãƒ»ã‚³ãƒãƒ³ãƒ‰ã‚’å–å¾— */
 UnicodeString Key_to_CmdV(UnicodeString key);
 
 bool is_ToLeftOpe(UnicodeString keystr, UnicodeString cmdstr);
 bool is_ToRightOpe(UnicodeString keystr, UnicodeString cmdstr);
 
 /**
- * @brief ƒRƒ}ƒ“ƒh‚É‘Î‚·‚éà–¾•¶š—ñ‚ğæ“¾
- * @param cmd ƒRƒ}ƒ“ƒh
- * @param only_inf à–¾‚Ì‚İæ“¾
- * @param menu_list ’Ç‰Áƒƒjƒ…[
- * @param tool_list ŠO•”ƒc[ƒ‹
- * @param is_TV ƒeƒLƒXƒgƒrƒ…[ƒAEƒRƒ}ƒ“ƒh
+ * @brief ã‚³ãƒãƒ³ãƒ‰ã«å¯¾ã™ã‚‹èª¬æ˜æ–‡å­—åˆ—ã‚’å–å¾—
+ * @param cmd ã‚³ãƒãƒ³ãƒ‰
+ * @param only_inf èª¬æ˜ã®ã¿å–å¾—
+ * @param menu_list è¿½åŠ ãƒ¡ãƒ‹ãƒ¥ãƒ¼
+ * @param tool_list å¤–éƒ¨ãƒ„ãƒ¼ãƒ«
+ * @param is_TV ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ãƒ»ã‚³ãƒãƒ³ãƒ‰
  * @return UnicodeString
  */
 UnicodeString get_CmdDesc(UnicodeString cmd, bool only_inf = false,
 	TStrings *menu_list = NULL, TStrings *tool_list = NULL, bool is_TV = false);
 
-/** @brief ‹Ö~•¶š^ƒ†[ƒU’è‹`•¶š‚Ì•ÏŠ· */
+/** @brief ç¦æ­¢æ–‡å­—ï¼ãƒ¦ãƒ¼ã‚¶å®šç¾©æ–‡å­—ã®å¤‰æ› */
 UnicodeString ApplyCnvCharList(UnicodeString s);
 
 TColor read_ColorList(UnicodeString key, TColor def, TStringList *lst = NULL);
 TColor read_ColorList(const _TCHAR *key, TColor def, TStringList *lst = NULL);
 void set_col_from_ColorList();
 
-/** @brief •ÒW—š—ğ‚ğ’Ç‰Á */
+/** @brief ç·¨é›†å±¥æ­´ã‚’è¿½åŠ  */
 void add_TextEditHistory(UnicodeString fnam);
 
-/** @brief ŒÄ‚Ño‚µƒzƒbƒgƒL[‚Ì“o˜^ */
+/** @brief å‘¼ã³å‡ºã—ãƒ›ãƒƒãƒˆã‚­ãƒ¼ã®ç™»éŒ² */
 bool register_HotKey(int id, UnicodeString kstr);
 
 void set_FormTitle(TForm *frm, const _TCHAR *s);
 
-/** @brief Œx‰¹ */
+/** @brief è­¦å‘ŠéŸ³ */
 void beep_Warn(UnicodeString fnam = EmptyStr);
 
-/** @brief ƒ^ƒCƒgƒ‹ƒo[‚Ì“_–Å */
+/** @brief ã‚¿ã‚¤ãƒˆãƒ«ãƒãƒ¼ã®ç‚¹æ»… */
 void flash_win(int cnt = 0, int tm = 0);
 
-/** @brief ‰¹—Êƒ~ƒ…[ƒg */
+/** @brief éŸ³é‡ãƒŸãƒ¥ãƒ¼ãƒˆ */
 bool mute_Volume(UnicodeString prm);
 
-/** @brief ƒTƒEƒ“ƒhÄ¶ */
+/** @brief ã‚µã‚¦ãƒ³ãƒ‰å†ç”Ÿ */
 bool play_sound(UnicodeString fnam);
 bool play_sound_id(UnicodeString id);
 bool play_sound_ex(UnicodeString fnam, bool limit = true);
@@ -2750,10 +2750,10 @@ bool is_ListPlaying();
 void set_CloseButton(bool enabled);
 
 /**
- * @brief ƒ^ƒu‚ğl—¶‚µ‚Ä•¶š—ñ•‚ğæ“¾
- * @param s ‘ÎÛ•¶š—ñ
- * @param cv ƒLƒƒƒ“ƒoƒX
- * @param tab_wd ƒ^ƒuƒXƒgƒbƒv•
+ * @brief ã‚¿ãƒ–ã‚’è€ƒæ…®ã—ã¦æ–‡å­—åˆ—å¹…ã‚’å–å¾—
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param cv ã‚­ãƒ£ãƒ³ãƒã‚¹
+ * @param tab_wd ã‚¿ãƒ–ã‚¹ãƒˆãƒƒãƒ—å¹…
  * @return int
  */
 int  get_TabTextWidth(UnicodeString s, TCanvas *cv, int tab_wd);
@@ -2764,12 +2764,12 @@ void out_TextEx(TCanvas *cv, int &x, int y, UnicodeString s, TColor fg = col_Non
 void out_TextRect(TCanvas *cv, TRect &rc, UnicodeString s, TColor fg = col_None, TColor bg = col_None);
 
 /**
- * @brief •¶š—ñ‚É‘Î‚·‚éƒ}ƒbƒ`Œê‚ÌƒŠƒXƒg‚ğæ“¾
- * @param lbuf ‘ÎÛ•¶š—ñ
- * @param kwd ŒŸõŒê
- * @param opt ƒIƒvƒVƒ‡ƒ“
- * @param[out] lst ƒ}ƒbƒ`ŒêƒŠƒXƒg
- * @return int ƒ}ƒbƒ`”
+ * @brief æ–‡å­—åˆ—ã«å¯¾ã™ã‚‹ãƒãƒƒãƒèªã®ãƒªã‚¹ãƒˆã‚’å–å¾—
+ * @param lbuf å¯¾è±¡æ–‡å­—åˆ—
+ * @param kwd æ¤œç´¢èª
+ * @param opt ã‚ªãƒ—ã‚·ãƒ§ãƒ³
+ * @param[out] lst ãƒãƒƒãƒèªãƒªã‚¹ãƒˆ
+ * @return int ãƒãƒƒãƒæ•°
  */
 int get_MatchWordList(UnicodeString lbuf, UnicodeString kwd, SearchOption opt, TStringList *lst);
 
@@ -2860,19 +2860,19 @@ bool divide_FileName_LineNo(UnicodeString &fnam, int &lno, UnicodeString rnam, i
 UnicodeString get_tags_file(UnicodeString rnam);
 int  get_FileNameByTag(UnicodeString tnam, UnicodeString &rnam, TStringList *lst, UnicodeString onam = EmptyStr);
 
-/** @brief ƒeƒLƒXƒgƒGƒfƒBƒ^‚ÅŠJ‚­ */
+/** @brief ãƒ†ã‚­ã‚¹ãƒˆã‚¨ãƒ‡ã‚£ã‚¿ã§é–‹ã */
 bool open_by_TextEditor(UnicodeString fnam, int lno = 0);
 
 void ini_HtmConv_def(HtmConv *htmcnv, UnicodeString fnam = EmptyStr, UnicodeString url = EmptyStr);
 
 /**
- * @brief w’èƒtƒ@ƒCƒ‹‚ğÀs/ŠJ‚­
- * @param cmd Àsƒtƒ@ƒCƒ‹/ƒtƒHƒ‹ƒ_–¼/CLSId ‚È‚Ç
- * @param prm ƒpƒ‰ƒ[ƒ^
- * @param wdir ì‹ÆƒfƒBƒŒƒNƒgƒŠ
- * @param opt ƒIƒvƒVƒ‡ƒ“
- * @param[out] exit_code I—¹ƒR[ƒh
- * @param[out] o_lst o—ÍƒŠƒXƒg
+ * @brief æŒ‡å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚’å®Ÿè¡Œ/é–‹ã
+ * @param cmd å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«/ãƒ•ã‚©ãƒ«ãƒ€å/CLSId ãªã©
+ * @param prm ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
+ * @param wdir ä½œæ¥­ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+ * @param opt ã‚ªãƒ—ã‚·ãƒ§ãƒ³
+ * @param[out] exit_code çµ‚äº†ã‚³ãƒ¼ãƒ‰
+ * @param[out] o_lst å‡ºåŠ›ãƒªã‚¹ãƒˆ
  * @return true
  * @return false
  */
@@ -2880,14 +2880,14 @@ bool Execute_ex(UnicodeString cmd, UnicodeString prm = EmptyStr, UnicodeString w
 		UnicodeString opt = EmptyStr, DWORD *exit_code = NULL, TStringList *o_lst = NULL);
 
 /**
- * @brief ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“‚ğÀs
- * @param cmdln ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“
- * @param wdir ì‹ÆƒfƒBƒŒƒNƒgƒŠ
- * @param opt ƒIƒvƒVƒ‡ƒ“
- * @param[out] exit_code I—¹ƒR[ƒh
- * @param[out] o_lst o—ÍƒŠƒXƒg
- * @param[out] o_ms o—ÍƒCƒ[ƒW
- * @param rq_abort ’†’f—v‹
+ * @brief ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã‚’å®Ÿè¡Œ
+ * @param cmdln ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³
+ * @param wdir ä½œæ¥­ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+ * @param opt ã‚ªãƒ—ã‚·ãƒ§ãƒ³
+ * @param[out] exit_code çµ‚äº†ã‚³ãƒ¼ãƒ‰
+ * @param[out] o_lst å‡ºåŠ›ãƒªã‚¹ãƒˆ
+ * @param[out] o_ms å‡ºåŠ›ã‚¤ãƒ¡ãƒ¼ã‚¸
+ * @param rq_abort ä¸­æ–­è¦æ±‚
  * @return true
  * @return false
  */
@@ -2896,34 +2896,34 @@ bool Execute_cmdln(UnicodeString cmdln, UnicodeString wdir = EmptyStr,
 			bool *rq_abort = NULL);
 
 /**
- * @brief ˆê”Êƒ†[ƒU‚É~Ši‚µ‚ÄÀs
- * @param cmd ƒRƒ}ƒ“ƒh
- * @param prm ƒpƒ‰ƒ[ƒ^
- * @param wdir ì‹ÆƒfƒBƒŒƒNƒgƒŠ
+ * @brief ä¸€èˆ¬ãƒ¦ãƒ¼ã‚¶ã«é™æ ¼ã—ã¦å®Ÿè¡Œ
+ * @param cmd ã‚³ãƒãƒ³ãƒ‰
+ * @param prm ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
+ * @param wdir ä½œæ¥­ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
  * @return true
  * @return false
  */
 bool Execute_demote(UnicodeString cmd, UnicodeString prm = EmptyStr, UnicodeString wdir = EmptyStr);
 
 /**
- * @brief shexe.exe ‚ğ‰î‚µ•ÊƒvƒƒZƒX‚Æ‚µ‚ÄÀs
- * @details ƒlƒbƒgƒ[ƒNæ‚ÌÀsƒtƒ@ƒCƒ‹‚ªƒ][ƒ“¯•Êq‚ğ‚Âê‡Ashexe.exe ‚ğ‰î‚µ•ÊƒvƒƒZƒX‚Æ‚µ‚ÄÀs‚µ‚Ü‚·B@n
- * ‚»‚¤‚Å‚È‚¢ê‡‚ÍAExecute_ex ‚ÅqƒvƒƒZƒX‚Æ‚µ‚ÄÀs‚µ‚Ü‚·B
- * @param fnam Àsƒtƒ@ƒCƒ‹–¼
- * @param wdir ì‹ÆƒfƒBƒŒƒNƒgƒŠ
+ * @brief shexe.exe ã‚’ä»‹ã—åˆ¥ãƒ—ãƒ­ã‚»ã‚¹ã¨ã—ã¦å®Ÿè¡Œ
+ * @details ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯å…ˆã®å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«ãŒã‚¾ãƒ¼ãƒ³è­˜åˆ¥å­ã‚’æŒã¤å ´åˆã€shexe.exe ã‚’ä»‹ã—åˆ¥ãƒ—ãƒ­ã‚»ã‚¹ã¨ã—ã¦å®Ÿè¡Œã—ã¾ã™ã€‚@n
+ * ãã†ã§ãªã„å ´åˆã¯ã€Execute_ex ã§å­ãƒ—ãƒ­ã‚»ã‚¹ã¨ã—ã¦å®Ÿè¡Œã—ã¾ã™ã€‚
+ * @param fnam å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«å
+ * @param wdir ä½œæ¥­ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
  * @return true
  * @return false
  */
 bool Execute_shexe(UnicodeString fnam, UnicodeString wdir = EmptyStr);
 
 /**
- * @brief git.exe ‚ğÀs
- * @param prm ƒpƒ‰ƒ[ƒ^
- * @param wdir ì‹ÆƒfƒBƒŒƒNƒgƒŠ
- * @param[out] o_lst o—ÍƒŠƒXƒg
- * @param[out] exit_cd I—¹ƒR[ƒh
- * @param[out] w_lst ŒxƒŠƒXƒg(o—Í‚©‚ç•ª—£‚µ‚Äæ“¾)
- * @param rq_abort ’†’f—v‹
+ * @brief git.exe ã‚’å®Ÿè¡Œ
+ * @param prm ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
+ * @param wdir ä½œæ¥­ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+ * @param[out] o_lst å‡ºåŠ›ãƒªã‚¹ãƒˆ
+ * @param[out] exit_cd çµ‚äº†ã‚³ãƒ¼ãƒ‰
+ * @param[out] w_lst è­¦å‘Šãƒªã‚¹ãƒˆ(å‡ºåŠ›ã‹ã‚‰åˆ†é›¢ã—ã¦å–å¾—)
+ * @param rq_abort ä¸­æ–­è¦æ±‚
  * @return true
  * @return false
  */
@@ -2933,56 +2933,56 @@ bool GitShellExe(UnicodeString prm, UnicodeString wdir, TMemoryStream *o_ms, DWO
 bool GitShellExe(UnicodeString prm, UnicodeString wdir);
 void split_GitWarning(TStringList *o_lst, TStringList *w_lst = NULL);
 
-/** @brief w’èƒŠƒrƒWƒ‡ƒ“‚Ìƒtƒ@ƒCƒ‹‚ğˆêƒfƒBƒŒƒNƒgƒŠ‚É•Û‘¶ */
+/** @brief æŒ‡å®šãƒªãƒ“ã‚¸ãƒ§ãƒ³ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä¸€æ™‚ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã«ä¿å­˜ */
 UnicodeString save_GitRevAsTemp(UnicodeString id, UnicodeString fnam, UnicodeString wdir);
 
 /**
- * @brief grep.exe ‚ğÀs
- * @param prm ƒpƒ‰ƒ[ƒ^
- * @param wdir ì‹ÆƒfƒBƒŒƒNƒgƒŠ
- * @param[out] o_lst o—ÍƒŠƒXƒg
- * @param[out] exit_cd I—¹ƒR[ƒh
- * @param[out] rq_abort ’†’f—v‹
+ * @brief grep.exe ã‚’å®Ÿè¡Œ
+ * @param prm ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
+ * @param wdir ä½œæ¥­ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+ * @param[out] o_lst å‡ºåŠ›ãƒªã‚¹ãƒˆ
+ * @param[out] exit_cd çµ‚äº†ã‚³ãƒ¼ãƒ‰
+ * @param[out] rq_abort ä¸­æ–­è¦æ±‚
  * @return true
  * @return false
  */
 bool GrepShellExe(UnicodeString prm, UnicodeString wdir, TStringList *o_lst, DWORD *exit_cd = NULL, bool *rq_abort = NULL);
 
-/** @brief Às/‘Ò‹@’†‚Ìƒ^ƒXƒN”‚ğæ“¾ */
+/** @brief å®Ÿè¡Œ/å¾…æ©Ÿä¸­ã®ã‚¿ã‚¹ã‚¯æ•°ã‚’å–å¾— */
 int  get_BusyTaskCount();
 
-/** @brief ‹­§Às‚ğŠÜ‚ŞÅ‘åƒ^ƒXƒN”‚ğæ“¾ */
+/** @brief å¼·åˆ¶å®Ÿè¡Œã‚’å«ã‚€æœ€å¤§ã‚¿ã‚¹ã‚¯æ•°ã‚’å–å¾— */
 int  get_MaxTaskCount();
 
 /**
- * @brief ‹ó‚«ƒ^ƒXƒN‚ª‚ ‚é‚©H
- * @param ex_sw Å‘åƒ^ƒXƒN”‚ğ’´‚¦‚Äæ“¾
+ * @brief ç©ºãã‚¿ã‚¹ã‚¯ãŒã‚ã‚‹ã‹ï¼Ÿ
+ * @param ex_sw æœ€å¤§ã‚¿ã‚¹ã‚¯æ•°ã‚’è¶…ãˆã¦å–å¾—
  * @return true
  * @return false
  */
 bool has_EmptyTask(bool ex_sw = false);
 
 /**
- * @brief ƒ^ƒXƒNƒXƒŒƒbƒh‚ğæ“¾
- * @param cp ƒ^ƒXƒNİ’è
- * @param reserve —\–ñ‚·‚é
- * @param force •Û—¯’†‚Å‚à‹­§æ“¾
- * @param ext_sw Å‘åƒ^ƒXƒN”‚ğ’´‚¦‚Äæ“¾
+ * @brief ã‚¿ã‚¹ã‚¯ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’å–å¾—
+ * @param cp ã‚¿ã‚¹ã‚¯è¨­å®š
+ * @param reserve äºˆç´„ã™ã‚‹
+ * @param force ä¿ç•™ä¸­ã§ã‚‚å¼·åˆ¶å–å¾—
+ * @param ext_sw æœ€å¤§ã‚¿ã‚¹ã‚¯æ•°ã‚’è¶…ãˆã¦å–å¾—
  * @return TTaskThread*
  */
 TTaskThread * CreTaskThread(TaskConfig **cp, bool reserve = true, bool force = false, bool ext_sw = false);
 
-/** ƒ^ƒXƒN‚ÌŠJn‚Ü‚½‚Í—\–ñ */
+/** ã‚¿ã‚¹ã‚¯ã®é–‹å§‹ã¾ãŸã¯äºˆç´„ */
 void ActivateTask(TTaskThread *tp, TaskConfig *cp);
 
-/** —\–ñ•Û—¯€–Ú‚ÌÀs */
+/** äºˆç´„ä¿ç•™é …ç›®ã®å®Ÿè¡Œ */
 void StartReserve();
 bool StartReserve(int idx, bool ext_sw = false);
 
-/** @brief ƒ^ƒXƒN‚É’á‘¬Às‚ğ—v‹ */
+/** @brief ã‚¿ã‚¹ã‚¯ã«ä½é€Ÿå®Ÿè¡Œã‚’è¦æ±‚ */
 void RequestSlowTask();
 
-/** @brief ƒ^ƒXƒN‚Åˆ—’†‚Ìƒtƒ@ƒCƒ‹‚©H */
+/** @brief ã‚¿ã‚¹ã‚¯ã§å‡¦ç†ä¸­ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‹ï¼Ÿ */
 bool is_OnTask(UnicodeString fnam);
 
 UnicodeString get_LogErrMsg(UnicodeString msg = EmptyStr, bool add_cr = true, UnicodeString fnam = EmptyStr, int err_id = NO_ERROR);
@@ -2991,19 +2991,19 @@ void set_LogErrMsg(UnicodeString &msg, UnicodeString s = EmptyStr, UnicodeString
 int get_TopMargin(TCanvas *cv);
 int get_TopMargin2(TCanvas *cv);
 
-/** @brief Œvƒpƒlƒ‹—p•¶š—ñ‚ğæ“¾ */
+/** @brief æ™‚è¨ˆãƒ‘ãƒãƒ«ç”¨æ–‡å­—åˆ—ã‚’å–å¾— */
 UnicodeString GetClockStr();
 
-/** @brief ƒRƒ}ƒ“ƒhƒtƒ@ƒCƒ‹‚Ì‰ü–¼‚ğƒIƒvƒVƒ‡ƒ“İ’è‚É”½‰f */
+/** @brief ã‚³ãƒãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã®æ”¹åã‚’ã‚ªãƒ—ã‚·ãƒ§ãƒ³è¨­å®šã«åæ˜  */
 void RenameOptCmdFile();
 
-/** @brief ƒRƒ}ƒ“ƒhƒtƒ@ƒCƒ‹‚ÌQÆî•ñ‚ğæ“¾ */
+/** @brief ã‚³ãƒãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã®å‚ç…§æƒ…å ±ã‚’å–å¾— */
 UnicodeString get_ref_CmdFile(UnicodeString fnam, TStringList *lst = NULL);
 
-/** @brief ƒGƒCƒŠƒAƒX‚ğQÆ‚µ‚Ä‚¢‚éƒL[‚ğæ“¾(ƒJƒ“ƒ}‹æØ‚è•¶š—ñ) */
+/** @brief ã‚¨ã‚¤ãƒªã‚¢ã‚¹ã‚’å‚ç…§ã—ã¦ã„ã‚‹ã‚­ãƒ¼ã‚’å–å¾—(ã‚«ãƒ³ãƒåŒºåˆ‡ã‚Šæ–‡å­—åˆ—) */
 UnicodeString get_Alias_KeyStr(UnicodeString alias, TStringList *k_lst = NULL);
 
-/** @brief à–¾‚âˆø—p•„‚ğŠO‚µ‚Äƒpƒ‰ƒ[ƒ^‚ğ’Šo */
+/** @brief èª¬æ˜ã‚„å¼•ç”¨ç¬¦ã‚’å¤–ã—ã¦ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’æŠ½å‡º */
 UnicodeString extract_ExeParam(UnicodeString prm, UnicodeString *dsc = NULL);
 
 UnicodeString make_PathMask(UnicodeString mask, UnicodeString def_desc = EmptyStr);
@@ -3017,7 +3017,7 @@ void cat_DestDir(UnicodeString &msg, UnicodeString dnam);
 void cat_DestFile(UnicodeString &msg, UnicodeString fnam);
 void set_RenameLog(UnicodeString &msg, UnicodeString fnam);
 
-/** @brief ƒƒOƒŠƒXƒgƒ{ƒbƒNƒX‚ÌXV */
+/** @brief ãƒ­ã‚°ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®æ›´æ–° */
 void UpdateLogListBox();
 
 void StartLog(UnicodeString msg, int task_no = -1);
@@ -3042,7 +3042,7 @@ bool __fastcall SpecialKeyProc(TForm *frm, WORD &Key, TShiftState Shift, int hlp
 
 bool __fastcall SpecialEditProc(TObject *Sender, WORD &Key, TShiftState Shift);
 
-/** @brief ƒfƒBƒŒƒNƒgƒŠ“ü—Íƒ{ƒbƒNƒX */
+/** @brief ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå…¥åŠ›ãƒœãƒƒã‚¯ã‚¹ */
 UnicodeString inputbox_dir(const _TCHAR *tit, const _TCHAR *cmd);
 
 bool is_FirstKey(UnicodeString id, UnicodeString keystr);
@@ -3055,7 +3055,7 @@ bool is_OneNrmCmd(UnicodeString cmds, bool no_prm = false);
 bool MovListBoxFromFilter(TListBox *lp, UnicodeString key_str);
 bool MovGridFromFilter(TStringGrid *gp, UnicodeString key_str);
 
-/** @brief ƒŠƒXƒgƒ{ƒbƒNƒX‚Å‚ÌƒRƒ}ƒ“ƒhˆ— */
+/** @brief ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã§ã®ã‚³ãƒãƒ³ãƒ‰å‡¦ç† */
 bool ExeCmdListBox(TListBox *lp, UnicodeString cmd, UnicodeString prm = EmptyStr);
 
 void copy_to_Clipboard(UnicodeString s);
@@ -3077,25 +3077,25 @@ bool focus_ExViewer();
 void close_all_ExViewer(TForm *frm = NULL);
 
 /**
- * @brief Å‰‚É‹N“®‚³‚ê‚½ NyanFi ‚Ìƒnƒ“ƒhƒ‹‚ğæ“¾
+ * @brief æœ€åˆã«èµ·å‹•ã•ã‚ŒãŸ NyanFi ã®ãƒãƒ³ãƒ‰ãƒ«ã‚’å–å¾—
  * @return HWND
  */
 HWND get_PrimNyanWnd();
 
 /**
- * @brief NyanFi ‚ÌƒƒCƒ“‰æ–Ê‚©H
+ * @brief NyanFi ã®ãƒ¡ã‚¤ãƒ³ç”»é¢ã‹ï¼Ÿ
  * @param hWnd
  */
 bool IsNyanfiWnd(HWND hWnd);
 
 /**
- * @brief “ñd‹N“®‚³‚ê‚½ NyanFi ‚ÌƒƒCƒ“‰æ–Ê‚©H
+ * @brief äºŒé‡èµ·å‹•ã•ã‚ŒãŸ NyanFi ã®ãƒ¡ã‚¤ãƒ³ç”»é¢ã‹ï¼Ÿ
  * @param hWnd
  */
 bool IsNyanfi2Wnd(HWND hWnd);
 
 /**
- * @brief Å‰‚É‹N“®‚³‚ê‚½ NyanFi ‚É•¶š—ñ‚ğ‘—o
+ * @brief æœ€åˆã«èµ·å‹•ã•ã‚ŒãŸ NyanFi ã«æ–‡å­—åˆ—ã‚’é€å‡º
  * @param msg
  * @return true
  * @return false
@@ -3118,24 +3118,24 @@ void AddToRecentFile(TStringList *lst);
 int get_ViewTabWidth(UnicodeString fext);
 
 /**
- * @brief ƒcƒŠ[ƒŠƒXƒg‚ğ(Ä)ì¬
+ * @brief ãƒ„ãƒªãƒ¼ãƒªã‚¹ãƒˆã‚’(å†)ä½œæˆ
  * @param lst
  * @param pnam
- * @param chk_sw ”²‚¯‚ğƒ`ƒFƒbƒN
+ * @param chk_sw æŠœã‘ã‚’ãƒã‚§ãƒƒã‚¯
  */
 void MakeTreeList(TStringList *lst, UnicodeString pnam, bool chk_sw = false);
 bool AddPathToTreeList(TStringList *lst);
 
 /**
- * @brief ƒRƒ}ƒ“ƒh—š—ğ‚Ì’Ç‰Á
- * @param cmd ƒRƒ}ƒ“ƒh
- * @param prm ƒpƒ‰ƒ[ƒ^
- * @param id ‰æ–Êƒ‚[ƒh
- * @param fnam ‘ÎÛƒtƒ@ƒCƒ‹–¼
+ * @brief ã‚³ãƒãƒ³ãƒ‰å±¥æ­´ã®è¿½åŠ 
+ * @param cmd ã‚³ãƒãƒ³ãƒ‰
+ * @param prm ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
+ * @param id ç”»é¢ãƒ¢ãƒ¼ãƒ‰
+ * @param fnam å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«å
  */
 void AddCmdHistory(UnicodeString cmd, UnicodeString prm = EmptyStr, UnicodeString id = EmptyStr, UnicodeString fnam = EmptyStr);
 
-//Git ŠÖ˜A‚ÌŠÖ”
+//Git é–¢é€£ã®é–¢æ•°
 UnicodeString get_GitTopPath(UnicodeString dnam);
 UnicodeString get_GitConfig(UnicodeString dnam);
 UnicodeString get_GitUrl(file_rec *fp);
@@ -3155,7 +3155,7 @@ int extract_ver_no(UnicodeString fnam);
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒc[ƒ‹ƒ`ƒbƒv (”zF•ÏX‚Ì‚½‚ß‚ÉƒTƒuƒNƒ‰ƒX‰»)
+ * @brief ãƒ„ãƒ¼ãƒ«ãƒãƒƒãƒ— (é…è‰²å¤‰æ›´ã®ãŸã‚ã«ã‚µãƒ–ã‚¯ãƒ©ã‚¹åŒ–)
  */
 class UsrTooltipWindow : public THintWindow
 {

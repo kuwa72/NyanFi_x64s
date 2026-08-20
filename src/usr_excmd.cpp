@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ExeCommands —pŠÖ”													//
+//  ExeCommands ç”¨é–¢æ•°													//
 //----------------------------------------------------------------------//
 #include "usr_str.h"
 #include "usr_file_ex.h"
@@ -14,7 +14,7 @@
 #include "usr_excmd.h"
 
 //---------------------------------------------------------------------------
-// ExeCmdsList ƒNƒ‰ƒX
+// ExeCmdsList ã‚¯ãƒ©ã‚¹
 //---------------------------------------------------------------------------
 ExeCmdsList::ExeCmdsList(UnicodeString cmds)
 {
@@ -30,10 +30,10 @@ ExeCmdsList::ExeCmdsList(UnicodeString cmds)
 
 	for (int i=0; i<MAX_REPEAT_LEVEL; i++) RepCnt[i] = RepTop[i] = 0;
 
-	//à–¾‚ğ“Ç‚İ”ò‚Î‚·
+	//èª¬æ˜ã‚’èª­ã¿é£›ã°ã™
 	split_dsc(cmds);
 
-	//ƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚Ş
+	//ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã‚€
 	bool loaded  = false;
 	if (remove_top_AT(cmds)) {
 		FileName = to_absolute_name(exclude_quot(cmds));
@@ -43,7 +43,7 @@ ExeCmdsList::ExeCmdsList(UnicodeString cmds)
 		}
 
 		int idx = CmdFileList->IndexOf(FileName);
-		//Šù“Ç
+		//æ—¢èª­
 		if (idx!=-1) {
 			CmdRec = (cmdf_rec*)CmdFileList->Objects[idx];
 			if (CmdRec->noreload || WithinPastMilliSeconds(CmdRec->f_time, get_file_age(FileName), TimeTolerance)) {
@@ -52,7 +52,7 @@ ExeCmdsList::ExeCmdsList(UnicodeString cmds)
 			}
 			CmdRec->exe_count++;
 		}
-		//–¢“Ç
+		//æœªèª­
 		else {
 			CmdRec = new cmdf_rec;
 			CmdRec->file_buf  = new TStringList();
@@ -67,13 +67,13 @@ ExeCmdsList::ExeCmdsList(UnicodeString cmds)
 			CmdRec->file_buf->LoadFromFile(FileName);
 			std::unique_ptr<TStringList> f_buf(new TStringList());
 			f_buf->Assign(CmdRec->file_buf);
-			//s”Ô†‚ğ•t‰Á
+			//è¡Œç•ªå·ã‚’ä»˜åŠ 
 			for (int i=0; i<f_buf->Count; i++) {
 				UnicodeString lbuf = Trim(f_buf->Strings[i]);
 				if (lbuf.IsEmpty() || StartsStr(';', lbuf)) continue;
-				f_buf->Strings[i] = UnicodeString().sprintf(_T("”%u: %s"), i + 1, lbuf.c_str());
+				f_buf->Strings[i] = UnicodeString().sprintf(_T("ï¼ƒ%u: %s"), i + 1, lbuf.c_str());
 			}
-			//ƒRƒƒ“ƒgA‹ós‚ğíœ/ ‘Oˆ—
+			//ã‚³ãƒ¡ãƒ³ãƒˆã€ç©ºè¡Œã‚’å‰Šé™¤/ å‰å‡¦ç†
 			int i = 0;
 			while (i<f_buf->Count) {
 				UnicodeString lbuf = Trim(f_buf->Strings[i]);
@@ -90,10 +90,10 @@ ExeCmdsList::ExeCmdsList(UnicodeString cmds)
 		}
 	}
 
-	//ƒRƒ}ƒ“ƒhƒŠƒXƒg‚ğì¬
+	//ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆã‚’ä½œæˆ
 	if (!loaded) {
 		cmds = ReplaceStr(cmds, "\t",   " ");
-		cmds = ReplaceStr(cmds, ":\\",  "\f");	//‹æØ‚è•¶š‚Æ‚Ì¬“¯‚ğ”ğ‚¯‚é‚½‚ßˆê’uŠ·
+		cmds = ReplaceStr(cmds, ":\\",  "\f");	//åŒºåˆ‡ã‚Šæ–‡å­—ã¨ã®æ··åŒã‚’é¿ã‘ã‚‹ãŸã‚ä¸€æ™‚ç½®æ›
 		cmds = ReplaceStr(cmds, "\r\n", ":");
 
 		UnicodeString c_buf;
@@ -101,7 +101,7 @@ ExeCmdsList::ExeCmdsList(UnicodeString cmds)
 		bool in_qut = false;
 		while (p<=cmds.Length()) {
 			WideChar c = cmds[p];
-			//ˆø—p•„ŠO
+			//å¼•ç”¨ç¬¦å¤–
 			if (!in_qut) {
 				if (c==':') {
 					c_buf = Trim(ReplaceStr(c_buf, "\f", ":\\"));
@@ -113,7 +113,7 @@ ExeCmdsList::ExeCmdsList(UnicodeString cmds)
 					c_buf += c;
 				}
 			}
-			//ˆø—p•„“à
+			//å¼•ç”¨ç¬¦å†…
 			else {
 				if (c=='\"') in_qut = false;
 				c_buf += c;
@@ -126,7 +126,7 @@ ExeCmdsList::ExeCmdsList(UnicodeString cmds)
 		if (CmdRec) CmdRec->cmd_list->Assign(CmdList);
 	}
 
-	if (CmdList->Count==0) ErrMsg = "—LŒø‚ÈƒRƒ}ƒ“ƒh‚ª‚ ‚è‚Ü‚¹‚ñ";
+	if (CmdList->Count==0) ErrMsg = "æœ‰åŠ¹ãªã‚³ãƒãƒ³ãƒ‰ãŒã‚ã‚Šã¾ã›ã‚“";
 }
 //---------------------------------------------------------------------------
 ExeCmdsList::~ExeCmdsList()
@@ -135,25 +135,25 @@ ExeCmdsList::~ExeCmdsList()
 };
 
 //---------------------------------------------------------------------------
-//‘Oˆ—AƒRƒ}ƒ“ƒh/ƒpƒ‰ƒ[ƒ^‚Ìæ‚èo‚µ
+//å‰å‡¦ç†ã€ã‚³ãƒãƒ³ãƒ‰/ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®å–ã‚Šå‡ºã—
 //---------------------------------------------------------------------------
 bool ExeCmdsList::Preproc(UnicodeString &cmd, UnicodeString &prm)
 {
 	CmdStr = CmdList->Strings[PC];
-	//s”Ô†
-	if (remove_top_s(CmdStr, "”")) {
+	//è¡Œç•ªå·
+	if (remove_top_s(CmdStr, "ï¼ƒ")) {
 		LineNo = CmdStr.ToIntDef(0);
 		IncPC();
 		return false;
 	}
-	//ƒ‰ƒxƒ‹
+	//ãƒ©ãƒ™ãƒ«
 	if (StartsStr('#', CmdStr)) {
 		if (RepLevel!=-1) UserAbort(USTR_BadStatmet);
 		IncPC();
 		return false;
 	}
 
-	//ƒRƒ}ƒ“ƒhAƒpƒ‰ƒ[ƒ^
+	//ã‚³ãƒãƒ³ãƒ‰ã€ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 	cmd = get_CmdStr(CmdStr);
 	prm = get_PrmStr(CmdStr);
 	if (!SameText(cmd, "ReplaceBuffer")) prm = exclude_quot(prm);
@@ -184,7 +184,7 @@ bool ExeCmdsList::proc_Repeat(UnicodeString cmd, UnicodeString prm)
 		bool to_brk = false;
 		switch (idx) {
 		case 0:	//Repeat
-			if (RepLevel>=(MAX_REPEAT_LEVEL - 1)) TextAbort(_T("‚±‚êˆÈã‘½d‰»‚Å‚«‚Ü‚¹‚ñB"));
+			if (RepLevel>=(MAX_REPEAT_LEVEL - 1)) TextAbort(_T("ã“ã‚Œä»¥ä¸Šå¤šé‡åŒ–ã§ãã¾ã›ã‚“ã€‚"));
 			RepLevel++;
 			if (prm.IsEmpty()) {
 				RepCnt[RepLevel] = -2;
@@ -193,7 +193,7 @@ bool ExeCmdsList::proc_Repeat(UnicodeString cmd, UnicodeString prm)
 				RepCnt[RepLevel] = -1;
 			}
 			else {
-				if (SameText(prm, "IN")) prm = inputbox_ex(_T("Repeat"), _T("ŒJ‚è•Ô‚µ‰ñ”"), EmptyStr, true);
+				if (SameText(prm, "IN")) prm = inputbox_ex(_T("Repeat"), _T("ç¹°ã‚Šè¿”ã—å›æ•°"), EmptyStr, true);
 				RepCnt[RepLevel] = prm.ToIntDef(0);
 				to_brk = (RepCnt[RepLevel]==0);
 			}
@@ -207,7 +207,7 @@ bool ExeCmdsList::proc_Repeat(UnicodeString cmd, UnicodeString prm)
 			if (RepCnt[RepLevel]>0) {
 				RepCnt[RepLevel]--;
 			}
-			else if (RepCnt[RepLevel]==-1 && !msgbox_Sure(_T("ŒJ‚è•Ô‚µ‚Ü‚·‚©?"))) {
+			else if (RepCnt[RepLevel]==-1 && !msgbox_Sure(_T("ç¹°ã‚Šè¿”ã—ã¾ã™ã‹?"))) {
 				RepCnt[RepLevel] = 0;
 			}
 
@@ -238,7 +238,7 @@ bool ExeCmdsList::proc_Repeat(UnicodeString cmd, UnicodeString prm)
 }
 
 //---------------------------------------------------------------------------
-//EndRepeat ‚ğ’T‚·
+//EndRepeat ã‚’æ¢ã™
 //---------------------------------------------------------------------------
 bool ExeCmdsList::search_EndRepeat()
 {
@@ -273,7 +273,7 @@ bool ExeCmdsList::proc_Goto(UnicodeString label)
 	}
 
 	if (PC==-1) {
-		ErrMsg.sprintf(_T("ƒ‰ƒxƒ‹ %s ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ"), label.c_str());
+		ErrMsg.sprintf(_T("ãƒ©ãƒ™ãƒ« %s ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“"), label.c_str());
 		return false;
 	}
 
@@ -285,7 +285,7 @@ bool ExeCmdsList::proc_IfCnd(bool cnd, UnicodeString prm)
 {
 	try {
 		if (cnd) {
-			//ƒpƒ‰ƒ[ƒ^‚ ‚è
+			//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚ã‚Š
 			if (!prm.IsEmpty()) {
 				if (SameText(prm, "Exit")) {
 					EndOfCmds = true;
@@ -302,12 +302,12 @@ bool ExeCmdsList::proc_IfCnd(bool cnd, UnicodeString prm)
 				}
 				else UserAbort(USTR_SyntaxError);
 			}
-			//ƒpƒ‰ƒ[ƒ^‚È‚µ
+			//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãªã—
 			else {
 				IfCnt++;  IncPC();
 			}
 		}
-		//‹U
+		//å½
 		else {
 			IncPC();
 			if (!EndOfCmds && prm.IsEmpty()) {
@@ -370,7 +370,7 @@ bool ExeCmdsList::proc_IfElseEnd(UnicodeString cmd)
 }
 
 //---------------------------------------------------------------------------
-//•â•ƒRƒ}ƒ“ƒhƒŠƒXƒg
+//è£œåŠ©ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆ
 const UnicodeString XCMD_SubCmds =
 	"ActivateWnd\n"
 	"Add\n"
@@ -452,7 +452,7 @@ const UnicodeString XCMD_SubCmds =
 	"Warn\n"
 	"WriteINI\n";
 
-//’è‹`Ï‚İ•Ï”‚Ì–¼‘OƒŠƒXƒg
+//å®šç¾©æ¸ˆã¿å¤‰æ•°ã®åå‰ãƒªã‚¹ãƒˆ
 const UnicodeString XCMD_VarNames =
 	"BaseName|Battery|Buffer|BufferCount|BufferIndex|BufferLength|BufferLine|Clipboard|CodePage|CurFiles|CurPath|"
 	"CursorPosX|CursorPosY|Date|DirCount|DirName|DownloadName|ExePath|ExitCode|FileCount|FileName|FileSize|FileSizeF|"
@@ -463,7 +463,7 @@ const UnicodeString XCMD_VarNames =
 	"TaskOkCount|TaskErrCount|TaskSkipCount|";
 
 //---------------------------------------------------------------------------
-//ExeCommands ‚Ìˆ—
+//ExeCommands ã®å‡¦ç†
 //---------------------------------------------------------------------------
 bool XCMD_IsBusy;
 bool XCMD_Aborted;
@@ -506,7 +506,7 @@ __int64   XCMD_f_size;
 TDateTime XCMD_f_time;
 
 //---------------------------------------------------------------------------
-//‰Šú‰»
+//åˆæœŸåŒ–
 //---------------------------------------------------------------------------
 void XCMD_Initialize(UnicodeString &opt)
 {
@@ -516,7 +516,7 @@ void XCMD_Initialize(UnicodeString &opt)
 	XCMD_TopIdxStack = new TStringList();
 	XCMD_VarStack	 = new TStringList();
 
-	//•Ï”ƒŠƒXƒg‰Šú‰»
+	//å¤‰æ•°ãƒªã‚¹ãƒˆåˆæœŸåŒ–
 	int i = 0;
 	while (i<XCMD_VarList->Count) {
 		if (StartsStr("..", XCMD_VarList->Strings[i])) i++; else XCMD_VarList->Delete(i);
@@ -540,7 +540,7 @@ void XCMD_Initialize(UnicodeString &opt)
 	XCMD_set_Var(_T("TaskErrCount"),	0);
 	XCMD_set_Var(_T("TaskSkipCount"),	0);
 
-	//‚·‚Å‚ÉÀs’†ƒ^ƒXƒN‚ÌÅ‘åID‚ğæ“¾
+	//ã™ã§ã«å®Ÿè¡Œä¸­ã‚¿ã‚¹ã‚¯ã®æœ€å¤§IDã‚’å–å¾—
 	XCMD_last_task_id = -1;
 	for (int i=0; i<MAX_TASK_THREAD; i++) {
 		TTaskThread *tp = TaskThread[i];
@@ -580,7 +580,7 @@ void XCMD_Initialize(UnicodeString &opt)
 }
 
 //---------------------------------------------------------------------------
-//I—¹ˆ—
+//çµ‚äº†å‡¦ç†
 //---------------------------------------------------------------------------
 void XCMD_Uninitialize()
 {
@@ -615,7 +615,7 @@ bool XCMD_TestDelParam(UnicodeString prm)
 	int idx = -1;
 	for (int i=0; i<lst.Length && idx==-1; i++) if (SameText(prm, lst[i])) idx = i;
 
-	//ŠY“–ƒpƒ‰ƒ[ƒ^‚ª‚ ‚Á‚½‚çíœ
+	//è©²å½“ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãŒã‚ã£ãŸã‚‰å‰Šé™¤
 	if (idx!=-1) {
 		UnicodeString lbuf;
 		for (int i=0; i<lst.Length; i++) if (i!=idx) cat_str_semicolon(lbuf, lst[i]);
@@ -626,7 +626,7 @@ bool XCMD_TestDelParam(UnicodeString prm)
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒ}ƒ“ƒhƒŠƒXƒg‚ğ’Ç‰Á
+//ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆã‚’è¿½åŠ 
 //---------------------------------------------------------------------------
 ExeCmdsList *XCMD_AddCmdsList(UnicodeString cmds, bool is_call)
 {
@@ -644,7 +644,7 @@ ExeCmdsList *XCMD_AddCmdsList(UnicodeString cmds, bool is_call)
 	return XCMD_xlp;
 }
 //---------------------------------------------------------------------------
-//ŒÄ‚Ño‚µŒ³‚É–ß‚é
+//å‘¼ã³å‡ºã—å…ƒã«æˆ»ã‚‹
 //---------------------------------------------------------------------------
 ExeCmdsList *XCMD_Return()
 {
@@ -667,7 +667,7 @@ ExeCmdsList *XCMD_Return()
 }
 
 //---------------------------------------------------------------------------
-//ƒJƒŒƒ“ƒg‚Ìƒtƒ@ƒCƒ‹€–Ú‚ğİ’è
+//ã‚«ãƒ¬ãƒ³ãƒˆã®ãƒ•ã‚¡ã‚¤ãƒ«é …ç›®ã‚’è¨­å®š
 //---------------------------------------------------------------------------
 file_rec *XCMD_set_cfp(UnicodeString fnam, UnicodeString cnam, file_rec *cfp)
 {
@@ -719,16 +719,16 @@ file_rec *XCMD_set_cfp(UnicodeString fnam, UnicodeString cnam, file_rec *cfp)
 		XCMD_f_time = 0;
 	}
 
-	//ƒJƒŒƒ“ƒg‚ÌXV
+	//ã‚«ãƒ¬ãƒ³ãƒˆã®æ›´æ–°
 	XCMD_cur_path = (ScrMode==SCMD_FLIST)? cnam : ExtractFilePath(XCMD_cur_f_name);
 	if (!SameText(XCMD_cur_path, XCMD_VarList->Values["CurPath"])) {
 		XCMD_set_Var(_T("CurPath"), XCMD_cur_path);
 		XCMD_set_Var(_T("VolumeLabel"), CurStt->is_FTP? EmptyStr : get_VolumeInfo(XCMD_cur_path));
 	}
 
-	//ƒtƒ@ƒCƒ‹–¼‚È‚Ç‚ğXV
+	//ãƒ•ã‚¡ã‚¤ãƒ«åãªã©ã‚’æ›´æ–°
 	if (!SameText(XCMD_cur_f_name, XCMD_VarList->Values["FileName"])) {
-		//’è‹`Ï‚İ•Ï”‚ÌXV
+		//å®šç¾©æ¸ˆã¿å¤‰æ•°ã®æ›´æ–°
 		XCMD_set_Var(_T("FileName"), XCMD_cur_f_name);
 		XCMD_set_Var(_T("BaseName"), XCMD_cur_bnam);
 		XCMD_set_Var(_T("DirName"),  ExtractFileDir(XCMD_cur_f_name));
@@ -736,7 +736,7 @@ file_rec *XCMD_set_cfp(UnicodeString fnam, UnicodeString cnam, file_rec *cfp)
 		XCMD_FileChanged = true;
 	}
 
-	//’è‹`Ï‚İ•Ï”‚ÌXV
+	//å®šç¾©æ¸ˆã¿å¤‰æ•°ã®æ›´æ–°
 	XCMD_set_Var(_T("FileSize"),	XCMD_f_size);
 	XCMD_set_Var(_T("FileSizeF"),	get_FileSizeStr(XCMD_f_size));
 	XCMD_set_Var(_T("FileTime"),	format_DateTime(XCMD_f_time));
@@ -747,12 +747,12 @@ file_rec *XCMD_set_cfp(UnicodeString fnam, UnicodeString cnam, file_rec *cfp)
 	TListBox *lp  = FileListBox[CurListTag];
 
 	switch (ScrMode) {
-	case SCMD_FLIST:	//ƒtƒ@ƒCƒ‰[
+	case SCMD_FLIST:	//ãƒ•ã‚¡ã‚¤ãƒ©ãƒ¼
 		XCMD_is_top = (lp->ItemIndex == 0);
 		XCMD_is_end = (lp->ItemIndex == lp->Count-1);
 		XCMD_marked = IniFile->IsMarked(XCMD_cur_r_name);
 		break;
-	case SCMD_TVIEW:	//ƒeƒLƒXƒgƒrƒ…[ƒA
+	case SCMD_TVIEW:	//ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢
 		if (TxtViewer->isReady) {
 			XCMD_is_top	= (TxtViewer->CurPos.y == 0);
 			XCMD_is_end	= (TxtViewer->CurPos.y == TxtViewer->MaxDispLine-1);
@@ -760,7 +760,7 @@ file_rec *XCMD_set_cfp(UnicodeString fnam, UnicodeString cnam, file_rec *cfp)
 			XCMD_marked = TxtViewer->IsMarked();
 		}
 		break;
-	case SCMD_IVIEW:	//ƒCƒ[ƒWƒrƒ…[ƒA
+	case SCMD_IVIEW:	//ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢
 		XCMD_is_top	= (v_idx == 0);
 		XCMD_is_end	= (v_idx == ViewFileList->Count-1);
 		XCMD_marked	= IniFile->IsMarked(ViewFileName);
@@ -771,7 +771,7 @@ file_rec *XCMD_set_cfp(UnicodeString fnam, UnicodeString cnam, file_rec *cfp)
 }
 
 //---------------------------------------------------------------------------
-//•Ï”‚Ì‰ğŒˆ (ŠÂ‹«•Ï”‚ğŠÜ‚Ş)
+//å¤‰æ•°ã®è§£æ±º (ç’°å¢ƒå¤‰æ•°ã‚’å«ã‚€)
 //---------------------------------------------------------------------------
 UnicodeString XCMD_eval_Var(UnicodeString prm)
 {
@@ -784,7 +784,7 @@ UnicodeString XCMD_eval_Var(UnicodeString prm)
 			UnicodeString vbuf = mts.Item[i].Value;
 			UnicodeString nstr = exclude_top_end(vbuf);
 			UnicodeString rstr = EmptyStr;
-			//•¶š—ñƒŠƒXƒg‚ÌsQÆ (%•Ï”–¼[ƒCƒ“ƒfƒbƒNƒX]%)
+			//æ–‡å­—åˆ—ãƒªã‚¹ãƒˆã®è¡Œå‚ç…§ (%å¤‰æ•°å[ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹]%)
 			if (EndsStr(']', nstr)) {
 				UnicodeString istr = get_tkn_m(nstr, '[', ']');
 				std::unique_ptr<TStringList> vlst(new TStringList());
@@ -795,23 +795,23 @@ UnicodeString XCMD_eval_Var(UnicodeString prm)
 					rstr = (idx>=0 && idx<vlst->Count)? vlst->Strings[idx] : EmptyStr;
 				}
 			}
-			//s” (%•Ï”–¼.Count%)
+			//è¡Œæ•° (%å¤‰æ•°å.Count%)
 			else if (EndsText(".Count", nstr)) {
 				std::unique_ptr<TStringList> vlst(new TStringList());
 				vlst->Text = XCMD_VarList->Values[nstr.SubString(1, nstr.Length() - 6)];
 				rstr = IntToStr(vlst->Count);
 			}
-			//‘•¶š” (%•Ï”–¼.Length%)
+			//ç·æ–‡å­—æ•° (%å¤‰æ•°å.Length%)
 			else if (EndsText(".Length", nstr)) {
 				std::unique_ptr<TStringList> vlst(new TStringList());
 				vlst->Text = XCMD_VarList->Values[nstr.SubString(1, nstr.Length() - 7)];
 				rstr = IntToStr(vlst->Text.Length());
 			}
-			//’Êí
+			//é€šå¸¸
 			else {
 				int idx = XCMD_VarList->IndexOfName(nstr);
 				if (idx!=-1)		rstr = XCMD_VarList->ValueFromIndex[idx];
-				if (rstr.IsEmpty()) rstr = GetEnvironmentVariable(nstr);	//ŠÂ‹«•Ï”
+				if (rstr.IsEmpty()) rstr = GetEnvironmentVariable(nstr);	//ç’°å¢ƒå¤‰æ•°
 			}
 
 			int i_p = mts.Item[i].Index;
@@ -827,7 +827,7 @@ UnicodeString XCMD_eval_Var(UnicodeString prm)
 }
 
 //---------------------------------------------------------------------------
-//’è‹`Ï‚İ•Ï”‚ÌXV
+//å®šç¾©æ¸ˆã¿å¤‰æ•°ã®æ›´æ–°
 //---------------------------------------------------------------------------
 void XCMD_upd_Var()
 {
@@ -878,7 +878,7 @@ void XCMD_upd_Var()
 		XCMD_set_Var(_T("CursorPosX"),	0);
 	}
 
-	//‰æ–Êƒ‚[ƒh
+	//ç”»é¢ãƒ¢ãƒ¼ãƒ‰
 	switch (ScrMode) {
 	case SCMD_GREP:  XCMD_set_Var(_T("ScrMode"), "GR"); break;
 	case SCMD_TVIEW: XCMD_set_Var(_T("ScrMode"), "TV"); break;
@@ -886,15 +886,15 @@ void XCMD_upd_Var()
 	default:		 XCMD_set_Var(_T("ScrMode"), "FL");
 	}
 
-	//ƒ\[ƒgƒ‚[ƒh
+	//ã‚½ãƒ¼ãƒˆãƒ¢ãƒ¼ãƒ‰
 	XCMD_set_Var(_T("SortMode"), get_word_i_idx("F|E|D|S|A|U|L", CurSortMode()));
 
-	//ƒ^ƒXƒN”
+	//ã‚¿ã‚¹ã‚¯æ•°
 	XCMD_set_Var(_T("TaskCount"), get_BusyTaskCount());
 
-	//ƒtƒ@ƒCƒ‹‚ÌƒŠƒXƒg
-	std::unique_ptr<TStringList> flst(new TStringList());	//‚·‚×‚Ä
-	std::unique_ptr<TStringList> slst(new TStringList());	//‘I‘ğ’†
+	//ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒªã‚¹ãƒˆ
+	std::unique_ptr<TStringList> flst(new TStringList());	//ã™ã¹ã¦
+	std::unique_ptr<TStringList> slst(new TStringList());	//é¸æŠä¸­
 	TStringList *lst = GetCurList();
 	for (int i=0; i<lst->Count; i++) {
 		file_rec *fp = (file_rec*)lst->Objects[i];
@@ -918,12 +918,12 @@ void XCMD_upd_Var()
 		XCMD_BufChanged = false;
 	}
 
-	//•Ï”‚Ì‰ğŒˆ
+	//å¤‰æ•°ã®è§£æ±º
 	if (!XCMD_prm.IsEmpty()) XCMD_prm = XCMD_eval_Var(XCMD_prm);
 }
 
 //---------------------------------------------------------------------------
-//sƒGƒR[
+//è¡Œã‚¨ã‚³ãƒ¼
 //---------------------------------------------------------------------------
 void XCMD_EchoLn()
 {
@@ -936,35 +936,35 @@ void XCMD_EchoLn()
 }
 
 //---------------------------------------------------------------------------
-//ƒfƒoƒbƒOî•ñ‚Ì•\¦
+//ãƒ‡ãƒãƒƒã‚°æƒ…å ±ã®è¡¨ç¤º
 //---------------------------------------------------------------------------
 void XCMD_ShowDebugInf(
-	UnicodeString err)	//ƒGƒ‰[	(default = EmptyStr)
+	UnicodeString err)	//ã‚¨ãƒ©ãƒ¼	(default = EmptyStr)
 {
 	if (!DebugForm || !DebugForm->Visible) return;
 
 	if (XCMD_xlp && !XCMD_xlp->FileName.IsEmpty()) {
 		cmdf_rec *cp = XCMD_xlp->CmdRec;
 		if (cp) {
-			//ƒvƒŒƒrƒ…[
+			//ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼
 			DebugForm->FileName = XCMD_xlp->FileName;
 			DebugForm->SetPreview(cp->file_buf, XCMD_xlp->LineNo - 1);
 
-			//ƒfƒoƒbƒOó‘Ô
+			//ãƒ‡ãƒãƒƒã‚°çŠ¶æ…‹
 			std::unique_ptr<TStringList> i_lst(new TStringList());
 			i_lst->AddObject(ExtractFileName(XCMD_xlp->FileName),	(TObject*)LBFLG_STD_FINF);
 			i_lst->AddObject(yen_to_delimiter(ExtractFilePath(XCMD_xlp->FileName)), (TObject*)LBFLG_STD_FINF);
 			i_lst->AddObject(get_FileInfStr(XCMD_xlp->FileName),	(TObject*)LBFLG_STD_FINF);
 
-			UnicodeString dbgstt = get_PropTitle(_T("ƒfƒoƒbƒOó‘Ô"));
+			UnicodeString dbgstt = get_PropTitle(_T("ãƒ‡ãƒãƒƒã‚°çŠ¶æ…‹"));
 			if (!err.IsEmpty()) {
-				dbgstt.cat_sprintf(_T("ƒGƒ‰[I—¹ [%s]"), err.c_str());
+				dbgstt.cat_sprintf(_T("ã‚¨ãƒ©ãƒ¼çµ‚äº† [%s]"), err.c_str());
 			}
 			else {
 				dbgstt.cat_sprintf(_T("%s"),
 						!XCMD_Debugging? _T("----") :
-					XCMD_xlp->EndOfCmds? _T("I—¹") :
-						  XCMD_Debug_Go? _T("Às’†") : _T("’â~’†"));
+					XCMD_xlp->EndOfCmds? _T("çµ‚äº†") :
+						  XCMD_Debug_Go? _T("å®Ÿè¡Œä¸­") : _T("åœæ­¢ä¸­"));
 			}
 			i_lst->AddObject(dbgstt, (TObject*)LBFLG_DEBUG);
 
@@ -974,7 +974,7 @@ void XCMD_ShowDebugInf(
 					dbgstt = get_PropTitle("Repeat" + IntToStr(i + 1));
 					int r_cnt = XCMD_xlp->RepCnt[i];
 					switch (r_cnt) {
-					case -2: dbgstt += "–³ŒÀ";	break;
+					case -2: dbgstt += "ç„¡é™";	break;
 					case -1: dbgstt += "Y/N";	break;
 					default: dbgstt.cat_sprintf(_T("%3u"), r_cnt);
 					}
@@ -982,7 +982,7 @@ void XCMD_ShowDebugInf(
 				}
 			}
 
-			//ŠÄ‹•Ï”
+			//ç›£è¦–å¤‰æ•°
 			if (XCMD_WatchList->Count>0) {
 				i_lst->Add(EmptyStr);
 				for (int i=0; i<XCMD_WatchList->Count; i++) {
@@ -991,7 +991,7 @@ void XCMD_ShowDebugInf(
 				}
 			}
 
-			//ƒ†[ƒU’è‹`•Ï”
+			//ãƒ¦ãƒ¼ã‚¶å®šç¾©å¤‰æ•°
 			if (XCMD_VarList->Count>0) {
 				i_lst->Add(EmptyStr);
 				XCMD_get_UsrVarList(i_lst.get());
@@ -1002,11 +1002,11 @@ void XCMD_ShowDebugInf(
 }
 
 //===========================================================================
-//IˆÈ‰º‚ÌŠÖ”‚Å‚ÍAƒGƒ‰[”­¶‚É EAbort —áŠO‚ª‘—o‚³‚ê‚Ü‚·B
+//ï¼ä»¥ä¸‹ã®é–¢æ•°ã§ã¯ã€ã‚¨ãƒ©ãƒ¼ç™ºç”Ÿæ™‚ã« EAbort ä¾‹å¤–ãŒé€å‡ºã•ã‚Œã¾ã™ã€‚
 //===========================================================================
 
 //---------------------------------------------------------------------------
-//˜_—®‚Ì•]‰¿
+//è«–ç†å¼ã®è©•ä¾¡
 //---------------------------------------------------------------------------
 bool XCMD_EvalCnd(TStringDynArray lst)
 {
@@ -1037,11 +1037,11 @@ bool XCMD_EvalCnd(TStringDynArray lst)
 }
 
 //---------------------------------------------------------------------------
-//If•¶‚Ìˆ—
+//Ifæ–‡ã®å‡¦ç†
 //---------------------------------------------------------------------------
 bool XCMD_Control()
 {
-	//If•¶
+	//Ifæ–‡
 	if (remove_top_text(XCMD_cmd, "If")) {
 		TStringDynArray cnd_lst = SplitString(XCMD_cmd, ".");
 		if (cnd_lst.Length%2==0) UserAbort(USTR_SyntaxError);
@@ -1057,11 +1057,11 @@ bool XCMD_Control()
 			bool cnd_res = false;
 
 			switch (idx_of_word_i(
-				"True|False|Selected|Dir|File|Arc|Sel|Top|End|Left|"					//0`9
-				"Right|Empty|Root|Remote|Removable|Virtual|Work|Found|Yes|No|"			//10`19
-				"Cancel|SelMask|PathMask|Task|Suspend|Binary|Log|HtmTxt|Marked|Image|"	//20`29
-				"Shift|Ctrl|Alt|Grep|Connected|Primary|Duplicated|FTP|ADS|Git|"			//30`39
-				"TimeOut",																//40`
+				"True|False|Selected|Dir|File|Arc|Sel|Top|End|Left|"					//0ï½9
+				"Right|Empty|Root|Remote|Removable|Virtual|Work|Found|Yes|No|"			//10ï½19
+				"Cancel|SelMask|PathMask|Task|Suspend|Binary|Log|HtmTxt|Marked|Image|"	//20ï½29
+				"Shift|Ctrl|Alt|Grep|Connected|Primary|Duplicated|FTP|ADS|Git|"			//30ï½39
+				"TimeOut",																//40ï½
 				cnd))
 			{
 			case  0: cnd_res = XCMD_matched;							break;
@@ -1151,7 +1151,7 @@ bool XCMD_Control()
 				UserAbort(USTR_SyntaxError);
 			}
 
-			//”Û’è
+			//å¦å®š
 			if (if_not) cnd_res = !cnd_res;
 
 			cnd_lst[i].sprintf(_T("%s"), cnd_res? _T("1") : _T("0"));
@@ -1162,11 +1162,11 @@ bool XCMD_Control()
 	else if (XCMD_xlp->proc_IfElseEnd(XCMD_cmd)) {
 		;
 	}
-	//Repeat•¶
+	//Repeatæ–‡
 	else if (XCMD_xlp->proc_Repeat(XCMD_cmd, XCMD_prm)) {
 		if (!XCMD_xlp->ErrMsg.IsEmpty()) throw EAbort(XCMD_xlp->ErrMsg);
 	}
-	//Goto•¶
+	//Gotoæ–‡
 	else if (SameText(XCMD_cmd, "Goto")) {
 		if (!XCMD_xlp->proc_Goto(XCMD_prm)) throw EAbort(XCMD_xlp->ErrMsg);
 	}
@@ -1178,7 +1178,7 @@ bool XCMD_Control()
 }
 
 //---------------------------------------------------------------------------
-//•¶š—ñƒ}ƒbƒ`
+//æ–‡å­—åˆ—ãƒãƒƒãƒ
 //---------------------------------------------------------------------------
 void XCMD_match_Str(UnicodeString prm, UnicodeString s)
 {
@@ -1212,7 +1212,7 @@ void XCMD_MatchExt(UnicodeString prm, UnicodeString fext)
 }
 
 //---------------------------------------------------------------------------
-//Set : •Ï”‚Ìİ’è
+//Set : å¤‰æ•°ã®è¨­å®š
 //---------------------------------------------------------------------------
 void XCMD_Set(UnicodeString prm)
 {
@@ -1224,23 +1224,23 @@ void XCMD_Set(UnicodeString prm)
 	UnicodeString vstr	= XCMD_VarList->Values[vnam];
 	UnicodeString nstr	= exclude_quot(get_tkn_r(prm, opstr));
 	UnicodeString rstr;
-	//•¡‡‰‰Zq
+	//è¤‡åˆæ¼”ç®—å­
 	if (!SameStr(opstr, "=")) {
-		//Œ³‚Ì•Ï”‚Ì‘®‚ğƒ`ƒFƒbƒN
+		//å…ƒã®å¤‰æ•°ã®æ›¸å¼ã‚’ãƒã‚§ãƒƒã‚¯
 		int t_flag = TRegEx::IsMatch(vstr, "\\d{4}/\\d{2}/\\d{2}\\s\\d{2}:\\d{2}:\\d{2}")? 0 :
 											TRegEx::IsMatch(vstr, "\\d{4}/\\d{2}/\\d{2}")? 1 :
 											TRegEx::IsMatch(vstr, "\\d{2}:\\d{2}:\\d{2}")? 2 : -1;
-		//ŠÔ‰‰Z
+		//æ™‚é–“æ¼”ç®—
 		if (t_flag!=-1) {
 			try {
-				TDateTime vt = str_to_DateTime(vstr);			//Œ³‚Ì•Ï”
+				TDateTime vt = str_to_DateTime(vstr);			//å…ƒã®å¤‰æ•°
 				TDateTime nt = str_to_DateTime(nstr, true);
-				//‰‰Z
+				//æ¼”ç®—
 				if		(SameStr(opstr, "+=")) vt += nt;
 				else if (SameStr(opstr, "-=")) vt -= nt;
 				else UserAbort(USTR_SyntaxError);
 
-				//Œ‹‰Ê‚Ìİ’è
+				//çµæœã®è¨­å®š
 				if		(t_flag==0) rstr = format_DateTime(vt);
 				else if (t_flag==1) rstr = format_Date(vt);
 				else if (t_flag==2) rstr = FormatDateTime("hh:nn:ss", vt);
@@ -1249,10 +1249,10 @@ void XCMD_Set(UnicodeString prm)
 				t_flag = -1;
 			}
 		}
-		//ŠÔˆÈŠO‚Ì‰‰Z
+		//æ™‚é–“ä»¥å¤–ã®æ¼”ç®—
 		if (t_flag==-1) {
 			try {
-				//®”‰‰Z
+				//æ•´æ•°æ¼”ç®—
 				if (!vstr.IsEmpty() && !nstr.IsEmpty()) {
 					int v = vstr.ToInt();
 					int n = nstr.ToInt();
@@ -1280,16 +1280,16 @@ void XCMD_Set(UnicodeString prm)
 			}
 		}
 	}
-	//‘ã“ü
+	//ä»£å…¥
 	else {
 		rstr = nstr;
 	}
 
-	//•Ï”XV
+	//å¤‰æ•°æ›´æ–°
 	XCMD_VarList->Values[vnam] = rstr;
 	if (SameText(vnam, "CodePage")) XCMD_chg_CodePage = true;
 
-	//BufferXV
+	//Bufferæ›´æ–°
 	if (contained_wd_i(_T("Buffer|BufferIndex"), vnam)) {
 		XCMD_BufChanged = true;
 	}
@@ -1305,7 +1305,7 @@ void XCMD_Set(UnicodeString prm)
 }
 
 //---------------------------------------------------------------------------
-//Add : •Ï”‚Ös’Ç‰Á
+//Add : å¤‰æ•°ã¸è¡Œè¿½åŠ 
 //---------------------------------------------------------------------------
 void XCMD_Add(UnicodeString prm)
 {
@@ -1321,7 +1321,7 @@ void XCMD_Add(UnicodeString prm)
 	if (SameText(vnam, "Buffer")) XCMD_BufChanged = true;
 }
 //---------------------------------------------------------------------------
-//Ins : •Ï”‚Ìæ“ª‚És‘}“ü
+//Ins : å¤‰æ•°ã®å…ˆé ­ã«è¡ŒæŒ¿å…¥
 //---------------------------------------------------------------------------
 void XCMD_Ins(UnicodeString prm)
 {
@@ -1338,7 +1338,7 @@ void XCMD_Ins(UnicodeString prm)
 }
 
 //---------------------------------------------------------------------------
-//Mid : •”•ª•¶š—ñ‚Ìæ“¾
+//Mid : éƒ¨åˆ†æ–‡å­—åˆ—ã®å–å¾—
 //---------------------------------------------------------------------------
 void XCMD_Mid(UnicodeString prm)
 {
@@ -1392,13 +1392,13 @@ void XCMD_Trim(UnicodeString prm)
 }
 
 //---------------------------------------------------------------------------
-//Input : ƒ†[ƒU’è‹`•Ï”‚Ì“ü—Í
+//Input : ãƒ¦ãƒ¼ã‚¶å®šç¾©å¤‰æ•°ã®å…¥åŠ›
 //---------------------------------------------------------------------------
 void XCMD_Input(UnicodeString prm)
 {
 	UnicodeString tit, msg, vnam;
 	if (remove_top_s(prm, ':')) {
-		prm = ReplaceStr(prm, ":\\", "\f");	//‹æØ‚è‚Æ‚Ì¬“¯‚ğ”ğ‚¯‚é‚½‚ßˆê’uŠ·
+		prm = ReplaceStr(prm, ":\\", "\f");	//åŒºåˆ‡ã‚Šã¨ã®æ··åŒã‚’é¿ã‘ã‚‹ãŸã‚ä¸€æ™‚ç½®æ›
 		TStringDynArray prmlst = SplitString(prm, ":");
 		if (prmlst.Length>0) vnam = prmlst[prmlst.Length - 1];
 		if (prmlst.Length>1) tit  = ReplaceStr(prmlst[0], "\f", ":\\");
@@ -1413,7 +1413,7 @@ void XCMD_Input(UnicodeString prm)
 
 	UnicodeString vstr = XCMD_VarList->Values[vnam];
 
-	if (input_query_ex(def_if_empty(tit, "ƒ†[ƒU’è‹`•Ï”‚Ì“ü—Í").c_str(), msg.c_str(), &vstr)) {
+	if (input_query_ex(def_if_empty(tit, "ãƒ¦ãƒ¼ã‚¶å®šç¾©å¤‰æ•°ã®å…¥åŠ›").c_str(), msg.c_str(), &vstr)) {
 		XCMD_VarList->Values[vnam] = vstr;
 		XCMD_box_res = mrYes;
 	}
@@ -1424,13 +1424,13 @@ void XCMD_Input(UnicodeString prm)
 	if (SameText(vnam, "Buffer")) XCMD_BufChanged = true;
 }
 //---------------------------------------------------------------------------
-//Edit : ƒ†[ƒU’è‹`•Ï”‚Ì•ÒW
+//Edit : ãƒ¦ãƒ¼ã‚¶å®šç¾©å¤‰æ•°ã®ç·¨é›†
 //---------------------------------------------------------------------------
 void XCMD_Edit(UnicodeString prm)
 {
 	UnicodeString tit, msg, vnam;
 	if (remove_top_s(prm, ':')) {
-		prm = ReplaceStr(prm, ":\\", "\f");	//‹æØ‚è‚Æ‚Ì¬“¯‚ğ”ğ‚¯‚é‚½‚ßˆê’uŠ·
+		prm = ReplaceStr(prm, ":\\", "\f");	//åŒºåˆ‡ã‚Šã¨ã®æ··åŒã‚’é¿ã‘ã‚‹ãŸã‚ä¸€æ™‚ç½®æ›
 		TStringDynArray prmlst = SplitString(prm, ":");
 		if (prmlst.Length>0) vnam = prmlst[prmlst.Length - 1];
 		if (prmlst.Length>1) tit  = ReplaceStr(prmlst[0], "\f", ":\\");
@@ -1441,8 +1441,8 @@ void XCMD_Edit(UnicodeString prm)
 
 	if (vnam.IsEmpty()) UserAbort(USTR_SyntaxError);
 
-	if (!MemoForm) MemoForm = new TMemoForm(Application->MainForm);	//‰‰ñ‚É“®“Iì¬
-	MemoForm->Caption = def_if_empty(tit, "ƒ†[ƒU’è‹`•Ï”‚Ì•ÒW");
+	if (!MemoForm) MemoForm = new TMemoForm(Application->MainForm);	//åˆå›ã«å‹•çš„ä½œæˆ
+	MemoForm->Caption = def_if_empty(tit, "ãƒ¦ãƒ¼ã‚¶å®šç¾©å¤‰æ•°ã®ç·¨é›†");
 	MemoForm->LinesBuff->Text = XCMD_VarList->Values[vnam];
 	if (MemoForm->ShowModal()==mrOk) {
 		XCMD_VarList->Values[vnam] = MemoForm->LinesBuff->Text;
@@ -1456,7 +1456,7 @@ void XCMD_Edit(UnicodeString prm)
 }
 
 //---------------------------------------------------------------------------
-//ƒ‰ƒ“ƒ_ƒ€’l‚ğİ’è
+//ãƒ©ãƒ³ãƒ€ãƒ å€¤ã‚’è¨­å®š
 //---------------------------------------------------------------------------
 void XCMD_Random(UnicodeString prm)
 {
@@ -1499,7 +1499,7 @@ void XCMD_Random(UnicodeString prm)
 }
 
 //---------------------------------------------------------------------------
-//Test : •Ï”‚Ì”äŠr
+//Test : å¤‰æ•°ã®æ¯”è¼ƒ
 //---------------------------------------------------------------------------
 bool XCMD_Test(UnicodeString prm)
 {
@@ -1541,7 +1541,7 @@ void XCMD_SetBuffer(UnicodeString s)
 }
 
 //---------------------------------------------------------------------------
-//FilterBuffer : ƒoƒbƒtƒ@‚ği‚è‚Ş
+//FilterBuffer : ãƒãƒƒãƒ•ã‚¡ã‚’çµã‚Šè¾¼ã‚€
 //---------------------------------------------------------------------------
 void XCMD_FilterBuffer(UnicodeString prm)
 {
@@ -1555,17 +1555,17 @@ void XCMD_FilterBuffer(UnicodeString prm)
 	XCMD_BufChanged = true;
 }
 //---------------------------------------------------------------------------
-//ReplaceBuffer : ƒoƒbƒtƒ@‚Ì•¶š—ñ’uŠ·
+//ReplaceBuffer : ãƒãƒƒãƒ•ã‚¡ã®æ–‡å­—åˆ—ç½®æ›
 //---------------------------------------------------------------------------
 void XCMD_ReplaceBuffer(UnicodeString prm)
 {
-	//’uŠ·ƒpƒ^[ƒ“‰ğÍ
+	//ç½®æ›ãƒ‘ã‚¿ãƒ¼ãƒ³è§£æ
 	UnicodeString o_str, r_str;
 	int p = 1;
 	bool in_qut = false;
 	while (p<=prm.Length()) {
 		WideChar c = prm[p];
-		//ˆø—p•„ŠO
+		//å¼•ç”¨ç¬¦å¤–
 		if (!in_qut) {
 			if (c=='=') {
 				if (p<prm.Length()) r_str = exclude_quot(prm.SubString(p + 1, prm.Length() - p));
@@ -1573,22 +1573,22 @@ void XCMD_ReplaceBuffer(UnicodeString prm)
 			}
 			if (c=='\"') in_qut = true; else o_str.cat_sprintf(_T("%c"), c);
 		}
-		//ˆø—p•„“à
+		//å¼•ç”¨ç¬¦å†…
 		else if (c=='\"') in_qut = false; else o_str.cat_sprintf(_T("%c"), c);
 		p++;
 	}
 
-	//’uŠ·
+	//ç½®æ›
 	UnicodeString buf_str = XCMD_GetBuffer();
-	//³‹K•\Œ»
+	//æ­£è¦è¡¨ç¾
 	if (is_regex_slash(o_str)) {
 		try {
 			o_str = exclude_top_end(o_str);
 			r_str = ReplaceStr(ReplaceStr(r_str, "\\n", "\n"), "\\r", "\r");
 			TRegExOptions opt;
-			opt << roIgnoreCase << roMultiLine;	//‘å¬•¶š–³‹A•¡”sƒ‚[ƒh
+			opt << roIgnoreCase << roMultiLine;	//å¤§å°æ–‡å­—ç„¡è¦–ã€è¤‡æ•°è¡Œãƒ¢ãƒ¼ãƒ‰
 			if (contained_wd_i(_T("^|$|^$"), o_str)) {
-				//¦\rA\n ‚Ì—¼•û‚Éƒ}ƒbƒ`‚µ‚Ä‚µ‚Ü‚¤‚½‚ßAˆê“I‚É \r\n ¨ \n
+				//â€»\rã€\n ã®ä¸¡æ–¹ã«ãƒãƒƒãƒã—ã¦ã—ã¾ã†ãŸã‚ã€ä¸€æ™‚çš„ã« \r\n â†’ \n
 				buf_str = ReplaceStr(buf_str, "\r\n", "\n");
 				r_str	= ReplaceStr(r_str,   "\r\n", "\n");
 				buf_str = replace_regex_2(buf_str, o_str, r_str, opt);
@@ -1602,7 +1602,7 @@ void XCMD_ReplaceBuffer(UnicodeString prm)
 			UserAbort(USTR_IllegalRegEx);
 		}
 	}
-	//’Êí
+	//é€šå¸¸
 	else {
 		buf_str = ReplaceText(buf_str, o_str, r_str);
 	}
@@ -1612,7 +1612,7 @@ void XCMD_ReplaceBuffer(UnicodeString prm)
 }
 
 //---------------------------------------------------------------------------
-//LoadBuffer : ƒoƒbƒtƒ@‚ÉƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚Ş
+//LoadBuffer : ãƒãƒƒãƒ•ã‚¡ã«ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚€
 //---------------------------------------------------------------------------
 void XCMD_LoadBuffer(UnicodeString prm)
 {
@@ -1625,7 +1625,7 @@ void XCMD_LoadBuffer(UnicodeString prm)
 }
 
 //---------------------------------------------------------------------------
-//SaveBuffer : ƒoƒbƒtƒ@‚ğƒtƒ@ƒCƒ‹‚É•Û‘¶
+//SaveBuffer : ãƒãƒƒãƒ•ã‚¡ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã«ä¿å­˜
 //---------------------------------------------------------------------------
 void XCMD_SaveBuffer(UnicodeString prm, bool wtBOM)
 {
@@ -1641,7 +1641,7 @@ void XCMD_SaveBuffer(UnicodeString prm, bool wtBOM)
 	}
 }
 //---------------------------------------------------------------------------
-//AppendBuffer : ƒoƒbƒtƒ@‚ğƒtƒ@ƒCƒ‹‚É’Ç‹L•Û‘¶
+//AppendBuffer : ãƒãƒƒãƒ•ã‚¡ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã«è¿½è¨˜ä¿å­˜
 //---------------------------------------------------------------------------
 void XCMD_AppendBuffer(UnicodeString prm)
 {
@@ -1655,7 +1655,7 @@ void XCMD_AppendBuffer(UnicodeString prm)
 }
 
 //---------------------------------------------------------------------------
-//MsgBox : ƒƒbƒZ[ƒW•\¦
+//MsgBox : ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¡¨ç¤º
 //---------------------------------------------------------------------------
 int XCMD_MsgBox(UnicodeString cmd, UnicodeString prm)
 {
@@ -1663,11 +1663,11 @@ int XCMD_MsgBox(UnicodeString cmd, UnicodeString prm)
 	UnicodeString opt = cmd.SubString(7, 16);
 
 	UnicodeString tit;
-	prm = ReplaceStr(prm, ":\\",  "\f");	//‹æØ‚è‚Æ‚Ì¬“¯‚ğ”ğ‚¯‚é‚½‚ßˆê’uŠ·
+	prm = ReplaceStr(prm, ":\\",  "\f");	//åŒºåˆ‡ã‚Šã¨ã®æ··åŒã‚’é¿ã‘ã‚‹ãŸã‚ä¸€æ™‚ç½®æ›
 	if (remove_top_s(prm, ':')) tit = ReplaceStr(split_tkn(prm, ':'), "\f", ":\\");
 	prm = ReplaceStr(prm, "\f", ":\\");
 
-	//ƒGƒXƒP[ƒvƒV[ƒPƒ“ƒXˆ— ('`' “à‚Í–³‹)
+	//ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã‚·ãƒ¼ã‚±ãƒ³ã‚¹å‡¦ç† ('ï½' å†…ã¯ç„¡è¦–)
 	UnicodeString lbuf;
 	bool in_sq = false;
 	while (!prm.IsEmpty()) {
@@ -1703,16 +1703,16 @@ int XCMD_MsgBox(UnicodeString cmd, UnicodeString prm)
 }
 
 //---------------------------------------------------------------------------
-//PlaySound : ƒTƒEƒ“ƒhÄ¶
+//PlaySound : ã‚µã‚¦ãƒ³ãƒ‰å†ç”Ÿ
 //---------------------------------------------------------------------------
 void XCMD_PlaySound(UnicodeString prm)
 {
-	//’â~
+	//åœæ­¢
 	if (prm.IsEmpty()) {
 		::mciSendString(_T("close TPLYSND"), NULL, 0, NULL);
 		::PlaySound(NULL, NULL, SND_PURGE);
 	}
-	//Ä¶
+	//å†ç”Ÿ
 	else {
 		if (is_SoundID(prm)) {
 			play_sound_id(prm);
@@ -1726,7 +1726,7 @@ void XCMD_PlaySound(UnicodeString prm)
 }
 
 //---------------------------------------------------------------------------
-//FlashWin : ƒrƒWƒ…ƒAƒ‹ƒxƒ‹
+//FlashWin : ãƒ“ã‚¸ãƒ¥ã‚¢ãƒ«ãƒ™ãƒ«
 //---------------------------------------------------------------------------
 void XCMD_FlashWin(UnicodeString prm)
 {
@@ -1741,7 +1741,7 @@ void XCMD_FlashWin(UnicodeString prm)
 }
 
 //---------------------------------------------------------------------------
-//ListVar : •Ï”ˆê——‚ğ•\¦
+//ListVar : å¤‰æ•°ä¸€è¦§ã‚’è¡¨ç¤º
 //---------------------------------------------------------------------------
 void XCMD_get_UsrVarList(TStringList *lst)
 {
@@ -1757,7 +1757,7 @@ void XCMD_ListVar()
 	std::unique_ptr<TStringList> u_buf(new TStringList());
 	v_buf->Assign(XCMD_VarList);
 
-	//ƒ†[ƒU’è‹`•Ï”‚ğ’Šo
+	//ãƒ¦ãƒ¼ã‚¶å®šç¾©å¤‰æ•°ã‚’æŠ½å‡º
 	int i = 0;
 	while (i<v_buf->Count) {
 		if (!contained_wd_i(XCMD_VarNames, v_buf->Names[i])) {
@@ -1768,14 +1768,14 @@ void XCMD_ListVar()
 	}
 
 	v_buf->Sort();
-	v_buf->Insert(0, "’è‹`Ï‚İ•Ï”");
+	v_buf->Insert(0, "å®šç¾©æ¸ˆã¿å¤‰æ•°");
 	if (u_buf->Count>0) {
 		u_buf->Sort();
-		u_buf->Insert(0, "ƒ†[ƒU’è‹`•Ï”");
+		u_buf->Insert(0, "ãƒ¦ãƒ¼ã‚¶å®šç¾©å¤‰æ•°");
 		u_buf->Insert(0, EmptyStr);
 	}
 
-	set_FormTitle(GeneralInfoDlg, _T("•Ï”ˆê——"));
+	set_FormTitle(GeneralInfoDlg, _T("å¤‰æ•°ä¸€è¦§"));
 	GeneralInfoDlg->isVarList = true;
 	GeneralInfoDlg->GenInfoList->Assign(v_buf.get());
 	GeneralInfoDlg->GenInfoList->AddStrings(u_buf.get());
@@ -1783,7 +1783,7 @@ void XCMD_ListVar()
 }
 
 //---------------------------------------------------------------------------
-//Sleep : ŠÔ‘Ò‚¿
+//Sleep : æ™‚é–“å¾…ã¡
 //---------------------------------------------------------------------------
 void XCMD_Sleep(UnicodeString prm)
 {
@@ -1795,7 +1795,7 @@ void XCMD_Sleep(UnicodeString prm)
 	}
 }
 //---------------------------------------------------------------------------
-//Timer : ƒ^ƒCƒ}[
+//Timer : ã‚¿ã‚¤ãƒãƒ¼
 //---------------------------------------------------------------------------
 void XCMD_Timer(UnicodeString prm)
 {
@@ -1803,7 +1803,7 @@ void XCMD_Timer(UnicodeString prm)
 	XCMD_tim_t	 = 0;
 
 	if (!prm.IsEmpty()) {
-		//
+		//æ™‚åˆ»
 		if (ContainsStr(prm, ":")) {
 			try {
 				XCMD_tim_t = str_to_DateTime(prm);
@@ -1813,10 +1813,10 @@ void XCMD_Timer(UnicodeString prm)
 				UserAbort(USTR_IllegalParam);
 			}
 			XCMD_tim_t += Date();
-			//‚·‚Å‚É‰ß‚¬‚Ä‚¢‚½‚ç—‚“ú
+			//ã™ã§ã«éãã¦ã„ãŸã‚‰ç¿Œæ—¥
 			if (CompareDateTime(Now(), XCMD_tim_t)==GreaterThanValue) XCMD_tim_t = IncDay(XCMD_tim_t, 1);
 		}
-		//ŠÔ
+		//æ™‚é–“
 		else {
 			int ms = param_to_mSec(prm);
 			if (ms<=0) UserAbort(USTR_SyntaxError);
@@ -1916,7 +1916,7 @@ void XCMD_PopVar(UnicodeString prm)
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚Ìİ’è
+//ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã®è¨­å®š
 //---------------------------------------------------------------------------
 void XCMD_SetFileTime(UnicodeString prm)
 {
@@ -1933,11 +1933,11 @@ void XCMD_SetFileTime(UnicodeString prm)
 	catch (EConvertError &e) {
 		UserAbort(USTR_IllegalParam);
 	}
-	if (!set_file_age(XCMD_cur_f_name, dt, ForceDel)) TextAbort(_T("ƒ^ƒCƒ€ƒXƒ^ƒ“ƒvİ’è‚É¸”s‚µ‚Ü‚µ‚½B"));
+	if (!set_file_age(XCMD_cur_f_name, dt, ForceDel)) TextAbort(_T("ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—è¨­å®šã«å¤±æ•—ã—ã¾ã—ãŸã€‚"));
 }
 
 //---------------------------------------------------------------------------
-//ReadINI : INIƒtƒ@ƒCƒ‹‚©‚ç“Ç
+//ReadINI : INIãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­è¾¼
 //---------------------------------------------------------------------------
 void XCMD_ReadINI(UnicodeString prm)
 {
@@ -1946,7 +1946,7 @@ void XCMD_ReadINI(UnicodeString prm)
 	XCMD_VarList->Values[get_tkn(prm, '=')] = IniFile->ReadString("ExeCommands", exclude_quot(get_tkn_r(prm, '=')));
 }
 //---------------------------------------------------------------------------
-//WriteINI : INIƒtƒ@ƒCƒ‹‚É‘
+//WriteINI : INIãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸è¾¼
 //---------------------------------------------------------------------------
 void XCMD_WriteINI(UnicodeString prm)
 {
@@ -1956,10 +1956,10 @@ void XCMD_WriteINI(UnicodeString prm)
 }
 
 //---------------------------------------------------------------------------
-//ŠO•”ƒc[ƒ‹‚ÌÀs
+//å¤–éƒ¨ãƒ„ãƒ¼ãƒ«ã®å®Ÿè¡Œ
 //---------------------------------------------------------------------------
 bool XCMD_ShellExe(UnicodeString cmd, UnicodeString prm, UnicodeString wdir,
-	UnicodeString opt)	//H=”ñ•\¦/ W=I—¹‘Ò‚¿
+	UnicodeString opt)	//H=éè¡¨ç¤º/ W=çµ‚äº†å¾…ã¡
 {
 	wdir = ExcludeTrailingPathDelimiter(wdir);
 	XCMD_set_Var(_T("ExitCode"), EmptyStr);
@@ -1985,10 +1985,10 @@ bool XCMD_ShellExe(UnicodeString cmd, UnicodeString prm, UnicodeString wdir,
 }
 
 //---------------------------------------------------------------------------
-//w’èƒNƒ‰ƒX/ƒeƒLƒXƒg‚Éƒ}ƒbƒ`‚·‚éƒEƒBƒ“ƒhƒE‚ğƒAƒNƒeƒBƒu‰»
+//æŒ‡å®šã‚¯ãƒ©ã‚¹/ãƒ†ã‚­ã‚¹ãƒˆã«ãƒãƒƒãƒã™ã‚‹ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–
 //---------------------------------------------------------------------------
 bool XCMD_ActivateWnd(
-	UnicodeString prm)	//[ƒNƒ‰ƒX–¼][;ƒeƒLƒXƒg|/³‹K•\Œ»/]
+	UnicodeString prm)	//[ã‚¯ãƒ©ã‚¹å][;ãƒ†ã‚­ã‚¹ãƒˆ|/æ­£è¦è¡¨ç¾/]
 {
 	HWND hWnd = NULL;
 	std::unique_ptr<TStringList> w_lst(new TStringList());
@@ -2024,7 +2024,7 @@ bool XCMD_ActivateWnd(
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚Ì•`‰æ‚ğ’â~/ÄŠJ
+//ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã®æç”»ã‚’åœæ­¢/å†é–‹
 //---------------------------------------------------------------------------
 void XCMD_Redraw(UnicodeString prm)
 {

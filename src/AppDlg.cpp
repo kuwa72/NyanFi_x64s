@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒAƒvƒŠƒP[ƒVƒ‡ƒ“ˆê——												//
+//  ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ä¸€è¦§												//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -17,7 +17,7 @@
 TAppListDlg *AppListDlg = NULL;
 
 //---------------------------------------------------------------------------
-//ƒ\[ƒg—p”äŠrŠÖ”
+//ã‚½ãƒ¼ãƒˆç”¨æ¯”è¼ƒé–¢æ•°
 //---------------------------------------------------------------------------
 bool SortByIcon = true;
 
@@ -66,7 +66,7 @@ int __fastcall SortComp_LaunchS(TStringList *List, int Index1, int Index2)
 }
 
 //---------------------------------------------------------------------------
-//ƒAƒvƒŠƒP[ƒVƒ‡ƒ“î•ñƒNƒ‰ƒX
+//ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã‚¯ãƒ©ã‚¹
 //---------------------------------------------------------------------------
 AppWinInf::AppWinInf()
 {
@@ -90,14 +90,14 @@ AppWinInf::~AppWinInf()
 }
 
 //---------------------------------------------------------------------------
-//ƒAƒvƒŠƒP[ƒVƒ‡ƒ“î•ñƒŠƒXƒg (TList ‚©‚çŒp³)
+//ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ãƒªã‚¹ãƒˆ (TList ã‹ã‚‰ç¶™æ‰¿)
 //---------------------------------------------------------------------------
 __fastcall TAppWinList::TAppWinList(): TList()
 {
 }
 
 //---------------------------------------------------------------------------
-//€–Úíœ‚Éƒƒ‚ƒŠ‚ğ‰ğ•ú
+//é …ç›®å‰Šé™¤æ™‚ã«ãƒ¡ãƒ¢ãƒªã‚’è§£æ”¾
 //---------------------------------------------------------------------------
 void __fastcall TAppWinList::Notify(void *Ptr, TListNotification Action)
 {
@@ -105,7 +105,7 @@ void __fastcall TAppWinList::Notify(void *Ptr, TListNotification Action)
 }
 
 //---------------------------------------------------------------------------
-//TAppListDlg ƒNƒ‰ƒX
+//TAppListDlg ã‚¯ãƒ©ã‚¹
 //---------------------------------------------------------------------------
 __fastcall TAppListDlg::TAppListDlg(TComponent* Owner)
 	: TForm(Owner)
@@ -136,7 +136,7 @@ void __fastcall TAppListDlg::FormCreate(TObject *Sender)
 void __fastcall TAppListDlg::FormShow(TObject *Sender)
 {
 	if (OnlyLauncher) {
-		set_FormTitle(this, _T("ƒ‰ƒ“ƒ`ƒƒ["));
+		set_FormTitle(this, _T("ãƒ©ãƒ³ãƒãƒ£ãƒ¼"));
 		AppPanel->Visible	= false;
 		LRSplitter->Visible = false;
 		IniFile->LoadPosInfo(this, DialogCenter, "Launcher");
@@ -144,7 +144,7 @@ void __fastcall TAppListDlg::FormShow(TObject *Sender)
 		LaunchPanel->Visible = true;
 	}
 	else {
-		set_FormTitle(this, _T("ƒAƒvƒŠƒP[ƒVƒ‡ƒ“ˆê——"));
+		set_FormTitle(this, _T("ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ä¸€è¦§"));
 		AppPanel->Visible	= true;
 		LRSplitter->Visible = true;
 		IniFile->LoadPosInfo(this, DialogCenter);
@@ -177,7 +177,7 @@ void __fastcall TAppListDlg::FormShow(TObject *Sender)
 
 	AppInfoList->Clear();
 
-	//ˆê——‰Šú‰»
+	//ä¸€è¦§åˆæœŸåŒ–
 	TListBox *lp = AppListBox;
 	set_StdListBox(lp, LBTAG_OPT_LOOP);
 	set_UsrScrPanel(AppScrPanel);
@@ -189,7 +189,7 @@ void __fastcall TAppListDlg::FormShow(TObject *Sender)
 	MaxWd_f = 0;
 	if (!OnlyLauncher) UpdateAppList();
 
-	//ƒ‰ƒ“ƒ`ƒƒ[‚Ì‰Šú‰»
+	//ãƒ©ãƒ³ãƒãƒ£ãƒ¼ã®åˆæœŸåŒ–
 	if (!OnlyAppList) {
 		SortByRem  = IniFile->ReadBoolGen(_T("AppListLaunchRemSort"));
 		SortByIcon = IniFile->ReadBoolGen(_T("AppListLaunchIconSort"), true);
@@ -205,7 +205,7 @@ void __fastcall TAppListDlg::FormShow(TObject *Sender)
 	FocusClass	   = EmptyStr;
 	isNyan = false;
 
-	//ƒtƒ@ƒCƒ‹‚Ìƒhƒƒbƒv‚ğ‹–‰Â
+	//ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‰ãƒ­ãƒƒãƒ—ã‚’è¨±å¯
 	::DragAcceptFiles(Handle, LaunchPanel->Visible);
 
 	::PostMessage(Handle, WM_FORM_SHOWED, 0, 0);
@@ -281,7 +281,7 @@ void __fastcall TAppListDlg::FormKeyDown(TObject *Sender, WORD &Key, TShiftState
 	SpecialKeyProc(this, Key, Shift);
 }
 //---------------------------------------------------------------------------
-//ƒzƒC[ƒ‹‘€ì
+//ãƒ›ã‚¤ãƒ¼ãƒ«æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::FormMouseWheel(TObject *Sender, TShiftState Shift, int WheelDelta,
 	TPoint &MousePos, bool &Handled)
@@ -298,7 +298,7 @@ void __fastcall TAppListDlg::FormMouseWheel(TObject *Sender, TShiftState Shift, 
 	}
 }
 //---------------------------------------------------------------------------
-//ƒVƒ‡[ƒgƒJƒbƒgƒtƒ@ƒCƒ‹‚Ìƒhƒƒbƒvó‚¯“ü‚ê
+//ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‰ãƒ­ãƒƒãƒ—å—ã‘å…¥ã‚Œ
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::WMDropFiles(TWMDropFiles &msg)
 {
@@ -317,7 +317,7 @@ void __fastcall TAppListDlg::WMDropFiles(TWMDropFiles &msg)
 				if (!test_FileExt(get_extension(fnam), ".lnk.url")) continue;
 				f_list->Add(fnam);
 			}
-			//ƒRƒs[
+			//ã‚³ãƒ”ãƒ¼
 			if (f_list->Count>0) {
 				for (int i=0; i<f_list->Count; i++) {
 					fnam = f_list->Strings[i];
@@ -335,7 +335,7 @@ void __fastcall TAppListDlg::WMDropFiles(TWMDropFiles &msg)
 }
 
 //---------------------------------------------------------------------------
-//ƒ‰ƒ“ƒ`ƒƒ[‚Ì file_rec ƒ|ƒCƒ“ƒ^‚ğæ“¾
+//ãƒ©ãƒ³ãƒãƒ£ãƒ¼ã® file_rec ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—
 //---------------------------------------------------------------------------
 file_rec* __fastcall TAppListDlg::GetLaunchFrecPtr()
 {
@@ -344,7 +344,7 @@ file_rec* __fastcall TAppListDlg::GetLaunchFrecPtr()
 }
 
 //---------------------------------------------------------------------------
-//ƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`ƒ‚[ƒh‚Ìİ’è
+//ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ã‚¿ãƒ«ã‚µãƒ¼ãƒãƒ¢ãƒ¼ãƒ‰ã®è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::SetIncSeaMode(bool sw)
 {
@@ -364,7 +364,7 @@ void __fastcall TAppListDlg::SetIncSeaMode(bool sw)
 	InpPanel->Color 	  = get_ListBgCol();
 	InpPanel->BevelOuter  = bvLowered;
 
-	//ƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`ƒ‚[ƒh
+	//ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ã‚¿ãƒ«ã‚µãƒ¼ãƒãƒ¢ãƒ¼ãƒ‰
 	if (IsIncSea) {
 		InpPanel->Visible = true;
 		UserModule->SetBlinkTimer(InpPaintBox);
@@ -377,7 +377,7 @@ void __fastcall TAppListDlg::SetIncSeaMode(bool sw)
 		get_files(LaunchPath, "*.lnk", LaunchFileList, true);
 		get_files(LaunchPath, "*.url", LaunchFileList, true);
 
-		//ƒXƒ^[ƒgƒƒjƒ…[€–Ú‚ğ’Ç‰Á
+		//ã‚¹ã‚¿ãƒ¼ãƒˆãƒ¡ãƒ‹ãƒ¥ãƒ¼é …ç›®ã‚’è¿½åŠ 
 		if (AddStart) {
 			std::unique_ptr<TStringList> st_lst(new TStringList());
 			usr_SH->AddKnownPath(FOLDERID_StartMenu,		st_lst.get());
@@ -390,7 +390,7 @@ void __fastcall TAppListDlg::SetIncSeaMode(bool sw)
 			}
 		}
 	}
-	//’Êí•\¦
+	//é€šå¸¸è¡¨ç¤º
 	else {
 		CurLaunchPath = StartsText(LaunchPath, l_fnam)? ExtractFilePath(l_fnam) : LaunchPath;
 		InpPanel->Visible = false;
@@ -400,7 +400,7 @@ void __fastcall TAppListDlg::SetIncSeaMode(bool sw)
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚ÌXV
+//ä¸€è¦§ã®æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::UpdateAppList()
 {
@@ -413,15 +413,15 @@ void __fastcall TAppListDlg::UpdateAppList()
 
 	AppWinInf *ap_Res = NULL;
 
-	//ZƒI[ƒ_[‡‚Éæ“¾
+	//Zã‚ªãƒ¼ãƒ€ãƒ¼é †ã«å–å¾—
 	HWND hWnd = ::GetWindow(Application->Handle, GW_HWNDFIRST);
 	while (hWnd) {
 		do {
-			//ƒvƒƒZƒXID
+			//ãƒ—ãƒ­ã‚»ã‚¹ID
 			DWORD pid;
 			DWORD tid = ::GetWindowThreadProcessId(hWnd, &pid);
 
-			//ƒNƒ‰ƒX–¼
+			//ã‚¯ãƒ©ã‚¹å
 			UnicodeString cnam = get_WndClassName(hWnd);
 			if (!::IsWindowVisible(hWnd) && !Application->MainForm->ClassNameIs(cnam)) break;
 			if (ProcessId==pid && contained_wd_i("TAppListDlg|HH Parent", cnam)) break;
@@ -429,21 +429,21 @@ void __fastcall TAppListDlg::UpdateAppList()
 			BOOL cloaked;
 			if (::DwmGetWindowAttribute(hWnd, DWMWA_CLOAKED, &cloaked, sizeof(cloaked))==S_OK && cloaked) break;
 
-			//Šg’£ƒEƒBƒ“ƒhƒEƒXƒ^ƒCƒ‹
+			//æ‹¡å¼µã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¹ã‚¿ã‚¤ãƒ«
 			LONG w_style = ::GetWindowLong(hWnd, GWL_EXSTYLE);
 			if (w_style & WS_EX_TOOLWINDOW) break;
 			if ((w_style & WS_EX_LAYERED) && !(w_style & WS_EX_WINDOWEDGE)) break;
 			if (::GetParent(hWnd) && !(w_style & WS_EX_APPWINDOW)) break;
 
-			//ƒEƒBƒ“ƒhƒEƒTƒCƒY
+			//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚µã‚¤ã‚º
 			TRect w_rect = get_window_rect(hWnd);
 			if (w_rect.IsEmpty()) break;
 
-			//ƒeƒLƒXƒg
+			//ãƒ†ã‚­ã‚¹ãƒˆ
 			UnicodeString wtxt = get_WndText(hWnd);
 			if (wtxt.IsEmpty()) break;
 
-			//œŠOƒ`ƒFƒbƒN
+			//é™¤å¤–ãƒã‚§ãƒƒã‚¯
 			if (!ExcAppText.IsEmpty()) {
 				TStringDynArray exc_txt_lst = split_strings_semicolon(ExcAppText);
 				bool ok = true;
@@ -453,7 +453,7 @@ void __fastcall TAppListDlg::UpdateAppList()
 				if (!ok) break;
 			}
 
-			//UWPƒAƒvƒŠ
+			//UWPã‚¢ãƒ—ãƒª
 			bool is_uwp = SameText(cnam, "ApplicationFrameWindow");
 			DWORD pid2 = 0, tid2 = 0;
 			UnicodeString cnam2;
@@ -466,7 +466,7 @@ void __fastcall TAppListDlg::UpdateAppList()
 				}
 			}
 
-			//Šù‘¶‚©?
+			//æ—¢å­˜ã‹?
 			AppWinInf *ap = NULL;
 			bool is_new = false;
 			for (int i=0; i<AppInfoList->Count && !ap; i++) {
@@ -496,7 +496,7 @@ void __fastcall TAppListDlg::UpdateAppList()
 			ap->win_left   = w_rect.Left;
 			ap->win_top    = w_rect.Top;
 
-			//•\¦ƒ‚ƒjƒ^
+			//è¡¨ç¤ºãƒ¢ãƒ‹ã‚¿
 			ap->mon_no = -1;
 			for (int i=0; i<Screen->MonitorCount; i++) {
 				TRect m_rc = Screen->Monitors[i]->BoundsRect;
@@ -507,7 +507,7 @@ void __fastcall TAppListDlg::UpdateAppList()
 				}
 			}
 
-			//–³‰“šƒ`ƒFƒbƒN
+			//ç„¡å¿œç­”ãƒã‚§ãƒƒã‚¯
 			bool last_nores = ap->isNoRes;
 			DWORD_PTR res;
 			ap->isNoRes = (::SendMessageTimeout(hWnd, WM_NULL, 0, 0, SMTO_ABORTIFHUNG, 50, &res)==0);
@@ -516,7 +516,7 @@ void __fastcall TAppListDlg::UpdateAppList()
 			ap->mem_WS = ap->mem_pWS = ap->mem_PF = ap->mem_pPF = 0;
 			HANDLE hProcess = ::OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, ap->PID);
 			if (hProcess) {
-				//ƒƒ‚ƒŠî•ñ
+				//ãƒ¡ãƒ¢ãƒªæƒ…å ±
 				PROCESS_MEMORY_COUNTERS pmc = {0};
 				if (::GetProcessMemoryInfo(hProcess, &pmc, sizeof(pmc))) {
 					ap->mem_WS	= pmc.WorkingSetSize;
@@ -525,7 +525,7 @@ void __fastcall TAppListDlg::UpdateAppList()
 					ap->mem_pPF	= pmc.PeakPagefileUsage;
 				}
 
-				//ì¬
+				//ä½œæˆæ™‚åˆ»
 				FILETIME s_tm, x_tm, k_tm, u_tm, f_tm;
 				if (::GetProcessTimes(hProcess, &s_tm, &x_tm, &k_tm, &u_tm)) ap->StartTime = utc_to_DateTime(&s_tm);
 
@@ -533,7 +533,7 @@ void __fastcall TAppListDlg::UpdateAppList()
 			}
 
 			if (is_new) {
-				//•Â‚¶‚æ‚¤‚Æ‚µ‚Ä‚¢‚éƒvƒƒZƒX‚©‚çV‚½‚ÉƒEƒBƒ“ƒhƒE‚ªo‚Ä‚¢‚é‚©?
+				//é–‰ã˜ã‚ˆã†ã¨ã—ã¦ã„ã‚‹ãƒ—ãƒ­ã‚»ã‚¹ã‹ã‚‰æ–°ãŸã«ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãŒå‡ºã¦ã„ã‚‹ã‹?
 				for (int i=0; i<AppInfoList->Count; i++) {
 					AppWinInf *bp = AppInfoList->Items[i];
 					if (bp->toClose && bp->PID==ap->PID) {
@@ -541,7 +541,7 @@ void __fastcall TAppListDlg::UpdateAppList()
 					}
 				}
 
-				//Àsƒtƒ@ƒCƒ‹–¼‚ÆƒAƒCƒRƒ“
+				//å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«åã¨ã‚¢ã‚¤ã‚³ãƒ³
 				if (ap->isNyan) {
 					ap->FileName = Application->ExeName;
 					ap->Caption	 = get_base_name(Application->ExeName);
@@ -563,7 +563,7 @@ void __fastcall TAppListDlg::UpdateAppList()
 						ap->FileName = ::QueryFullProcessImageName(hProcess, 0, sbuf, &sz)? sbuf : _T("");
 						ap->Caption	 = get_base_name(ap->FileName);
 
-						//ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“
+						//ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³
 						HINSTANCE hNtDll = ::GetModuleHandle(_T("ntdll.dll"));
 						NTSTATUS (NTAPI* lpfNtQueryInformationProcess)(HANDLE, PROCESSINFOCLASS, PVOID, ULONG, PULONG) =
 							(NTSTATUS (NTAPI*)(HANDLE, PROCESSINFOCLASS, PVOID, ULONG, PULONG))::GetProcAddress(hNtDll, "NtQueryInformationProcess");
@@ -597,7 +597,7 @@ void __fastcall TAppListDlg::UpdateAppList()
 							}
 						}
 
-						//¸Ši
+						//æ˜‡æ ¼
 						HANDLE hToken = NULL;
 						if (::OpenProcessToken(hProcess, TOKEN_QUERY, &hToken)) {
 							TOKEN_ELEVATION tokenEle;
@@ -615,7 +615,7 @@ void __fastcall TAppListDlg::UpdateAppList()
 						ap->FileName   = EmptyStr;
 						ap->Caption    = "????";
 						ap->ErrMsg     = SysErrorMessage(err);
-						ap->isElevated = (err==ERROR_ACCESS_DENIED);  //¦ƒAƒNƒZƒX‹‘”Û‚È‚ç¸Ši‚³‚ê‚Ä‚¢‚é‚Æ‚İ‚È‚·
+						ap->isElevated = (err==ERROR_ACCESS_DENIED);  //â€»ã‚¢ã‚¯ã‚»ã‚¹æ‹’å¦ãªã‚‰æ˜‡æ ¼ã•ã‚Œã¦ã„ã‚‹ã¨ã¿ãªã™
 					}
 
 					if (ap->isUWP) {
@@ -677,7 +677,7 @@ void __fastcall TAppListDlg::UpdateAppList()
 		hWnd = ::GetWindow(hWnd, GW_HWNDNEXT);
 	}
 
-	//‘¶İ‚µ‚È‚­‚È‚Á‚½€–Ú‚ğ”jŠü
+	//å­˜åœ¨ã—ãªããªã£ãŸé …ç›®ã‚’ç ´æ£„
 	int i = 0;
 	while(i < AppInfoList->Count) {
 		AppWinInf *ap = AppInfoList->Items[i];
@@ -689,7 +689,7 @@ void __fastcall TAppListDlg::UpdateAppList()
 		else i++;
 	}
 
-	//ƒLƒƒƒvƒVƒ‡ƒ“‚ÌÅ‘å•‚ğXV
+	//ã‚­ãƒ£ãƒ—ã‚·ãƒ§ãƒ³ã®æœ€å¤§å¹…ã‚’æ›´æ–°
 	TCanvas *cv = lp->Canvas;
 	cv->Font->Assign(lp->Font);
 	for (int i=0; i<AppInfoList->Count; i++) {
@@ -699,7 +699,7 @@ void __fastcall TAppListDlg::UpdateAppList()
 		MaxWd_f = std::max(wd, MaxWd_f);
 	}
 
-	//ƒŠƒXƒgƒ{ƒbƒNƒX‚ÉŠ„‚è“–‚Ä(‰¼‘z)
+	//ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã«å‰²ã‚Šå½“ã¦(ä»®æƒ³)
 	if (lp->Count!=AppInfoList->Count)
 		lp->Count = AppInfoList->Count;
 	else if (changed)
@@ -711,10 +711,10 @@ void __fastcall TAppListDlg::UpdateAppList()
 
 	UpdateAppSttBar();
 
-	//ƒvƒƒpƒeƒB•ÏX‚ğ”½‰f
+	//ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£å¤‰æ›´ã‚’åæ˜ 
 	if (req_upd) UpdateLaunchList();
 
-	//•Â‚¶‚æ‚¤‚Æ‚µ‚Ä‚¢‚éƒvƒƒZƒX‚©‚ço‚½ƒEƒBƒ“ƒhƒE‚ÖØ‚è‘Ö‚¦
+	//é–‰ã˜ã‚ˆã†ã¨ã—ã¦ã„ã‚‹ãƒ—ãƒ­ã‚»ã‚¹ã‹ã‚‰å‡ºãŸã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã¸åˆ‡ã‚Šæ›¿ãˆ
 	if (ap_Res) ::SetForegroundWindow(ap_Res->WinHandle);
 }
 
@@ -726,14 +726,14 @@ AppWinInf* __fastcall TAppListDlg::GetCurAppWinInf()
 }
 
 //---------------------------------------------------------------------------
-//ƒ‰ƒ“ƒ`ƒƒ[€–Ú‚ğì¬
+//ãƒ©ãƒ³ãƒãƒ£ãƒ¼é …ç›®ã‚’ä½œæˆ
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::AddLnkFileRec(UnicodeString fnam, TStringList *lst,
-	UnicodeString rnam)		//•ÒW‹——£æ“¾‚Ì‚½‚ß‚ÌŠî€–¼	(default = EmptyStr)
+	UnicodeString rnam)		//ç·¨é›†è·é›¢å–å¾—ã®ãŸã‚ã®åŸºæº–å	(default = EmptyStr)
 {
 	file_rec *fp = cre_new_file_rec(fnam);
 	if (fp) {
-		//fp->l_name = ƒŠƒ“ƒNæ, fp->alias = ƒRƒƒ“ƒg, fp->faild = ƒŠƒ“ƒNØ‚ê
+		//fp->l_name = ãƒªãƒ³ã‚¯å…ˆ, fp->alias = ã‚³ãƒ¡ãƒ³ãƒˆ, fp->faild = ãƒªãƒ³ã‚¯åˆ‡ã‚Œ
 		if (SortByRem && test_LnkExt(fp->f_ext)) {
 			usr_SH->get_LnkInf(fp->f_name, NULL, &fp->l_name, NULL, NULL, NULL, &fp->alias);
 			fp->failed = !fp->l_name.IsEmpty() && !StartsStr("::", fp->l_name) && !file_exists(fp->l_name);
@@ -743,7 +743,7 @@ void __fastcall TAppListDlg::AddLnkFileRec(UnicodeString fnam, TStringList *lst,
 			std::unique_ptr<UsrIniFile> url_file(new UsrIniFile(fnam));
 			fp->l_name = url_file->ReadString("InternetShortcut", "URL");
 		}
-		//•ÒW‹——£
+		//ç·¨é›†è·é›¢
 		if (!rnam.IsEmpty()) {
 			fp->distance = get_NrmLevenshteinDistance(rnam, fp->b_name, true);
 		}
@@ -752,7 +752,7 @@ void __fastcall TAppListDlg::AddLnkFileRec(UnicodeString fnam, TStringList *lst,
 }
 
 //---------------------------------------------------------------------------
-//ƒ‰ƒ“ƒ`ƒƒ[ƒŠƒXƒg‚ÌXV
+//ãƒ©ãƒ³ãƒãƒ£ãƒ¼ãƒªã‚¹ãƒˆã®æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::UpdateLaunchList(UnicodeString lnam)
 {
@@ -760,7 +760,7 @@ void __fastcall TAppListDlg::UpdateLaunchList(UnicodeString lnam)
 
 	clear_FileList(LaunchList);
 
-	//ƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`
+	//ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ã‚¿ãƒ«ã‚µãƒ¼ãƒ
 	if (IsIncSea) {
 		bool is_all = contained_wd_i("*|?| ", IncSeaWord);
 		UnicodeString ptn = is_all? UnicodeString(".+") :
@@ -782,7 +782,7 @@ void __fastcall TAppListDlg::UpdateLaunchList(UnicodeString lnam)
 
 		DirPanel->Caption = EmptyStr;
 	}
-	//’Êíƒ‚[ƒh
+	//é€šå¸¸ãƒ¢ãƒ¼ãƒ‰
 	else {
 		DirPanel->Caption =
 			get_MiniPathName(get_tkn_r(CurLaunchPath, get_parent_path(LaunchPath)), DirPanel->ClientWidth, DirPanel->Font);
@@ -810,7 +810,7 @@ void __fastcall TAppListDlg::UpdateLaunchList(UnicodeString lnam)
 		LaunchList->CustomSort(SortComp_Launch);
 	}
 
-	//ƒŠƒXƒgƒ{ƒbƒNƒX‚ÉŠ„‚è“–‚Ä(‰¼‘z)
+	//ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã«å‰²ã‚Šå½“ã¦(ä»®æƒ³)
 	TListBox *lp = LaunchListBox;
 	int idx =lp->ItemIndex;
 	lp->Count = LaunchList->Count;
@@ -826,7 +826,7 @@ void __fastcall TAppListDlg::UpdateLaunchList(UnicodeString lnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒXƒe[ƒ^ƒXƒo[‚ÌXV(ƒ‰ƒ“ƒ`ƒƒ[)
+//ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒãƒ¼ã®æ›´æ–°(ãƒ©ãƒ³ãƒãƒ£ãƒ¼)
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::UpdateLaunchSttBar()
 {
@@ -835,14 +835,14 @@ void __fastcall TAppListDlg::UpdateLaunchSttBar()
 	if (cfp) {
 		msg = cfp->n_name;
 		if (!cfp->is_dir) {
-			//ƒRƒƒ“ƒg
+			//ã‚³ãƒ¡ãƒ³ãƒˆ
 			if (!cfp->alias.IsEmpty()) msg.cat_sprintf(_T(" (%s)"),  cfp->alias.c_str());
-			//ƒŠƒ“ƒNæ
+			//ãƒªãƒ³ã‚¯å…ˆ
 			if (!cfp->l_name.IsEmpty()) {
 				if (cfp->failed)
-					msg += " ¨ ƒŠƒ“ƒNØ‚ê";
+					msg += " â†’ ãƒªãƒ³ã‚¯åˆ‡ã‚Œ";
 				else
-					msg.cat_sprintf(_T(" ¨ %s"), yen_to_delimiter(cfp->l_name).c_str());
+					msg.cat_sprintf(_T(" â†’ %s"), yen_to_delimiter(cfp->l_name).c_str());
 			}
 		}
 
@@ -861,11 +861,11 @@ void __fastcall TAppListDlg::UpdateLaunchSttBar()
 }
 
 //---------------------------------------------------------------------------
-//ƒXƒe[ƒ^ƒXƒo[‚¨‚æ‚Ñƒ‰ƒCƒuƒTƒ€ƒlƒCƒ‹‚ÌXV
+//ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒãƒ¼ãŠã‚ˆã³ãƒ©ã‚¤ãƒ–ã‚µãƒ ãƒã‚¤ãƒ«ã®æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::UpdateAppSttBar(
-	bool force,		//ƒ‰ƒCƒuƒTƒ€ƒlƒCƒ‹‚ğ‹­§“I‚ÉXV	(default = false)
-	bool actual)	//ƒ‰ƒCƒuƒTƒ€ƒlƒCƒ‹‚ğ“™”{•\¦		(default = false)
+	bool force,		//ãƒ©ã‚¤ãƒ–ã‚µãƒ ãƒã‚¤ãƒ«ã‚’å¼·åˆ¶çš„ã«æ›´æ–°	(default = false)
+	bool actual)	//ãƒ©ã‚¤ãƒ–ã‚µãƒ ãƒã‚¤ãƒ«ã‚’ç­‰å€è¡¨ç¤º		(default = false)
 {
 	TListBox *lp = AppListBox;
 	AppWinInf *c_ap = GetCurAppWinInf();
@@ -877,10 +877,10 @@ void __fastcall TAppListDlg::UpdateAppSttBar(
 		return;
 	}
 
-	//ƒXƒe[ƒ^ƒXƒo[‚ÌXV
+	//ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒãƒ¼ã®æ›´æ–°
 	if (lp->Focused()) {
 		UnicodeString msg;
-		msg.sprintf(_T("PID:%u   WS:%s - %s / PF:%s - %s   Win:%u~%u"),
+		msg.sprintf(_T("PID:%u   WS:%s - %s / PF:%s - %s   Win:%uÃ—%u"),
 			c_ap->PID,
 			get_size_str_K(c_ap->mem_WS).c_str(), get_size_str_K(c_ap->mem_pWS).c_str(),
 			get_size_str_K(c_ap->mem_PF).c_str(), get_size_str_K(c_ap->mem_pPF).c_str(),
@@ -894,14 +894,14 @@ void __fastcall TAppListDlg::UpdateAppSttBar(
 			else
 				msg += " (?)";
 		}
-		if (c_ap->isNoRes) msg += " (–³‰“š)";
+		if (c_ap->isNoRes) msg += " (ç„¡å¿œç­”)";
 		msg += "  Started:";
 		msg += format_DateTime(c_ap->StartTime, true);
 		StatusBar1->Panels->Items[0]->Text = msg;
 		StatusBar1->Hint = msg;
 	}
 
-	//ƒJ[ƒ\ƒ‹ˆÊ’uˆÈŠO‚ÌƒTƒ€ƒlƒCƒ‹‚Í‰ğ•ú
+	//ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ä»¥å¤–ã®ã‚µãƒ ãƒã‚¤ãƒ«ã¯è§£æ”¾
 	for (int i=0; i<AppInfoList->Count; i++) {
 		AppWinInf *ap = AppInfoList->Items[i];
 		if (ap!=c_ap && ap->hThumb) {
@@ -910,14 +910,14 @@ void __fastcall TAppListDlg::UpdateAppSttBar(
 		}
 	}
 
-	//ƒJ[ƒ\ƒ‹ˆÊ’uƒAƒvƒŠ‚ÌƒTƒ€ƒlƒCƒ‹‚ª–³‚¯‚ê‚Îİ’è
+	//ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã‚¢ãƒ—ãƒªã®ã‚µãƒ ãƒã‚¤ãƒ«ãŒç„¡ã‘ã‚Œã°è¨­å®š
 	if (!c_ap->hThumb) {
 		ThumbRect = Rect(0, 0, 0, 0);
 		LiveRect  = Rect(0, 0, 0, 0);
 		if (ViewPanel->Height>0) ::DwmRegisterThumbnail(Handle, c_ap->WinHandle, &c_ap->hThumb);
 	}
 
-	//‰‰ñ‚¨‚æ‚ÑƒTƒCƒY•Ï‰»‚ÉƒTƒ€ƒlƒCƒ‹İ’è‚ğXV
+	//åˆå›ãŠã‚ˆã³ã‚µã‚¤ã‚ºå¤‰åŒ–æ™‚ã«ã‚µãƒ ãƒã‚¤ãƒ«è¨­å®šã‚’æ›´æ–°
 	if (c_ap->hThumb) {
 		TRect rc_thum = Rect(0, 0, 0, 0);
 		SIZE size;
@@ -927,7 +927,7 @@ void __fastcall TAppListDlg::UpdateAppSttBar(
 		}
 
 		TRect rc_dst = ViewPanel->BoundsRect;
-		//¦VCLƒXƒ^ƒCƒ‹‚¾‚Æ‚¸‚ê‚é‚æ‚¤‚È‚Ì‚Å•â³
+		//â€»VCLã‚¹ã‚¿ã‚¤ãƒ«ã ã¨ãšã‚Œã‚‹ã‚ˆã†ãªã®ã§è£œæ­£
 		int ofs_y = use_VclStyle()? get_SysMetricsForPPI(SM_CYCAPTION, CurrentPPI) + SCALED_THIS(6) : 0;
 		OffsetRect(rc_dst, AppPanel->Left, ofs_y);
 		InflateRect(rc_dst, SCALED_THIS(-16), SCALED_THIS(-8));
@@ -956,7 +956,7 @@ void __fastcall TAppListDlg::UpdateAppSttBar(
 			prop.fVisible			   = TRUE;
 			prop.opacity			   = 255;
 
-			//“™”{
+			//ç­‰å€
 			if (actual && dst_r>0 && dst_r<1.0) {
 				TPoint p = ViewPanel->ScreenToClient(Mouse->CursorPos);
 				p.x -= SCALED_THIS(16);
@@ -994,7 +994,7 @@ void __fastcall TAppListDlg::UpdateAppSttBar(
 				if (rc_dst.Height()<src_h) rc_dst.SetHeight(src_h);
 				prop.rcDestination = rc_dst;
 			}
-			//’Êí
+			//é€šå¸¸
 			else {
 				prop.rcSource = rc_thum;
 				prop.rcDestination = rc_dst;
@@ -1011,7 +1011,7 @@ void __fastcall TAppListDlg::Timer1Timer(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚Ì•`‰æ
+//ä¸€è¦§ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::AppListBoxDrawItem(TWinControl *Control, int Index, TRect &Rect,
 	TOwnerDrawState State)
@@ -1023,14 +1023,14 @@ void __fastcall TAppListDlg::AppListBoxDrawItem(TWinControl *Control, int Index,
 	cv->Font->Assign(lp->Font);
 	bool show_mon_no = (Screen->MonitorCount>1 && ShowMonNoAction->Checked);
 
-	//”wŒi
+	//èƒŒæ™¯
 	cv->Brush->Color = ap->toClose ? clMaroon: 
 		State.Contains(odSelected) ? (lp->Focused()? col_selItem : SelectWorB(get_ListBgCol(), 0.15)) : get_ListBgCol();
 	cv->FillRect(Rect);
 
 	int xp = Rect.Left + SCALED_THIS(4);
 
-	//–³‰“š•\¦
+	//ç„¡å¿œç­”è¡¨ç¤º
 	if (ap->isNoRes) {
 		TRect rc = Rect;
 		rc.Left	 = xp + SCALED_THIS(36);
@@ -1042,7 +1042,7 @@ void __fastcall TAppListDlg::AppListBoxDrawItem(TWinControl *Control, int Index,
 		cv->Brush->Color = br_col;
 	}
 
-	//ƒAƒCƒRƒ“
+	//ã‚¢ã‚¤ã‚³ãƒ³
 	int s_32 = SCALED_THIS(32);
 	if (!ap->PngImg->Empty) {
 		TRect rc = Rect;
@@ -1055,7 +1055,7 @@ void __fastcall TAppListDlg::AppListBoxDrawItem(TWinControl *Control, int Index,
 		::DrawIconEx(cv->Handle, xp, Rect.Top + SCALED_THIS(2), ap->Icon->Handle, s_32, s_32, 0, NULL, DI_NORMAL);
 	}
 
-	//Å¬‰»ƒ}[ƒN
+	//æœ€å°åŒ–ãƒãƒ¼ã‚¯
 	if (::IsIconic(ap->WinHandle)) {
 		TRect rc(xp + SCALED_THIS(22), Rect.Top + SCALED_THIS(24),
 				 xp + SCALED_THIS(34), Rect.Top + SCALED_THIS(36));
@@ -1071,7 +1071,7 @@ void __fastcall TAppListDlg::AppListBoxDrawItem(TWinControl *Control, int Index,
 
 	bool use_fgsel = is_SelFgCol(State);
 
-	//”š
+	//æ•°å­—
 	int yp = Rect.Top + (Rect.Height() - cv->TextHeight("I"))/2;
 	if (Index<10) {
 		cv->Font->Color = use_fgsel? col_fgSelItem : get_ListFgCol();
@@ -1081,7 +1081,7 @@ void __fastcall TAppListDlg::AppListBoxDrawItem(TWinControl *Control, int Index,
 	cv->Font->Style = cv->Font->Style >> fsUnderline;
 	xp += get_CharWidth(cv, 2);
 
-	//ƒ‚ƒjƒ^”Ô†
+	//ãƒ¢ãƒ‹ã‚¿ç•ªå·
 	if (show_mon_no) {
 		xp += get_CharWidth(cv, 1);
 		if (::IsIconic(ap->WinHandle)) {
@@ -1101,14 +1101,14 @@ void __fastcall TAppListDlg::AppListBoxDrawItem(TWinControl *Control, int Index,
 		xp += get_CharWidth(cv, 2);
 	}
 
-	//–¼‘O
+	//åå‰
 	TColor col_x = ap->FileName.IsEmpty()? col_Error : get_ExtColor(ExtractFileExt(ap->FileName));
 	cv->Font->Color = (lp->Focused() && use_fgsel)? col_fgSelItem : col_x;
 	cv->TextOut(xp, yp, ap->Caption);
 	if (ap->isWow64) cv->TextOut(xp + cv->TextWidth(ap->Caption), yp, ISWOW64_STR);
 	xp += MaxWd_f + SCALED_THIS(12);
 
-	//¸ŠiƒAƒCƒRƒ“
+	//æ˜‡æ ¼ã‚¢ã‚¤ã‚³ãƒ³
 	if (ap->isElevated) {
 		int s_16 = SCALED_THIS(16);
 		::DrawIconEx(cv->Handle, xp, Rect.Top + (Rect.Height() - s_16)/2,
@@ -1116,16 +1116,16 @@ void __fastcall TAppListDlg::AppListBoxDrawItem(TWinControl *Control, int Index,
 	}
 	xp += SCALED_THIS(18);
 
-	//ƒeƒLƒXƒg
+	//ãƒ†ã‚­ã‚¹ãƒˆ
 	UnicodeString s = yen_to_delimiter(ap->WinText);
 	cv->Font->Color = (lp->Focused() && use_fgsel)? col_fgSelItem : get_ListFgCol();
 	cv->TextOut(xp, yp, s);
 
-	//ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ƒpƒ‰ƒ[ƒ^
+	//ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 	if (ShowCmdParamAction->Checked && !ap->CmdParam.IsEmpty()) {
 		cv->Font->Color = (lp->Focused() && use_fgsel)? col_fgSelItem : AdjustColor(get_ListFgCol(), ADJCOL_LIGHT);
 		xp += (cv->TextWidth(s) + get_CharWidth(cv, 2));
-		int w = Rect.Right - xp - cv->TextWidth("c ");
+		int w = Rect.Right - xp - cv->TextWidth("â€¦ ");
 		if (w>0) cv->TextOut(xp, yp, minimize_str(yen_to_delimiter(ap->CmdParam), cv, w, true));
 	}
 }
@@ -1144,7 +1144,7 @@ void __fastcall TAppListDlg::AppListBoxEnter(TObject *Sender)
 	UpdateAppSttBar();
 }
 //---------------------------------------------------------------------------
-//ˆê——‚ÌƒL[‘€ì
+//ä¸€è¦§ã®ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::AppListBoxKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -1154,7 +1154,7 @@ void __fastcall TAppListDlg::AppListBoxKeyDown(TObject *Sender, WORD &Key, TShif
 
 	TListBox *lp = (TListBox*)Sender;
 	bool handled = true;
-	//Ø‚è‘Ö‚¦
+	//åˆ‡ã‚Šæ›¿ãˆ
 	if (is_Num0to9(KeyStr) || equal_ENTER(KeyStr)) {
 		int idx = is_Num0to9(KeyStr)? ((KeyStr.ToIntDef(0) + 9)%10) : lp->ItemIndex;
 		if (idx>=0 && idx<AppInfoList->Count) {
@@ -1173,14 +1173,14 @@ void __fastcall TAppListDlg::AppListBoxKeyDown(TObject *Sender, WORD &Key, TShif
 			ModalResult = mrOk;
 		}
 	}
-	//ƒ‰ƒ“ƒ`ƒƒ[‚Ö
+	//ãƒ©ãƒ³ãƒãƒ£ãƒ¼ã¸
 	else if (LaunchPanel->Visible && LaunchPanel->Align==alRight && is_ToRightOpe(KeyStr, CmdStr)) {
 		LaunchListBox->SetFocus();
 	}
 	else if (LaunchPanel->Visible && LaunchPanel->Align==alLeft  && is_ToLeftOpe(KeyStr, CmdStr)) {
 		LaunchListBox->SetFocus();
 	}
-	//ƒEƒBƒ“ƒhƒE‘€ì
+	//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦æ“ä½œ
 	else if (SameText(CmdStr, "WinMinimize")) {
 		MinimizeAction->Execute();
 	}
@@ -1196,22 +1196,22 @@ void __fastcall TAppListDlg::AppListBoxKeyDown(TObject *Sender, WORD &Key, TShif
 	else if (ExeCmdListBox(lp, CmdStr)) {
 		;
 	}
-	//‰EƒNƒŠƒbƒNƒƒjƒ…[
+	//å³ã‚¯ãƒªãƒƒã‚¯ãƒ¡ãƒ‹ãƒ¥ãƒ¼
 	else if (contained_wd_i(KeysStr_Popup, KeyStr)) {
 		show_PopupMenu(lp);
 	}
-	//“ª•¶šƒT[ƒ`
+	//é ­æ–‡å­—ã‚µãƒ¼ãƒ
 	else if (is_IniSeaKey(KeyStr)) {
 		ListBoxInitialSearch(AppListBox, KeyStr);
 	}
 	else if (equal_ESC(KeyStr)) {
 		ModalResult = mrCancel;
 	}
-	//ƒAƒvƒŠƒP[ƒVƒ‡ƒ“î•ñ
+	//ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±
 	else if (StartsText("ShowFileInfo", CmdStr) || SameText(CmdStr, "ListFileInfo")) {
 		AppInfoAction->Execute();
 	}
-	//Àsƒtƒ@ƒCƒ‹–¼‚ÌƒRƒs[
+	//å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«åã®ã‚³ãƒ”ãƒ¼
 	else if (SameText(CmdStr, "CopyFileName")) {
 		AppWinInf *ap = GetCurAppWinInf();
 		if (ap) copy_to_Clipboard(ap->FileName);
@@ -1253,7 +1253,7 @@ void __fastcall TAppListDlg::ViewPanelDblClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//‰EƒNƒŠƒbƒNƒƒjƒ…[
+//å³ã‚¯ãƒªãƒƒã‚¯ãƒ¡ãƒ‹ãƒ¥ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::PopupMenu1Popup(TObject *Sender)
 {
@@ -1279,7 +1279,7 @@ void __fastcall TAppListDlg::PopupMenu2Popup(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//Œ³‚ÌƒTƒCƒY‚É–ß‚·
+//å…ƒã®ã‚µã‚¤ã‚ºã«æˆ»ã™
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::RestoreActionExecute(TObject *Sender)
 {
@@ -1305,7 +1305,7 @@ void __fastcall TAppListDlg::RestoreActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = (ap && ap->WinHandle!=Application->MainForm->Handle);
 }
 //---------------------------------------------------------------------------
-//Å¬‰»
+//æœ€å°åŒ–
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::MinimizeActionExecute(TObject *Sender)
 {
@@ -1336,7 +1336,7 @@ void __fastcall TAppListDlg::MinimizeActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = (ap!=NULL);
 }
 //---------------------------------------------------------------------------
-//Å‘å‰»
+//æœ€å¤§åŒ–
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::MaximizeActionExecute(TObject *Sender)
 {
@@ -1363,7 +1363,7 @@ void __fastcall TAppListDlg::MaximizeActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒvƒ‰ƒCƒ}ƒŠƒ‚ƒjƒ^‚ÉˆÚ“®
+//ãƒ—ãƒ©ã‚¤ãƒãƒªãƒ¢ãƒ‹ã‚¿ã«ç§»å‹•
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::ToPrimaryActionExecute(TObject *Sender)
 {
@@ -1385,7 +1385,7 @@ void __fastcall TAppListDlg::ToPrimaryActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚É‡‚í‚¹‚é
+//ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã«åˆã‚ã›ã‚‹
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::FitToFileListActionExecute(TObject *Sender)
 {
@@ -1402,7 +1402,7 @@ void __fastcall TAppListDlg::FitToFileListActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = (ap && !ap->isNyan && Application->MainForm->WindowState!=wsMinimized);
 }
 //---------------------------------------------------------------------------
-//í‚Éè‘O‚É•\¦
+//å¸¸ã«æ‰‹å‰ã«è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::TopMostActionExecute(TObject *Sender)
 {
@@ -1422,7 +1422,7 @@ void __fastcall TAppListDlg::TopMostActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = (ap && !ap->isNyan);
 }
 //---------------------------------------------------------------------------
-//•Â‚¶‚é
+//é–‰ã˜ã‚‹
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::CloseItemClick(TObject *Sender)
 {
@@ -1430,7 +1430,7 @@ void __fastcall TAppListDlg::CloseItemClick(TObject *Sender)
 	if (ap) {
 		ap->toClose = true;
 		AppListBox->Invalidate();
-		//“à•”
+		//å†…éƒ¨
 		if (ap->isNyan) {
 			if (ap->WinHandle==Application->MainForm->Handle) {
 				ModalResult = mrClose;
@@ -1443,14 +1443,14 @@ void __fastcall TAppListDlg::CloseItemClick(TObject *Sender)
 			}
 			SetFocus();
 		}
-		//ŠO•”
+		//å¤–éƒ¨
 		else {
 			::PostMessage(ap->WinHandle, WM_SYSCOMMAND, SC_CLOSE, 0);
 		}
 	}
 }
 //---------------------------------------------------------------------------
-//‚Ü‚Æ‚ß‚Ä•Â‚¶‚é
+//ã¾ã¨ã‚ã¦é–‰ã˜ã‚‹
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::CloseSameItemClick(TObject *Sender)
 {
@@ -1475,7 +1475,7 @@ void __fastcall TAppListDlg::CloseSameItemClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒfƒXƒNƒgƒbƒv‚ğ•\¦
+//ãƒ‡ã‚¹ã‚¯ãƒˆãƒƒãƒ—ã‚’è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::DesktopItemClick(TObject *Sender)
 {
@@ -1487,7 +1487,7 @@ void __fastcall TAppListDlg::DesktopItemClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//‹­§C—¹
+//å¼·åˆ¶ä¿®äº†
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::TerminateItemClick(TObject *Sender)
 {
@@ -1508,7 +1508,7 @@ void __fastcall TAppListDlg::TerminateItemClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//Àsƒtƒ@ƒCƒ‹–¼‚ğƒRƒs[
+//å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«åã‚’ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::CopyNameItemClick(TObject *Sender)
 {
@@ -1516,7 +1516,7 @@ void __fastcall TAppListDlg::CopyNameItemClick(TObject *Sender)
 	if (ap) copy_to_Clipboard(ap->FileName);
 }
 //---------------------------------------------------------------------------
-//Àsƒtƒ@ƒCƒ‹ˆÊ’u‚ÉˆÚ“®
+//å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«ä½ç½®ã«ç§»å‹•
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::JumpExeItemClick(TObject *Sender)
 {
@@ -1528,12 +1528,12 @@ void __fastcall TAppListDlg::JumpExeItemClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//œŠOƒeƒLƒXƒg‚ğİ’è
+//é™¤å¤–ãƒ†ã‚­ã‚¹ãƒˆã‚’è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::ExcAppTextItemClick(TObject *Sender)
 {
-	if (!EditItemDlg) EditItemDlg = new TEditItemDlg(this);	//‰‰ñ‚É“®“Iì¬
-	EditItemDlg->AssignText("œŠOƒeƒLƒXƒg", ExcAppText);
+	if (!EditItemDlg) EditItemDlg = new TEditItemDlg(this);	//åˆå›ã«å‹•çš„ä½œæˆ
+	EditItemDlg->AssignText("é™¤å¤–ãƒ†ã‚­ã‚¹ãƒˆ", ExcAppText);
 	if (show_ModalDlg(EditItemDlg)==mrOk) {
 		ExcAppText = EditItemDlg->RetStr;
 		if (!OnlyLauncher) UpdateAppList();
@@ -1541,7 +1541,7 @@ void __fastcall TAppListDlg::ExcAppTextItemClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒAƒvƒŠƒP[ƒVƒ‡ƒ“î•ñ
+//ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::AppInfoActionExecute(TObject *Sender)
 {
@@ -1553,26 +1553,26 @@ void __fastcall TAppListDlg::AppInfoActionExecute(TObject *Sender)
 
 		std::unique_ptr<TStringList> i_lst(new TStringList());
 		UnicodeString tmp;
-		if (!c_ap->ErrMsg.IsEmpty()) add_PropLine(_T("ƒGƒ‰["), c_ap->ErrMsg, i_lst.get(), LBFLG_ERR_FIF);
-		add_PropLine(_T("ƒLƒƒƒvƒVƒ‡ƒ“"),	c_ap->WinText,	i_lst.get());
+		if (!c_ap->ErrMsg.IsEmpty()) add_PropLine(_T("ã‚¨ãƒ©ãƒ¼"), c_ap->ErrMsg, i_lst.get(), LBFLG_ERR_FIF);
+		add_PropLine(_T("ã‚­ãƒ£ãƒ—ã‚·ãƒ§ãƒ³"),	c_ap->WinText,	i_lst.get());
 		tmp = ExtractFileName(c_ap->FileName);
 		if (c_ap->isWow64) tmp += "  (32-bit)"; else tmp += "  (64-bit)";
-		add_PropLine(_T("Àsƒtƒ@ƒCƒ‹"),tmp, i_lst.get(), LBFLG_PATH_FIF);
-		add_PropLine(_T("êŠ"),		ExtractFilePath(c_ap->FileName), i_lst.get(), LBFLG_PATH_FIF);
-		add_PropLine(_T("ƒpƒ‰ƒ[ƒ^"),	c_ap->CmdParam,	i_lst.get());
+		add_PropLine(_T("å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«"),tmp, i_lst.get(), LBFLG_PATH_FIF);
+		add_PropLine(_T("å ´æ‰€"),		ExtractFilePath(c_ap->FileName), i_lst.get(), LBFLG_PATH_FIF);
+		add_PropLine(_T("ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿"),	c_ap->CmdParam,	i_lst.get());
 
-		i_lst->Add(get_img_size_str(c_ap->win_wd, 	c_ap->win_hi, "‰æ–ÊƒTƒCƒY"));
+		i_lst->Add(get_img_size_str(c_ap->win_wd, 	c_ap->win_hi, "ç”»é¢ã‚µã‚¤ã‚º"));
 		tmp.sprintf(_T("(%d, %d) - (%d, %d)"),
 			c_ap->win_left, c_ap->win_top, c_ap->win_left + c_ap->win_wd, c_ap->win_top + c_ap->win_hi);
-		add_PropLine(_T("‹éŒ`"),		tmp,	i_lst.get()),
-		add_PropLine(_T("ŠJnƒ^ƒCƒ€"),	format_DateTime(c_ap->StartTime),	i_lst.get());
+		add_PropLine(_T("çŸ©å½¢"),		tmp,	i_lst.get()),
+		add_PropLine(_T("é–‹å§‹ã‚¿ã‚¤ãƒ "),	format_DateTime(c_ap->StartTime),	i_lst.get());
 		i_lst->Add(EmptyStr);
 
 		HWND hWnd = c_ap->WinHandle;
 		tmp = c_ap->ClassName;
 		if (!c_ap->ClassName2.IsEmpty()) tmp.cat_sprintf(_T(" (%s)"), c_ap->ClassName2.c_str());
-		add_PropLine(_T("ƒNƒ‰ƒX–¼"),	tmp,	i_lst.get());
-		add_PropLine(_T("ƒXƒ^ƒCƒ‹"),	tmp.sprintf(fmt_08X, ::GetWindowLong(hWnd, GWL_STYLE)),	i_lst.get());
+		add_PropLine(_T("ã‚¯ãƒ©ã‚¹å"),	tmp,	i_lst.get());
+		add_PropLine(_T("ã‚¹ã‚¿ã‚¤ãƒ«"),	tmp.sprintf(fmt_08X, ::GetWindowLong(hWnd, GWL_STYLE)),	i_lst.get());
 
 		tmp.sprintf(fmt_08X, c_ap->win_xstyle);
 		UnicodeString tmp2;
@@ -1588,12 +1588,12 @@ void __fastcall TAppListDlg::AppInfoActionExecute(TObject *Sender)
 			remove_top_s(tmp2, ", ");
 			tmp.cat_sprintf(_T(" (%s)"), tmp2.c_str());
 		}
-		add_PropLine(_T("Šg’£ƒXƒ^ƒCƒ‹"),	tmp,	i_lst.get());
+		add_PropLine(_T("æ‹¡å¼µã‚¹ã‚¿ã‚¤ãƒ«"),	tmp,	i_lst.get());
 
 		i_lst->Add(EmptyStr);
-		add_PropLine(_T("ƒvƒƒZƒXID"),		tmp.sprintf(fmt_08X_U, c_ap->PID, c_ap->PID),	i_lst.get());
-		add_PropLine(_T("ƒXƒŒƒbƒhID"),		tmp.sprintf(fmt_08X_U, c_ap->TID, c_ap->TID),	i_lst.get());
-		add_PropLine(_T("ƒnƒ“ƒhƒ‹"),		tmp.sprintf(fmt_08X_U, hWnd, hWnd),				i_lst.get());
+		add_PropLine(_T("ãƒ—ãƒ­ã‚»ã‚¹ID"),		tmp.sprintf(fmt_08X_U, c_ap->PID, c_ap->PID),	i_lst.get());
+		add_PropLine(_T("ã‚¹ãƒ¬ãƒƒãƒ‰ID"),		tmp.sprintf(fmt_08X_U, c_ap->TID, c_ap->TID),	i_lst.get());
+		add_PropLine(_T("ãƒãƒ³ãƒ‰ãƒ«"),		tmp.sprintf(fmt_08X_U, hWnd, hWnd),				i_lst.get());
 
 		i_lst->Add(EmptyStr);
 		get_AppInf(c_ap->FileName, i_lst.get(), false);
@@ -1606,7 +1606,7 @@ void __fastcall TAppListDlg::AppInfoActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒ‚ƒjƒ^”Ô†‚ğ•\¦
+//ãƒ¢ãƒ‹ã‚¿ç•ªå·ã‚’è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::ShowMonNoActionExecute(TObject *Sender)
 {
@@ -1619,7 +1619,7 @@ void __fastcall TAppListDlg::ShowMonNoActionUpdate(TObject *Sender)
 	((TAction *)Sender)->Enabled = (Screen->MonitorCount>1);
 }
 //---------------------------------------------------------------------------
-//ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ƒpƒ‰ƒ[ƒ^‚ğ•\¦
+//ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::ShowCmdParamActionExecute(TObject *Sender)
 {
@@ -1628,7 +1628,7 @@ void __fastcall TAppListDlg::ShowCmdParamActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒ‰ƒ“ƒ`ƒƒ[ƒŠƒXƒg‚Ì•`‰æ
+//ãƒ©ãƒ³ãƒãƒ£ãƒ¼ãƒªã‚¹ãƒˆã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::LaunchListBoxDrawItem(TWinControl *Control, int Index,
 		TRect &Rect, TOwnerDrawState State)
@@ -1643,21 +1643,21 @@ void __fastcall TAppListDlg::LaunchListBoxDrawItem(TWinControl *Control, int Ind
 	int yp = Rect.Top  + SCALED_THIS(2);
 
 	file_rec *fp = (file_rec*)LaunchList->Objects[Index];
-	//ƒAƒCƒRƒ“
+	//ã‚¢ã‚¤ã‚³ãƒ³
 	draw_SmallIcon(fp, cv, xp, Rect.Top + (Rect.Height() - SCALED_THIS(16))/2, true, this);
 	xp += SCALED_THIS(18);
 
-	//–¼‘O
+	//åå‰
 	cv->Font->Color = fp->failed? col_Error :
 	   (lp->Focused() && is_SelFgCol(State))? col_fgSelItem :
 					  fp->is_dir? col_Folder: get_ExtColor(fp->f_ext);
 	cv->TextOut(xp, yp, fp->b_name);
 
-	//•ªŠ„ü
+	//åˆ†å‰²ç·š
 	if (Index>0 && !IsIncSea) {
 		file_rec *fp2 = (file_rec*)LaunchList->Objects[Index - 1];
 		if (!SameText(fp->f_ext, fp2->f_ext))	draw_separateLine(cv, Rect, 0);
-		if (EndsStr('-', fp->alias)) 			draw_separateLine(cv, Rect, 2);	//ƒRƒƒ“ƒg
+		if (EndsStr('-', fp->alias)) 			draw_separateLine(cv, Rect, 2);	//ã‚³ãƒ¡ãƒ³ãƒˆ
 	}
 }
 //---------------------------------------------------------------------------
@@ -1673,7 +1673,7 @@ void __fastcall TAppListDlg::LaunchListBoxEnter(TObject *Sender)
 	UpdateLaunchSttBar();
 }
 //---------------------------------------------------------------------------
-//ƒ‰ƒ“ƒ`ƒƒ[‚ÌƒL[‘€ì
+//ãƒ©ãƒ³ãƒãƒ£ãƒ¼ã®ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::LaunchListBoxKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -1694,7 +1694,7 @@ void __fastcall TAppListDlg::LaunchListBoxKeyDown(TObject *Sender, WORD &Key, TS
 	file_rec *cfp = GetLaunchFrecPtr();
 
 	bool handled = true;
-	//ˆÚ“®/Às
+	//ç§»å‹•/å®Ÿè¡Œ
 	if (equal_ENTER(KeyStr)) {
 		if (cfp) {
 			if (cfp->is_dir) {
@@ -1726,39 +1726,39 @@ void __fastcall TAppListDlg::LaunchListBoxKeyDown(TObject *Sender, WORD &Key, TS
 		else
 			ModalResult = mrCancel;
 	}
-	//ƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`ƒ‚[ƒh
+	//ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ã‚¿ãƒ«ã‚µãƒ¼ãƒãƒ¢ãƒ¼ãƒ‰
 	else if (StartsText("IncSearch", CmdStr)) {
 		SetIncSeaMode(!SameText(CmdStr, "IncSearchExit"));
 	}
-	//ƒL[ƒ[ƒhƒNƒŠƒA
+	//ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ã‚¯ãƒªã‚¢
 	else if (SameText(CmdStr, "ClearIncKeyword")) {
 		IncSeaWord = EmptyStr;
 		UpdateLaunchList();
 	}
-	//Migemoƒ‚[ƒhØ‘Ö
+	//Migemoãƒ¢ãƒ¼ãƒ‰åˆ‡æ›¿
 	else if (contained_wd_i("MigemoMode|NormalMode", CmdStr)) {
 		IsMigemo = SameText(CmdStr, "MigemoMode")? (!IsMigemo && usr_Migemo->DictReady) : false;
 		UpdateLaunchList();
 	}
-	//ƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`
+	//ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ã‚¿ãƒ«ã‚µãƒ¼ãƒ
 	else if (IsIncSea && update_IncSeaWord(IncSeaWord, KeyStr)) {
 		UpdateLaunchList();
 	}
-	//–¼‘O‚Ì•ÏX
+	//åå‰ã®å¤‰æ›´
 	else if (SameText(CmdStr, "RenameDlg")) {
 		if (cfp) {
 			UnicodeString new_name = cfp->b_name;
-			if (input_query_ex(USTR_Rename, _T("–¼‘O"), &new_name)) {
+			if (input_query_ex(USTR_Rename, _T("åå‰"), &new_name)) {
 				new_name = cfp->p_name + new_name;
 				if (!cfp->is_dir) new_name += cfp->f_ext;
 				if (move_FileT(cfp->f_name, new_name))
 					UpdateLaunchList(new_name);
 				else
-					msgbox_ERR("‰ü–¼‚É¸”s‚µ‚Ü‚µ‚½B");
+					msgbox_ERR("æ”¹åã«å¤±æ•—ã—ã¾ã—ãŸã€‚");
 			}
 		}
 	}
-	//íœ
+	//å‰Šé™¤
 	else if (SameText(CmdStr, "Delete")) {
 		if (cfp && !cfp->is_up) {
 			try {
@@ -1781,7 +1781,7 @@ void __fastcall TAppListDlg::LaunchListBoxKeyDown(TObject *Sender, WORD &Key, TS
 			}
 		}
 	}
-	//ƒfƒBƒŒƒNƒgƒŠ‚Ìì¬
+	//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ä½œæˆ
 	else if (SameText(CmdStr, "CreateDir")) {
 		InputExDlg->IpuntExMode = INPEX_CRE_DIR;
 		InputExDlg->InputComboBox->Text = EmptyStr;
@@ -1794,11 +1794,11 @@ void __fastcall TAppListDlg::LaunchListBoxKeyDown(TObject *Sender, WORD &Key, TS
 				UpdateLaunchList(dnam);
 		}
 	}
-	//ƒvƒƒpƒeƒB
+	//ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	else if (SameText(CmdStr, "PropertyDlg")) {
 		PropertyItem->Click();
 	}
-	//eƒfƒBƒŒƒNƒgƒŠ‚Ö
+	//è¦ªãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¸
 	else if (SameText(get_CmdStr(CmdStr), "ToParent")) {
 		if (!SameText(CurLaunchPath, LaunchPath)) {
 			UnicodeString l_fnam = ExcludeTrailingPathDelimiter(CurLaunchPath);
@@ -1809,22 +1809,22 @@ void __fastcall TAppListDlg::LaunchListBoxKeyDown(TObject *Sender, WORD &Key, TS
 			beep_Warn();
 		}
 	}
-	//ˆê——‚Ö
+	//ä¸€è¦§ã¸
 	else if (AppPanel->Visible && LaunchPanel->Align==alRight && is_ToLeftOpe(KeyStr, CmdStr)) {
 		AppListBox->SetFocus();
 	}
 	else if (AppPanel->Visible && LaunchPanel->Align==alLeft  && is_ToRightOpe(KeyStr, CmdStr)) {
 		AppListBox->SetFocus();
 	}
-	//ˆê”ÊƒRƒ}ƒ“ƒh
+	//ä¸€èˆ¬ã‚³ãƒãƒ³ãƒ‰
 	else if (ExeCmdListBox(lp, CmdStr)) {
 		;
 	}
-	//‰EƒNƒŠƒbƒNƒƒjƒ…[
+	//å³ã‚¯ãƒªãƒƒã‚¯ãƒ¡ãƒ‹ãƒ¥ãƒ¼
 	else if (contained_wd_i(KeysStr_Popup, KeyStr)) {
 		show_PopupMenu(lp);
 	}
-	//“ª•¶šƒT[ƒ`
+	//é ­æ–‡å­—ã‚µãƒ¼ãƒ
 	else if (!IsIncSea && is_IniSeaKey(KeyStr)) {
 		ListBoxInitialSearch(LaunchListBox, KeyStr);
 	}
@@ -1846,12 +1846,12 @@ void __fastcall TAppListDlg::LaunchListBoxDblClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒgƒbƒvƒfƒBƒŒƒNƒgƒŠ‚ğİ’è
+//ãƒˆãƒƒãƒ—ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::SelLaunhDirItemClick(TObject *Sender)
 {
 	UnicodeString dnam = CurLaunchPath;
-	if (UserModule->SelectDirEx(_T("ƒ‰ƒ“ƒ`ƒƒ[‚ÌƒgƒbƒvƒfƒBƒŒƒNƒgƒŠ‚ğİ’è"), dnam)) {
+	if (UserModule->SelectDirEx(_T("ãƒ©ãƒ³ãƒãƒ£ãƒ¼ã®ãƒˆãƒƒãƒ—ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’è¨­å®š"), dnam)) {
 		CurLaunchPath = LaunchPath = to_path_name(dnam);
 		UpdateLaunchList();
 	}
@@ -1862,7 +1862,7 @@ void __fastcall TAppListDlg::DirPanelDblClick(TObject *Sender)
 	SelLaunhDirItem->Click();
 }
 //---------------------------------------------------------------------------
-//‚±‚ÌƒfƒBƒŒƒNƒgƒŠ‚ÉˆÚ“®
+//ã“ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã«ç§»å‹•
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::JumpLaunchDirItemClick(TObject *Sender)
 {
@@ -1876,7 +1876,7 @@ void __fastcall TAppListDlg::JumpLaunchDirItemClick(TObject *Sender)
 	ModalResult  = mrOk;
 }
 //---------------------------------------------------------------------------
-//ƒŠƒ“ƒNæ‚ÉˆÚ“®
+//ãƒªãƒ³ã‚¯å…ˆã«ç§»å‹•
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::JumpLinkedActionExecute(TObject *Sender)
 {
@@ -1893,7 +1893,7 @@ void __fastcall TAppListDlg::JumpLinkedActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = (cfp && test_LnkExt(cfp->f_ext));
 }
 //---------------------------------------------------------------------------
-//ƒ‰ƒ“ƒ`ƒƒ[‚Ì•\¦ˆÊ’u
+//ãƒ©ãƒ³ãƒãƒ£ãƒ¼ã®è¡¨ç¤ºä½ç½®
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::LaunchPosItemClick(TObject *Sender)
 {
@@ -1901,7 +1901,7 @@ void __fastcall TAppListDlg::LaunchPosItemClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒHƒ‹ƒ_ƒAƒCƒRƒ“‚Åƒ\[ƒg
+//ãƒ•ã‚©ãƒ«ãƒ€ã‚¢ã‚¤ã‚³ãƒ³ã§ã‚½ãƒ¼ãƒˆ
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::SortByIconActionExecute(TObject *Sender)
 {
@@ -1916,7 +1916,7 @@ void __fastcall TAppListDlg::SortByIconActionUpdate(TObject *Sender)
 	ap->Checked = SortByIcon;
 }
 //---------------------------------------------------------------------------
-//ƒRƒƒ“ƒg‚Åƒ\[ƒg
+//ã‚³ãƒ¡ãƒ³ãƒˆã§ã‚½ãƒ¼ãƒˆ
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::SortByRemActionExecute(TObject *Sender)
 {
@@ -1932,7 +1932,7 @@ void __fastcall TAppListDlg::SortByRemActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒAƒCƒRƒ“‚ğXV
+//ã‚¢ã‚¤ã‚³ãƒ³ã‚’æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::UpdateIcoItemClick(TObject *Sender)
 {
@@ -1944,7 +1944,7 @@ void __fastcall TAppListDlg::UpdateIcoItemClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒvƒƒpƒeƒB
+//ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::PropertyItemClick(TObject *Sender)
 {
@@ -1956,11 +1956,11 @@ void __fastcall TAppListDlg::PropertyItemClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//“ü—Í—“‚Ì•`‰æ
+//å…¥åŠ›æ¬„ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TAppListDlg::InpPaintBoxPaint(TObject *Sender)
 {
-	draw_InputPaintBox((TPaintBox*)Sender, (IsMigemo? "Migemo: " : "ƒtƒBƒ‹ƒ^: ") + IncSeaWord);
+	draw_InputPaintBox((TPaintBox*)Sender, (IsMigemo? "Migemo: " : "ãƒ•ã‚£ãƒ«ã‚¿: ") + IncSeaWord);
 }
 //---------------------------------------------------------------------------
 

@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  XMLƒrƒ…[ƒA															//
+//  XMLãƒ“ãƒ¥ãƒ¼ã‚¢															//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -42,7 +42,7 @@ void __fastcall TXmlViewer::FormShow(TObject *Sender)
 	AssignScaledFont(XmlTreeView, ListFont);
 	AssignScaledFont(StatusBar1, SttBarFont);
 
-	Caption = yen_to_delimiter(FileName) + " - XMLƒrƒ…[ƒA";
+	Caption = yen_to_delimiter(FileName) + " - XMLãƒ“ãƒ¥ãƒ¼ã‚¢";
 
 	::PostMessage(Handle, WM_FORM_SHOWED, 0, 0);
 }
@@ -56,11 +56,11 @@ void __fastcall TXmlViewer::WmFormShowed(TMessage &msg)
 	XmlTreeView->LockDrawing();
 	try {
 		XmlTreeView->SetFocus();
-		//XMLƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ
+		//XMLãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿
 		XMLDocument1->Options = XMLDocument1->Options >> doAutoPrefix;
 		XMLDocument1->LoadFromFile(FileName);
 
-		//Å‰‚ÉéŒ¾‚³‚ê‚½–¼‘O‹óŠÔ‚ÌƒŠƒXƒg‚ğæ“¾
+		//æœ€åˆã«å®£è¨€ã•ã‚ŒãŸåå‰ç©ºé–“ã®ãƒªã‚¹ãƒˆã‚’å–å¾—
 		XmlnsList->Clear();
 		_di_IXMLNode XMLNode = XMLDocument1->Node;
 		for (int i=0; i<XMLNode->ChildNodes->Count; i++) {
@@ -79,7 +79,7 @@ void __fastcall TXmlViewer::WmFormShowed(TMessage &msg)
 			break;
 		}
 
-		//ƒcƒŠ[ƒrƒ…[‚ÉŠ„‚è“–‚Ä
+		//ãƒ„ãƒªãƒ¼ãƒ“ãƒ¥ãƒ¼ã«å‰²ã‚Šå½“ã¦
 		AssignView(NULL, XMLDocument1->Node);
 		TTreeNode *TopNode = XmlTreeView->Items->GetFirstNode();
 		TopNode->Selected  = true;
@@ -124,7 +124,7 @@ void __fastcall TXmlViewer::FormKeyDown(TObject *Sender, WORD &Key, TShiftState 
 	SpecialKeyProc(this, Key, Shift);
 }
 //---------------------------------------------------------------------------
-//ViewBusy ƒvƒƒpƒeƒB
+//ViewBusy ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 //---------------------------------------------------------------------------
 void __fastcall TXmlViewer::SetViewBusy(bool Value)
 {
@@ -132,7 +132,7 @@ void __fastcall TXmlViewer::SetViewBusy(bool Value)
 
 	if (Value) {
 		cursor_HourGlass();
-		StatusBar1->Panels->Items[0]->Text = "ˆ—’†...";	StatusBar1->Repaint();
+		StatusBar1->Panels->Items[0]->Text = "å‡¦ç†ä¸­...";	StatusBar1->Repaint();
 	}
 	else {
 		StatusBar1->Panels->Items[0]->Text = GetXPath();
@@ -141,25 +141,25 @@ void __fastcall TXmlViewer::SetViewBusy(bool Value)
 }
 
 //---------------------------------------------------------------------------
-//ƒcƒŠ[ƒrƒ…[‚ÉŠ„‚è“–‚Ä
+//ãƒ„ãƒªãƒ¼ãƒ“ãƒ¥ãƒ¼ã«å‰²ã‚Šå½“ã¦
 //---------------------------------------------------------------------------
 void __fastcall TXmlViewer::AssignView(TTreeNode *TreeNode, _di_IXMLNode XMLNode)
 {
 	TTreeNode *Node;
 
 	if (XMLNode->NodeType==ntText) {
-		//’l
-		Node = XmlTreeView->Items->AddChildObject(TreeNode, XMLNode->NodeValue, (void*)0);	//0=’l
+		//å€¤
+		Node = XmlTreeView->Items->AddChildObject(TreeNode, XMLNode->NodeValue, (void*)0);	//0=å€¤
 		Node->ImageIndex	= 0;
 		Node->SelectedIndex = 0;
 	}
 	else {
 		UnicodeString lbuf;
-		//ƒm[ƒh–¼/‘®«ƒ‚[ƒh
+		//ãƒãƒ¼ãƒ‰å/å±æ€§ãƒ¢ãƒ¼ãƒ‰
 		if (ViewMode<2) {
-			//–¼‘O
+			//åå‰
 			lbuf = XMLNode->NodeName;
-			//‘®«
+			//å±æ€§
 			if (ViewMode==1) {
 				_di_IXMLNodeList atrs = XMLNode->AttributeNodes;
 				if (atrs && atrs->Count>0) {
@@ -168,7 +168,7 @@ void __fastcall TXmlViewer::AssignView(TTreeNode *TreeNode, _di_IXMLNode XMLNode
 				}
 			}
 		}
-		//XMLƒ‚[ƒh
+		//XMLãƒ¢ãƒ¼ãƒ‰
 		else {
 			if (!TreeNode) {
 				lbuf = XMLNode->NodeName;
@@ -176,7 +176,7 @@ void __fastcall TXmlViewer::AssignView(TTreeNode *TreeNode, _di_IXMLNode XMLNode
 			else {
 				lbuf = get_tkn(XMLNode->XML, "\r\n");
 				if (lbuf.Pos('>')) lbuf = get_tkn(lbuf, '>') + ">";
-				//•s—v‚È xmlns ‚ğíœ
+				//ä¸è¦ãª xmlns ã‚’å‰Šé™¤
 				if (XmlnsList->Count>0 && TreeNode && TreeNode->Level>0) {
 					for (int i=0; i<XmlnsList->Count; i++)
 						lbuf = ReplaceStr(lbuf, XmlnsList->Strings[i], EmptyStr);
@@ -184,7 +184,7 @@ void __fastcall TXmlViewer::AssignView(TTreeNode *TreeNode, _di_IXMLNode XMLNode
 			}
 		}
 
-		Node = XmlTreeView->Items->AddChildObject(TreeNode, lbuf, (void*)1);	//1=ƒm[ƒh
+		Node = XmlTreeView->Items->AddChildObject(TreeNode, lbuf, (void*)1);	//1=ãƒãƒ¼ãƒ‰
 		Node->ImageIndex	= 1;
 		Node->SelectedIndex = 1;
 	}
@@ -193,7 +193,7 @@ void __fastcall TXmlViewer::AssignView(TTreeNode *TreeNode, _di_IXMLNode XMLNode
 }
 
 //---------------------------------------------------------------------------
-//ƒm[ƒh‚ÌƒpƒX‚ğæ“¾
+//ãƒãƒ¼ãƒ‰ã®ãƒ‘ã‚¹ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString __fastcall TXmlViewer::GetXPath(TTreeNode *Node)
 {
@@ -218,7 +218,7 @@ UnicodeString __fastcall TXmlViewer::GetXPath(TTreeNode *Node)
 	return ret_str;
 }
 //---------------------------------------------------------------------------
-//w’èƒpƒX‚ÌXMLƒ\[ƒX‚ğæ“¾
+//æŒ‡å®šãƒ‘ã‚¹ã®XMLã‚½ãƒ¼ã‚¹ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString __fastcall TXmlViewer::GetXmlStr()
 {
@@ -233,7 +233,7 @@ UnicodeString __fastcall TXmlViewer::GetXmlStr()
 		for (int i=0; i<p_buf.Length && XMLNode; i++) XMLNode = XMLNode->ChildNodes->FindNode(p_buf[i]);
 		if (XMLNode) {
 			ret_str = XMLNode->XML;
-			//•s—v‚È xmlns ‚ğíœ
+			//ä¸è¦ãª xmlns ã‚’å‰Šé™¤
 			if (XmlnsList->Count>0 && p_buf.Length>1) {
 				for (int i=0; i<XmlnsList->Count; i++) ret_str = ReplaceStr(ret_str, XmlnsList->Strings[i], EmptyStr);
 			}
@@ -243,7 +243,7 @@ UnicodeString __fastcall TXmlViewer::GetXmlStr()
 }
 
 //---------------------------------------------------------------------------
-//ƒm[ƒh‚ªŒŸõŒê‚Éƒ}ƒbƒ`‚·‚é‚©?
+//ãƒãƒ¼ãƒ‰ãŒæ¤œç´¢èªã«ãƒãƒƒãƒã™ã‚‹ã‹?
 //---------------------------------------------------------------------------
 bool __fastcall TXmlViewer::MatchNode(TTreeNode *Node)
 {
@@ -251,7 +251,7 @@ bool __fastcall TXmlViewer::MatchNode(TTreeNode *Node)
 
 	UnicodeString lbuf = Node->Text;
 	UnicodeString s;
-	//ƒm[ƒh
+	//ãƒãƒ¼ãƒ‰
 	if ((int)Node->Data==1) {
 		if (NamCheckBox->Checked) {
 			if (ViewMode==2)
@@ -266,7 +266,7 @@ bool __fastcall TXmlViewer::MatchNode(TTreeNode *Node)
 				s.cat_sprintf(_T(" %s"), get_tkn_r(lbuf, " [").c_str());
 		}
 	}
-	//’l
+	//å€¤
 	else {
 		if (ValCheckBox->Checked) s += lbuf;
 	}
@@ -275,7 +275,7 @@ bool __fastcall TXmlViewer::MatchNode(TTreeNode *Node)
 }
 
 //---------------------------------------------------------------------------
-//ƒŠƒXƒgƒrƒ…[‚Ì•`‰æ
+//ãƒªã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TXmlViewer::XmlTreeViewCustomDrawItem(TCustomTreeView *Sender, TTreeNode *Node,
 	TCustomDrawState State, bool &DefaultDraw)
@@ -288,17 +288,17 @@ void __fastcall TXmlViewer::XmlTreeViewCustomDrawItem(TCustomTreeView *Sender, T
 	if (rc_t.Left==0 || rc_t.Width()<=0 || rc_t.Height()<=0) return;
 	TRect rc_s = Node->DisplayRect(false);
 	if (rc_s.Width()<=0 || rc_s.Height()<=0) return;
-	//¦ƒXƒP[ƒŠƒ“ƒO‚ÌˆÙ‚È‚éƒ‚ƒjƒ^ŠÔ‚Å‚ÌˆÚ“®‚ÉAˆÙí’l‚É‚È‚éê‡‚ª‚ ‚é‚±‚Æ‚Ö‚Ì‘Îô
+	//â€»ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°ã®ç•°ãªã‚‹ãƒ¢ãƒ‹ã‚¿é–“ã§ã®ç§»å‹•æ™‚ã«ã€ç•°å¸¸å€¤ã«ãªã‚‹å ´åˆãŒã‚ã‚‹ã“ã¨ã¸ã®å¯¾ç­–
 
 	TTreeView *vp = XmlTreeView;
 	TCanvas *cv   = vp->Canvas;
 	cv->Brush->Color = Node->Selected? col_selItem : get_ListBgCol();
 	cv->FillRect(rc_s);
 
-	//ƒeƒLƒXƒg
+	//ãƒ†ã‚­ã‚¹ãƒˆ
 	UnicodeString lbuf = Node->Text;
 
-	//¦Sender->Canvas ‚¾‚ÆƒtƒHƒ“ƒgF‚ğ“r’†‚Å•ÏX‚µ‚Ä‚àŒø‚©‚È‚¢‚æ‚¤‚È‚Ì‚Åˆê’Uƒoƒbƒtƒ@‚É•`‰æ
+	//â€»Sender->Canvas ã ã¨ãƒ•ã‚©ãƒ³ãƒˆè‰²ã‚’é€”ä¸­ã§å¤‰æ›´ã—ã¦ã‚‚åŠ¹ã‹ãªã„ã‚ˆã†ãªã®ã§ä¸€æ—¦ãƒãƒƒãƒ•ã‚¡ã«æç”»
 	std::unique_ptr<Graphics::TBitmap> tmp_bmp(new Graphics::TBitmap());
 	tmp_bmp->SetSize(cv->TextWidth(lbuf) + SCALED_THIS(4), rc_t.Height());
 
@@ -311,16 +311,16 @@ void __fastcall TXmlViewer::XmlTreeViewCustomDrawItem(TCustomTreeView *Sender, T
 	bool is_selfg = (Node->Selected && col_fgSelItem!=col_None);
 
 	int ntyp = (int)Node->Data;
-	//ƒm[ƒh
+	//ãƒãƒ¼ãƒ‰
 	if (ntyp==1) {
 		int xp = 0;
-		//ƒm[ƒh–¼/‘®«ƒ‚[ƒh
+		//ãƒãƒ¼ãƒ‰å/å±æ€§ãƒ¢ãƒ¼ãƒ‰
 		if (ViewMode<2) {
-			//–¼‘O
+			//åå‰
 			tmp_cv->Font->Color = is_selfg? col_fgSelItem : col_Reserved;
 			UnicodeString nnam = split_tkn(lbuf, ' ');
 			tmp_cv->TextOut(xp, 0, nnam);
-			//‘®«
+			//å±æ€§
 			if (!lbuf.IsEmpty()) {
 				xp += tmp_cv->TextWidth(nnam);
 				lbuf.Insert(" ", 1);
@@ -347,15 +347,15 @@ void __fastcall TXmlViewer::XmlTreeViewCustomDrawItem(TCustomTreeView *Sender, T
 				}
 			}
 		}
-		//XMLƒ‚[ƒh
+		//XMLãƒ¢ãƒ¼ãƒ‰
 		else {
-			//ƒRƒƒ“ƒg
+			//ã‚³ãƒ¡ãƒ³ãƒˆ
 			if (StartsStr("<!--", lbuf)) {
 				tmp_cv->Font->Color = is_selfg? col_fgSelItem : col_Comment;
 				tmp_cv->TextOut(xp, 0, lbuf);
 			}
 			else {
-				//–¼‘O
+				//åå‰
 				bool in_qt	= false;
 				TColor fg = col_Reserved;
 				UnicodeString s;
@@ -389,28 +389,28 @@ void __fastcall TXmlViewer::XmlTreeViewCustomDrawItem(TCustomTreeView *Sender, T
 			}
 		}
 	}
-	//’l
+	//å€¤
 	else if (ntyp==0) {
 		tmp_cv->Font->Color = is_selfg? col_fgSelItem :
 					(StartsStr("http", lbuf) && TRegEx::Match(lbuf, URL_MATCH_PTN).Success)? col_URL : get_ListFgCol();
 		tmp_cv->TextOut(0, 0, lbuf);
 	}
-	//ƒGƒ‰[
+	//ã‚¨ãƒ©ãƒ¼
 	else {
 		tmp_cv->Font->Color = col_Error;
 		tmp_cv->TextOut(0, 0, lbuf);
 	}
 
 	if (State.Contains(cdsSelected)) tmp_cv->DrawFocusRect(tmp_rc);
-	//•`‰æ
+	//æç”»
 	cv->Draw(rc_t.Left, rc_t.Top, tmp_bmp.get());
 
-	//‰¡ƒXƒNƒ[ƒ‹ˆÊ’u‚ğæ“¾
+	//æ¨ªã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä½ç½®ã‚’å–å¾—
 	int scr_p = 0;
 	SCROLLINFO si = {sizeof(SCROLLINFO), SIF_TRACKPOS};
 	if (::GetScrollInfo(vp->Handle, SB_HORZ, &si)) scr_p = si.nTrackPos;
 
-	//eƒ‰ƒCƒ“
+	//è¦ªãƒ©ã‚¤ãƒ³
 	cv->Pen->Style = psSolid;
 	cv->Pen->Width = SCALED_THIS(1);
 	cv->Pen->Color = col_HR;
@@ -429,28 +429,28 @@ void __fastcall TXmlViewer::XmlTreeViewCustomDrawItem(TCustomTreeView *Sender, T
 		pp = pp->Parent;
 	}
 
-	//ƒvƒ‰ƒX/ƒ}ƒCƒiƒXƒ{ƒ^ƒ“
+	//ãƒ—ãƒ©ã‚¹/ãƒã‚¤ãƒŠã‚¹ãƒœã‚¿ãƒ³
 	if (Node->HasChildren) {
 		cv->Pen->Color	 = col_HR;
 		cv->Brush->Color = col_HR;
-		int w_btn = SCALED_THIS(11);	//ƒ{ƒ^ƒ“ƒTƒCƒY
+		int w_btn = SCALED_THIS(11);	//ãƒœã‚¿ãƒ³ã‚µã‚¤ã‚º
 		int xp = rc_s.Right - SCALED_THIS(16);
 		int yp = rc_s.Top + (rc_s.Height() - w_btn)/2;
 		if ((xp + w_btn)>=0) {
 			int s_2 = SCALED_THIS(2);
-			//˜g
+			//æ 
 			cv->FrameRect(Rect (xp, yp, xp + w_btn, yp + w_btn));
-			//‰¡–_
+			//æ¨ªæ£’
 			cv->MoveTo(xp + s_2, yp + w_btn/2);
 			cv->LineTo(xp + w_btn - s_2, yp + w_btn/2);
-			//c–_
+			//ç¸¦æ£’
 			if (!Node->Expanded) {
 				cv->MoveTo(xp + w_btn/2, yp + s_2);
 				cv->LineTo(xp + w_btn/2, yp + w_btn - s_2);
 			}
 		}
 	}
-	//qƒ‰ƒCƒ“
+	//å­ãƒ©ã‚¤ãƒ³
 	else if (Node->Level>0) {
 		cv->Pen->Color = col_HR;
 		int xl = XmlTreeView->Indent * Node->Level + l_ofs - scr_p;
@@ -476,7 +476,7 @@ void __fastcall TXmlViewer::XmlTreeViewChange(TObject *Sender, TTreeNode *Node)
 	StatusBar1->Panels->Items[0]->Text = !ErrMsg.IsEmpty()? ErrMsg : GetXPath(Node);
 }
 //---------------------------------------------------------------------------
-//ƒL[‘€ì
+//ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TXmlViewer::XmlTreeViewKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -485,7 +485,7 @@ void __fastcall TXmlViewer::XmlTreeViewKeyDown(TObject *Sender, WORD &Key, TShif
 	UnicodeString cmd_V  = Key_to_CmdV(KeyStr);
 
 	TTreeNode *sp = XmlTreeView->Selected;
-	//ˆÚ“®
+	//ç§»å‹•
 	if		(SameText(cmd_F, "CursorDown") || SameText(cmd_V, "CursorDown"))	perform_Key(XmlTreeView, VK_DOWN);
 	else if (SameText(cmd_F, "CursorUp")   || SameText(cmd_V, "CursorUp"))		perform_Key(XmlTreeView, VK_UP);
 	else if (SameText(cmd_F, "PageDown")   || SameText(cmd_V, "PageDown"))		perform_Key(XmlTreeView, VK_NEXT);
@@ -493,7 +493,7 @@ void __fastcall TXmlViewer::XmlTreeViewKeyDown(TObject *Sender, WORD &Key, TShif
 	else if (SameText(cmd_F, "CursorTop")  || SameText(cmd_V, "TextTop"))		perform_Key(XmlTreeView, VK_HOME);
 	else if (SameText(cmd_F, "CursorEnd")  || SameText(cmd_V, "TextEnd"))		perform_Key(XmlTreeView, VK_END);
 
-	//ŠJ•Â
+	//é–‹é–‰
 	else if (equal_ENTER(KeyStr)) {
 		if (sp) {
 			if (sp->HasChildren) {
@@ -520,7 +520,7 @@ void __fastcall TXmlViewer::XmlTreeViewKeyDown(TObject *Sender, WORD &Key, TShif
 			else OpenUrlAction->Execute();
 		}
 	}
-	//ŒŸõ
+	//æ¤œç´¢
 	else if (SameText(cmd_F, "FindDown") || SameText(KeyStr, "F3")) {
 		FindDownAction->Execute();
 	}
@@ -530,7 +530,7 @@ void __fastcall TXmlViewer::XmlTreeViewKeyDown(TObject *Sender, WORD &Key, TShif
 	else if (StartsText("IncSearch", cmd_F) || contained_wd_i(KeysStr_Filter, KeyStr)) {
 		FindEdit->SetFocus();
 	}
-	//•Â‚¶‚é
+	//é–‰ã˜ã‚‹
 	else if (SameText(cmd_F, "ReturnList")) {
 		ModalResult = mrCancel;
 	}
@@ -551,7 +551,7 @@ void __fastcall TXmlViewer::XmlTreeViewHint(TObject *Sender, TTreeNode * const N
 	Hint = EmptyStr;
 }
 //---------------------------------------------------------------------------
-//‚·‚×‚Ä“WŠJ
+//ã™ã¹ã¦å±•é–‹
 //---------------------------------------------------------------------------
 void __fastcall TXmlViewer::ExpandItemClick(TObject *Sender)
 {
@@ -563,14 +563,14 @@ void __fastcall TXmlViewer::ExpandItemClick(TObject *Sender)
 	ViewBusy = false;
 }
 //---------------------------------------------------------------------------
-//‚·‚×‚Äô‚Ş
+//ã™ã¹ã¦ç•³ã‚€
 //---------------------------------------------------------------------------
 void __fastcall TXmlViewer::CollapseItemClick(TObject *Sender)
 {
 	XmlTreeView->FullCollapse();
 }
 //---------------------------------------------------------------------------
-//ƒRƒs[
+//ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TXmlViewer::CopyActionExecute(TObject *Sender)
 {
@@ -584,7 +584,7 @@ void __fastcall TXmlViewer::CopyActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//XMLƒ\[ƒX‚ğƒRƒs[
+//XMLã‚½ãƒ¼ã‚¹ã‚’ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TXmlViewer::CopyXmlActionExecute(TObject *Sender)
 {
@@ -599,7 +599,7 @@ void __fastcall TXmlViewer::CopyXmlActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//XPath ‚ğƒRƒs[
+//XPath ã‚’ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TXmlViewer::CopyXPathActionExecute(TObject *Sender)
 {
@@ -613,7 +613,7 @@ void __fastcall TXmlViewer::CopyXPathActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//URL‚ğŠJ‚­
+//URLã‚’é–‹ã
 //---------------------------------------------------------------------------
 void __fastcall TXmlViewer::OpenUrlActionExecute(TObject *Sender)
 {
@@ -627,7 +627,7 @@ void __fastcall TXmlViewer::OpenUrlActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//•\¦ƒ‚[ƒh
+//è¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰
 //---------------------------------------------------------------------------
 void __fastcall TXmlViewer::PopupMenu1Popup(TObject *Sender)
 {
@@ -653,7 +653,7 @@ void __fastcall TXmlViewer::ViewModeItemClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//‰º•ûŒü‚ÉŒŸõ
+//ä¸‹æ–¹å‘ã«æ¤œç´¢
 //---------------------------------------------------------------------------
 void __fastcall TXmlViewer::FindDownActionExecute(TObject *Sender)
 {
@@ -669,7 +669,7 @@ void __fastcall TXmlViewer::FindDownActionExecute(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//ã•ûŒü‚ÉŒŸõ
+//ä¸Šæ–¹å‘ã«æ¤œç´¢
 //---------------------------------------------------------------------------
 void __fastcall TXmlViewer::FindUpActionExecute(TObject *Sender)
 {
@@ -694,7 +694,7 @@ void __fastcall TXmlViewer::FindActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//“WŠJ
+//å±•é–‹
 //---------------------------------------------------------------------------
 void __fastcall TXmlViewer::ExpandActionExecute(TObject *Sender)
 {
@@ -711,7 +711,7 @@ void __fastcall TXmlViewer::ExpandActionExecute(TObject *Sender)
 	ViewBusy = false;
 }
 //---------------------------------------------------------------------------
-//ô‚Ş
+//ç•³ã‚€
 //---------------------------------------------------------------------------
 void __fastcall TXmlViewer::CollapseActionExecute(TObject *Sender)
 {
@@ -727,7 +727,7 @@ void __fastcall TXmlViewer::CollapseActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//©“®ŠJ•Â
+//è‡ªå‹•é–‹é–‰
 //---------------------------------------------------------------------------
 void __fastcall TXmlViewer::AutoActionExecute(TObject *Sender)
 {

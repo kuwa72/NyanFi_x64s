@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒtƒ@ƒCƒ‹î•ñ/€–Ú‚ÌWŒv												//
+//  ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±/é …ç›®ã®é›†è¨ˆ												//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "Global.h"
@@ -109,7 +109,7 @@ void __fastcall TFileInfoDlg::FormKeyDown(TObject *Sender, WORD &Key, TShiftStat
 		SpecialKeyProc(this, Key, Shift, _T(HELPTOPIC_FL) _T("#ShowFileInfo"));
 }
 //---------------------------------------------------------------------------
-//w’èƒtƒ@ƒCƒ‹‚Ìî•ñ•\¦ (‘OŒãˆÚ“®‹Ö~)
+//æŒ‡å®šãƒ•ã‚¡ã‚¤ãƒ«ã®æƒ…å ±è¡¨ç¤º (å‰å¾Œç§»å‹•ç¦æ­¢)
 //---------------------------------------------------------------------------
 int __fastcall TFileInfoDlg::ShowModalEx(UnicodeString fnam)
 {
@@ -127,7 +127,7 @@ int __fastcall TFileInfoDlg::ShowModalEx(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚ÌXV
+//ä¸€è¦§ã®æ›´æ–°
 //---------------------------------------------------------------------------
 int __fastcall comp_ObjLD(TStringList *List, int Index1, int Index2)
 {
@@ -144,39 +144,39 @@ bool __fastcall TFileInfoDlg::UpdateInfo()
 	TListBox *lp = InfListBox;
 
 	if (isAppInfo) {
-		set_FormTitle(this, _T("ƒAƒvƒŠƒP[ƒVƒ‡ƒ“î•ñ"));
+		set_FormTitle(this, _T("ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±"));
 		assign_InfListBox(lp, ItemList, ListScrPanel);
 		return true;
 	}
 
 	if (isGitInfo) {
-		set_FormTitle(this, _T("ƒRƒ~ƒbƒgî•ñ"));
+		set_FormTitle(this, _T("ã‚³ãƒŸãƒƒãƒˆæƒ…å ±"));
 		assign_InfListBox(lp, ItemList, ListScrPanel);
 		return true;
 	}
 
-	//€–Ú‚ÌWŒv
+	//é …ç›®ã®é›†è¨ˆ
 	if (isCalcItem) {
 		try {
 			if (!DataList) Abort();
 			UnicodeString top_str = DataList->Strings[0];
 			bool IsCSV = !ContainsStr(top_str, "\t");
-			set_FormTitle(this, IsCSV? _T("CSV€–Ú‚ÌWŒv") : _T("TSV€–Ú‚ÌWŒv"));
+			set_FormTitle(this, IsCSV? _T("CSVé …ç›®ã®é›†è¨ˆ") : _T("TSVé …ç›®ã®é›†è¨ˆ"));
 			TStringDynArray top_buf = IsCSV? get_csv_array(top_str, 99) : split_strings_tab(top_str);
 			if (CsvCol==-1) CsvCol = 0;
 			if (CsvCol>=top_buf.Length) Abort();
 
-			//€–Ú–¼
+			//é …ç›®å
 			UnicodeString i_nam;
 			if (TopIsHeader)
 				i_nam = IsCSV? get_csv_item(top_str, CsvCol) : get_tsv_item(top_str, CsvCol);
 			else
-				i_nam.sprintf(_T("€–Ú%u"), CsvCol + 1);
+				i_nam.sprintf(_T("é …ç›®%u"), CsvCol + 1);
 
 			long double total = 0.0;
 			long double i_max = 0, i_min = 0;
-			int f_w = 0;	//¬”•”‚Ì•\¦Œ…”
-			std::unique_ptr<TStringList> s_lst(new TStringList());	//—LŒø‚È”’l€–Ú‚ÌƒŠƒXƒg
+			int f_w = 0;	//å°æ•°éƒ¨ã®è¡¨ç¤ºæ¡æ•°
+			std::unique_ptr<TStringList> s_lst(new TStringList());	//æœ‰åŠ¹ãªæ•°å€¤é …ç›®ã®ãƒªã‚¹ãƒˆ
 			for (int i=(TopIsHeader? 1 : 0); i<DataList->Count; i++) {
 				UnicodeString lbuf = DataList->Strings[i];
 				UnicodeString istr = extract_top_num_str(IsCSV? get_csv_item(lbuf, CsvCol) : get_tsv_item(lbuf, CsvCol));
@@ -207,28 +207,28 @@ bool __fastcall TFileInfoDlg::UpdateInfo()
 			int i_cnt = s_lst->Count;
 			if (i_cnt==0) Abort();
 
-			//•½‹Ï’l
+			//å¹³å‡å€¤
 			long double i_ave = total/i_cnt;
-			//’†‰›’l
+			//ä¸­å¤®å€¤
 			s_lst->CustomSort(comp_ObjLD);
 			long double i_med = (i_cnt%2==1)?
 		 		*(long double*)s_lst->Objects[(i_cnt - 1) / 2] :
 				(*(long double*)s_lst->Objects[i_cnt/2 - 1] + *(long double*)s_lst->Objects[i_cnt/2]) /2;
-			//•ªU
+			//åˆ†æ•£
 			long double sum = 0;
 			for (int i=0; i<s_lst->Count; i++) {
 				long double v = *(long double*)s_lst->Objects[i];
 				sum += (v - i_ave) * (v - i_ave);
 			}
 			long double i_var = sum/i_cnt;
-			//•W€•Î·
+			//æ¨™æº–åå·®
 			long double i_std = sqrtl(i_var);
 
-			//ŠK‹‰”(ƒXƒ^[ƒWƒFƒX‚ÌŒö®)
+			//éšç´šæ•°(ã‚¹ã‚¿ãƒ¼ã‚¸ã‚§ã‚¹ã®å…¬å¼)
 			int k = 1 + (int)(log10l(i_cnt)/log10l(2) + 0.5);
-			//ŠK‹‰•
+			//éšç´šå¹…
 			long double d = (i_max - i_min)/k;
-			//“x”•ª•z
+			//åº¦æ•°åˆ†å¸ƒ
 			std::unique_ptr<int[]> freq(new int[k]);
 			std::unique_ptr<TStringList> f_lst(new TStringList());
 			for (int i = 0; i < k; i++) freq[i] = 0;
@@ -254,14 +254,14 @@ bool __fastcall TFileInfoDlg::UpdateInfo()
 				int f_sum = 0;
 				for (int i=0; i<k; i++) {
 					UnicodeString s0, s1, s2;
-					//ŠK‹‰‰ºŒÀ’l
+					//éšç´šä¸‹é™å€¤
 					long double lmt = i_min + d * i;
 					if (f_w==0) lmt = floorl(lmt + 0.5);
-					s0.sprintf(_T("%s`"), ldouble_to_str(lmt, f_w).c_str());
-					//“x”
+					s0.sprintf(_T("%sï½"), ldouble_to_str(lmt, f_w).c_str());
+					//åº¦æ•°
 					s1 = IntToStr(freq[i]);
 					f_sum += freq[i];
-					//—İÏ‘Š‘Î“x”
+					//ç´¯ç©ç›¸å¯¾åº¦æ•°
 					s2.sprintf(_T("%.3f"), 1.0*f_sum/i_cnt);
 					f_lst->Add(s0 + "\t" + s1 + "\t" + s2);
 					MaxColWd0 = std::max(MaxColWd0, cv->TextWidth(s0));
@@ -270,44 +270,44 @@ bool __fastcall TFileInfoDlg::UpdateInfo()
 				}
 			}
 
-			//’l‚Ì‰ğ•ú
+			//å€¤ã®è§£æ”¾
 			for (int i=0; i<s_lst->Count; i++) delete (long double*)s_lst->Objects[i];
 
-			//Œ‹‰Ê•\¦
+			//çµæœè¡¨ç¤º
 			std::unique_ptr<TStringList> i_lst(new TStringList());
 			UnicodeString tmp;
 			FreqIndex = 0;
-			add_PropLine(_T("€–Ú–¼"),		i_nam,	i_lst.get());
+			add_PropLine(_T("é …ç›®å"),		i_nam,	i_lst.get());
 			i_lst->Add(EmptyStr);
-			add_PropLine(_T("—LŒø€–Ú”"),	i_cnt,	i_lst.get());
-			add_PropLine(_T("‡Œv’l"),		ldouble_to_str(total, f_w),	i_lst.get());
-			add_PropLine(_T("Å¬’l"),		ldouble_to_str(i_min, f_w),	i_lst.get());
-			add_PropLine(_T("Å‘å’l"),		ldouble_to_str(i_max, f_w),	i_lst.get());
+			add_PropLine(_T("æœ‰åŠ¹é …ç›®æ•°"),	i_cnt,	i_lst.get());
+			add_PropLine(_T("åˆè¨ˆå€¤"),		ldouble_to_str(total, f_w),	i_lst.get());
+			add_PropLine(_T("æœ€å°å€¤"),		ldouble_to_str(i_min, f_w),	i_lst.get());
+			add_PropLine(_T("æœ€å¤§å€¤"),		ldouble_to_str(i_max, f_w),	i_lst.get());
 			i_lst->Add(EmptyStr);
-			add_PropLine(_T("•½‹Ï’l"),		ldouble_to_str(i_ave, f_w + 1),	i_lst.get());
-			add_PropLine(_T("’†‰›’l"),		ldouble_to_str(i_med, f_w),		i_lst.get());
-			add_PropLine(_T("•ªU"),		ldouble_to_str(i_var, f_w + 1),	i_lst.get());
-			add_PropLine(_T("•W€•Î·"),	ldouble_to_str(i_std, f_w + 1),	i_lst.get());
+			add_PropLine(_T("å¹³å‡å€¤"),		ldouble_to_str(i_ave, f_w + 1),	i_lst.get());
+			add_PropLine(_T("ä¸­å¤®å€¤"),		ldouble_to_str(i_med, f_w),		i_lst.get());
+			add_PropLine(_T("åˆ†æ•£"),		ldouble_to_str(i_var, f_w + 1),	i_lst.get());
+			add_PropLine(_T("æ¨™æº–åå·®"),	ldouble_to_str(i_std, f_w + 1),	i_lst.get());
 			if (f_lst->Count>0) {
 				i_lst->Add(EmptyStr);
-				FreqIndex = i_lst->Add(_T("“x”•ª•z"));
+				FreqIndex = i_lst->Add(_T("åº¦æ•°åˆ†å¸ƒ"));
 				i_lst->AddStrings(f_lst.get());
 			}
 			assign_InfListBox(lp, i_lst.get(), ListScrPanel);
 			return true;
 		}
 		catch (...) {
-			msgbox_ERR("—LŒø‚È”’l€–Ú‚ª‚ ‚è‚Ü‚¹‚ñ");
+			msgbox_ERR("æœ‰åŠ¹ãªæ•°å€¤é …ç›®ãŒã‚ã‚Šã¾ã›ã‚“");
 			return false;
 		}
 	}
 
-	//ƒtƒ@ƒCƒ‹î•ñ
+	//ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±
 	if (!FileRec) FileRec = NyanFiForm->GetCurFrecPtr(false, true);
 	if (FileRec) {
 		cursor_HourGlass();
 
-		Caption = UnicodeString().sprintf(_T("%s ‚Ìî•ñ"), (FileRec->is_up? FileRec->p_name : FileRec->n_name).c_str());
+		Caption = UnicodeString().sprintf(_T("%s ã®æƒ…å ±"), (FileRec->is_up? FileRec->p_name : FileRec->n_name).c_str());
 
 		if (!FileRec->is_dir && FileRec->is_virtual && !FileRec->failed) FileRec->failed = !SetTmpFile(FileRec);
 		if (!FileRec->is_dummy && FileRec->inf_list->Count==0) GetFileInfList(FileRec, true);
@@ -318,34 +318,34 @@ bool __fastcall TFileInfoDlg::UpdateInfo()
 		if (i_lst->Count>=3) {
 			int idx = 0;
 			if (!FileRec->is_up) {
-				i_lst->Strings[idx] = make_PropLine(FileRec->is_dir? _T("ƒfƒBƒŒƒNƒgƒŠ–¼") : _T("ƒtƒ@ƒCƒ‹–¼"), i_lst->Strings[idx]);
+				i_lst->Strings[idx] = make_PropLine(FileRec->is_dir? _T("ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå") : _T("ãƒ•ã‚¡ã‚¤ãƒ«å"), i_lst->Strings[idx]);
 				i_lst->Objects[idx] = (TObject*)LBFLG_FILE_FIF;
 				idx++;
-				i_lst->Strings[idx] = make_PropLine(_T("êŠ"), i_lst->Strings[idx]);
+				i_lst->Strings[idx] = make_PropLine(_T("å ´æ‰€"), i_lst->Strings[idx]);
 				i_lst->Objects[idx] = (TObject*)LBFLG_PATH_FIF;
 			}
 			else {
 				i_lst->Delete(0);
-				i_lst->Strings[idx] = make_PropLine(_T("ƒfƒBƒŒƒNƒgƒŠ–¼"), i_lst->Strings[idx]);
+				i_lst->Strings[idx] = make_PropLine(_T("ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå"), i_lst->Strings[idx]);
 				i_lst->Objects[idx] = (TObject*)LBFLG_FILE_FIF;
 			}
 			idx++;
-			i_lst->Strings[idx] = make_PropLine(FileRec->is_ftp? "ƒp[ƒ~ƒbƒVƒ‡ƒ“" : "‘®«", FileRec->attr_str);
+			i_lst->Strings[idx] = make_PropLine(FileRec->is_ftp? "ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³" : "å±æ€§", FileRec->attr_str);
 			i_lst->Objects[idx] = (TObject*)LBFLG_ATTR_FIF;
 			idx++;
 
-			//ƒtƒ@ƒCƒ‹ƒTƒCƒY
+			//ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚º
 			if (!FileRec->is_dir) {
-				//ƒTƒCƒY
+				//ã‚µã‚¤ã‚º
 				if (FileRec->f_size>=0) {
 					i_lst->Insert(idx++,
-						get_PropTitle(_T("ƒTƒCƒY")).cat_sprintf(_T("%s (%s)"),
+						get_PropTitle(_T("ã‚µã‚¤ã‚º")).cat_sprintf(_T("%s (%s)"),
 							get_size_str_G(FileRec->f_size, 10, SizeDecDigits, 1).c_str(),
 							get_size_str_B(FileRec->f_size, 5).c_str()));
 				}
-				//è—LƒTƒCƒY
+				//å æœ‰ã‚µã‚¤ã‚º
 				if (!FileRec->is_virtual && !FileRec->is_ftp) {
-					int clu_sz = get_ClusterSize(FileRec->p_name);	//ƒNƒ‰ƒXƒ^ƒTƒCƒY
+					int clu_sz = get_ClusterSize(FileRec->p_name);	//ã‚¯ãƒ©ã‚¹ã‚¿ã‚µã‚¤ã‚º
 					if (clu_sz>0) {
 						__int64 o_size;
 						if (FileRec->is_dir)
@@ -357,7 +357,7 @@ bool __fastcall TFileInfoDlg::UpdateInfo()
 						}
 						if (o_size>=0) {
 							i_lst->Insert(idx++,
-								get_PropTitle(_T("è—LƒTƒCƒY")).cat_sprintf(_T("%s (%s)"),
+								get_PropTitle(_T("å æœ‰ã‚µã‚¤ã‚º")).cat_sprintf(_T("%s (%s)"),
 									get_size_str_G(o_size, 10, SizeDecDigits, 1).c_str(),
 									get_size_str_B(o_size, 5).c_str()));
 						}
@@ -365,9 +365,9 @@ bool __fastcall TFileInfoDlg::UpdateInfo()
 				}
 			}
 
-			//“ú
+			//æ—¥æ™‚
 			i_lst->InsertObject(idx++,
-				make_PropLine(_T("XV“ú"), format_DateTime(FileRec->f_time)), (TObject*)LBFLG_TIME_FIF);
+				make_PropLine(_T("æ›´æ–°æ—¥æ™‚"), format_DateTime(FileRec->f_time)), (TObject*)LBFLG_TIME_FIF);
 
 			if (!FileRec->is_virtual && !FileRec->is_ftp) {
 				HANDLE hFile = ::CreateFile(cv_ex_filename(FileRec->f_name).c_str(),
@@ -376,10 +376,10 @@ bool __fastcall TFileInfoDlg::UpdateInfo()
 					FILETIME c_tm, a_tm, w_tm, f_tm;
 					if (::GetFileTime(hFile, &c_tm, &a_tm, &w_tm)) {
 						i_lst->InsertObject(idx++,
-							make_PropLine(_T("ì¬“ú"), format_DateTime(utc_to_DateTime(&c_tm))),
+							make_PropLine(_T("ä½œæˆæ—¥æ™‚"), format_DateTime(utc_to_DateTime(&c_tm))),
 							(TObject*)LBFLG_TIME_FIF);
 						i_lst->InsertObject(idx++,
-							make_PropLine(_T("ƒAƒNƒZƒX“ú"), format_DateTime(utc_to_DateTime(&a_tm))),
+							make_PropLine(_T("ã‚¢ã‚¯ã‚»ã‚¹æ—¥æ™‚"), format_DateTime(utc_to_DateTime(&a_tm))),
 							(TObject*)LBFLG_TIME_FIF);
 					}
 					::CloseHandle(hFile);
@@ -391,7 +391,7 @@ bool __fastcall TFileInfoDlg::UpdateInfo()
 		cursor_Default();
 	}
 	else {
-		set_FormTitle(this, _T("ƒtƒ@ƒCƒ‹î•ñ"));
+		set_FormTitle(this, _T("ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±"));
 	}
 
 	ListScrPanel->UpdateKnob();
@@ -399,14 +399,14 @@ bool __fastcall TFileInfoDlg::UpdateInfo()
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚Ì•`‰æ
+//ä¸€è¦§ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TFileInfoDlg::InfListBoxDrawItem(TWinControl *Control, int Index,
 		TRect &Rect, TOwnerDrawState State)
 {
 	TListBox *lp = (TListBox*)Control;
 
-	//“x”•ª•z
+	//åº¦æ•°åˆ†å¸ƒ
 	if (isCalcItem && FreqIndex>0 && Index>=FreqIndex) {
 		TCanvas *cv = lp->Canvas;
 		cv->Font->Assign(lp->Font);
@@ -424,27 +424,27 @@ void __fastcall TFileInfoDlg::InfListBoxDrawItem(TWinControl *Control, int Index
 			cv->TextOut(xp, yp, itm_buf[0]);
 		}
 		else if (itm_buf.Length==3) {
-			//ŠK‹‰
+			//éšç´š
 			cv->Font->Color = use_fgsel? col_fgSelItem : get_InfFgCol();
 			cv->TextOut(xp + MaxColWd0 - cv->TextWidth(itm_buf[0]), yp, itm_buf[0]);
 			xp += MaxColWd0 + SCALED_THIS(8);
-			//‹æØ‚èü
+			//åŒºåˆ‡ã‚Šç·š
 			cv->Pen->Style = psSolid;
 			cv->Pen->Width = 1;
 			cv->Pen->Color = col_HR;
 			cv->MoveTo(xp, Rect.Top);  cv->LineTo(xp, Rect.Bottom);
-			//“x”
+			//åº¦æ•°
 			xp += SCALED_THIS(8);
 			int n = itm_buf[1].ToIntDef(0);
 			cv->TextOut(xp + MaxColWd1 - cv->TextWidth(itm_buf[1]), yp, itm_buf[1]);
 			xp += MaxColWd1 + SCALED_THIS(4);
 			cv->MoveTo(xp, Rect.Top);  cv->LineTo(xp, Rect.Bottom);
-			//—İÏ‘Š‘Î“x”
+			//ç´¯ç©ç›¸å¯¾åº¦æ•°
 			xp += SCALED_THIS(8);
 			cv->TextOut(xp + MaxColWd2 - cv->TextWidth(itm_buf[2]), yp, itm_buf[2]);
 			xp += MaxColWd2 + SCALED_THIS(4);
 
-			//ƒOƒ‰ƒt
+			//ã‚°ãƒ©ãƒ•
 			TRect rc = Rect;
 			rc.Left  = xp;
 			if (ScrBarStyle>0) {
@@ -463,7 +463,7 @@ void __fastcall TFileInfoDlg::InfListBoxDrawItem(TWinControl *Control, int Index
 			}
 		}
 	}
-	//ˆê”Ê
+	//ä¸€èˆ¬
 	else {
 		draw_InfListBox(lp, Rect, Index, State);
 	}
@@ -472,7 +472,7 @@ void __fastcall TFileInfoDlg::InfListBoxDrawItem(TWinControl *Control, int Index
 }
 
 //---------------------------------------------------------------------------
-//ƒL[‘€ì
+//ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TFileInfoDlg::InfListBoxKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -485,10 +485,10 @@ void __fastcall TFileInfoDlg::InfListBoxKeyDown(TObject *Sender, WORD &Key, TShi
 	if (ExeCmdListBox(lp, cmd_F) || ExeCmdListBox(lp, cmd_V)) {
 		;
 	}
-	//‘OŒã‚Ìƒtƒ@ƒCƒ‹‚ÖØ‚è‘Ö‚¦
+	//å‰å¾Œã®ãƒ•ã‚¡ã‚¤ãƒ«ã¸åˆ‡ã‚Šæ›¿ãˆ
 	else if (FileRec && !FileRec->is_ftp && !inhNxtPre && contained_wd_i("PrevFile|NextFile", cmd_V)) {
 		CmdStr = cmd_V;
-		//‰æ–Ê‚ğÁ‚³‚¸‚Éc‚·
+		//ç”»é¢ã‚’æ¶ˆã•ãšã«æ®‹ã™
 		this->Perform(WM_SETREDRAW, 0, (NativeInt)0);
 		if (SubViewer->Visible) SubViewer->Perform(WM_SETREDRAW, 0, (NativeInt)0);
 		ModalResult = mrRetry;
@@ -515,7 +515,7 @@ void __fastcall TFileInfoDlg::InfListBoxKeyDown(TObject *Sender, WORD &Key, TShi
 //---------------------------------------------------------------------------
 void __fastcall TFileInfoDlg::InfListBoxKeyPress(TObject *Sender, System::WideChar &Key)
 {
-	//ƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`‚ğ‰ñ”ğ
+	//ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ã‚¿ãƒ«ã‚µãƒ¼ãƒã‚’å›é¿
 	if (_istalnum(Key) || Key==VK_SPACE) Key = 0;
 }
 //---------------------------------------------------------------------------
@@ -525,14 +525,14 @@ void __fastcall TFileInfoDlg::InfListBoxDblClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹î•ñ‚ğƒRƒs[
+//ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã‚’ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TFileInfoDlg::CopyInfoActionExecute(TObject *Sender)
 {
 	copy_to_Clipboard(InfListBox->Items->Text);
 }
 //---------------------------------------------------------------------------
-//€–Ú‚Ì’l‚ğƒRƒs[
+//é …ç›®ã®å€¤ã‚’ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TFileInfoDlg::CopyValueActionExecute(TObject *Sender)
 {
@@ -540,7 +540,7 @@ void __fastcall TFileInfoDlg::CopyValueActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//‚±‚Ì€–Ú“à—e‚ğ‹­’²•\¦
+//ã“ã®é …ç›®å†…å®¹ã‚’å¼·èª¿è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TFileInfoDlg::EmpItemActionExecute(TObject *Sender)
 {
@@ -567,7 +567,7 @@ void __fastcall TFileInfoDlg::EmpItemActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒs[
+//ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TFileInfoDlg::CopyActionExecute(TObject *Sender)
 {
@@ -579,14 +579,14 @@ void __fastcall TFileInfoDlg::CopyActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = (Active && InfListBox->SelCount>0);
 }
 //---------------------------------------------------------------------------
-//‚·‚×‚Ä‘I‘ğ
+//ã™ã¹ã¦é¸æŠ
 //---------------------------------------------------------------------------
 void __fastcall TFileInfoDlg::SelAllActionExecute(TObject *Sender)
 {
 	ListBoxSelectAll(InfListBox);
 }
 //---------------------------------------------------------------------------
-//URL/êŠ‚ğŠJ‚­
+//URL/å ´æ‰€ã‚’é–‹ã
 //---------------------------------------------------------------------------
 void __fastcall TFileInfoDlg::OpenLocActionExecute(TObject *Sender)
 {
@@ -603,11 +603,11 @@ void __fastcall TFileInfoDlg::OpenLocActionUpdate(TObject *Sender)
 {
 	TAction *ap = (TAction*)Sender;
 	if (Active && !ListBoxGetURL(InfListBox).IsEmpty()) {
-		ap->Caption = "URL‚ğŠJ‚­(&W)";
+		ap->Caption = "URLã‚’é–‹ã(&W)";
 		ap->Visible = true;
 	}
 	else if (ScrMode==SCMD_FLIST && !isAppInfo && !isGitInfo && !isCalcItem && !InfListBoxGetDir(InfListBox).IsEmpty()) {
-		ap->Caption = "êŠ‚ğŠJ‚­(&L)";
+		ap->Caption = "å ´æ‰€ã‚’é–‹ã(&L)";
 		ap->Visible = true;
 	}
 	else {
@@ -618,7 +618,7 @@ void __fastcall TFileInfoDlg::OpenLocActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒvƒƒpƒeƒB
+//ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 //---------------------------------------------------------------------------
 void __fastcall TFileInfoDlg::PropertyDlgActionExecute(TObject *Sender)
 {
@@ -630,7 +630,7 @@ void __fastcall TFileInfoDlg::PropertyDlgActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = (FileRec && !FileRec->is_virtual);
 }
 //---------------------------------------------------------------------------
-//ƒCƒ[ƒWƒvƒŒƒrƒ…[
+//ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TFileInfoDlg::ImgPreviewActionExecute(TObject *Sender)
 {

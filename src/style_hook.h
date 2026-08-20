@@ -1,7 +1,7 @@
 /**
  * @file style_hook.h
  * @author your name (you@domain.com)
- * @brief ƒXƒ^ƒCƒ‹EƒtƒbƒN
+ * @brief ã‚¹ã‚¿ã‚¤ãƒ«ãƒ»ãƒ•ãƒƒã‚¯
  */
 //---------------------------------------------------------------------------
 #ifndef StyleHookH
@@ -9,9 +9,9 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒXƒ^ƒCƒ‹EƒtƒbƒN
- * @details TEdit/TMaskEdit/TLabeledEdit —p‚ÌƒXƒ^ƒCƒ‹EƒtƒbƒN‚Å‚·B@n
- * ”wŒiF‚É Color ‚ğ“K—p‚µ‚Ü‚·(ƒVƒXƒeƒ€F‚Ìê‡‚ÍƒXƒ^ƒCƒ‹—p‚É•ÏŠ·)B
+ * @brief ã‚¹ã‚¿ã‚¤ãƒ«ãƒ»ãƒ•ãƒƒã‚¯
+ * @details TEdit/TMaskEdit/TLabeledEdit ç”¨ã®ã‚¹ã‚¿ã‚¤ãƒ«ãƒ»ãƒ•ãƒƒã‚¯ã§ã™ã€‚@n
+ * èƒŒæ™¯è‰²ã« Color ã‚’é©ç”¨ã—ã¾ã™(ã‚·ã‚¹ãƒ†ãƒ è‰²ã®å ´åˆã¯ã‚¹ã‚¿ã‚¤ãƒ«ç”¨ã«å¤‰æ›)ã€‚
  */
 class TEditStyleHookColor : public TEditStyleHook
 {

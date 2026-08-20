@@ -1,6 +1,6 @@
 /**
  * @file NewDlg.h
- * @brief V‹Kƒtƒ@ƒCƒ‹‚Ìì¬ƒ_ƒCƒAƒƒO
+ * @brief æ–°è¦ãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 //---------------------------------------------------------------------------
 #ifndef NewDlgH
@@ -18,11 +18,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief V‹Kƒtƒ@ƒCƒ‹‚Ìì¬ƒ_ƒCƒAƒƒO
+ * @brief æ–°è¦ãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TNewFileDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *OkAction;
 	TActionList *OK;
 	TButton *CancelBtn;
@@ -42,12 +42,12 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall TplComboBoxClick(TObject *Sender);
 	void __fastcall OkActionUpdate(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	UnicodeString TplRefDir;
 
 	void __fastcall WmFormShowed(TMessage &msg);
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	__fastcall TNewFileDlg(TComponent* Owner);
 
 	BEGIN_MESSAGE_MAP

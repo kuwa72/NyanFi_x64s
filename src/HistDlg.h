@@ -1,6 +1,6 @@
 /**
  * @file HistDlg.h
- * @brief ƒfƒBƒŒƒNƒgƒŠ—š—ğ/ƒXƒ^ƒbƒN
+ * @brief ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå±¥æ­´/ã‚¹ã‚¿ãƒƒã‚¯
  */
 //---------------------------------------------------------------------------
 #ifndef HistDlgH
@@ -19,11 +19,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒfƒBƒŒƒNƒgƒŠ—š—ğ/ƒXƒ^ƒbƒN
+ * @brief ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå±¥æ­´/ã‚¹ã‚¿ãƒƒã‚¯
  */
 class TDirHistoryDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *AddDirsAction;
 	TAction *ClearAllAction;
 	TAction *ClearFltAction;
@@ -70,10 +70,10 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall PropertyActionExecute(TObject *Sender);
 	void __fastcall PropertyActionUpdate(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	TStringList *ListBuff;
 
-	UsrScrollPanel *ListScrPanel;	//ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[
+	UsrScrollPanel *ListScrPanel;	//ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 
 	UnicodeString IncSeaWord;
 	bool IsMigemo;
@@ -84,11 +84,11 @@ private:	// ƒ†[ƒU[éŒ¾
 	void __fastcall UpdateListBox(int idx = 0);
 	void __fastcall AddDirsCore(UnicodeString pnam, TStrings *lst, TStringDynArray ex_lst);
 
-public:		// ƒ†[ƒU[éŒ¾
-	bool IsDirStack;				//!< ƒfƒBƒŒƒNƒgƒŠEƒXƒ^ƒbƒN
-	bool IsAllDirHist;				//!< ‘S‘Ì—š—ğ
-	bool IsFindDirHist;				//!< ‘S‘Ì—š—ğ(ƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`)
-	bool IdRecentDir;				//!< Å‹ßg‚Á‚½ƒfƒBƒŒƒNƒgƒŠ
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	bool IsDirStack;				//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãƒ»ã‚¹ã‚¿ãƒƒã‚¯
+	bool IsAllDirHist;				//!< å…¨ä½“å±¥æ­´
+	bool IsFindDirHist;				//!< å…¨ä½“å±¥æ­´(ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ã‚¿ãƒ«ã‚µãƒ¼ãƒ)
+	bool IdRecentDir;				//!< æœ€è¿‘ä½¿ã£ãŸãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 
 	int  RefListTag;
 	UnicodeString WorkListName;

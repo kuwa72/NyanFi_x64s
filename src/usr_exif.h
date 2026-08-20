@@ -1,6 +1,6 @@
 /**
  * @file usr_exif.h
- * @brief Exif î•ñŠÖ˜A‚ÌŠÖ”
+ * @brief Exif æƒ…å ±é–¢é€£ã®é–¢æ•°
  */
 //---------------------------------------------------------------------------
 #ifndef UsrExifH
@@ -14,57 +14,57 @@ void EXIF_get_idf_inf(TFileStream *fs, int top, bool bsw, TStringList *lst, Unic
 void EXIF_format_inf(UnicodeString fext, TStringList *lst);
 
 /**
- * @brief w’èƒtƒ@ƒCƒ‹‚ÌExifî•ñˆê——‚ğæ“¾
- * @param fnam ƒtƒ@ƒCƒ‹–¼
- * @param[out] lst Œ‹‰ÊŠi”[ƒŠƒXƒg(ƒ^ƒO”Ô†=•¶š—ñ)
+ * @brief æŒ‡å®šãƒ•ã‚¡ã‚¤ãƒ«ã®Exifæƒ…å ±ä¸€è¦§ã‚’å–å¾—
+ * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+ * @param[out] lst çµæœæ ¼ç´ãƒªã‚¹ãƒˆ(ã‚¿ã‚°ç•ªå·=æ–‡å­—åˆ—)
  * @return true 
  * @return false 
  */
 bool EXIF_GetInf(UnicodeString fnam, TStringList *lst);
 
 /**
- * @brief ExifƒŠƒXƒg‚©‚ç‰æ‘œƒTƒCƒY‚ğæ“¾
+ * @brief Exifãƒªã‚¹ãƒˆã‹ã‚‰ç”»åƒã‚µã‚¤ã‚ºã‚’å–å¾—
  * 
- * @param lst ExifƒŠƒXƒg
- * @param fext Šg’£q
- * @param[out] w • 
- * @param[out] h ‚‚³
- * @return true ¬Œ÷
+ * @param lst Exifãƒªã‚¹ãƒˆ
+ * @param fext æ‹¡å¼µå­
+ * @param[out] w å¹… 
+ * @param[out] h é«˜ã•
+ * @return true æˆåŠŸ
  */
 bool Exif_GetImgSize(TStringList *lst, UnicodeString fext, unsigned int *w, unsigned int *h);
 
 /**
- * @brief ƒtƒ@ƒCƒ‹‚ÌExifB‰e“ú‚ğæ“¾
- * @param fnam ƒtƒ@ƒCƒ‹–¼
- * @param[out] dt B‰e“ú
- * @return true ¬Œ÷ 
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«ã®Exifæ’®å½±æ—¥æ™‚ã‚’å–å¾—
+ * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+ * @param[out] dt æ’®å½±æ—¥æ™‚
+ * @return true æˆåŠŸ 
  */
 bool EXIF_GetExifTime(UnicodeString fnam, TDateTime &dt);
 
 /**
- * @brief ƒtƒ@ƒCƒ‹‚ÌExifB‰e“ú‚ğw’è‘®‚Åæ“¾
- * @param fnam ƒtƒ@ƒCƒ‹–¼
- * @param format ‘®
- * @return UnicodeString B‰e“ú•¶š—ñ
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«ã®Exifæ’®å½±æ—¥æ™‚ã‚’æŒ‡å®šæ›¸å¼ã§å–å¾—
+ * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+ * @param format æ›¸å¼
+ * @return UnicodeString æ’®å½±æ—¥æ™‚æ–‡å­—åˆ—
  */
 UnicodeString EXIF_GetExifTimeStr(UnicodeString fnam, UnicodeString format);
 
 /**
- * @brief ƒtƒ@ƒCƒ‹‚Ìƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚ğExifB‰e“ú‚É
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã‚’Exifæ’®å½±æ—¥æ™‚ã«
  * 
- * @param fnam ƒtƒ@ƒCƒ‹–¼
- * @return true ¬Œ÷
+ * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+ * @return true æˆåŠŸ
  */
 bool EXIF_SetExifTime(UnicodeString fnam);
 
 /**
- * @brief Jpegƒtƒ@ƒCƒ‹‚©‚çExifî•ñ‚ğíœ
- * @param fnam ‘ÎÛƒtƒ@ƒCƒ‹–¼
- * @param onam o—Íƒtƒ@ƒCƒ‹–¼
- * @param keep_time ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚ğˆÛ
- * @retval 0 ¬Œ÷ 
- * @retval -1 ¸”s
- * @retval 1 Exif‚È‚µ 
+ * @brief Jpegãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰Exifæƒ…å ±ã‚’å‰Šé™¤
+ * @param fnam å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«å
+ * @param onam å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«å
+ * @param keep_time ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã‚’ç¶­æŒ
+ * @retval 0 æˆåŠŸ 
+ * @retval -1 å¤±æ•—
+ * @retval 1 Exifãªã— 
  */
 int  EXIF_DelJpgExif(UnicodeString fnam, UnicodeString onam, bool keep_time = true);
 //---------------------------------------------------------------------------

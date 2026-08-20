@@ -1,6 +1,6 @@
 /**
  * @file FindTxtDlg.h
- * @brief •¶š—ñŒŸõƒ_ƒCƒAƒƒO(ƒeƒLƒXƒgƒrƒ…[ƒA)
+ * @brief æ–‡å­—åˆ—æ¤œç´¢ãƒ€ã‚¤ã‚¢ãƒ­ã‚°(ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢)
  */
 //---------------------------------------------------------------------------
 #ifndef FindTxtDlgH
@@ -20,11 +20,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief •¶š—ñŒŸõƒ_ƒCƒAƒƒO(ƒeƒLƒXƒgƒrƒ…[ƒA)
+ * @brief æ–‡å­—åˆ—æ¤œç´¢ãƒ€ã‚¤ã‚¢ãƒ­ã‚°(ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢)
  */
 class TFindTextDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *FindNextAction;
 	TActionList *ActionList1;
 	TButton *CalcelBtn;
@@ -58,7 +58,7 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall FindNextActionExecute(TObject *Sender);
 	void __fastcall FindNextActionUpdate(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	TTxtViewer *Viewer;
 	bool DlgInitialized;
 	bool KeyHandled;
@@ -75,8 +75,8 @@ private:	// ƒ†[ƒU[éŒ¾
 		FindComboBox->SelLength = 0;
 	}
 
-public:		// ƒ†[ƒU[éŒ¾
-	bool fromTV;		//!< ƒeƒLƒXƒgƒrƒ…[ƒA‚©‚ç
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	bool fromTV;		//!< ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã‹ã‚‰
 
 	TExTxtViewer *ExTViewer;
 

@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ÉoÉbÉNÉAÉbÉvÉ_ÉCÉAÉçÉO												//
+//  „Éê„ÉÉ„ÇØ„Ç¢„ÉÉ„Éó„ÉÄ„Ç§„Ç¢„É≠„Ç∞												//
 //----------------------------------------------------------------------//
 #include "Global.h"
 #include "UserFunc.h"
@@ -59,11 +59,11 @@ void __fastcall TBackupDlg::FormShow(TObject *Sender)
 
 	std::unique_ptr<TStringList> dst_lst(new TStringList());
 	get_SyncDirList(DstDirEdit->Text, dst_lst.get());
-	UnicodeString s = "(ìØä˙ÉfÉBÉåÉNÉgÉä: ";
+	UnicodeString s = "(ÂêåÊúü„Éá„Ç£„É¨„ÇØ„Éà„É™: ";
 	if (dst_lst->Count>1)
 		s += IntToStr(dst_lst->Count - 1);
 	else
-		s += "Ç»Çµ";
+		s += "„Å™„Åó";
 	s += ")";
 	SyncLabel->Caption = s;
 }
@@ -113,7 +113,7 @@ void __fastcall TBackupDlg::SetupComboBoxClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ê›íËÇÃï€ë∂
+//Ë®≠ÂÆö„ÅÆ‰øùÂ≠ò
 //---------------------------------------------------------------------------
 void __fastcall TBackupDlg::SaveSetupActionExecute(TObject *Sender)
 {
@@ -149,7 +149,7 @@ void __fastcall TBackupDlg::SaveSetupActionUpdate(TObject *Sender)
 	BakSkipDirEdit->Enabled = SubDirCheckBox->Checked;
 }
 //---------------------------------------------------------------------------
-//Ç±ÇÃçÄñ⁄ÇçÌèú
+//„Åì„ÅÆÈ†ÖÁõÆ„ÇíÂâäÈô§
 //---------------------------------------------------------------------------
 void __fastcall TBackupDlg::DelSetupActionExecute(TObject *Sender)
 {
@@ -167,18 +167,18 @@ void __fastcall TBackupDlg::DelSetupActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ÉRÉ}ÉìÉhÉtÉ@ÉCÉãÇ∆ÇµÇƒï€ë∂
+//„Ç≥„Éû„É≥„Éâ„Éï„Ç°„Ç§„É´„Å®„Åó„Å¶‰øùÂ≠ò
 //---------------------------------------------------------------------------
 void __fastcall TBackupDlg::MakeNbtActionExecute(TObject *Sender)
 {
-	UserModule->PrepareSaveDlg(_T("ÉRÉ}ÉìÉhÉtÉ@ÉCÉãÇ∆ÇµÇƒï€ë∂"), F_FILTER_NBT, NULL, CmdFilePath);
+	UserModule->PrepareSaveDlg(_T("„Ç≥„Éû„É≥„Éâ„Éï„Ç°„Ç§„É´„Å®„Åó„Å¶‰øùÂ≠ò"), F_FILTER_NBT, NULL, CmdFilePath);
 	UnicodeString fnam = UserModule->SaveDlgExecute();
 	if (!fnam.IsEmpty()) {
 		CmdFilePath = ExtractFilePath(fnam);
 
 		std::unique_ptr<TStringList> fbuf(new TStringList());
 		fbuf->Text =
-			";ÉoÉbÉNÉAÉbÉv\r\n"
+			";„Éê„ÉÉ„ÇØ„Ç¢„ÉÉ„Éó\r\n"
 			"PushDir\r\n"
 			"PushDir_OP\r\n"
 			"ChangeDir_\"" + SrcDirEdit->Text + "\"\r\n"
@@ -197,19 +197,19 @@ void __fastcall TBackupDlg::MakeNbtActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//äJén
+//ÈñãÂßã
 //---------------------------------------------------------------------------
 void __fastcall TBackupDlg::OkButtonClick(TObject *Sender)
 {
 	if (SureCheckBox->Checked) {
-		UnicodeString msg = "ÉoÉbÉNÉAÉbÉvÇäJénÇµÇ‹Ç∑Ç©?\r\n\r\n";
-		msg.cat_sprintf(_T("ÉoÉbÉNÉAÉbÉvå≥: %s\r\n"), SrcDirEdit->Text.c_str());
-		msg.cat_sprintf(_T("ÉoÉbÉNÉAÉbÉvêÊ: %s\r\n"), DstDirEdit->Text.c_str());
+		UnicodeString msg = "„Éê„ÉÉ„ÇØ„Ç¢„ÉÉ„Éó„ÇíÈñãÂßã„Åó„Åæ„Åô„Åã?\r\n\r\n";
+		msg.cat_sprintf(_T("„Éê„ÉÉ„ÇØ„Ç¢„ÉÉ„ÉóÂÖÉ: %s\r\n"), SrcDirEdit->Text.c_str());
+		msg.cat_sprintf(_T("„Éê„ÉÉ„ÇØ„Ç¢„ÉÉ„ÉóÂÖà: %s\r\n"), DstDirEdit->Text.c_str());
 		if (SyncCheckBox->Checked) {
 			std::unique_ptr<TStringList> dst_lst(new TStringList());
 			get_SyncDirList(DstDirEdit->Text, dst_lst.get());
 			for (int i=1; i<dst_lst->Count; i++) {
-				msg.cat_sprintf(_T("ìØä˙êÊ%u: %s\r\n"), i, dst_lst->Strings[i].c_str());
+				msg.cat_sprintf(_T("ÂêåÊúüÂÖà%u: %s\r\n"), i, dst_lst->Strings[i].c_str());
 			}
 		}
 		if (msgbox_Sure(msg)) ModalResult = mrOk;

@@ -1,29 +1,29 @@
 /**
  * @file usr_mmfile.h
- * @brief ƒƒ‚ƒŠƒ}ƒbƒvƒhƒtƒ@ƒCƒ‹
+ * @brief ãƒ¡ãƒ¢ãƒªãƒãƒƒãƒ—ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«
  */
 //---------------------------------------------------------------------------
 #ifndef UsrMMFileH
 #define UsrMMFileH
 
 //---------------------------------------------------------------------------
-#define MAX_MEMMAP_SIZE	1073741824L		//!< Å‘åƒ}ƒbƒvƒTƒCƒY		   (1GB)
-#define FAILED_BUF_SIZE	8388608L		//!< ƒ}ƒbƒv¸”s‚Ì“ÇƒTƒCƒY (8MB)
+#define MAX_MEMMAP_SIZE	1073741824L		//!< æœ€å¤§ãƒãƒƒãƒ—ã‚µã‚¤ã‚º		   (1GB)
+#define FAILED_BUF_SIZE	8388608L		//!< ãƒãƒƒãƒ—å¤±æ•—æ™‚ã®èª­è¾¼ã‚µã‚¤ã‚º (8MB)
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒƒ‚ƒŠƒ}ƒbƒvƒhƒtƒ@ƒCƒ‹
+ * @brief ãƒ¡ãƒ¢ãƒªãƒãƒƒãƒ—ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«
  */
 class MemMapFile
 {
 private:
 	HANDLE hFile;
 	HANDLE hMap;
-	BYTE *pPointer;		//ƒ}ƒbƒv—pƒ|ƒCƒ“ƒ^
+	BYTE *pPointer;		//ãƒãƒƒãƒ—ç”¨ãƒã‚¤ãƒ³ã‚¿
 
-	TBytes ByteBuff;	//’Êí“Ç—pƒoƒbƒtƒ@
+	TBytes ByteBuff;	//é€šå¸¸èª­è¾¼ç”¨ãƒãƒƒãƒ•ã‚¡
 
-	void Initialize();	//‰Šú‰»
+	void Initialize();	//åˆæœŸåŒ–
 
 	BYTE Get(unsigned int Index)
 	{
@@ -40,29 +40,29 @@ private:
 public:
 	__property BYTE Bytes[unsigned int Index] = {read=Get};
 
-	__int64 FileSize;		//!< ƒtƒ@ƒCƒ‹ƒTƒCƒY
-	unsigned int BuffSize;	//!< ƒoƒbƒtƒ@(ƒ}ƒbƒv)ƒTƒCƒY
-	bool MapEnabled;		//!< ƒ}ƒbƒv—LŒø
-	bool isMaped;			//!< ƒ}ƒbƒv‚³‚ê‚Ä‚¢‚é
-	UnicodeString ErrMsg;	//!< ƒGƒ‰[ƒƒbƒZ[ƒW
+	__int64 FileSize;		//!< ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚º
+	unsigned int BuffSize;	//!< ãƒãƒƒãƒ•ã‚¡(ãƒãƒƒãƒ—)ã‚µã‚¤ã‚º
+	bool MapEnabled;		//!< ãƒãƒƒãƒ—æœ‰åŠ¹
+	bool isMaped;			//!< ãƒãƒƒãƒ—ã•ã‚Œã¦ã„ã‚‹
+	UnicodeString ErrMsg;	//!< ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
 
-	/* @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
+	/* @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 	MemMapFile();
 
 	~MemMapFile();
 
 	/**
-	 * @brief “Ç‚İæ‚èê—p‚Ìƒƒ‚ƒŠƒ}ƒbƒvƒhƒtƒ@ƒCƒ‹‚Æ‚µ‚ÄŠJ‚­@n
-			  ŠJ‚¯‚È‚¢ê‡‚Íƒƒ‚ƒŠ‚É’Êí“Ç‚İ‚İ
+	 * @brief èª­ã¿å–ã‚Šå°‚ç”¨ã®ãƒ¡ãƒ¢ãƒªãƒãƒƒãƒ—ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã¨ã—ã¦é–‹ã@n
+			  é–‹ã‘ãªã„å ´åˆã¯ãƒ¡ãƒ¢ãƒªã«é€šå¸¸èª­ã¿è¾¼ã¿
 	 * 
-	 * @param fnam ƒtƒ@ƒCƒ‹–¼
-	 * @param top_adr æ“ªƒAƒhƒŒƒX
-	 * @param max_size Å‘åƒTƒCƒY
-	 * @return true ¬Œ÷
+	 * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+	 * @param top_adr å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹
+	 * @param max_size æœ€å¤§ã‚µã‚¤ã‚º
+	 * @return true æˆåŠŸ
 	 */
 	bool OpenRO(UnicodeString fnam, __int64 top_adr, unsigned int max_size);
 
-	/** @brief •Â‚¶‚Ä‰Šú‰» */
+	/** @brief é–‰ã˜ã¦åˆæœŸåŒ– */
 	void Close();
 };
 //---------------------------------------------------------------------------

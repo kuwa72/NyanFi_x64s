@@ -1,6 +1,6 @@
 /**
  * @file FindDlg.h
- * @brief ƒtƒ@ƒCƒ‹–¼ŒŸõƒ_ƒCƒAƒƒO
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«åæ¤œç´¢ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 //---------------------------------------------------------------------------
 #ifndef FindDlgH
@@ -18,11 +18,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒtƒ@ƒCƒ‹–¼ŒŸõƒ_ƒCƒAƒƒO
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«åæ¤œç´¢ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TFindFileDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *FindOkAction;
 	TActionList *ActionList1;
 	TBevel *Bevel2;
@@ -169,7 +169,7 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall FindOkActionExecute(TObject *Sender);
 	void __fastcall FindOkActionUpdate(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	bool DlgInitialized;
 
 	void __fastcall WmMenuChar(TMessage &msg)
@@ -180,7 +180,7 @@ private:	// ƒ†[ƒU[éŒ¾
 	void __fastcall SetDlgHeight();
 	void __fastcall ClearExtraCond();
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	UnicodeString SubTitle;
 
 	bool FindDir;

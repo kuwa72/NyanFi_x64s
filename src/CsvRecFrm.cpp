@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  CSV/TSVƒŒƒR[ƒh														//
+//  CSV/TSVãƒ¬ã‚³ãƒ¼ãƒ‰														//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "Global.h"
@@ -39,7 +39,7 @@ void __fastcall TCsvRecForm::FormShow(TObject *Sender)
 
 	TStringGrid *gp = RecordGrid;
 	InitializeListGrid(gp, ViewerFont);
-	InitializeListHeader(RecordHeader, _T("€–Ú–¼|“à—e"));
+	InitializeListHeader(RecordHeader, _T("é …ç›®å|å†…å®¹"));
 	IniFile->LoadGridColWidth(gp, 2, 120,280);
 	set_HeaderFromGrid(gp, RecordHeader);
 	set_UsrScrPanel(GridScrPanel);
@@ -86,7 +86,7 @@ void __fastcall TCsvRecForm::RecordHeaderSectionResize(THeaderControl *HeaderCon
 	set_GridFromHeader(RecordHeader, RecordGrid);
 }
 //---------------------------------------------------------------------------
-//ƒwƒbƒ_‚Ì•`‰æ
+//ãƒ˜ãƒƒãƒ€ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TCsvRecForm::RecordHeaderDrawSection(THeaderControl *HeaderControl,
 		THeaderSection *Section, const TRect &Rect, bool Pressed)
@@ -95,7 +95,7 @@ void __fastcall TCsvRecForm::RecordHeaderDrawSection(THeaderControl *HeaderContr
 }
 
 //---------------------------------------------------------------------------
-//ƒZƒ‹‚Ì•`‰æ
+//ã‚»ãƒ«ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TCsvRecForm::RecordGridDrawCell(TObject *Sender, System::LongInt ACol, System::LongInt ARow,
 		TRect &Rect, TGridDrawState State)
@@ -110,7 +110,7 @@ void __fastcall TCsvRecForm::RecordGridDrawCell(TObject *Sender, System::LongInt
 	cv->Font->Color = is_SelFgCol(State)? col_fgSelItem : (ACol==0)? col_Headline : get_ListFgCol();
 	cv->TextOut(Rect.Left + SCALED_THIS(4), Rect.Top + get_TopMargin2(cv), cellstr);
 
-	//‹æØ‚èü
+	//åŒºåˆ‡ã‚Šç·š
 	cv->Pen->Width = 1;
 	cv->Pen->Color = SelectWorB(cv->Brush->Color, 0.3);
 	cv->MoveTo(Rect.Right, Rect.Top);  cv->LineTo(Rect.Right, Rect.Bottom);
@@ -125,8 +125,8 @@ void __fastcall TCsvRecForm::RecordGridClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//€–Ú–¼‚ğİ’è
-//  –ß‚è’l: €–Ú”
+//é …ç›®åã‚’è¨­å®š
+//  æˆ»ã‚Šå€¤: é …ç›®æ•°
 //---------------------------------------------------------------------------
 int __fastcall TCsvRecForm::UpdateItemName()
 {
@@ -137,7 +137,7 @@ int __fastcall TCsvRecForm::UpdateItemName()
 	if (TopIsHeaderCheckBox->Checked) { rec_no--; max_rec--; }
 
 	UnicodeString tmp;
-	tmp.sprintf(_T("%sƒŒƒR[ƒh"), IsCSV? _T("CSV") : _T("TSV"));
+	tmp.sprintf(_T("%sãƒ¬ã‚³ãƒ¼ãƒ‰"), IsCSV? _T("CSV") : _T("TSV"));
 	Caption = (rec_no>0)? tmp.cat_sprintf(_T(" - [%u/%u]"), rec_no, max_rec) : tmp.cat_sprintf(_T(" - [_/%u]"), max_rec);
 
 	int itm_count = 0;
@@ -148,7 +148,7 @@ int __fastcall TCsvRecForm::UpdateItemName()
 		for (int i=0; i<itm_count; i++) {
 			if (i<gp->RowCount)
 				gp->Cells[0][i] = TopIsHeaderCheckBox->Checked?
-									hdr_buf[i] : UnicodeString().sprintf(_T("€–Ú%u"), i + 1);
+									hdr_buf[i] : UnicodeString().sprintf(_T("é …ç›®%u"), i + 1);
 		}
 	}
 	return itm_count;
@@ -163,12 +163,12 @@ void __fastcall TCsvRecForm::TopIsHeaderCheckBoxClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//“à—e‚ÌXV
+//å†…å®¹ã®æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TCsvRecForm::UpdateRecord(
 	TStringList *lst,
-	int r_idx,			//ƒŒƒR[ƒhƒCƒ“ƒfƒbƒNƒX	(default = -1)
-	int i_idx)			//€–ÚƒCƒ“ƒeƒŠƒA		(default = -1)
+	int r_idx,			//ãƒ¬ã‚³ãƒ¼ãƒ‰ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹	(default = -1)
+	int i_idx)			//é …ç›®ã‚¤ãƒ³ãƒ†ãƒªã‚¢		(default = -1)
 {
 	if (lst) DataList = lst;
 	TStringGrid *gp = RecordGrid;
@@ -187,11 +187,11 @@ void __fastcall TCsvRecForm::UpdateRecord(
 
 		int org_row = gp->Row;
 		int org_col = gp->Col;
-		if (HeaderStr.IsEmpty() && RecordStr.IsEmpty()) gp->RowCount = 1;	//‘I‘ğó‘ÔƒNƒŠƒA‚Ì‚½‚ß
+		if (HeaderStr.IsEmpty() && RecordStr.IsEmpty()) gp->RowCount = 1;	//é¸æŠçŠ¶æ…‹ã‚¯ãƒªã‚¢ã®ãŸã‚
 
 		int itm_count = UpdateItemName();	if (itm_count==0) Abort();
 		gp->RowCount = itm_count;
-		//“à—e
+		//å†…å®¹
 		TStringDynArray rec_buf = IsCSV? get_csv_array(RecordStr, MAX_CSV_ITEM) : split_strings_tab(RecordStr);
 		for (int i=0; i<gp->RowCount; i++) gp->Cells[1][i] = (i<rec_buf.Length)? rec_buf[i] : EmptyStr;
 
@@ -208,7 +208,7 @@ void __fastcall TCsvRecForm::UpdateRecord(
 	Application->MainForm->SetFocus();
 }
 //---------------------------------------------------------------------------
-//ƒRƒs[
+//ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TCsvRecForm::CopyItemClick(TObject *Sender)
 {
@@ -225,7 +225,7 @@ void __fastcall TCsvRecForm::CopyItemClick(TObject *Sender)
 	Application->MainForm->SetFocus();
 }
 //---------------------------------------------------------------------------
-//URL‚ğŠJ‚­
+//URLã‚’é–‹ã
 //---------------------------------------------------------------------------
 void __fastcall TCsvRecForm::OpenUrlActionExecute(TObject *Sender)
 {
@@ -241,7 +241,7 @@ void __fastcall TCsvRecForm::OpenUrlActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//€–Ú‚ÌWŒv
+//é …ç›®ã®é›†è¨ˆ
 //---------------------------------------------------------------------------
 void __fastcall TCsvRecForm::CalcBtnClick(TObject *Sender)
 {
@@ -252,7 +252,7 @@ void __fastcall TCsvRecForm::CalcBtnClick(TObject *Sender)
 	FileInfoDlg->ShowModal();
 }
 //---------------------------------------------------------------------------
-//€–Ú‚ÌƒOƒ‰ƒt•\¦
+//é …ç›®ã®ã‚°ãƒ©ãƒ•è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TCsvRecForm::GraphBtnClick(TObject *Sender)
 {

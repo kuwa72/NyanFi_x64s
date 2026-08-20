@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒfƒoƒbƒOî•ñ														//
+//  ãƒ‡ãƒãƒƒã‚°æƒ…å ±														//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -59,7 +59,7 @@ void __fastcall TDebugForm::FormShow(TObject *Sender)
 void __fastcall TDebugForm::FormCloseQuery(TObject *Sender, bool &CanClose)
 {
 	if (XCMD_Debugging && XCMD_xlp && !XCMD_xlp->EndOfCmds)
-		CanClose = msgbox_Sure(_T("ƒfƒoƒbƒN‚ğ’†~‚µ‚ÄƒRƒ}ƒ“ƒh‚ÌÀs‚ğI—¹‚µ‚Ü‚·‚©?"));
+		CanClose = msgbox_Sure(_T("ãƒ‡ãƒãƒƒã‚¯ã‚’ä¸­æ­¢ã—ã¦ã‚³ãƒãƒ³ãƒ‰ã®å®Ÿè¡Œã‚’çµ‚äº†ã—ã¾ã™ã‹?"));
 }
 //---------------------------------------------------------------------------
 void __fastcall TDebugForm::FormClose(TObject *Sender, TCloseAction &Action)
@@ -78,7 +78,7 @@ void __fastcall TDebugForm::FormDestroy(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒL[‘€ì
+//ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TDebugForm::FormKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -110,12 +110,12 @@ void __fastcall TDebugForm::UpdateToolBar()
 }
 
 //---------------------------------------------------------------------------
-//ƒvƒŒƒrƒ…[“à—e‚Ìİ’è
+//ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼å†…å®¹ã®è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall TDebugForm::SetPreview(TStringList *lst, int idx)
 {
 	if (!FileName.IsEmpty())
-		Caption = UnicodeString().cat_sprintf(_T("ƒfƒoƒbƒO - %s"), ExtractFileName(FileName).c_str());
+		Caption = UnicodeString().cat_sprintf(_T("ãƒ‡ãƒãƒƒã‚° - %s"), ExtractFileName(FileName).c_str());
 	
 	ListBuff->Assign(lst);
 	ListBuff->Insert(0, EmptyStr);
@@ -134,7 +134,7 @@ void __fastcall TDebugForm::PreviewListBoxEnter(TObject *Sender)
 	ReferListBox->SetFocus();
 }
 //---------------------------------------------------------------------------
-//ƒvƒŒƒrƒ…[‚Ì•`‰æ
+//ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TDebugForm::PreviewListBoxDrawItem(TWinControl *Control, int Index,
 	TRect &Rect, TOwnerDrawState State)
@@ -143,17 +143,17 @@ void __fastcall TDebugForm::PreviewListBoxDrawItem(TWinControl *Control, int Ind
 	TCanvas  *cv = lp->Canvas;
 	TRect	  rc = Rect;
 
-	//s”Ô†
+	//è¡Œç•ªå·
 	LineNoOut(cv, rc, Index);
 
-	//ƒeƒLƒXƒg
+	//ãƒ†ã‚­ã‚¹ãƒˆ
 	cv->Brush->Color = State.Contains(odSelected)? col_selItem : get_ViewBgCol();
 	cv->FillRect(rc);
 	PrvTextOut(lp, Index, cv, rc,
 		is_SelFgCol(State)? col_fgSelItem : get_ViewFgCol(),
 		4, NULL, false, "*.nbt");
 
-	//ƒJ[ƒ\ƒ‹
+	//ã‚«ãƒ¼ã‚½ãƒ«
 	if (lp->ItemIndex==Index) {
 		int lw = 1;
 		int yp = Rect.Bottom - lw;
@@ -167,7 +167,7 @@ void __fastcall TDebugForm::PreviewListBoxData(TWinControl *Control, int Index, 
 }
 
 //---------------------------------------------------------------------------
-//QÆî•ñ‚Ì•`‰æ
+//å‚ç…§æƒ…å ±ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TDebugForm::ReferListBoxDrawItem(TWinControl *Control, int Index,
 	TRect &Rect, TOwnerDrawState State)
@@ -175,7 +175,7 @@ void __fastcall TDebugForm::ReferListBoxDrawItem(TWinControl *Control, int Index
 	draw_InfListBox((TListBox*)Control, Rect, Index, State);
 }
 //---------------------------------------------------------------------------
-//ƒvƒŒƒrƒ…[/QÆî•ñ‚Å‚ÌƒL[‘€ì
+//ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼/å‚ç…§æƒ…å ±ã§ã®ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TDebugForm::ReferListBoxKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -184,7 +184,7 @@ void __fastcall TDebugForm::ReferListBoxKeyDown(TObject *Sender, WORD &Key, TShi
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒs[
+//ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TDebugForm::EditCopyActionExecute(TObject *Sender)
 {
@@ -198,7 +198,7 @@ void __fastcall TDebugForm::EditCopyActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒXƒeƒbƒvÀs
+//ã‚¹ãƒ†ãƒƒãƒ—å®Ÿè¡Œ
 //---------------------------------------------------------------------------
 void __fastcall TDebugForm::StepActionExecute(TObject *Sender)
 {
@@ -210,7 +210,7 @@ void __fastcall TDebugForm::StepActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = XCMD_IsBusy && XCMD_Debugging;
 }
 //---------------------------------------------------------------------------
-//Às
+//å®Ÿè¡Œ
 //---------------------------------------------------------------------------
 void __fastcall TDebugForm::GoActionExecute(TObject *Sender)
 {
@@ -222,7 +222,7 @@ void __fastcall TDebugForm::GoActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = XCMD_IsBusy && XCMD_Debugging && !XCMD_Debug_Go;
 }
 //---------------------------------------------------------------------------
-//’â~
+//åœæ­¢
 //---------------------------------------------------------------------------
 void __fastcall TDebugForm::BreakActionExecute(TObject *Sender)
 {
@@ -236,7 +236,7 @@ void __fastcall TDebugForm::BreakActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒfƒoƒbƒOƒ‚[ƒhI—¹
+//ãƒ‡ãƒãƒƒã‚°ãƒ¢ãƒ¼ãƒ‰çµ‚äº†
 //---------------------------------------------------------------------------
 void __fastcall TDebugForm::QuitActionExecute(TObject *Sender)
 {
@@ -249,7 +249,7 @@ void __fastcall TDebugForm::QuitActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒ}ƒ“ƒh‚ÌÀs‚ğI—¹
+//ã‚³ãƒãƒ³ãƒ‰ã®å®Ÿè¡Œã‚’çµ‚äº†
 //---------------------------------------------------------------------------
 void __fastcall TDebugForm::ExitActionExecute(TObject *Sender)
 {
@@ -262,7 +262,7 @@ void __fastcall TDebugForm::ExitActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//•Ï”ˆê——
+//å¤‰æ•°ä¸€è¦§
 //---------------------------------------------------------------------------
 void __fastcall TDebugForm::VarListActionExecute(TObject *Sender)
 {
@@ -273,7 +273,7 @@ void __fastcall TDebugForm::VarListActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒGƒfƒBƒ^‚ÅŠJ‚­
+//ã‚¨ãƒ‡ã‚£ã‚¿ã§é–‹ã
 //---------------------------------------------------------------------------
 void __fastcall TDebugForm::EditActionExecute(TObject *Sender)
 {
@@ -286,7 +286,7 @@ void __fastcall TDebugForm::EditActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒwƒ‹ƒv
+//ãƒ˜ãƒ«ãƒ—
 //---------------------------------------------------------------------------
 void __fastcall TDebugForm::HelpActionExecute(TObject *Sender)
 {

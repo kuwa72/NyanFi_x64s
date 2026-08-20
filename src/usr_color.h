@@ -1,6 +1,6 @@
 /**
  * @file usr_color.h
- * @brief ƒJƒ‰[ˆ—ŠÖ˜A‚ÌŠÖ”
+ * @brief ã‚«ãƒ©ãƒ¼å‡¦ç†é–¢é€£ã®é–¢æ•°
  */
 //---------------------------------------------------------------------------
 #ifndef UsrColorH
@@ -12,50 +12,50 @@ extern const TColor col_Teal;
 
 //---------------------------------------------------------------------------
 /**
- * @brief ‹P“x‚ğæ“¾
- * @param col ‘ÎÛF
- * @return double ‹P“x’l(0`1.0)
+ * @brief è¼åº¦ã‚’å–å¾—
+ * @param col å¯¾è±¡è‰²
+ * @return double è¼åº¦å€¤(0ï½1.0)
  */
 double GetLuminance(TColor col);
 
 /**
- * @brief F‚É”{—¦‚ğ‚©‚¯‚é
- * @param col Œ³‚ÌF
- * @param rt ”{—¦(0.0`1.0)
+ * @brief è‰²ã«å€ç‡ã‚’ã‹ã‘ã‚‹
+ * @param col å…ƒã®è‰²
+ * @param rt å€ç‡(0.0ï½1.0)
  * @return TColor 
  */
 TColor RatioCol(TColor col, float rt);
 
 /**
- * @brief ‹P“x‚ÉŠî‚Ã‚¢‚ÄƒOƒŒ[ƒXƒP[ƒ‹‰»
- * @param col Œ³‚ÌF
- * @return TColor ƒOƒŒ[ƒXƒP[ƒ‹‰»‚³‚ê‚½F
+ * @brief è¼åº¦ã«åŸºã¥ã„ã¦ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«åŒ–
+ * @param col å…ƒã®è‰²
+ * @return TColor ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«åŒ–ã•ã‚ŒãŸè‰²
  */
 TColor GrayCol(TColor col);
 
 /**
- * @brief •âF‚ğæ“¾
- * @param col Œ³‚ÌF
- * @return TColor •âF
+ * @brief è£œè‰²ã‚’å–å¾—
+ * @param col å…ƒã®è‰²
+ * @return TColor è£œè‰²
  */
 TColor ComplementaryCol(TColor col);
 
-/** @brief RGB¨HSL •ÏŠ· */
+/** @brief RGBâ†’HSL å¤‰æ› */
 void RgbToHsl(TColor col, int *h, int *s, int *l);
 
-/** @brief RGB¨HSV •ÏŠ· */
+/** @brief RGBâ†’HSV å¤‰æ› */
 void RgbToHsv(TColor col, int *h, int *s, int *v);
 
-/** @brief RGB¨HSV •ÏŠ· */
+/** @brief RGBâ†’HSV å¤‰æ› */
 void RgbToHsv(BYTE r, BYTE g, BYTE b, int *h, int *s, int *v);
 
-/** @brief HSL¨RGB •ÏŠ· */
+/** @brief HSLâ†’RGB å¤‰æ› */
 TColor HslToCol(int h, int s, int l);
 
 /**
- * @brief ”wŒi‚Ì‹P“x‚©‚ç”’‚Ü‚½‚Í•‚ğ‘I‘ğE‰ÁŒ¸
- * @param col ”wŒiF
- * @param rt ‰ÁŒ¸w’è
+ * @brief èƒŒæ™¯ã®è¼åº¦ã‹ã‚‰ç™½ã¾ãŸã¯é»’ã‚’é¸æŠãƒ»åŠ æ¸›
+ * @param col èƒŒæ™¯è‰²
+ * @param rt åŠ æ¸›æŒ‡å®š
  * @return TColor 
  */
 TColor SelectWorB(TColor col, float rt = 1.0);
@@ -68,47 +68,47 @@ TColor SelectWorB(TColor col, float rt = 1.0);
 #define ADJCOL_BGBIT	16
 
 /**
- * @brief ‹P“x‚ÉŠî‚Ã‚¢‚Ä–¾ˆÃ‚ğ‰ÁŒ¸
- * @param col Œ³‚ÌF
- * @param adj ‰ÁŒ¸’l (0`255)
+ * @brief è¼åº¦ã«åŸºã¥ã„ã¦æ˜æš—ã‚’åŠ æ¸›
+ * @param col å…ƒã®è‰²
+ * @param adj åŠ æ¸›å€¤ (0ï½255)
  * @return TColor 
  */
 TColor AdjustColor(TColor col, int adj);
 
-/** @brief ‚QF¬‡ */
+/** @brief ï¼’è‰²æ··åˆ */
 TColor Mix2Colors(TColor col1, TColor col2);
 
 /**
- * @brief •¶š—ñ‚©‚çƒJƒ‰[‚ğİ’è
+ * @brief æ–‡å­—åˆ—ã‹ã‚‰ã‚«ãƒ©ãƒ¼ã‚’è¨­å®š
  * @param[out] col 
- * @param s ®”’l‚ğ•\‚·•¶š—ñ
+ * @param s æ•´æ•°å€¤ã‚’è¡¨ã™æ–‡å­—åˆ—
  */
 void str_to_Color(TColor &col, UnicodeString s);
 
 /**
- * @brief ƒXƒ^ƒCƒ‹‚ğl—¶‚µ‚½ƒEƒBƒ“ƒhƒE”wŒiF‚Ìæ“¾
- * @param is_inv –³Œø‚È€–Ú
+ * @brief ã‚¹ã‚¿ã‚¤ãƒ«ã‚’è€ƒæ…®ã—ãŸã‚¦ã‚£ãƒ³ãƒ‰ã‚¦èƒŒæ™¯è‰²ã®å–å¾—
+ * @param is_inv ç„¡åŠ¹ãªé …ç›®
  * @return TColor 
  */
 TColor get_WinColor(bool is_inv = false);
 
 /**
- * @brief ƒXƒ^ƒCƒ‹‚ğl—¶‚µ‚½ƒEƒBƒ“ƒhƒE•¶šF‚Ìæ“¾
- * @param is_hl ƒnƒCƒ‰ƒCƒg
+ * @brief ã‚¹ã‚¿ã‚¤ãƒ«ã‚’è€ƒæ…®ã—ãŸã‚¦ã‚£ãƒ³ãƒ‰ã‚¦æ–‡å­—è‰²ã®å–å¾—
+ * @param is_hl ãƒã‚¤ãƒ©ã‚¤ãƒˆ
  * @return TColor 
  */
 TColor get_TextColor(bool is_hl = false);
 
 /**
- * @brief ƒXƒ^ƒCƒ‹‚ğl—¶‚µ‚½ƒpƒlƒ‹F‚Ìæ“¾
- * @param is_inv –³Œø‚È€–Ú
+ * @brief ã‚¹ã‚¿ã‚¤ãƒ«ã‚’è€ƒæ…®ã—ãŸãƒ‘ãƒãƒ«è‰²ã®å–å¾—
+ * @param is_inv ç„¡åŠ¹ãªé …ç›®
  * @return TColor 
  */
 TColor get_PanelColor(bool is_inv = false);
 
 /**
- * @brief ƒXƒ^ƒCƒ‹‚ğl—¶‚µ‚½ƒ‰ƒxƒ‹•¶šF‚Ìæ“¾
- * @param is_inv –³Œø‚È€–Ú
+ * @brief ã‚¹ã‚¿ã‚¤ãƒ«ã‚’è€ƒæ…®ã—ãŸãƒ©ãƒ™ãƒ«æ–‡å­—è‰²ã®å–å¾—
+ * @param is_inv ç„¡åŠ¹ãªé …ç›®
  * @return TColor 
  */
 TColor get_LabelColor(bool is_inv = false);
@@ -122,9 +122,9 @@ void InvColIfEmpty(TEdit *ep);
 TColor get_OptSysColor(TColor col, TColor def);
 
 /**
- * @brief ƒnƒCƒ‰ƒCƒgF‚Ìİ’è
- * @param cv ƒLƒƒƒ“ƒoƒX
- * @param hl ƒnƒCƒ‰ƒCƒg
+ * @brief ãƒã‚¤ãƒ©ã‚¤ãƒˆè‰²ã®è¨­å®š
+ * @param cv ã‚­ãƒ£ãƒ³ãƒã‚¹
+ * @param hl ãƒã‚¤ãƒ©ã‚¤ãƒˆ
  */
 void SetHighlight(TCanvas *cv, bool hl);
 

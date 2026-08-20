@@ -1,6 +1,6 @@
 /**
  * @file ExpCsv.h
- * @brief CSV/TSVƒGƒNƒXƒ|[ƒgEƒ_ƒCƒAƒƒO
+ * @brief CSV/TSVã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆãƒ»ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 //---------------------------------------------------------------------------
 #ifndef ExpCsvH
@@ -19,11 +19,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief CSV/TSVƒGƒNƒXƒ|[ƒgEƒ_ƒCƒAƒƒO
+ * @brief CSV/TSVã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆãƒ»ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TExpCsvDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *AddAllItemAction;
 	TAction *AddItemAction;
 	TAction *ExportAction;
@@ -63,11 +63,11 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall RefOutNameBtnClick(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	bool isTSV;
 	bool ExpBusy;
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	TTxtViewer *Viewer;
 
 	__fastcall TExpCsvDlg(TComponent* Owner);

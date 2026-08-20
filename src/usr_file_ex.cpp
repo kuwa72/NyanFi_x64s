@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------//
-// ƒtƒ@ƒCƒ‹‘€ì (260•¶šˆÈã‚ÌƒpƒX‚É‘Î‰)								//
+// ãƒ•ã‚¡ã‚¤ãƒ«æ“ä½œ (260æ–‡å­—ä»¥ä¸Šã®ãƒ‘ã‚¹ã«å¯¾å¿œ)								//
 //																		//
 //----------------------------------------------------------------------//
 #include "usr_str.h"
@@ -12,7 +12,7 @@
 UnicodeString ExePath;
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹–¼å•”‚É‚æ‚éƒ\[ƒg—p”äŠrŠÖ”
+//ãƒ•ã‚¡ã‚¤ãƒ«åä¸»éƒ¨ã«ã‚ˆã‚‹ã‚½ãƒ¼ãƒˆç”¨æ¯”è¼ƒé–¢æ•°
 //---------------------------------------------------------------------------
 int __fastcall FileComp_Base(TStringList *List, int Index1, int Index2)
 {
@@ -24,8 +24,8 @@ int __fastcall FileComp_Base(TStringList *List, int Index1, int Index2)
 }
 
 //---------------------------------------------------------------------------
-//260•¶šˆÈã‚ÌƒpƒX–¼‚É‘Î‰‚·‚é‚½‚ß‚Ìƒtƒ@ƒCƒ‹–¼•ÏŠ·
-//  ––”ö‚ª‹ó”’‚Ìê‡‚É‚à‘Î‰
+//260æ–‡å­—ä»¥ä¸Šã®ãƒ‘ã‚¹åã«å¯¾å¿œã™ã‚‹ãŸã‚ã®ãƒ•ã‚¡ã‚¤ãƒ«åå¤‰æ›
+//  æœ«å°¾ãŒç©ºç™½ã®å ´åˆã«ã‚‚å¯¾å¿œ
 //---------------------------------------------------------------------------
 UnicodeString cv_ex_filename(UnicodeString fnam)
 {
@@ -36,7 +36,7 @@ UnicodeString cv_ex_filename(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//ŠÂ‹«•Ï”‚ğ•ÏŠ·
+//ç’°å¢ƒå¤‰æ•°ã‚’å¤‰æ›
 //---------------------------------------------------------------------------
 UnicodeString cv_env_var(UnicodeString s)
 {
@@ -52,7 +52,7 @@ UnicodeString cv_env_var(UnicodeString s)
 }
 
 //---------------------------------------------------------------------------
-//ŠÂ‹«•Ï”‚ğŠÜ‚Ş•¶š—ñ‚ğ•ÏŠ·
+//ç’°å¢ƒå¤‰æ•°ã‚’å«ã‚€æ–‡å­—åˆ—ã‚’å¤‰æ›
 //---------------------------------------------------------------------------
 UnicodeString cv_env_str(UnicodeString s)
 {
@@ -62,27 +62,27 @@ UnicodeString cv_env_str(UnicodeString s)
 }
 
 //---------------------------------------------------------------------------
-//ŠÂ‹«•Ï”‚â‘®•¶š—ñ‚ğŠÜ‚Ş•¶š—ñ‚©‚çÀÛ‚ÌƒpƒX–¼‚ğæ“¾
+//ç’°å¢ƒå¤‰æ•°ã‚„æ›¸å¼æ–‡å­—åˆ—ã‚’å«ã‚€æ–‡å­—åˆ—ã‹ã‚‰å®Ÿéš›ã®ãƒ‘ã‚¹åã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString get_actual_path(UnicodeString pnam)
 {
 	pnam = cv_env_str(pnam);
 
 	if (ContainsStr(pnam, "$")) {
-		pnam = ReplaceStr(pnam, "$$", "\f");	//$$ ‚ğˆê“I‚É \f ‚É•Ï‚¦‚Ä‚¨‚¢‚Ä
+		pnam = ReplaceStr(pnam, "$$", "\f");	//$$ ã‚’ä¸€æ™‚çš„ã« \f ã«å¤‰ãˆã¦ãŠã„ã¦
 		pnam = ReplaceStr(pnam, "$X", ExcludeTrailingPathDelimiter(ExePath));
 		pnam = ReplaceStr(pnam, "$D", ExtractFileDrive(ExePath));
-		pnam = ReplaceStr(pnam, "\f", "$");		//$$(\f) ‚ğ $ ‚É•ÏŠ·
+		pnam = ReplaceStr(pnam, "\f", "$");		//$$(\f) ã‚’ $ ã«å¤‰æ›
 	}
 	return pnam;
 }
 
 //---------------------------------------------------------------------------
-//ƒpƒX‚ª’Ê‚Á‚Ä‚¢‚éê‡AƒpƒX–³‚µƒtƒ@ƒCƒ‹–¼‚ğƒpƒX•t‚«‚É•ÏŠ·
+//ãƒ‘ã‚¹ãŒé€šã£ã¦ã„ã‚‹å ´åˆã€ãƒ‘ã‚¹ç„¡ã—ãƒ•ã‚¡ã‚¤ãƒ«åã‚’ãƒ‘ã‚¹ä»˜ãã«å¤‰æ›
 //---------------------------------------------------------------------------
 UnicodeString get_actual_name(
 	UnicodeString fnam,
-	bool sw_fmt)			//‘®•¶š—ñ‚ğ“WŠJ	(default = false)
+	bool sw_fmt)			//æ›¸å¼æ–‡å­—åˆ—ã‚’å±•é–‹	(default = false)
 {
 	fnam = sw_fmt? get_actual_path(fnam) : cv_env_str(fnam);
 
@@ -103,7 +103,7 @@ UnicodeString get_actual_name(
 			else if (file_exists(pnam + fnam)) {
 				rnam = pnam + fnam;
 			}
-			//ƒVƒ“ƒ{ƒŠƒbƒNƒŠƒ“ƒN‚È‚ç App Paths ‚ğƒ`ƒFƒbƒN
+			//ã‚·ãƒ³ãƒœãƒªãƒƒã‚¯ãƒªãƒ³ã‚¯ãªã‚‰ App Paths ã‚’ãƒã‚§ãƒƒã‚¯
 			if (!rnam.IsEmpty() && is_SymLink(rnam)) {
 				rnam = EmptyStr;
 				std::unique_ptr<TRegistry> reg(new TRegistry());
@@ -124,7 +124,7 @@ UnicodeString get_actual_name(
 }
 
 //---------------------------------------------------------------------------
-//ƒpƒX‚ª’Ê‚Á‚Ä‚¢‚éê‡Aƒtƒ@ƒCƒ‹–¼‚©‚çƒpƒX‚ÆŠg’£q‚ğæ‚èœ‚­
+//ãƒ‘ã‚¹ãŒé€šã£ã¦ã„ã‚‹å ´åˆã€ãƒ•ã‚¡ã‚¤ãƒ«åã‹ã‚‰ãƒ‘ã‚¹ã¨æ‹¡å¼µå­ã‚’å–ã‚Šé™¤ã
 //---------------------------------------------------------------------------
 UnicodeString exclude_env_path(UnicodeString fnam)
 {
@@ -133,12 +133,12 @@ UnicodeString exclude_env_path(UnicodeString fnam)
 	UnicodeString fext = get_extension(fnam);
 	if (fext.IsEmpty()) return fnam;
 
-	//Šg’£q‚ğƒ`ƒFƒbƒN
+	//æ‹¡å¼µå­ã‚’ãƒã‚§ãƒƒã‚¯
 	TStringDynArray xlst = split_strings_semicolon(GetEnvironmentVariable("PATHEXT"));
 	bool ok = false;
 	for (int i=0; i<xlst.Length && !ok; i++) ok = SameText(fext, xlst[i]);
 
-	//ƒpƒX‚ğƒ`ƒFƒbƒN
+	//ãƒ‘ã‚¹ã‚’ãƒã‚§ãƒƒã‚¯
 	if (ok) {
 		TStringDynArray plst = split_strings_semicolon(GetEnvironmentVariable("PATH"));
 		UnicodeString pnam = ExtractFilePath(fnam);
@@ -154,7 +154,7 @@ UnicodeString exclude_env_path(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//Àsƒtƒ@ƒCƒ‹‚ÌƒfƒBƒŒƒNƒgƒŠ‚©‚ç‚Ì‘Š‘Îƒtƒ@ƒCƒ‹–¼‚É•ÏŠ·
+//å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰ã®ç›¸å¯¾ãƒ•ã‚¡ã‚¤ãƒ«åã«å¤‰æ›
 //---------------------------------------------------------------------------
 UnicodeString to_relative_name(UnicodeString fnam)
 {
@@ -163,22 +163,22 @@ UnicodeString to_relative_name(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//â‘ÎƒpƒX‚É•ÏŠ· (ƒhƒ‰ƒCƒu–¼‚ğŠÜ‚Şê‡‚Í³‹K‰»)
+//çµ¶å¯¾ãƒ‘ã‚¹ã«å¤‰æ› (ãƒ‰ãƒ©ã‚¤ãƒ–åã‚’å«ã‚€å ´åˆã¯æ­£è¦åŒ–)
 //---------------------------------------------------------------------------
 UnicodeString to_absolute_name(
-	UnicodeString fnam,		//•ÏŠ·‘ÎÛƒtƒ@ƒCƒ‹–¼
-	UnicodeString rnam)		//Šî€ƒfƒBƒŒƒNƒgƒŠ–¼ (default = EmptyStr/ ExePath);
+	UnicodeString fnam,		//å¤‰æ›å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«å
+	UnicodeString rnam)		//åŸºæº–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå (default = EmptyStr/ ExePath);
 {
 	if (fnam.IsEmpty()) return EmptyStr;
 
-	//.. ‚ğŠÜ‚ŞƒpƒX‚ğ³‹K‰»
+	//.. ã‚’å«ã‚€ãƒ‘ã‚¹ã‚’æ­£è¦åŒ–
 	if (!ExtractFileDrive(fnam).IsEmpty()) {
 		UnicodeString ptn = "\\\\[^\\\\\\.]+\\\\\\.\\.\\\\";
 		while (TRegEx::IsMatch(fnam, ptn)) fnam = TRegEx::Replace(fnam, ptn, "\\");
 		return fnam;
 	}
 
-	//‘Š‘ÎƒpƒX‚©‚çâ‘ÎƒpƒX‚Ö
+	//ç›¸å¯¾ãƒ‘ã‚¹ã‹ã‚‰çµ¶å¯¾ãƒ‘ã‚¹ã¸
 	if (rnam.IsEmpty()) rnam = ExePath;
 	for (;;) {
 		if (remove_top_text(fnam, ".\\")) continue;
@@ -190,7 +190,7 @@ UnicodeString to_absolute_name(
 }
 
 //---------------------------------------------------------------------------
-//‘ã‘Öƒf[ƒ^ƒXƒgƒŠ[ƒ€‚ğl—¶‚µ‚½ƒpƒX–¼‚Ìæ“¾
+//ä»£æ›¿ãƒ‡ãƒ¼ã‚¿ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚’è€ƒæ…®ã—ãŸãƒ‘ã‚¹åã®å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString extract_file_path(UnicodeString fnam)
 {
@@ -200,12 +200,12 @@ UnicodeString extract_file_path(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒpƒXƒŠƒXƒg‚Éƒ}ƒbƒ`‚·‚é‚©?
+//ãƒ‘ã‚¹ãƒªã‚¹ãƒˆã«ãƒãƒƒãƒã™ã‚‹ã‹?
 //---------------------------------------------------------------------------
 bool match_path_list(
-	UnicodeString dnam,		//ƒ`ƒFƒbƒN‘ÎÛ
-	UnicodeString plist,	//ƒpƒXƒŠƒXƒg(ŠÂ‹«•Ï”A%ExePath% ‘Î‰)
-	bool start_sw)			//true : ‘O•ûˆê’v	(default = false : •”•ªˆê’v)
+	UnicodeString dnam,		//ãƒã‚§ãƒƒã‚¯å¯¾è±¡
+	UnicodeString plist,	//ãƒ‘ã‚¹ãƒªã‚¹ãƒˆ(ç’°å¢ƒå¤‰æ•°ã€%ExePath% å¯¾å¿œ)
+	bool start_sw)			//true : å‰æ–¹ä¸€è‡´	(default = false : éƒ¨åˆ†ä¸€è‡´)
 {
 	bool ret = false;
 	TStringDynArray path_lst = split_strings_semicolon(plist);
@@ -218,10 +218,10 @@ bool match_path_list(
 }
 
 //---------------------------------------------------------------------------
-//“¯ˆêƒtƒ@ƒCƒ‹‚©?
+//åŒä¸€ãƒ•ã‚¡ã‚¤ãƒ«ã‹?
 //---------------------------------------------------------------------------
 bool is_same_file(UnicodeString fnam1, UnicodeString fnam2,
-	UnicodeString rnam)		//Šî€ƒfƒBƒŒƒNƒgƒŠ–¼ (default = EmptyStr/ ExePath);
+	UnicodeString rnam)		//åŸºæº–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå (default = EmptyStr/ ExePath);
 {
 	fnam1 = to_absolute_name(exclude_quot(fnam1), rnam);
 	fnam2 = to_absolute_name(exclude_quot(fnam2), rnam);
@@ -229,7 +229,7 @@ bool is_same_file(UnicodeString fnam1, UnicodeString fnam2,
 }
 
 //---------------------------------------------------------------------------
-//“¯ˆêƒfƒBƒŒƒNƒgƒŠ‚©? (ŠÂ‹«•Ï”‘Î‰)
+//åŒä¸€ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹? (ç’°å¢ƒå¤‰æ•°å¯¾å¿œ)
 //---------------------------------------------------------------------------
 bool is_same_dir(UnicodeString dir1, UnicodeString dir2)
 {
@@ -239,7 +239,7 @@ bool is_same_dir(UnicodeString dir1, UnicodeString dir2)
 }
 
 //---------------------------------------------------------------------------
-//ƒ‹[ƒg–¼(ƒhƒ‰ƒCƒu–¼‚Ü‚½‚ÍUNC‚ÌƒRƒ“ƒsƒ…[ƒ^–¼)‚ğæ“¾
+//ãƒ«ãƒ¼ãƒˆå(ãƒ‰ãƒ©ã‚¤ãƒ–åã¾ãŸã¯UNCã®ã‚³ãƒ³ãƒ”ãƒ¥ãƒ¼ã‚¿å)ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString get_root_name(UnicodeString pnam)
 {
@@ -252,7 +252,7 @@ UnicodeString get_root_name(UnicodeString pnam)
 }
 
 //---------------------------------------------------------------------------
-//ÀÛ‚Ì‘å¬•¶š‚Åƒtƒ@ƒCƒ‹–¼‚ğæ“¾
+//å®Ÿéš›ã®å¤§å°æ–‡å­—ã§ãƒ•ã‚¡ã‚¤ãƒ«åã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString get_case_name(UnicodeString fnam)
 {
@@ -273,7 +273,7 @@ UnicodeString get_case_name(UnicodeString fnam)
 			FindClose(sr);
 		}
 		else {
-			//Œ©‚Â‚©‚ç‚È‚©‚Á‚½‚ç‚»‚Ì‚Ü‚Ü•Ô‚·
+			//è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸã‚‰ãã®ã¾ã¾è¿”ã™
 			ret_str = fnam;
 			break;
 		}
@@ -282,7 +282,7 @@ UnicodeString get_case_name(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒ‹[ƒgƒfƒBƒŒƒNƒgƒŠ‚©?
+//ãƒ«ãƒ¼ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹?
 //---------------------------------------------------------------------------
 bool is_root_dir(UnicodeString dnam)
 {
@@ -301,7 +301,7 @@ bool is_root_unc(UnicodeString dnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠ‚ªƒ‹[ƒg‚Ìê‡A––”ö‚Ì \ ‚ğæ‚èœ‚­
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒãƒ«ãƒ¼ãƒˆã®å ´åˆã€æœ«å°¾ã® \ ã‚’å–ã‚Šé™¤ã
 //---------------------------------------------------------------------------
 UnicodeString exclede_delimiter_if_root(UnicodeString dnam)
 {
@@ -313,7 +313,7 @@ UnicodeString exclede_delimiter_if_root(UnicodeString dnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒhƒ‰ƒCƒu–¼(‘å•¶šA\•t‚«)‚ğæ“¾
+//ãƒ‰ãƒ©ã‚¤ãƒ–å(å¤§æ–‡å­—ã€\ä»˜ã)ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString get_drive_str(UnicodeString dnam)
 {
@@ -321,19 +321,19 @@ UnicodeString get_drive_str(UnicodeString dnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒhƒ‰ƒCƒu‚ª—LŒø‚©?
+//ãƒ‰ãƒ©ã‚¤ãƒ–ãŒæœ‰åŠ¹ã‹?
 //---------------------------------------------------------------------------
 bool drive_exists(UnicodeString drv)
 {
 	drv = get_tkn(drv, ':');	if (drv.IsEmpty())	 return false;
 	int d_n = drv[1] - _T('A');	if (d_n<0 || d_n>25) return false;
 	DWORD d_flag = 0x00000001 << d_n;
-	DWORD d_bit = ::GetLogicalDrives();	//—˜—p‰Â”\‚Èƒhƒ‰ƒCƒu‚ğƒrƒbƒgƒ}ƒXƒNŒ`®‚Åæ“¾
+	DWORD d_bit = ::GetLogicalDrives();	//åˆ©ç”¨å¯èƒ½ãªãƒ‰ãƒ©ã‚¤ãƒ–ã‚’ãƒ“ãƒƒãƒˆãƒã‚¹ã‚¯å½¢å¼ã§å–å¾—
 	return (d_bit & d_flag);
 }
 
 //---------------------------------------------------------------------------
-//ƒhƒ‰ƒCƒu‚Ìí—Ş‚ğæ“¾
+//ãƒ‰ãƒ©ã‚¤ãƒ–ã®ç¨®é¡ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UINT get_drive_type(UnicodeString dnam)
 {
@@ -341,7 +341,7 @@ UINT get_drive_type(UnicodeString dnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒNƒ‰ƒXƒ^ƒTƒCƒY‚ğæ“¾
+//ã‚¯ãƒ©ã‚¹ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—
 //---------------------------------------------------------------------------
 int get_ClusterSize(UnicodeString dnam)
 {
@@ -353,7 +353,7 @@ int get_ClusterSize(UnicodeString dnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚Ìƒx[ƒX–¼‚ğæ“¾
+//ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ™ãƒ¼ã‚¹åã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString get_base_name(UnicodeString fnam)
 {
@@ -363,7 +363,7 @@ UnicodeString get_base_name(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//Šg’£q‚ğæ“¾ (ƒhƒbƒgƒtƒ@ƒCƒ‹‚ğl—¶)
+//æ‹¡å¼µå­ã‚’å–å¾— (ãƒ‰ãƒƒãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã‚’è€ƒæ…®)
 //---------------------------------------------------------------------------
 UnicodeString get_extension(UnicodeString fnam)
 {
@@ -372,7 +372,7 @@ UnicodeString get_extension(UnicodeString fnam)
 	return ExtractFileExt(StartsStr('.', fnam)? exclude_top(fnam) : fnam);
 }
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚È‚çŠg’£q‚ğæ“¾
+//ãƒ•ã‚¡ã‚¤ãƒ«ãªã‚‰æ‹¡å¼µå­ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString get_extension_if_file(UnicodeString fnam)
 {
@@ -380,7 +380,7 @@ UnicodeString get_extension_if_file(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//Šg’£q‚Ìƒ`ƒFƒbƒN
+//æ‹¡å¼µå­ã®ãƒã‚§ãƒƒã‚¯
 //---------------------------------------------------------------------------
 UnicodeString nrm_FileExt(UnicodeString fext)
 {
@@ -398,7 +398,7 @@ bool test_FileExt(UnicodeString fext, UnicodeString list)
 }
 
 //---------------------------------------------------------------------------
-//Šg’£q‚Ìƒ`ƒFƒbƒN(ƒTƒCƒY§ŒÀ‘Î‰)
+//æ‹¡å¼µå­ã®ãƒã‚§ãƒƒã‚¯(ã‚µã‚¤ã‚ºåˆ¶é™å¯¾å¿œ)
 //---------------------------------------------------------------------------
 bool test_FileExtSize(UnicodeString fext, UnicodeString list, __int64 size)
 {
@@ -417,7 +417,7 @@ bool test_FileExtSize(UnicodeString fext, UnicodeString list, __int64 size)
 }
 
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠ–¼‚Ì––”ö‚É \\ ‚ğ (EmptyStr ‚Ìê‡‚Í EmptyStr ‚ğ•Ô‚·)
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåã®æœ«å°¾ã« \\ ã‚’ (EmptyStr ã®å ´åˆã¯ EmptyStr ã‚’è¿”ã™)
 //---------------------------------------------------------------------------
 UnicodeString to_path_name(UnicodeString dnam)
 {
@@ -425,7 +425,7 @@ UnicodeString to_path_name(UnicodeString dnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠ–¼(––”ö‚Ì \\ –³‚µ)‚ğæ“¾
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå(æœ«å°¾ã® \\ ç„¡ã—)ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString get_dir_name(UnicodeString dnam)
 {
@@ -433,7 +433,7 @@ UnicodeString get_dir_name(UnicodeString dnam)
 }
 
 //---------------------------------------------------------------------------
-//eƒfƒBƒŒƒNƒgƒŠ‚ğæ“¾
+//è¦ªãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString get_parent_path(UnicodeString dnam)
 {
@@ -441,7 +441,7 @@ UnicodeString get_parent_path(UnicodeString dnam)
 }
 
 //---------------------------------------------------------------------------
-//“KØ‚ÈFTPƒpƒX‚É•ÏŠ·
+//é©åˆ‡ãªFTPãƒ‘ã‚¹ã«å¤‰æ›
 //---------------------------------------------------------------------------
 UnicodeString nrm_ftp_path(UnicodeString pnam)
 {
@@ -451,7 +451,7 @@ UnicodeString nrm_ftp_path(UnicodeString pnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒpƒX‚ğ•ªŠ„
+//ãƒ‘ã‚¹ã‚’åˆ†å‰²
 //---------------------------------------------------------------------------
 TStringDynArray split_path(UnicodeString pnam, UnicodeString dlmt)
 {
@@ -475,7 +475,7 @@ TStringDynArray split_path(UnicodeString pnam)
 }
 
 //---------------------------------------------------------------------------
-//"UNCƒpƒX:ƒ†[ƒU–¼" ‚©‚çƒ†[ƒU–¼‚ğ•ª—£
+//"UNCãƒ‘ã‚¹:ãƒ¦ãƒ¼ã‚¶å" ã‹ã‚‰ãƒ¦ãƒ¼ã‚¶åã‚’åˆ†é›¢
 //---------------------------------------------------------------------------
 UnicodeString split_user_name(UnicodeString &dnam)
 {
@@ -488,7 +488,7 @@ UnicodeString split_user_name(UnicodeString &dnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒ“ƒsƒ…[ƒ^–¼‚©?
+//ã‚³ãƒ³ãƒ”ãƒ¥ãƒ¼ã‚¿åã‹?
 //---------------------------------------------------------------------------
 bool is_computer_name(UnicodeString pnam)
 {
@@ -497,7 +497,7 @@ bool is_computer_name(UnicodeString pnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠ‚ªƒAƒNƒZƒX‰Â”\‚©H
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒã‚¢ã‚¯ã‚»ã‚¹å¯èƒ½ã‹ï¼Ÿ
 //---------------------------------------------------------------------------
 bool is_dir_accessible(UnicodeString dnam)
 {
@@ -520,7 +520,7 @@ bool is_dir_accessible(UnicodeString dnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒhƒ‰ƒCƒu‚ªƒAƒNƒZƒX‰Â”\‚©H
+//ãƒ‰ãƒ©ã‚¤ãƒ–ãŒã‚¢ã‚¯ã‚»ã‚¹å¯èƒ½ã‹ï¼Ÿ
 //---------------------------------------------------------------------------
 bool is_drive_accessible(UnicodeString dnam)
 {
@@ -535,7 +535,7 @@ bool is_drive_accessible(UnicodeString dnam)
 	return res;
 }
 //---------------------------------------------------------------------------
-//ƒhƒ‰ƒCƒu‚ªƒ‰ƒCƒgƒvƒƒeƒNƒg‚³‚ê‚Ä‚¢‚é‚©H
+//ãƒ‰ãƒ©ã‚¤ãƒ–ãŒãƒ©ã‚¤ãƒˆãƒ—ãƒ­ãƒ†ã‚¯ãƒˆã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
 //---------------------------------------------------------------------------
 bool is_drive_protected(UnicodeString dnam)
 {
@@ -554,7 +554,7 @@ bool is_drive_protected(UnicodeString dnam)
 }
 
 //---------------------------------------------------------------------------
-//NTFSˆ³k‘®«‚Ìİ’è
+//NTFSåœ§ç¸®å±æ€§ã®è¨­å®š
 //---------------------------------------------------------------------------
 bool set_CompressAttr(UnicodeString fnam, bool sw)
 {
@@ -582,7 +582,7 @@ bool set_CompressAttr(UnicodeString fnam, bool sw)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚Ì‘®«‚ğæ“¾
+//ãƒ•ã‚¡ã‚¤ãƒ«ã®å±æ€§ã‚’å–å¾—
 //---------------------------------------------------------------------------
 int file_GetAttr(UnicodeString fnam)
 {
@@ -593,7 +593,7 @@ int file_GetAttr(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚Ì‘®«‚ğİ’è
+//ãƒ•ã‚¡ã‚¤ãƒ«ã®å±æ€§ã‚’è¨­å®š
 //---------------------------------------------------------------------------
 bool file_SetAttr(UnicodeString fnam, int attr)
 {
@@ -605,12 +605,12 @@ bool file_SetAttr(UnicodeString fnam, int attr)
 	}
 }
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠ‚Ì‘®«‚ğƒRƒs[
-//–ß‚è’l: false = ¸”s
-//dst_nam ‚Í–³‘®«‚Æ‚İ‚È‚·(ì¬’¼Œã‚Ìó‘Ô)
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å±æ€§ã‚’ã‚³ãƒ”ãƒ¼
+//æˆ»ã‚Šå€¤: false = å¤±æ•—
+//dst_nam ã¯ç„¡å±æ€§ã¨ã¿ãªã™(ä½œæˆç›´å¾Œã®çŠ¶æ…‹)
 //---------------------------------------------------------------------------
 bool dir_CopyAttr(UnicodeString src_nam, UnicodeString dst_nam,
-	bool remove_ro)	//“Çê—p‘®«‚ğ‰ğœ
+	bool remove_ro)	//èª­è¾¼å°‚ç”¨å±æ€§ã‚’è§£é™¤
 {
 	int attr = file_GetAttr(src_nam);	if (attr==faInvalid) return false;
 	if (remove_ro) attr &= ~faReadOnly;
@@ -619,7 +619,7 @@ bool dir_CopyAttr(UnicodeString src_nam, UnicodeString dst_nam,
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚Ì“Ç‚İo‚µê—p‘®«‚ğ‰ğœ
+//ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿å‡ºã—å°‚ç”¨å±æ€§ã‚’è§£é™¤
 //---------------------------------------------------------------------------
 bool set_FileWritable(UnicodeString fnam)
 {
@@ -635,7 +635,7 @@ bool set_FileWritable(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒŠƒp[ƒXƒ|ƒCƒ“ƒg?
+//ãƒªãƒ‘ãƒ¼ã‚¹ãƒã‚¤ãƒ³ãƒˆ?
 //---------------------------------------------------------------------------
 bool is_SymLink(UnicodeString fnam)
 {
@@ -645,7 +645,7 @@ bool is_SymLink(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒŠƒ“ƒNƒJƒEƒ“ƒg‚ğæ“¾(2ˆÈã‚È‚çƒn[ƒhƒŠƒ“ƒN)
+//ãƒªãƒ³ã‚¯ã‚«ã‚¦ãƒ³ãƒˆã‚’å–å¾—(2ä»¥ä¸Šãªã‚‰ãƒãƒ¼ãƒ‰ãƒªãƒ³ã‚¯)
 //---------------------------------------------------------------------------
 int get_HardLinkCount(UnicodeString fnam)
 {
@@ -660,7 +660,7 @@ int get_HardLinkCount(UnicodeString fnam)
 	return cnt;
 }
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚Ì“¯ˆê«ƒ`ƒFƒbƒN
+//ãƒ•ã‚¡ã‚¤ãƒ«ã®åŒä¸€æ€§ãƒã‚§ãƒƒã‚¯
 //---------------------------------------------------------------------------
 bool is_IdenticalFile(UnicodeString fnam1, UnicodeString fnam2)
 {
@@ -685,7 +685,7 @@ bool is_IdenticalFile(UnicodeString fnam1, UnicodeString fnam2)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚Ì‘¶İƒ`ƒFƒbƒN
+//ãƒ•ã‚¡ã‚¤ãƒ«ã®å­˜åœ¨ãƒã‚§ãƒƒã‚¯
 //---------------------------------------------------------------------------
 bool file_exists(UnicodeString fnam)
 {
@@ -712,11 +712,11 @@ bool file_exists_ico(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒƒCƒ‹ƒhƒJ[ƒh‚É‘Î‰‚µ‚½‘¶İƒ`ƒFƒbƒN
+//ãƒ¯ã‚¤ãƒ«ãƒ‰ã‚«ãƒ¼ãƒ‰ã«å¯¾å¿œã—ãŸå­˜åœ¨ãƒã‚§ãƒƒã‚¯
 //---------------------------------------------------------------------------
 bool file_exists_wc(
-	UnicodeString &fnam)	//ƒtƒ@ƒCƒ‹–¼(ƒƒCƒ‹ƒhƒJ[ƒh‰Â)
-							//Å‰‚Éƒ}ƒbƒ`‚µ‚½‚à‚Ì‚ğ•Ô‚·A‚È‚¯‚ê‚Î EmptyStr
+	UnicodeString &fnam)	//ãƒ•ã‚¡ã‚¤ãƒ«å(ãƒ¯ã‚¤ãƒ«ãƒ‰ã‚«ãƒ¼ãƒ‰å¯)
+							//æœ€åˆã«ãƒãƒƒãƒã—ãŸã‚‚ã®ã‚’è¿”ã™ã€ãªã‘ã‚Œã° EmptyStr
 {
 	UnicodeString mask = ExtractFileName(fnam);
 	if (mask.Pos('*') || mask.Pos('?')) {
@@ -728,7 +728,7 @@ bool file_exists_wc(
 }
 
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠ‚Ì‘¶İƒ`ƒFƒbƒN
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å­˜åœ¨ãƒã‚§ãƒƒã‚¯
 //---------------------------------------------------------------------------
 bool dir_exists(UnicodeString dnam)
 {
@@ -737,7 +737,7 @@ bool dir_exists(UnicodeString dnam)
 }
 
 //---------------------------------------------------------------------------
-//¢ŠE‹¦’è‚©‚çƒ[ƒJƒ‹‚Ì TDateTime ‚Ö
+//ä¸–ç•Œå”å®šæ™‚åˆ»ã‹ã‚‰ãƒ­ãƒ¼ã‚«ãƒ«ã® TDateTime ã¸
 //---------------------------------------------------------------------------
 TDateTime utc_to_DateTime(FILETIME *utc)
 {
@@ -749,7 +749,7 @@ TDateTime utc_to_DateTime(FILETIME *utc)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚Ìƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚ğ TDateTime Œ^‚Åæ“¾
+//ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã‚’ TDateTime å‹ã§å–å¾—
 //---------------------------------------------------------------------------
 TDateTime get_file_age(UnicodeString fnam)
 {
@@ -775,14 +775,14 @@ TDateTime get_file_age(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚ğİ’è
+//ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã‚’è¨­å®š
 //---------------------------------------------------------------------------
 bool set_file_age(UnicodeString fnam, TDateTime dt,
-	bool force)		//“Çê—p‚Å‚à‹­§“I‚É•ÏX (default = false)
+	bool force)		//èª­è¾¼å°‚ç”¨ã§ã‚‚å¼·åˆ¶çš„ã«å¤‰æ›´ (default = false)
 {
 	bool res = false;
 
-	//“Çê—p‚È‚çˆê“I‚É‰ğœ
+	//èª­è¾¼å°‚ç”¨ãªã‚‰ä¸€æ™‚çš„ã«è§£é™¤
 	int atr = file_GetAttr(fnam);
 	bool chg_ro = force && atr!=faInvalid && (atr & faReadOnly);
 	if (chg_ro && !set_FileWritable(fnam)) chg_ro = false;
@@ -794,21 +794,21 @@ bool set_file_age(UnicodeString fnam, TDateTime dt,
 		SYSTEMTIME s_tm;
 		FILETIME l_tm, f_tm;
 		DateTimeToSystemTime(dt, s_tm);
-		//ƒVƒXƒeƒ€“ú ¨ ƒtƒ@ƒCƒ‹ ¨ ¢ŠE‹¦’è
+		//ã‚·ã‚¹ãƒ†ãƒ æ—¥æ™‚ â†’ ãƒ•ã‚¡ã‚¤ãƒ«æ™‚åˆ» â†’ ä¸–ç•Œå”å®šæ™‚åˆ»
 		if (::SystemTimeToFileTime(&s_tm, &l_tm) && ::LocalFileTimeToFileTime(&l_tm, &f_tm)) {
 			res = ::SetFileTime(hFile, NULL, NULL, &f_tm);
 		}
 		::CloseHandle(hFile);
 	}
 
-	//‘®«‚ğŒ³‚É–ß‚·
+	//å±æ€§ã‚’å…ƒã«æˆ»ã™
 	if (chg_ro) file_SetAttr(fnam, atr);
 
 	return res;
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹ƒTƒCƒY‚ğæ“¾
+//ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚ºã‚’å–å¾—
 //---------------------------------------------------------------------------
 __int64 get_file_size(UnicodeString fnam)
 {
@@ -825,7 +825,7 @@ __int64 get_file_size(UnicodeString fnam)
 	return size;
 }
 //---------------------------------------------------------------------------
-//ˆ³kƒTƒCƒY‚ğæ“¾
+//åœ§ç¸®ã‚µã‚¤ã‚ºã‚’å–å¾—
 //---------------------------------------------------------------------------
 __int64 get_comp_size(UnicodeString fnam)
 {
@@ -836,7 +836,7 @@ __int64 get_comp_size(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//‘ã‘Öƒf[ƒ^ƒXƒgƒŠ[ƒ€‚Ì‹æØ‚èˆÊ’u‚ğæ“¾
+//ä»£æ›¿ãƒ‡ãƒ¼ã‚¿ã‚¹ãƒˆãƒªãƒ¼ãƒ ã®åŒºåˆ‡ã‚Šä½ç½®ã‚’å–å¾—
 //---------------------------------------------------------------------------
 int pos_ADS_delimiter(UnicodeString fnam)
 {
@@ -844,15 +844,15 @@ int pos_ADS_delimiter(UnicodeString fnam)
 	return (p>2 && fnam[p]==':')? p : 0;
 }
 //---------------------------------------------------------------------------
-//‘ã‘Öƒf[ƒ^ƒXƒgƒŠ[ƒ€•t‚«ƒpƒX–¼‚©?
+//ä»£æ›¿ãƒ‡ãƒ¼ã‚¿ã‚¹ãƒˆãƒªãƒ¼ãƒ ä»˜ããƒ‘ã‚¹åã‹?
 //---------------------------------------------------------------------------
 bool is_ADS_name(UnicodeString fnam)
 {
 	return (pos_ADS_delimiter(fnam)>0);
 }
 //---------------------------------------------------------------------------
-//‘ã‘Öƒf[ƒ^ƒXƒgƒŠ[ƒ€•t‚«ƒpƒX–¼‚ğ•ª‰ğ
-//–ß‚è’l: ƒtƒ@ƒCƒ‹–¼/ fnam = :ƒXƒgƒŠ[ƒ€–¼
+//ä»£æ›¿ãƒ‡ãƒ¼ã‚¿ã‚¹ãƒˆãƒªãƒ¼ãƒ ä»˜ããƒ‘ã‚¹åã‚’åˆ†è§£
+//æˆ»ã‚Šå€¤: ãƒ•ã‚¡ã‚¤ãƒ«å/ fnam = :ã‚¹ãƒˆãƒªãƒ¼ãƒ å
 //---------------------------------------------------------------------------
 UnicodeString split_ADS_name(UnicodeString &fnam)
 {
@@ -870,18 +870,18 @@ UnicodeString split_ADS_name(UnicodeString &fnam)
 }
 
 //---------------------------------------------------------------------------
-//‘ã‘Öƒf[ƒ^ƒXƒgƒŠ[ƒ€‚Ìíœ
-//–ß‚è’l: 1=¬Œ÷/ 0=¸”s(lst->Text ‚ÉƒGƒ‰[ƒƒbƒZ[ƒW)/ -1=ADS‚È‚µ
+//ä»£æ›¿ãƒ‡ãƒ¼ã‚¿ã‚¹ãƒˆãƒªãƒ¼ãƒ ã®å‰Šé™¤
+//æˆ»ã‚Šå€¤: 1=æˆåŠŸ/ 0=å¤±æ•—(lst->Text ã«ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸)/ -1=ADSãªã—
 //---------------------------------------------------------------------------
 int delete_ADS(
-	UnicodeString fnam,	//[i] ƒtƒ@ƒCƒ‹–¼
-	bool force, 		//“Çê—p‚Å‚à‹­§“I‚É•ÏX		(default = false)
-	UnicodeString mask,	//ƒ}ƒXƒN						(default = "*")
-	TStringList *lst)	//[o] íœ‚µ‚½ƒXƒgƒŠ[ƒ€–¼		(default = NULL)
+	UnicodeString fnam,	//[i] ãƒ•ã‚¡ã‚¤ãƒ«å
+	bool force, 		//èª­è¾¼å°‚ç”¨ã§ã‚‚å¼·åˆ¶çš„ã«å¤‰æ›´		(default = false)
+	UnicodeString mask,	//ãƒã‚¹ã‚¯						(default = "*")
+	TStringList *lst)	//[o] å‰Šé™¤ã—ãŸã‚¹ãƒˆãƒªãƒ¼ãƒ å		(default = NULL)
 {
 	int res = -1;
 
-	//“Çê—p‚È‚çˆê“I‚É‰ğœ
+	//èª­è¾¼å°‚ç”¨ãªã‚‰ä¸€æ™‚çš„ã«è§£é™¤
 	int atr = file_GetAttr(fnam);
 	bool chg_ro = force && atr!=faInvalid && (atr & faReadOnly);
 	if (chg_ro && !set_FileWritable(fnam)) chg_ro = false;
@@ -901,17 +901,17 @@ int delete_ADS(
 		::FindClose(hFS);
 	}
 
-	//‘®«‚ğŒ³‚É–ß‚·
+	//å±æ€§ã‚’å…ƒã«æˆ»ã™
 	if (chg_ro && atr!=-1) file_SetAttr(fnam, atr);
 
 	return res;
 }
 //---------------------------------------------------------------------------
-//‘ã‘Öƒf[ƒ^ƒXƒgƒŠ[ƒ€–¼‚Ì•ÏX
+//ä»£æ›¿ãƒ‡ãƒ¼ã‚¿ã‚¹ãƒˆãƒªãƒ¼ãƒ åã®å¤‰æ›´
 //---------------------------------------------------------------------------
 bool rename_ADS(
-	UnicodeString fnam,			//"Œ³ƒtƒ@ƒCƒ‹–¼:ƒXƒgƒŠ[ƒ€–¼"
-	UnicodeString new_name)		//":VƒXƒgƒŠ[ƒ€–¼"
+	UnicodeString fnam,			//"å…ƒãƒ•ã‚¡ã‚¤ãƒ«å:ã‚¹ãƒˆãƒªãƒ¼ãƒ å"
+	UnicodeString new_name)		//":æ–°ã‚¹ãƒˆãƒªãƒ¼ãƒ å"
 {
 	bool res = false;
 	HMODULE hNtDll = ::GetModuleHandle(_T("ntdll.dll"));
@@ -941,7 +941,7 @@ bool rename_ADS(
 }
 
 //---------------------------------------------------------------------------
-//w’èƒfƒBƒŒƒNƒgƒŠ‚ª‘¶İ‚µ‚È‚¢ê‡‚Íì¬
+//æŒ‡å®šãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒå­˜åœ¨ã—ãªã„å ´åˆã¯ä½œæˆ
 //---------------------------------------------------------------------------
 UnicodeString chk_cre_dir(UnicodeString dnam)
 {
@@ -950,10 +950,10 @@ UnicodeString chk_cre_dir(UnicodeString dnam)
 }
 
 //---------------------------------------------------------------------------
-//‹óƒfƒBƒŒƒNƒgƒŠ‚©H
+//ç©ºãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ï¼Ÿ
 //---------------------------------------------------------------------------
 bool is_EmptyDir(UnicodeString dnam,
-	bool no_file)	//true = ƒtƒ@ƒCƒ‹‚ªŠÜ‚Ü‚ê‚Ä‚¢‚È‚¢(ƒTƒCƒY=0) (default = false);
+	bool no_file)	//true = ãƒ•ã‚¡ã‚¤ãƒ«ãŒå«ã¾ã‚Œã¦ã„ãªã„(ã‚µã‚¤ã‚º=0) (default = false);
 {
 	bool e_flag = true;
 	dnam = IncludeTrailingPathDelimiter(dnam);
@@ -972,12 +972,12 @@ bool is_EmptyDir(UnicodeString dnam,
 }
 
 //---------------------------------------------------------------------------
-//—˜—p‰Â”\‚Èƒhƒ‰ƒCƒu‚ÌƒŠƒXƒg‚ğæ“¾
+//åˆ©ç”¨å¯èƒ½ãªãƒ‰ãƒ©ã‚¤ãƒ–ã®ãƒªã‚¹ãƒˆã‚’å–å¾—
 //---------------------------------------------------------------------------
 int get_available_drive_list(TStringList *lst)
 {
 	lst->Clear();
-	DWORD d_bit = ::GetLogicalDrives();	//—˜—p‰Â”\‚Èƒhƒ‰ƒCƒu‚ğƒrƒbƒgƒ}ƒXƒNŒ`®‚Åæ“¾
+	DWORD d_bit = ::GetLogicalDrives();	//åˆ©ç”¨å¯èƒ½ãªãƒ‰ãƒ©ã‚¤ãƒ–ã‚’ãƒ“ãƒƒãƒˆãƒã‚¹ã‚¯å½¢å¼ã§å–å¾—
 	DWORD d_flag = 0x00000001;
 	UINT old_mode = ::SetErrorMode(SEM_FAILCRITICALERRORS);
 	for (int d_n=_T('A'); d_n <= _T('Z'); d_n++,d_flag<<=1) {
@@ -990,7 +990,7 @@ int get_available_drive_list(TStringList *lst)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚Ì‘®«•¶š—ñ‚ğæ“¾
+//ãƒ•ã‚¡ã‚¤ãƒ«ã®å±æ€§æ–‡å­—åˆ—ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString get_file_attr_str(int atr)
 {
@@ -1006,13 +1006,13 @@ UnicodeString get_file_attr_str(int atr)
 }
 
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠ‰º‚Ìƒ}ƒXƒN‚ÉŠY“–‚·‚é‘Sƒtƒ@ƒCƒ‹‚ğæ“¾
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä¸‹ã®ãƒã‚¹ã‚¯ã«è©²å½“ã™ã‚‹å…¨ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å–å¾—
 //---------------------------------------------------------------------------
 void get_files(
-	UnicodeString pnam,	//ƒfƒBƒŒƒNƒgƒŠ–¼
-	UnicodeString mask,	//ƒ}ƒXƒN
-	TStrings *lst,		//Œ‹‰ÊŠi”[ƒŠƒXƒg
-	bool subSW)			//ƒTƒuƒfƒBƒŒƒNƒgƒŠ‚à	 (default = false)
+	UnicodeString pnam,	//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå
+	UnicodeString mask,	//ãƒã‚¹ã‚¯
+	TStrings *lst,		//çµæœæ ¼ç´ãƒªã‚¹ãƒˆ
+	bool subSW)			//ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚‚	 (default = false)
 {
 	if (!dir_exists(pnam)) return;
 
@@ -1020,7 +1020,7 @@ void get_files(
 
 	UnicodeString mask_u = def_if_empty(mask, "*.*");
 
-	//ƒTƒuƒfƒBƒŒƒNƒgƒŠ‚ğŒŸõ
+	//ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’æ¤œç´¢
 	TSearchRec sr;
 	if (subSW) {
 		if (FindFirst(cv_ex_filename(pnam + "*"), faAnyFile, sr)==0) {
@@ -1033,7 +1033,7 @@ void get_files(
 		}
 	}
 
-	//ƒtƒ@ƒCƒ‹‚ğŒŸõ
+	//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ¤œç´¢
 	if (FindFirst(cv_ex_filename(pnam + mask_u), faAnyFile, sr)==0) {
 		do {
 			if (sr.Attr & faDirectory) continue;
@@ -1044,18 +1044,18 @@ void get_files(
 }
 
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠ‰º‚Ìƒ}ƒXƒN‚ÉŠY“–‚·‚é‘Sƒtƒ@ƒCƒ‹‚ÌƒŠƒXƒg‚ğ’Ç‰Áæ“¾
-//  –ß‚è’l: ƒtƒ@ƒCƒ‹”(‹óƒfƒBƒŒƒNƒgƒŠ‚Íœ‚­)
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä¸‹ã®ãƒã‚¹ã‚¯ã«è©²å½“ã™ã‚‹å…¨ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒªã‚¹ãƒˆã‚’è¿½åŠ å–å¾—
+//  æˆ»ã‚Šå€¤: ãƒ•ã‚¡ã‚¤ãƒ«æ•°(ç©ºãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¯é™¤ã)
 //---------------------------------------------------------------------------
 int get_all_files_ex(
-	UnicodeString pnam,		//ƒfƒBƒŒƒNƒgƒŠ–¼
-	UnicodeString mask,		//ƒ}ƒXƒN
-	TStrings *lst,			//Œ‹‰Ê‚ğŠi”[‚·‚é TStrings
-	bool sub_sw,			//ƒTƒuƒfƒBƒŒƒNƒgƒŠ‚àŒŸõ			(default = fals)
-	int sub_n,				//ƒTƒuƒfƒBƒŒƒNƒgƒŠ‚ÌŠK‘w‚Ì[‚³		(default = 99)
-	UnicodeString skip_dir,	//œŠODirƒ}ƒXƒN(;‚Å‹æØ‚è•¡”‰Â)	(default = EmptyStr)
-	bool inc_hide,			//‰B‚µ‘®«‚à						(default = true)
-	bool inc_sys)			//ƒVƒXƒeƒ€‘®«‚à					(default = true)
+	UnicodeString pnam,		//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå
+	UnicodeString mask,		//ãƒã‚¹ã‚¯
+	TStrings *lst,			//çµæœã‚’æ ¼ç´ã™ã‚‹ TStrings
+	bool sub_sw,			//ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚‚æ¤œç´¢			(default = fals)
+	int sub_n,				//ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®éšå±¤ã®æ·±ã•		(default = 99)
+	UnicodeString skip_dir,	//é™¤å¤–Dirãƒã‚¹ã‚¯(;ã§åŒºåˆ‡ã‚Šè¤‡æ•°å¯)	(default = EmptyStr)
+	bool inc_hide,			//éš ã—å±æ€§ã‚‚						(default = true)
+	bool inc_sys)			//ã‚·ã‚¹ãƒ†ãƒ å±æ€§ã‚‚					(default = true)
 {
 	int fcnt = 0;
 	if (!dir_exists(pnam)) return fcnt;
@@ -1063,7 +1063,7 @@ int get_all_files_ex(
 	pnam = IncludeTrailingPathDelimiter(pnam);
 	if (mask.IsEmpty()) mask = "*.*";
 
-	//ƒTƒuƒfƒBƒŒƒNƒgƒŠ‚ğŒŸõ
+	//ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’æ¤œç´¢
 	TSearchRec sr;
 	if (sub_sw && sub_n>0) {
 		TStringDynArray skip_dir_lst = split_strings_semicolon(skip_dir, true);
@@ -1075,7 +1075,7 @@ int get_all_files_ex(
 
 				UnicodeString dnam = sr.Name;
 				if (!ContainsStr("..", dnam)) {
-					//œŠOƒfƒBƒŒƒNƒgƒŠ‚Ìƒ`ƒFƒbƒN
+					//é™¤å¤–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ãƒã‚§ãƒƒã‚¯
 					bool skip = false;
 					for (int i=0; i<skip_dir_lst.Length; i++) {
 						UnicodeString snam = skip_dir_lst[i];
@@ -1093,7 +1093,7 @@ int get_all_files_ex(
 		}
 	}
 
-	//ƒtƒ@ƒCƒ‹‚ğŒŸõ
+	//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ¤œç´¢
 	if (FindFirst(cv_ex_filename(pnam + mask), faAnyFile, sr)==0) {
 		do {
 			if (sr.Attr & faDirectory) continue;
@@ -1109,7 +1109,7 @@ int get_all_files_ex(
 }
 
 //---------------------------------------------------------------------------
-//‹ó‚Ìƒtƒ@ƒCƒ‹‚ğì¬
+//ç©ºã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆ
 //---------------------------------------------------------------------------
 bool create_EmptyFile(UnicodeString fnam)
 {
@@ -1121,7 +1121,7 @@ bool create_EmptyFile(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠ‚Ìì¬
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ä½œæˆ
 //---------------------------------------------------------------------------
 bool create_Dir(UnicodeString dnam)
 {
@@ -1131,7 +1131,7 @@ bool create_Dir(UnicodeString dnam)
 	return ::CreateDirectory(dnam.c_str(), NULL);
 }
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠ‚Ìì¬(•¡”ŠK‘w‰Â)
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ä½œæˆ(è¤‡æ•°éšå±¤å¯)
 //---------------------------------------------------------------------------
 bool create_ForceDirs(UnicodeString dnam)
 {
@@ -1148,24 +1148,24 @@ bool create_ForceDirs(UnicodeString dnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠ‚Ìíœ
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å‰Šé™¤
 //---------------------------------------------------------------------------
 bool delete_Dir(
 	UnicodeString dnam,
-	bool force)			//‹­§“I‚Éíœ (default = false)
+	bool force)			//å¼·åˆ¶çš„ã«å‰Šé™¤ (default = false)
 {
 	if (force && !set_FileWritable(dnam)) return false;
 	return ::RemoveDirectory(cv_ex_filename(dnam).c_str());
 }
 //---------------------------------------------------------------------------
-//ƒTƒuƒfƒBƒŒƒNƒgƒŠ‚ğŠÜ‚ß‚½ƒfƒBƒŒƒNƒgƒŠ‚Ìíœ
+//ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’å«ã‚ãŸãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å‰Šé™¤
 //---------------------------------------------------------------------------
 bool delete_Dirs(UnicodeString pnam)
 {
 	pnam = to_path_name(pnam);
 	if (!dir_exists(pnam)) return false;
 
-	//ƒTƒuƒfƒBƒŒƒNƒgƒŠ‚ğŒŸõ‚µ‚Äíœ
+	//ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’æ¤œç´¢ã—ã¦å‰Šé™¤
 	TSearchRec sr;
 	if (FindFirst(cv_ex_filename(pnam + "*"), faAnyFile, sr)==0) {
 		bool ok = true;
@@ -1176,13 +1176,13 @@ bool delete_Dirs(UnicodeString pnam)
 		FindClose(sr);
 	}
 
-	//ƒfƒBƒŒƒNƒgƒŠ‚ğíœ
+	//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’å‰Šé™¤
 	if (!set_FileWritable(pnam)) return false;
 	return delete_Dir(pnam);
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚ÌˆÚ“®
+//ãƒ•ã‚¡ã‚¤ãƒ«ã®ç§»å‹•
 //---------------------------------------------------------------------------
 bool move_File(UnicodeString old_nam, UnicodeString new_nam)
 {
@@ -1190,7 +1190,7 @@ bool move_File(UnicodeString old_nam, UnicodeString new_nam)
 				MOVEFILE_REPLACE_EXISTING | MOVEFILE_COPY_ALLOWED | MOVEFILE_WRITE_THROUGH);
 }
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚ÌƒRƒs[
+//ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 bool copy_File(UnicodeString src_nam, UnicodeString dst_nam)
 {
@@ -1198,7 +1198,7 @@ bool copy_File(UnicodeString src_nam, UnicodeString dst_nam)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹–¼‘O‚Ì•ÏX
+//ãƒ•ã‚¡ã‚¤ãƒ«åå‰ã®å¤‰æ›´
 //---------------------------------------------------------------------------
 bool rename_File(UnicodeString old_nam, UnicodeString new_nam)
 {
@@ -1206,7 +1206,7 @@ bool rename_File(UnicodeString old_nam, UnicodeString new_nam)
 }
 
 //---------------------------------------------------------------------------
-//ƒpƒX–¼‚Ì•ÏX
+//ãƒ‘ã‚¹åã®å¤‰æ›´
 //---------------------------------------------------------------------------
 bool rename_Path(UnicodeString old_nam, UnicodeString new_nam)
 {
@@ -1237,7 +1237,7 @@ bool rename_Path(UnicodeString old_nam, UnicodeString new_nam)
 }
 
 //---------------------------------------------------------------------------
-//ƒWƒƒƒ“ƒNƒVƒ‡ƒ“‚Ìì¬
+//ã‚¸ãƒ£ãƒ³ã‚¯ã‚·ãƒ§ãƒ³ã®ä½œæˆ
 //---------------------------------------------------------------------------
 bool cre_Junction(UnicodeString pnam, UnicodeString target)
 {
@@ -1272,8 +1272,8 @@ bool cre_Junction(UnicodeString pnam, UnicodeString target)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹ƒXƒgƒŠ[ƒ€‚©‚ç‚Ì“Ç‚İ‚İ
-//IƒGƒ‰[‚É EReadError —áŠO‘—o
+//ãƒ•ã‚¡ã‚¤ãƒ«ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‹ã‚‰ã®èª­ã¿è¾¼ã¿
+//ï¼ã‚¨ãƒ©ãƒ¼æ™‚ã« EReadError ä¾‹å¤–é€å‡º
 //---------------------------------------------------------------------------
 BYTE fsRead_byte(TFileStream *fs)
 {
@@ -1283,7 +1283,7 @@ BYTE fsRead_byte(TFileStream *fs)
 }
 //---------------------------------------------------------------------------
 int fsRead_int2(TFileStream *fs,
-	bool be_sw)		//true = ƒrƒbƒOƒGƒ“ƒfƒBƒAƒ“ (default = false)
+	bool be_sw)		//true = ãƒ“ãƒƒã‚°ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ (default = false)
 {
 	BYTE xbuf[2];
 	fs->ReadBuffer(xbuf, 2);
@@ -1291,7 +1291,7 @@ int fsRead_int2(TFileStream *fs,
 }
 //---------------------------------------------------------------------------
 int fsRead_int3(TFileStream *fs,
-	bool be_sw)		//true = ƒrƒbƒOƒGƒ“ƒfƒBƒAƒ“ (default = false)
+	bool be_sw)		//true = ãƒ“ãƒƒã‚°ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ (default = false)
 {
 	BYTE xbuf[3];
 	fs->ReadBuffer(xbuf, 3);
@@ -1301,7 +1301,7 @@ int fsRead_int3(TFileStream *fs,
 }
 //---------------------------------------------------------------------------
 int fsRead_int4(TFileStream *fs,
-	bool be_sw)		//true = ƒrƒbƒOƒGƒ“ƒfƒBƒAƒ“ (default = false)
+	bool be_sw)		//true = ãƒ“ãƒƒã‚°ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ (default = false)
 {
 	BYTE xbuf[4];
 	fs->ReadBuffer(xbuf, 4);
@@ -1318,8 +1318,8 @@ double fsRead_double(TFileStream *fs)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹ƒXƒgƒŠ[ƒ€‚©‚ç‚Ì•¶š—ñ“Ç‚İ‚İ
-//I“r’†‚É \0 ‚ª‚ ‚ê‚Î‚»‚êˆÈ~‚ÍØ‚èÌ‚Ä‚Ä•Ô‚·
+//ãƒ•ã‚¡ã‚¤ãƒ«ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‹ã‚‰ã®æ–‡å­—åˆ—èª­ã¿è¾¼ã¿
+//ï¼é€”ä¸­ã« \0 ãŒã‚ã‚Œã°ãã‚Œä»¥é™ã¯åˆ‡ã‚Šæ¨ã¦ã¦è¿”ã™
 //---------------------------------------------------------------------------
 UnicodeString fsRead_char(TFileStream *fs, int size)
 {
@@ -1330,10 +1330,10 @@ UnicodeString fsRead_char(TFileStream *fs, int size)
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒƒ“ƒg‚Ì“Ç‚İ‚İ
+//ã‚³ãƒ¡ãƒ³ãƒˆã®èª­ã¿è¾¼ã¿
 //  length  : 32bit
 //  comment : UTF-8[length]
-//IƒGƒ‰[‚É EReadError —áŠO‘—o
+//ï¼ã‚¨ãƒ©ãƒ¼æ™‚ã« EReadError ä¾‹å¤–é€å‡º
 //---------------------------------------------------------------------------
 UnicodeString fsRead_comment_utf8(TFileStream *fs)
 {
@@ -1348,8 +1348,8 @@ UnicodeString fsRead_comment_utf8(TFileStream *fs)
 }
 
 //---------------------------------------------------------------------------
-// ƒtƒ@ƒCƒ‹‚ÌŒ»İˆÊ’u‚Éw’è•¶š—ñ‚ª‚ ‚é‚©H
-// ‚ ‚ê‚Î’¼ŒãˆÊ’u‚ÖA–³‚¯‚ê‚ÎŒ»İˆÊ’u‚Ì‚Ü‚Ü
+// ãƒ•ã‚¡ã‚¤ãƒ«ã®ç¾åœ¨ä½ç½®ã«æŒ‡å®šæ–‡å­—åˆ—ãŒã‚ã‚‹ã‹ï¼Ÿ
+// ã‚ã‚Œã°ç›´å¾Œä½ç½®ã¸ã€ç„¡ã‘ã‚Œã°ç¾åœ¨ä½ç½®ã®ã¾ã¾
 //---------------------------------------------------------------------------
 bool fsRead_check_char(TFileStream *fs, const char *s)
 {

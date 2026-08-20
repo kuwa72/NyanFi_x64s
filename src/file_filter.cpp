@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------//
-// ƒtƒ@ƒCƒ‹ƒtƒBƒ‹ƒ^ˆ—ƒNƒ‰ƒX											//
+// ãƒ•ã‚¡ã‚¤ãƒ«ãƒ•ã‚£ãƒ«ã‚¿å‡¦ç†ã‚¯ãƒ©ã‚¹											//
 //----------------------------------------------------------------------//
 #include "usr_str.h"
 #include "file_filter.h"
@@ -8,7 +8,7 @@
 #pragma package(smart_init)
 
 //---------------------------------------------------------------------------
-//ƒtƒBƒ‹ƒ^î•ñ•¶š—ñ‚ğæ“¾
+//ãƒ•ã‚£ãƒ«ã‚¿æƒ…å ±æ–‡å­—åˆ—ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString GetFilterInfStr(UnicodeString filter, bool is_grep)
 {
@@ -24,7 +24,7 @@ UnicodeString GetFilterInfStr(UnicodeString filter, bool is_grep)
 				int n = mt.Groups.Item[1].Value.ToIntDef(0);
 				if (n>0) {
 					cat_separator(ret_str, " | ");
-					ret_str.cat_sprintf(_T("æ“ª‚©‚ç%us"), n);
+					ret_str.cat_sprintf(_T("å…ˆé ­ã‹ã‚‰%uè¡Œ"), n);
 					continue;
 				}
 			}
@@ -34,25 +34,25 @@ UnicodeString GetFilterInfStr(UnicodeString filter, bool is_grep)
 				int n = mt.Groups.Item[1].Value.ToIntDef(0);
 				if (n>0) {
 					cat_separator(ret_str, " | ");
-					ret_str.cat_sprintf(_T("ÅŒã‚©‚ç%us"), n);
+					ret_str.cat_sprintf(_T("æœ€å¾Œã‹ã‚‰%uè¡Œ"), n);
 					continue;
 				}
 			}
 
 			//HtmlHead
 			if (SameText(f, "HtmlHead")) {
-				ins_sep_cat(ret_str, " | ", "head—v‘fs");
+				ins_sep_cat(ret_str, " | ", "headè¦ç´ è¡Œ");
 				continue;
 			}
 			//HtmlBody
 			if (SameText(f, "HtmlBody")) {
-				ins_sep_cat(ret_str, " | ", "body—v‘fs");
+				ins_sep_cat(ret_str, " | ", "bodyè¦ç´ è¡Œ");
 				continue;
 			}
 
 			//HtmlRe
 			if (SameText(f, "HtmlRem")) {
-				ins_sep_cat(ret_str, " | ", (is_grep? "ƒRƒƒ“ƒg" : "ƒRƒƒ“ƒgs"));
+				ins_sep_cat(ret_str, " | ", (is_grep? "ã‚³ãƒ¡ãƒ³ãƒˆ" : "ã‚³ãƒ¡ãƒ³ãƒˆè¡Œ"));
 				continue;
 			}
 
@@ -64,9 +64,9 @@ UnicodeString GetFilterInfStr(UnicodeString filter, bool is_grep)
 				if (idx>0) {
 					cat_separator(ret_str, " | ");
 					if (len>0)
-						ret_str.cat_sprintf(_T("%u•¶š–Ú‚©‚ç%u•¶š"), idx, len);
+						ret_str.cat_sprintf(_T("%uæ–‡å­—ç›®ã‹ã‚‰%uæ–‡å­—"), idx, len);
 					else
-						ret_str.cat_sprintf(_T("%u•¶š–ÚˆÈ~"), idx);
+						ret_str.cat_sprintf(_T("%uæ–‡å­—ç›®ä»¥é™"), idx);
 					continue;
 				}
 			}
@@ -89,7 +89,7 @@ UnicodeString GetFilterInfStr(UnicodeString filter, bool is_grep)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒBƒ‹ƒ^w’è‚Ìƒ`ƒFƒbƒN
+//ãƒ•ã‚£ãƒ«ã‚¿æŒ‡å®šã®ãƒã‚§ãƒƒã‚¯
 //---------------------------------------------------------------------------
 bool TestFilter(UnicodeString filter, bool is_grep)
 {
@@ -131,7 +131,7 @@ bool TestFilter(UnicodeString filter, bool is_grep)
 
 
 //---------------------------------------------------------------------------
-// FileFilter ƒNƒ‰ƒX
+// FileFilter ã‚¯ãƒ©ã‚¹
 //---------------------------------------------------------------------------
 FileFilter::FileFilter()
 {
@@ -147,7 +147,7 @@ FileFilter::~FileFilter()
 }
 
 //---------------------------------------------------------------------------
-//‰Šú‰»
+//åˆæœŸåŒ–
 //---------------------------------------------------------------------------
 bool FileFilter::Initialize(UnicodeString fnam, TStringList *fbuf, UnicodeString filter, FilterOption opt)
 {
@@ -229,7 +229,7 @@ bool FileFilter::Initialize(UnicodeString fnam, TStringList *fbuf, UnicodeString
 }
 
 //---------------------------------------------------------------------------
-//w’èƒ^ƒO—v‘fs‚ğ’Šo
+//æŒ‡å®šã‚¿ã‚°è¦ç´ è¡Œã‚’æŠ½å‡º
 //---------------------------------------------------------------------------
 bool FileFilter::GetBlockRange(UnicodeString tag)
 {
@@ -260,7 +260,7 @@ bool FileFilter::GetBlockRange(UnicodeString tag)
 }
 
 //---------------------------------------------------------------------------
-//HTMLƒRƒƒ“ƒgsî•ñ‚ğİ’è
+//HTMLã‚³ãƒ¡ãƒ³ãƒˆè¡Œæƒ…å ±ã‚’è¨­å®š
 //---------------------------------------------------------------------------
 void FileFilter::SetHtmlComent()
 {
@@ -295,14 +295,14 @@ void FileFilter::SetHtmlComent()
 			}
 		}
 
-		//ƒRƒƒ“ƒg‚ğŠÜ‚Şs
+		//ã‚³ãƒ¡ãƒ³ãƒˆã‚’å«ã‚€è¡Œ
 		if (p1>0 && p2>=p1) {
 			if (isGrep)
 				FileBuff->Objects[lp] = (TObject*)((NativeInt)MAKELONG(p1, p2 - p1 + 1));
 			else
 				FileBuff->Objects[lp] = (TObject*)((NativeInt)MAKELONG(1, lbuf.Length()));
 		}
-		//ƒRƒƒ“ƒg‚Å‚Í‚È‚¢
+		//ã‚³ãƒ¡ãƒ³ãƒˆã§ã¯ãªã„
 		else {
 			FileBuff->Objects[lp] = (TObject*)((NativeInt)MAKELONG(1, 0));
 		}
@@ -310,14 +310,14 @@ void FileFilter::SetHtmlComent()
 }
 
 //---------------------------------------------------------------------------
-//s“à—e‚Ìæ“¾
-//  –ß‚è’l: ŒŸõ‘ÎÛ‚Æ‚È‚é•¶š—ñ
+//è¡Œå†…å®¹ã®å–å¾—
+//  æˆ»ã‚Šå€¤: æ¤œç´¢å¯¾è±¡ã¨ãªã‚‹æ–‡å­—åˆ—
 //---------------------------------------------------------------------------
 UnicodeString FileFilter::GetLinePart(
 	int idx, 
-	int &r_idx, 			//[o] ŠJnˆÊ’u
-	int &r_len, 			//[o] ’·‚³
-	UnicodeString &lbuf)	//[o] •\¦—ps“à—e
+	int &r_idx, 			//[o] é–‹å§‹ä½ç½®
+	int &r_len, 			//[o] é•·ã•
+	UnicodeString &lbuf)	//[o] è¡¨ç¤ºç”¨è¡Œå†…å®¹
 {
 	r_idx = strIndex;
 	r_len = strLength;
@@ -328,9 +328,9 @@ UnicodeString FileFilter::GetLinePart(
 		if (excludeTag) lbuf = TRegEx::Replace(lbuf, "^([^<]+>)|(<[^<>]+>)|(<[^>]+)$", EmptyStr);
 		sbuf = lbuf;
 
-		//s–ˆ‚Éİ’è‚³‚ê‚½”ÍˆÍw’è
+		//è¡Œæ¯ã«è¨­å®šã•ã‚ŒãŸç¯„å›²æŒ‡å®š
 		DWORD p = (DWORD)FileBuff->Objects[idx];
-		if (p>0) {	//İ’è—L‚è
+		if (p>0) {	//è¨­å®šæœ‰ã‚Š
 			if (HIWORD(p)>0) {
 				r_idx = LOWORD(p);
 				r_len = HIWORD(p);
@@ -357,7 +357,7 @@ UnicodeString FileFilter::GetLinePart(
 	return sbuf;
 }
 //---------------------------------------------------------------------------
-//•\¦—ps“à—e‚ğæ“¾
+//è¡¨ç¤ºç”¨è¡Œå†…å®¹ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString FileFilter::GetDispLine(int idx)
 {
@@ -369,14 +369,14 @@ UnicodeString FileFilter::GetDispLine(int idx)
 	return lbuf;
 }
 //---------------------------------------------------------------------------
-//ŒŸõ‘ÎÛs‚©H
+//æ¤œç´¢å¯¾è±¡è¡Œã‹ï¼Ÿ
 //---------------------------------------------------------------------------
 bool FileFilter::IsValidLine(int idx)
 {
 	bool ret = false;
 	if (idx>=0 && idx<FileBuff->Count) {
 		DWORD p = (DWORD)FileBuff->Objects[idx];
-		if (p>0) {	//İ’è—L‚è
+		if (p>0) {	//è¨­å®šæœ‰ã‚Š
 			ret = (HIWORD(p)>0);
 		}
 		else {

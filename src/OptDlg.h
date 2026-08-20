@@ -1,6 +1,6 @@
 /**
  * @file OptDlg.h
- * @brief ƒIƒvƒVƒ‡ƒ“İ’èƒ_ƒCƒAƒƒO
+ * @brief ã‚ªãƒ—ã‚·ãƒ§ãƒ³è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 //---------------------------------------------------------------------------
 #ifndef OptDlgH
@@ -39,11 +39,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒIƒvƒVƒ‡ƒ“İ’èƒ_ƒCƒAƒƒO
+ * @brief ã‚ªãƒ—ã‚·ãƒ§ãƒ³è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TOptionDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *AddAssoAction;
 	TAction *AddDrvAction;
 	TAction *AddEtcEditorAction;
@@ -939,7 +939,7 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall RefCmdGrepExeBtnClick(TObject *Sender);
 
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	MarkList *FindMarkList;
 	TStringList *FontBufList;
 	TStringList *ColBufList;
@@ -1014,8 +1014,8 @@ private:	// ƒ†[ƒU[éŒ¾
 		UserModule->InitializeListBox(GetCurListBox());
 	}
 
-public:		// ƒ†[ƒU[éŒ¾
-	bool KeySetOnly;		//!< ƒL[İ’è‚Ì‚İ•\¦
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	bool KeySetOnly;		//!< ã‚­ãƒ¼è¨­å®šã®ã¿è¡¨ç¤º
 
 	bool LayoutChanged;
 	bool WinSizeChanged;

@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒpƒXƒ}ƒXƒN															//
+//  ãƒ‘ã‚¹ãƒã‚¹ã‚¯															//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -28,7 +28,7 @@ void __fastcall TPathMaskDlg::FormShow(TObject *Sender)
 {
 	IniFile->LoadPosInfo(this, DialogCenter);
 
-	Caption = "ƒpƒXƒ}ƒXƒN - " + get_LRUD_str();
+	Caption = "ãƒ‘ã‚¹ãƒã‚¹ã‚¯ - " + get_LRUD_str();
 	set_BtnMarkStyle(HideOptBtn, UBMK_BDOWN);
 	set_BtnMarkStyle(ShowOptBtn, UBMK_BUP);
 	HideOptBtn->Hint = LoadUsrMsg(USTR_HideOptPanel);
@@ -37,7 +37,7 @@ void __fastcall TPathMaskDlg::FormShow(TObject *Sender)
 	OptPanel->Visible	= IniFile->ReadBoolGen(_T("PathMaskDlgShowOpt"),  true);
 	BlankPanel->Visible = !OptPanel->Visible;
 
-	InitializeListHeader(PathMaskHeader, _T("ƒL[|–¼‘O|ƒ}ƒXƒN"));
+	InitializeListHeader(PathMaskHeader, _T("ã‚­ãƒ¼|åå‰|ãƒã‚¹ã‚¯"));
 	PathMaskHeader->Sections->Items[0]->Width = IniFile->ReadScaledInteger("PathMaskGrid", "ColWidth0",	 40, this);
 	PathMaskHeader->Sections->Items[1]->Width = IniFile->ReadScaledInteger("PathMaskGrid", "ColWidth1",	200, this);
 	adjust_HeaderSecWidth(PathMaskHeader, 2);
@@ -93,7 +93,7 @@ void __fastcall TPathMaskDlg::PathMaskHeaderResize(TObject *Sender)
 	adjust_HeaderSecWidth((THeaderControl *)Sender, 2);
 }
 //---------------------------------------------------------------------------
-//ƒwƒbƒ_‚Ì•`‰æ
+//ãƒ˜ãƒƒãƒ€ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TPathMaskDlg::PathMaskHeaderDrawSection(THeaderControl *HeaderControl,
 	THeaderSection *Section, const TRect &Rect, bool Pressed)
@@ -109,7 +109,7 @@ void __fastcall TPathMaskDlg::PathMaskHeaderSectionResize(THeaderControl *Header
 }
 
 //---------------------------------------------------------------------------
-//€–Ú‚Ì•`‰æ
+//é …ç›®ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TPathMaskDlg::PathMaskListBoxDrawItem(TWinControl *Control, int Index,
 	TRect &Rect, TOwnerDrawState State)
@@ -129,7 +129,7 @@ void __fastcall TPathMaskDlg::PathMaskListBoxDrawItem(TWinControl *Control, int 
 		int c_wd = sp->Items[0]->Width - SCALED_THIS(4);
 		int xp = Rect.Left + SCALED_THIS(2);
 		int yp = Rect.Top  + get_TopMargin2(cv);
-		if (s_wd<c_wd) xp += (c_wd - s_wd)/2;	//ƒZƒ“ƒ^ƒŠƒ“ƒO
+		if (s_wd<c_wd) xp += (c_wd - s_wd)/2;	//ã‚»ãƒ³ã‚¿ãƒªãƒ³ã‚°
 		cv->TextOut(xp, yp, itm_buf[0]);
 		xp = sp->Items[0]->Width + 1;
 		cv->Font->Style  = cv->Font->Style >> fsBold;
@@ -138,11 +138,11 @@ void __fastcall TPathMaskDlg::PathMaskListBoxDrawItem(TWinControl *Control, int 
 		cv->TextOut(xp, yp, itm_buf[2]);
 	}
 
-	//ƒJ[ƒ\ƒ‹
+	//ã‚«ãƒ¼ã‚½ãƒ«
 	draw_ListCursor2(lp, Rect, Index, State);
 }
 //---------------------------------------------------------------------------
-//ƒL[‘€ì
+//ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TPathMaskDlg::PathMaskListBoxKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -168,7 +168,7 @@ void __fastcall TPathMaskDlg::PathMaskListBoxKeyDown(TObject *Sender, WORD &Key,
 	}
 }
 //---------------------------------------------------------------------------
-//ƒ}ƒEƒX‘€ì
+//ãƒã‚¦ã‚¹æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TPathMaskDlg::PathMaskListBoxClick(TObject *Sender)
 {
@@ -185,7 +185,7 @@ void __fastcall TPathMaskDlg::PathMaskListBoxDblClick(TObject *Sender)
 	perform_Key_RETURN((TControl*)Sender);
 }
 //---------------------------------------------------------------------------
-//€–Ú‚ğ•ÏX
+//é …ç›®ã‚’å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TPathMaskDlg::EditItemActionExecute(TObject *Sender)
 {
@@ -207,7 +207,7 @@ void __fastcall TPathMaskDlg::EditItemActionUpdate(TObject *Sender)
 		!KeyEdit->Text.IsEmpty() && !DescEdit->Text.IsEmpty() && !MaskEdit->Text.IsEmpty() : false;
 }
 //---------------------------------------------------------------------------
-//€–Ú‚ğ’Ç‰Á
+//é …ç›®ã‚’è¿½åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TPathMaskDlg::AddItemActionExecute(TObject *Sender)
 {
@@ -227,7 +227,7 @@ void __fastcall TPathMaskDlg::AddItemActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒIƒvƒVƒ‡ƒ“‚ÌŠJ•Â
+//ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®é–‹é–‰
 //---------------------------------------------------------------------------
 void __fastcall TPathMaskDlg::SetOptBtn()
 {

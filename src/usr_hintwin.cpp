@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
-// ƒqƒ“ƒgƒEƒBƒ“ƒhƒE														//
-//  ”wŒiF•ÏX‚Ì‚½‚ß‚ÉƒTƒuƒNƒ‰ƒX‰»										//
+// ãƒ’ãƒ³ãƒˆã‚¦ã‚£ãƒ³ãƒ‰ã‚¦														//
+//  èƒŒæ™¯è‰²å¤‰æ›´ã®ãŸã‚ã«ã‚µãƒ–ã‚¯ãƒ©ã‚¹åŒ–										//
 //----------------------------------------------------------------------//
 #include "usr_str.h"
 #include "usr_scale.h"
@@ -32,11 +32,11 @@ void __fastcall UsrHintWindow::Paint(void)
 
 //---------------------------------------------------------------------------
 void __fastcall UsrHintWindow::ActivateHintEx(
-	UnicodeString msg,	//ƒƒbƒZ[ƒW
-	int max_w,			//Å‘å•
-	int min_w,			//Å¬•
-	TControl *cp,		//Šî€ƒRƒ“ƒgƒ[ƒ‹
-	TColor bg_col)		//”wŒiF
+	UnicodeString msg,	//ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
+	int max_w,			//æœ€å¤§å¹…
+	int min_w,			//æœ€å°å¹…
+	TControl *cp,		//åŸºæº–ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«
+	TColor bg_col)		//èƒŒæ™¯è‰²
 {
 	if (!cp) return;
 

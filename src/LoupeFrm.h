@@ -1,6 +1,6 @@
 /**
  * @file LoupeFrm.h
- * @brief ƒ‹[ƒy 
+ * @brief ãƒ«ãƒ¼ãƒš 
  */
 //---------------------------------------------------------------------------
 #ifndef LoupeFrmH
@@ -24,11 +24,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒ‹[ƒy
+ * @brief ãƒ«ãƒ¼ãƒš
  */
 class TLoupeForm : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *Mag1Action;
 	TAction *Mag2Action;
 	TAction *Mag4Action;
@@ -66,17 +66,17 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall ShowBtnActionExecute(TObject *Sender);
 	void __fastcall ShowBtnActionUpdate(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	void __fastcall WmSysCommand(TWMSysCommand & SysCom)
 	{
-		if (SysCom.CmdType==SC_CLOSE) {	//[~]ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½
+		if (SysCom.CmdType==SC_CLOSE) {	//[Ã—]ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸ
 			Close();
 			ShowLoupe = false;
 		}
 		else TForm::Dispatch(&SysCom);
 	}
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	__fastcall TLoupeForm(TComponent* Owner);
 
 	void __fastcall SaveOption();

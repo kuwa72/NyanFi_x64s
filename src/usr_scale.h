@@ -1,6 +1,6 @@
 /**
  * @file usr_scale.h
- * @brief ƒXƒP[ƒŠƒ“ƒOˆ—
+ * @brief ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°å‡¦ç†
  */
 //----------------------------------------------------------------------//
 #ifndef UsrScaleH
@@ -12,12 +12,12 @@
 #include <Vcl.Grids.hpp>
 
 //---------------------------------------------------------------------------
-#define DEFAULT_PPI	96	//!< ƒfƒtƒHƒ‹ƒg(100\%)‚ÌPPI’l
+#define DEFAULT_PPI	96	//!< ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ(100\%æ™‚)ã®PPIå€¤
 
 /**
- * @brief Œ»İ‚ÌPPI‚ğæ“¾
- * @param cp ‘ÎÛƒRƒ“ƒgƒ[ƒ‹
- * @return int PPI’l
+ * @brief ç¾åœ¨ã®PPIã‚’å–å¾—
+ * @param cp å¯¾è±¡ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«
+ * @return int PPIå€¤
  */
 inline int GetCurPPI(TControl *cp = NULL)
 {
@@ -27,20 +27,20 @@ inline int GetCurPPI(TControl *cp = NULL)
 }
 
 //----------------------------------------------------------------------
-/** @brief ©g‚ÌƒtƒH[ƒ€‚ÅƒXƒP[ƒŠƒ“ƒO‚³‚ê‚½®”’l‚ğæ“¾ */
+/** @brief è‡ªèº«ã®ãƒ•ã‚©ãƒ¼ãƒ ã§ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°ã•ã‚ŒãŸæ•´æ•°å€¤ã‚’å–å¾— */
 #define SCALED_THIS(n)		MulDiv(n, CurrentPPI, DEFAULT_PPI)
 
-/** @brief ©g‚ÌƒtƒH[ƒ€‚ÅƒXƒP[ƒŠƒ“ƒO‚³‚ê‚é‘O(100\%)‚Ì®”’l‚ğæ“¾ */
+/** @brief è‡ªèº«ã®ãƒ•ã‚©ãƒ¼ãƒ ã§ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°ã•ã‚Œã‚‹å‰(100\%æ™‚)ã®æ•´æ•°å€¤ã‚’å–å¾— */
 #define UNSCALED_THIS(n)	MulDiv(n, DEFAULT_PPI, CurrentPPI)
 
-/** @brief ƒƒCƒ“ƒtƒH[ƒ€‚ÅƒXƒP[ƒŠƒ“ƒO‚³‚ê‚½®”’l‚ğæ“¾ */
+/** @brief ãƒ¡ã‚¤ãƒ³ãƒ•ã‚©ãƒ¼ãƒ ã§ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°ã•ã‚ŒãŸæ•´æ•°å€¤ã‚’å–å¾— */
 #define SCALED_MAIN(n)		MulDiv(n, Application->MainForm->CurrentPPI, DEFAULT_PPI)
 
 //----------------------------------------------------------------------
 /**
- * @brief ƒXƒP[ƒŠƒ“ƒO‚³‚ê‚½®”’l‚ğæ“¾
- * @param n ’l
- * @param cp ‘ÎÛƒRƒ“ƒgƒ[ƒ‹
+ * @brief ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°ã•ã‚ŒãŸæ•´æ•°å€¤ã‚’å–å¾—
+ * @param n å€¤
+ * @param cp å¯¾è±¡ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«
  * @return int 
  */
 inline int ScaledInt(int n, TControl *cp = NULL)
@@ -49,9 +49,9 @@ inline int ScaledInt(int n, TControl *cp = NULL)
 }
 //----------------------------------------------------------------------
 /**
- * @brief ƒXƒP[ƒŠƒ“ƒO‚³‚ê‚é‘O(100\%)‚Ì®”’l‚ğæ“¾
- * @param n ’l
- * @param cp ‘ÎÛƒRƒ“ƒgƒ[ƒ‹
+ * @brief ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°ã•ã‚Œã‚‹å‰(100\%æ™‚)ã®æ•´æ•°å€¤ã‚’å–å¾—
+ * @param n å€¤
+ * @param cp å¯¾è±¡ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«
  * @return int 
  */
 inline int UnscaledInt(int n, TControl *cp = NULL)
@@ -61,7 +61,7 @@ inline int UnscaledInt(int n, TControl *cp = NULL)
 
 //----------------------------------------------------------------------
 /**
- * @brief ƒVƒXƒeƒ€EƒƒgƒŠƒbƒN‚Ìæ“¾
+ * @brief ã‚·ã‚¹ãƒ†ãƒ ãƒ»ãƒ¡ãƒˆãƒªãƒƒã‚¯ã®å–å¾—
  * @param idx 
  * @param ppi 
  * @return int 
@@ -76,59 +76,59 @@ inline int get_SysMetricsForPPI(int idx, int ppi)
 
 //---------------------------------------------------------------------------
 /**
- * @brief w’èƒtƒHƒ“ƒg‚Ì•`‰æ‚‚ğæ“¾
- * @param font ƒtƒHƒ“ƒg
- * @param mgn ƒ}[ƒWƒ“
- * @param min_mgn Å¬ƒ}[ƒWƒ“
- * @return int •`‰æ‚
+ * @brief æŒ‡å®šãƒ•ã‚©ãƒ³ãƒˆã®æç”»é«˜ã‚’å–å¾—
+ * @param font ãƒ•ã‚©ãƒ³ãƒˆ
+ * @param mgn ãƒãƒ¼ã‚¸ãƒ³
+ * @param min_mgn æœ€å°ãƒãƒ¼ã‚¸ãƒ³
+ * @return int æç”»é«˜
  */
 int get_FontHeightMgn(TFont *font, int mgn = 0, int min_mgn = 2);
 
 /**
- * @brief w’èƒtƒHƒ“ƒg‚Ì•`‰æ‚‚ğæ“¾
- * @param font ƒtƒHƒ“ƒg
- * @param mgn ƒ}[ƒWƒ“(100\%‚Ì’lAƒXƒP[ƒŠƒ“ƒO‚³‚ê‚Ä“K—p)
- * @param min_mgn Å¬ƒ}[ƒWƒ“(100\%‚Ì’lAƒXƒP[ƒŠƒ“ƒO‚³‚ê‚Ä“K—p)
- * @return int •`‰æ‚
+ * @brief æŒ‡å®šãƒ•ã‚©ãƒ³ãƒˆã®æç”»é«˜ã‚’å–å¾—
+ * @param font ãƒ•ã‚©ãƒ³ãƒˆ
+ * @param mgn ãƒãƒ¼ã‚¸ãƒ³(100\%æ™‚ã®å€¤ã€ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°ã•ã‚Œã¦é©ç”¨)
+ * @param min_mgn æœ€å°ãƒãƒ¼ã‚¸ãƒ³(100\%æ™‚ã®å€¤ã€ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°ã•ã‚Œã¦é©ç”¨)
+ * @return int æç”»é«˜
  */
 int get_FontHeightMgnS(TFont *font, int mgn = 0, int min_mgn = 2);
 
 /**
- * @brief ƒXƒP[ƒŠƒ“ƒO‚³‚ê‚½ƒtƒHƒ“ƒg‚ğŠ„‚è“–‚Ä‚é
- * @param s_font Š„“–æ‚ÌƒtƒHƒ“ƒg
- * @param font Š„‚è“–‚Ä‚éƒtƒHƒ“ƒg
- * @param cp PPI‚ğæ“¾‚·‚éƒRƒ“ƒgƒ[ƒ‹
- * @param size ƒTƒCƒY
- * @param col •¶šF
+ * @brief ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°ã•ã‚ŒãŸãƒ•ã‚©ãƒ³ãƒˆã‚’å‰²ã‚Šå½“ã¦ã‚‹
+ * @param s_font å‰²å½“å…ˆã®ãƒ•ã‚©ãƒ³ãƒˆ
+ * @param font å‰²ã‚Šå½“ã¦ã‚‹ãƒ•ã‚©ãƒ³ãƒˆ
+ * @param cp PPIã‚’å–å¾—ã™ã‚‹ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«
+ * @param size ã‚µã‚¤ã‚º
+ * @param col æ–‡å­—è‰²
  */
 void AssignScaledFont(TFont *s_font, TFont *font, TControl *cp, int size = 0, TColor col = Graphics::clNone);
 
 /**
- * @brief ƒRƒ“ƒgƒ[ƒ‹‚ÉƒXƒP[ƒŠƒ“ƒO‚³‚ê‚½ƒtƒHƒ“ƒg‚ğİ’è
- * @param cp ‘ÎÛƒRƒ“ƒgƒ[ƒ‹
- * @param font ƒtƒHƒ“ƒg
+ * @brief ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã«ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°ã•ã‚ŒãŸãƒ•ã‚©ãƒ³ãƒˆã‚’è¨­å®š
+ * @param cp å¯¾è±¡ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«
+ * @param font ãƒ•ã‚©ãƒ³ãƒˆ
  */
 void AssignScaledFont(TWinControl *cp, TFont *font = NULL);
 
 /**
- * @brief TLabel ‚ÉƒXƒP[ƒŠƒ“ƒO‚³‚ê‚½ƒtƒHƒ“ƒg‚ğİ’è
- * @param lp ‘ÎÛƒ‰ƒxƒ‹
- * @param font ƒtƒHƒ“ƒg
+ * @brief TLabel ã«ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°ã•ã‚ŒãŸãƒ•ã‚©ãƒ³ãƒˆã‚’è¨­å®š
+ * @param lp å¯¾è±¡ãƒ©ãƒ™ãƒ«
+ * @param font ãƒ•ã‚©ãƒ³ãƒˆ
  */
 void AssignScaledFont(TLabel *lp, TFont *font = NULL);
 
 /**
- * @brief TPaintBox ‚ÉƒXƒP[ƒŠƒ“ƒO‚³‚ê‚½ƒtƒHƒ“ƒg‚ğİ’è
- * @param pp ‘ÎÛƒyƒCƒ“ƒgƒ{ƒbƒNƒX
- * @param font ƒtƒHƒ“ƒg
+ * @brief TPaintBox ã«ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°ã•ã‚ŒãŸãƒ•ã‚©ãƒ³ãƒˆã‚’è¨­å®š
+ * @param pp å¯¾è±¡ãƒšã‚¤ãƒ³ãƒˆãƒœãƒƒã‚¯ã‚¹
+ * @param font ãƒ•ã‚©ãƒ³ãƒˆ
  */
 void AssignScaledFont(TPaintBox *pp, TFont *font = NULL);
 
 /**
- * @brief ƒTƒCƒY‚©‚çƒXƒP[ƒŠƒ“ƒO‚³‚ê‚½ƒtƒHƒ“ƒg‚‚ğæ“¾
- * @param sz ƒTƒCƒY
- * @param cp ‘ÎÛƒRƒ“ƒgƒ[ƒ‹
- * @return int ƒtƒHƒ“ƒg‚
+ * @brief ã‚µã‚¤ã‚ºã‹ã‚‰ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°ã•ã‚ŒãŸãƒ•ã‚©ãƒ³ãƒˆé«˜ã‚’å–å¾—
+ * @param sz ã‚µã‚¤ã‚º
+ * @param cp å¯¾è±¡ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«
+ * @return int ãƒ•ã‚©ãƒ³ãƒˆé«˜
  */
 int  ScaledFontHeight(int sz, TControl *cp);
 

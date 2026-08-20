@@ -1,6 +1,6 @@
 /**
  * @file UserMdl.h
- * @brief ”Ä—p‹¤—pƒ‚ƒWƒ…[ƒ‹
+ * @brief æ±ç”¨å…±ç”¨ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«
  */
 //---------------------------------------------------------------------------
 #ifndef UserMdlH
@@ -21,39 +21,39 @@
 #include "usr_scrpanel.h"
 
 //---------------------------------------------------------------------------
-//ƒŠƒXƒgƒ{ƒbƒNƒX‚ÌƒIƒvƒVƒ‡ƒ“ƒ^ƒO
-#define LBTAG_OPT_FOCS	0x10000000		//!< ‘€ìŒãAƒŠƒXƒgƒ{ƒbƒNƒX‚ÉƒtƒH[ƒJƒX
-#define LBTAG_OPT_INHI	0x20000000		//!< •ÏX‹Ö~
+//ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚¿ã‚°
+#define LBTAG_OPT_FOCS	0x10000000		//!< æ“ä½œå¾Œã€ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã«ãƒ•ã‚©ãƒ¼ã‚«ã‚¹
+#define LBTAG_OPT_INHI	0x20000000		//!< å¤‰æ›´ç¦æ­¢
 
-//ƒRƒ“ƒ{ƒ{ƒbƒNƒX‚ÌƒIƒvƒVƒ‡ƒ“ƒ^ƒO
-#define CBTAG_RGEX_V	0x01000000		//!< ³‹K•\Œ»QÆ‚ğ•\¦
-#define CBTAG_RGEX_E	0x02000000		//!< ³‹K•\Œ»QÆ‚ğ—LŒø
-#define CBTAG_HISTORY	0x08000000		//!< —š—ğ‚ğ‚Â
-#define CBTAG_NO_CALC	0x10000000		//!< “d‘ì‚ğ•\¦‚µ‚È‚¢
-#define CBTAG_HAS_POP	0x40000000		//!< ƒ|ƒbƒvƒAƒbƒv‚ªŠ„‚è“–‚Ä‚ç‚ê‚Ä‚¢‚é
+//ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹ã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚¿ã‚°
+#define CBTAG_RGEX_V	0x01000000		//!< æ­£è¦è¡¨ç¾å‚ç…§ã‚’è¡¨ç¤º
+#define CBTAG_RGEX_E	0x02000000		//!< æ­£è¦è¡¨ç¾å‚ç…§ã‚’æœ‰åŠ¹
+#define CBTAG_HISTORY	0x08000000		//!< å±¥æ­´ã‚’æŒã¤
+#define CBTAG_NO_CALC	0x10000000		//!< é›»å“ã‚’è¡¨ç¤ºã—ãªã„
+#define CBTAG_HAS_POP	0x40000000		//!< ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ãŒå‰²ã‚Šå½“ã¦ã‚‰ã‚Œã¦ã„ã‚‹
 
-//ƒGƒfƒBƒbƒgƒ{ƒbƒNƒX‚ÌƒIƒvƒVƒ‡ƒ“ƒ^ƒO
-#define EDTAG_RGEX_V	0x01000000		//!< ³‹K•\Œ»QÆ‚ğ•\¦
-#define EDTAG_RGEX_E	0x02000000		//!< ³‹K•\Œ»QÆ‚ğ—LŒø
-#define EDTAG_DST_FMT	0x04000000		//!< U•ªæ‚Ì‘®•¶š—ñQÆ
-#define EDTAG_REF_CDIR	0x08000000		//!< ƒJƒŒƒ“ƒg‚ÌƒpƒX–³‚µƒfƒBƒŒƒNƒgƒŠ–¼
-#define EDTAG_NO_CALC	0x10000000		//!< “d‘ì‚ğ•\¦‚µ‚È‚¢
+//ã‚¨ãƒ‡ã‚£ãƒƒãƒˆãƒœãƒƒã‚¯ã‚¹ã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚¿ã‚°
+#define EDTAG_RGEX_V	0x01000000		//!< æ­£è¦è¡¨ç¾å‚ç…§ã‚’è¡¨ç¤º
+#define EDTAG_RGEX_E	0x02000000		//!< æ­£è¦è¡¨ç¾å‚ç…§ã‚’æœ‰åŠ¹
+#define EDTAG_DST_FMT	0x04000000		//!< æŒ¯åˆ†å…ˆã®æ›¸å¼æ–‡å­—åˆ—å‚ç…§
+#define EDTAG_REF_CDIR	0x08000000		//!< ã‚«ãƒ¬ãƒ³ãƒˆã®ãƒ‘ã‚¹ç„¡ã—ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå
+#define EDTAG_NO_CALC	0x10000000		//!< é›»å“ã‚’è¡¨ç¤ºã—ãªã„
 
-//ƒtƒ@ƒCƒ‹ƒ_ƒCƒAƒƒO—pƒtƒBƒ‹ƒ^
-#define F_FILTER_EXE	_T("Àsƒtƒ@ƒCƒ‹ (*.exe)|*.EXE")
-#define F_FILTER_EXE2	_T("Àsƒtƒ@ƒCƒ‹ (*.exe)|*.EXE|ƒVƒ‡[ƒgƒJƒbƒg (*.lnk)|*.LNK")
-#define F_FILTER_NBT	_T("ƒRƒ}ƒ“ƒhƒtƒ@ƒCƒ‹(*.nbt)|*.nbt")
-#define F_FILTER_INI	_T("İ’èƒtƒ@ƒCƒ‹ (*.ini)|*.INI")
-#define F_FILTER_TXT	_T("ƒeƒLƒXƒgƒtƒ@ƒCƒ‹ (*.txt)|*.txt")
-#define F_FILTER_CSV	_T("CSVƒtƒ@ƒCƒ‹ (*.csv)|*.csv")
-#define F_FILTER_TSV	_T("TSVƒtƒ@ƒCƒ‹ (*.txt,*.csv,*.tsv)|*.txt;*.csv;*.tsv")
-#define F_FILTER_NWL	_T("ƒ[ƒNƒŠƒXƒg (*.nwl)|*.nwl")
-#define F_FILTER_LST	_T("ƒeƒLƒXƒgƒtƒ@ƒCƒ‹ (*.txt)|*.TXT|ƒ[ƒNƒŠƒXƒg (*.nwl)|*.nwl")
+//ãƒ•ã‚¡ã‚¤ãƒ«ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ç”¨ãƒ•ã‚£ãƒ«ã‚¿
+#define F_FILTER_EXE	_T("å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ« (*.exe)|*.EXE")
+#define F_FILTER_EXE2	_T("å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ« (*.exe)|*.EXE|ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆ (*.lnk)|*.LNK")
+#define F_FILTER_NBT	_T("ã‚³ãƒãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«(*.nbt)|*.nbt")
+#define F_FILTER_INI	_T("è¨­å®šãƒ•ã‚¡ã‚¤ãƒ« (*.ini)|*.INI")
+#define F_FILTER_TXT	_T("ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ« (*.txt)|*.txt")
+#define F_FILTER_CSV	_T("CSVãƒ•ã‚¡ã‚¤ãƒ« (*.csv)|*.csv")
+#define F_FILTER_TSV	_T("TSVãƒ•ã‚¡ã‚¤ãƒ« (*.txt,*.csv,*.tsv)|*.txt;*.csv;*.tsv")
+#define F_FILTER_NWL	_T("ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆ (*.nwl)|*.nwl")
+#define F_FILTER_LST	_T("ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ« (*.txt)|*.TXT|ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆ (*.nwl)|*.nwl")
 #define F_FILTER_ICO	_T("(*.ico,*.exe,*.dll,*.lnk)|*.ICO;*.EXE;*.DLL;*.LNK")
-#define F_FILTER_WAV	_T("WAVƒtƒ@ƒCƒ‹|*.WAV|‚·‚×‚Ä‚Ìƒtƒ@ƒCƒ‹(*.*)|*.*")
-#define F_FILTER_ALL	_T("‚·‚×‚Ä‚Ìƒtƒ@ƒCƒ‹(*.*)|*.*")
+#define F_FILTER_WAV	_T("WAVãƒ•ã‚¡ã‚¤ãƒ«|*.WAV|ã™ã¹ã¦ã®ãƒ•ã‚¡ã‚¤ãƒ«(*.*)|*.*")
+#define F_FILTER_ALL	_T("ã™ã¹ã¦ã®ãƒ•ã‚¡ã‚¤ãƒ«(*.*)|*.*")
 
-//ƒR[ƒhƒy[ƒW
+//ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸
 struct code_page_inf {
 	unsigned int  page;
 	UnicodeString name;
@@ -67,11 +67,11 @@ typedef BOOL (WINAPI *FUNC_PickIconDlg)(HWND, LPWSTR, DWORD, LPDWORD);
 
 //---------------------------------------------------------------------------
 /**
- * @brief ”Ä—p‹¤—pƒ‚ƒWƒ…[ƒ‹
+ * @brief æ±ç”¨å…±ç”¨ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«
  */
 class TUserModule : public TDataModule
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *CalculatorAction;
 	TAction *ClrHistComboAction;
 	TAction *ClrListItemAction;
@@ -234,9 +234,9 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall SizePosToFlieListActionExecute(TObject *Sender);
 	void __fastcall BlinkTimerTimer(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
-	TCustomListBox *ActiveListBox;		//‘€ì‘ÎÛƒŠƒXƒgƒ{ƒbƒNƒX
-	UsrScrollPanel *ActiveScrPanel;		//ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	TCustomListBox *ActiveListBox;		//æ“ä½œå¯¾è±¡ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹
+	UsrScrollPanel *ActiveScrPanel;		//ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 	int PrevListIdx;
 
 	TComboBox *LastComboBox;
@@ -262,71 +262,71 @@ private:	// ƒ†[ƒU[éŒ¾
 
 	void __fastcall SelectIconDlg(UnicodeString &fnam);
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	TCursor crSpuitTool;
 	TCursor crHandGrabR;
 
-	UnicodeString ExePath;			//!< NyanFiÀsƒpƒX
-	UnicodeString CurFileName;		//!< ƒJ[ƒ\ƒ‹ˆÊ’u‚Ìƒtƒ@ƒCƒ‹–¼
-	UnicodeString CurPathName;		//!< Œ»İ‚ÌƒJƒŒƒ“ƒgƒpƒX–¼
-	UnicodeString OppPathName;		//!< Œ»İ‚Ì”½‘ÎƒpƒX–¼
-	UnicodeString RefFileName;		//!< ƒƒjƒ…[QÆ—pƒtƒ@ƒCƒ‹–¼
+	UnicodeString ExePath;			//!< NyanFiå®Ÿè¡Œãƒ‘ã‚¹
+	UnicodeString CurFileName;		//!< ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®ãƒ•ã‚¡ã‚¤ãƒ«å
+	UnicodeString CurPathName;		//!< ç¾åœ¨ã®ã‚«ãƒ¬ãƒ³ãƒˆãƒ‘ã‚¹å
+	UnicodeString OppPathName;		//!< ç¾åœ¨ã®åå¯¾ãƒ‘ã‚¹å
+	UnicodeString RefFileName;		//!< ãƒ¡ãƒ‹ãƒ¥ãƒ¼å‚ç…§ç”¨ãƒ•ã‚¡ã‚¤ãƒ«å
 
-	UnicodeString IconFilePath;		//!< ƒAƒCƒRƒ“QÆƒpƒX
+	UnicodeString IconFilePath;		//!< ã‚¢ã‚¤ã‚³ãƒ³å‚ç…§ãƒ‘ã‚¹
 
-	TStringList *RefRegExList;		//!< ³‹K•\Œ»‚ÌQÆƒŠƒXƒg
-	TStringList *CmdParamList;		//!< ƒRƒ}ƒ“ƒhƒpƒ‰ƒ[ƒ^‚ÌQÆƒŠƒXƒg
+	TStringList *RefRegExList;		//!< æ­£è¦è¡¨ç¾ã®å‚ç…§ãƒªã‚¹ãƒˆ
+	TStringList *CmdParamList;		//!< ã‚³ãƒãƒ³ãƒ‰ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®å‚ç…§ãƒªã‚¹ãƒˆ
 
-	TRect FileListRect;				//!< ƒtƒ@ƒCƒ‹ƒŠƒXƒg•”•ª‚ÌƒXƒNƒŠ[ƒ“À•WRect
+	TRect FileListRect;				//!< ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆéƒ¨åˆ†ã®ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™Rect
 
-	int ScrMode;					//!< ‰æ–Êƒ‚[ƒh
+	int ScrMode;					//!< ç”»é¢ãƒ¢ãƒ¼ãƒ‰
 
 	__fastcall TUserModule(TComponent* Owner);
 
-	/** @brief ƒŠƒXƒgƒ{ƒbƒNƒX‚Ì‰Šú‰»*/
+	/** @brief ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®åˆæœŸåŒ–*/
 	void __fastcall InitializeListBox(TCustomListBox *lp, UsrScrollPanel *sp = NULL);
 	void __fastcall UninitializeListBox();
 
 	bool __fastcall ListBoxOpeItem(UnicodeString keystr);
 
 	/**
-	 * @brief ƒXƒ|ƒCƒgˆ—‚ÌŠJn
-	 * @param pp ƒXƒ|ƒCƒgƒpƒlƒ‹
-	 * @param ip ƒXƒ|ƒCƒgƒCƒ[ƒW
-	 * @param col_def ƒfƒtƒHƒ‹ƒgF
+	 * @brief ã‚¹ãƒã‚¤ãƒˆå‡¦ç†ã®é–‹å§‹
+	 * @param pp ã‚¹ãƒã‚¤ãƒˆãƒ‘ãƒãƒ«
+	 * @param ip ã‚¹ãƒã‚¤ãƒˆã‚¤ãƒ¡ãƒ¼ã‚¸
+	 * @param col_def ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆè‰²
 	 */
 	void __fastcall BeginSpuit(TPanel *pp, TImage *ip, TColor col_def);
 
-	/** @brief ƒXƒ|ƒCƒgˆ—‚ÌI—¹ */
+	/** @brief ã‚¹ãƒã‚¤ãƒˆå‡¦ç†ã®çµ‚äº† */
 	TColor __fastcall EndSpuit();
 
-	/** @brief ƒXƒ|ƒCƒg“®ì’†H */
+	/** @brief ã‚¹ãƒã‚¤ãƒˆå‹•ä½œä¸­ï¼Ÿ */
 	bool __fastcall SpuitEnabled();
 
 	void __fastcall SetUsrPopupMenu(TForm *fp);
 	bool __fastcall ShowPopupMenu();
 
-	/** @brief ‰æ‘œƒtƒBƒ‹ƒ^‚ğİ’è */
+	/** @brief ç”»åƒãƒ•ã‚£ãƒ«ã‚¿ã‚’è¨­å®š */
 	void __fastcall SetOpenImgFilter(UnicodeString fnam);
 
-	/** @brief ƒfƒBƒŒƒNƒgƒŠ‚Ì‘I‘ğ */
+	/** @brief ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®é¸æŠ */
 	bool __fastcall SelectDirEx(const _TCHAR *tit, UnicodeString &dnam, bool to_rel = false);
 
-	/** @brief ƒtƒBƒ‹ƒ^‚©‚çƒfƒtƒHƒ‹ƒg‚ÌŠg’£q‚ğæ“¾ */
+	/** @brief ãƒ•ã‚£ãƒ«ã‚¿ã‹ã‚‰ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®æ‹¡å¼µå­ã‚’å–å¾— */
 	UnicodeString __fastcall get_DlgDefExt(UnicodeString filter);
 
 	/**
-	 * @brief ŠJ‚­ƒ_ƒCƒAƒƒO‚Ì€”õ
-	 * @param tit ƒ^ƒCƒgƒ‹
-	 * @param filter ƒtƒBƒ‹ƒ^
-	 * @param fnam ƒtƒ@ƒCƒ‹–¼
-	 * @param inidir ‰ŠúƒpƒX
+	 * @brief é–‹ããƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®æº–å‚™
+	 * @param tit ã‚¿ã‚¤ãƒˆãƒ«
+	 * @param filter ãƒ•ã‚£ãƒ«ã‚¿
+	 * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+	 * @param inidir åˆæœŸãƒ‘ã‚¹
 	 */
 	void __fastcall PrepareOpenDlg(const _TCHAR *tit, const _TCHAR *filter, const _TCHAR *fnam = NULL, UnicodeString inidir = EmptyStr);
 
 	UnicodeString __fastcall OpenDlgExecute();
 
-	/** @brief ŠJ‚­ƒ_ƒCƒAƒƒO‚ÌŒ‹‰Ê‚ğİ’è */
+	/** @brief é–‹ããƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®çµæœã‚’è¨­å®š */
 	bool __fastcall OpenDlgToEdit(TWinControl *ep, bool to_rel = false);
 
 	bool __fastcall OpenDlgToStr(UnicodeString &s, bool to_rel = false);
@@ -335,19 +335,19 @@ public:		// ƒ†[ƒU[éŒ¾
 	UnicodeString __fastcall OpenDlgIconIndex(bool to_rel = false);
 
 	/**
-	 * @brief •Û‘¶ƒ_ƒCƒAƒƒO‚Ì€”õ
-	 * @param tit ƒ^ƒCƒgƒ‹
-	 * @param filter ƒtƒBƒ‹ƒ^
-	 * @param fnam ƒtƒ@ƒCƒ‹–¼
-	 * @param inidir ‰ŠúƒpƒX
+	 * @brief ä¿å­˜ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®æº–å‚™
+	 * @param tit ã‚¿ã‚¤ãƒˆãƒ«
+	 * @param filter ãƒ•ã‚£ãƒ«ã‚¿
+	 * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+	 * @param inidir åˆæœŸãƒ‘ã‚¹
 	 */
 	void __fastcall PrepareSaveDlg(const _TCHAR *tit, const _TCHAR *filter, const _TCHAR *fnam = NULL, UnicodeString inidir = EmptyStr);
 
 	UnicodeString __fastcall SaveDlgExecute();
 
-	/** @brief ƒRƒ“ƒ{ƒ{ƒbƒNƒX‚Ì‘I‘ğó‘Ô‚ğ•Û‘¶ */
+	/** @brief ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹ã®é¸æŠçŠ¶æ…‹ã‚’ä¿å­˜ */
 	void __fastcall SaveLastComboBox();
-	/** @brief ƒRƒ“ƒ{ƒ{ƒbƒNƒX‚Ì‘I‘ğó‘Ô‚ğ•œ‹A */
+	/** @brief ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹ã®é¸æŠçŠ¶æ…‹ã‚’å¾©å¸° */
 	void __fastcall RestoreLastComboBox();
 
 	void __fastcall SetBlinkTimer(TComponent *cp);

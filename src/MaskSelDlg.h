@@ -1,6 +1,6 @@
 /**
  * @file MaskSelDlg.h
- * @brief ƒ}ƒXƒN/ƒ}ƒbƒ`‘I‘ğƒ_ƒCƒAƒƒO
+ * @brief ãƒã‚¹ã‚¯/ãƒãƒƒãƒé¸æŠãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 //---------------------------------------------------------------------------
 #ifndef MaskSelDlgH
@@ -14,11 +14,11 @@
 
 //---------------------------------------------------
 /**
- * @brief ƒ}ƒXƒN/ƒ}ƒbƒ`‘I‘ğƒ_ƒCƒAƒƒO
+ * @brief ãƒã‚¹ã‚¯/ãƒãƒƒãƒé¸æŠãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TMaskSelectDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TButton *CanButton;
 	TButton *OkButton;
 	TComboBox *MaskSelComboBox;
@@ -28,10 +28,10 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall FormKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	bool IsMask;
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	UnicodeString CmdName;
 
 	__fastcall TMaskSelectDlg(TComponent* Owner);

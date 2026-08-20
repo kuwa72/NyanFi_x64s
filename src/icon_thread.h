@@ -1,6 +1,6 @@
 /**
  * @file icon_thread.h
- * @brief ƒAƒCƒRƒ“æ“¾ƒXƒŒƒbƒh
+ * @brief ã‚¢ã‚¤ã‚³ãƒ³å–å¾—ã‚¹ãƒ¬ãƒƒãƒ‰
  */
 //---------------------------------------------------------------------------
 #ifndef TGetIconThreadH
@@ -11,10 +11,10 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒAƒCƒRƒ“æ“¾ƒXƒŒƒbƒh
+ * @brief ã‚¢ã‚¤ã‚³ãƒ³å–å¾—ã‚¹ãƒ¬ãƒƒãƒ‰
  * 
- * CachedIcoList ‚Éƒtƒ@ƒCƒ‹–¼‚ª’Ç‰Á‚³‚ê‚é‚ÆA‚»‚ÌƒAƒCƒRƒ“‚ğæ“¾‚µ‚ÄƒLƒƒƒbƒVƒ…‚µ‚Ü‚·(Objects ‚Éİ’è)B
- * @attention CachedIcoList ‚ğ‘€ì‚·‚éÛ‚Í IconRWLock ‚ÅƒƒbƒN‚µ‚Ä‚­‚¾‚³‚¢B
+ * CachedIcoList ã«ãƒ•ã‚¡ã‚¤ãƒ«åãŒè¿½åŠ ã•ã‚Œã‚‹ã¨ã€ãã®ã‚¢ã‚¤ã‚³ãƒ³ã‚’å–å¾—ã—ã¦ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã—ã¾ã™(Objects ã«è¨­å®š)ã€‚
+ * @attention CachedIcoList ã‚’æ“ä½œã™ã‚‹éš›ã¯ IconRWLock ã§ãƒ­ãƒƒã‚¯ã—ã¦ãã ã•ã„ã€‚
  */
 class TGetIconThread : public TThread
 {
@@ -23,10 +23,10 @@ private:
 	void __fastcall Execute();
 
 public:
-	HWND CallbackWnd;	//!< ’Ê’mæƒEƒBƒ“ƒhƒE‚Ìƒnƒ“ƒhƒ‹
+	HWND CallbackWnd;	//!< é€šçŸ¥å…ˆã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ãƒãƒ³ãƒ‰ãƒ«
 
 	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	 * @param CreateSuspended 
 	 */
 	__fastcall TGetIconThread(bool CreateSuspended);

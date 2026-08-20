@@ -1,6 +1,6 @@
 /**
  * @file ExeDlg.h
- * @brief ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“‚ÌÀsƒ_ƒCƒAƒƒO
+ * @brief ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã®å®Ÿè¡Œãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 //---------------------------------------------------------------------------
 #ifndef ExeDlgH
@@ -18,11 +18,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“‚ÌÀsƒ_ƒCƒAƒƒO
+ * @brief ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã®å®Ÿè¡Œãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TExeCmdDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *DelItemAction;
 	TAction *OkAction;
 	TAction *RefCurFnamAction;
@@ -51,16 +51,16 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall OkActionExecute(TObject *Sender);
 	void __fastcall OkActionUpdate(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	void __fastcall WmMenuChar(TMessage &msg)
 	{
 		if (msg.WParamHi==MF_POPUP) TForm::Dispatch(&msg); else msg.Result = MAKELONG(0, MNC_CLOSE);
 	}
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	file_rec *FileRec;
-	bool inp_CurName;		//!< ƒJ[ƒ\ƒ‹ˆÊ’u‚Ìƒtƒ@ƒCƒ‹–¼‚ğ“ü—Í
-	bool inp_LastCmd;		//!< ‘O‰ñ‚ÌƒRƒ}ƒ“ƒh‚ğ“ü—Í
+	bool inp_CurName;		//!< ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®ãƒ•ã‚¡ã‚¤ãƒ«åã‚’å…¥åŠ›
+	bool inp_LastCmd;		//!< å‰å›ã®ã‚³ãƒãƒ³ãƒ‰ã‚’å…¥åŠ›
 
 	__fastcall TExeCmdDlg(TComponent* Owner);
 

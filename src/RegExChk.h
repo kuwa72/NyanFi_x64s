@@ -1,6 +1,6 @@
 /**
  * @file RegExChk.h
- * @brief ³‹K•\Œ»ƒ`ƒFƒbƒJ[
+ * @brief æ­£è¦è¡¨ç¾ãƒã‚§ãƒƒã‚«ãƒ¼
  */
 //---------------------------------------------------------------------------
 #ifndef RegExChkH
@@ -21,11 +21,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ³‹K•\Œ»ƒ`ƒFƒbƒJ[
+ * @brief æ­£è¦è¡¨ç¾ãƒã‚§ãƒƒã‚«ãƒ¼
  */
 class TRegExChecker : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *CopyAction;
 	TAction *CopyCAction;
 	TAction *EditSampleAction;
@@ -88,7 +88,7 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall EditSampleActionExecute(TObject *Sender);
 	void __fastcall EditSampleActionUpdate(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	int PtnSelStart;
 	int PtnSelLength;
 	bool with_Slash;
@@ -102,7 +102,7 @@ private:	// ƒ†[ƒU[éŒ¾
 	UnicodeString SampleFile;
 	TDateTime SampleTime;
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	TComboBox   *ObjComboBox;
 	TCustomEdit *ObjCustomEdit;
 

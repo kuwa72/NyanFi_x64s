@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  d•¡ƒtƒ@ƒCƒ‹‚ÌŒŸõƒ_ƒCƒAƒƒO										//
+//  é‡è¤‡ãƒ•ã‚¡ã‚¤ãƒ«ã®æ¤œç´¢ãƒ€ã‚¤ã‚¢ãƒ­ã‚°										//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "Global.h"
@@ -35,7 +35,7 @@ void __fastcall TFindDuplDlg::FormShow(TObject *Sender)
 
 	ClientHeight = TopPanel->Height + (OptPanel->Visible? OptPanel->Height : SCALED_THIS(16)) + BottomPanel->Height;
 
-	Caption = OptPanel->Visible? "d•¡ƒtƒ@ƒCƒ‹‚ÌŒŸõ" : "d•¡ƒtƒ@ƒCƒ‹‚ÌŒŸõ (¶‰E - ‘I‘ğ)";
+	Caption = OptPanel->Visible? "é‡è¤‡ãƒ•ã‚¡ã‚¤ãƒ«ã®æ¤œç´¢" : "é‡è¤‡ãƒ•ã‚¡ã‚¤ãƒ«ã®æ¤œç´¢ (å·¦å³ - é¸æŠ)";
 }
 //---------------------------------------------------------------------------
 void __fastcall TFindDuplDlg::FormClose(TObject *Sender, TCloseAction &Action)

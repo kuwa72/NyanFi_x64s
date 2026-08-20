@@ -1,6 +1,6 @@
 /**
  * @file TxtViewer.h
- * @brief ƒeƒLƒXƒgƒrƒ…[ƒA
+ * @brief ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢
  */
 //---------------------------------------------------------------------------
 #ifndef TxtViewerH
@@ -11,62 +11,62 @@
 #include "Global.h"
 
 //---------------------------------------------------------------------------
-/** ƒŠƒ“ƒNæŒŸõ‚Ì³‹K•\Œ» */
-#define LINK_MATCH_PTN	"(https?://[\\w/:%#$&?()~.=+-]+)|(file:///[^*?\"<>|)j]+\\.[a-zA-Z0-9]+)|(mailto:[a-zA-Z0-9]+[\\w.-]*@[\\w.-]+)"
+/** ãƒªãƒ³ã‚¯å…ˆæ¤œç´¢ã®æ­£è¦è¡¨ç¾ */
+#define LINK_MATCH_PTN	"(https?://[\\w/:%#$&?()~.=+-]+)|(file:///[^*?\"<>|)ï¼‰]+\\.[a-zA-Z0-9]+)|(mailto:[a-zA-Z0-9]+[\\w.-]*@[\\w.-]+)"
 
-/** ’PŒêƒ}ƒbƒ`—p³‹K•\Œ» */
-#define WORD_MATCH_PTN	LINK_MATCH_PTN "|\\w+|[ˆê-ê]+|[‚Ÿ-‚ñ]+|[ƒ@-ƒ”[]+|[‚-‚š‚`-‚y‚O-‚X]+|[¦-ß]+|#[0-9a-fA-F]{3,6}"
+/** å˜èªãƒãƒƒãƒç”¨æ­£è¦è¡¨ç¾ */
+#define WORD_MATCH_PTN	LINK_MATCH_PTN "|\\w+|[ä¸€-é¾ ]+|[ã-ã‚“]+|[ã‚¡-ãƒ´ãƒ¼]+|[ï½-ï½šï¼¡-ï¼ºï¼-ï¼™]+|[ï½¦-ï¾Ÿ]+|#[0-9a-fA-F]{3,6}"
 
 #define MAX_BIN_HCH_X	67
 #define MARK_WIDTH		8
 
-#define MAX_EM_PTN		7	//!< ‹­’²•\¦ƒpƒ^[ƒ“”
+#define MAX_EM_PTN		7	//!< å¼·èª¿è¡¨ç¤ºãƒ‘ã‚¿ãƒ¼ãƒ³æ•°
 
 //---------------------------------------------------------------------------
-/** @brief •\¦s“à—e */
+/** @brief è¡¨ç¤ºè¡Œå†…å®¹ */
 struct line_rec {
-	int  LineNo;			//!< s”Ô†
-	int  LineIdx;			//!< ‰üss“àƒCƒ“ƒfƒbƒNƒX
-	bool hasCR;				//!< s––‚É‰üsƒR[ƒh‚ ‚è
+	int  LineNo;			//!< è¡Œç•ªå·
+	int  LineIdx;			//!< æ”¹è¡Œè¡Œå†…ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
+	bool hasCR;				//!< è¡Œæœ«ã«æ”¹è¡Œã‚³ãƒ¼ãƒ‰ã‚ã‚Š
 	WideChar topQch;
-	int  RemPos0;			//!< ƒRƒƒ“ƒgŠJnˆÊ’u
-	int  RemPos1;			//!< ƒRƒƒ“ƒgI—¹ˆÊ’u
-	int  IndentN;			//!< ƒCƒ“ƒfƒ“ƒgƒKƒCƒh”
-	int  StickyIdx;			//!< Sticky—pƒCƒ“ƒXƒg[ƒ‹(|1: –¢İ’è)
+	int  RemPos0;			//!< ã‚³ãƒ¡ãƒ³ãƒˆé–‹å§‹ä½ç½®
+	int  RemPos1;			//!< ã‚³ãƒ¡ãƒ³ãƒˆçµ‚äº†ä½ç½®
+	int  IndentN;			//!< ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã‚¬ã‚¤ãƒ‰æ•°
+	int  StickyIdx;			//!< Stickyç”¨ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«(ï¼1: æœªè¨­å®š)
 };
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒeƒLƒXƒgƒrƒ…[ƒA
+ * @brief ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢
  */
 class TTxtViewer
 {
 private:
-	TPaintBox	*ViewBox;			//ƒrƒ…[ƒA•`‰æ—pPaintBox
+	TPaintBox	*ViewBox;			//ãƒ“ãƒ¥ãƒ¼ã‚¢æç”»ç”¨PaintBox
 	TCanvas		*ViewCanvas;
 	TScrollBar	*ScrBar;
 	UsrScrollPanel *ScrPanel;
-	TPaintBox	*RulerBox;			//ƒ‹[ƒ‰
-	TStatusBar	*SttHeader;			//ƒXƒe[ƒ^ƒXƒwƒbƒ_
-	TPaintBox	*MarginBox;			//‰E—]”’
+	TPaintBox	*RulerBox;			//ãƒ«ãƒ¼ãƒ©
+	TStatusBar	*SttHeader;			//ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒ˜ãƒƒãƒ€
+	TPaintBox	*MarginBox;			//å³ä½™ç™½
 
-	bool isExtWnd;					//ŠO•”ƒEƒBƒ“ƒhƒE‚Å•\¦
+	bool isExtWnd;					//å¤–éƒ¨ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã§è¡¨ç¤º
 
-	UnicodeString EmPtn[MAX_EM_PTN];	//‹­’²•\¦ƒpƒ^[ƒ“
-	TColor EmFgC[MAX_EM_PTN];			//‹­’²•¶šF
-	TColor EmBgC[MAX_EM_PTN];			//‹­’²”wŒiF
+	UnicodeString EmPtn[MAX_EM_PTN];	//å¼·èª¿è¡¨ç¤ºãƒ‘ã‚¿ãƒ¼ãƒ³
+	TColor EmFgC[MAX_EM_PTN];			//å¼·èª¿æ–‡å­—è‰²
+	TColor EmBgC[MAX_EM_PTN];			//å¼·èª¿èƒŒæ™¯è‰²
 
-	TPanel *ColorPanel;				//ƒJ[ƒ\ƒ‹ˆÊ’u’l‚ÌƒJƒ‰[•\¦
+	TPanel *ColorPanel;				//ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®å€¤ã®ã‚«ãƒ©ãƒ¼è¡¨ç¤º
 
-	TPanel *StickyPanel;			//ŠÖ”ƒXƒeƒBƒbƒL[
+	TPanel *StickyPanel;			//é–¢æ•°ã‚¹ãƒ†ã‚£ãƒƒã‚­ãƒ¼
 	TPaintBox *StickyBox;
-	UnicodeString StickyStr;		//ƒXƒeƒBƒbƒL[•\¦“à—e
-	int StickyLine;					//ƒXƒeƒBƒbƒL[s”Ô†(1ƒx[ƒX)
+	UnicodeString StickyStr;		//ã‚¹ãƒ†ã‚£ãƒƒã‚­ãƒ¼è¡¨ç¤ºå†…å®¹
+	int StickyLine;					//ã‚¹ãƒ†ã‚£ãƒƒã‚­ãƒ¼è¡Œç•ªå·(1ãƒ™ãƒ¼ã‚¹)
 	int LastTopPos;
 
-	UnicodeString FuncPtn;			//ŠÖ”ƒ}ƒbƒ`ƒpƒ^[ƒ“
-	UnicodeString FuncBrkPtn;		//ŠÖ”ƒuƒŒ[ƒNƒpƒ^[ƒ“
-	UnicodeString FuncNamPtn;		//ŠÖ”–¼‹­’²ƒpƒ^[ƒ“
+	UnicodeString FuncPtn;			//é–¢æ•°ãƒãƒƒãƒãƒ‘ã‚¿ãƒ¼ãƒ³
+	UnicodeString FuncBrkPtn;		//é–¢æ•°ãƒ–ãƒ¬ãƒ¼ã‚¯ãƒ‘ã‚¿ãƒ¼ãƒ³
+	UnicodeString FuncNamPtn;		//é–¢æ•°åå¼·èª¿ãƒ‘ã‚¿ãƒ¼ãƒ³
 
 	Graphics::TBitmap *ImgBuff;
 
@@ -76,53 +76,53 @@ private:
 	bool SelSkip;
 	bool inh_Repaint;
 
-	TFont *UseFont;					//g—pƒtƒHƒ“ƒg
-	UnicodeString useFontName;		//g—pƒtƒHƒ“ƒg–¼
-	int  useFontSize;				//g—pƒtƒHƒ“ƒgƒTƒCƒY(ƒŠƒZƒbƒg’l)
+	TFont *UseFont;					//ä½¿ç”¨ãƒ•ã‚©ãƒ³ãƒˆ
+	UnicodeString useFontName;		//ä½¿ç”¨ãƒ•ã‚©ãƒ³ãƒˆå
+	int  useFontSize;				//ä½¿ç”¨ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚º(ãƒªã‚»ãƒƒãƒˆå€¤)
 
-	int  FontHeight;				//ƒtƒHƒ“ƒg‚
-	int  LineHeight;				//s‚
-	int  HchWidth;					//”¼Šp•(px)
-	int  TabWidth;					//ƒ^ƒu•(px)
-	int  CurHchX;					//ã‰ºˆÚ“®‚ÌXˆÊ’u(”¼Šp’PˆÊ)
-	int  MaxHchX;					//XˆÊ’u‚ÌÅ‘å’l(”¼Šp’PˆÊ)
+	int  FontHeight;				//ãƒ•ã‚©ãƒ³ãƒˆé«˜
+	int  LineHeight;				//è¡Œé«˜
+	int  HchWidth;					//åŠè§’å¹…(px)
+	int  TabWidth;					//ã‚¿ãƒ–å¹…(px)
+	int  CurHchX;					//ä¸Šä¸‹ç§»å‹•æ™‚ã®Xä½ç½®(åŠè§’å˜ä½)
+	int  MaxHchX;					//Xä½ç½®ã®æœ€å¤§å€¤(åŠè§’å˜ä½)
 	int  LeftMargin;
-	int  CurTop;					//•\¦æ“ªs(1ƒx[ƒX)
-	int  CurBottom;					//•\¦Å‰ºs
-	int  TopXpos;					//s“ª‚Ì•\¦ŠJnˆÊ’u
-	int  TopMargin;					//s“ª‚Ì—]”’
+	int  CurTop;					//è¡¨ç¤ºå…ˆé ­è¡Œ(1ãƒ™ãƒ¼ã‚¹)
+	int  CurBottom;					//è¡¨ç¤ºæœ€ä¸‹è¡Œ
+	int  TopXpos;					//è¡Œé ­ã®è¡¨ç¤ºé–‹å§‹ä½ç½®
+	int  TopMargin;					//è¡Œé ­ã®ä½™ç™½
 
-	DynamicArray<int>  FixWdList;	//ŒÅ’è’·•ƒŠƒXƒg
-	DynamicArray<bool> IsNumList;	//€–Ú‚ª”’l‚©
+	DynamicArray<int>  FixWdList;	//å›ºå®šé•·å¹…ãƒªã‚¹ãƒˆ
+	DynamicArray<bool> IsNumList;	//é …ç›®ãŒæ•°å€¤ã‹
 
-	TStringList *RemLnList;			//1sƒRƒƒ“ƒg¯•Ê•¶š—ñ
-	TStringList *RemBgnList;		//ƒuƒƒbƒNƒRƒƒ“ƒgŠJn•¶š—ñ
-	TStringList *RemEndList;		//ƒuƒƒbƒNƒRƒƒ“ƒgI—¹•¶š—ñ
+	TStringList *RemLnList;			//1è¡Œã‚³ãƒ¡ãƒ³ãƒˆè­˜åˆ¥æ–‡å­—åˆ—
+	TStringList *RemBgnList;		//ãƒ–ãƒ­ãƒƒã‚¯ã‚³ãƒ¡ãƒ³ãƒˆé–‹å§‹æ–‡å­—åˆ—
+	TStringList *RemEndList;		//ãƒ–ãƒ­ãƒƒã‚¯ã‚³ãƒ¡ãƒ³ãƒˆçµ‚äº†æ–‡å­—åˆ—
 
-	UnicodeString QuotStr;			//•¶š—ñ‚Ìˆø—p•„
-	bool useEsc;					//•¶š—ñ“à‚ÅƒGƒXƒP[ƒvƒV[ƒPƒ“ƒX‚ ‚è
+	UnicodeString QuotStr;			//æ–‡å­—åˆ—ã®å¼•ç”¨ç¬¦
+	bool useEsc;					//æ–‡å­—åˆ—å†…ã§ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã‚·ãƒ¼ã‚±ãƒ³ã‚¹ã‚ã‚Š
 
-	UnicodeString ReservedPtn;		//—\–ñŒê
-	bool ReservedCase;				//—\–ñŒê‚Å‘å¬•¶š‚ğ‹æ•Ê
+	UnicodeString ReservedPtn;		//äºˆç´„èª
+	bool ReservedCase;				//äºˆç´„èªã§å¤§å°æ–‡å­—ã‚’åŒºåˆ¥
 
-	UnicodeString SymbolChs;		//ƒVƒ“ƒ{ƒ‹
-	UnicodeString NumericPtn;		//”’l
-	UnicodeString CharPtn;			//•¶š
+	UnicodeString SymbolChs;		//ã‚·ãƒ³ãƒœãƒ«
+	UnicodeString NumericPtn;		//æ•°å€¤
+	UnicodeString CharPtn;			//æ–‡å­—
 
-	UnicodeString UsrKeyword;		//ƒ†[ƒU’è‹`ƒL[ƒ[ƒh
-	bool   UsrKeywdCase;			//ƒ†[ƒU’è‹`ƒL[ƒ[ƒh‚Å‘å¬•¶š‚ğ‹æ•Ê
-	TColor UsrKeywdCol;				//ƒ†[ƒU’è‹`ƒL[ƒ[ƒh‚Ì•¶šF
+	UnicodeString UsrKeyword;		//ãƒ¦ãƒ¼ã‚¶å®šç¾©ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰
+	bool   UsrKeywdCase;			//ãƒ¦ãƒ¼ã‚¶å®šç¾©ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ã§å¤§å°æ–‡å­—ã‚’åŒºåˆ¥
+	TColor UsrKeywdCol;				//ãƒ¦ãƒ¼ã‚¶å®šç¾©ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ã®æ–‡å­—è‰²
 
-	UnicodeString UsrKeyword2;		//ƒ†[ƒU’è‹`ƒL[ƒ[ƒh
-	bool   UsrKeywdCase2;			//ƒ†[ƒU’è‹`ƒL[ƒ[ƒh‚Å‘å¬•¶š‚ğ‹æ•Ê
-	TColor UsrKeywdCol2;			//ƒ†[ƒU’è‹`ƒL[ƒ[ƒh‚Ì•¶šF
+	UnicodeString UsrKeyword2;		//ãƒ¦ãƒ¼ã‚¶å®šç¾©ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰
+	bool   UsrKeywdCase2;			//ãƒ¦ãƒ¼ã‚¶å®šç¾©ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ã§å¤§å°æ–‡å­—ã‚’åŒºåˆ¥
+	TColor UsrKeywdCol2;			//ãƒ¦ãƒ¼ã‚¶å®šç¾©ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ã®æ–‡å­—è‰²
 
-	TStringList *PairPtnList;		//SearchPair —p‚ÌŠJn/I—¹sƒpƒ^[ƒ“ƒŠƒXƒg
+	TStringList *PairPtnList;		//SearchPair ç”¨ã®é–‹å§‹/çµ‚äº†è¡Œãƒ‘ã‚¿ãƒ¼ãƒ³ãƒªã‚¹ãƒˆ
 
-	TBytes FindByte0, FindByte1;	//ƒoƒCƒiƒŠŒŸõŒê
-	TBytes FindMask;				//ƒoƒCƒiƒŠŒŸõ—pƒ}ƒXƒN
+	TBytes FindByte0, FindByte1;	//ãƒã‚¤ãƒŠãƒªæ¤œç´¢èª
+	TBytes FindMask;				//ãƒã‚¤ãƒŠãƒªæ¤œç´¢ç”¨ãƒã‚¹ã‚¯
 
-	bool alt_BackSlash;				//\ ‚ğ _(U+2216)‚Å•\¦
+	bool alt_BackSlash;				//\ ã‚’ ï¼¼(U+2216)ã§è¡¨ç¤º
 
 	line_rec BinLineRec;
 	line_rec* __fastcall AddDispLine(UnicodeString s, int lno, int lidx = 0);
@@ -167,215 +167,215 @@ private:
 public:
 	TForm *OwnerForm;
 
-	MemMapFile	 *MMF;				//!< ƒƒ‚ƒŠƒ}ƒbƒvƒhƒtƒ@ƒCƒ‹
+	MemMapFile	 *MMF;				//!< ãƒ¡ãƒ¢ãƒªãƒãƒƒãƒ—ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«
 
-	TStringList  *TxtBufList;		//!< “à—eƒŠƒXƒg
-	TStringList  *TxtBufList2;		//!< HTML¨TEXT•ÏŠ·Œã‚Ì“à—eƒŠƒXƒg/ ®Œ`ŒãJSON
-	TStringList  *DispLines;		//!< •\¦sƒŠƒXƒg(ƒeƒLƒXƒg—p)
+	TStringList  *TxtBufList;		//!< å†…å®¹ãƒªã‚¹ãƒˆ
+	TStringList  *TxtBufList2;		//!< HTMLâ†’TEXTå¤‰æ›å¾Œã®å†…å®¹ãƒªã‚¹ãƒˆ/ æ•´å½¢å¾ŒJSON
+	TStringList  *DispLines;		//!< è¡¨ç¤ºè¡Œãƒªã‚¹ãƒˆ(ãƒ†ã‚­ã‚¹ãƒˆç”¨)
 
-	UnicodeString FileName;			//!< ƒtƒ@ƒCƒ‹–¼
-	UnicodeString OrgName;			//!< ˆê‰ğ“€‚µ‚Ä‚¢‚éê‡‚ÌŒ³ƒtƒ@ƒCƒ‹–¼
+	UnicodeString FileName;			//!< ãƒ•ã‚¡ã‚¤ãƒ«å
+	UnicodeString OrgName;			//!< ä¸€æ™‚è§£å‡ã—ã¦ã„ã‚‹å ´åˆã®å…ƒãƒ•ã‚¡ã‚¤ãƒ«å
 	file_rec     *FileRec;
-	bool 		  HasBOM;			//!< BOM•t‚«
-	UnicodeString LineBreakStr;		//!< ‰üsƒR[ƒh
-	UnicodeString SttHdrInf;		//!< ƒtƒ@ƒCƒ‹î•ñ
-	UnicodeString MarkListStr;		//!< ƒ}[ƒNƒŠƒXƒg
+	bool 		  HasBOM;			//!< BOMä»˜ã
+	UnicodeString LineBreakStr;		//!< æ”¹è¡Œã‚³ãƒ¼ãƒ‰
+	UnicodeString SttHdrInf;		//!< ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±
+	UnicodeString MarkListStr;		//!< ãƒãƒ¼ã‚¯ãƒªã‚¹ãƒˆ
 
 	bool isReady;
-	bool isFitWin;					//!< Ü‚è•Ô‚µ‚ğƒEƒBƒ“ƒhƒE•‚É
-	bool isText;					//!< ƒeƒLƒXƒg•\¦
-	bool isBinary;					//!< ƒoƒCƒiƒŠ•\¦
-	bool isXDoc2Txt;				//!< xdoc2txt‚ğg—p
-	bool isHtm2Txt;					//!< HTML¨TEXT•ÏŠ·ƒ‚[ƒh
-	bool isFixedLen;				//!< ŒÅ’è’·•\¦ƒ‚[ƒh
-	bool isCSV;						//!< CSV(TSV‚ğŠÜ‚Ş)
+	bool isFitWin;					//!< æŠ˜ã‚Šè¿”ã—ã‚’ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦å¹…ã«
+	bool isText;					//!< ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¤º
+	bool isBinary;					//!< ãƒã‚¤ãƒŠãƒªè¡¨ç¤º
+	bool isXDoc2Txt;				//!< xdoc2txtã‚’ä½¿ç”¨
+	bool isHtm2Txt;					//!< HTMLâ†’TEXTå¤‰æ›ãƒ¢ãƒ¼ãƒ‰
+	bool isFixedLen;				//!< å›ºå®šé•·è¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰
+	bool isCSV;						//!< CSV(TSVã‚’å«ã‚€)
 	bool isTSV;
-	bool isSelected;				//!< ƒtƒ@ƒCƒ‹‘I‘ğ’†
-	bool ShowRuby;					//!< ƒ‹ƒr•\¦
-	bool isAozora;					//!< Â‹ó•¶ŒÉŒ`®
-	bool isJsonFmt;					//!< ®Œ`ŒãJSON
-	bool isLog;						//!< ƒ^ƒXƒNƒƒO
-	bool isClip;					//!< ƒNƒŠƒbƒvƒ{[ƒh
-	bool isIniFmt;					//!< INIƒtƒ@ƒCƒ‹‚È‚Ç
-	bool isAwstats;					//!< AwstatsƒƒO
-	bool isNyanTxt;					//!< NyanFi—pƒeƒLƒXƒg
-	bool isLimited;					//!< ƒTƒCƒY§ŒÀ—L‚è
-	bool isContinue;				//!< ÅŒã‚©‚ç‘±‚­
-	bool isSelMode;					//!< ‘I‘ğƒ‚[ƒh
-	bool isBoxMode;					//!< ” Œ`‘I‘ğƒ‚[ƒh
-	bool ExtClicked;				//!< ƒeƒLƒXƒgŠO‚ğƒNƒŠƒbƒN‚³‚ê‚½
-	bool Selecting;					//!< ƒ}ƒEƒX‚Å‘I‘ğ’†
-	bool PtInSelect;				//!< ‘I‘ğ”ÍˆÍ“à‚ğƒNƒŠƒbƒN‚µ‚½
-	bool reqCurPos;					//!< •Â‚¶‚½‚Æ‚«‚Éƒtƒ@ƒCƒ‰[‚ÌƒJ[ƒ\ƒ‹ˆÊ’u‚ğİ’è
+	bool isSelected;				//!< ãƒ•ã‚¡ã‚¤ãƒ«é¸æŠä¸­
+	bool ShowRuby;					//!< ãƒ«ãƒ“è¡¨ç¤º
+	bool isAozora;					//!< é’ç©ºæ–‡åº«å½¢å¼
+	bool isJsonFmt;					//!< æ•´å½¢å¾ŒJSON
+	bool isLog;						//!< ã‚¿ã‚¹ã‚¯ãƒ­ã‚°
+	bool isClip;					//!< ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰
+	bool isIniFmt;					//!< INIãƒ•ã‚¡ã‚¤ãƒ«ãªã©
+	bool isAwstats;					//!< Awstatsãƒ­ã‚°
+	bool isNyanTxt;					//!< NyanFiç”¨ãƒ†ã‚­ã‚¹ãƒˆ
+	bool isLimited;					//!< ã‚µã‚¤ã‚ºåˆ¶é™æœ‰ã‚Š
+	bool isContinue;				//!< æœ€å¾Œã‹ã‚‰ç¶šã
+	bool isSelMode;					//!< é¸æŠãƒ¢ãƒ¼ãƒ‰
+	bool isBoxMode;					//!< ç®±å½¢é¸æŠãƒ¢ãƒ¼ãƒ‰
+	bool ExtClicked;				//!< ãƒ†ã‚­ã‚¹ãƒˆå¤–ã‚’ã‚¯ãƒªãƒƒã‚¯ã•ã‚ŒãŸ
+	bool Selecting;					//!< ãƒã‚¦ã‚¹ã§é¸æŠä¸­
+	bool PtInSelect;				//!< é¸æŠç¯„å›²å†…ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ãŸ
+	bool reqCurPos;					//!< é–‰ã˜ãŸã¨ãã«ãƒ•ã‚¡ã‚¤ãƒ©ãƒ¼ã®ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã‚’è¨­å®š
 
-	int  TabLength;					//!< ƒ^ƒu”
-	int  LineCount;					//!< 1ƒy[ƒW•ª‚Ìs”(-1)
-	int  MaxLine;					//!< Å‘ås”
-	int  MaxDispLine;				//!< Å‘å•\¦s
+	int  TabLength;					//!< ã‚¿ãƒ–æ•°
+	int  LineCount;					//!< 1ãƒšãƒ¼ã‚¸åˆ†ã®è¡Œæ•°(-1)
+	int  MaxLine;					//!< æœ€å¤§è¡Œæ•°
+	int  MaxDispLine;				//!< æœ€å¤§è¡¨ç¤ºè¡Œ
 
-	bool isTail;					//!< ––”ö‚ğ•\¦
-	bool isReverse;					//!< ‹t‡
-	int  TailLine;					//!< ––”ös”
+	bool isTail;					//!< æœ«å°¾ã‚’è¡¨ç¤º
+	bool isReverse;					//!< é€†é †
+	int  TailLine;					//!< æœ«å°¾è¡Œæ•°
 
-	//TopIsHeader ƒvƒƒpƒeƒB
+	//TopIsHeader ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	bool FTopIsHeader;
 	void __fastcall SetTopIsHeader(bool Value);
-	/** @brief æ“ªs‚ÍCSV€–Ú–¼ */
+	/** @brief å…ˆé ­è¡Œã¯CSVé …ç›®å */
 	__property bool TopIsHeader = {read = FTopIsHeader,  write = SetTopIsHeader};
 
-	unsigned int BinarySize;		//!< ƒoƒCƒiƒŠ“ÇƒTƒCƒY
-	unsigned __int64 BinFileSize;	//!< ƒtƒ@ƒCƒ‹ƒTƒCƒY
-	__int64 TopAddress;				//!< æ“ªƒAƒhƒŒƒX
+	unsigned int BinarySize;		//!< ãƒã‚¤ãƒŠãƒªèª­è¾¼ã‚µã‚¤ã‚º
+	unsigned __int64 BinFileSize;	//!< ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚º
+	__int64 TopAddress;				//!< å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹
 
-	TPoint CurPos;					//!< ƒJ[ƒ\ƒ‹ˆÊ’u(•¶š’PˆÊ 0ƒx[ƒX)
-	TPoint SelStart, SelEnd;		//!< ’Êí‘I‘ğ”ÍˆÍ(•¶š’PˆÊ)
-	TPoint BoxStart, BoxEnd;		//!< ” Œ`‘I‘ğ”ÍˆÍ(”¼Šp’PˆÊ)
+	TPoint CurPos;					//!< ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®(æ–‡å­—å˜ä½ 0ãƒ™ãƒ¼ã‚¹)
+	TPoint SelStart, SelEnd;		//!< é€šå¸¸é¸æŠç¯„å›²(æ–‡å­—å˜ä½)
+	TPoint BoxStart, BoxEnd;		//!< ç®±å½¢é¸æŠç¯„å›²(åŠè§’å˜ä½)
 
-	TPoint PairPos1, PairPos2;		//!< ‘Î‰‚·‚éŠ‡ŒÊ‚ÌˆÊ’u
+	TPoint PairPos1, PairPos2;		//!< å¯¾å¿œã™ã‚‹æ‹¬å¼§ã®ä½ç½®
 	bool PairChanged;
 
-	int  MaxFoldWd;					//!< Å‘åÜ‚è•Ô‚µ•
-	int  CsvCol;					//!< CSV—ñ(ŒÅ’è’·•\¦ƒ‚[ƒh)
+	int  MaxFoldWd;					//!< æœ€å¤§æŠ˜ã‚Šè¿”ã—å¹…
+	int  CsvCol;					//!< CSVåˆ—(å›ºå®šé•·è¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰æ™‚)
 
-	int  SortMode;					//!< ƒ\[ƒgƒ‚[ƒh(0:‚È‚µ/ 1:¸‡/ -1:~‡)
-	int  SortCol;					//!< ƒ\[ƒg—ñ(ŒÅ’è’·•\¦ƒ‚[ƒh)
+	int  SortMode;					//!< ã‚½ãƒ¼ãƒˆãƒ¢ãƒ¼ãƒ‰(0:ãªã—/ 1:æ˜‡é †/ -1:é™é †)
+	int  SortCol;					//!< ã‚½ãƒ¼ãƒˆåˆ—(å›ºå®šé•·è¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰æ™‚)
 
-	UnicodeString JsonErrMsg;		//!< JSON‰ğÍƒGƒ‰[
+	UnicodeString JsonErrMsg;		//!< JSONè§£æã‚¨ãƒ©ãƒ¼
 
-	UnicodeString FindWord;			//!< ŒŸõ•¶š—ñ
-	UnicodeString RegExPtn;			//!< ³‹K•\Œ»ƒpƒ^[ƒ“
-	UnicodeString LastSelWord;		//!< ‘O‰ñ FindSel`‚Å—p‚¢‚½ŒŸõŒê
-	bool isCase;					//!< ‘å¬•¶š‚ğ‹æ•Ê
-	bool isRegEx;					//!< ³‹K•\Œ»
-	bool isWord;					//!< ’PŒê’PˆÊ‚ÅŒŸõ
-	bool isMigemo;					//!< Migemoƒ‚[ƒh
-	bool isBytes;					//!< ƒoƒCƒg—ñŒŸõ
-	int  BinCodePage;				//!< ƒR[ƒhƒy[ƒW
-	bool Highlight;					//!< ƒ}ƒbƒ`‚Ì‹­’²•\¦
-	bool LastFound;					//!< ’¼‘O‚ÌŒŸõŒ‹‰Ê
-	TPoint FoundPos;				//!< ’¼‘O‚ÌƒqƒbƒgˆÊ’u
+	UnicodeString FindWord;			//!< æ¤œç´¢æ–‡å­—åˆ—
+	UnicodeString RegExPtn;			//!< æ­£è¦è¡¨ç¾ãƒ‘ã‚¿ãƒ¼ãƒ³
+	UnicodeString LastSelWord;		//!< å‰å› FindSelï½ã§ç”¨ã„ãŸæ¤œç´¢èª
+	bool isCase;					//!< å¤§å°æ–‡å­—ã‚’åŒºåˆ¥
+	bool isRegEx;					//!< æ­£è¦è¡¨ç¾
+	bool isWord;					//!< å˜èªå˜ä½ã§æ¤œç´¢
+	bool isMigemo;					//!< Migemoãƒ¢ãƒ¼ãƒ‰
+	bool isBytes;					//!< ãƒã‚¤ãƒˆåˆ—æ¤œç´¢
+	int  BinCodePage;				//!< ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸
+	bool Highlight;					//!< ãƒãƒƒãƒã®å¼·èª¿è¡¨ç¤º
+	bool LastFound;					//!< ç›´å‰ã®æ¤œç´¢çµæœ
+	TPoint FoundPos;				//!< ç›´å‰ã®ãƒ’ãƒƒãƒˆä½ç½®
 
-	UnicodeString IncSeaWord;		//!< ƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`“ü—ÍŒê
-	bool isIncSea;					//!< ƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`
-	bool isIncMigemo;				//!< Migemoƒ‚[ƒh
+	UnicodeString IncSeaWord;		//!< ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ã‚¿ãƒ«ã‚µãƒ¼ãƒå…¥åŠ›èª
+	bool isIncSea;					//!< ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ã‚¿ãƒ«ã‚µãƒ¼ãƒ
+	bool isIncMigemo;				//!< Migemoãƒ¢ãƒ¼ãƒ‰
 
-	UnicodeString HeadlinePtn;		//!< Œ©o‚µ‚Ì³‹K•\Œ»
-	UnicodeString RubyPtn;			//!< ƒ‹ƒr‚Ì³‹K•\Œ»
+	UnicodeString HeadlinePtn;		//!< è¦‹å‡ºã—ã®æ­£è¦è¡¨ç¾
+	UnicodeString RubyPtn;			//!< ãƒ«ãƒ“ã®æ­£è¦è¡¨ç¾
 
 	TStringList *ColBufList;
-	TColor color_Cursor;			//!< ƒ‰ƒCƒ“ƒJ[ƒ\ƒ‹‚ÌF
-	TColor color_selItem;			//!< ‘I‘ğ€–Ú‚Ì”wŒiF
-	TColor color_fgSelItem;			//!< ‘I‘ğ€–Ú‚Ì•¶šF
-	TColor color_Folder;			//!< ƒfƒBƒŒƒNƒgƒŠ‚Ì•¶šF
-	TColor color_Error;				//!< ƒGƒ‰[‚Ì•¶šF
-	TColor color_bgView;			//!< ƒeƒLƒXƒgƒrƒ…[ƒA‚Ì”wŒiF
-	TColor color_fgView;			//!< ƒeƒLƒXƒgƒrƒ…[ƒA‚Ì•¶šF
-	TColor color_Margin;			//!< ƒeƒLƒXƒgƒrƒ…[ƒA‚Ì—]”’”’
-	TColor color_bgLineNo;			//!< ƒeƒLƒXƒgƒrƒ…[ƒA‚Ìs”Ô†”wŒiF
-	TColor color_LineNo;			//!< ƒeƒLƒXƒgƒrƒ…[ƒA‚Ìs”Ô†•¶šF
-	TColor color_Mark;				//!< ƒeƒLƒXƒgƒrƒ…[ƒA‚Ìƒ}[ƒN
-	TColor color_bgRuler;			//!< ƒ‹[ƒ‰‚Ì”wŒiF
-	TColor color_fgRuler;			//!< ƒ‹[ƒ‰‚Ì–Ú·F
-	TColor color_bdrLine;			//!< s”Ô†‚Ì‹«ŠEü
-	TColor color_Indent;			//!< ƒCƒ“ƒfƒ“ƒgƒKƒCƒh
-	TColor color_Indent2;			//!< ƒCƒ“ƒfƒ“ƒgƒKƒCƒh(ŒğŒİ)
-	TColor color_bdrFold;			//!< Ü‚è•Ô‚µ‹«ŠEü
-	TColor color_bdrFixed;			//!< ŒÅ’è’·•\¦‚ÌcŒrü
-	TColor color_Comment;			//!< ƒRƒƒ“ƒg‚Ì•¶šF
-	TColor color_Strings;			//!< •¶š—ñ‚Ì•¶šF
-	TColor color_Reserved;			//!< —\–ñŒê‚Ì•¶šF
-	TColor color_Symbol;			//!< ƒVƒ“ƒ{ƒ‹‚Ì•¶šF
-	TColor color_Numeric;			//!< ”’l‚Ì•¶šF
-	TColor color_fgEmpBin1;			//!< ƒoƒCƒiƒŠ‹­’²•¶šF1
-	TColor color_fgEmpBin2;			//!< ƒoƒCƒiƒŠ‹­’²•¶šF2
-	TColor color_fgEmpBin3;			//!< ƒoƒCƒiƒŠ‹­’²•¶šF3
-	TColor color_Headline;			//!< Œ©o‚µ‚Ì•¶šF
-	TColor color_URL;				//!< URL‚Ì•¶šF
-	TColor color_LocalLink;			//!< ƒ[ƒJƒ‹ƒtƒ@ƒCƒ‹‚Ö‚ÌƒŠƒ“ƒN
-	TColor color_fgEmp;				//!< ‹­’²•¶šF
-	TColor color_bgEmp;				//!< ‹­’²”wŒiF
-	TColor color_Ruby;				//!< ƒ‹ƒr
-	TColor color_TAB;				//!< ƒ^ƒu•\¦F
-	TColor color_CR;				//!< ‰üs•\¦F
-	TColor color_HR;				//!< Œrü‚ÌF
-	TColor color_Ctrl;				//!< ƒRƒ“ƒgƒ[ƒ‹ƒR[ƒh
-	TColor color_fgPair;			//!< ‘Î‰‚·‚éŠ‡ŒÊ‚Ì•¶šF
+	TColor color_Cursor;			//!< ãƒ©ã‚¤ãƒ³ã‚«ãƒ¼ã‚½ãƒ«ã®è‰²
+	TColor color_selItem;			//!< é¸æŠé …ç›®ã®èƒŒæ™¯è‰²
+	TColor color_fgSelItem;			//!< é¸æŠé …ç›®ã®æ–‡å­—è‰²
+	TColor color_Folder;			//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®æ–‡å­—è‰²
+	TColor color_Error;				//!< ã‚¨ãƒ©ãƒ¼ã®æ–‡å­—è‰²
+	TColor color_bgView;			//!< ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã®èƒŒæ™¯è‰²
+	TColor color_fgView;			//!< ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã®æ–‡å­—è‰²
+	TColor color_Margin;			//!< ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã®ä½™ç™½ç™½
+	TColor color_bgLineNo;			//!< ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã®è¡Œç•ªå·èƒŒæ™¯è‰²
+	TColor color_LineNo;			//!< ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã®è¡Œç•ªå·æ–‡å­—è‰²
+	TColor color_Mark;				//!< ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã®ãƒãƒ¼ã‚¯
+	TColor color_bgRuler;			//!< ãƒ«ãƒ¼ãƒ©ã®èƒŒæ™¯è‰²
+	TColor color_fgRuler;			//!< ãƒ«ãƒ¼ãƒ©ã®ç›®ç››è‰²
+	TColor color_bdrLine;			//!< è¡Œç•ªå·ã®å¢ƒç•Œç·š
+	TColor color_Indent;			//!< ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã‚¬ã‚¤ãƒ‰
+	TColor color_Indent2;			//!< ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã‚¬ã‚¤ãƒ‰(äº¤äº’)
+	TColor color_bdrFold;			//!< æŠ˜ã‚Šè¿”ã—å¢ƒç•Œç·š
+	TColor color_bdrFixed;			//!< å›ºå®šé•·è¡¨ç¤ºã®ç¸¦ç½«ç·š
+	TColor color_Comment;			//!< ã‚³ãƒ¡ãƒ³ãƒˆã®æ–‡å­—è‰²
+	TColor color_Strings;			//!< æ–‡å­—åˆ—ã®æ–‡å­—è‰²
+	TColor color_Reserved;			//!< äºˆç´„èªã®æ–‡å­—è‰²
+	TColor color_Symbol;			//!< ã‚·ãƒ³ãƒœãƒ«ã®æ–‡å­—è‰²
+	TColor color_Numeric;			//!< æ•°å€¤ã®æ–‡å­—è‰²
+	TColor color_fgEmpBin1;			//!< ãƒã‚¤ãƒŠãƒªå¼·èª¿æ–‡å­—è‰²1
+	TColor color_fgEmpBin2;			//!< ãƒã‚¤ãƒŠãƒªå¼·èª¿æ–‡å­—è‰²2
+	TColor color_fgEmpBin3;			//!< ãƒã‚¤ãƒŠãƒªå¼·èª¿æ–‡å­—è‰²3
+	TColor color_Headline;			//!< è¦‹å‡ºã—ã®æ–‡å­—è‰²
+	TColor color_URL;				//!< URLã®æ–‡å­—è‰²
+	TColor color_LocalLink;			//!< ãƒ­ãƒ¼ã‚«ãƒ«ãƒ•ã‚¡ã‚¤ãƒ«ã¸ã®ãƒªãƒ³ã‚¯
+	TColor color_fgEmp;				//!< å¼·èª¿æ–‡å­—è‰²
+	TColor color_bgEmp;				//!< å¼·èª¿èƒŒæ™¯è‰²
+	TColor color_Ruby;				//!< ãƒ«ãƒ“
+	TColor color_TAB;				//!< ã‚¿ãƒ–è¡¨ç¤ºè‰²
+	TColor color_CR;				//!< æ”¹è¡Œè¡¨ç¤ºè‰²
+	TColor color_HR;				//!< ç½«ç·šã®è‰²
+	TColor color_Ctrl;				//!< ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚³ãƒ¼ãƒ‰
+	TColor color_fgPair;			//!< å¯¾å¿œã™ã‚‹æ‹¬å¼§ã®æ–‡å­—è‰²
 
 	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param frm ƒtƒH[ƒ€
-	 * @param viewbox •\¦—Ìˆæ
-	 * @param scrbar ƒXƒNƒ[ƒ‹ƒo[
-	 * @param sp ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[
-	 * @param stthdr î•ñƒwƒbƒ_
-	 * @param ruler ƒ‹[ƒ‰
-	 * @param mgn_box ‰E—]”’ƒpƒlƒ‹
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param frm ãƒ•ã‚©ãƒ¼ãƒ 
+	 * @param viewbox è¡¨ç¤ºé ˜åŸŸ
+	 * @param scrbar ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
+	 * @param sp ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
+	 * @param stthdr æƒ…å ±ãƒ˜ãƒƒãƒ€
+	 * @param ruler ãƒ«ãƒ¼ãƒ©
+	 * @param mgn_box å³ä½™ç™½ãƒ‘ãƒãƒ«
 	 */
 	TTxtViewer(TForm *frm, TPaintBox *viewbox, TScrollBar *scrbar, UsrScrollPanel *sp,
 				TStatusBar *stthdr, TPaintBox *ruler, TPaintBox *mgn_box = NULL);
 	~TTxtViewer();
 
-	/** @brief •â•‰æ–Ê‚ğ•Â‚¶‚é */
+	/** @brief è£œåŠ©ç”»é¢ã‚’é–‰ã˜ã‚‹ */
 	bool __fastcall CloseAuxForm();
 
 	void __fastcall Clear();
 
-	/** @brief ”zF‚Ìİ’è */
+	/** @brief é…è‰²ã®è¨­å®š */
 	void __fastcall SetColor(TStringList *lst);
 	void __fastcall SetColor(UnicodeString prm = EmptyStr);
 
-	/** @brief ƒIƒvƒVƒ‡ƒ“İ’è‚É”zF‚ğ”½‰f */
+	/** @brief ã‚ªãƒ—ã‚·ãƒ§ãƒ³è¨­å®šã«é…è‰²ã‚’åæ˜  */
 	void __fastcall SetOptColor();
 
-	/** @brief ƒƒgƒŠƒbƒN‚Ìİ’è */
+	/** @brief ãƒ¡ãƒˆãƒªãƒƒã‚¯ã®è¨­å®š */
 	void __fastcall SetMetric(bool set_hi = false);
 
 	/**
-	 * @brief ŠÖ”‚Ìƒ}ƒbƒ`ƒpƒ^[ƒ“‚ğæ“¾
-	 * @param[out] nam_ptn ŠÖ”–¼‚Ì‹­’²ƒpƒ^[ƒ“
-	 * @param[out] cap_str ˆê———pƒLƒƒƒvƒVƒ‡ƒ“
+	 * @brief é–¢æ•°ã®ãƒãƒƒãƒãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’å–å¾—
+	 * @param[out] nam_ptn é–¢æ•°åã®å¼·èª¿ãƒ‘ã‚¿ãƒ¼ãƒ³
+	 * @param[out] cap_str ä¸€è¦§ç”¨ã‚­ãƒ£ãƒ—ã‚·ãƒ§ãƒ³
 	 * @return UnicodeString 
 	 */
 	UnicodeString __fastcall GetFuncPtns(UnicodeString *nam_ptn = NULL, UnicodeString *cap_str = NULL);
 
 	/**
-	 * @brief ‰æ–Ê‚É‡‚í‚¹‚Äs“à—e‚ğİ’è
-	 * @param lno s”Ô† (0: Œ»İs)
+	 * @brief ç”»é¢ã«åˆã‚ã›ã¦è¡Œå†…å®¹ã‚’è¨­å®š
+	 * @param lno è¡Œç•ªå· (0: ç¾åœ¨è¡Œ)
 	 */
 	void __fastcall UpdateScr(int lno = 1);
 
 	/**
-	 * @brief ƒeƒLƒXƒg“à—e‚ğİ’è
-	 * @param[in] lst ƒeƒLƒXƒg“à—e
-	 * @param lno s”Ô† (0:—š—ğ‚ğQÆ)
-	 * @param sort_mode ƒ\[ƒgƒ‚[ƒh (0:‰ğœ/ 1:¸‡/ -1:~‡)
+	 * @brief ãƒ†ã‚­ã‚¹ãƒˆå†…å®¹ã‚’è¨­å®š
+	 * @param[in] lst ãƒ†ã‚­ã‚¹ãƒˆå†…å®¹
+	 * @param lno è¡Œç•ªå· (0:å±¥æ­´ã‚’å‚ç…§)
+	 * @param sort_mode ã‚½ãƒ¼ãƒˆãƒ¢ãƒ¼ãƒ‰ (0:è§£é™¤/ 1:æ˜‡é †/ -1:é™é †)
 	 */
 	void __fastcall AssignText(TStrings *lst = NULL, int lno = 1, int sort_mode = 0);
 
 	/**
-	 * @brief ƒoƒCƒiƒŠƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚ñ‚Å“à—e‚ğİ’è
+	 * @brief ãƒã‚¤ãƒŠãƒªãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚“ã§å†…å®¹ã‚’è¨­å®š
 	 *
-	 * @param top_adr æ“ªƒAƒhƒŒƒX
-	 * @param reload Ä“Ç‚İ‚İ (false: —š—ğ‚©‚çƒ}[ƒN‚ğ•œŒ³)
-	 * @param adr ˆÚ“®ƒAƒhƒŒƒX
+	 * @param top_adr å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹
+	 * @param reload å†èª­ã¿è¾¼ã¿ (false: å±¥æ­´ã‹ã‚‰ãƒãƒ¼ã‚¯ã‚’å¾©å…ƒ)
+	 * @param adr ç§»å‹•ã‚¢ãƒ‰ãƒ¬ã‚¹
 	 * @return true
 	 * @return false
 	 */
 	bool __fastcall AssignBin(__int64 top_adr = 0, bool reload = false, unsigned int adr = 0);
 
-	/** @brief Ä•`‰æ—v‹ */
+	/** @brief å†æç”»è¦æ±‚ */
 	void __fastcall Repaint(bool force = false);
 
-	/** @brief î•ñƒwƒbƒ_‚Ìƒpƒlƒ‹•‚ğ’²® */
+	/** @brief æƒ…å ±ãƒ˜ãƒƒãƒ€ã®ãƒ‘ãƒãƒ«å¹…ã‚’èª¿æ•´ */
 	void __fastcall AdjustSttHdr();
 
 	/**
-	 * @brief ó‘Ô•\¦‚ğİ’è
+	 * @brief çŠ¶æ…‹è¡¨ç¤ºã‚’è¨­å®š
 	 * @param msg
 	 */
 	void __fastcall SetSttInf(UnicodeString msg = EmptyStr);
 
-	/** @brief î•ñƒwƒbƒ_‚Ì•`‰æ */
+	/** @brief æƒ…å ±ãƒ˜ãƒƒãƒ€ã®æç”» */
 	void __fastcall SttHeaderDrawPanel(TStatusBar *StatusBar, TStatusPanel *Panel, TRect Rect);
 
 	void __fastcall onMouseDown(int x, int y);
@@ -390,14 +390,14 @@ public:
 	void __fastcall CursorDown(bool sel = false, UnicodeString prm = EmptyStr);
 	void __fastcall MovePage(bool is_down, bool sel = false);
 
-	/** @brief ƒXƒNƒ[ƒ‹‚Ì•\¦’²® */
+	/** @brief ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«æ™‚ã®è¡¨ç¤ºèª¿æ•´ */
 	void __fastcall ScrollAdjust();
 
 	/**
-	 * @brief ƒXƒNƒ[ƒ‹
-	 * @param is_down ‰º•ûŒü
-	 * @param prm ƒpƒ‰ƒ[ƒ^
-	 * @param move_csr ƒJ[ƒ\ƒ‹‚àˆÚ“®
+	 * @brief ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«
+	 * @param is_down ä¸‹æ–¹å‘
+	 * @param prm ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
+	 * @param move_csr ã‚«ãƒ¼ã‚½ãƒ«ã‚‚ç§»å‹•
 	 */
 	void __fastcall MoveScroll(bool is_down, UnicodeString prm, bool move_csr = false);
 
@@ -407,89 +407,89 @@ public:
 	void __fastcall TextTop(bool sel = false);
 	void __fastcall TextEnd(bool sel = false);
 
-	/** @brief CSV—ñˆÊ’u‚©‚çŒ…‚ğİ’è (ƒŒƒR[ƒh‚Ì1s–Ú‚Å‚Ì‚İ—LŒø) */
+	/** @brief CSVåˆ—ä½ç½®ã‹ã‚‰æ¡ã‚’è¨­å®š (ãƒ¬ã‚³ãƒ¼ãƒ‰ã®1è¡Œç›®ã§ã®ã¿æœ‰åŠ¹) */
 	bool __fastcall set_PosFromCol(int col);
 
 	void __fastcall WordLeft(bool sel = false);
 	void __fastcall WordRight(bool sel = false);
 
 	/**
-	 * @brief ƒNƒŠƒbƒvƒ{[ƒh‚ÉƒRƒs[
-	 * @param append ’Ç‰ÁƒRƒs[
+	 * @brief ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã«ã‚³ãƒ”ãƒ¼
+	 * @param append è¿½åŠ ã‚³ãƒ”ãƒ¼
 	 */
 	void __fastcall ClipCopy(bool append = false);
 
-	/** @brief w’ès‚Ì•\¦sƒŒƒR[ƒh(line_rec)‚ğæ“¾ */
+	/** @brief æŒ‡å®šè¡Œã®è¡¨ç¤ºè¡Œãƒ¬ã‚³ãƒ¼ãƒ‰(line_rec)ã‚’å–å¾— */
 	line_rec* __fastcall get_LineRec(int idx);
 	UnicodeString __fastcall get_DispLine(int idx, int b0 = 0, int b1 = 15);
 
 	/**
-	 * @brief ‘I‘ğ•¶š—ñ‚ğæ“¾
-	 * @param clr_sel æ“¾ŒãA‘I‘ğó‘Ô‚ğƒNƒŠƒA
+	 * @brief é¸æŠæ–‡å­—åˆ—ã‚’å–å¾—
+	 * @param clr_sel å–å¾—å¾Œã€é¸æŠçŠ¶æ…‹ã‚’ã‚¯ãƒªã‚¢
 	 * @return UnicodeString 
 	 */
 	UnicodeString __fastcall get_SelText(bool clr_sel = false);
 
-	/** @brief ƒJ[ƒ\ƒ‹ˆÊ’u/s‚©‚çURL‚ğæ“¾ */
+	/** @brief ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®/è¡Œã‹ã‚‰URLã‚’å–å¾— */
 	UnicodeString __fastcall get_CurUrl();
 
 	/**
-	 * @brief ƒJ[ƒ\ƒ‹s‚Ì•¶š—ñ‚ğæ“¾
-	 * @param to_cr ‰üs‚Ü‚Åæ“¾
+	 * @brief ã‚«ãƒ¼ã‚½ãƒ«è¡Œã®æ–‡å­—åˆ—ã‚’å–å¾—
+	 * @param to_cr æ”¹è¡Œã¾ã§å–å¾—
 	 * @return UnicodeString 
 	 */
 	UnicodeString __fastcall get_CurLine(bool to_cr = false);
 
-	/** @brief ƒJ[ƒ\ƒ‹s‚Ìs”Ô†‚ğæ“¾ */
+	/** @brief ã‚«ãƒ¼ã‚½ãƒ«è¡Œã®è¡Œç•ªå·ã‚’å–å¾— */
 	int __fastcall get_CurLineNo();
 
-	/** @brief ƒJ[ƒ\ƒ‹ˆÊ’u‚Ìâ‘ÎƒAƒhƒŒƒX‚ğæ“¾ (ƒoƒCƒiƒŠ) */
+	/** @brief ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®çµ¶å¯¾ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å–å¾— (ãƒã‚¤ãƒŠãƒª) */
 	__int64 __fastcall get_CurAddrA();
 
-	/** @brief ƒJ[ƒ\ƒ‹ˆÊ’u‚Ì‘Š‘ÎƒAƒhƒŒƒX‚ğæ“¾ (ƒoƒCƒiƒŠ) */
+	/** @brief ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®ç›¸å¯¾ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å–å¾— (ãƒã‚¤ãƒŠãƒª) */
 	unsigned int __fastcall get_CurAddrR();
 
-	/** @brief s“ª‚©‚ç‚ÌƒIƒtƒZƒbƒg‚ğæ“¾ (ƒoƒCƒiƒŠ) */
+	/** @brief è¡Œé ­ã‹ã‚‰ã®ã‚ªãƒ•ã‚»ãƒƒãƒˆã‚’å–å¾— (ãƒã‚¤ãƒŠãƒª) */
 	unsigned int __fastcall get_OfsR(int xp);
 
-	/** @brief ƒJ[ƒ\ƒ‹ˆÊ’u‚Ìs(y)EŒ…(x)‚ğæ“¾ (ƒeƒLƒXƒg) */
+	/** @brief ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®è¡Œ(y)ãƒ»æ¡(x)ã‚’å–å¾— (ãƒ†ã‚­ã‚¹ãƒˆ) */
 	TPoint __fastcall get_CurLinePos();
 
-	/** @brief CSVŒ©o‚µƒŠƒXƒg‚ğæ“¾ */
+	/** @brief CSVè¦‹å‡ºã—ãƒªã‚¹ãƒˆã‚’å–å¾— */
 	TStringDynArray __fastcall GetCsvHdrList();
 
-	/** @brief ‘S‚Ä‘I‘ğ */
+	/** @brief å…¨ã¦é¸æŠ */
 	void __fastcall SelectAll();
 
 	/**
-	 * @brief ƒJ[ƒ\ƒ‹ˆÊ’u‚Ì’PŒê‚ğæ“¾/‘I‘ğ
-	 * @param ptn ƒ}ƒbƒ`ƒpƒ^[ƒ“
-	 * @param[out] p_s ŠJnˆÊ’u
-	 * @param[out] p_e I—¹ˆÊ’u
+	 * @brief ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®å˜èªã‚’å–å¾—/é¸æŠ
+	 * @param ptn ãƒãƒƒãƒãƒ‘ã‚¿ãƒ¼ãƒ³
+	 * @param[out] p_s é–‹å§‹ä½ç½®
+	 * @param[out] p_e çµ‚äº†ä½ç½®
 	 * @return UnicodeString 
 	 */
 	UnicodeString __fastcall GetCurWord(UnicodeString ptn = EmptyStr, int *p_s = NULL, int *p_e = NULL);
 
 	/**
-	 * @brief ƒJ[ƒ\ƒ‹ˆÊ’u‚Ì’PŒê‚ğ‘I‘ğ
-	 * @param append ’Ç‰Á‘I‘ğ
+	 * @brief ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®å˜èªã‚’é¸æŠ
+	 * @param append è¿½åŠ é¸æŠ
 	 */
 	void __fastcall SelCurWord(bool append = false);
 
-	/** @brief ‰üs’PˆÊ‚Ås‘S‘Ì‚ğ‘I‘ğ */
+	/** @brief æ”¹è¡Œå˜ä½ã§è¡Œå…¨ä½“ã‚’é¸æŠ */
 	void __fastcall SelLine(bool cr = false);
 
 	void __fastcall saveDef_CodePage(int code_page);
 	int  __fastcall change_CodePage(UnicodeString prm);
 
-	/** @brief ƒJ[ƒ\ƒ‹ˆÊ’u‚Ì‰æ‘œƒtƒ@ƒCƒ‹–¼‚ğæ“¾ */
+	/** @brief ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«åã‚’å–å¾— */
 	UnicodeString __fastcall GetCurImgFile();
 
 	/**
-	 * @brief •¶š—ñŒŸõ
-	 * @param is_down ‰º•ûŒü‚ÉŒŸõ
-	 * @param kwd ŒŸõŒê
-	 * @param opt ŒŸõƒIƒvƒVƒ‡ƒ“
+	 * @brief æ–‡å­—åˆ—æ¤œç´¢
+	 * @param is_down ä¸‹æ–¹å‘ã«æ¤œç´¢
+	 * @param kwd æ¤œç´¢èª
+	 * @param opt æ¤œç´¢ã‚ªãƒ—ã‚·ãƒ§ãƒ³
 	 * @return true 
 	 * @return false 
 	 */
@@ -498,35 +498,35 @@ public:
 	bool __fastcall SearchDown(UnicodeString kwd, SearchOption opt);
 	bool __fastcall SearchUp(UnicodeString kwd, SearchOption opt);
 
-	/** @brief ‰º•ûŒü‚ÉƒoƒCƒg—ñŒŸõ */
+	/** @brief ä¸‹æ–¹å‘ã«ãƒã‚¤ãƒˆåˆ—æ¤œç´¢ */
 	bool __fastcall SearchDownBytes(UnicodeString kwd, bool case_sw);
-	/** @brief ã•ûŒü‚ÉƒoƒCƒg—ñŒŸõ*/
+	/** @brief ä¸Šæ–¹å‘ã«ãƒã‚¤ãƒˆåˆ—æ¤œç´¢*/
 	bool __fastcall SearchUpBytes(UnicodeString kwd, bool case_sw);
 
 	/**
-	 * @brief ‘I‘ğ•¶š—ñ‚ğŒŸõ
-	 * @param up_sw ã•ûŒü‚ÉŒŸõ
-	 * @param em_sw ƒ}ƒbƒ`Œê‚ğ‹­’²•\¦
+	 * @brief é¸æŠæ–‡å­—åˆ—ã‚’æ¤œç´¢
+	 * @param up_sw ä¸Šæ–¹å‘ã«æ¤œç´¢
+	 * @param em_sw ãƒãƒƒãƒèªã‚’å¼·èª¿è¡¨ç¤º
 	 * @return true 
 	 * @return false 
 	 */
 	bool __fastcall SearchSel(bool up_sw, bool em_sw);
 
-	/** @brief ƒJ[ƒ\ƒ‹ˆÊ’u‚Ì‘Î‰‚·‚éŠ‡ŒÊ‚ğİ’è */
+	/** @brief ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®å¯¾å¿œã™ã‚‹æ‹¬å¼§ã‚’è¨­å®š */
 	bool __fastcall UpdatePairPos();
 
 	bool __fastcall SearchPairCore(UnicodeString bgn_ptn, UnicodeString end_ptn);
 
-	/** @brief ‘Î‰‚·‚és—v‘f‚ğŒŸõ */
+	/** @brief å¯¾å¿œã™ã‚‹è¡Œè¦ç´ ã‚’æ¤œç´¢ */
 	bool __fastcall SearchPair(UnicodeString prm);
 
-	/** @brief w’ès”Ô†‚ÉˆÚ“®*/
+	/** @brief æŒ‡å®šè¡Œç•ªå·ã«ç§»å‹•*/
 	bool __fastcall ToLine(int lno, int col = -1);
 
-	/** @brief TopAddress ‚©‚ç‚Ì‘Š‘ÎƒAƒhƒŒƒX‚ÉˆÚ“® */
+	/** @brief TopAddress ã‹ã‚‰ã®ç›¸å¯¾ã‚¢ãƒ‰ãƒ¬ã‚¹ã«ç§»å‹• */
 	bool __fastcall ToAddrR(unsigned int adr);
 
-	/** @brief â‘ÎƒAƒhƒŒƒX‚ÉˆÚ“® */
+	/** @brief çµ¶å¯¾ã‚¢ãƒ‰ãƒ¬ã‚¹ã«ç§»å‹• */
 	bool __fastcall ToAddrA(__int64 adr);
 
 	void __fastcall JumpLine(UnicodeString ln_str);
@@ -534,37 +534,37 @@ public:
 	void __fastcall MarkLine(int lno);
 	bool __fastcall IsMarked(int lno = 0);
 
-	/** @brief ‰{———š—ğ‚É’Ç‰Á */
+	/** @brief é–²è¦§å±¥æ­´ã«è¿½åŠ  */
 	void __fastcall add_ViewHistory();
 
-	/** @brief ƒ_ƒ“ƒvƒŠƒXƒg‚ğæ“¾ */
+	/** @brief ãƒ€ãƒ³ãƒ—ãƒªã‚¹ãƒˆã‚’å–å¾— */
 	void __fastcall GetDumpList(TStringList *lst);
 
-	/** @brief ƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ` */
+	/** @brief ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ã‚¿ãƒ«ã‚µãƒ¼ãƒ */
 	void __fastcall IncSearch(UnicodeString keystr);
 
 	/**
-	 * @brief •W€ƒL[‘€ì‚É‘Î‰‚·‚éƒRƒ}ƒ“ƒh‚ğæ“¾
-	 * @param keystr ƒL[•¶š—ñ
-	 * @return UnicodeString ƒRƒ}ƒ“ƒh
+	 * @brief æ¨™æº–ã‚­ãƒ¼æ“ä½œã«å¯¾å¿œã™ã‚‹ã‚³ãƒãƒ³ãƒ‰ã‚’å–å¾—
+	 * @param keystr ã‚­ãƒ¼æ–‡å­—åˆ—
+	 * @return UnicodeString ã‚³ãƒãƒ³ãƒ‰
 	 */
 	UnicodeString __fastcall GetStdKeyCommand(UnicodeString keystr);
 
 	/**
-	 * @brief ƒRƒ}ƒ“ƒh‚ğÀs
-	 * @param cmd ƒRƒ}ƒ“ƒh
-	 * @param prm ƒpƒ‰ƒ[ƒ^
-	 * @return true ˆ—‚³‚ê‚½
+	 * @brief ã‚³ãƒãƒ³ãƒ‰ã‚’å®Ÿè¡Œ
+	 * @param cmd ã‚³ãƒãƒ³ãƒ‰
+	 * @param prm ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
+	 * @return true å‡¦ç†ã•ã‚ŒãŸ
 	 */
 	bool __fastcall ExeCommand(const _TCHAR *cmd, UnicodeString prm = EmptyStr);
 
-	/** @brief ƒeƒLƒXƒgƒrƒ…[ƒA‚Å—˜—p‰Â”\‚ÈƒRƒ}ƒ“ƒh‚©H */
+	/** @brief ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã§åˆ©ç”¨å¯èƒ½ãªã‚³ãƒãƒ³ãƒ‰ã‹ï¼Ÿ */
 	bool __fastcall IsCmdAvailable(UnicodeString cmd);
 
-	/** @brief ƒ‚[ƒhŒÅ—L‚Ì‹Ö~ƒRƒ}ƒ“ƒh‚©H */
+	/** @brief ãƒ¢ãƒ¼ãƒ‰å›ºæœ‰ã®ç¦æ­¢ã‚³ãƒãƒ³ãƒ‰ã‹ï¼Ÿ */
 	bool __fastcall IsCmdInhibited(UnicodeString cmd);
 
-	/** @brief HtmlToText ‚ÌƒIƒvƒVƒ‡ƒ“İ’è */
+	/** @brief HtmlToText ã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³è¨­å®š */
 	void __fastcall SetHtmlToText(UnicodeString prm);
 };
 //---------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 /**
  * @file usr_key.h
- * @brief ÉLÅ[É{Å[Éhì¸óÕä÷òAÇÃä÷êî
+ * @brief „Ç≠„Éº„Éú„Éº„ÉâÂÖ•ÂäõÈñ¢ÈÄ£„ÅÆÈñ¢Êï∞
  */
 //---------------------------------------------------------------------------
 #ifndef UsrKeyH
@@ -17,59 +17,59 @@ extern UnicodeString KeyStr_Alt;
 extern int KeyboardMode;
 
 /**
- * @brief ÉLÅ[ÉäÉXÉgÇÃçÏê¨
- * @param[out] lst ÉLÅ[ÉäÉXÉg
+ * @brief „Ç≠„Éº„É™„Çπ„Éà„ÅÆ‰ΩúÊàê
+ * @param[out] lst „Ç≠„Éº„É™„Çπ„Éà
  */
 void make_KeyList(TStringList *lst);
 
 void assign_KeyList(TComboBox *cp, bool ins_empty = false, bool keep_item = false);
 
 /**
- * @brief éwíËÉLÅ[Ç™âüÇ≥ÇÍÇƒÇ¢ÇÈÇ©ÅH
- * @param key âºëzÉLÅ[ÉRÅ[Éh
+ * @brief ÊåáÂÆö„Ç≠„Éº„ÅåÊäº„Åï„Çå„Å¶„ÅÑ„Çã„ÅãÔºü
+ * @param key ‰ªÆÊÉ≥„Ç≠„Éº„Ç≥„Éº„Éâ
  */
 bool is_KeyDown(WORD key);
 
 /**
- * @brief É_ÉCÉAÉçÉOÉLÅ[Ç©ÅH
- * @param Key âºëzÉLÅ[ÉRÅ[Éh
+ * @brief „ÉÄ„Ç§„Ç¢„É≠„Ç∞„Ç≠„Éº„ÅãÔºü
+ * @param Key ‰ªÆÊÉ≥„Ç≠„Éº„Ç≥„Éº„Éâ
  */
 bool is_DialogKey(WORD Key);
 
 /**
- * @brief 0Å`9ÉLÅ[Ç©ÅH
- * @param keystr ÉLÅ[ï∂éöóÒ
+ * @brief 0ÔΩû9„Ç≠„Éº„ÅãÔºü
+ * @param keystr „Ç≠„ÉºÊñáÂ≠óÂàó
  */
 bool is_Num0to9(UnicodeString keystr);
 
 /**
- * @brief WPARAM Ç©ÇÁÉVÉtÉgèÛë‘ÇéÊìæ
+ * @brief WPARAM „Åã„Çâ„Ç∑„Éï„ÉàÁä∂ÊÖã„ÇíÂèñÂæó
  * @param prm
  * @return int
  */
 int  get_shift_from_wparam(WPARAM prm);
 
 /**
- * @brief ì˙ñ{åÍÉLÅ[É{Å[ÉhÇ©ÅH
+ * @brief Êó•Êú¨Ë™û„Ç≠„Éº„Éú„Éº„Éâ„ÅãÔºü
  */
 bool is_JpKeybd();
 
 /**
- * @brief ÉLÅ[ÅEÉ}ÉEÉXÉoÉbÉtÉ@ÇÉNÉäÉA
- * @param key_only ÉLÅ[ÉoÉbÉtÉ@ÇÃÇ›ÉNÉäÉA
+ * @brief „Ç≠„Éº„Éª„Éû„Ç¶„Çπ„Éê„ÉÉ„Éï„Ç°„Çí„ÇØ„É™„Ç¢
+ * @param key_only „Ç≠„Éº„Éê„ÉÉ„Éï„Ç°„ÅÆ„Åø„ÇØ„É™„Ç¢
  */
 void ClearKeyBuff(bool key_only = false);
 
 /**
- * @brief ÉRÉìÉgÉçÅ[ÉãÇ≈ÉLÅ[ÇâüÇ∑
- * @param cp ëŒè€ÉRÉìÉgÉçÅ[Éã
- * @param key âºëzÉLÅ[ÉRÅ[Éh
+ * @brief „Ç≥„É≥„Éà„É≠„Éº„É´„Åß„Ç≠„Éº„ÇíÊäº„Åô
+ * @param cp ÂØæË±°„Ç≥„É≥„Éà„É≠„Éº„É´
+ * @param key ‰ªÆÊÉ≥„Ç≠„Éº„Ç≥„Éº„Éâ
  */
 void perform_Key(TControl *cp, int key);
 
 /**
- * @brief ÉRÉìÉgÉçÅ[ÉãÇ≈ENTERÉLÅ[ÇâüÇ∑
- * @param cp ëŒè€ÉRÉìÉgÉçÅ[Éã
+ * @brief „Ç≥„É≥„Éà„É≠„Éº„É´„ÅßENTER„Ç≠„Éº„ÇíÊäº„Åô
+ * @param cp ÂØæË±°„Ç≥„É≥„Éà„É≠„Éº„É´
  */
 void perform_Key_RETURN(TControl *cp);
 
@@ -91,7 +91,7 @@ inline bool has_KeyDownMsg()
 inline bool is_KeyPress_ESC()
 {
 	if (!Application->Active) return false;
-	Application->ProcessMessages();		//ÅIóvíçà”
+	Application->ProcessMessages();		//ÔºÅË¶ÅÊ≥®ÊÑè
 	return (HIBYTE(::GetAsyncKeyState(VK_ESCAPE)) != 0);
 }
 //---------------------------------------------------------------------------

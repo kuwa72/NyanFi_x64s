@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒ^ƒXƒNˆ—ƒXƒŒƒbƒh													//
+//  ã‚¿ã‚¹ã‚¯å‡¦ç†ã‚¹ãƒ¬ãƒƒãƒ‰													//
 //----------------------------------------------------------------------//
 #include "usr_file_ex.h"
 #include "usr_file_inf.h"
@@ -16,7 +16,7 @@
 #pragma package(smart_init)
 
 //---------------------------------------------------------------------------
-//ƒ^ƒXƒNİ’èƒNƒ‰ƒX
+//ã‚¿ã‚¹ã‚¯è¨­å®šã‚¯ãƒ©ã‚¹
 //---------------------------------------------------------------------------
 TaskConfig::TaskConfig()
 {
@@ -86,7 +86,7 @@ void TaskConfig::Assign(TaskConfig *cp)
 }
 
 //---------------------------------------------------------------------------
-// ƒ^ƒXƒNİ’èƒŠƒXƒg (TList ‚©‚çŒp³)
+// ã‚¿ã‚¹ã‚¯è¨­å®šãƒªã‚¹ãƒˆ (TList ã‹ã‚‰ç¶™æ‰¿)
 //---------------------------------------------------------------------------
 __fastcall TaskConfigList::TaskConfigList(): TList()
 {
@@ -98,7 +98,7 @@ __fastcall TaskConfigList::~TaskConfigList()
 }
 
 //---------------------------------------------------------------------------
-//ƒ}[ƒN‚ğ‚·‚×‚ÄƒNƒŠƒA
+//ãƒãƒ¼ã‚¯ã‚’ã™ã¹ã¦ã‚¯ãƒªã‚¢
 //---------------------------------------------------------------------------
 void __fastcall TaskConfigList::ClearAll()
 {
@@ -110,7 +110,7 @@ void __fastcall TaskConfigList::ClearAll()
 int TaskIdCount = 0;
 
 //---------------------------------------------------------------------------
-//ƒXƒŒƒbƒh‚Ì‰Šú‰»
+//ã‚¹ãƒ¬ãƒƒãƒ‰ã®åˆæœŸåŒ–
 //---------------------------------------------------------------------------
 __fastcall TTaskThread::TTaskThread(bool CreateSuspended) : TThread(CreateSuspended)
 {
@@ -150,7 +150,7 @@ __fastcall TTaskThread::TTaskThread(bool CreateSuspended) : TThread(CreateSuspen
 }
 
 //---------------------------------------------------------------------------
-//MoveFileWithProgressACopyFileEx —pƒR[ƒ‹ƒoƒbƒNŠÖ”
+//MoveFileWithProgressã€CopyFileEx ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
 //---------------------------------------------------------------------------
 DWORD CALLBACK TTaskThread::ProgressRoutine(
 	LARGE_INTEGER TotalFileSize,
@@ -168,20 +168,20 @@ DWORD CALLBACK TTaskThread::ProgressRoutine(
 //---------------------------------------------------------------------------
 DWORD __fastcall TTaskThread::ProgressCore(LARGE_INTEGER TotalFileSize, LARGE_INTEGER TotalBytesTransferred)
 {
-	//ˆê’U’â~’†‚Ìˆ—
+	//ä¸€æ—¦åœæ­¢ä¸­ã®å‡¦ç†
 	if (TaskPause) {
 		WaitIfPause();
 		TaskIsFast = false;
 		return TaskCancel? PROGRESS_CANCEL : PROGRESS_CONTINUE;
 	}
-	//’†’f
+	//ä¸­æ–­
 	if (TaskCancel) return PROGRESS_CANCEL;
 
-	//i’»—¦(0.0`1.0)
+	//é€²æ—ç‡(0.0ï½1.0)
 	CurProgress  = (TotalFileSize.QuadPart>0)? 1.0*TotalBytesTransferred.QuadPart/TotalFileSize.QuadPart : -1;
 	CurTotalSize = TotalFileSize.QuadPart;
 
-	//“]‘—‘¬“x‚ğŒvZ
+	//è»¢é€é€Ÿåº¦ã‚’è¨ˆç®—
 	SmplSize += (TotalBytesTransferred.QuadPart - LastTransferred.QuadPart);
 	LastTransferred = TotalBytesTransferred;
 	int cur_cnt  = GetTickCount();
@@ -192,10 +192,10 @@ DWORD __fastcall TTaskThread::ProgressCore(LARGE_INTEGER TotalFileSize, LARGE_IN
 		SmplSize = 0;
 	}
 
-	//c‚èŠÔ‚ğŒvZ
+	//æ®‹ã‚Šæ™‚é–“ã‚’è¨ˆç®—
 	RemCount = (Speed>0)? (TotalFileSize.QuadPart-TotalBytesTransferred.QuadPart)/Speed : 0;
 
-	//‘Ò‚¿ŠÔ (¬ƒTƒCƒYƒtƒ@ƒCƒ‹‚Ìˆ—‚‘¬‰»‚Ì‚½‚ßAÅ‰‚ÆÅŒã‚É‚Í‘Ò‚¿‚ğ“ü‚ê‚È‚¢)
+	//å¾…ã¡æ™‚é–“ (å°ã‚µã‚¤ã‚ºãƒ•ã‚¡ã‚¤ãƒ«ã®å‡¦ç†é«˜é€ŸåŒ–ã®ãŸã‚ã€æœ€åˆã¨æœ€å¾Œã«ã¯å¾…ã¡ã‚’å…¥ã‚Œãªã„)
 	if (CurProgress>0.0 && CurProgress<1.0) {
 		if (ReqTaskSlow) {
 			ReqTaskSlow = false;
@@ -204,7 +204,7 @@ DWORD __fastcall TTaskThread::ProgressCore(LARGE_INTEGER TotalFileSize, LARGE_IN
 		else {
 			TaskIsFast = (NopDtctTime>0) && ((int)(GetTickCount() - LastOpCount) > NopDtctTime*1000);
 			if (TaskIsFast)
-				Sleep((Speed>67108)? 0 : MIN_INTERVAL);	//*** 64MB/•bˆÈã‚È‚ç 0
+				Sleep((Speed>67108)? 0 : MIN_INTERVAL);	//*** 64MB/ç§’ä»¥ä¸Šãªã‚‰ 0
 			else
 				Sleep(std::max(IsRemote? RemoteWaitTime : NormalWaitTime, MIN_INTERVAL));
 		}
@@ -214,7 +214,7 @@ DWORD __fastcall TTaskThread::ProgressCore(LARGE_INTEGER TotalFileSize, LARGE_IN
 }
 
 //---------------------------------------------------------------------------
-//ƒƒO‚ÉƒƒbƒZ[ƒW‚ğ’Ç‰Á
+//ãƒ­ã‚°ã«ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¿½åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TTaskThread::AddLog(UnicodeString msg, bool must_log)
 {
@@ -227,7 +227,7 @@ void __fastcall TTaskThread::AddLog(UnicodeString msg, bool must_log)
 	}
 }
 //---------------------------------------------------------------------------
-//ƒƒO‚ÉƒfƒoƒbƒOî•ñ‚ğ’Ç‰Á
+//ãƒ­ã‚°ã«ãƒ‡ãƒãƒƒã‚°æƒ…å ±ã‚’è¿½åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TTaskThread::AddDebugLog(UnicodeString msg, UnicodeString info)
 {
@@ -240,8 +240,8 @@ void __fastcall TTaskThread::AddDebugLog(UnicodeString msg, UnicodeString info)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚ª‘€ì‰Â”\‚É‚È‚é‚Ü‚Å‘Ò‚Â(Å‘å10•bA’†’f‰Â)
-//  ƒvƒŒƒrƒ…[“Ç’†‚Ìê‡‚Ì‘Îˆ
+//ãƒ•ã‚¡ã‚¤ãƒ«ãŒæ“ä½œå¯èƒ½ã«ãªã‚‹ã¾ã§å¾…ã¤(æœ€å¤§10ç§’ã€ä¸­æ–­å¯)
+//  ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼èª­è¾¼ä¸­ã®å ´åˆã®å¯¾å‡¦
 //---------------------------------------------------------------------------
 bool __fastcall TTaskThread::EX_wait_file_ready(UnicodeString fnam)
 {
@@ -320,14 +320,14 @@ bool __fastcall TTaskThread::EX_delete_Dir(UnicodeString dnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠ‰º‚Ìƒ}ƒXƒN‚ÉŠY“–‚·‚é‘Sƒtƒ@ƒCƒ‹‚ğæ“¾
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä¸‹ã®ãƒã‚¹ã‚¯ã«è©²å½“ã™ã‚‹å…¨ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å–å¾—
 //---------------------------------------------------------------------------
 int __fastcall TTaskThread::GetFiles(
-	UnicodeString pnam,		//ƒfƒBƒŒƒNƒgƒŠ–¼
-	UnicodeString mask,		//ƒ}ƒXƒN
-	TStrings *lst,			//Œ‹‰Ê‚ğŠi”[ƒŠƒXƒg
-	bool empSW,				//‹ó‚ÌƒTƒuƒfƒBƒŒƒNƒgƒŠ‚àæ“¾ (default = false)
-	bool symSW)				//ƒVƒ“ƒ{ƒŠƒbƒNƒŠƒ“ƒN“à‚à	 (default = false)
+	UnicodeString pnam,		//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå
+	UnicodeString mask,		//ãƒã‚¹ã‚¯
+	TStrings *lst,			//çµæœã‚’æ ¼ç´ãƒªã‚¹ãƒˆ
+	bool empSW,				//ç©ºã®ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚‚å–å¾— (default = false)
+	bool symSW)				//ã‚·ãƒ³ãƒœãƒªãƒƒã‚¯ãƒªãƒ³ã‚¯å†…ã‚‚	 (default = false)
 {
 	int fcnt = 0;
 	if (!dir_exists(pnam) || (!symSW && is_SymLink(pnam))) return fcnt;
@@ -335,7 +335,7 @@ int __fastcall TTaskThread::GetFiles(
 	pnam = IncludeTrailingPathDelimiter(pnam);
 	if (mask.IsEmpty()) mask = "*.*";
 
-	//ƒTƒuƒfƒBƒŒƒNƒgƒŠ‚ğŒŸõ
+	//ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’æ¤œç´¢
 	UnicodeString sea_str;
 	TSearchRec sr;
 	sea_str = cv_ex_filename(pnam + "*");
@@ -350,7 +350,7 @@ int __fastcall TTaskThread::GetFiles(
 			int scnt = GetFiles(pnam + dnam, mask, lst, empSW, symSW);
 			fcnt += scnt;
 			if (empSW && scnt==0) {
-				//‹ó‚ÌƒTƒuƒfƒBƒŒƒNƒgƒŠ
+				//ç©ºã®ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 				lst->Add(IncludeTrailingPathDelimiter(pnam + dnam));
 				PreCount = lst->Count;
 			}
@@ -358,14 +358,14 @@ int __fastcall TTaskThread::GetFiles(
 		FindClose(sr);
 	}
 
-	//ƒtƒ@ƒCƒ‹‚ğŒŸõ
+	//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ¤œç´¢
 	sea_str = cv_ex_filename(pnam + mask);
 	if (!TaskCancel && FindFirst(sea_str, faAnyFile, sr)==0) {
 		do {
 			WaitIfPause();
 			if (sr.Attr & faDirectory) continue;
 
-			//ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚É‚æ‚éƒtƒBƒ‹ƒ^ƒŠƒ“ƒO
+			//ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã«ã‚ˆã‚‹ãƒ•ã‚£ãƒ«ã‚¿ãƒªãƒ³ã‚°
 			if (Config->FilterMode>0 && !test_DateCond(Config->FilterMode, sr.TimeStamp, Config->FilterTime)) continue;
 
 			lst->Add(pnam + sr.Name);
@@ -378,38 +378,38 @@ int __fastcall TTaskThread::GetFiles(
 	return fcnt;
 }
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠ‰º‚Ìƒ}ƒXƒN‚ÉŠY“–‚·‚é‘Sƒtƒ@ƒCƒ‹‚ÌƒŠƒXƒg‚ğ’Ç‰Áæ“¾
-//  –ß‚è’l: ƒtƒ@ƒCƒ‹”(‹óƒfƒBƒŒƒNƒgƒŠ‚Íœ‚­)
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä¸‹ã®ãƒã‚¹ã‚¯ã«è©²å½“ã™ã‚‹å…¨ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒªã‚¹ãƒˆã‚’è¿½åŠ å–å¾—
+//  æˆ»ã‚Šå€¤: ãƒ•ã‚¡ã‚¤ãƒ«æ•°(ç©ºãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¯é™¤ã)
 //---------------------------------------------------------------------------
 int __fastcall TTaskThread::GetFilesEx(
-	UnicodeString pnam,			//ƒfƒBƒŒƒNƒgƒŠ–¼
-	UnicodeString inc_mask,		//‘ÎÛƒ}ƒXƒN(;‚Å‹æØ‚è•¡”w’è‰Â)
-	UnicodeString exc_mask,		//œŠOƒ}ƒXƒN(;‚Å‹æØ‚è•¡”w’è‰Â)
-	TStrings *lst,				//Œ‹‰Ê‚ğŠi”[‚·‚é TStrings
-	bool subSW,					//ƒTƒuƒfƒBƒŒƒNƒgƒŠ‚àŒŸõ				(default = fals)
-	UnicodeString skip_dir,		//œŠOƒfƒBƒŒƒNƒgƒŠ(;‚Å‹æØ‚è•¡”w’è‰Â)	(default = EmptyStr)
-	TStringList *d_lst,			//ƒTƒuƒfƒBƒŒƒNƒgƒŠ‚ÌƒŠƒXƒg				(default = NUL)
-	bool symSW,					//ƒVƒ“ƒ{ƒŠƒbƒNƒŠƒ“ƒN“à‚à		 		(default = false)
-	bool dateSW)				//“ú•tğŒ‚ğ—˜—p						(default = false)
+	UnicodeString pnam,			//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå
+	UnicodeString inc_mask,		//å¯¾è±¡ãƒã‚¹ã‚¯(;ã§åŒºåˆ‡ã‚Šè¤‡æ•°æŒ‡å®šå¯)
+	UnicodeString exc_mask,		//é™¤å¤–ãƒã‚¹ã‚¯(;ã§åŒºåˆ‡ã‚Šè¤‡æ•°æŒ‡å®šå¯)
+	TStrings *lst,				//çµæœã‚’æ ¼ç´ã™ã‚‹ TStrings
+	bool subSW,					//ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚‚æ¤œç´¢				(default = fals)
+	UnicodeString skip_dir,		//é™¤å¤–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª(;ã§åŒºåˆ‡ã‚Šè¤‡æ•°æŒ‡å®šå¯)	(default = EmptyStr)
+	TStringList *d_lst,			//ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ãƒªã‚¹ãƒˆ				(default = NUL)
+	bool symSW,					//ã‚·ãƒ³ãƒœãƒªãƒƒã‚¯ãƒªãƒ³ã‚¯å†…ã‚‚		 		(default = false)
+	bool dateSW)				//æ—¥ä»˜æ¡ä»¶ã‚’åˆ©ç”¨						(default = false)
 {
 	int fcnt = 0;
 	if (!dir_exists(pnam) || (!symSW && is_SymLink(pnam))) return fcnt;
 
 	pnam = IncludeTrailingPathDelimiter(pnam);
 
-	//œŠOƒfƒBƒŒƒNƒgƒŠ
+	//é™¤å¤–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 	TStringDynArray skip_dir_lst = split_strings_semicolon(skip_dir, true);
-	//ƒ}ƒXƒN
+	//ãƒã‚¹ã‚¯
 	if (inc_mask.IsEmpty()) inc_mask = "*";
 
-	TStringDynArray inc_msk_lst = split_strings_semicolon(inc_mask, true);	//‘ÎÛ
-	TStringDynArray exc_msk_lst = split_strings_semicolon(exc_mask, true);	//œŠO
+	TStringDynArray inc_msk_lst = split_strings_semicolon(inc_mask, true);	//å¯¾è±¡
+	TStringDynArray exc_msk_lst = split_strings_semicolon(exc_mask, true);	//é™¤å¤–
 
 	TSearchRec sr;
 	if (FindFirst(cv_ex_filename(pnam + "*"), faAnyFile, sr)==0) {
 		do {
 			WaitIfPause();
-			//ƒTƒuƒfƒBƒŒƒNƒgƒŠ‚ğŒŸõ
+			//ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’æ¤œç´¢
 			if (subSW && (sr.Attr & faDirectory)) {
 				UnicodeString dnam = sr.Name;
 				if (ContainsStr("..", dnam)) continue;
@@ -417,7 +417,7 @@ int __fastcall TTaskThread::GetFilesEx(
 
 				if (d_lst) d_lst->Add(pnam + dnam);
 
-				//œŠOƒfƒBƒŒƒNƒgƒŠ‚Ìƒ`ƒFƒbƒN
+				//é™¤å¤–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ãƒã‚§ãƒƒã‚¯
 				bool skip = false;
 				for (int i=0; i<skip_dir_lst.Length; i++) {
 					if (str_match(skip_dir_lst[i], dnam)) {
@@ -427,9 +427,9 @@ int __fastcall TTaskThread::GetFilesEx(
 
 				if (!skip) fcnt += GetFilesEx(pnam + dnam, inc_mask, exc_mask, lst, subSW, skip_dir, d_lst, symSW, dateSW);
 			}
-			//ƒtƒ@ƒCƒ‹‚ğŒŸõ
+			//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ¤œç´¢
 			else {
-				//‘ÎÛƒ`ƒFƒbƒN
+				//å¯¾è±¡ãƒã‚§ãƒƒã‚¯
 				bool ok = false;
 				for (int i=0; i<inc_msk_lst.Length; i++) {
 					if (inc_msk_lst[i].IsEmpty()) continue;
@@ -438,7 +438,7 @@ int __fastcall TTaskThread::GetFilesEx(
 					}
 				}
 				if (!ok) continue;
-				//œŠOƒ`ƒFƒbƒN
+				//é™¤å¤–ãƒã‚§ãƒƒã‚¯
 				for (int i=0; i<exc_msk_lst.Length; i++) {
 					if (exc_msk_lst[i].IsEmpty()) continue;
 					if (str_match(exc_msk_lst[i], sr.Name)) {
@@ -447,7 +447,7 @@ int __fastcall TTaskThread::GetFilesEx(
 				}
 				if (!ok) continue;
 
-				//ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚É‚æ‚éƒtƒBƒ‹ƒ^ƒŠƒ“ƒO
+				//ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã«ã‚ˆã‚‹ãƒ•ã‚£ãƒ«ã‚¿ãƒªãƒ³ã‚°
 				if (dateSW && Config->FilterMode>0) {
 					if (!test_DateCond(Config->FilterMode, sr.TimeStamp, Config->FilterTime)) continue;
 				}
@@ -463,7 +463,7 @@ int __fastcall TTaskThread::GetFilesEx(
 }
 
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠ‰º‚Ì‘SƒfƒBƒŒƒNƒgƒŠ‚ğæ“¾
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä¸‹ã®å…¨ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’å–å¾—
 //---------------------------------------------------------------------------
 void __fastcall TTaskThread::GetDirs(UnicodeString pnam, TStrings *lst)
 {
@@ -487,21 +487,21 @@ void __fastcall TTaskThread::GetDirs(UnicodeString pnam, TStrings *lst)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚ÌƒRƒs[/ˆÚ“®
+//ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚³ãƒ”ãƒ¼/ç§»å‹•
 //---------------------------------------------------------------------------
 void __fastcall TTaskThread::CPY_core(
-	UnicodeString fnam, 		//ƒRƒs[Œ³
-	UnicodeString dst_path,		//ƒRƒs[æ
-	bool mov_sw,				//true = ˆÚ“®/ false = ƒRƒs[
-	bool remove_ro,				//true = “Çê—p‘®«‚ğ‰ğœ
-	TStringList *skip_list)		//ƒXƒLƒbƒv‚µ‚½ƒfƒBƒŒƒNƒgƒŠ(ˆÚ“®ˆ—Œã‚Éíœ‚µ‚È‚¢)
+	UnicodeString fnam, 		//ã‚³ãƒ”ãƒ¼å…ƒ
+	UnicodeString dst_path,		//ã‚³ãƒ”ãƒ¼å…ˆ
+	bool mov_sw,				//true = ç§»å‹•/ false = ã‚³ãƒ”ãƒ¼
+	bool remove_ro,				//true = èª­è¾¼å°‚ç”¨å±æ€§ã‚’è§£é™¤
+	TStringList *skip_list)		//ã‚¹ã‚­ãƒƒãƒ—ã—ãŸãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª(ç§»å‹•å‡¦ç†å¾Œã«å‰Šé™¤ã—ãªã„)
 								//	(default = NULL)
 {
 	WaitIfPause();
 
 	UnicodeString msg;
 
-	//ƒRƒs[æ‚ª‚È‚¯‚ê‚Îì¬
+	//ã‚³ãƒ”ãƒ¼å…ˆãŒãªã‘ã‚Œã°ä½œæˆ
 	if (!dir_exists(dst_path)) {
 		msg = make_LogHdr(_T("CREATE"), dst_path, true);
 		SetLastError(NO_ERROR);
@@ -533,7 +533,7 @@ void __fastcall TTaskThread::CPY_core(
 
 	UnicodeString dst_fnam = dst_path + CopyName;
 
-	//“¯–¼ƒfƒBƒŒƒNƒgƒŠ‚ª‘¶İ
+	//åŒåãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒå­˜åœ¨
 	if (dir_exists(dst_fnam)) {
 		ErrCount++;
 		set_LogErrMsg(msg, LoadUsrMsg(USTR_NgSameName));
@@ -543,7 +543,7 @@ void __fastcall TTaskThread::CPY_core(
 		return;
 	}
 
-	//“¯–¼ˆ—
+	//åŒåå‡¦ç†
 	if (!Config->CopyAll && file_exists(dst_fnam)) {
 		CurSrcName  = fnam;
 		CurDstName	= dst_fnam;
@@ -552,7 +552,7 @@ void __fastcall TTaskThread::CPY_core(
 		while (TaskAskSame && !TaskCancel) Sleep(250);
 	}
 
-	//’†’f
+	//ä¸­æ–­
 	if (TaskCancel) {
 		msg[1] = 'C';
 		AddLog(msg);
@@ -565,11 +565,11 @@ void __fastcall TTaskThread::CPY_core(
 		bool skiped = false;
 
 		switch (Config->CopyMode) {
-		case CPYMD_OW:	//ã‘‚«
+		case CPYMD_OW:	//ä¸Šæ›¸ã
 			msg[1] = 'O';
 			break;
 
-		case CPYMD_NEW:	//ÅV‚È‚ç
+		case CPYMD_NEW:	//æœ€æ–°ãªã‚‰
 			if (is_NewerTime(get_file_age(fnam), get_file_age(dst_fnam))) {
 				msg[1] = 'N';
 			}
@@ -581,20 +581,20 @@ void __fastcall TTaskThread::CPY_core(
 			}
 			break;
 
-		case CPYMD_SKIP:	//ƒXƒLƒbƒv
+		case CPYMD_SKIP:	//ã‚¹ã‚­ãƒƒãƒ—
 			w_flag = false;
 			SkipCount++;
 			if (LogHideSkip) msg = EmptyStr; else msg[1] = 'S';
 			skiped = true;
 			break;
 
-		case CPYMD_AUT_REN:		//©“®“I‚É–¼‘O‚ğ•ÏX
-		case CPYMD_REN_CLONE:	//’P“ÆƒNƒ[ƒ“‰»‚Å‰ü–¼
+		case CPYMD_AUT_REN:		//è‡ªå‹•çš„ã«åå‰ã‚’å¤‰æ›´
+		case CPYMD_REN_CLONE:	//å˜ç‹¬ã‚¯ãƒ­ãƒ¼ãƒ³åŒ–ã§æ”¹å
 			dst_fnam = format_CloneName(Config->CopyFmt, fnam, dst_path);
 			set_RenameLog(msg, dst_fnam);
 			break;
 
-		case CPYMD_MAN_REN:	//–¼‘O‚ğ•ÏX
+		case CPYMD_MAN_REN:	//åå‰ã‚’å¤‰æ›´
 			dst_fnam = dst_path + CopyName;
 			if (!file_exists(dst_fnam)) {
 				set_RenameLog(msg, CopyName);
@@ -606,7 +606,7 @@ void __fastcall TTaskThread::CPY_core(
 			}
 			break;
 
-		case CPYMD_NEW_BACKUP:	//ÅV‚È‚çƒoƒbƒNƒAƒbƒv
+		case CPYMD_NEW_BACKUP:	//æœ€æ–°ãªã‚‰ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—
 			if (is_NewerTime(get_file_age(fnam), get_file_age(dst_fnam))) {
 				msg[1] = 'N';
 			}
@@ -628,7 +628,7 @@ void __fastcall TTaskThread::CPY_core(
 	if (Config->DstPosMode==1 && FirstDstName.IsEmpty()) FirstDstName = dst_fnam;
 	if (Config->DstPosMode==2) LastDstName = dst_fnam;
 
-	//ã‘‚«(‰ü–¼)Às
+	//ä¸Šæ›¸ã(æ”¹å)å®Ÿè¡Œ
 	if (w_flag) {
 		bool failed = false;
 		int  err_id = NO_ERROR;
@@ -642,7 +642,7 @@ void __fastcall TTaskThread::CPY_core(
 			LastCount = 0;
 			Speed	  = 0;
 
-			//ˆÚ“®
+			//ç§»å‹•
 			if (mov_sw) {
 				if (!EX_wait_file_ready(fnam))	throw Exception(EmptyStr);
 				if (TaskCancel)					Abort();
@@ -658,15 +658,15 @@ void __fastcall TTaskThread::CPY_core(
 					if (TaskCancel) Abort(); else throw Exception(EmptyStr);
 				}
 
-				usr_TAG->Rename(fnam, dst_fnam);	//ƒ^ƒO‚ÌˆÚ“®
-				rename_FolderIcon(fnam, dst_fnam);	//ƒtƒHƒ‹ƒ_ƒAƒCƒRƒ“‚ÌˆÚ“®
+				usr_TAG->Rename(fnam, dst_fnam);	//ã‚¿ã‚°ã®ç§»å‹•
+				rename_FolderIcon(fnam, dst_fnam);	//ãƒ•ã‚©ãƒ«ãƒ€ã‚¢ã‚¤ã‚³ãƒ³ã®ç§»å‹•
 			}
-			//ƒRƒs[
+			//ã‚³ãƒ”ãƒ¼
 			else {
-				BOOL cancel = FALSE;	//ƒ_ƒ~[ (’†’f‚Í TaskCancel ‚Å)
+				BOOL cancel = FALSE;	//ãƒ€ãƒŸãƒ¼ (ä¸­æ–­ã¯ TaskCancel ã§)
 
-				//¦RAMƒfƒBƒXƒN‚Æ‚ÌŠÔ‚Å¬‚³‚Èƒtƒ@ƒCƒ‹‚ğƒRƒs[‚·‚é‚ÆƒGƒ‰[‚É‚È‚éŒ»Û‚Ö‚Ì‘Îô
-				//  10MBˆÈ‰º‚Ìê‡‚Í COPY_FILE_NO_BUFFERING ‚ğg‚í‚È‚¢
+				//â€»RAMãƒ‡ã‚£ã‚¹ã‚¯ã¨ã®é–“ã§å°ã•ãªãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚³ãƒ”ãƒ¼ã™ã‚‹ã¨ã‚¨ãƒ©ãƒ¼ã«ãªã‚‹ç¾è±¡ã¸ã®å¯¾ç­–
+				//  10MBä»¥ä¸‹ã®å ´åˆã¯ COPY_FILE_NO_BUFFERING ã‚’ä½¿ã‚ãªã„
 				DWORD cpyflag = (CopyNoBuffering && get_file_size(fnam)>10485760)? COPY_FILE_NO_BUFFERING : 0;
 
 				AddDebugLog("Call CopyFileEx");
@@ -678,10 +678,10 @@ void __fastcall TTaskThread::CPY_core(
 					if (TaskCancel) Abort(); else throw Exception(EmptyStr);
 				}
 
-				//ƒ^ƒO‚ÌƒRƒs[
+				//ã‚¿ã‚°ã®ã‚³ãƒ”ãƒ¼
 				if (CopyTags) usr_TAG->Copy(fnam, dst_fnam);
 
-				//CD-ROM‚©‚ç‚Ìê‡A“Çê—p‘®«‚ğ‰ğœ
+				//CD-ROMã‹ã‚‰ã®å ´åˆã€èª­è¾¼å°‚ç”¨å±æ€§ã‚’è§£é™¤
 				if (remove_ro) {
 					int attr = file_GetAttr(dst_fnam);	if (attr==faInvalid) throw Exception(EmptyStr);
 					AddDebugLog("Set Attribute");
@@ -692,12 +692,12 @@ void __fastcall TTaskThread::CPY_core(
 			}
 			OkCount++;
 		}
-		//’†’f
+		//ä¸­æ–­
 		catch (EAbort &e) {
 			msg[1] = 'C';  msg += get_LogErrMsg(EmptyStr, true, EmptyStr, err_id);
 			failed = true;
 		}
-		//ƒGƒ‰[
+		//ã‚¨ãƒ©ãƒ¼
 		catch (...) {
 			ErrCount++;
 			set_LogErrMsg(msg, EmptyStr, fnam, err_id);
@@ -708,7 +708,7 @@ void __fastcall TTaskThread::CPY_core(
 			failed = true;
 		}
 
-		//ˆÚ“®‚É¸”s‚µ‚½ƒtƒ@ƒCƒ‹‚ÌƒfƒBƒŒƒNƒgƒŠ‚Íˆ—Œã‚Ìíœ‘ÎÛ‚©‚çœŠO
+		//ç§»å‹•ã«å¤±æ•—ã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¯å‡¦ç†å¾Œã®å‰Šé™¤å¯¾è±¡ã‹ã‚‰é™¤å¤–
 		if (mov_sw && failed && skip_list) {
 			UnicodeString dnam = ExtractFilePath(fnam);
 			if (skip_list->IndexOf(dnam)==-1) skip_list->Add(dnam);
@@ -724,8 +724,8 @@ void __fastcall TTaskThread::CPY_core(
 }
 //---------------------------------------------------------------------------
 void __fastcall TTaskThread::Task_CPY(
-	UnicodeString prm,	//ƒRƒs[Œ³ \t ƒRƒs[æ
-	bool mov_sw)		//true = ˆÚ“®/ false = ƒRƒs[ (default)
+	UnicodeString prm,	//ã‚³ãƒ”ãƒ¼å…ƒ \t ã‚³ãƒ”ãƒ¼å…ˆ
+	bool mov_sw)		//true = ç§»å‹•/ false = ã‚³ãƒ”ãƒ¼ (default)
 {
 	UnicodeString src_prm  = split_pre_tab(prm);
 	UnicodeString dst_path = prm;
@@ -738,9 +738,9 @@ void __fastcall TTaskThread::Task_CPY(
 	bool remove_ro	 = RemoveCdReadOnly && (src_drv_typ==DRIVE_CDROM);
 	IsRemote		 = (src_drv_typ==DRIVE_REMOTE || dst_drv_typ==DRIVE_REMOTE);
 
-	//ƒtƒ@ƒCƒ‹
+	//ãƒ•ã‚¡ã‚¤ãƒ«
 	if (!ExtractFileName(src_prm).IsEmpty()) {
-		//ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚É‚æ‚éƒtƒBƒ‹ƒ^ƒŠƒ“ƒO
+		//ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã«ã‚ˆã‚‹ãƒ•ã‚£ãƒ«ã‚¿ãƒªãƒ³ã‚°
 		if (Config->FilterMode>0) {
 			bool ok = false;
 			TValueRelationship res = System::Dateutils::CompareDate(get_file_age(src_prm), Config->FilterTime);
@@ -754,13 +754,13 @@ void __fastcall TTaskThread::Task_CPY(
 
 		CPY_core(src_prm, dst_path, mov_sw, remove_ro);
 	}
-	//ƒfƒBƒŒƒNƒgƒŠ
+	//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 	else {
 		bool is_same_drv = SameText(get_root_name(src_prm), get_root_name(dst_path));
 		UnicodeString src_nam = ExcludeTrailingPathDelimiter(src_prm);
 		UnicodeString dst_nam = dst_path + ExtractFileName(src_nam);
 
-		//“¯–¼ƒtƒ@ƒCƒ‹‚ª‘¶İ
+		//åŒåãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨
 		if (file_exists_x(dst_nam)) {
 			ErrCount++;
 			msg = make_LogHdr(_T("MOVE"), src_nam);
@@ -772,17 +772,17 @@ void __fastcall TTaskThread::Task_CPY(
 		if (Config->DstPosMode==1 && FirstDstName.IsEmpty()) FirstDstName = dst_nam;
 		if (Config->DstPosMode==2) LastDstName = dst_nam;
 
-		//“¯ƒhƒ‰ƒCƒu“à‚Å‚ÌˆÚ“®
+		//åŒãƒ‰ãƒ©ã‚¤ãƒ–å†…ã§ã®ç§»å‹•
 		if (mov_sw && is_same_drv && !dir_exists(dst_nam)) {
 			msg = make_LogHdr(_T("MOVE"), src_nam);
 			try {
-				//ˆÚ“®æ‚ª‚È‚¯‚ê‚Îì¬
+				//ç§»å‹•å…ˆãŒãªã‘ã‚Œã°ä½œæˆ
 				if (!dir_exists(dst_path)) {
 					msg = make_LogHdr(_T("CREATE"), dst_path, true);
 					SetLastError(NO_ERROR);
 					if (!create_ForceDirs(dst_path)) Abort();
 				}
-				//ˆÚ“®
+				//ç§»å‹•
 				SetLastError(NO_ERROR);
 				if (!move_FileT(src_nam, dst_nam)) throw Exception(EmptyStr);
 				OkCount++;
@@ -793,7 +793,7 @@ void __fastcall TTaskThread::Task_CPY(
 			}
 			AddLog(msg);
 		}
-		//ƒRƒs[Œ³æ“¾
+		//ã‚³ãƒ”ãƒ¼å…ƒå–å¾—
 		else {
 			UnicodeString org_path = get_parent_path(src_prm);
 			std::unique_ptr<TStringList> fbuf(new TStringList());
@@ -801,7 +801,7 @@ void __fastcall TTaskThread::Task_CPY(
 			GetFiles(src_prm, "*.*", fbuf.get(), true, true);
 			PreCount = 0;
 
-			//ƒfƒBƒŒƒNƒgƒŠ‚Ìƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚ğæ“¾
+			//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã‚’å–å¾—
 			std::unique_ptr<TStringList> tbuf(new TStringList());
 			if (Config->KeepTime) {
 				std::unique_ptr<TStringList> dbuf(new TStringList());
@@ -822,7 +822,7 @@ void __fastcall TTaskThread::Task_CPY(
 
 			if (!TaskCancel) {
 				std::unique_ptr<TStringList> skip_lst(new TStringList());
-				//ƒRƒs[
+				//ã‚³ãƒ”ãƒ¼
 				if (fbuf->Count>0) {
 					fbuf->Sort();
 					for (int i=0; i<fbuf->Count; i++) {
@@ -841,7 +841,7 @@ void __fastcall TTaskThread::Task_CPY(
 						}
 					}
 				}
-				//‹óƒfƒBƒŒƒNƒgƒŠ
+				//ç©ºãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 				else if (!dir_exists(dst_nam)) {
 					msg = make_LogHdr(_T("CREATE"), dst_nam, true);
 					SetLastError(NO_ERROR);
@@ -858,7 +858,7 @@ void __fastcall TTaskThread::Task_CPY(
 					AddLog(msg);
 				}
 
-				//ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv
+				//ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—
 				if (Config->KeepTime) {
 					for (int i=0; i<tbuf->Count; i++) {
 						UnicodeString dnam = get_pre_tab(tbuf->Strings[i]);
@@ -895,7 +895,7 @@ void __fastcall TTaskThread::Task_CPY(
 					}
 				}
 
-				//ˆÚ“®Œ³‚ÌƒfƒBƒŒƒNƒgƒŠíœ
+				//ç§»å‹•å…ƒã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå‰Šé™¤
 				if (mov_sw) {
 					DEL_dirs(src_prm, skip_lst.get());
 					usr_TAG->Rename(src_prm, dst_nam);
@@ -904,22 +904,22 @@ void __fastcall TTaskThread::Task_CPY(
 		}
 	}
 
-	//ƒGƒ‰[’†’f
-	if (ErrCancel) AddLog("C ƒGƒ‰[‚É‚æ‚èƒ^ƒXƒN‚ğ’†’f‚µ‚Ü‚µ‚½");
+	//ã‚¨ãƒ©ãƒ¼ä¸­æ–­
+	if (ErrCancel) AddLog("C ã‚¨ãƒ©ãƒ¼ã«ã‚ˆã‚Šã‚¿ã‚¹ã‚¯ã‚’ä¸­æ–­ã—ã¾ã—ãŸ");
 }
 
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠíœ
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TTaskThread::DEL_dirs(
-	UnicodeString pnam,			//íœ‚·‚éƒfƒBƒŒƒNƒgƒŠ
-	TStringList *skip_list)		//ƒXƒLƒbƒv‚·‚éƒfƒBƒŒƒNƒgƒŠ‚ÌƒŠƒXƒg	(default = NULL)
+	UnicodeString pnam,			//å‰Šé™¤ã™ã‚‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+	TStringList *skip_list)		//ã‚¹ã‚­ãƒƒãƒ—ã™ã‚‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ãƒªã‚¹ãƒˆ	(default = NULL)
 {
 	if (pnam.IsEmpty()) return;
 	pnam = to_path_name(pnam);
 	bool is_sym = is_SymLink(pnam);
 
-	//ƒTƒuƒfƒBƒŒƒNƒgƒŠ‚ğŒŸõ‚µ‚Äíœ
+	//ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’æ¤œç´¢ã—ã¦å‰Šé™¤
 	if (!is_sym) {
 		UnicodeString sea_str = cv_ex_filename(pnam + "*");
 		TSearchRec sr;
@@ -935,7 +935,7 @@ void __fastcall TTaskThread::DEL_dirs(
 		}
 	}
 
-	//ƒfƒBƒŒƒNƒgƒŠ‚ğíœ
+	//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’å‰Šé™¤
 	UnicodeString msg = make_LogHdr(is_sym? _T("REMOVE") : _T("DELETE"), pnam, true);
 
 	try {
@@ -965,12 +965,12 @@ void __fastcall TTaskThread::DEL_dirs(
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹íœ
+//ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TTaskThread::DEL_core(
 	UnicodeString fnam,
-	bool use_trash,			//‚²‚İ” ‚ğg—p
-	TStringList *skip_list)	//ƒXƒLƒbƒv‚·‚éƒfƒBƒŒƒNƒgƒŠ	(default = NULL)
+	bool use_trash,			//ã”ã¿ç®±ã‚’ä½¿ç”¨
+	TStringList *skip_list)	//ã‚¹ã‚­ãƒƒãƒ—ã™ã‚‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª	(default = NULL)
 {
 	CurFileName = fnam;
 	UnicodeString msg = make_LogHdr(_T("DELETE"), fnam);
@@ -995,11 +995,11 @@ void __fastcall TTaskThread::DEL_core(
 
 		OkCount++;
 	}
-	//’†’f
+	//ä¸­æ–­
 	catch (EAbort &e) {
 		msg[1] = 'C';
 	}
-	//ƒGƒ‰[
+	//ã‚¨ãƒ©ãƒ¼
 	catch (...) {
 		ErrCount++;
 		set_LogErrMsg(msg, EmptyStr, fnam);
@@ -1014,7 +1014,7 @@ void __fastcall TTaskThread::DEL_core(
 	CurFileName = EmptyStr;
 }
 //---------------------------------------------------------------------------
-//‚²‚İ” ‚É‚æ‚éƒfƒBƒŒƒNƒgƒŠíœ
+//ã”ã¿ç®±ã«ã‚ˆã‚‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TTaskThread::DEL_dir_trash(UnicodeString dnam)
 {
@@ -1036,24 +1036,24 @@ void __fastcall TTaskThread::Task_DEL(UnicodeString prm)
 {
 	if (prm.IsEmpty()) return;
 
-	//ƒtƒ@ƒCƒ‹
+	//ãƒ•ã‚¡ã‚¤ãƒ«
 	if (!ExtractFileName(prm).IsEmpty()) {
 		DEL_core(prm, DelUseTrash);
 	}
-	//ƒfƒBƒŒƒNƒgƒŠ(––”ö‚ª \)
+	//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª(æœ«å°¾ãŒ \)
 	else if (EX_dir_exists(prm)) {
-		//‚²‚İ” 
+		//ã”ã¿ç®±
 		if (DelUseTrash) {
 			DEL_dir_trash(prm);
 		}
 		else {
-			//ƒVƒ“ƒ{ƒŠƒbƒNƒŠƒ“ƒNAƒWƒƒƒ“ƒNƒVƒ‡ƒ“
+			//ã‚·ãƒ³ãƒœãƒªãƒƒã‚¯ãƒªãƒ³ã‚¯ã€ã‚¸ãƒ£ãƒ³ã‚¯ã‚·ãƒ§ãƒ³
 			if (is_SymLink(prm)) {
 				DEL_dirs(prm);
 			}
-			//’Êí
+			//é€šå¸¸
 			else {
-				//ƒfƒBƒŒƒNƒgƒŠ“à‚Ìíœ
+				//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå†…ã®å‰Šé™¤
 				std::unique_ptr<TStringList> fbuf(new TStringList());
 				PreCount = 0;
 				GetFiles(prm, "*.*", fbuf.get());
@@ -1089,13 +1089,13 @@ void __fastcall TTaskThread::Task_DEL(UnicodeString prm)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹Š®‘Síœ
+//ãƒ•ã‚¡ã‚¤ãƒ«å®Œå…¨å‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TTaskThread::CMPDEL_core(
 	UnicodeString fnam,
-	TStringList *skip_list)	//ƒXƒLƒbƒv‚·‚éƒfƒBƒŒƒNƒgƒŠ	(default = NULL)
+	TStringList *skip_list)	//ã‚¹ã‚­ãƒƒãƒ—ã™ã‚‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª	(default = NULL)
 {
-	//ƒn[ƒhƒŠƒ“ƒO‚Ìê‡A’Êííœ
+	//ãƒãƒ¼ãƒ‰ãƒªãƒ³ã‚°ã®å ´åˆã€é€šå¸¸å‰Šé™¤
 	if (get_HardLinkCount(fnam)>1) {
 		DEL_core(fnam, false);
 		return;
@@ -1130,11 +1130,11 @@ void __fastcall TTaskThread::CMPDEL_core(
 
 		try {
 			for (int i=0; i<CmpDelOwCnt; i++) {
-				//ƒ‰ƒ“ƒ_ƒ€ƒpƒ^[ƒ“ì¬
+				//ãƒ©ãƒ³ãƒ€ãƒ ãƒ‘ã‚¿ãƒ¼ãƒ³ä½œæˆ
 				for (int j=0; j<CMPDEL_BUFF_SIZE; j++) wbuf[j] = Random(256);
-				//æ“ª‚ÖƒV[ƒN
+				//å…ˆé ­ã¸ã‚·ãƒ¼ã‚¯
 				::SetFilePointer(hFile, 0, NULL, FILE_BEGIN);
-				//‘‚«‚İ
+				//æ›¸ãè¾¼ã¿
 				DWORD wbyt;
 				for (int j=0; j<wcnt; j++) {
 					WaitIfPause();
@@ -1146,21 +1146,21 @@ void __fastcall TTaskThread::CMPDEL_core(
 						Sleep(MIN_INTERVAL);
 					}
 
-					if (TaskCancel) throw Exception(EmptyStr);	//’†’f
+					if (TaskCancel) throw Exception(EmptyStr);	//ä¸­æ–­
 					if (!WriteFile(hFile, wbuf.get(), CMPDEL_BUFF_SIZE, &wbyt, NULL)) throw Exception(EmptyStr);
 					written_sz += wbyt;
 					CurProgress = 1.0*written_sz/total_sz;
 					if (Random(8)==0)
-						for (int k=0; k<CMPDEL_BUFF_SIZE; k++) wbuf[k] = Random(256);	//‚Æ‚«‚Ç‚«ƒpƒ^[ƒ“•ÏX
+						for (int k=0; k<CMPDEL_BUFF_SIZE; k++) wbuf[k] = Random(256);	//ã¨ãã©ããƒ‘ã‚¿ãƒ¼ãƒ³å¤‰æ›´
 				}
-				//’[”ƒoƒCƒg
+				//ç«¯æ•°ãƒã‚¤ãƒˆ
 				if (rcnt>0) {
 					if (!WriteFile(hFile, wbuf.get(), rcnt, &wbyt, NULL)) throw Exception(EmptyStr);
 					written_sz += wbyt;
 					CurProgress = 1.0*written_sz/total_sz;
 				}
 			}
-			//ƒTƒCƒY‚ğ0‚ÉØ‚è‹l‚ß‚é
+			//ã‚µã‚¤ã‚ºã‚’0ã«åˆ‡ã‚Šè©°ã‚ã‚‹
 			::SetFilePointer(hFile, 0, NULL, FILE_BEGIN);
 			::SetEndOfFile(hFile);
 			AddDebugLog("CloseHandle");
@@ -1172,7 +1172,7 @@ void __fastcall TTaskThread::CMPDEL_core(
 			if (TaskCancel) Abort();
 		}
 
-		//íœ
+		//å‰Šé™¤
 		if (!EX_delete_File(fnam)) throw Exception(EmptyStr);
 
 		del_CachedIcon(fnam);
@@ -1180,11 +1180,11 @@ void __fastcall TTaskThread::CMPDEL_core(
 
 		OkCount++;
 	}
-	//’†’f
+	//ä¸­æ–­
 	catch (EAbort &e) {
-		msg[1] = 'C';  msg += "\r\n    —v‹‚Í’†’f‚³‚ê‚Ü‚µ‚½B";
+		msg[1] = 'C';  msg += "\r\n    è¦æ±‚ã¯ä¸­æ–­ã•ã‚Œã¾ã—ãŸã€‚";
 	}
-	//ƒGƒ‰[
+	//ã‚¨ãƒ©ãƒ¼
 	catch (...) {
 		ErrCount++;
 		set_LogErrMsg(msg, EmptyStr, fnam);
@@ -1207,7 +1207,7 @@ void __fastcall TTaskThread::Task_CMPDEL(UnicodeString prm)
 	else if (EX_dir_exists(prm)) {
 		std::unique_ptr<TStringList> skip_lst(new TStringList());
 		if (!is_SymLink(prm)) {
-			//ƒfƒBƒŒƒNƒgƒŠ“à‚Ìíœ
+			//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå†…ã®å‰Šé™¤
 			std::unique_ptr<TStringList> fbuf(new TStringList());
 			PreCount = 0;
 			GetFiles(prm, "*.*", fbuf.get());
@@ -1227,7 +1227,7 @@ void __fastcall TTaskThread::Task_CMPDEL(UnicodeString prm)
 }
 
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠ\‘¢‚ÌƒRƒs[
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæ§‹é€ ã®ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TTaskThread::Task_CPYDIR(UnicodeString prm)
 {
@@ -1237,7 +1237,7 @@ void __fastcall TTaskThread::Task_CPYDIR(UnicodeString prm)
 
 	bool remove_ro = RemoveCdReadOnly && (get_drive_type(src_prm)==DRIVE_CDROM);
 
-	//æ“¾
+	//å–å¾—
 	std::unique_ptr<TStringList> dbuf(new TStringList());
 	dbuf->Add(src_prm);
 	if (!Config->NoSubDir) {
@@ -1246,7 +1246,7 @@ void __fastcall TTaskThread::Task_CPYDIR(UnicodeString prm)
 		PreCount = 0;
 	}
 
-	//ƒRƒs[(ì¬)
+	//ã‚³ãƒ”ãƒ¼(ä½œæˆ)
 	UnicodeString org_path = get_parent_path(src_prm);
 	for (int i=0; i<dbuf->Count && !TaskCancel; i++) {
 		WaitIfPause();
@@ -1259,9 +1259,9 @@ void __fastcall TTaskThread::Task_CPYDIR(UnicodeString prm)
 		if (!dir_exists(dst_nam)) {
 			SetLastError(NO_ERROR);
 			if (create_ForceDirs(dst_nam)) {
-				//‘®«
+				//å±æ€§
 				dir_CopyAttr(dnam, dst_nam, remove_ro);
-				//ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv
+				//ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—
 				if (Config->KeepTime) {
 					TDateTime ft = get_file_age(dnam);
 					if (ft>(TDateTime)0) set_file_age(dst_nam, ft);
@@ -1283,7 +1283,7 @@ void __fastcall TTaskThread::Task_CPYDIR(UnicodeString prm)
 }
 
 //---------------------------------------------------------------------------
-//‰æ‘œƒtƒ@ƒCƒ‹‚Ì•ÏŠ·
+//ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«ã®å¤‰æ›
 //---------------------------------------------------------------------------
 void __fastcall TTaskThread::Task_CVIMG(UnicodeString prm)
 {
@@ -1305,27 +1305,27 @@ void __fastcall TTaskThread::Task_CVIMG(UnicodeString prm)
 			WaitIfPause();
 			if (!is_clip && !EX_file_exists(fnam)) throw Exception(EmptyStr);
 
-			//ˆ—‘O‚Éƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚ğæ‚Á‚Ä‚¨‚­
+			//å‡¦ç†å‰ã«ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã‚’å–ã£ã¦ãŠã
 			TDateTime ft;
 			if (!is_clip && Config->KeepTime) ft = get_file_age(fnam);
 
-			//“Ç‚İ‚İ
+			//èª­ã¿è¾¼ã¿
 			std::unique_ptr<TMetafile> mf(new TMetafile());
 			unsigned int i_wd, i_hi;
-			//ƒNƒŠƒbƒvƒ{[ƒh
+			//ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰
 			if (is_clip) {
 				if (!Clipboard()->HasFormat(CF_BITMAP)) UserAbort(USTR_NoObject);
 				i_img->Assign(Clipboard());
 				i_wd = i_img->Width;
 				i_hi = i_img->Height;
 			}
-			//ƒƒ^ƒtƒ@ƒCƒ‹
+			//ãƒ¡ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«
 			else if (is_wmf) {
 				mf->LoadFromFile(fnam);
 				i_wd = mf->Width;
 				i_hi = mf->Height;
 			}
-			//‰æ‘œƒtƒ@ƒCƒ‹
+			//ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«
 			else {
 				TColor bg = test_FileExt(ExtractFileExt(fnam), ".png.gif")? Config->CvImg_mgn_color : col_None;
 				if (load_ImageFile(fnam, i_img.get(), (Config->CvImg_not_use_prvw? WICIMG_FRAME : WICIMG_PREVIEW), bg)==0)
@@ -1333,13 +1333,13 @@ void __fastcall TTaskThread::Task_CVIMG(UnicodeString prm)
 				i_wd = i_img->Width;
 				i_hi = i_img->Height;
 			}
-			if (i_wd==0 || i_hi==0) TextAbort(_T("Œ³‰æ‘œ‚ÌƒTƒCƒY‚ª•s³‚Å‚·B"));
+			if (i_wd==0 || i_hi==0) TextAbort(_T("å…ƒç”»åƒã®ã‚µã‚¤ã‚ºãŒä¸æ­£ã§ã™ã€‚"));
 
-			//k¬EŠg‘å
+			//ç¸®å°ãƒ»æ‹¡å¤§
 			if (Config->CvImg_scale_mode>0) {
 				float r, r0, r1;
 
-				//ƒpƒ‰ƒ[ƒ^ƒ`ƒFƒbƒN
+				//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒã‚§ãƒƒã‚¯
 				switch (Config->CvImg_scale_mode) {
 				case 1:
 					if (Config->CvImg_scale_prm1==0) UserAbort(USTR_IllegalParam);
@@ -1351,31 +1351,31 @@ void __fastcall TTaskThread::Task_CVIMG(UnicodeString prm)
 					if (Config->CvImg_scale_prm1==0) UserAbort(USTR_IllegalParam);
 				}
 
-				//•ÏXƒTƒCƒY‚ğ‹‚ß‚é
+				//å¤‰æ›´ã‚µã‚¤ã‚ºã‚’æ±‚ã‚ã‚‹
 				switch (Config->CvImg_scale_mode) {
-				case 2:	//c‰¡‚Ì’·‚¢•û
-					if (i_wd>i_hi) {	//‰¡‚Ì•û‚ª’·‚¢
+				case 2:	//ç¸¦æ¨ªã®é•·ã„æ–¹
+					if (i_wd>i_hi) {	//æ¨ªã®æ–¹ãŒé•·ã„
 						r = 1.0 * i_hi / i_wd;
 						i_wd = Config->CvImg_scale_prm1;
 						i_hi = i_wd * r;
 					}
-					else {			//c‚Ì•û‚ª’·‚¢
+					else {			//ç¸¦ã®æ–¹ãŒé•·ã„
 						r = 1.0 * i_wd / i_hi;
 						i_hi = Config->CvImg_scale_prm1;
 						i_wd = i_hi * r;
 					}
 					break;
-				case 3:	//‰¡ƒTƒCƒY‚ğw’è
+				case 3:	//æ¨ªã‚µã‚¤ã‚ºã‚’æŒ‡å®š
 					r = 1.0 * i_hi / i_wd;
 					i_wd = Config->CvImg_scale_prm1;
 					i_hi = i_wd * r;
 					break;
-				case 4:	//cƒTƒCƒY‚ğw’è
+				case 4:	//ç¸¦ã‚µã‚¤ã‚ºã‚’æŒ‡å®š
 					r = 1.0 * i_wd / i_hi;
 					i_hi = Config->CvImg_scale_prm1;
 					i_wd = i_hi * r;
 					break;
-				case 5: case 7: //w’èƒTƒCƒY‚Éû‚ß‚é/ —]”’•t‚«
+				case 5: case 7: //æŒ‡å®šã‚µã‚¤ã‚ºã«åã‚ã‚‹/ ä½™ç™½ä»˜ã
 					r0 = 1.0 * i_wd / i_hi;
 					r1 = 1.0 * Config->CvImg_scale_prm1 / Config->CvImg_scale_prm2;
 					if (r0>r1) {
@@ -1389,11 +1389,11 @@ void __fastcall TTaskThread::Task_CVIMG(UnicodeString prm)
 						i_wd = i_hi * r;
 					}
 					break;
-				case 6:	//w’èƒTƒCƒY‚ÉƒXƒgƒŒƒbƒ`
+				case 6:	//æŒ‡å®šã‚µã‚¤ã‚ºã«ã‚¹ãƒˆãƒ¬ãƒƒãƒ
 					i_wd = Config->CvImg_scale_prm1;
 					i_hi = Config->CvImg_scale_prm2;
 					break;
-				case 8:	//w’èƒTƒCƒY‚É‡‚í‚¹‚ÄØ‚èo‚µ
+				case 8:	//æŒ‡å®šã‚µã‚¤ã‚ºã«åˆã‚ã›ã¦åˆ‡ã‚Šå‡ºã—
 					r0 = 1.0 * i_wd / i_hi;
 					r1 = 1.0 * Config->CvImg_scale_prm1 / Config->CvImg_scale_prm2;
 					if (r0<r1) {
@@ -1409,16 +1409,16 @@ void __fastcall TTaskThread::Task_CVIMG(UnicodeString prm)
 					break;
 				}
 
-				//k¬EŠg‘å
-				//ƒƒ^ƒtƒ@ƒCƒ‹
+				//ç¸®å°ãƒ»æ‹¡å¤§
+				//ãƒ¡ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«
 				if (is_wmf) {
 					if (Config->CvImg_scale_mode==1) {
-						//”{—¦w’è
+						//å€ç‡æŒ‡å®š
 						float r = Config->CvImg_scale_prm1/100.0;
 						r_img->SetSize(i_wd * r, i_hi * r);
 					}
 					else {
-						//cE‰¡ƒTƒCƒYw’è
+						//ç¸¦ãƒ»æ¨ªã‚µã‚¤ã‚ºæŒ‡å®š
 						r_img->SetSize(i_wd, i_hi);
 					}
 					TRect rc = Rect(0, 0, r_img->Width, r_img->Height);
@@ -1426,23 +1426,23 @@ void __fastcall TTaskThread::Task_CVIMG(UnicodeString prm)
 					r_img->Canvas->FillRect(rc);
 					r_img->Canvas->StretchDraw(rc, mf.get());
 				}
-				//‰æ‘œƒtƒ@ƒCƒ‹
+				//ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«
 				else {
-					//•âŠÔ‚·‚é
+					//è£œé–“ã™ã‚‹
 					if (Config->CvImg_scale_opt>=0 && Config->CvImg_scale_opt<=3) {
-						//”{—¦w’è
+						//å€ç‡æŒ‡å®š
 						if (Config->CvImg_scale_mode==1) {
 							if (!WIC_resize_image(i_img.get(), r_img.get(),
 								Config->CvImg_scale_prm1/100.0, 0, 0, Config->CvImg_scale_opt))
 									UserAbort(USTR_FaildProc);
 						}
-						//cE‰¡ƒTƒCƒYw’è
+						//ç¸¦ãƒ»æ¨ªã‚µã‚¤ã‚ºæŒ‡å®š
 						else {
 							if (!WIC_resize_image(i_img.get(), r_img.get(), 0.0, i_wd, i_hi, Config->CvImg_scale_opt))
 								UserAbort(USTR_FaildProc);
 						}
 					}
-					//•âŠÔ‚µ‚È‚¢
+					//è£œé–“ã—ãªã„
 					else {
 						int r_wd = i_wd;
 						int r_hi = i_hi;
@@ -1457,10 +1457,10 @@ void __fastcall TTaskThread::Task_CVIMG(UnicodeString prm)
 					}
 				}
 
-				//Œ‹‰Ê‚ğŠ„‚è“–‚Ä‚é
+				//çµæœã‚’å‰²ã‚Šå½“ã¦ã‚‹
 				int xp, yp;
 				switch (Config->CvImg_scale_mode) {
-				case 7:	//—]”’‚ğ•t‚¯‚é
+				case 7:	//ä½™ç™½ã‚’ä»˜ã‘ã‚‹
 					xp = (Config->CvImg_scale_prm1 - i_wd)/2;
 					yp = (Config->CvImg_scale_prm2 - i_hi)/2;
 					i_img->SetSize(Config->CvImg_scale_prm1, Config->CvImg_scale_prm2);
@@ -1468,7 +1468,7 @@ void __fastcall TTaskThread::Task_CVIMG(UnicodeString prm)
 					i_img->Canvas->FillRect(Rect(0, 0, Config->CvImg_scale_prm1, Config->CvImg_scale_prm2));
 					i_img->Canvas->Draw(xp, yp, r_img.get());
 					break;
-				case 8:	//Ø‚èo‚µ
+				case 8:	//åˆ‡ã‚Šå‡ºã—
 					xp = (i_wd - Config->CvImg_scale_prm1)/2;
 					yp = (i_hi - Config->CvImg_scale_prm2)/2;
 					i_img->SetSize(Config->CvImg_scale_prm1, Config->CvImg_scale_prm2);
@@ -1479,7 +1479,7 @@ void __fastcall TTaskThread::Task_CVIMG(UnicodeString prm)
 					i_img->Handle = r_img->ReleaseHandle();
 				}
 			}
-			//k¬EŠg‘å‚µ‚È‚¢
+			//ç¸®å°ãƒ»æ‹¡å¤§ã—ãªã„
 			else if (is_wmf) {
 				i_img->SetSize(mf->Width, mf->Height);
 				i_img->Canvas->Brush->Color = Config->CvImg_mgn_color;
@@ -1487,10 +1487,10 @@ void __fastcall TTaskThread::Task_CVIMG(UnicodeString prm)
 				i_img->Canvas->Draw(0, 0, mf.get());
 			}
 
-			//ƒOƒŒ[ƒXƒP[ƒ‹‰»
+			//ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«åŒ–
 			if (Config->CvImg_grayscale) WIC_grayscale_image(i_img.get());
 
-			//ƒtƒ@ƒCƒ‹–¼‚Ì•ÏX
+			//ãƒ•ã‚¡ã‚¤ãƒ«åã®å¤‰æ›´
 			UnicodeString bnam;
 			if (is_clip) {
 				bnam = Config->CvImg_clip_name;
@@ -1515,12 +1515,12 @@ void __fastcall TTaskThread::Task_CVIMG(UnicodeString prm)
 			cat_DestFile(msg, cv_nam);
 			DstFileName = cv_nam;
 
-			//Œ`®•ÏŠ·‚µ‚Ä•Û‘¶
+			//å½¢å¼å¤‰æ›ã—ã¦ä¿å­˜
 			if (!WIC_save_image(cv_nam, i_img.get(),
 				Config->CvImg_quality, Config->CvImg_ycrcb, Config->CvImg_grayscale, Config->CvImg_cmp_mode))
 					UserAbort(USTR_FaildSave);
 
-			//ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚ğİ’è
+			//ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã‚’è¨­å®š
 			if (!is_clip && Config->KeepTime && ft>(TDateTime)0) set_file_age(cv_nam, ft);
 
 			OkCount++;
@@ -1545,7 +1545,7 @@ void __fastcall TTaskThread::Task_CVIMG(UnicodeString prm)
 }
 
 //---------------------------------------------------------------------------
-//Jpeg ƒtƒ@ƒCƒ‹‚©‚ç Exif î•ñ‚ğíœ
+//Jpeg ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ Exif æƒ…å ±ã‚’å‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TTaskThread::Task_DLEXIF(UnicodeString prm)
 {
@@ -1576,7 +1576,7 @@ void __fastcall TTaskThread::Task_DLEXIF(UnicodeString prm)
 }
 
 //---------------------------------------------------------------------------
-//HTMLƒwƒ‹ƒv(.chm)‚©‚çƒ\[ƒX‚ğ’Šo
+//HTMLãƒ˜ãƒ«ãƒ—(.chm)ã‹ã‚‰ã‚½ãƒ¼ã‚¹ã‚’æŠ½å‡º
 //---------------------------------------------------------------------------
 void __fastcall TTaskThread::Task_EXTCHM(UnicodeString prm)
 {
@@ -1594,7 +1594,7 @@ void __fastcall TTaskThread::Task_EXTCHM(UnicodeString prm)
 	si.wShowWindow = SW_SHOWNORMAL;
 	PROCESS_INFORMATION pi;
 	if (::CreateProcess(NULL, cmdln.c_str(), NULL, NULL, TRUE, 0, NULL, c_dir.c_str(), &si, &pi)) {
-		//I—¹‘Ò‚¿
+		//çµ‚äº†å¾…ã¡
 		while (::WaitForSingleObject(pi.hProcess, 50)==WAIT_TIMEOUT) Sleep(MIN_INTERVAL);
 		::CloseHandle(pi.hThread);
 		::CloseHandle(pi.hProcess);
@@ -1603,21 +1603,21 @@ void __fastcall TTaskThread::Task_EXTCHM(UnicodeString prm)
 }
 
 //---------------------------------------------------------------------------
-//ƒoƒbƒNƒAƒbƒv
+//ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—
 //---------------------------------------------------------------------------
 void __fastcall TTaskThread::Task_BACKUP(UnicodeString prm)
 {
 	UnicodeString src_path = split_pre_tab(prm);
 	UnicodeString dst_path = prm;
 
-	//ƒRƒs[Œ³æ“¾
+	//ã‚³ãƒ”ãƒ¼å…ƒå–å¾—
 	std::unique_ptr<TStringList> src_lst(new TStringList());
 	PreCount = 0;
 	GetFilesEx(src_path, Config->Bakup_inc_mask, Config->Bakup_exc_mask, src_lst.get(),
 				Config->Bakup_sub_sw, Config->Bakup_skip_dir, NULL, true, true);
 	PreCount = 0;
 
-	//ƒRƒs[
+	//ã‚³ãƒ”ãƒ¼
 	if (src_lst->Count>0) {
 		src_lst->Sort();
 		for (int i=0; i<src_lst->Count && !TaskCancel; i++) {
@@ -1630,21 +1630,21 @@ void __fastcall TTaskThread::Task_BACKUP(UnicodeString prm)
 		}
 	}
 	if (TaskCancel) return;
-	AddLog("         ƒRƒs[I—¹" + get_ResCntStr(OkCount, ErrCount, SkipCount, 0, true));
+	AddLog("         ã‚³ãƒ”ãƒ¼çµ‚äº†" + get_ResCntStr(OkCount, ErrCount, SkipCount, 0, true));
 	SubCount = OkCount = SkipCount = ErrCount = 0;
 
-	//ƒ~ƒ‰[ƒŠƒ“ƒO
+	//ãƒŸãƒ©ãƒ¼ãƒªãƒ³ã‚°
 	if (Config->Bakup_mirror) {
 		UnicodeString msg;
-		msg.sprintf(_T("         ƒ~ƒ‰[ƒŠƒ“ƒOŠJn  %s"), dst_path.c_str());
+		msg.sprintf(_T("         ãƒŸãƒ©ãƒ¼ãƒªãƒ³ã‚°é–‹å§‹  %s"), dst_path.c_str());
 		if (!dir_exists(src_path)) {
-			set_LogErrMsg(msg, "ƒoƒbƒNƒAƒbƒvŒ³‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB");
+			set_LogErrMsg(msg, "ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—å…ƒãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚");
 			AddLog(msg);
 			return;
 		}
 		AddLog(msg);
 
-		//ƒoƒbƒNƒAƒbƒvŒ³‚É‚È‚¢ƒtƒ@ƒCƒ‹‚ğíœ
+		//ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—å…ƒã«ãªã„ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å‰Šé™¤
 		std::unique_ptr<TStringList> dst_lst(new TStringList());
 		std::unique_ptr<TStringList> dir_lst(new TStringList());
 		PreCount = 0;
@@ -1656,7 +1656,7 @@ void __fastcall TTaskThread::Task_BACKUP(UnicodeString prm)
 			if (!file_exists(src_path + get_tkn_r(fnam, dst_path))) Task_DEL(fnam);
 		}
 
-		//ƒoƒbƒNƒAƒbƒvŒ³‚É‚È‚¢ƒfƒBƒŒƒNƒgƒŠ‚ğíœ
+		//ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—å…ƒã«ãªã„ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’å‰Šé™¤
 		if (Config->Bakup_sub_sw) {
 			for (int i=0; i<dir_lst->Count && !TaskCancel; i++) {
 				UnicodeString pnam = dir_lst->Strings[i];
@@ -1668,13 +1668,13 @@ void __fastcall TTaskThread::Task_BACKUP(UnicodeString prm)
 			}
 		}
 
-		AddLog("         ƒ~ƒ‰[ƒŠƒ“ƒOI—¹" + get_ResCntStr(OkCount, ErrCount, SkipCount, 0, true));
+		AddLog("         ãƒŸãƒ©ãƒ¼ãƒªãƒ³ã‚°çµ‚äº†" + get_ResCntStr(OkCount, ErrCount, SkipCount, 0, true));
 		SubCount = OkCount = SkipCount = ErrCount = 0;
 	}
 }
 
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠ‚Ìƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚ğÅVƒtƒ@ƒCƒ‹‚Ì‚à‚Ì‚Éİ’è
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã‚’æœ€æ–°ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚‚ã®ã«è¨­å®š
 //---------------------------------------------------------------------------
 TDateTime __fastcall TTaskThread::SetDirTime(UnicodeString dnam)
 {
@@ -1700,7 +1700,7 @@ TDateTime __fastcall TTaskThread::SetDirTime(UnicodeString dnam)
 		i_cnt += cnt;
 	}
 
-	//ƒtƒ@ƒCƒ‹
+	//ãƒ•ã‚¡ã‚¤ãƒ«
 	if (!TaskCancel && FindFirst(sea_str, faAnyFile, sr)==0) {
 		int cnt = 0;
 		do {
@@ -1749,7 +1749,7 @@ void __fastcall TTaskThread::Task_DIRTIME(UnicodeString prm)
 }
 
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠ‚ÌNTFSˆ³k/‰ğœ
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®NTFSåœ§ç¸®/è§£é™¤
 //---------------------------------------------------------------------------
 void TTaskThread::MakeCompList(UnicodeString dnam)
 {
@@ -1770,7 +1770,7 @@ void TTaskThread::MakeCompList(UnicodeString dnam)
 		FindClose(sr);
 	}
 
-	//ƒtƒ@ƒCƒ‹
+	//ãƒ•ã‚¡ã‚¤ãƒ«
 	if (!TaskCancel && FindFirst(sea_str, faAnyFile, sr)==0) {
 		int cnt = 0;
 		do {
@@ -1849,7 +1849,7 @@ void __fastcall TTaskThread::Task_DIRCOMP(UnicodeString prm)
 		}
 
 		if (r_size>0) {
-			AddLog(msg.sprintf(_T("         ƒTƒCƒY‚ª %s Œ¸­‚µ‚Ü‚µ‚½B"), get_size_str_G(r_size, 0, SizeDecDigits, 1).c_str()));
+			AddLog(msg.sprintf(_T("         ã‚µã‚¤ã‚ºãŒ %s æ¸›å°‘ã—ã¾ã—ãŸã€‚"), get_size_str_G(r_size, 0, SizeDecDigits, 1).c_str()));
 		}
 	}
 
@@ -1858,7 +1858,7 @@ void __fastcall TTaskThread::Task_DIRCOMP(UnicodeString prm)
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒXƒN‚ÌŠJn
+//ã‚¿ã‚¹ã‚¯ã®é–‹å§‹
 //---------------------------------------------------------------------------
 bool __fastcall TTaskThread::TaskStart()
 {
@@ -1873,15 +1873,15 @@ bool __fastcall TTaskThread::TaskStart()
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒXƒN‚ÌI—¹(’†’f)ˆ—
+//ã‚¿ã‚¹ã‚¯ã®çµ‚äº†(ä¸­æ–­)å‡¦ç†
 //---------------------------------------------------------------------------
 void __fastcall TTaskThread::FinishTask()
 {
-	//ƒƒO•\¦
+	//ãƒ­ã‚°è¡¨ç¤º
 	float tcnt = (GetTickCount() - StartCount)/1000.0;
 	TFormatSettings fs = TFormatSettings::Create();
 	UnicodeString msg = FormatDateTime("hh:nn:ss ", Now(), fs);
-	msg.cat_sprintf(_T("%sI—¹ %5.1f•b"), TaskCmdList->Values[CmdName].c_str(), tcnt);
+	msg.cat_sprintf(_T("%sçµ‚äº† %5.1fç§’"), TaskCmdList->Values[CmdName].c_str(), tcnt);
 	msg += get_ResCntStr(OkCount, ErrCount, SkipCount, 0, true);
 	if (TaskCancel) {
 		msg.cat_sprintf(_T("  CANCELED:%u"), Config->TaskList->Count + 1);
@@ -1947,7 +1947,7 @@ void __fastcall TTaskThread::Execute()
 		}
 		catch (...) {
 			ErrCount++;
-			AddLog("E —áŠOƒGƒ‰[\r\n    " + SysErrorMessage(EVENT_E_INTERNALEXCEPTION));
+			AddLog("E ä¾‹å¤–ã‚¨ãƒ©ãƒ¼\r\n    " + SysErrorMessage(EVENT_E_INTERNALEXCEPTION));
 			TaskCancel = true;
 			FinishTask();
 		}

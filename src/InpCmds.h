@@ -1,6 +1,6 @@
 /**
  * @file InpCmds.h
- * @brief ƒRƒ}ƒ“ƒh‚Ì“ü—Íƒ_ƒCƒAƒƒO
+ * @brief ã‚³ãƒãƒ³ãƒ‰ã®å…¥åŠ›ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 //---------------------------------------------------------------------------
 #ifndef InpCmdsH
@@ -16,11 +16,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒRƒ}ƒ“ƒh‚Ì“ü—Íƒ_ƒCƒAƒƒO
+ * @brief ã‚³ãƒãƒ³ãƒ‰ã®å…¥åŠ›ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TInpCmdsDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TButton *HiddenCanBtn;
 	TCheckBox *MigemoCheckBox;
 	TComboBox *CmdsComboBox;
@@ -45,9 +45,9 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall SubComboBoxClick(TObject *Sender);
 	void __fastcall SubComboBoxCloseUp(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
-	TStringList *ItemList;		//Œó•âƒŠƒXƒg
-	TStringList *SubCmdList;	//•â•ƒRƒ}ƒ“ƒhƒŠƒXƒg
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	TStringList *ItemList;		//å€™è£œãƒªã‚¹ãƒˆ
+	TStringList *SubCmdList;	//è£œåŠ©ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆ
 	TStringList *HistoryList;
 	UnicodeString IdChar;
 	bool InhFilter;
@@ -61,7 +61,7 @@ private:	// ƒ†[ƒU[éŒ¾
 	void __fastcall SetList();
 	void __fastcall Filter();
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	bool toCopy;
 	bool toRefer;
 	bool isFuzzy;

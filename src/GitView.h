@@ -1,6 +1,6 @@
 /**
  * @file GitView.h
- * @brief GitÉrÉÖÅ[ÉA
+ * @brief Git„Éì„É•„Éº„Ç¢
  */
 //---------------------------------------------------------------------------
 #ifndef GitViewH
@@ -23,43 +23,43 @@
 
 //---------------------------------------------------------------------------
 struct git_rec {
-	UnicodeString graph;	//!< ÉOÉâÉtï∂éö
-	UnicodeString msg;		//!< ÉÅÉbÉZÅ[ÉW
-	UnicodeString hash;		//!< ÉRÉ~ÉbÉgÇÃÉnÉbÉVÉÖ
-	UnicodeString parent;	//!< êeÉRÉ~ÉbÉgÇÃÉnÉbÉVÉÖ
-	UnicodeString branch;	//!< ÉuÉâÉìÉ`
-	UnicodeString branch_r;	//!< ÉäÉÇÅ[ÉgïîÉâÉbÉ`
-	UnicodeString tags;		//!< É^ÉO(ï°êîÇÃèÍçá \t ãÊêÿÇË)
-	UnicodeString author;	//!< Authorñº
-	UnicodeString stash;	//!< Stashñº
+	UnicodeString graph;	//!< „Ç∞„É©„ÉïÊñáÂ≠ó
+	UnicodeString msg;		//!< „É°„ÉÉ„Çª„Éº„Ç∏
+	UnicodeString hash;		//!< „Ç≥„Éü„ÉÉ„Éà„ÅÆ„Éè„ÉÉ„Ç∑„É•
+	UnicodeString parent;	//!< Ë¶™„Ç≥„Éü„ÉÉ„Éà„ÅÆ„Éè„ÉÉ„Ç∑„É•
+	UnicodeString branch;	//!< „Éñ„É©„É≥„ÉÅ
+	UnicodeString branch_r;	//!< „É™„É¢„Éº„ÉàÈÉ®„É©„ÉÉ„ÉÅ
+	UnicodeString tags;		//!< „Çø„Ç∞(Ë§áÊï∞„ÅÆÂ†¥Âêà \t Âå∫Âàá„Çä)
+	UnicodeString author;	//!< AuthorÂêç
+	UnicodeString stash;	//!< StashÂêç
 	TDateTime f_time;
 	bool is_head;
 	bool is_work;
 	bool is_index;
 	bool is_stash;
-	UnicodeString diff_inf;	//!< ç∑ï™èÓïÒ
+	UnicodeString diff_inf;	//!< Â∑ÆÂàÜÊÉÖÂ†±
 };
 
-#define GIT_DEF_HISTLIMIT	100	//!< ÉfÉtÉHÉãÉgÇÃÉRÉ~ÉbÉgóöóï\é¶êî
+#define GIT_DEF_HISTLIMIT	100	//!< „Éá„Éï„Ç©„É´„Éà„ÅÆ„Ç≥„Éü„ÉÉ„ÉàÂ±•Ê≠¥Ë°®Á§∫Êï∞
 
-//ÉuÉâÉìÉ`/É^ÉOÉäÉXÉgÇÃçÄñ⁄É^ÉO
+//„Éñ„É©„É≥„ÉÅ/„Çø„Ç∞„É™„Çπ„Éà„ÅÆÈ†ÖÁõÆ„Çø„Ç∞
 #define GIT_FLAG_HEAD	0x0001
 #define GIT_FLAG_LOCAL	0x0100
 #define GIT_FLAG_REMOTE	0x0200
 #define GIT_FLAG_TAG	0x0400
 #define GIT_FLAG_INVAL	0x0800
-#define GIT_FLAG_HDRLN	0x1000	//!< å©èoÇµ
-#define GIT_FLAG_BLANK	0x2000	//!< ãÛçs
+#define GIT_FLAG_HDRLN	0x1000	//!< Ë¶ãÂá∫„Åó
+#define GIT_FLAG_BLANK	0x2000	//!< Á©∫Ë°å
 
 #define GIT_NULL_ID	"4b825dc642cb6eb9a060e54bf8d69288fbee4904"
 
 //---------------------------------------------------------------------------
 /**
- * @brief GitÉrÉÖÅ[ÉA
+ * @brief Git„Éì„É•„Éº„Ç¢
  */
 class TGitViewer : public TForm
 {
-__published:	// IDE Ç≈ä«óùÇ≥ÇÍÇÈÉRÉìÉ|Å[ÉlÉìÉg
+__published:	// IDE „ÅßÁÆ°ÁêÜ„Åï„Çå„Çã„Ç≥„É≥„Éù„Éº„Éç„É≥„Éà
 	TAction *AddAAction;
 	TAction *AddAction;
 	TAction *AddUAction;
@@ -309,7 +309,7 @@ __published:	// IDE Ç≈ä«óùÇ≥ÇÍÇÈÉRÉìÉ|Å[ÉlÉìÉg
 	void __fastcall GrepActionUpdate(TObject *Sender);
 	void __fastcall DescTagActionExecute(TObject *Sender);
 
-private:	// ÉÜÅ[ÉUÅ[êÈåæ
+private:	// „É¶„Éº„Ç∂„ÉºÂÆ£Ë®Ä
 	UnicodeString RefHEAD;
 	UnicodeString CommitID;
 	UnicodeString ParentID;
@@ -399,11 +399,11 @@ private:	// ÉÜÅ[ÉUÅ[êÈåæ
 		if (msg.WParamHi==MF_POPUP) TForm::Dispatch(&msg); else msg.Result = MAKELONG(0, MNC_CLOSE);
 	}
 
-public:		// ÉÜÅ[ÉUÅ[êÈåæ
-	UnicodeString WorkDir;		//!< GitÉgÉbÉvÉfÉBÉåÉNÉgÉä
-	UnicodeString FilterName;	//!< óöóçiÇËçûÇ›éûÇÃëŒè€ñº
-	int HistoryLimit;			//!< óöóÇÃï\é¶êßå¿êî
-	UnicodeString RetArcFile;	//!< [o] àÍéûÉAÅ[ÉJÉCÉuñº
+public:		// „É¶„Éº„Ç∂„ÉºÂÆ£Ë®Ä
+	UnicodeString WorkDir;		//!< Git„Éà„ÉÉ„Éó„Éá„Ç£„É¨„ÇØ„Éà„É™
+	UnicodeString FilterName;	//!< Â±•Ê≠¥Áµû„ÇäËæº„ÅøÊôÇ„ÅÆÂØæË±°Âêç
+	int HistoryLimit;			//!< Â±•Ê≠¥„ÅÆË°®Á§∫Âà∂ÈôêÊï∞
+	UnicodeString RetArcFile;	//!< [o] ‰∏ÄÊôÇ„Ç¢„Éº„Ç´„Ç§„ÉñÂêç
 
 	bool FGitBusy;
 	void __fastcall SetGitBusy(bool Value)

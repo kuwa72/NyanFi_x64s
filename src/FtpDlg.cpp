@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  FTPÚ‘±ƒ_ƒCƒAƒƒO													//
+//  FTPæŽ¥ç¶šãƒ€ã‚¤ã‚¢ãƒ­ã‚°													//
 //----------------------------------------------------------------------//
 #include "Global.h"
 #include "UserFunc.h"
@@ -25,7 +25,7 @@ void __fastcall TFtpConnectDlg::FormCreate(TObject *Sender)
 	UserModule->SetUsrPopupMenu(this);
 
 	set_ComboBoxText(SSLComboBox,
-		_T("ˆÃ†‰»‚µ‚È‚¢\n")
+		_T("æš—å·åŒ–ã—ãªã„\n")
 		_T("Explicit TLS\n")
 		_T("Implicit TLS\n"));
 
@@ -123,7 +123,7 @@ void __fastcall TFtpConnectDlg::PageControl1DrawTab(TCustomTabControl *Control,
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚Ì•`‰æ
+//ä¸€è¦§ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TFtpConnectDlg::HostListBoxDrawItem(TWinControl *Control, int Index,
 	TRect &Rect, TOwnerDrawState State)
@@ -190,7 +190,7 @@ UnicodeString __fastcall TFtpConnectDlg::MakeHostItem()
 }
 
 //---------------------------------------------------------------------------
-//’Ç‰Á
+//è¿½åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TFtpConnectDlg::AddHostActionExecute(TObject *Sender)
 {
@@ -198,7 +198,7 @@ void __fastcall TFtpConnectDlg::AddHostActionExecute(TObject *Sender)
 	HostListBox->ItemIndex = idx;
 }
 //---------------------------------------------------------------------------
-//•ÏX
+//å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TFtpConnectDlg::ChgHostActionExecute(TObject *Sender)
 {
@@ -214,16 +214,16 @@ void __fastcall TFtpConnectDlg::HostItemActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒ[ƒJƒ‹ŠJŽnƒfƒBƒŒƒNƒgƒŠ‚Ì‘I‘ð
+//ãƒ­ãƒ¼ã‚«ãƒ«é–‹å§‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®é¸æŠž
 //---------------------------------------------------------------------------
 void __fastcall TFtpConnectDlg::RefDirBtnClick(TObject *Sender)
 {
 	UnicodeString dnam = LocalDirEdit->Text;
-	if (UserModule->SelectDirEx(_T("ƒ[ƒJƒ‹ŠJŽnƒfƒBƒŒƒNƒgƒŠ"), dnam)) LocalDirEdit->Text = dnam;
+	if (UserModule->SelectDirEx(_T("ãƒ­ãƒ¼ã‚«ãƒ«é–‹å§‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª"), dnam)) LocalDirEdit->Text = dnam;
 }
 
 //---------------------------------------------------------------------------
-//Ú‘±
+//æŽ¥ç¶š
 //---------------------------------------------------------------------------
 void __fastcall TFtpConnectDlg::ConnectActionExecute(TObject *Sender)
 {
@@ -251,7 +251,7 @@ void __fastcall TFtpConnectDlg::RefSoundBtnClick(TObject *Sender)
 
 	UnicodeString inidir = def_if_empty(
 		ExtractFileDir(to_absolute_name((tag==0)? SndConnectEdit->Text : (tag==1)? SndDisconEdit->Text : SndTransferEdit->Text)), ExePath);
-	UserModule->PrepareOpenDlg(_T("ƒTƒEƒ“ƒhƒtƒ@ƒCƒ‹‚ÌŽw’è"), F_FILTER_WAV, NULL, inidir);
+	UserModule->PrepareOpenDlg(_T("ã‚µã‚¦ãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã®æŒ‡å®š"), F_FILTER_WAV, NULL, inidir);
 	UnicodeString fnam;
 	if (UserModule->OpenDlgToStr(fnam, true)) {
 		switch (tag) {

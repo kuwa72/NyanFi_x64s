@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  “¯–¼ƒtƒ@ƒCƒ‹‚Ìˆ—ƒ_ƒCƒAƒƒO										//
+//  åŒåãƒ•ã‚¡ã‚¤ãƒ«ã®å‡¦ç†ãƒ€ã‚¤ã‚¢ãƒ­ã‚°										//
 //----------------------------------------------------------------------//
 #include "Global.h"
 #include "UserFunc.h"
@@ -67,26 +67,26 @@ void __fastcall TSameNameDlg::FormShow(TObject *Sender)
 	InfoListBox->Clear();
 	InfoListBox->Items->Add(ExtractFileName(CurSrcName));
 
-	InfoListBox->Items->Add("Œ³: " + ExtractFileDir(CurSrcName));
+	InfoListBox->Items->Add("å…ƒ: " + ExtractFileDir(CurSrcName));
 	InfoListBox->Items->Add(EmptyStr);
 
-	InfoListBox->Items->Add("æ: " + ExtractFileDir(CurDstName));
+	InfoListBox->Items->Add("å…ˆ: " + ExtractFileDir(CurDstName));
 	InfoListBox->Items->Add(EmptyStr);
 
-	tmp = "ƒTƒCƒY: ";
+	tmp = "ã‚µã‚¤ã‚º: ";
 	if (CurSrcSize == CurDstSize)
-		tmp += "“¯‚¶";
+		tmp += "åŒã˜";
 	else
-		tmp.cat_sprintf(_T("“]‘—æ‚Ì•û‚ª%s"), (CurSrcSize<CurDstSize)? _T("‘å‚«‚¢") : _T("¬‚³‚¢"));
+		tmp.cat_sprintf(_T("è»¢é€å…ˆã®æ–¹ãŒ%s"), (CurSrcSize<CurDstSize)? _T("å¤§ãã„") : _T("å°ã•ã„"));
 	InfoListBox->Items->Add(tmp);
 
-	tmp = "ƒ^ƒCƒ€: ";
+	tmp = "ã‚¿ã‚¤ãƒ : ";
 	if (WithinPastMilliSeconds(CurSrcTime, CurDstTime, TimeTolerance)) {
-		tmp += "“¯‚¶";
-		if (CurSrcTime!=CurDstTime) tmp += " (‹–—eŒë·“à)";
+		tmp += "åŒã˜";
+		if (CurSrcTime!=CurDstTime) tmp += " (è¨±å®¹èª¤å·®å†…)";
 	}
 	else {
-		tmp.cat_sprintf(_T("“]‘—æ‚Ì•û‚ª%s"), (CurSrcTime<CurDstTime)? _T("V‚µ‚¢") : _T("ŒÃ‚¢"));
+		tmp.cat_sprintf(_T("è»¢é€å…ˆã®æ–¹ãŒ%s"), (CurSrcTime<CurDstTime)? _T("æ–°ã—ã„") : _T("å¤ã„"));
 	}
 	InfoListBox->Items->Add(tmp);
 }
@@ -103,7 +103,7 @@ void __fastcall TSameNameDlg::FormClose(TObject *Sender, TCloseAction &Action)
 }
 
 //---------------------------------------------------------------------------
-//ƒ‚[ƒh•ÏX
+//ãƒ¢ãƒ¼ãƒ‰å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TSameNameDlg::ModeBtnClick(TObject *Sender)
 {
@@ -148,7 +148,7 @@ void __fastcall TSameNameDlg::AllCheckBoxClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//î•ñ—“‚Ì•`‰æ
+//æƒ…å ±æ¬„ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TSameNameDlg::InfoListBoxDrawItem(TWinControl *Control, int Index,
 		TRect &Rect, TOwnerDrawState State)
@@ -161,12 +161,12 @@ void __fastcall TSameNameDlg::InfoListBoxDrawItem(TWinControl *Control, int Inde
 	int yp = Rect.Top  + get_TopMargin(cv);
 
 	if (Index==2 || Index==4) {
-		//ƒTƒCƒY
+		//ã‚µã‚¤ã‚º
 		UnicodeString lbuf = "    " + get_FileSizeStr((Index==2)? CurSrcSize : CurDstSize) + " ";
 		cv->Font->Color = get_ListFgCol();
 		cv->TextOut(xp, yp, lbuf);
 		xp += cv->TextWidth(lbuf);
-		//ƒ^ƒCƒ€
+		//ã‚¿ã‚¤ãƒ 
 		TDateTime dt = (Index==2)? CurSrcTime : CurDstTime;
 		cv->Font->Color = get_TimeColor(dt, get_ListFgCol());
 		cv->TextOut(xp, yp, format_DateTime(dt));
@@ -188,7 +188,7 @@ void __fastcall TSameNameDlg::InfoListBoxDrawItem(TWinControl *Control, int Inde
 }
 
 //---------------------------------------------------------------------------
-//–¼‘O—“‚Å‚ÌƒL[‘€ì
+//åå‰æ¬„ã§ã®ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TSameNameDlg::RenameEditKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {

@@ -1,6 +1,6 @@
 /**
  * @file FuncDlg.h
- * @brief ŠÖ”^ƒ†[ƒU’è‹`•¶š—ñ^ƒ}[ƒNsˆê——
+ * @brief é–¢æ•°ï¼ãƒ¦ãƒ¼ã‚¶å®šç¾©æ–‡å­—åˆ—ï¼ãƒãƒ¼ã‚¯è¡Œä¸€è¦§
  */
 //---------------------------------------------------------------------------
 #ifndef FuncDlgH
@@ -23,11 +23,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ŠÖ”^ƒ†[ƒU’è‹`•¶š—ñ^ƒ}[ƒNsˆê——
+ * @brief é–¢æ•°ï¼ãƒ¦ãƒ¼ã‚¶å®šç¾©æ–‡å­—åˆ—ï¼ãƒãƒ¼ã‚¯è¡Œä¸€è¦§
  */
 class TFuncListDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *CloseListAction;
 	TAction *CopyListAction;
 	TAction *LinkAction;
@@ -90,7 +90,7 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall NameOnlyActionExecute(TObject *Sender);
 	void __fastcall LinkActionExecute(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	TStringList *FunctionList;
 	TStringList *UserDefList;
 	TStringList *MarkLineList;
@@ -108,16 +108,16 @@ private:	// ƒ†[ƒU[éŒ¾
 	void __fastcall ToLine();
 	void __fastcall GetStrList(TStringList *lst);
 
-public:		// ƒ†[ƒU[éŒ¾
-	UsrScrollPanel *ListScrPanel;	//!< ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	UsrScrollPanel *ListScrPanel;	//!< ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 
-	int  ListMode;					//!< ƒ‚[ƒh(0:ŠÖ”  1:ƒ†[ƒU’è‹`  2:ƒ}[ƒNsˆê——)
+	int  ListMode;					//!< ãƒ¢ãƒ¼ãƒ‰(0:é–¢æ•°  1:ãƒ¦ãƒ¼ã‚¶å®šç¾©  2:ãƒãƒ¼ã‚¯è¡Œä¸€è¦§)
 	int  LineNo;
 	bool ToFilter;
 	bool ReqEdit;
 	bool isFuzzy;
 	UnicodeString UserDefStr;
-	UnicodeString NamePtn;			//!< ŠÖ”–¼‚Ì‹­’²ƒpƒ^[ƒ“
+	UnicodeString NamePtn;			//!< é–¢æ•°åã®å¼·èª¿ãƒ‘ã‚¿ãƒ¼ãƒ³
 
 	bool is_DFM;
 

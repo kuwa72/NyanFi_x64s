@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒeƒLƒXƒgƒrƒ…[ƒA‚Ì”zF												//
+//  ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã®é…è‰²												//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -25,43 +25,43 @@ void __fastcall TColorDlg::FormCreate(TObject *Sender)
 	ColBufList = new TStringList();
 
 	ColorListBox->Items->Text =
-		"bgView=”wŒiF\n"
-		"fgView=•¶šF\n"
-		"Margin=—]”’”’\n"
-		"bgRuler=ƒ‹[ƒ‰‚Ì”wŒiF\n"
-		"fgRuler=ƒ‹[ƒ‰‚Ì–Ú·F\n"
-		"Cursor=ƒ‰ƒCƒ“ƒJ[ƒ\ƒ‹‚ÌF\n"
-		"selItem=‘I‘ğ€–Ú‚Ì”wŒiF\n"
-		"fgSelItem=‘I‘ğ€–Ú‚Ì•¶šF\n"
-		"bgLineNo=s”Ô†”wŒiF\n"
-		"LineNo=s”Ô†•¶šF\n"
-		"Mark=sƒ}[ƒN\n"
-		"bdrLine=s”Ô†‹«ŠEü\n"
-		"Indent=ƒCƒ“ƒfƒ“ƒgƒKƒCƒh\n"
-		"Indent2=ƒCƒ“ƒfƒ“ƒgƒKƒCƒh(ŒğŒİ)\n"
-		"bdrFold=Ü‚è•Ô‚µ‹«ŠEü\n"
-		"bdrFixed=ŒÅ’è’·•\¦‚ÌcŒrü\n"
-		"Comment=|ƒRƒƒ“ƒg‚Ì•¶šF\n"
-		"Strings=•¶š—ñ‚Ì•¶šF\n"
-		"Reserved=—\–ñŒê‚Ì•¶šF\n"
-		"Symbol=ƒVƒ“ƒ{ƒ‹‚Ì•¶šF\n"
-		"Numeric=”’l‚Ì•¶šF\n"
-		"fgEmpBin1=ƒoƒCƒiƒŠ‹­’²•¶šF1\n"
-		"fgEmpBin2=ƒoƒCƒiƒŠ‹­’²•¶šF2\n"
-		"fgEmpBin3=ƒoƒCƒiƒŠ‹­’²•¶šF3\n"
-		"Headline=Œ©o‚µ‚Ì•¶šF\n"
-		"Ruby=ƒ‹ƒr\n"
-		"URL=URL‚Ì•¶šF\n"
-		"LocalLink=ƒ[ƒJƒ‹ƒtƒ@ƒCƒ‹‚Ö‚ÌƒŠƒ“ƒN\n"
-		"fgEmp=‹­’²•¶šF\n"
-		"bgEmp=‹­’²”wŒiF\n"
-		"TAB=ƒ^ƒu•\¦F\n"
-		"CR=‰üs•\¦F\n"
-		"HR=‰¡Œrü‚ÌF\n"
-		"Ctrl=ƒRƒ“ƒgƒ[ƒ‹ƒR[ƒh\n"
-		"fgPair=‘Î‰‚·‚éŠ‡ŒÊ‚Ì•¶šF\n"
-		"Folder=ƒfƒBƒŒƒNƒgƒŠ‚Ì•¶šF\n"
-		"Error=ƒGƒ‰[‚Ì•¶šF\n";
+		"bgView=èƒŒæ™¯è‰²\n"
+		"fgView=æ–‡å­—è‰²\n"
+		"Margin=ä½™ç™½ç™½\n"
+		"bgRuler=ãƒ«ãƒ¼ãƒ©ã®èƒŒæ™¯è‰²\n"
+		"fgRuler=ãƒ«ãƒ¼ãƒ©ã®ç›®ç››è‰²\n"
+		"Cursor=ãƒ©ã‚¤ãƒ³ã‚«ãƒ¼ã‚½ãƒ«ã®è‰²\n"
+		"selItem=é¸æŠé …ç›®ã®èƒŒæ™¯è‰²\n"
+		"fgSelItem=é¸æŠé …ç›®ã®æ–‡å­—è‰²\n"
+		"bgLineNo=è¡Œç•ªå·èƒŒæ™¯è‰²\n"
+		"LineNo=è¡Œç•ªå·æ–‡å­—è‰²\n"
+		"Mark=è¡Œãƒãƒ¼ã‚¯\n"
+		"bdrLine=è¡Œç•ªå·å¢ƒç•Œç·š\n"
+		"Indent=ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã‚¬ã‚¤ãƒ‰\n"
+		"Indent2=ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã‚¬ã‚¤ãƒ‰(äº¤äº’)\n"
+		"bdrFold=æŠ˜ã‚Šè¿”ã—å¢ƒç•Œç·š\n"
+		"bdrFixed=å›ºå®šé•·è¡¨ç¤ºã®ç¸¦ç½«ç·š\n"
+		"Comment=|ã‚³ãƒ¡ãƒ³ãƒˆã®æ–‡å­—è‰²\n"
+		"Strings=æ–‡å­—åˆ—ã®æ–‡å­—è‰²\n"
+		"Reserved=äºˆç´„èªã®æ–‡å­—è‰²\n"
+		"Symbol=ã‚·ãƒ³ãƒœãƒ«ã®æ–‡å­—è‰²\n"
+		"Numeric=æ•°å€¤ã®æ–‡å­—è‰²\n"
+		"fgEmpBin1=ãƒã‚¤ãƒŠãƒªå¼·èª¿æ–‡å­—è‰²1\n"
+		"fgEmpBin2=ãƒã‚¤ãƒŠãƒªå¼·èª¿æ–‡å­—è‰²2\n"
+		"fgEmpBin3=ãƒã‚¤ãƒŠãƒªå¼·èª¿æ–‡å­—è‰²3\n"
+		"Headline=è¦‹å‡ºã—ã®æ–‡å­—è‰²\n"
+		"Ruby=ãƒ«ãƒ“\n"
+		"URL=URLã®æ–‡å­—è‰²\n"
+		"LocalLink=ãƒ­ãƒ¼ã‚«ãƒ«ãƒ•ã‚¡ã‚¤ãƒ«ã¸ã®ãƒªãƒ³ã‚¯\n"
+		"fgEmp=å¼·èª¿æ–‡å­—è‰²\n"
+		"bgEmp=å¼·èª¿èƒŒæ™¯è‰²\n"
+		"TAB=ã‚¿ãƒ–è¡¨ç¤ºè‰²\n"
+		"CR=æ”¹è¡Œè¡¨ç¤ºè‰²\n"
+		"HR=æ¨ªç½«ç·šã®è‰²\n"
+		"Ctrl=ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚³ãƒ¼ãƒ‰\n"
+		"fgPair=å¯¾å¿œã™ã‚‹æ‹¬å¼§ã®æ–‡å­—è‰²\n"
+		"Folder=ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®æ–‡å­—è‰²\n"
+		"Error=ã‚¨ãƒ©ãƒ¼ã®æ–‡å­—è‰²\n";
 
 	SwatchPanel = new UsrSwatchPanel(this);
 	SwatchPanel->Parent = this;
@@ -92,7 +92,7 @@ void __fastcall TColorDlg::FormDestroy(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒwƒ‹ƒv
+//ãƒ˜ãƒ«ãƒ—
 //---------------------------------------------------------------------------
 bool __fastcall TColorDlg::FormHelp(WORD Command, THelpEventData Data, bool &CallHelp)
 {
@@ -103,7 +103,7 @@ bool __fastcall TColorDlg::FormHelp(WORD Command, THelpEventData Data, bool &Cal
 	return true;
 }
 //---------------------------------------------------------------------------
-//ˆê——‚Ì•`‰æ
+//ä¸€è¦§ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TColorDlg::ColorListBoxDrawItem(TWinControl *Control, int Index, TRect &Rect,
 	TOwnerDrawState State)
@@ -112,7 +112,7 @@ void __fastcall TColorDlg::ColorListBoxDrawItem(TWinControl *Control, int Index,
 }
 
 //---------------------------------------------------------------------------
-//F‚ÌQÆ
+//è‰²ã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TColorDlg::RefColBtnClick(TObject *Sender)
 {
@@ -128,7 +128,7 @@ void __fastcall TColorDlg::RefColBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒXƒ|ƒCƒg
+//ã‚¹ãƒã‚¤ãƒˆ
 //---------------------------------------------------------------------------
 void __fastcall TColorDlg::SpuitImageMouseDown(TObject *Sender, TMouseButton Button,
 		TShiftState Shift, int X, int Y)
@@ -136,7 +136,7 @@ void __fastcall TColorDlg::SpuitImageMouseDown(TObject *Sender, TMouseButton But
 	TListBox *lp = ColorListBox;
 	if (Button!=mbLeft || lp->ItemIndex==-1) return;
 
-	//ƒXƒEƒHƒbƒ`ƒuƒbƒN
+	//ã‚¹ã‚¦ã‚©ãƒƒãƒãƒ–ãƒƒã‚¯
 	SetCustomColToSwatch(UserModule->ColorDlg->CustomColors);
 	SwatchPanel->Visible = true;
 	SwatchPanel->BringToFront();
@@ -161,11 +161,11 @@ void __fastcall TColorDlg::SpuitImageMouseUp(TObject *Sender, TMouseButton Butto
 }
 
 //---------------------------------------------------------------------------
-//ƒCƒ“ƒ|[ƒg
+//ã‚¤ãƒ³ãƒãƒ¼ãƒˆ
 //---------------------------------------------------------------------------
 void __fastcall TColorDlg::InportBtnClick(TObject *Sender)
 {
-	UserModule->PrepareOpenDlg(_T("”zF‚ÌƒCƒ“ƒ|[ƒg"), F_FILTER_INI, _T("*.INI"));
+	UserModule->PrepareOpenDlg(_T("é…è‰²ã®ã‚¤ãƒ³ãƒãƒ¼ãƒˆ"), F_FILTER_INI, _T("*.INI"));
 	UnicodeString fnam = UserModule->OpenDlgExecute();
 	if (!fnam.IsEmpty()) {
 		std::unique_ptr<UsrIniFile> inp_file(new UsrIniFile(fnam));
@@ -175,11 +175,11 @@ void __fastcall TColorDlg::InportBtnClick(TObject *Sender)
 	SetFocus();
 }
 //---------------------------------------------------------------------------
-//ƒGƒNƒXƒ|[ƒg
+//ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ
 //---------------------------------------------------------------------------
 void __fastcall TColorDlg::ExportBtnClick(TObject *Sender)
 {
-	UserModule->PrepareSaveDlg(_T("”zF‚ÌƒGƒNƒXƒ|[ƒg"), F_FILTER_INI, FileName.c_str());
+	UserModule->PrepareSaveDlg(_T("é…è‰²ã®ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ"), F_FILTER_INI, FileName.c_str());
 	UnicodeString fnam = UserModule->SaveDlgExecute();
 	if (!fnam.IsEmpty()) {
 		std::unique_ptr<UsrIniFile> exp_file(new UsrIniFile(fnam));
@@ -189,18 +189,18 @@ void __fastcall TColorDlg::ExportBtnClick(TObject *Sender)
 	SetFocus();
 }
 //---------------------------------------------------------------------------
-//‘S‘Ì‚É”½‰f
+//å…¨ä½“ã«åæ˜ 
 //---------------------------------------------------------------------------
 void __fastcall TColorDlg::OptApplyBtnClick(TObject *Sender)
 {
-	if (msgbox_Sure(_T("‘S‘Ì‚ÌƒIƒvƒVƒ‡ƒ“İ’è‚É”½‰f‚³‚¹‚Ü‚·‚©H"))) {
+	if (msgbox_Sure(_T("å…¨ä½“ã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³è¨­å®šã«åæ˜ ã•ã›ã¾ã™ã‹ï¼Ÿ"))) {
 		ObjViewer->SetColor(ColBufList);
 		ObjViewer->SetOptColor();
 		ObjViewer->Repaint(true);
 	}
 }
 //---------------------------------------------------------------------------
-//“K—p
+//é©ç”¨
 //---------------------------------------------------------------------------
 void __fastcall TColorDlg::ApplyBtnClick(TObject *Sender)
 {
@@ -209,7 +209,7 @@ void __fastcall TColorDlg::ApplyBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//Šm’è
+//ç¢ºå®š
 //---------------------------------------------------------------------------
 void __fastcall TColorDlg::OkActionExecute(TObject *Sender)
 {
@@ -222,24 +222,24 @@ void __fastcall TColorDlg::OkActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒLƒƒƒ“ƒZƒ‹
+//ã‚­ãƒ£ãƒ³ã‚»ãƒ«
 //---------------------------------------------------------------------------
 void __fastcall TColorDlg::CancelBtnClick(TObject *Sender)
 {
-	//ƒXƒ|ƒCƒg‚ÌƒLƒƒƒ“ƒZƒ‹
+	//ã‚¹ãƒã‚¤ãƒˆã®ã‚­ãƒ£ãƒ³ã‚»ãƒ«
 	if (UserModule->SpuitEnabled()) {
 		SwatchPanel->Visible = false;
 		UserModule->EndSpuit();
 		SpuitImage->Visible = true;
 	}
-	//•Â‚¶‚é
+	//é–‰ã˜ã‚‹
 	else {
 		ModalResult = mrCancel;
 	}
 }
 
 //---------------------------------------------------------------------------
-//”zF‚Ì–³Œø‰»
+//é…è‰²ã®ç„¡åŠ¹åŒ–
 //---------------------------------------------------------------------------
 void __fastcall TColorDlg::DisableColActionExecute(TObject *Sender)
 {

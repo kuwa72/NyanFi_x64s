@@ -1,6 +1,6 @@
 /**
  * @file CompDlg.h
- * @brief “¯–¼ƒtƒ@ƒCƒ‹‚Ì”äŠrƒ_ƒCƒAƒƒO
+ * @brief åŒåãƒ•ã‚¡ã‚¤ãƒ«ã®æ¯”è¼ƒãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 //---------------------------------------------------------------------------
 #ifndef CompDlgH
@@ -17,11 +17,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief “¯–¼ƒtƒ@ƒCƒ‹‚Ì”äŠrƒ_ƒCƒAƒƒO
+ * @brief åŒåãƒ•ã‚¡ã‚¤ãƒ«ã®æ¯”è¼ƒãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TFileCompDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *OkAction;
 	TActionList *ActionList1;
 	TButton *CanButton;
@@ -48,14 +48,14 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall OptRadioGroupClick(TObject *Sender);
 	void __fastcall OkActionUpdate(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	void __fastcall WmMenuChar(TMessage &msg)
 	{
 		if (msg.WParamHi==MF_POPUP) TForm::Dispatch(&msg); else msg.Result = MAKELONG(0, MNC_CLOSE);
 	}
 
-public:		// ƒ†[ƒU[éŒ¾
-	bool AllDirHasSize;		//!< ‚·‚×‚Ä‚Ì‘ÎÛƒfƒBƒŒƒNƒgƒŠ‚ªƒTƒCƒYæ“¾Ï‚İ
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	bool AllDirHasSize;		//!< ã™ã¹ã¦ã®å¯¾è±¡ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒã‚µã‚¤ã‚ºå–å¾—æ¸ˆã¿
 
 	__fastcall TFileCompDlg(TComponent* Owner);
 

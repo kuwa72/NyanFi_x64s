@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------//
-// ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[Eƒpƒlƒ‹										//
+// ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ãƒ»ãƒ‘ãƒãƒ«										//
 //																		//
 //----------------------------------------------------------------------//
 #include "usr_scrpanel.h"
@@ -8,7 +8,7 @@
 #pragma package(smart_init)
 
 //---------------------------------------------------------------------------
-//ƒŠƒXƒgƒ{ƒbƒNƒX‚ÉŠÖ˜A•t‚¯
+//ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã«é–¢é€£ä»˜ã‘
 //---------------------------------------------------------------------------
 UsrScrollPanel::UsrScrollPanel(TPanel *pp, TListBox *lp, int flag)
 {
@@ -22,7 +22,7 @@ UsrScrollPanel::UsrScrollPanel(TPanel *pp, TListBox *lp, int flag)
 	InitializePanel();
 }
 //---------------------------------------------------------------------------
-//ƒ`ƒFƒbƒNƒŠƒXƒgƒ{ƒbƒNƒX‚ÉŠÖ˜A•t‚¯
+//ãƒã‚§ãƒƒã‚¯ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã«é–¢é€£ä»˜ã‘
 //---------------------------------------------------------------------------
 UsrScrollPanel::UsrScrollPanel(TPanel *pp, TCheckListBox *lp, int flag)
 {
@@ -36,7 +36,7 @@ UsrScrollPanel::UsrScrollPanel(TPanel *pp, TCheckListBox *lp, int flag)
 	InitializePanel();
 }
 //---------------------------------------------------------------------------
-//ƒOƒŠƒbƒh‚ÉŠÖ˜A•t‚¯
+//ã‚°ãƒªãƒƒãƒ‰ã«é–¢é€£ä»˜ã‘
 //---------------------------------------------------------------------------
 UsrScrollPanel::UsrScrollPanel(TPanel *pp, TStringGrid *gp, int flag)
 {
@@ -50,7 +50,7 @@ UsrScrollPanel::UsrScrollPanel(TPanel *pp, TStringGrid *gp, int flag)
 	InitializePanel();
 }
 //---------------------------------------------------------------------------
-//‚’¼ƒXƒNƒ[ƒ‹ƒo[‚ÉŠÖ˜A•t‚¯
+//å‚ç›´ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã«é–¢é€£ä»˜ã‘
 //---------------------------------------------------------------------------
 UsrScrollPanel::UsrScrollPanel(TPanel *pp, TScrollBar *sp, int flag)
 {
@@ -94,7 +94,7 @@ void __fastcall UsrScrollPanel::InitializePanel()
 
 	ListCsrVisible = false;
 
-	//‚’¼ƒXƒNƒ[ƒ‹ƒo[
+	//å‚ç›´ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 	ScrPanelV = new TPanel(ParentPanel);
 	ScrPanelV->Parent		  = ParentPanel;
 	ScrPanelV->DoubleBuffered = true;
@@ -114,7 +114,7 @@ void __fastcall UsrScrollPanel::InitializePanel()
 	ScrPaintBoxV->OnMouseUp   = ScrPaintBoxMouseUp;
 	ScrPaintBoxV->Tag		  = USCRPNL_SCRTYPE_V;
 
-	//…•½ƒXƒNƒ[ƒ‹
+	//æ°´å¹³ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«
 	ScrPanelH	 = NULL;
 	ScrPaintBoxH = NULL;
 	org_ScrPanelHWndProc = NULL;
@@ -194,7 +194,7 @@ void __fastcall UsrScrollPanel::InitializePanel()
 }
 
 //---------------------------------------------------------------------------
-//ƒOƒŠƒbƒh‚Ì—ñ•‚Ì‡Œv
+//ã‚°ãƒªãƒƒãƒ‰ã®åˆ—å¹…ã®åˆè¨ˆ
 //---------------------------------------------------------------------------
 int __fastcall UsrScrollPanel::get_GridTotalWidth()
 {
@@ -205,7 +205,7 @@ int __fastcall UsrScrollPanel::get_GridTotalWidth()
 	return wd;
 }
 //---------------------------------------------------------------------------
-//…•½ƒXƒNƒ[ƒ‹ˆÊ’u‚©‚çƒOƒŠƒbƒh‚Ìæ“ª—ñ‚ğİ’è
+//æ°´å¹³ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä½ç½®ã‹ã‚‰ã‚°ãƒªãƒƒãƒ‰ã®å…ˆé ­åˆ—ã‚’è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall UsrScrollPanel::set_GridLefCol(int pos)
 {
@@ -223,7 +223,7 @@ void __fastcall UsrScrollPanel::set_GridLefCol(int pos)
 }
 
 //---------------------------------------------------------------------------
-//ƒOƒŠƒbƒh‚Ìs‚‚Ì‡Œv
+//ã‚°ãƒªãƒƒãƒ‰ã®è¡Œé«˜ã®åˆè¨ˆ
 //---------------------------------------------------------------------------
 int __fastcall UsrScrollPanel::get_GridTotalHeight()
 {
@@ -234,7 +234,7 @@ int __fastcall UsrScrollPanel::get_GridTotalHeight()
 	return hi;
 }
 //---------------------------------------------------------------------------
-//‚’¼ƒXƒNƒ[ƒ‹ˆÊ’u‚©‚çƒOƒŠƒbƒh‚Ìæ“ªs‚ğİ’è
+//å‚ç›´ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä½ç½®ã‹ã‚‰ã‚°ãƒªãƒƒãƒ‰ã®å…ˆé ­è¡Œã‚’è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall UsrScrollPanel::set_GridTopRow(int pos)
 {
@@ -247,7 +247,7 @@ void __fastcall UsrScrollPanel::set_GridTopRow(int pos)
 }
 
 //---------------------------------------------------------------------------
-//ƒŠƒXƒgƒ{ƒbƒNƒX‚Ì…•½ƒXƒNƒ[ƒ‹ˆÊ’u‚ğæ“¾‚µƒmƒuˆÊ’u‚É•ÏŠ·
+//ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®æ°´å¹³ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä½ç½®ã‚’å–å¾—ã—ãƒãƒ–ä½ç½®ã«å¤‰æ›
 //---------------------------------------------------------------------------
 int __fastcall UsrScrollPanel::GetKnobPosH()
 {
@@ -266,7 +266,7 @@ int __fastcall UsrScrollPanel::GetKnobPosH()
 }
 
 //---------------------------------------------------------------------------
-//•\¦AƒmƒuƒTƒCƒY“™‚ÌXV
+//è¡¨ç¤ºã€ãƒãƒ–ã‚µã‚¤ã‚ºç­‰ã®æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall UsrScrollPanel::UpdateKnob()
 {
@@ -284,12 +284,12 @@ void __fastcall UsrScrollPanel::UpdateKnob()
 			ScrPanelH->Top		 = ParentPanel->ClientHeight - ScrPanelH->Height;
 			ScrPaintBoxH->Height = ScrPanelH->ClientHeight;
 		}
-		int s_hi = get_SysMetricsForPPI(SM_CYHSCROLL, ParentPanel->CurrentPPI);	//…•½ƒXƒNƒ[ƒ‹ƒo[‚Ì•‚ğæ“¾
+		int s_hi = get_SysMetricsForPPI(SM_CYHSCROLL, ParentPanel->CurrentPPI);	//æ°´å¹³ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã®å¹…ã‚’å–å¾—
 
-		//ƒŠƒXƒgƒ{ƒbƒNƒX
+		//ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹
 		if (AssoListBox) {
 			TListBox *lp = AssoListBox;
-			//‚’¼ƒXƒNƒ[ƒ‹ƒo[
+			//å‚ç›´ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 			if (lp->ItemHeight>0 && lp->Count>0) {
 				int lst_hi = lp->ClientHeight;
 				ScrPage = lst_hi/lp->ItemHeight;
@@ -310,7 +310,7 @@ void __fastcall UsrScrollPanel::UpdateKnob()
 				ScrPanelV->Visible = false;
 			}
 
-			//…•½ƒXƒNƒ[ƒ‹ƒo[
+			//æ°´å¹³ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 			if (ScrPanelH && ScrPaintBoxH) {
 				if (lp->ScrollWidth>lp->ClientWidth) {
 					double r = 1.0 * lp->ClientWidth / lp->ScrollWidth;
@@ -325,14 +325,14 @@ void __fastcall UsrScrollPanel::UpdateKnob()
 					ScrPanelH->Visible = false;
 				}
 
-				//ƒŠƒXƒgƒ{ƒbƒNƒX‚Ì‚‚³’²®
+				//ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®é«˜ã•èª¿æ•´
 				lp->Height = ParentPanel->ClientHeight + (ScrPanelH->Visible? (s_hi - ScrPanelH->Height + 1) : 0);
 			}
 		}
-		//ƒ`ƒFƒbƒNƒŠƒXƒgƒ{ƒbƒNƒX
+		//ãƒã‚§ãƒƒã‚¯ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹
 		else if (AssoChkListBox) {
 			TCheckListBox *lp = AssoChkListBox;
-			//‚’¼ƒXƒNƒ[ƒ‹ƒo[
+			//å‚ç›´ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 			if (lp->ItemHeight>0 && lp->Count>0) {
 				int lst_hi = lp->ClientHeight;
 				ScrPage = lst_hi/lp->ItemHeight;
@@ -353,10 +353,10 @@ void __fastcall UsrScrollPanel::UpdateKnob()
 				ScrPanelV->Visible = false;
 			}
 		}
-		//ƒOƒŠƒbƒh
+		//ã‚°ãƒªãƒƒãƒ‰
 		else if (AssoStrGrid) {
 			TStringGrid *gp = AssoStrGrid;
-			//‚’¼ƒXƒNƒ[ƒ‹ƒo[
+			//å‚ç›´ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 			if (gp->RowCount>0) {
 				int grid_hi = gp->ClientHeight;
 				ScrPage = gp->VisibleRowCount;
@@ -377,7 +377,7 @@ void __fastcall UsrScrollPanel::UpdateKnob()
 				ScrPanelV->Visible = false;
 			}
 
-			//…•½ƒXƒNƒ[ƒ‹ƒo[
+			//æ°´å¹³ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 			if (ScrPanelH && ScrPaintBoxH) {
 				if (gp->ColCount>gp->VisibleColCount) {
 					double r = 1.0 * gp->ClientWidth / get_GridTotalWidth();
@@ -392,14 +392,14 @@ void __fastcall UsrScrollPanel::UpdateKnob()
 					ScrPanelH->Visible = false;
 				}
 
-				//ƒOƒŠƒbƒh‚Ì‚‚³’²®
+				//ã‚°ãƒªãƒƒãƒ‰ã®é«˜ã•èª¿æ•´
 				gp->Height = ParentPanel->ClientHeight + (ScrPanelH->Visible? (s_hi - ScrPanelH->Height + 1) : 0);
 			}
 		}
-		//ƒXƒNƒ[ƒ‹ƒo[
+		//ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 		else if (AssoScrollBar) {
 			TScrollBar *bp = AssoScrollBar;
-			//‚’¼ƒXƒNƒ[ƒ‹ƒo[
+			//å‚ç›´ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 			if (bp->Max>0) {
 				ScrPage = bp->LargeChange;
 				if (bp->Max>ScrPage) {
@@ -433,7 +433,7 @@ void __fastcall UsrScrollPanel::UpdateKnob()
 }
 
 //---------------------------------------------------------------------------
-//•`‰æ
+//æç”»
 //---------------------------------------------------------------------------
 void __fastcall UsrScrollPanel::ScrPaintBoxPaint(TObject *Sender)
 {
@@ -441,11 +441,11 @@ void __fastcall UsrScrollPanel::ScrPaintBoxPaint(TObject *Sender)
 		TPaintBox *pp = (TPaintBox *)Sender;
 		TCanvas *cv = pp->Canvas;
 
-		//”wŒi
+		//èƒŒæ™¯
 		cv->Brush->Color = Color;
 		cv->FillRect(pp->ClientRect);
 
-		//‚Â‚Ü‚İ
+		//ã¤ã¾ã¿
 		TRect rc = (pp->Tag==USCRPNL_SCRTYPE_H)? ScrKnobRectH : ScrKnobRectV;
 		Graphics::TBitmap *bp = (pp->Tag==USCRPNL_SCRTYPE_H)? KnobImgBuffH : KnobImgBuffV;
 		if (bp && !bp->Empty) {
@@ -470,7 +470,7 @@ void __fastcall UsrScrollPanel::ScrPaintBoxPaint(TObject *Sender)
 				}
 				cv->FillRect(rc);
 
-				//—ÖŠs
+				//è¼ªéƒ­
 				cv->Pen->Style = psSolid;
 				cv->Pen->Width = 1;
 				cv->Pen->Color = KnobBdrColor;
@@ -481,7 +481,7 @@ void __fastcall UsrScrollPanel::ScrPaintBoxPaint(TObject *Sender)
 			}
 		}
 
-		//ˆÊ’u•\¦
+		//ä½ç½®è¡¨ç¤º
 		bool has_hit = (HitLineColor!=Graphics::clNone && HitLines->Count>1);
 		bool has_sel = (SelLineColor!=Graphics::clNone && SelLines->Count>1);
 		if (pp->Tag==USCRPNL_SCRTYPE_V && (has_hit || has_sel)) {
@@ -496,9 +496,9 @@ void __fastcall UsrScrollPanel::ScrPaintBoxPaint(TObject *Sender)
 			bp_l->SetSize(w, 1);
 			bp_l->Canvas->Brush->Style = bsSolid;
 
-			//ƒqƒbƒgˆÊ’u
+			//ãƒ’ãƒƒãƒˆä½ç½®
 			if (has_hit) {
-				int max_n = (int)HitLines->Objects[0];	//‘s”
+				int max_n = (int)HitLines->Objects[0];	//ç·è¡Œæ•°
 				if (max_n>0) {
 					bp_l->Canvas->Brush->Color = HitLineColor;
 					bp_l->Canvas->FillRect(TRect(0, 0, w, 1));
@@ -515,9 +515,9 @@ void __fastcall UsrScrollPanel::ScrPaintBoxPaint(TObject *Sender)
 				}
 			}
 
-			//‘I‘ğˆÊ’u
+			//é¸æŠä½ç½®
 			if (has_sel) {
-				int max_n = (int)SelLines->Objects[0];	//‘s”
+				int max_n = (int)SelLines->Objects[0];	//ç·è¡Œæ•°
 				if (max_n>0) {
 					bp_l->Canvas->Brush->Color = SelLineColor;
 					bp_l->Canvas->FillRect(TRect(0, 0, w, 1));
@@ -539,22 +539,22 @@ void __fastcall UsrScrollPanel::ScrPaintBoxPaint(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall UsrScrollPanel::Repaint()
 {
-	//‚’¼ƒXƒNƒ[ƒ‹ƒo[
+	//å‚ç›´ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 	if (ScrPanelV->Visible && ScrKnobRectV.Height()>0) {
 		int yp = -1;
-		//ƒŠƒXƒgƒ{ƒbƒNƒX
+		//ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹
 		if (AssoListBox && AssoListBox->Count>0) {
 			yp = (int)(1.0 * AssoListBox->TopIndex / AssoListBox->Count * AssoListBox->ClientHeight);
 		}
-		//ƒ`ƒFƒbƒNƒŠƒXƒgƒ{ƒbƒNƒX
+		//ãƒã‚§ãƒƒã‚¯ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹
 		else if (AssoChkListBox && AssoChkListBox->Count>0) {
 			yp = (int)(1.0 * AssoChkListBox->TopIndex / AssoChkListBox->Count * AssoChkListBox->ClientHeight);
 		}
-		//ƒOƒŠƒbƒh
+		//ã‚°ãƒªãƒƒãƒ‰
 		else if (AssoStrGrid && AssoStrGrid->RowCount>0) {
 			yp = (int)(1.0 * AssoStrGrid->TopRow / AssoStrGrid->RowCount * AssoStrGrid->ClientHeight);
 		}
-		//ƒXƒNƒ[ƒ‹ƒo[
+		//ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 		else if (AssoScrollBar && AssoScrollBar->Max>0) {
 			double r = 1.0 * (AssoScrollBar->Position - AssoScrollBar->Min) / AssoScrollBar->Max;
 			yp = (int)(r * ScrPanelV->ClientHeight);
@@ -566,7 +566,7 @@ void __fastcall UsrScrollPanel::Repaint()
 		}
 	}
 
-	//…•½ƒXƒNƒ[ƒ‹ƒo[
+	//æ°´å¹³ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 	if (ScrPanelH && ScrPaintBoxH && ScrPanelH->Visible && ScrKnobRectH.Width()>0) {
 		if ((AssoListBox && AssoListBox->Count>0) || (AssoStrGrid && AssoStrGrid->RowCount>0)) {
 			ScrKnobRectH.Location = Point(GetKnobPosH(), 0);
@@ -576,7 +576,7 @@ void __fastcall UsrScrollPanel::Repaint()
 }
 
 //---------------------------------------------------------------------------
-//ƒ}ƒEƒX‘€ì
+//ãƒã‚¦ã‚¹æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall UsrScrollPanel::ScrPaintBoxMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y)
 {
@@ -585,26 +585,26 @@ void __fastcall UsrScrollPanel::ScrPaintBoxMouseDown(TObject *Sender, TMouseButt
 		TRect rc = (pp->Tag==USCRPNL_SCRTYPE_H)? ScrKnobRectH : ScrKnobRectV;
 		ScrCatchKnob = rc.PtInRect(Point(X, Y));
 		ScrCatchTag  = pp->Tag;
-		//ƒmƒuˆÚ“®ŠJn
+		//ãƒãƒ–ç§»å‹•é–‹å§‹
 		if (ScrCatchKnob) {
 			if (pp->Tag==USCRPNL_SCRTYPE_V)
 				ScrCatchYp = Y - rc.Top;
 			else
 				ScrCatchXp = X - rc.Left;
 		}
-		//‘OŒãƒy[ƒW
+		//å‰å¾Œãƒšãƒ¼ã‚¸
 		else {
-			//ƒŠƒXƒgƒ{ƒbƒNƒX
+			//ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹
 			if (AssoListBox) {
 				TListBox *lp = AssoListBox;
-				//‚’¼ƒXƒNƒ[ƒ‹ƒo[
+				//å‚ç›´ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 				if (pp->Tag==USCRPNL_SCRTYPE_V) {
 					if (Y<rc.Top)
 						lp->TopIndex = std::max(lp->TopIndex - ScrPage, 0);
 					else if (Y>rc.Bottom)
 						lp->TopIndex = lp->TopIndex + ScrPage;
 				}
-				//…•½ƒXƒNƒ[ƒ‹ƒo[
+				//æ°´å¹³ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 				else {
 					if (X<rc.Left) {
 						lp->Perform(WM_HSCROLL, MAKEWPARAM(SB_PAGELEFT,  0), (NativeInt)0);
@@ -616,10 +616,10 @@ void __fastcall UsrScrollPanel::ScrPaintBoxMouseDown(TObject *Sender, TMouseButt
 					}
 				}
 			}
-			//ƒ`ƒFƒbƒNƒŠƒXƒgƒ{ƒbƒNƒX
+			//ãƒã‚§ãƒƒã‚¯ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹
 			else if (AssoChkListBox) {
 				TCheckListBox *lp = AssoChkListBox;
-				//‚’¼ƒXƒNƒ[ƒ‹ƒo[
+				//å‚ç›´ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 				if (pp->Tag==USCRPNL_SCRTYPE_V) {
 					if (Y<rc.Top)
 						lp->TopIndex = std::max(lp->TopIndex - ScrPage, 0);
@@ -627,17 +627,17 @@ void __fastcall UsrScrollPanel::ScrPaintBoxMouseDown(TObject *Sender, TMouseButt
 						lp->TopIndex = lp->TopIndex + ScrPage;
 				}
 			}
-			//ƒOƒŠƒbƒh
+			//ã‚°ãƒªãƒƒãƒ‰
 			else if (AssoStrGrid) {
 				TStringGrid *gp = AssoStrGrid;
-				//‚’¼ƒXƒNƒ[ƒ‹ƒo[
+				//å‚ç›´ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 				if (pp->Tag==USCRPNL_SCRTYPE_V) {
 					if (Y<rc.Top)
 						gp->TopRow = std::max(gp->TopRow - ScrPage, 0);
 					else if (Y>rc.Bottom)
 						gp->TopRow = gp->TopRow + ScrPage;
 				}
-				//…•½ƒXƒNƒ[ƒ‹ƒo[
+				//æ°´å¹³ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 				else {
 					if (X<rc.Left) {
 						gp->Perform(WM_HSCROLL, MAKEWPARAM(SB_PAGELEFT,  0), (NativeInt)0);
@@ -649,7 +649,7 @@ void __fastcall UsrScrollPanel::ScrPaintBoxMouseDown(TObject *Sender, TMouseButt
 					}
 				}
 			}
-			//ƒXƒNƒ[ƒ‹ƒo[
+			//ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 			else if (AssoScrollBar) {
 				if (Y<rc.Top)
 					AssoScrollBar->Position = std::max(AssoScrollBar->Position - ScrPage, 0);
@@ -666,13 +666,13 @@ void __fastcall UsrScrollPanel::ScrPaintBoxMouseMove(TObject *Sender, TShiftStat
 {
 	if (ScrCatchKnob) {
 		TPaintBox *pp = (TPaintBox *)Sender;
-		//‚’¼ƒXƒNƒ[ƒ‹ƒo[
+		//å‚ç›´ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 		if (pp->Tag==USCRPNL_SCRTYPE_V) {
 			int yp = std::min(std::max(Y - ScrCatchYp, 0), ScrKnobMaxY);
 			ScrKnobRectV.Location = Point(0, yp);
 			pp->Repaint();
 
-			//ƒŠƒXƒgƒ{ƒbƒNƒX
+			//ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹
 			if (AssoListBox) {
 				if (yp==ScrKnobMaxY)
 					AssoListBox->TopIndex = AssoListBox->Count - 1;
@@ -681,7 +681,7 @@ void __fastcall UsrScrollPanel::ScrPaintBoxMouseMove(TObject *Sender, TShiftStat
 
 				if (Flag & (USCRPNL_FLAG_FL|USCRPNL_FLAG_GL)) AssoListBox->Perform(WM_NYANFI_USCROLL, 0, (NativeInt)0);
 
-				//ƒJ[ƒ\ƒ‹‚ğí‚É‰Â‹—Ìˆæ‚É
+				//ã‚«ãƒ¼ã‚½ãƒ«ã‚’å¸¸ã«å¯è¦–é ˜åŸŸã«
 				if (ListCsrVisible) {
 					if (AssoListBox->ItemIndex < AssoListBox->TopIndex)
 						AssoListBox->ItemIndex = AssoListBox->TopIndex;
@@ -691,7 +691,7 @@ void __fastcall UsrScrollPanel::ScrPaintBoxMouseMove(TObject *Sender, TShiftStat
 					}
 				}
 			}
-			//ƒ`ƒFƒbƒNƒŠƒXƒgƒ{ƒbƒNƒX
+			//ãƒã‚§ãƒƒã‚¯ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹
 			else if (AssoChkListBox) {
 				if (yp==ScrKnobMaxY)
 					AssoChkListBox->TopIndex = AssoChkListBox->Count - 1;
@@ -700,7 +700,7 @@ void __fastcall UsrScrollPanel::ScrPaintBoxMouseMove(TObject *Sender, TShiftStat
 
 				if (Flag & (USCRPNL_FLAG_FL|USCRPNL_FLAG_GL)) AssoChkListBox->Perform(WM_NYANFI_USCROLL, 0, (NativeInt)0);
 
-				//ƒJ[ƒ\ƒ‹‚ğí‚É‰Â‹—Ìˆæ‚É
+				//ã‚«ãƒ¼ã‚½ãƒ«ã‚’å¸¸ã«å¯è¦–é ˜åŸŸã«
 				if (ListCsrVisible) {
 					if (AssoChkListBox->ItemIndex < AssoChkListBox->TopIndex) {
 						AssoChkListBox->ItemIndex = AssoChkListBox->TopIndex;
@@ -711,11 +711,11 @@ void __fastcall UsrScrollPanel::ScrPaintBoxMouseMove(TObject *Sender, TShiftStat
 					}
 				}
 			}
-			//ƒOƒŠƒbƒh
+			//ã‚°ãƒªãƒƒãƒ‰
 			else if (AssoStrGrid) {
 				set_GridTopRow(yp);
 			}
-			//ƒXƒNƒ[ƒ‹ƒo[
+			//ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 			else if (AssoScrollBar) {
 				if (yp==ScrKnobMaxY)
 					AssoScrollBar->Position = std::max(AssoScrollBar->Max - ScrPage, AssoScrollBar->Min);
@@ -723,7 +723,7 @@ void __fastcall UsrScrollPanel::ScrPaintBoxMouseMove(TObject *Sender, TShiftStat
 					AssoScrollBar->Position = (1.0 * yp / ScrPanelV->ClientHeight * AssoScrollBar->Max) + AssoScrollBar->Min;
 			}
 		}
-		//…•½ƒXƒNƒ[ƒ‹ƒo[
+		//æ°´å¹³ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 		else {
 			if (ScrPaintBoxH && (AssoListBox || AssoStrGrid) && ScrKnobMaxX>0) {
 				int xp = std::min(std::max(X - ScrCatchXp, 0), ScrKnobMaxX);
@@ -732,13 +732,13 @@ void __fastcall UsrScrollPanel::ScrPaintBoxMouseMove(TObject *Sender, TShiftStat
 
 				int hscr_wd  = ParentPanel->ClientWidth - KnobWidth;
 				if (hscr_wd>0) {
-					//ƒŠƒXƒgƒ{ƒbƒNƒX
+					//ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹
 					if (AssoListBox) {
 						int scr_p = (int)(1.0 * xp / hscr_wd * AssoListBox->ScrollWidth);
 						AssoListBox->Perform(WM_HSCROLL, MAKEWPARAM(SB_THUMBPOSITION, scr_p), (NativeInt)0);
 						AssoListBox->Perform(WM_HSCROLL, MAKEWPARAM(SB_ENDSCROLL, 0), (NativeInt)0);
 					}
-					//ƒOƒŠƒbƒh
+					//ã‚°ãƒªãƒƒãƒ‰
 					else if (AssoStrGrid && AssoStrGrid->ColCount>0) {
 						set_GridLefCol(xp);
 					}
@@ -754,12 +754,12 @@ void __fastcall UsrScrollPanel::ScrPaintBoxMouseUp(TObject *Sender, TMouseButton
 	ScrCatchKnob = false;
 	Repaint();
 
-	//‰EƒNƒŠƒbƒNƒCƒxƒ“ƒg
+	//å³ã‚¯ãƒªãƒƒã‚¯ã‚¤ãƒ™ãƒ³ãƒˆ
 	if (Button==mbRight && OnRButtonUp && pp->Tag==USCRPNL_SCRTYPE_V) OnRButtonUp(Sender, Button, Shift, X, Y);
 }
 
 //---------------------------------------------------------------------------
-//ƒR[ƒi[ƒpƒlƒ‹‚Ìİ’è
+//ã‚³ãƒ¼ãƒŠãƒ¼ãƒ‘ãƒãƒ«ã®è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall UsrScrollPanel::SetRBCornerPanel(TPanel *pp)
 {
@@ -769,16 +769,16 @@ void __fastcall UsrScrollPanel::SetRBCornerPanel(TPanel *pp)
 }
 
 //---------------------------------------------------------------------------
-//ŒŸõŒê‚ª•Ï‰»‚µ‚½‚©?
-//  •Ï‰»‚µ‚½ê‡ HitLines ‚ğ‰Šú‰»
-//  æ“ª€–Ú = ŒŸõŒê [TAB] ƒIƒvƒVƒ‡ƒ“‚È‚Ç
+//æ¤œç´¢èªãŒå¤‰åŒ–ã—ãŸã‹?
+//  å¤‰åŒ–ã—ãŸå ´åˆ HitLines ã‚’åˆæœŸåŒ–
+//  å…ˆé ­é …ç›® = æ¤œç´¢èª [TAB] ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãªã©
 //---------------------------------------------------------------------------
 bool __fastcall UsrScrollPanel::KeyWordChanged(
-	UnicodeString kwd,	//ŒŸõŒê
-	int  max_cnt,		//Å‘ås”
-	bool case_sw,		//‘å¬•¶š‚ğ‹æ•Ê	(default = false)
-	bool word_sw,		//’PŒê’PˆÊ			(default = false)
-	int  code_page)		//ƒoƒCƒiƒŠEƒR[ƒhƒy[ƒW	(default = 0)
+	UnicodeString kwd,	//æ¤œç´¢èª
+	int  max_cnt,		//æœ€å¤§è¡Œæ•°
+	bool case_sw,		//å¤§å°æ–‡å­—ã‚’åŒºåˆ¥	(default = false)
+	bool word_sw,		//å˜èªå˜ä½			(default = false)
+	int  code_page)		//ãƒã‚¤ãƒŠãƒªãƒ»ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸	(default = 0)
 {
 	if (HitLineColor==Graphics::clNone) {
 		HitLines->Clear();
@@ -801,14 +801,14 @@ bool __fastcall UsrScrollPanel::KeyWordChanged(
 	return ret;
 }
 //---------------------------------------------------------------------------
-//ƒqƒbƒgs‚ğ’Ç‰Á
+//ãƒ’ãƒƒãƒˆè¡Œã‚’è¿½åŠ 
 //---------------------------------------------------------------------------
 void __fastcall UsrScrollPanel::AddHitLine(int n)
 {
 	HitLines->AddObject(EmptyStr, (TObject *)(NativeInt)n);
 }
 //---------------------------------------------------------------------------
-//ƒqƒbƒgs‚ğƒNƒŠƒA
+//ãƒ’ãƒƒãƒˆè¡Œã‚’ã‚¯ãƒªã‚¢
 //---------------------------------------------------------------------------
 void __fastcall UsrScrollPanel::ClearHitLine()
 {

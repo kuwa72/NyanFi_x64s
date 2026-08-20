@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  É\Å[ÉgÉ_ÉCÉAÉçÉO													//
+//  „ÇΩ„Éº„Éà„ÉÄ„Ç§„Ç¢„É≠„Ç∞													//
 //----------------------------------------------------------------------//
 #include "Global.h"
 #include "UserFunc.h"
@@ -23,7 +23,7 @@ void __fastcall TSortModeDlg::FormCreate(TObject *Sender)
 	UserModule->SetUsrPopupMenu(this);
 
 	set_ComboBoxText(DirSortModeComboBox,
-		_T("ÉtÉ@ÉCÉãÇ∆ìØÇ∂\nñºëO\nçXêVì˙éû\nÉTÉCÉY\nëÆê´\nÉfÉBÉåÉNÉgÉäÇãÊï ÇµÇ»Ç¢\nÉAÉCÉRÉì(ÉtÉ@ÉCÉã:ñºëO/ägí£éq)\n"));
+		_T("„Éï„Ç°„Ç§„É´„Å®Âêå„Åò\nÂêçÂâç\nÊõ¥Êñ∞Êó•ÊôÇ\n„Çµ„Ç§„Ç∫\nÂ±ûÊÄß\n„Éá„Ç£„É¨„ÇØ„Éà„É™„ÇíÂå∫Âà•„Åó„Å™„ÅÑ\n„Ç¢„Ç§„Ç≥„É≥(„Éï„Ç°„Ç§„É´:ÂêçÂâç/Êã°ÂºµÂ≠ê)\n"));
 
 	ExtListEdit->Hint = LoadUsrMsg(USTR_HintMltFExt);
 }
@@ -46,7 +46,7 @@ void __fastcall TSortModeDlg::FormShow(TObject *Sender)
 
 	Changed  = false;
 	SelByKey = false;
-	Caption = "É\Å[Ég - " + get_LRUD_str(CurListTag, SortBoth);
+	Caption = "„ÇΩ„Éº„Éà - " + get_LRUD_str(CurListTag, SortBoth);
 	SortModeRadioGroup->ItemIndex  = SortMode[CurListTag];
 	if (SortModeRadioGroup->ItemIndex!=5) {
 		PrimeComboBox->ItemIndex = SortModeRadioGroup->ItemIndex;
@@ -114,7 +114,7 @@ void __fastcall TSortModeDlg::ApplicationEvents1Message(TMsg &Msg, bool &Handled
 	if (Active && Msg.message==WM_KEYDOWN) {
 		WORD Key = Msg.wParam;
 		UnicodeString KeyStr = get_KeyStr(Key, get_Shift());
-		//ÉJÅ[É\ÉãÉLÅ[Ç≈ämíËÇ≥ÇπÇ»Ç¢
+		//„Ç´„Éº„ÇΩ„É´„Ç≠„Éº„ÅßÁ¢∫ÂÆö„Åï„Åõ„Å™„ÅÑ
 		InhOk = contained_wd_i("DOWN|UP|LEFT|RIGHT", KeyStr);
 	}
 }
@@ -134,28 +134,28 @@ void __fastcall TSortModeDlg::FormKeyDown(TObject *Sender, WORD &Key, TShiftStat
 
 	if (idx!=-1) {
 		if (idx==SortModeRadioGroup->ItemIndex) {
-			SelByKey = true;	//åªç›ÇÃÉÇÅ[ÉhÇÃÉLÅ[Ç™âüÇ≥ÇÍÇΩ
+			SelByKey = true;	//ÁèæÂú®„ÅÆ„É¢„Éº„Éâ„ÅÆ„Ç≠„Éº„ÅåÊäº„Åï„Çå„Åü
 			Key = 0;
 			if (SameCloseCheckBox->Checked) {
-				Application->ProcessMessages();		//ÅIÇ±ÇÍÇ™Ç»Ç¢Ç∆ÉtÉHÅ[ÉJÉXÉGÉâÅ[Ç…Ç»ÇÈ
+				Application->ProcessMessages();		//ÔºÅ„Åì„Çå„Åå„Å™„ÅÑ„Å®„Éï„Ç©„Éº„Ç´„Çπ„Ç®„É©„Éº„Å´„Å™„Çã
 				ModalResult = mrOk;
 			}
 		}
 		else {
 			SortModeRadioGroup->ItemIndex = idx;
-			Application->ProcessMessages();		//ÅIÇ±ÇÍÇ™Ç»Ç¢Ç∆ÉtÉHÅ[ÉJÉXÉGÉâÅ[Ç…Ç»ÇÈ
+			Application->ProcessMessages();		//ÔºÅ„Åì„Çå„Åå„Å™„ÅÑ„Å®„Éï„Ç©„Éº„Ç´„Çπ„Ç®„É©„Éº„Å´„Å™„Çã
 		}
 	}
 }
 //---------------------------------------------------------------------------
-//çXêVì˙éûÇÃÉAÉNÉZÉâÉåÅ[É^Çê›íË
+//Êõ¥Êñ∞Êó•ÊôÇ„ÅÆ„Ç¢„ÇØ„Çª„É©„É¨„Éº„Çø„ÇíË®≠ÂÆö
 //---------------------------------------------------------------------------
 void __fastcall TSortModeDlg::SetAccDT()
 {
 	bool ok = false;
-	UnicodeString dt_s;  dt_s.sprintf(_T("çXêVì˙éû(%c)"), AccDtoTCheckBox->Checked? 'T' : 'D');
+	UnicodeString dt_s;  dt_s.sprintf(_T("Êõ¥Êñ∞Êó•ÊôÇ(%c)"), AccDtoTCheckBox->Checked? 'T' : 'D');
 	for (int i=0; i<SortModeRadioGroup->Items->Count; i++) {
-		if (StartsStr("çXêVì˙éû", SortModeRadioGroup->Items->Strings[i])) {
+		if (StartsStr("Êõ¥Êñ∞Êó•ÊôÇ", SortModeRadioGroup->Items->Strings[i])) {
 			SortModeRadioGroup->Items->Strings[i] = dt_s;
 			ok = true;
 			break;
@@ -166,7 +166,7 @@ void __fastcall TSortModeDlg::SetAccDT()
 			TControl *cp = SortModeRadioGroup->Controls[i];
 			if (cp->ClassNameIs("TLabel")) {
 				TLabel *lp = (TLabel *)cp;
-				if (StartsStr("çXêVì˙éû", lp->Caption)) {
+				if (StartsStr("Êõ¥Êñ∞Êó•ÊôÇ", lp->Caption)) {
 					lp->Caption = dt_s;
 					break;
 				}
@@ -178,7 +178,7 @@ void __fastcall TSortModeDlg::SetAccDT()
 //---------------------------------------------------------------------------
 void __fastcall TSortModeDlg::SortBothCheckBoxClick(TObject *Sender)
 {
-	Caption = "É\Å[Ég - " + get_LRUD_str(CurListTag, SortBothCheckBox->Checked);
+	Caption = "„ÇΩ„Éº„Éà - " + get_LRUD_str(CurListTag, SortBothCheckBox->Checked);
 }
 
 //---------------------------------------------------------------------------
@@ -191,7 +191,7 @@ void __fastcall TSortModeDlg::SortModeRadioGroupClick(TObject *Sender)
 {
 	if (!DlgInitialized) return;
 
-	if (!InhOk) {	//ApplicationEvents1Message Ç≈ÉJÅ[É\ÉãÉLÅ[Çó}é~
+	if (!InhOk) {	//ApplicationEvents1Message „Åß„Ç´„Éº„ÇΩ„É´„Ç≠„Éº„ÇíÊäëÊ≠¢
 		Changed = true;
 		ModalResult = mrOk;
 	}
@@ -211,7 +211,7 @@ void __fastcall TSortModeDlg::SortModeRadioGroupExit(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ägí£ê›íË
+//Êã°ÂºµË®≠ÂÆö
 //---------------------------------------------------------------------------
 void __fastcall TSortModeDlg::ExOptActionExecute(TObject *Sender)
 {

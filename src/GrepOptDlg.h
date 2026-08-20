@@ -1,6 +1,6 @@
 /**
  * @file GrepOptDlg.h
- * @brief GREPŠg’£İ’è
+ * @brief GREPæ‹¡å¼µè¨­å®š
  */
 //---------------------------------------------------------------------------
 #ifndef GrepOptDlgH
@@ -18,11 +18,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief GREPŠg’£İ’èƒ_ƒCƒAƒƒO
+ * @brief GREPæ‹¡å¼µè¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TGrepExOptDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TButton *CanButton;
 	TButton *OkButton;
 	TButton *RefAppBtn;
@@ -83,10 +83,10 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall RefLogBtnClick(TObject *Sender);
 	void __fastcall OkButtonClick(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	void __fastcall WmDropped(TMessage &msg);
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	__fastcall TGrepExOptDlg(TComponent* Owner);
 
 	BEGIN_MESSAGE_MAP

@@ -1,6 +1,6 @@
 /**
  * @file FtpDlg.h
- * @brief FTPÚ‘±ƒ_ƒCƒAƒƒO
+ * @brief FTPæ¥ç¶šãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 //---------------------------------------------------------------------------
 #ifndef FtpDlgH
@@ -19,11 +19,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief FTPÚ‘±ƒ_ƒCƒAƒƒO
+ * @brief FTPæ¥ç¶šãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TFtpConnectDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *AddHostAction;
 	TAction *ChgHostAction;
 	TAction *ConnectAction;	TButton *DelMenuBtn;
@@ -96,12 +96,12 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall RefSoundBtnClick(TObject *Sender);
 	void __fastcall TestSoundBtnClick(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	TStringList *HostList;
 
 	UnicodeString __fastcall MakeHostItem();
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	UnicodeString HostItem;
 
 	__fastcall TFtpConnectDlg(TComponent* Owner);

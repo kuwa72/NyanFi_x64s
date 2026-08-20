@@ -1,6 +1,6 @@
 /**
  * @file GenInfDlg.h
- * @brief ”Ä—pˆê——ƒ_ƒCƒAƒƒO
+ * @brief æ±ç”¨ä¸€è¦§ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 //---------------------------------------------------------------------------
 #ifndef GenInfDlgH
@@ -25,11 +25,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ”Ä—pˆê——ƒ_ƒCƒAƒƒO
+ * @brief æ±ç”¨ä¸€è¦§ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TGeneralInfoDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *AndOrAction;
 	TAction *ClrCmdHistoryAction;
 	TAction *CopyAction;
@@ -182,24 +182,24 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall PlayPrevActionExecute(TObject *Sender);
 	void __fastcall PlayActionUpdate(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	int  MaxNameWidth;
 	int  TabWidth;
 	UnicodeString SavePath;
 	bool isFiltered;
 	int  LastIndex;
 	int  LastTopIndex;
-	int  ListWidth;				//ƒŠƒXƒg•
+	int  ListWidth;				//ãƒªã‚¹ãƒˆå¹…
 
-	UnicodeString FirstKey;		//2ƒXƒgƒ[ƒNŠJnƒL[
-	bool Wait2ndKey;			//2ƒXƒgƒ[ƒN–Ú‘Ò‚¿ó‘Ô
+	UnicodeString FirstKey;		//2ã‚¹ãƒˆãƒ­ãƒ¼ã‚¯é–‹å§‹ã‚­ãƒ¼
+	bool Wait2ndKey;			//2ã‚¹ãƒˆãƒ­ãƒ¼ã‚¯ç›®å¾…ã¡çŠ¶æ…‹
 	bool KeyHandled;
 
 	__int64   FileSize;
 	TDateTime FileTime;
 
-	int  SortMode;				//ƒ\[ƒgƒ‚[ƒh 1:¸‡/ -1:~‡/ 0:‰ğœ
-	bool Found;					//ŒŸõŒ‹‰Ê
+	int  SortMode;				//ã‚½ãƒ¼ãƒˆãƒ¢ãƒ¼ãƒ‰ 1:æ˜‡é †/ -1:é™é †/ 0:è§£é™¤
+	bool Found;					//æ¤œç´¢çµæœ
 
 	void __fastcall WmFormShowed(TMessage &msg);
 	void __fastcall WmNyanFiPlayList(TMessage &msg);
@@ -222,39 +222,39 @@ private:	// ƒ†[ƒU[éŒ¾
 
 	UnicodeString __fastcall GetSelcetedCmd(TStringList *lst = NULL);
 
-public:		// ƒ†[ƒU[éŒ¾
-	UsrScrollPanel *ListScrPanel;	//!< ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	UsrScrollPanel *ListScrPanel;	//!< ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 
-	bool isVarList;		//!< u–¼‘O=’lvŒ`®
-	bool isLog;			//!< ƒƒO
-	bool isGit;			//!< git ‚Ìo—Í (æ“ªs‚ª "$ git ")
-	bool isFileList;	//!< ƒtƒ@ƒCƒ‹–¼ˆê——
-	bool isPlayList;	//!< ƒvƒŒƒCƒŠƒXƒg
-	bool isDirs;		//!< ƒfƒBƒŒƒNƒgƒŠˆê——
-	bool isTree;		//!< ƒfƒBƒŒƒNƒgƒŠƒcƒŠ[•\¦
-	bool isCmdHistory;	//!< ƒRƒ}ƒ“ƒh—š—ğ
+	bool isVarList;		//!< ã€Œåå‰=å€¤ã€å½¢å¼
+	bool isLog;			//!< ãƒ­ã‚°
+	bool isGit;			//!< git ã®å‡ºåŠ› (å…ˆé ­è¡ŒãŒ "$ git ")
+	bool isFileList;	//!< ãƒ•ã‚¡ã‚¤ãƒ«åä¸€è¦§
+	bool isPlayList;	//!< ãƒ—ãƒ¬ã‚¤ãƒªã‚¹ãƒˆ
+	bool isDirs;		//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä¸€è¦§
+	bool isTree;		//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãƒ„ãƒªãƒ¼è¡¨ç¤º
+	bool isCmdHistory;	//!< ã‚³ãƒãƒ³ãƒ‰å±¥æ­´
 	bool isFTP;			//!< FTP
-	bool isTail;		//!< ––”ö•\¦
-	bool isReverse;		//!< ‹t‡•\¦
-	bool fromGitView;	//!< GitViewer‚©‚ç•\¦
-	bool isNonFile;		//!< ƒtƒ@ƒCƒ‹‚Í‘¶İ‚µ‚È‚¢
-	bool fromPopWnd;	//!< ƒ|ƒbƒvƒAƒbƒv‰æ–Ê‚©‚ç•\¦
-	bool ErrOnly;		//!< ƒGƒ‰[•”•ª‚Ì‚İ(ƒƒO)
-	bool ToEnd;			//!< ÅŒã‚ÉˆÚ“®
-	bool ToFilter;		//!< ƒtƒBƒ‹ƒ^—“‚ÉƒtƒH[ƒJƒX
+	bool isTail;		//!< æœ«å°¾è¡¨ç¤º
+	bool isReverse;		//!< é€†é †è¡¨ç¤º
+	bool fromGitView;	//!< GitViewerã‹ã‚‰è¡¨ç¤º
+	bool isNonFile;		//!< ãƒ•ã‚¡ã‚¤ãƒ«ã¯å­˜åœ¨ã—ãªã„
+	bool fromPopWnd;	//!< ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ç”»é¢ã‹ã‚‰è¡¨ç¤º
+	bool ErrOnly;		//!< ã‚¨ãƒ©ãƒ¼éƒ¨åˆ†ã®ã¿(ãƒ­ã‚°)
+	bool ToEnd;			//!< æœ€å¾Œã«ç§»å‹•
+	bool ToFilter;		//!< ãƒ•ã‚£ãƒ«ã‚¿æ¬„ã«ãƒ•ã‚©ãƒ¼ã‚«ã‚¹
 
 	UnicodeString ComPathName;
 
 	UnicodeString FileName;
 	UnicodeString RetStr;
-	int  LineIndex;				//!< sƒCƒ“ƒfƒbƒNƒX(0ƒx[ƒX)
-	int  TailLine;				//!< ––”ö•\¦s”
-	int  CodePage;				//!< ƒR[ƒhƒy[ƒW
+	int  LineIndex;				//!< è¡Œã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹(0ãƒ™ãƒ¼ã‚¹)
+	int  TailLine;				//!< æœ«å°¾è¡¨ç¤ºè¡Œæ•°
+	int  CodePage;				//!< ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸
 	bool HasBOM;				//!< BOM
-	UnicodeString LineBreakStr;	//!< ‰üsƒR[ƒh
-	UnicodeString FindWord;		//!< ŒŸõ•¶š—ñ
-	UnicodeString RegExPtn;		//!< ³‹K•\Œ»ƒpƒ^[ƒ“
-	UnicodeString HdrLnStr;		//!< Œ©o‚µsŠJn•¶š—ñ(/`/ ‚Ìê‡³‹K•\Œ»)
+	UnicodeString LineBreakStr;	//!< æ”¹è¡Œã‚³ãƒ¼ãƒ‰
+	UnicodeString FindWord;		//!< æ¤œç´¢æ–‡å­—åˆ—
+	UnicodeString RegExPtn;		//!< æ­£è¦è¡¨ç¾ãƒ‘ã‚¿ãƒ¼ãƒ³
+	UnicodeString HdrLnStr;		//!< è¦‹å‡ºã—è¡Œé–‹å§‹æ–‡å­—åˆ—(/ï½/ ã®å ´åˆæ­£è¦è¡¨ç¾)
 	UnicodeString ErrMsg;
 
 	TStringList *GenInfoList;

@@ -1,6 +1,6 @@
 /**
  * @file usr_arc.h
- * @brief ƒA[ƒJƒCƒuˆ—
+ * @brief ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–å‡¦ç†
  */
 //---------------------------------------------------------------------------
 #ifndef UserArcUnitH
@@ -32,33 +32,33 @@ typedef struct {
 //---------------------------------------------------------------------------
 #pragma pack(pop)
 
-//‘ŒÉŒ`®
+//æ›¸åº«å½¢å¼
 #ifndef ARCHIVETYPE_ZIP
 #define ARCHIVETYPE_ZIP		1
 #define ARCHIVETYPE_7Z		2
 #endif
 
-//ƒtƒ@ƒCƒ‹‘®«
+//ãƒ•ã‚¡ã‚¤ãƒ«å±æ€§
 #ifndef FA_RDONLY
-#define FA_RDONLY		0x01			//!< “Ç‚İæ‚èê—p
-#define FA_HIDDEN		0x02			//!< ‰B‚µƒtƒ@ƒCƒ‹
-#define FA_SYSTEM		0x04			//!< ƒVƒXƒeƒ€ƒtƒ@ƒCƒ‹
-#define FA_LABEL		0x08			//!< ƒ{ƒŠƒ…[ƒ€ƒ‰ƒxƒ‹
-#define FA_DIREC		0x10			//!< ƒfƒBƒŒƒNƒgƒŠ
-#define FA_ARCH 		0x20			//!< ƒA[ƒJƒCƒu
-#define FA_ENCRYPTED	0x40			//!< ƒpƒXƒ[ƒh•ÛŒì
+#define FA_RDONLY		0x01			//!< èª­ã¿å–ã‚Šå°‚ç”¨
+#define FA_HIDDEN		0x02			//!< éš ã—ãƒ•ã‚¡ã‚¤ãƒ«
+#define FA_SYSTEM		0x04			//!< ã‚·ã‚¹ãƒ†ãƒ ãƒ•ã‚¡ã‚¤ãƒ«
+#define FA_LABEL		0x08			//!< ãƒœãƒªãƒ¥ãƒ¼ãƒ ãƒ©ãƒ™ãƒ«
+#define FA_DIREC		0x10			//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+#define FA_ARCH 		0x20			//!< ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–
+#define FA_ENCRYPTED	0x40			//!< ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ä¿è­·
 #endif
 
-//OpenArchiveƒ‚[ƒh
-#define M_ERROR_MESSAGE_OFF		0x00800000L	//!< ƒGƒ‰[‚ğ•\¦‚µ‚È‚¢
+//OpenArchiveãƒ¢ãƒ¼ãƒ‰
+#define M_ERROR_MESSAGE_OFF		0x00800000L	//!< ã‚¨ãƒ©ãƒ¼ã‚’è¡¨ç¤ºã—ãªã„
 
-//ƒGƒ‰[
+//ã‚¨ãƒ©ãƒ¼
 #define ERROR_USER_CANCEL		0x8020
 
 //---------------------------------------------------------------------------
 #define MAX_ARC_DLL	6
 
-//ƒA[ƒJƒCƒuí•Ê
+//ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ç¨®åˆ¥
 #define	UARCTYP_ZIP	1
 #define	UARCTYP_7Z	2
 #define	UARCTYP_LHA	3
@@ -67,7 +67,7 @@ typedef struct {
 #define	UARCTYP_RAR	6
 #define	UARCTYP_ISO	7
 
-//‘Î‰Šg’£q
+//å¯¾å¿œæ‹¡å¼µå­
 #define FEXT_ZIP	_T(".zip.apk.jar.ear.sar.war.cbz.epub.gdtf.mobi.docx.dotx.pptx.xlsx.xltx.odt.ods.odp.odg.odc.odf.odi.odm.odb")
 #define FEXT_7Z		_T(".7z.cb7")
 #define FEXT_LHA	_T(".lzh")
@@ -76,18 +76,18 @@ typedef struct {
 #define FEXT_RAR	_T(".rar.cbr")
 #define FEXT_ISO	_T(".iso")
 
-#define FEXT_ZIPIMG	_T(".zip.cbz.epub.gdtf")	//!< ‰æ‘œ‚ğ‚Â‰Â”\«‚Ì‚ ‚éZIPƒtƒ@ƒCƒ‹
+#define FEXT_ZIPIMG	_T(".zip.cbz.epub.gdtf")	//!< ç”»åƒã‚’æŒã¤å¯èƒ½æ€§ã®ã‚ã‚‹ZIPãƒ•ã‚¡ã‚¤ãƒ«
 
 #define ARC_OUTBUF_SIZE_L	1048576	//!< 1MB
 #define ARC_OUTBUF_SIZE_S	4096
 
 //---------------------------------------------------------------------------
 struct arc_find_inf {
-	UnicodeString f_name;		//!< ƒpƒX•tƒtƒ@ƒCƒ‹–¼
-	bool is_dir;				//!< ƒfƒBƒŒƒNƒgƒŠ
-	__int64 f_size;				//!< ƒTƒCƒY
-	int  f_attr;				//!< ‘®«
-	TDateTime f_time;			//!< ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv
+	UnicodeString f_name;		//!< ãƒ‘ã‚¹ä»˜ãƒ•ã‚¡ã‚¤ãƒ«å
+	bool is_dir;				//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+	__int64 f_size;				//!< ã‚µã‚¤ã‚º
+	int  f_attr;				//!< å±æ€§
+	TDateTime f_time;			//!< ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—
 };
 
 //---------------------------------------------------------------------------
@@ -131,10 +131,10 @@ struct arc_func {
 	FUNC_ArcSetBackGroundMode		SetBackGroundMode;
 	FUNC_ArcCheckArchive			CheckArchive;
 	FUNC_ArcGetLastError			GetLastError;
-	FUNC_ArcGetArchiveType			GetArchiveType;		//!< 7-zip32.dll/tar32.dll “Æ©
-	FUNC_SevenZipExists7zdll		Exists7zdll;		//!< 7z.dll‘Î‰”Å7-zip32.dll “Æ©
+	FUNC_ArcGetArchiveType			GetArchiveType;		//!< 7-zip32.dll/tar32.dll ç‹¬è‡ª
+	FUNC_SevenZipExists7zdll		Exists7zdll;		//!< 7z.dllå¯¾å¿œç‰ˆ7-zip32.dll ç‹¬è‡ª
 
-/*	¦ŠmÀ‚Å‚È‚¢ê‡‚ª‚ ‚é‚½‚ßˆÈ‰º‚Íg—p‚µ‚È‚¢(TAR,CAB)
+/*	â€»ç¢ºå®Ÿã§ãªã„å ´åˆãŒã‚ã‚‹ãŸã‚ä»¥ä¸‹ã¯ä½¿ç”¨ã—ãªã„(TAR,CAB)
 	FUNC_ArcGetArcFileSize			GetArcFileSize;
 	FUNC_ArcGetArcFileSizeEx		GetArcFileSizeEx;
 	FUNC_ArcGetArcOriginalSize		GetArcOriginalSize;
@@ -161,7 +161,7 @@ typedef void (*FUNC_AddDebugLog)(UnicodeString, UnicodeString, UnicodeString);
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒA[ƒJƒCƒuˆ—ƒNƒ‰ƒX
+ * @brief ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–å‡¦ç†ã‚¯ãƒ©ã‚¹
  * 
  */
 class UserArcUnit
@@ -183,24 +183,24 @@ private:
 public:
 	arc_func ArcFunc[MAX_ARC_DLL];
 
-	UnicodeString ResMsg;		//!< ƒRƒ}ƒ“ƒh‚Ì‰“šƒƒbƒZ[ƒW
-	UnicodeString ErrMsg;		//!< ƒGƒ‰[ƒƒbƒZ[ƒW
+	UnicodeString ResMsg;		//!< ã‚³ãƒãƒ³ãƒ‰ã®å¿œç­”ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
+	UnicodeString ErrMsg;		//!< ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
 
-	FUNC_AddDebugLog fpAddDebugLog;		//!<ƒfƒoƒbƒOî•ño—ÍŠÖ”
+	FUNC_AddDebugLog fpAddDebugLog;		//!<ãƒ‡ãƒãƒƒã‚°æƒ…å ±å‡ºåŠ›é–¢æ•°
 
 	bool Busy;
-	bool RarUnpacking;			//!<RAR ‰ğ“€’†
+	bool RarUnpacking;			//!<RAR è§£å‡ä¸­
 
-	bool Use7zDll;				//!< 7z.dll ‚ğ—˜—p‰Â”\
-	UnicodeString FExt7zDll;	//!< 7z.dll ‘Î‰Šg’£q
+	bool Use7zDll;				//!< 7z.dll ã‚’åˆ©ç”¨å¯èƒ½
+	UnicodeString FExt7zDll;	//!< 7z.dll å¯¾å¿œæ‹¡å¼µå­
 
-	bool ZipPrm_sfx;			//!< ZIP©ŒÈ‰ğ“€
-	int  ZipPrm_x;				//!< ZIPˆ³kƒŒƒxƒ‹
-	int  SevenPrm_x;			//!< 7zˆ³kƒŒƒxƒ‹
-	int  TarPrm_z;				//!< TARˆ³kƒŒƒxƒ‹(gzip)
-	int  CabPrm_z;				//!< CABˆ³kƒŒƒxƒ‹(0=MSZIP/ 15`21=LZX)
+	bool ZipPrm_sfx;			//!< ZIPè‡ªå·±è§£å‡
+	int  ZipPrm_x;				//!< ZIPåœ§ç¸®ãƒ¬ãƒ™ãƒ«
+	int  SevenPrm_x;			//!< 7zåœ§ç¸®ãƒ¬ãƒ™ãƒ«
+	int  TarPrm_z;				//!< TARåœ§ç¸®ãƒ¬ãƒ™ãƒ«(gzip)
+	int  CabPrm_z;				//!< CABåœ§ç¸®ãƒ¬ãƒ™ãƒ«(0=MSZIP/ 15ï½21=LZX)
 
-	UnicodeString ExSw_Zip;		//!< ’Ç‰ÁƒXƒCƒbƒ`ƒIƒvƒVƒ‡ƒ“
+	UnicodeString ExSw_Zip;		//!< è¿½åŠ ã‚¹ã‚¤ãƒƒãƒã‚ªãƒ—ã‚·ãƒ§ãƒ³
 	UnicodeString ExSw_7z;
 	UnicodeString ExSw_Lha;
 	UnicodeString ExSw_Tar;

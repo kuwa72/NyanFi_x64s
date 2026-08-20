@@ -1,6 +1,6 @@
 /**
  * @file DuplDlg.h
- * @brief d•¡ƒtƒ@ƒCƒ‹‚ÌŒŸõƒ_ƒCƒAƒƒO
+ * @brief é‡è¤‡ãƒ•ã‚¡ã‚¤ãƒ«ã®æ¤œç´¢ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  * 
  */
 //---------------------------------------------------------------------------
@@ -19,11 +19,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief d•¡ƒtƒ@ƒCƒ‹‚ÌŒŸõƒ_ƒCƒAƒƒO
+ * @brief é‡è¤‡ãƒ•ã‚¡ã‚¤ãƒ«ã®æ¤œç´¢ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TFindDuplDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TButton *CanButton;
 	TButton *OkButton;
 	TCheckBox *ExcSymCheckBox;
@@ -43,13 +43,13 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall FormKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	void __fastcall WmMenuChar(TMessage &msg)
 	{
 		if (msg.WParamHi==MF_POPUP) TForm::Dispatch(&msg); else msg.Result = MAKELONG(0, MNC_CLOSE);
 	}
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	__fastcall TFindDuplDlg(TComponent* Owner);
 
 	BEGIN_MESSAGE_MAP

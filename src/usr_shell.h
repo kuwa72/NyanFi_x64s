@@ -1,6 +1,6 @@
 /**
  * @file usr_shell.h
- * @brief ƒVƒFƒ‹ŠÖ˜A‚Ìˆ—
+ * @brief ã‚·ã‚§ãƒ«é–¢é€£ã®å‡¦ç†
  */
 //---------------------------------------------------------------------------
 #ifndef UserShellH
@@ -18,23 +18,23 @@
 #define WICIMG_THUMBNAIL	2
 
 //---------------------------------------------------------------------------
-#define FPRP_NAM_WD		15				//!< €–Ú–¼‚ÌÅ‘å•\¦•(”¼Šp’PˆÊ)
+#define FPRP_NAM_WD		15				//!< é …ç›®åã®æœ€å¤§è¡¨ç¤ºå¹…(åŠè§’å˜ä½)
 
-//î•ñ€–Ú‚Ìí—Şƒtƒ‰ƒO
-#define LBFLG_STD_FINF	0x00010000		//!< Šî–{ƒtƒ@ƒCƒ‹î•ñ
-#define LBFLG_PATH_FIF	0x00020000		//!< ƒpƒX–¼
-#define LBFLG_FILE_FIF	0x00040000		//!< ƒtƒ@ƒCƒ‹–¼
-#define LBFLG_TIME_FIF	0x00080000		//!< ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv
-#define LBFLG_ATTR_FIF	0x00100000		//!< ‘®«
-#define LBFLG_TAGS_FIF	0x00200000		//!< ƒ^ƒO
-#define LBFLG_TYPE_FIF	0x00400000		//!< í—Ş
+//æƒ…å ±é …ç›®ã®ç¨®é¡ãƒ•ãƒ©ã‚°
+#define LBFLG_STD_FINF	0x00010000		//!< åŸºæœ¬ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±
+#define LBFLG_PATH_FIF	0x00020000		//!< ãƒ‘ã‚¹å
+#define LBFLG_FILE_FIF	0x00040000		//!< ãƒ•ã‚¡ã‚¤ãƒ«å
+#define LBFLG_TIME_FIF	0x00080000		//!< ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—
+#define LBFLG_ATTR_FIF	0x00100000		//!< å±æ€§
+#define LBFLG_TAGS_FIF	0x00200000		//!< ã‚¿ã‚°
+#define LBFLG_TYPE_FIF	0x00400000		//!< ç¨®é¡
 
-#define LBFLG_FEXT_FIF	0x01000000		//!< Šg’£q•Êƒtƒ@ƒCƒ‹”
-#define LBFLG_CRCD_FIF	0x02000000		//!< ‰üsƒR[ƒh
-#define LBFLG_ERR_FIF	0x04000000		//!< ƒGƒ‰[/Œx
-#define LBFLG_DEBUG		0x08000000		//!< ƒfƒoƒbƒOó‘Ô
-#define LBFLG_GIT_TAG	0x10000000		//!< Gitƒ^ƒO
-#define LBFLG_GIT_HASH	0x20000000		//!< GitƒnƒbƒVƒ…
+#define LBFLG_FEXT_FIF	0x01000000		//!< æ‹¡å¼µå­åˆ¥ãƒ•ã‚¡ã‚¤ãƒ«æ•°
+#define LBFLG_CRCD_FIF	0x02000000		//!< æ”¹è¡Œã‚³ãƒ¼ãƒ‰
+#define LBFLG_ERR_FIF	0x04000000		//!< ã‚¨ãƒ©ãƒ¼/è­¦å‘Š
+#define LBFLG_DEBUG		0x08000000		//!< ãƒ‡ãƒãƒƒã‚°çŠ¶æ…‹
+#define LBFLG_GIT_TAG	0x10000000		//!< Gitã‚¿ã‚°
+#define LBFLG_GIT_HASH	0x20000000		//!< Gitãƒãƒƒã‚·ãƒ¥
 
 //---------------------------------------------------------------------------
 UnicodeString get_WndText(HWND hWnd);
@@ -81,7 +81,7 @@ struct drop_target_rec {
 };
 
 //---------------------------------------------------------------------------
-// TDropSource ƒNƒ‰ƒX
+// TDropSource ã‚¯ãƒ©ã‚¹
 //---------------------------------------------------------------------------
 class TDropSource : public IDropSource
 {
@@ -98,7 +98,7 @@ private:
 };
 
 //---------------------------------------------------------------------------
-// TDropTarget ƒNƒ‰ƒX
+// TDropTarget ã‚¯ãƒ©ã‚¹
 //---------------------------------------------------------------------------
 class TDropTargetBase : public IDropTarget
 {
@@ -114,7 +114,7 @@ protected:
 };
 
 //---------------------------------------------------------------------------
-// TDropTarget ƒNƒ‰ƒX
+// TDropTarget ã‚¯ãƒ©ã‚¹
 //---------------------------------------------------------------------------
 class TDropTarget : public TDropTargetBase
 {
@@ -130,7 +130,7 @@ private:
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒhƒƒbƒvƒ^[ƒQƒbƒgEƒŠƒXƒg
+ * @brief ãƒ‰ãƒ­ãƒƒãƒ—ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãƒ»ãƒªã‚¹ãƒˆ
  */
 class TDropTargetList : public TList
 {
@@ -158,15 +158,15 @@ extern int TargetIndex;
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒVƒFƒ‹ŠÖ˜A‚Ìˆ—ƒNƒ‰ƒX
+ * @brief ã‚·ã‚§ãƒ«é–¢é€£ã®å‡¦ç†ã‚¯ãƒ©ã‚¹
  */
 class UserShell
 {
 private:
-	TStringList *PropertyList;		//!< ƒvƒƒpƒeƒB‚Ì€–ÚƒŠƒXƒg (€–Ú–¼=ƒCƒ“ƒfƒbƒNƒXNo.)
+	TStringList *PropertyList;		//!< ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®é …ç›®ãƒªã‚¹ãƒˆ (é …ç›®å=ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹No.)
 
-	TFPUExceptionMask FpuTmpMask;	//!< •‚“®¬”“_—áŠO‚Ì—}~ƒ}ƒXƒN
-									//!< ¦“Áê‚È .opus ƒtƒ@ƒCƒ‹‚Å‚ÌƒGƒ‰[‘Îô
+	TFPUExceptionMask FpuTmpMask;	//!< æµ®å‹•å°æ•°ç‚¹ä¾‹å¤–ã®æŠ‘æ­¢ãƒã‚¹ã‚¯
+									//!< â€»ç‰¹æ®Šãª .opus ãƒ•ã‚¡ã‚¤ãƒ«ã§ã®ã‚¨ãƒ©ãƒ¼å¯¾ç­–
 
 	IDataObject* GetFilePathDataObject(UnicodeString dnam, TStringList *flist);
 
@@ -178,7 +178,7 @@ public:
 	UserShell(HWND hWnd);
 	~UserShell();
 
-	int  PropNameWidth;		//!< ƒvƒƒpƒeƒB€–Ú–¼‚ÌÅ‘å•\¦•(”¼Šp’PˆÊ)
+	int  PropNameWidth;		//!< ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£é …ç›®åã®æœ€å¤§è¡¨ç¤ºå¹…(åŠè§’å˜ä½)
 
 	void AddTargetList(TForm *form, TWinControl *ctrl);
 	void DelTargetItem(TForm *form);
@@ -187,42 +187,42 @@ public:
 	DWORD DoClipDragDrop();
 
 	/**
-	 * @brief ƒRƒ“ƒeƒLƒXƒgƒƒjƒ…[‚ğ•\¦
-	 * @param hWnd ƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹
-	 * @param dnam ƒfƒBƒŒƒNƒgƒŠ–¼
-	 * @param flist ‘ÎÛƒŠƒXƒg
-	 * @param ex_item ’Ç‰Áƒƒjƒ…[€–ÚƒŠƒXƒg(ƒLƒƒƒvƒVƒ‡ƒ“ [TAB] ƒRƒ}ƒ“ƒh [TAB] ƒAƒCƒRƒ“)
-	 * @return UnicodeString ¸”s‚Ìê‡ "ERROR"A’Ç‰Á€–Ú‚È‚ç‚»‚Ì•¶š—ñA‚»‚êˆÈŠO‚Í EmptyStr
+	 * @brief ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’è¡¨ç¤º
+	 * @param hWnd ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ«
+	 * @param dnam ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå
+	 * @param flist å¯¾è±¡ãƒªã‚¹ãƒˆ
+	 * @param ex_item è¿½åŠ ãƒ¡ãƒ‹ãƒ¥ãƒ¼é …ç›®ãƒªã‚¹ãƒˆ(ã‚­ãƒ£ãƒ—ã‚·ãƒ§ãƒ³ [TAB] ã‚³ãƒãƒ³ãƒ‰ [TAB] ã‚¢ã‚¤ã‚³ãƒ³)
+	 * @return UnicodeString å¤±æ•—ã®å ´åˆ "ERROR"ã€è¿½åŠ é …ç›®ãªã‚‰ãã®æ–‡å­—åˆ—ã€ãã‚Œä»¥å¤–ã¯ EmptyStr
 	 */
 	UnicodeString ShowContextMenu(HWND hWnd, UnicodeString dnam, TStringList *flist, TStringList *ex_item);
 
 	/**
-	 * @brief //ƒhƒ‰ƒCƒu‚ÌƒRƒ“ƒeƒLƒXƒgƒƒjƒ…[‚ğ•\¦/w’èID‚ğÀs
-	 * @param ƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹
-	 * @param drvnam ƒhƒ‰ƒCƒu–¼
-	 * @param ex_item ’Ç‰Áƒƒjƒ…[€–ÚƒŠƒXƒg(ƒLƒƒƒvƒVƒ‡ƒ“ [TAB] ƒRƒ}ƒ“ƒhAƒTƒuƒƒjƒ…[”ñ‘Î‰)
-	 * @param ex_ID ƒRƒ}ƒ“ƒhID(>0 ‚Ìê‡ƒƒjƒ…[‚ğ•\¦‚¹‚¸‚ÉID‚ğÀs)
-	 * @return UnicodeString ¸”s‚Ìê‡ "ERROR"A’Ç‰Á€–Ú‚È‚ç‚»‚Ì•¶š—ñA‚»‚êˆÈŠO‚Í EmptyStr
+	 * @brief //ãƒ‰ãƒ©ã‚¤ãƒ–ã®ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’è¡¨ç¤º/æŒ‡å®šIDã‚’å®Ÿè¡Œ
+	 * @param ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ«
+	 * @param drvnam ãƒ‰ãƒ©ã‚¤ãƒ–å
+	 * @param ex_item è¿½åŠ ãƒ¡ãƒ‹ãƒ¥ãƒ¼é …ç›®ãƒªã‚¹ãƒˆ(ã‚­ãƒ£ãƒ—ã‚·ãƒ§ãƒ³ [TAB] ã‚³ãƒãƒ³ãƒ‰ã€ã‚µãƒ–ãƒ¡ãƒ‹ãƒ¥ãƒ¼éå¯¾å¿œ)
+	 * @param ex_ID ã‚³ãƒãƒ³ãƒ‰ID(>0 ã®å ´åˆãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’è¡¨ç¤ºã›ãšã«IDã‚’å®Ÿè¡Œ)
+	 * @return UnicodeString å¤±æ•—ã®å ´åˆ "ERROR"ã€è¿½åŠ é …ç›®ãªã‚‰ãã®æ–‡å­—åˆ—ã€ãã‚Œä»¥å¤–ã¯ EmptyStr
 	 */
 	UnicodeString DriveContextMenu(HWND hWnd, UnicodeString drvnam, TStringList *ex_item, int ex_ID = 0);
 
 	/**
-	 * @brief Copy/ Cut ‚È‚Ç‚ÌƒRƒ}ƒ“ƒh‚ğÀs
-	 * @param hWnd ƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹
-	 * @param dnam ƒfƒBƒŒƒNƒgƒŠ–¼
-	 * @param flist ‘ÎÛƒtƒ@ƒCƒ‹ƒŠƒXƒg
-	 * @param cmd ƒRƒ}ƒ“ƒh
+	 * @brief Copy/ Cut ãªã©ã®ã‚³ãƒãƒ³ãƒ‰ã‚’å®Ÿè¡Œ
+	 * @param hWnd ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ«
+	 * @param dnam ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå
+	 * @param flist å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆ
+	 * @param cmd ã‚³ãƒãƒ³ãƒ‰
 	 * @return true
 	 * @return false
 	 */
 	bool InvokeMenuCmd(HWND hWnd, UnicodeString dnam, TStringList *flist, LPCSTR cmd);
 
-	/** @brief ƒtƒ@ƒCƒ‹–¼‚ğw’è‚µ‚ÄÀs */
+	/** @brief ãƒ•ã‚¡ã‚¤ãƒ«åã‚’æŒ‡å®šã—ã¦å®Ÿè¡Œ */
 	bool ShowFileRun();
 
 	/**
-	 * @brief ƒVƒ‡[ƒgƒJƒbƒg‚Ìì¬
-	 * @param fnam ƒtƒ@ƒCƒ‹–¼
+	 * @brief ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã®ä½œæˆ
+	 * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
 	 * @param target
 	 * @param cmdprm
 	 * @param wdir
@@ -241,15 +241,15 @@ public:
 	int  get_Duration(UnicodeString fnam);
 
 	/**
-	 * @brief ƒVƒ‡[ƒgƒJƒbƒgî•ñ‚Ìæ“¾
-	 * @param fnam ƒtƒ@ƒCƒ‹–¼
-	 * @param[out] lst î•ñƒŠƒXƒg
-	 * @param[out] nam ƒŠƒ“ƒNæ
-	 * @param[out] prm ƒpƒ‰ƒ[ƒ^
-	 * @param[out] fld ì‹ÆêŠ
-	 * @param[out] shw Às‚Ì‘å‚«‚³
-	 * @param[out] rem ƒRƒƒ“ƒg
-	 * @param[out] is_ra ŠÇ—Ò‚Æ‚µ‚ÄÀs
+	 * @brief ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆæƒ…å ±ã®å–å¾—
+	 * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+	 * @param[out] lst æƒ…å ±ãƒªã‚¹ãƒˆ
+	 * @param[out] nam ãƒªãƒ³ã‚¯å…ˆ
+	 * @param[out] prm ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
+	 * @param[out] fld ä½œæ¥­å ´æ‰€
+	 * @param[out] shw å®Ÿè¡Œæ™‚ã®å¤§ãã•
+	 * @param[out] rem ã‚³ãƒ¡ãƒ³ãƒˆ
+	 * @param[out] is_ra ç®¡ç†è€…ã¨ã—ã¦å®Ÿè¡Œ
 	 * @return true
 	 * @return false
 	 */
@@ -257,15 +257,15 @@ public:
 		UnicodeString *prm = NULL, UnicodeString *fld = NULL, int *shw = NULL, UnicodeString *rem = NULL, bool *is_ra = NULL);
 
 	/**
-	 * @brief ƒtƒ@ƒCƒ‹‚Ìí—Ş‚ğæ“¾
-	 * @param fnam ƒtƒ@ƒCƒ‹–¼
+	 * @brief ãƒ•ã‚¡ã‚¤ãƒ«ã®ç¨®é¡ã‚’å–å¾—
+	 * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
 	 * @return UnicodeString
 	 */
 	UnicodeString get_FileTypeStr(UnicodeString fnam);
 
 	/**
-	 * @brief ƒVƒ‡[ƒgƒJƒbƒg‚ÌƒŠƒ“ƒNæ‚ğæ“¾
-	 * @param fnam ƒtƒ@ƒCƒ‹–¼
+	 * @brief ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã®ãƒªãƒ³ã‚¯å…ˆã‚’å–å¾—
+	 * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
 	 * @return UnicodeString
 	 */
 	UnicodeString get_LnkName(UnicodeString fnam);
@@ -275,19 +275,19 @@ public:
 	HICON get_Icon(UnicodeString fnam, int &size, bool chk_sz = true);
 
 	/**
-	 * @brief ƒXƒ‚[ƒ‹ƒAƒCƒRƒ“‚ğæ“¾
-	 * @param fnam ƒtƒ@ƒCƒ‹–¼
+	 * @brief ã‚¹ãƒ¢ãƒ¼ãƒ«ã‚¢ã‚¤ã‚³ãƒ³ã‚’å–å¾—
+	 * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
 	 * @return HICON
 	 */
 	HICON get_SmallIcon(UnicodeString fnam);
 
 	/**
-	 * @brief ƒXƒ‚[ƒ‹ƒAƒCƒRƒ“‚ğ•`‰æ
-	 * @param fnam ƒtƒ@ƒCƒ‹–¼
-	 * @param cv ƒLƒƒƒ“ƒoƒX
-	 * @param x XˆÊ’u
-	 * @param y YˆÊ’u
-	 * @param cp ƒRƒ“ƒgƒ[ƒ‹
+	 * @brief ã‚¹ãƒ¢ãƒ¼ãƒ«ã‚¢ã‚¤ã‚³ãƒ³ã‚’æç”»
+	 * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+	 * @param cv ã‚­ãƒ£ãƒ³ãƒã‚¹
+	 * @param x Xä½ç½®
+	 * @param y Yä½ç½®
+	 * @param cp ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«
 	 * @return true
 	 * @return false
 	 */
@@ -296,8 +296,8 @@ public:
 	bool draw_SmallIcon(UnicodeString fnam, TImage *ip, TColor bg = clBtnFace, TControl *cp = NULL);
 
 	/**
-	 * @brief ƒtƒ@ƒCƒ‹‚©‚çƒTƒ€ƒlƒCƒ‹‚ğæ“¾
-	 * @param fnam ƒtƒ@ƒCƒ‹–¼
+	 * @brief ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ã‚µãƒ ãƒã‚¤ãƒ«ã‚’å–å¾—
+	 * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
 	 * @param[out] o_bmp
 	 * @param o_size
 	 * @return true
@@ -305,18 +305,18 @@ public:
 	 */
 	bool  get_Thumbnail(UnicodeString fnam, Graphics::TBitmap *o_bmp, int o_size);
 
-	/** @brief Šù’mƒpƒX‚ÌGUID•¶š—ñ‚ğƒpƒX–¼‚É•ÏŠ· */
+	/** @brief æ—¢çŸ¥ãƒ‘ã‚¹ã®GUIDæ–‡å­—åˆ—ã‚’ãƒ‘ã‚¹åã«å¤‰æ› */
 	UnicodeString KnownGuidStrToPath(UnicodeString s);
 
-	/**@brief Šù’mƒpƒXID‚ğƒpƒX–¼‚É•ÏŠ· */
+	/**@brief æ—¢çŸ¥ãƒ‘ã‚¹IDã‚’ãƒ‘ã‚¹åã«å¤‰æ› */
 	UnicodeString KnownGuidToPath(REFKNOWNFOLDERID id);
 
 	void AddKnownPath(REFKNOWNFOLDERID id, TStringList *lst, bool brk_sw = false);
 	void AddEnvPath(UnicodeString enam, TStringList *lst, bool brk_sw = false);
 
 	/**
-	 * @brief “ÁêƒtƒHƒ‹ƒ_ˆê——‚ğæ“¾(ƒ[ƒNƒŠƒXƒgŒ`®)
-	 * @param[out] lst ƒŠƒXƒg 
+	 * @brief ç‰¹æ®Šãƒ•ã‚©ãƒ«ãƒ€ä¸€è¦§ã‚’å–å¾—(ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆå½¢å¼)
+	 * @param[out] lst ãƒªã‚¹ãƒˆ 
 	 */
 	void get_SpecialFolderList(TStringList *lst);
 };

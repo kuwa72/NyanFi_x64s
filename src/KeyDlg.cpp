@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒL[Š„‚è“–‚Äˆê——													//
+//  ã‚­ãƒ¼å‰²ã‚Šå½“ã¦ä¸€è¦§													//
 //----------------------------------------------------------------------//
 #include "UserMdl.h"
 #include "Global.h"
@@ -35,7 +35,7 @@ void __fastcall TKeyListDlg::FormShow(TObject *Sender)
 
 	TStringGrid *gp = KeyListGrid;
 	InitializeListGrid(gp);
-	InitializeListHeader(KeyListHeader, _T("ƒL[|ƒRƒ}ƒ“ƒh|à–¾"));
+	InitializeListHeader(KeyListHeader, _T("ã‚­ãƒ¼|ã‚³ãƒãƒ³ãƒ‰|èª¬æ˜"));
 	IniFile->LoadGridColWidth(gp, 3, 100,120,220);
 	set_HeaderFromGrid(gp, KeyListHeader);
 	set_UsrScrPanel(GridScrPanel);
@@ -83,8 +83,8 @@ void __fastcall TKeyListDlg::FormKeyDown(TObject *Sender, WORD &Key, TShiftState
 }
 
 //---------------------------------------------------------------------------
-//‰º•”ƒ^ƒu‚Ì•`‰æ
-//¦ƒe[ƒ}—˜—p‚É‰º•”ƒ^ƒu‚ª³‚µ‚­•`‰æ‚³‚ê‚È‚¢•s‹ï‡‚Ì‘Îô
+//ä¸‹éƒ¨ã‚¿ãƒ–ã®æç”»
+//â€»ãƒ†ãƒ¼ãƒåˆ©ç”¨æ™‚ã«ä¸‹éƒ¨ã‚¿ãƒ–ãŒæ­£ã—ãæç”»ã•ã‚Œãªã„ä¸å…·åˆã®å¯¾ç­–
 //---------------------------------------------------------------------------
 void __fastcall TKeyListDlg::KeyTabControlDrawTab(TCustomTabControl *Control, int TabIndex,
 	const TRect &Rect, bool Active)
@@ -92,11 +92,11 @@ void __fastcall TKeyListDlg::KeyTabControlDrawTab(TCustomTabControl *Control, in
 	draw_OwnerTab(Control, TabIndex, Rect, Active);
 }
 //---------------------------------------------------------------------------
-//ˆê——‚ÌØ‚è‘Ö‚¦
+//ä¸€è¦§ã®åˆ‡ã‚Šæ›¿ãˆ
 //---------------------------------------------------------------------------
 void __fastcall TKeyListDlg::KeyTabControlChange(TObject *Sender)
 {
-	//ŠY“–‚·‚éİ’è‚ğ’Šo
+	//è©²å½“ã™ã‚‹è¨­å®šã‚’æŠ½å‡º
 	std::unique_ptr<TStringList> cmd_lst(new TStringList());
 	UnicodeString id_str = ScrModeIdStr.SubString(KeyTabControl->TabIndex + 1, 1) + ":";
 	for (int i=0; i<CmdSetList->Count; i++) {
@@ -104,7 +104,7 @@ void __fastcall TKeyListDlg::KeyTabControlChange(TObject *Sender)
 		if (StartsText(id_str, lbuf)) cmd_lst->Add(lbuf);
 	}
 
-	//’Ç‰Áƒƒjƒ…[/ŠO•”ƒc[ƒ‹‚ÌƒGƒCƒŠƒAƒX
+	//è¿½åŠ ãƒ¡ãƒ‹ãƒ¥ãƒ¼/å¤–éƒ¨ãƒ„ãƒ¼ãƒ«ã®ã‚¨ã‚¤ãƒªã‚¢ã‚¹
 	if (KeyTabControl->TabIndex==0) {
 		UnicodeString itm;
 		for (int i=0; i<ExtMenuList->Count; i++) {
@@ -124,11 +124,11 @@ void __fastcall TKeyListDlg::KeyTabControlChange(TObject *Sender)
 	}
 
 	if (KeyTabControl->TabIndex==0) {
-		CurList->Add(IniSeaShift + "A`Z,_=InitialSearch");
-		if (IniSeaByNum || IniSeaBySign) CurList->Add(IniSeaShift + "0`9=InitialSearch");
+		CurList->Add(IniSeaShift + "Aï½Z,ï¼¼=InitialSearch");
+		if (IniSeaByNum || IniSeaBySign) CurList->Add(IniSeaShift + "0ï½9=InitialSearch");
 	}
 
-	//–¢“o˜^ƒRƒ}ƒ“ƒh‚ğ’Ç‰Á
+	//æœªç™»éŒ²ã‚³ãƒãƒ³ãƒ‰ã‚’è¿½åŠ 
 	if (ShowAllCmdCheckBox->Checked) {
 		for (int i=0; i<CurList->Count; i++) {
 			int idx = cmd_lst->IndexOf(id_str + get_CmdStr(CurList->ValueFromIndex[i]));
@@ -138,7 +138,7 @@ void __fastcall TKeyListDlg::KeyTabControlChange(TObject *Sender)
 		CurList->AddStrings(cmd_lst.get());
 	}
 
-	//ƒtƒBƒ‹ƒ^
+	//ãƒ•ã‚£ãƒ«ã‚¿
 	if (!FilterEdit->Text.IsEmpty()) {
 		UnicodeString ptn = usr_Migemo->GetRegExPtn(MigemoCheckBox->Checked, FilterEdit->Text);
 		if (!ptn.IsEmpty()) {
@@ -154,21 +154,21 @@ void __fastcall TKeyListDlg::KeyTabControlChange(TObject *Sender)
 		else if (!MigemoCheckBox->Checked) beep_Warn();
 	}
 
-	//ƒ\[ƒg
+	//ã‚½ãƒ¼ãƒˆ
 	switch (KeySortMode) {
-	case  1:	//ƒRƒ}ƒ“ƒh
+	case  1:	//ã‚³ãƒãƒ³ãƒ‰
 		CurList->CustomSort(KeyComp_Cmd);	break;
-	case  2:	//à–¾
+	case  2:	//èª¬æ˜
 		cursor_HourGlass();
 		CurList->CustomSort(KeyComp_Dsc);
 		cursor_Default();
 		break;
-	default:	//ƒL[
+	default:	//ã‚­ãƒ¼
 		CurList->CustomSort(KeyComp_Key);
 	}
 	KeyListHeader->Invalidate();
 
-	//ˆê——‚É•\¦
+	//ä¸€è¦§ã«è¡¨ç¤º
 	TStringGrid *gp = KeyListGrid;
 	if (CurList->Count>0) {
 		gp->RowCount = CurList->Count;
@@ -201,7 +201,7 @@ void __fastcall TKeyListDlg::KeyTabControlChange(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒwƒbƒ_‚Ì•`‰æ
+//ãƒ˜ãƒƒãƒ€ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TKeyListDlg::KeyListHeaderDrawSection(THeaderControl *HeaderControl,
 		THeaderSection *Section, const TRect &Rect, bool Pressed)
@@ -222,7 +222,7 @@ void __fastcall TKeyListDlg::KeyListHeaderSectionResize(THeaderControl *HeaderCo
 }
 
 //---------------------------------------------------------------------------
-//ƒ\[ƒg•ÏX
+//ã‚½ãƒ¼ãƒˆå¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TKeyListDlg::KeyListHeaderSectionClick(THeaderControl *HeaderControl,
 		THeaderSection *Section)
@@ -245,7 +245,7 @@ void __fastcall TKeyListDlg::SortKeyActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒZƒ‹‚Ì•`‰æ
+//ã‚»ãƒ«ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TKeyListDlg::KeyListGridDrawCell(TObject *Sender, System::LongInt ACol, System::LongInt ARow,
 		TRect &Rect, TGridDrawState State)
@@ -262,16 +262,16 @@ void __fastcall TKeyListDlg::KeyListGridDrawCell(TObject *Sender, System::LongIn
 	cv->FillRect(Rect);
 	cv->Font->Color = use_fgsel? col_fgSelItem : get_ListFgCol();
 
-	//ƒL[
+	//ã‚­ãƒ¼
 	if (ACol==0) {
-		// + ‚Æ ~ ‚ğƒVƒ“ƒ{ƒ‹F‚Å‹­’²•\¦
+		// + ã¨ ~ ã‚’ã‚·ãƒ³ãƒœãƒ«è‰²ã§å¼·èª¿è¡¨ç¤º
 		SearchOption opt; opt << soRegEx;
 		std::unique_ptr<TStringList> em_lst(new TStringList());
 		get_MatchWordListEx(cellstr, "[+~]", opt, em_lst.get());
 		TxtOutOption t_opt;  t_opt << toNormal;
 		EmphasisTextOutEx(cellstr, em_lst.get(), cv, xp, yp, t_opt, use_fgsel? col_fgSelItem : col_Symbol, cv->Brush->Color);
 	}
-	//ƒRƒ}ƒ“ƒh
+	//ã‚³ãƒãƒ³ãƒ‰
 	else if (ACol==1) {
 		cellstr = minimize_str(cellstr, gp->Canvas, gp->ColWidths[1] - 8, true);
 		if (starts_Dollar(cellstr)) {
@@ -285,15 +285,15 @@ void __fastcall TKeyListDlg::KeyListGridDrawCell(TObject *Sender, System::LongIn
 				use_fgsel? col_fgSelItem : col_Reserved, cv->Brush->Color);
 		}
 	}
-	//à–¾
+	//èª¬æ˜
 	else {
 		cv->TextRect(Rect, xp, yp, cellstr);
 	}
 
-	//ƒJ[ƒ\ƒ‹
+	//ã‚«ãƒ¼ã‚½ãƒ«
 	draw_GridCursor(gp, Rect, ARow, State);
 
-	//Œó•âŠm’è
+	//å€™è£œç¢ºå®š
 	if (gp->RowCount==1 && ARow==0 && ACol==1 && !cellstr.IsEmpty()) {
 		cv->Brush->Color = col_Cursor;
 		cv->FrameRect(Rect);
@@ -321,13 +321,13 @@ void __fastcall TKeyListDlg::FilterEditExit(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒBƒ‹ƒ^‚É‚æ‚éˆê——‚ÌXV
+//ãƒ•ã‚£ãƒ«ã‚¿ã«ã‚ˆã‚‹ä¸€è¦§ã®æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TKeyListDlg::FilterEditChange(TObject *Sender)
 {
 	KeyTabControlChange(NULL);
 
-	//Šm’è‘¦Às
+	//ç¢ºå®šå³å®Ÿè¡Œ
 	TStringGrid *gp = KeyListGrid;
 	if (CnfExeCheckBox->Checked && FilterEdit->Focused() && !FilterEdit->Text.IsEmpty()
 		&& gp->RowCount==1 && !gp->Cells[1][0].IsEmpty())
@@ -338,7 +338,7 @@ void __fastcall TKeyListDlg::FilterEditChange(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//ƒtƒBƒ‹ƒ^—“‚Å‚ÌƒL[‘€ì
+//ãƒ•ã‚£ãƒ«ã‚¿æ¬„ã§ã®ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TKeyListDlg::FilterEditKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -353,7 +353,7 @@ void __fastcall TKeyListDlg::FilterEditKeyDown(TObject *Sender, WORD &Key, TShif
 	Key = 0;
 }
 //---------------------------------------------------------------------------
-//ƒtƒBƒ‹ƒ^‚©‚çEnterƒL[‚Å‘I‘ğ€–Ú‚ğÀs
+//ãƒ•ã‚£ãƒ«ã‚¿ã‹ã‚‰Enterã‚­ãƒ¼ã§é¸æŠé …ç›®ã‚’å®Ÿè¡Œ
 //---------------------------------------------------------------------------
 void __fastcall TKeyListDlg::FilterEditKeyPress(TObject *Sender, System::WideChar &Key)
 {
@@ -371,7 +371,7 @@ void __fastcall TKeyListDlg::FilterEditKeyPress(TObject *Sender, System::WideCha
 }
 
 //---------------------------------------------------------------------------
-//–¢“o˜^ƒRƒ}ƒ“ƒh‚à•\¦
+//æœªç™»éŒ²ã‚³ãƒãƒ³ãƒ‰ã‚‚è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TKeyListDlg::ShowAllCmdActionExecute(TObject *Sender)
 {
@@ -383,7 +383,7 @@ void __fastcall TKeyListDlg::ShowAllCmdActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚Å‚ÌƒL[‘€ì
+//ä¸€è¦§ã§ã®ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TKeyListDlg::KeyListGridKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -392,23 +392,23 @@ void __fastcall TKeyListDlg::KeyListGridKeyDown(TObject *Sender, WORD &Key, TShi
 	UnicodeString cmd_F  = Key_to_CmdF(KeyStr);
 	UnicodeString cmd_V  = Key_to_CmdV(KeyStr);
 
-	//Šm’è
+	//ç¢ºå®š
 	if (equal_ENTER(KeyStr)) {
 		CommandStr	= gp->Cells[1][gp->Row];
 		ModalResult = mrOk;
 	}
-	//ƒJ[ƒ\ƒ‹ˆÚ“®
+	//ã‚«ãƒ¼ã‚½ãƒ«ç§»å‹•
 	else if (GridCursorMove(cmd_F, gp) || GridCursorMove(cmd_V, gp)) {
 		;
 	}
 	else if (StartsText("IncSearch", cmd_F)) {
 		FilterEdit->SetFocus();
 	}
-	//•Â‚¶‚é
+	//é–‰ã˜ã‚‹
 	else if (SameText(cmd_F, "ReturnList")) {
 		ModalResult = mrCancel;
 	}
-	//ƒ^ƒuØ‚èŠ·‚¦
+	//ã‚¿ãƒ–åˆ‡ã‚Šæ›ãˆ
 	else if (is_ToRightOpe(KeyStr, cmd_F)) {
 		KeyTabControl->TabIndex = (KeyTabControl->TabIndex + 1) % KeyTabControl->Tabs->Count;
 		KeyTabControlChange(NULL);
@@ -418,7 +418,7 @@ void __fastcall TKeyListDlg::KeyListGridKeyDown(TObject *Sender, WORD &Key, TShi
 															  : KeyTabControl->Tabs->Count - 1;
 		KeyTabControlChange(NULL);
 	}
-	//sƒRƒs[
+	//è¡Œã‚³ãƒ”ãƒ¼
 	else if (SameText(cmd_V, "ClipCopy")) {
 		UnicodeString ibuf = get_tkn_r(CurList->Names[gp->Row], ':');
 		UnicodeString cmd  = CurList->ValueFromIndex[gp->Row];
@@ -426,8 +426,8 @@ void __fastcall TKeyListDlg::KeyListGridKeyDown(TObject *Sender, WORD &Key, TShi
 		cmd = del_CmdDesc(cmd);
 		copy_to_Clipboard(ibuf.cat_sprintf(_T("\t%s\t%s"), cmd.c_str(), dsc.c_str()));
 	}
-	//“ª•¶šƒT[ƒ`
-	else if (is_IniSeaKey(KeyStr)) {	//KeyStr ‚É³‹K•\Œ»ƒpƒ^[ƒ“‚ª•Ô‚é
+	//é ­æ–‡å­—ã‚µãƒ¼ãƒ
+	else if (is_IniSeaKey(KeyStr)) {	//KeyStr ã«æ­£è¦è¡¨ç¾ãƒ‘ã‚¿ãƒ¼ãƒ³ãŒè¿”ã‚‹
 		TRegExOptions opt; opt << roIgnoreCase;
 		int idx0=0, idx1=0;
 		for (int i=0; i<gp->RowCount && idx1==0; i++) {
@@ -437,7 +437,7 @@ void __fastcall TKeyListDlg::KeyListGridKeyDown(TObject *Sender, WORD &Key, TShi
 		int rn = (idx1>0)? idx1 : idx0;
 		if (rn>0) gp->Row = rn;
 	}
-	//‰EƒNƒŠƒbƒNƒƒjƒ…[
+	//å³ã‚¯ãƒªãƒƒã‚¯ãƒ¡ãƒ‹ãƒ¥ãƒ¼
 	else if (StartsText("ContextMenu", cmd_F)) {
 		show_PopupMenu(gp);
 	}
@@ -451,11 +451,11 @@ void __fastcall TKeyListDlg::KeyListGridDblClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//Œ»İ‚Ìˆê——“à—e‚ğæ“¾(TAB‹æØ‚è)
+//ç¾åœ¨ã®ä¸€è¦§å†…å®¹ã‚’å–å¾—(TABåŒºåˆ‡ã‚Š)
 //---------------------------------------------------------------------------
 void __fastcall TKeyListDlg::GetStrList(TStringList *lst)
 {
-	lst->Add("ƒL[\tƒRƒ}ƒ“ƒh\tà–¾");
+	lst->Add("ã‚­ãƒ¼\tã‚³ãƒãƒ³ãƒ‰\tèª¬æ˜");
 	for (int i=0; i<CurList->Count; i++) {
 		UnicodeString ibuf = get_tkn_r(CurList->Names[i], ':');
 		UnicodeString cmd  = CurList->ValueFromIndex[i];
@@ -466,7 +466,7 @@ void __fastcall TKeyListDlg::GetStrList(TStringList *lst)
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚ğƒRƒs[
+//ä¸€è¦§ã‚’ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TKeyListDlg::CopyListItemClick(TObject *Sender)
 {
@@ -475,11 +475,11 @@ void __fastcall TKeyListDlg::CopyListItemClick(TObject *Sender)
 	copy_to_Clipboard(cbuf->Text);
 }
 //---------------------------------------------------------------------------
-//ˆê——‚ğƒtƒ@ƒCƒ‹‚É•Û‘¶
+//ä¸€è¦§ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã«ä¿å­˜
 //---------------------------------------------------------------------------
 void __fastcall TKeyListDlg::SaveAsListItemClick(TObject *Sender)
 {
-	UserModule->SaveTxtDlg->Title		  = LoadUsrMsg(USTR_SaveAs, _T("ƒL[Š„‚è“–‚Äˆê——"));
+	UserModule->SaveTxtDlg->Title		  = LoadUsrMsg(USTR_SaveAs, _T("ã‚­ãƒ¼å‰²ã‚Šå½“ã¦ä¸€è¦§"));
 	UserModule->SaveTxtDlg->InitialDir	  = ExcludeTrailingPathDelimiter(SaveTxtPath);
 	UserModule->SaveTxtDlg->EncodingIndex = SaveEncIndex;
 	if (UserModule->SaveTxtDlg->Execute()) {
@@ -489,13 +489,13 @@ void __fastcall TKeyListDlg::SaveAsListItemClick(TObject *Sender)
 		std::unique_ptr<TStringList> fbuf(new TStringList());
 		GetStrList(fbuf.get());
 		if (!saveto_TextFile(UserModule->SaveTxtDlg->FileName, fbuf.get(), SaveEncIndex))
-			msgbox_ERR(LoadUsrMsg(USTR_FaildSave, _T("ƒL[Š„‚è“–‚Äˆê——")));
+			msgbox_ERR(LoadUsrMsg(USTR_FaildSave, _T("ã‚­ãƒ¼å‰²ã‚Šå½“ã¦ä¸€è¦§")));
 	}
 
 	KeyListGrid->SetFocus();
 }
 //---------------------------------------------------------------------------
-//ƒRƒ}ƒ“ƒh‚ğƒRƒs[
+//ã‚³ãƒãƒ³ãƒ‰ã‚’ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TKeyListDlg::CopyCmdItemClick(TObject *Sender)
 {
@@ -504,7 +504,7 @@ void __fastcall TKeyListDlg::CopyCmdItemClick(TObject *Sender)
 		copy_to_Clipboard(del_CmdDesc(CurList->ValueFromIndex[idx]));
 }
 //---------------------------------------------------------------------------
-//ƒRƒ}ƒ“ƒh‚Ìƒwƒ‹ƒv
+//ã‚³ãƒãƒ³ãƒ‰ã®ãƒ˜ãƒ«ãƒ—
 //---------------------------------------------------------------------------
 void __fastcall TKeyListDlg::HelpCmdActionExecute(TObject *Sender)
 {
@@ -513,11 +513,11 @@ void __fastcall TKeyListDlg::HelpCmdActionExecute(TObject *Sender)
 		UnicodeString kwd = get_CmdStr(CurList->ValueFromIndex[idx]);
 		UnicodeString topic;
 		switch (KeyTabControl->TabIndex) {
-		case  1: topic = HELPTOPIC_IS;		break;	//ƒeƒLƒXƒgƒrƒ…[ƒA
-		case  2: topic = HELPTOPIC_TV;		break;	//ƒeƒLƒXƒgƒrƒ…[ƒA
-		case  3: topic = HELPTOPIC_IV;		break;	//ƒCƒ[ƒWƒrƒ…[ƒA
-		case  4: topic = HELPTOPIC_CILW;	break;	//ƒƒO
-		default: topic = HELPTOPIC_FL;		break;	//ƒtƒ@ƒCƒ‰[
+		case  1: topic = HELPTOPIC_IS;		break;	//ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢
+		case  2: topic = HELPTOPIC_TV;		break;	//ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢
+		case  3: topic = HELPTOPIC_IV;		break;	//ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢
+		case  4: topic = HELPTOPIC_CILW;	break;	//ãƒ­ã‚°
+		default: topic = HELPTOPIC_FL;		break;	//ãƒ•ã‚¡ã‚¤ãƒ©ãƒ¼
 		}
 
 		if (topic.Pos('#')==0 && !kwd.IsEmpty()) topic.cat_sprintf(_T("#%s"), kwd.c_str());
@@ -539,7 +539,7 @@ void __fastcall TKeyListDlg::HelpCmdActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒIƒvƒVƒ‡ƒ“İ’è‚Ö
+//ã‚ªãƒ—ã‚·ãƒ§ãƒ³è¨­å®šã¸
 //---------------------------------------------------------------------------
 void __fastcall TKeyListDlg::OptionItemClick(TObject *Sender)
 {

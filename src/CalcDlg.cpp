@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  “d‘ì																//
+//  é›»å“																//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -12,11 +12,11 @@
 #pragma resource "*.dfm"
 TCalculator *Calculator = NULL;
 
-bool Calculating = false;	//ŒvZ’†
+bool Calculating = false;	//è¨ˆç®—ä¸­
 
 //---------------------------------------------------------------------------
-//ƒ†[ƒU[‚É‚æ‚éZpƒGƒ‰[ƒnƒ“ƒhƒ‰
-//  ŒvZ’†‚ÍƒGƒ‰[‚ğ—}~
+//ãƒ¦ãƒ¼ã‚¶ãƒ¼ã«ã‚ˆã‚‹ç®—è¡“ã‚¨ãƒ©ãƒ¼ãƒãƒ³ãƒ‰ãƒ©
+//  è¨ˆç®—ä¸­ã¯ã‚¨ãƒ©ãƒ¼ã‚’æŠ‘æ­¢
 //---------------------------------------------------------------------------
 int _matherrl(struct _exceptionl *e)
 {
@@ -24,7 +24,7 @@ int _matherrl(struct _exceptionl *e)
 }
 
 //---------------------------------------------------------------------------
-//TCalculator ƒNƒ‰ƒX
+//TCalculator ã‚¯ãƒ©ã‚¹
 //---------------------------------------------------------------------------
 __fastcall TCalculator::TCalculator(TComponent* Owner)
 	: TForm(Owner)
@@ -102,27 +102,27 @@ void __fastcall TCalculator::FormKeyDown(TObject *Sender, WORD &Key, TShiftState
 	SpecialKeyProc(this, Key, Shift);
 }
 //---------------------------------------------------------------------------
-//ƒ†[ƒU’è‹`‚Ì‰Šú‰»
+//ãƒ¦ãƒ¼ã‚¶å®šç¾©ã®åˆæœŸåŒ–
 //---------------------------------------------------------------------------
 void __fastcall TCalculator::InitUsrDef()
 {
-	//ŠÖ”
+	//é–¢æ•°
 	std::unique_ptr<UsrIniFile> def_file(new UsrIniFile(ExePath + CALC_INI_FILE));
 	def_file->ReadSection("Function", FuncList);
 
-	//’è”
+	//å®šæ•°
 	ConstList->Text =
-		"pi=3.14159265358979323846	‰~ü—¦\n"
-		"e=2.71828182845904523536	©‘R‘Î”‚Ì’ê\n"
-		"c=299792458	^‹ó’†‚ÌŒõ‘¬“x [m*sec^-1]\n"
-		"g=9.80665	d—Í‰Á‘¬“x [m/sec^2]\n"
-		"h=6.6260755E-34	ƒvƒ‰ƒ“ƒN’è” [Js]\n"
-		"ec=1.60217733E-19	‘f“d‰× [C]\n"
-		"u0=1.25663706E-6	^‹ó‚Ì“§¥—¦ [H/m]\n"
-		"e0=8.85418782E-12	^‹ó‚Ì—U“d—¦ [F/m]\n"
-		"k=1.380658E-23	ƒ{ƒ‹ƒcƒ}ƒ“’è” [J/K]\n"
-		"NA=6.0221367E+23	ƒAƒ{ƒKƒhƒ’è”[1/mol]\n"
-		"Now=hh:nn:ss	Œ»İ\n";
+		"pi=3.14159265358979323846	å††å‘¨ç‡\n"
+		"e=2.71828182845904523536	è‡ªç„¶å¯¾æ•°ã®åº•\n"
+		"c=299792458	çœŸç©ºä¸­ã®å…‰é€Ÿåº¦ [m*sec^-1]\n"
+		"g=9.80665	é‡åŠ›åŠ é€Ÿåº¦ [m/sec^2]\n"
+		"h=6.6260755E-34	ãƒ—ãƒ©ãƒ³ã‚¯å®šæ•° [Js]\n"
+		"ec=1.60217733E-19	ç´ é›»è· [C]\n"
+		"u0=1.25663706E-6	çœŸç©ºã®é€ç£ç‡ [H/m]\n"
+		"e0=8.85418782E-12	çœŸç©ºã®èª˜é›»ç‡ [F/m]\n"
+		"k=1.380658E-23	ãƒœãƒ«ãƒ„ãƒãƒ³å®šæ•° [J/K]\n"
+		"NA=6.0221367E+23	ã‚¢ãƒœã‚¬ãƒ‰ãƒ­å®šæ•°[1/mol]\n"
+		"Now=hh:nn:ss	ç¾åœ¨æ™‚åˆ»\n";
 	DefConstCount = ConstList->Count;
 
 	std::unique_ptr<TStringList> c_lst(new TStringList());
@@ -133,7 +133,7 @@ void __fastcall TCalculator::InitUsrDef()
 }
 
 //---------------------------------------------------------------------------
-//•¶š—ñ‚ª hh:nn[:ss] Œ`®‚©?
+//æ–‡å­—åˆ—ãŒ hh:nn[:ss] å½¢å¼ã‹?
 //---------------------------------------------------------------------------
 bool __fastcall TCalculator::IsTimeStr(UnicodeString s)
 {
@@ -141,7 +141,7 @@ bool __fastcall TCalculator::IsTimeStr(UnicodeString s)
 	return TRegEx::IsMatch(s, "^(\\+|-)?(\\d+(:[0-5][0-9]){1,2}|Now)$", opt);
 }
 //---------------------------------------------------------------------------
-//•¶š—ñ‚ª16i”‚©?
+//æ–‡å­—åˆ—ãŒ16é€²æ•°ã‹?
 //---------------------------------------------------------------------------
 bool __fastcall TCalculator::IsHexStr(UnicodeString s)
 {
@@ -149,7 +149,7 @@ bool __fastcall TCalculator::IsHexStr(UnicodeString s)
 	return TRegEx::IsMatch(s, "^0x[0-9a-f]+$", opt);
 }
 //---------------------------------------------------------------------------
-//•¶š—ñ‚ª16i/10i®”‚©?
+//æ–‡å­—åˆ—ãŒ16é€²/10é€²æ•´æ•°ã‹?
 //---------------------------------------------------------------------------
 bool __fastcall TCalculator::IsHexOrInt(UnicodeString s)
 {
@@ -158,7 +158,7 @@ bool __fastcall TCalculator::IsHexOrInt(UnicodeString s)
 }
 
 //---------------------------------------------------------------------------
-//long double ‚ª®”‚©?
+//long double ãŒæ•´æ•°ã‹?
 //---------------------------------------------------------------------------
 bool __fastcall TCalculator::DoubleIsInt(long double v, long double &ip)
 {
@@ -172,13 +172,13 @@ bool __fastcall TCalculator::DoubleIsInt(long double v)
 }
 
 //---------------------------------------------------------------------------
-//long double ’l‚ğ•¶š—ñ‚É•ÏŠ·
+//long double å€¤ã‚’æ–‡å­—åˆ—ã«å¤‰æ›
 //---------------------------------------------------------------------------
 UnicodeString __fastcall TCalculator::LongDoubleToStr(
-	long double v,	//’l
-	bool is_x,		//16i•\‹L	(default = false)
-	bool is_t,		//ŠÔ		(default = false)
-	bool is_ans)	//Œ‹‰Ê—p‚É2Œ…Œ¸‚ç‚·	(default = false)
+	long double v,	//å€¤
+	bool is_x,		//16é€²è¡¨è¨˜	(default = false)
+	bool is_t,		//æ™‚é–“		(default = false)
+	bool is_ans)	//çµæœç”¨ã«2æ¡æ¸›ã‚‰ã™	(default = false)
 {
 	UnicodeString ret_str;
 
@@ -210,15 +210,15 @@ UnicodeString __fastcall TCalculator::LongDoubleToStr(
 }
 
 //---------------------------------------------------------------------------
-//”’l•¶š—ñ‚Ì•]‰¿
-//IƒGƒ‰[‚ÉƒTƒCƒŒƒ“ƒg—áŠO‘—o
+//æ•°å€¤æ–‡å­—åˆ—ã®è©•ä¾¡
+//ï¼ã‚¨ãƒ©ãƒ¼æ™‚ã«ã‚µã‚¤ãƒ¬ãƒ³ãƒˆä¾‹å¤–é€å‡º
 //---------------------------------------------------------------------------
 long double __fastcall TCalculator::EvalNumStr(UnicodeString s)
 {
 	long double v = 0;
 
 	try {
-		//’è”‚ğ‰ğŒˆ
+		//å®šæ•°ã‚’è§£æ±º
 		UnicodeString c = ConstList->Values[s];
 		if (!c.IsEmpty()) {
 			s = get_pre_tab(c);
@@ -226,18 +226,18 @@ long double __fastcall TCalculator::EvalNumStr(UnicodeString s)
 		}
 		s = ReplaceStr(s, ",", "");
 
-		//16i”
+		//16é€²æ•°
 		if (IsHexStr(s)) {
 			v = (long double)StrToInt64(s);
 		}
-		//ŠÔ(ms)
+		//æ™‚é–“(ms)
 		else if (IsTimeStr(s)) {
 			int hh = split_tkn(s, ':').ToInt();
 			int mm = split_tkn(s, ':').ToInt();
 			int ss = s.IsEmpty()? 0 : s.ToInt();
 			v = hh*3600 + mm * 60 + ss;
 		}
-		//‚»‚Ì‘¼
+		//ãã®ä»–
 		else {
 			bool is_fct = remove_end_s(s, '!');
 			wchar_t *topptr = s.c_str();
@@ -246,7 +246,7 @@ long double __fastcall TCalculator::EvalNumStr(UnicodeString s)
 			if ((topptr += s.Length()) != endptr) Abort();
 			if (is_IllegalVal(v)) Abort();
 
-			//ŠKæ
+			//éšä¹—
 			if (is_fct) {
 				long double ip;
 				if (!DoubleIsInt(v, ip)) Abort();
@@ -266,7 +266,7 @@ long double __fastcall TCalculator::EvalNumStr(UnicodeString s)
 		}
 	}
 	catch (...) {
-		ErrMsg = "ˆÙí’l‚Ü‚½‚ÍƒI[ƒo[ƒtƒ[";
+		ErrMsg = "ç•°å¸¸å€¤ã¾ãŸã¯ã‚ªãƒ¼ãƒãƒ¼ãƒ•ãƒ­ãƒ¼";
 		Abort();
 	}
 
@@ -274,8 +274,8 @@ long double __fastcall TCalculator::EvalNumStr(UnicodeString s)
 }
 
 //---------------------------------------------------------------------------
-//ŠÖ”‚Ì•]‰¿
-//IƒGƒ‰[‚ÉƒTƒCƒŒƒ“ƒg—áŠO‘—o
+//é–¢æ•°ã®è©•ä¾¡
+//ï¼ã‚¨ãƒ©ãƒ¼æ™‚ã«ã‚µã‚¤ãƒ¬ãƒ³ãƒˆä¾‹å¤–é€å‡º
 //---------------------------------------------------------------------------
 long double __fastcall TCalculator::EvalFunc(UnicodeString s)
 {
@@ -293,7 +293,7 @@ long double __fastcall TCalculator::EvalFunc(UnicodeString s)
 			long double   regA = EvalNumStr(Trim(get_tkn_r(buf, ' ')));
 
 			bool handled = true;
-			//OŠpŠÖ”
+			//ä¸‰è§’é–¢æ•°
 			if (contained_wd_i("SIN|COS|TAN", func)) {
 				regA = (AngleMode==0)? regA/180*M_PI : (AngleMode==2)? regA /200*M_PI : regA;
 				if		(SameText(func, "SIN")) ans = sinl(regA);
@@ -308,30 +308,30 @@ long double __fastcall TCalculator::EvalFunc(UnicodeString s)
 				else handled = false;
 				ans = (AngleMode==0)? ans/M_PI*180 : (AngleMode==2)? ans/M_PI*100 : ans;
 			}
-			//‘o‹ÈüŠÖ”
+			//åŒæ›²ç·šé–¢æ•°
 			else if (SameText(func ,"SINH")) ans = sinhl(regA);
 			else if (SameText(func ,"COSH")) ans = coshl(regA);
 			else if (SameText(func ,"TANH")) ans = tanhl(regA);
-			//‘Î”
+			//å¯¾æ•°
 			else if (SameText(func, "LN"))  ans = logl(regA);
 			else if (SameText(func, "LOG")) ans = log10l(regA);
-			//‚»‚Ì‘¼
+			//ãã®ä»–
 			else if (SameText(func, "ABS"))   ans = fabsl(regA);
 			else if (SameText(func, "CEIL"))  ans = Ceil(regA);
 			else if (SameText(func, "FLOOR")) ans = Floor(regA);
 			else handled = false;
 
 			if (!handled) {
-				ErrMsg = "•s–¾‚ÈŠÖ”";  Abort();
+				ErrMsg = "ä¸æ˜ãªé–¢æ•°";  Abort();
 			}
 			else if (is_IllegalVal(ans)) {
-				ErrMsg = "ˆÙí’l‚Ü‚½‚ÍƒI[ƒo[ƒtƒ[";  Abort();
+				ErrMsg = "ç•°å¸¸å€¤ã¾ãŸã¯ã‚ªãƒ¼ãƒãƒ¼ãƒ•ãƒ­ãƒ¼";  Abort();
 			}
 		}
 		else {
-			//ŠKæ‚Ì–‘Oƒ`ƒFƒbƒN
+			//éšä¹—ã®äº‹å‰ãƒã‚§ãƒƒã‚¯
 			if (EndsStr('!', s) && sig==-1) {
-				ErrMsg = "’è‹`ˆæƒGƒ‰[";  Abort();
+				ErrMsg = "å®šç¾©åŸŸã‚¨ãƒ©ãƒ¼";  Abort();
 			}
 			ans = EvalNumStr(buf);
 		}
@@ -345,13 +345,13 @@ long double __fastcall TCalculator::EvalFunc(UnicodeString s)
 }
 
 //---------------------------------------------------------------------------
-//w’èˆÊ’u‚Ì‰‰Z€–Ú‚ğ•]‰¿
-//IƒGƒ‰[‚ÉƒTƒCƒŒƒ“ƒg—áŠO‘—o
+//æŒ‡å®šä½ç½®ã®æ¼”ç®—é …ç›®ã‚’è©•ä¾¡
+//ï¼ã‚¨ãƒ©ãƒ¼æ™‚ã«ã‚µã‚¤ãƒ¬ãƒ³ãƒˆä¾‹å¤–é€å‡º
 //---------------------------------------------------------------------------
 void __fastcall TCalculator::EvalOpeItem(
-	TStringList *o_lst,		//‰‰ZqƒŠƒXƒg
-	TStringList *m_lst,		//ƒƒ‚ƒŠƒŠƒXƒg
-	int p)					//‰‰ZˆÊ’u
+	TStringList *o_lst,		//æ¼”ç®—å­ãƒªã‚¹ãƒˆ
+	TStringList *m_lst,		//ãƒ¡ãƒ¢ãƒªãƒªã‚¹ãƒˆ
+	int p)					//æ¼”ç®—ä½ç½®
 {
 	if (p>=o_lst->Count) Abort();
 	if (o_lst->Strings[p].IsEmpty()) Abort();
@@ -390,7 +390,7 @@ void __fastcall TCalculator::EvalOpeItem(
 		}
 		else if (SameStr(ope, "/")) {
 			if (regB==0) {
-				ErrMsg = "0‚É‚æ‚éŠ„‚èZ";  Abort();
+				ErrMsg = "0ã«ã‚ˆã‚‹å‰²ã‚Šç®—";  Abort();
 			}
 			ans = regA / regB;
 			is_t = is_tA && !is_tB;
@@ -400,23 +400,23 @@ void __fastcall TCalculator::EvalOpeItem(
 		}
 		else if (SameStr(ope, "^")) {
 			if ((regA<0 && !DoubleIsInt(regB)) || (regA==0 && regB<=0)) {
-				ErrMsg = "’è‹`ˆæƒGƒ‰[";  Abort();
+				ErrMsg = "å®šç¾©åŸŸã‚¨ãƒ©ãƒ¼";  Abort();
 			}
 			ans = powl(regA, regB);
 		}
-		else if (ope.IsDelimiter("&|O‚f‚k", 1)) {
+		else if (ope.IsDelimiter("&|ï¼¾ï¼§ï¼¬", 1)) {
 			long double ipA, ipB;
 			if (!DoubleIsInt(regA, ipA) || !DoubleIsInt(regB, ipB)) {
-				ErrMsg = "’l‚ª®”‚Å‚È‚¢‚©ƒI[ƒo[ƒtƒ[";  Abort();
+				ErrMsg = "å€¤ãŒæ•´æ•°ã§ãªã„ã‹ã‚ªãƒ¼ãƒãƒ¼ãƒ•ãƒ­ãƒ¼";  Abort();
 			}
 			int iA = (int)ipA;
 			int iB = (int)ipB;
-			//Å‘åŒö–ñ”/Å¬Œö”{”
-			if (SameStr(ope, "‚f") || SameStr(ope, "‚k")) {
+			//æœ€å¤§å…¬ç´„æ•°/æœ€å°å…¬å€æ•°
+			if (SameStr(ope, "ï¼§") || SameStr(ope, "ï¼¬")) {
 				if (iA==0 || iB==0) {
-					ErrMsg = "’è‹`ˆæƒGƒ‰[";  Abort();
+					ErrMsg = "å®šç¾©åŸŸã‚¨ãƒ©ãƒ¼";  Abort();
 				}
-				//ƒ†[ƒNƒŠƒbƒh‚ÌŒİœ–@
+				//ãƒ¦ãƒ¼ã‚¯ãƒªãƒƒãƒ‰ã®äº’é™¤æ³•
 				int a = iA; int b = iB;
 				if (a<b) std::swap(a, b);
 				for (;;) {
@@ -426,19 +426,19 @@ void __fastcall TCalculator::EvalOpeItem(
 				}
 				ans = b;	//GCD
 
-				if (SameStr(ope, "‚k")) ans = (iA * iB)/ans;	//LCM
+				if (SameStr(ope, "ï¼¬")) ans = (iA * iB)/ans;	//LCM
 			}
-			//ƒrƒbƒg‰‰Z
+			//ãƒ“ãƒƒãƒˆæ¼”ç®—
 			else {
-				ans = SameStr(ope, "&")? (iA & iB) : SameStr(ope, "O")? (iA ^ iB) : (iA | iB);
+				ans = SameStr(ope, "&")? (iA & iB) : SameStr(ope, "ï¼¾")? (iA ^ iB) : (iA | iB);
 			}
 		}
 
 		if (is_IllegalVal(ans)) {
-			ErrMsg = "ˆÙí’l‚Ü‚½‚ÍƒI[ƒo[ƒtƒ[";  Abort();
+			ErrMsg = "ç•°å¸¸å€¤ã¾ãŸã¯ã‚ªãƒ¼ãƒãƒ¼ãƒ•ãƒ­ãƒ¼";  Abort();
 		}
 
-		//•b–¢–‚ÍlÌŒÜ“ü
+		//ç§’æœªæº€ã¯å››æ¨äº”å…¥
 		if (is_t) ans = (ans>=0.0)? Floor(ans + 0.5) : -Floor(-ans + 0.5);
 	}
 	catch (...) {
@@ -452,14 +452,14 @@ void __fastcall TCalculator::EvalOpeItem(
 }
 
 //---------------------------------------------------------------------------
-//•”•ª®‚Ì•]‰¿
+//éƒ¨åˆ†å¼ã®è©•ä¾¡
 //---------------------------------------------------------------------------
 UnicodeString __fastcall TCalculator::EvalExpr(UnicodeString s)
 {
-	//®‚ğ‰‰Z€–Ú‚É•ª‰ğ
+	//å¼ã‚’æ¼”ç®—é …ç›®ã«åˆ†è§£
 	std::unique_ptr<TStringList> ope_lst(new TStringList());
 	std::unique_ptr<TStringList> mem_lst(new TStringList());
-	ope_lst->Add("+");	//‚±‚ê‚Íƒ_ƒ~[‚Åg‚í‚ê‚È‚¢
+	ope_lst->Add("+");	//ã“ã‚Œã¯ãƒ€ãƒŸãƒ¼ã§ä½¿ã‚ã‚Œãªã„
 
 	UnicodeString lbuf = Trim(s);
 	UnicodeString mbuf;
@@ -495,7 +495,7 @@ UnicodeString __fastcall TCalculator::EvalExpr(UnicodeString s)
 					flag = 0;
 				}
 			}
-			else if (UnicodeString("*/%^&O|‚f‚k").Pos(c)) {
+			else if (UnicodeString("*/%^&ï¼¾|ï¼§ï¼¬").Pos(c)) {
 				mem_lst->Add(Trim(mbuf)); ope_lst->Add(c); mbuf = EmptyStr;
 				flag = 0;
 			}
@@ -507,13 +507,13 @@ UnicodeString __fastcall TCalculator::EvalExpr(UnicodeString s)
 
 	if (!mbuf.IsEmpty()) mem_lst->Add(Trim(mbuf));
 
-	//ŒvZ
+	//è¨ˆç®—
 	UnicodeString ret_str;
 	try {
 		if (mem_lst->Count<ope_lst->Count) Abort();
 
 		for (;;) {
-			//Œ‹‰Ê
+			//çµæœ
 			if (mem_lst->Count==1) {
 				UnicodeString mem = mem_lst->Strings[0];
 				if (IsHexStr(mem) || IsTimeStr(mem))
@@ -522,7 +522,7 @@ UnicodeString __fastcall TCalculator::EvalExpr(UnicodeString s)
 					ret_str = LongDoubleToStr(EvalFunc(mem), false, false, true);
 				break;
 			}
-			//¶‘¤‚©‚ç—Dæ‡ˆÊ‚É]‚Á‚ÄŒvZ
+			//å·¦å´ã‹ã‚‰å„ªå…ˆé †ä½ã«å¾“ã£ã¦è¨ˆç®—
 			else {
 				// ^
 				for (int i=1; i<ope_lst->Count; i++)
@@ -538,13 +538,13 @@ UnicodeString __fastcall TCalculator::EvalExpr(UnicodeString s)
 					if (ContainsStr("&", ope_lst->Strings[i])) EvalOpeItem(ope_lst.get(), mem_lst.get(), i);
 				// xor
 				for (int i=1; i<ope_lst->Count; i++)
-					if (ContainsStr("O", ope_lst->Strings[i])) EvalOpeItem(ope_lst.get(), mem_lst.get(), i);
+					if (ContainsStr("ï¼¾", ope_lst->Strings[i])) EvalOpeItem(ope_lst.get(), mem_lst.get(), i);
 				// |
 				for (int i=1; i<ope_lst->Count; i++)
 					if (ContainsStr("|", ope_lst->Strings[i])) EvalOpeItem(ope_lst.get(), mem_lst.get(), i);
 				// gcd, lcm
 				for (int i=1; i<ope_lst->Count; i++)
-					if (ContainsStr("‚f‚k", ope_lst->Strings[i])) EvalOpeItem(ope_lst.get(), mem_lst.get(), i);
+					if (ContainsStr("ï¼§ï¼¬", ope_lst->Strings[i])) EvalOpeItem(ope_lst.get(), mem_lst.get(), i);
 			}
 		}
 	}
@@ -557,7 +557,7 @@ UnicodeString __fastcall TCalculator::EvalExpr(UnicodeString s)
 }
 
 //---------------------------------------------------------------------------
-//ŒvZs‚Ì•]‰¿
+//è¨ˆç®—è¡Œã®è©•ä¾¡
 //---------------------------------------------------------------------------
 UnicodeString __fastcall TCalculator::EvalLine(UnicodeString s)
 {
@@ -567,7 +567,7 @@ UnicodeString __fastcall TCalculator::EvalLine(UnicodeString s)
 	lbuf = TRegEx::Replace(lbuf, "\\b([a-z]\\w*)\\(", "\\1 (", opt);
 
 	while (!isError) {
-		//ˆê”Ô“à‘¤‚ÌŠ‡ŒÊ
+		//ä¸€ç•ªå†…å´ã®æ‹¬å¼§
 		TMatch mt = TRegEx::Match(lbuf, "\\([^()]+\\)");
 		if (mt.Success) {
 			int idx = mt.Index;
@@ -581,10 +581,10 @@ UnicodeString __fastcall TCalculator::EvalLine(UnicodeString s)
 			}
 			lbuf = Trim(rbuf + ebuf + lbuf.Delete(1, len));
 		}
-		//Š‡ŒÊ–³‚µ
+		//æ‹¬å¼§ç„¡ã—
 		else {
 			if (lbuf.Pos('(') || lbuf.Pos(')')) {
-				ErrMsg  = "•s³‚ÈŠ‡ŒÊ";
+				ErrMsg  = "ä¸æ­£ãªæ‹¬å¼§";
 				isError = true;
 			}
 			else {
@@ -600,11 +600,11 @@ UnicodeString __fastcall TCalculator::EvalLine(UnicodeString s)
 }
 
 //---------------------------------------------------------------------------
-//®‚ğŒvZ
+//å¼ã‚’è¨ˆç®—
 //---------------------------------------------------------------------------
 void __fastcall TCalculator::CalcLine(
-	UnicodeString s,	//ŒvZ®
-	bool use_cb)		//ƒNƒŠƒbƒvƒ{[ƒh‚ğ‰î‚µ‚ÄÀs
+	UnicodeString s,	//è¨ˆç®—å¼
+	bool use_cb)		//ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã‚’ä»‹ã—ã¦å®Ÿè¡Œ
 {
 	s = SetLineStr(s);
 
@@ -613,22 +613,22 @@ void __fastcall TCalculator::CalcLine(
 
 	InitUsrDef();
 
-	//ƒ†[ƒU’è‹`ŠÖ”‚Ì“WŠJ
+	//ãƒ¦ãƒ¼ã‚¶å®šç¾©é–¢æ•°ã®å±•é–‹
 	try {
 		for (int i=0; i<FuncList->Count; i++) {
 			UnicodeString fnc = FuncList->Names[i];
 			UnicodeString def = get_pre_tab(FuncList->ValueFromIndex[i]);
 
 			TStringDynArray p_lst = SplitString(get_in_paren(fnc), ",");
-			if (p_lst.Length==0) TextAbort(_T("ŠÖ”‚Ìˆø”‚ª–¢’è‹`"));
+			if (p_lst.Length==0) TextAbort(_T("é–¢æ•°ã®å¼•æ•°ãŒæœªå®šç¾©"));
 
 			fnc = get_tkn(fnc, '(') + "(";
-			if (pos_i(fnc, def)) TextAbort(_T("•s³‚ÈŠÖ”’è‹`"));
+			if (pos_i(fnc, def)) TextAbort(_T("ä¸æ­£ãªé–¢æ•°å®šç¾©"));
 
 			for (;;) {
 				int p0 = pos_i(fnc, exline);  if (p0==0) break;
 
-				//ŠÖ”•”•ª‚ğ’Šo
+				//é–¢æ•°éƒ¨åˆ†ã‚’æŠ½å‡º
 				int lvl = 1;
 				int p1 = p0 + fnc.Length();
 				UnicodeString fstr = fnc;
@@ -646,9 +646,9 @@ void __fastcall TCalculator::CalcLine(
 					pstr.cat_sprintf(_T("%c"), c);
 					p1++;
 				}
-				if (lvl!=0) TextAbort(_T("•s³‚ÈŠ‡ŒÊ"));
+				if (lvl!=0) TextAbort(_T("ä¸æ­£ãªæ‹¬å¼§"));
 
-				//ŠÖ”•”•ª‚©‚çˆø”•”•ª‚ğ’Šo
+				//é–¢æ•°éƒ¨åˆ†ã‹ã‚‰å¼•æ•°éƒ¨åˆ†ã‚’æŠ½å‡º
 				std::unique_ptr<TStringList> q_lst(new TStringList());
 				lvl = 0;
 				UnicodeString pbuf;
@@ -665,15 +665,15 @@ void __fastcall TCalculator::CalcLine(
 				}
 				if (!pbuf.IsEmpty()) q_lst->Add(pbuf);
 
-				if (p_lst.Length!=q_lst->Count) TextAbort(_T("ˆø”‚ª•sˆê’v"));
+				if (p_lst.Length!=q_lst->Count) TextAbort(_T("å¼•æ•°ãŒä¸ä¸€è‡´"));
 
-				//ŠÖ”’è‹`‚Éˆö”•”•ª‚ğİ’è
+				//é–¢æ•°å®šç¾©ã«å› æ•°éƒ¨åˆ†ã‚’è¨­å®š
 				UnicodeString dbuf = def;
 				for (int j=0; j<q_lst->Count; j++) {
 					dbuf = ReplaceText(dbuf, p_lst[j], "(" + q_lst->Strings[j] + ")");
 				}
 
-				//ŠÖ”•”•ª‚Ì’uŠ·
+				//é–¢æ•°éƒ¨åˆ†ã®ç½®æ›
 				exline = ReplaceText(exline, fstr, "(" + dbuf + ")");
 			}
 		}
@@ -683,20 +683,20 @@ void __fastcall TCalculator::CalcLine(
 		return;
 	}
 
-	//‰‰Zq‚ğ1•¶š‚É“à•”’uŠ·
+	//æ¼”ç®—å­ã‚’1æ–‡å­—ã«å†…éƒ¨ç½®æ›
 	exline = ReplaceText(exline, " AND ", "&");
-	exline = ReplaceText(exline, " XOR ", "O");
+	exline = ReplaceText(exline, " XOR ", "ï¼¾");
 	exline = ReplaceText(exline, " OR ", "|");
-	exline = ReplaceText(exline, " GCD ", "‚f");
-	exline = ReplaceText(exline, " LCM ", "‚k");
+	exline = ReplaceText(exline, " GCD ", "ï¼§");
+	exline = ReplaceText(exline, " LCM ", "ï¼¬");
 
-	//ƒJƒ“ƒ}‚Ìœ‹
+	//ã‚«ãƒ³ãƒã®é™¤å»
 	KommaFlag = (exline.Pos(',')>0);
 	exline = ReplaceStr(exline, ",", "");
 
 	UnicodeString answer;
 
-	//•‚“®¬”“_—áŠO‚ğˆê“I‚Éƒ}ƒXƒN
+	//æµ®å‹•å°æ•°ç‚¹ä¾‹å¤–ã‚’ä¸€æ™‚çš„ã«ãƒã‚¹ã‚¯
 	TFPUExceptionMask orgMask = GetExceptionMask();
 	TFPUExceptionMask tmpMask;
 	tmpMask<<exInvalidOp<<exDenormalized<<exZeroDivide<<exOverflow<<exUnderflow<<exPrecision;
@@ -706,21 +706,21 @@ void __fastcall TCalculator::CalcLine(
 		Calculating = true;
 		isError = false;
 		try {
-			if (TRegEx::IsMatch(exline, "[^\\-^+*/%&O|‚f‚k:()!,.\\w\\s]")) {
-				ErrMsg = "•s³‚È•¶š";
+			if (TRegEx::IsMatch(exline, "[^\\-^+*/%&ï¼¾|ï¼§ï¼¬:()!,.\\w\\s]")) {
+				ErrMsg = "ä¸æ­£ãªæ–‡å­—";
 				Abort();
 			}
 
-			//Œ»İ
+			//ç¾åœ¨æ™‚åˆ»
 			if (SameText(exline, "Now"))
 				answer = FormatDateTime("hh:nn:ss", Now());
-			//’P“Æ‚Ì®” (16i/10i•ÏŠ·)
+			//å˜ç‹¬ã®æ•´æ•° (16é€²/10é€²å¤‰æ›)
 			else if (IsHexOrInt(exline))
 				answer = LongDoubleToStr(EvalNumStr(exline), !IsHexStr(exline));
-			//’P“Æ‚ÌŠÔ (•b‚É•ÏŠ·)
+			//å˜ç‹¬ã®æ™‚é–“ (ç§’ã«å¤‰æ›)
 			else if (IsTimeStr(s))
 				answer = LongDoubleToStr(EvalNumStr(exline));
-			//®
+			//å¼
 			else
 				answer = EvalLine(exline);
 		}
@@ -733,7 +733,7 @@ void __fastcall TCalculator::CalcLine(
 		SetExceptionMask(orgMask);
 	}
 
-	//Œ‹‰Ê•\¦
+	//çµæœè¡¨ç¤º
 	if (!isError) {
 		if (use_cb) {
 			OutputLine = answer;
@@ -744,10 +744,10 @@ void __fastcall TCalculator::CalcLine(
 			SetLineEdit(answer);
 		}
 	}
-	//ƒGƒ‰[•\¦
+	//ã‚¨ãƒ©ãƒ¼è¡¨ç¤º
 	else {
 		if (use_cb) {
-			if (ErrMsg.IsEmpty()) ErrMsg = "“ü—Í“à—e‚ÌŒë‚è";
+			if (ErrMsg.IsEmpty()) ErrMsg = "å…¥åŠ›å†…å®¹ã®èª¤ã‚Š";
 			OutputLine.sprintf(_T("ERR: %s [%s]"), ErrMsg.c_str(), s.c_str());
 		}
 		else {
@@ -757,11 +757,11 @@ void __fastcall TCalculator::CalcLine(
 }
 
 //---------------------------------------------------------------------------
-//“ü—Ís‚ğİ’è(•¡”s‚È‚ç + ‚Å˜AŒ‹)
+//å…¥åŠ›è¡Œã‚’è¨­å®š(è¤‡æ•°è¡Œãªã‚‰ + ã§é€£çµ)
 //---------------------------------------------------------------------------
 UnicodeString __fastcall TCalculator::SetLineStr(UnicodeString s)
 {
-	//•¡”s‚Ìê‡ + ‚Å˜AŒ‹
+	//è¤‡æ•°è¡Œã®å ´åˆ + ã§é€£çµ
 	std::unique_ptr<TStringList> lst(new TStringList());
 	lst->Text = s;
 	if (lst->Count>1) {
@@ -782,7 +782,7 @@ UnicodeString __fastcall TCalculator::SetLineStr(UnicodeString s)
 }
 
 //---------------------------------------------------------------------------
-//“ü—Í—“‚Ìİ’è
+//å…¥åŠ›æ¬„ã®è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall TCalculator::SetLineEdit(UnicodeString s)
 {
@@ -792,13 +792,13 @@ void __fastcall TCalculator::SetLineEdit(UnicodeString s)
 }
 
 //---------------------------------------------------------------------------
-//ƒGƒ‰[‚ğ•\¦
+//ã‚¨ãƒ©ãƒ¼ã‚’è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TCalculator::ShowError(_TCHAR *msg)
 {
 	UnicodeString s = msg;
 	if (s.IsEmpty()) s = ErrMsg;
-	if (s.IsEmpty()) s = "“ü—Í“à—e‚ÌŒë‚è";
+	if (s.IsEmpty()) s = "å…¥åŠ›å†…å®¹ã®èª¤ã‚Š";
 
 	if (LineEdit->Focused()) {
 		UnicodeString lbuf = LineEdit->Text;
@@ -825,7 +825,7 @@ void __fastcall TCalculator::ShowError(_TCHAR *msg)
 }
 
 //---------------------------------------------------------------------------
-//ŒvZ®‚É•¶š—ñ‚ğ’Ç‰Á
+//è¨ˆç®—å¼ã«æ–‡å­—åˆ—ã‚’è¿½åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TCalculator::AppendToLine(UnicodeString s)
 {
@@ -845,7 +845,7 @@ void __fastcall TCalculator::AppendToLine(UnicodeString s)
 }
 
 //---------------------------------------------------------------------------
-//“ü—Í—“‚Å‚ÌƒL[‘€ì
+//å…¥åŠ›æ¬„ã§ã®ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TCalculator::LineEditKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -866,7 +866,7 @@ void __fastcall TCalculator::LineEditKeyPress(TObject *Sender, System::WideChar 
 	if (Key==VK_RETURN) Key = 0;
 }
 //---------------------------------------------------------------------------
-//—š—ğ—“‚Å‚ÌƒL[‘€ì
+//å±¥æ­´æ¬„ã§ã®ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TCalculator::HistComboBoxKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -913,7 +913,7 @@ void __fastcall TCalculator::RefDefBtnClick(TObject *Sender)
 {
 	ConstPopupMenu->Items->Clear();
 
-	//’è”
+	//å®šæ•°
 	TMenuItem *mp;
 	for (int i=HideDefConst? DefConstCount : 0; i<ConstList->Count; i++) {
 		mp = new TMenuItem(ConstPopupMenu);
@@ -922,7 +922,7 @@ void __fastcall TCalculator::RefDefBtnClick(TObject *Sender)
 		ConstPopupMenu->Items->Add(mp);
 	}
 
-	//ŠÖ”
+	//é–¢æ•°
 	if (FuncList->Count>0) {
 		mp = new TMenuItem(ConstPopupMenu);
 		mp->Caption = "-";
@@ -935,7 +935,7 @@ void __fastcall TCalculator::RefDefBtnClick(TObject *Sender)
 		}
 	}
 
-	//•ÒW
+	//ç·¨é›†
 	mp = new TMenuItem(ConstPopupMenu);
 	mp->Caption = "-";
 	ConstPopupMenu->Items->Add(mp);
@@ -954,17 +954,17 @@ void __fastcall TCalculator::RefDefItemClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//’è‹`ƒtƒ@ƒCƒ‹‚Ì•ÒW
+//å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«ã®ç·¨é›†
 //---------------------------------------------------------------------------
 void __fastcall TCalculator::EditDefActionExecute(TObject *Sender)
 {
 	UnicodeString fnam = ExePath + CALC_INI_FILE;
 	std::unique_ptr<UsrIniFile> def_file(new UsrIniFile(fnam));
 	if (def_file->SectionList->Count==0) {
-		//V‹Kì¬
+		//æ–°è¦ä½œæˆ
 		std::unique_ptr<TStringList> dummy(new TStringList());
-		def_file->WriteString("Constant", "Tax",    "0.08\tÁ”ïÅ");
-		def_file->WriteString("Function", "cot(X)", "1/tan(X)\t—]Ú");
+		def_file->WriteString("Constant", "Tax",    "0.08\tæ¶ˆè²»ç¨");
+		def_file->WriteString("Function", "cot(X)", "1/tan(X)\tä½™æ¥");
 		def_file->WriteBool("Option", "HideDefConst", false);
 		def_file->UpdateFile(true);
 	}
@@ -980,7 +980,7 @@ void __fastcall TCalculator::NowBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//16i/10i•ÏŠ·
+//16é€²/10é€²å¤‰æ›
 //---------------------------------------------------------------------------
 void __fastcall TCalculator::ToHexDecActionExecute(TObject *Sender)
 {

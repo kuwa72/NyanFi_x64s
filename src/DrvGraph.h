@@ -1,6 +1,6 @@
 /**
  * @file DrvGraph.h
- * @brief ƒhƒ‰ƒCƒug—p—¦„ˆÚ
+ * @brief ãƒ‰ãƒ©ã‚¤ãƒ–ä½¿ç”¨ç‡æ¨ç§»
  */
 //---------------------------------------------------------------------------
 #ifndef DrvGraphH
@@ -20,11 +20,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒhƒ‰ƒCƒug—p—¦„ˆÚ
+ * @brief ãƒ‰ãƒ©ã‚¤ãƒ–ä½¿ç”¨ç‡æ¨ç§»
  */
 class TDriveGraph : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *CursorAction;
 	TAction *MinMaxAction;
 	TAction *OldOdrAction;
@@ -32,7 +32,7 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	TButton *HiddenCanBtn;
 	TComboBox *DriveComboBox;
 	TComboBox *SizeComboBox;
-	TEdit *HiddenEdit;			//ƒL[æ“¾—p‰B‚µƒRƒ“ƒgƒ[ƒ‹
+	TEdit *HiddenEdit;			//ã‚­ãƒ¼å–å¾—ç”¨éš ã—ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«
 	TPaintBox *PaintBox1;
 	TPopupMenu *PopupMenu1;
 	TScrollBox *GraphScrollBox;
@@ -62,7 +62,7 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall HiddenEditKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 	void __fastcall HiddenEditEnterExit(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	bool DlgInitialized;
 	TStringList *DataList;
 	int  GraphTopX;
@@ -72,7 +72,7 @@ private:	// ƒ†[ƒU[éŒ¾
 
 	void __fastcall SetStatus(int idx);
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	UnicodeString DriveName;
 
 	__fastcall TDriveGraph(TComponent* Owner);

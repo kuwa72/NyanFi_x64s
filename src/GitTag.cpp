@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  Gitƒ^ƒOÝ’è															//
+//  Gitã‚¿ã‚°è¨­å®š															//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -26,14 +26,14 @@ void __fastcall TSetGitTagDlg::FormShow(TObject *Sender)
 	AnnotateMemo->Lines->Clear();
 
 	if (IsCommit) {
-		Caption = "ƒRƒ~ƒbƒg";
+		Caption = "ã‚³ãƒŸãƒƒãƒˆ";
 		TagPanel->Visible	 = false;
 		CommitPanel->Visible = true;
 		TagPanel->Visible	 = false;
 		AnnotateMemo->SetFocus();
 	}
 	else {
-		Caption = "ƒRƒ~ƒbƒg‚Éƒ^ƒO‚ð•t‚¯‚é";
+		Caption = "ã‚³ãƒŸãƒƒãƒˆã«ã‚¿ã‚°ã‚’ä»˜ã‘ã‚‹";
 		CommitPanel->Visible = false;
 		TagPanel->Visible	 = true;
 		AnnotateCheckBox->Checked = IniFile->ReadBoolGen(_T("GitTagAnnotate"));
@@ -56,7 +56,7 @@ void __fastcall TSetGitTagDlg::FormClose(TObject *Sender, TCloseAction &Action)
 }
 
 //---------------------------------------------------------------------------
-//Šm’è
+//ç¢ºå®š
 //---------------------------------------------------------------------------
 void __fastcall TSetGitTagDlg::OkActionExecute(TObject *Sender)
 {
@@ -68,11 +68,11 @@ void __fastcall TSetGitTagDlg::OkActionExecute(TObject *Sender)
 		saveto_TextUTF8(EditMsgFile, fbuf.get());
 	}
 
-	//ƒRƒ~ƒbƒg
+	//ã‚³ãƒŸãƒƒãƒˆ
 	if (IsCommit) {
 		GitParam.sprintf(_T("commit -F \"%s\""), yen_to_slash(EditMsgFile).c_str());
 	}
-	//ƒ^ƒO
+	//ã‚¿ã‚°
 	else {
 		GitParam = "tag";
 		if (AnnotateCheckBox->Checked) {

@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒ‹[ƒy																//
+//  ãƒ«ãƒ¼ãƒš																//
 //----------------------------------------------------------------------//
 #include "usr_wic.h"
 #include "Global.h"
@@ -87,7 +87,7 @@ void __fastcall TLoupeForm::ToolBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//•`‰æ
+//æç”»
 //---------------------------------------------------------------------------
 void __fastcall TLoupeForm::DrawImage(Graphics::TBitmap *bmp, int x, int y)
 {
@@ -117,7 +117,7 @@ void __fastcall TLoupeForm::DrawImage(Graphics::TBitmap *bmp, int x, int y)
 }
 
 //---------------------------------------------------------------------------
-//“Ë‚«”²‚¯•\¦
+//çªãæŠœã‘è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TLoupeForm::LoupeImageMouseMove(TObject *Sender, TShiftState Shift, int X, int Y)
 {
@@ -125,7 +125,7 @@ void __fastcall TLoupeForm::LoupeImageMouseMove(TObject *Sender, TShiftState Shi
 }
 
 //---------------------------------------------------------------------------
-//”{—¦
+//å€ç‡
 //---------------------------------------------------------------------------
 void __fastcall TLoupeForm::MagActionExecute(TObject *Sender)
 {
@@ -140,7 +140,7 @@ void __fastcall TLoupeForm::MagActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//”{—¦ƒ{ƒ^ƒ“‚Ì•\¦
+//å€ç‡ãƒœã‚¿ãƒ³ã®è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TLoupeForm::ShowBtnActionExecute(TObject *Sender)
 {

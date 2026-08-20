@@ -1,6 +1,6 @@
 /**
  * @file DriveDlg.h
- * @brief ƒhƒ‰ƒCƒuˆê——
+ * @brief ãƒ‰ãƒ©ã‚¤ãƒ–ä¸€è¦§
  */
 //---------------------------------------------------------------------------
 #ifndef DriveDlgH
@@ -25,11 +25,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒhƒ‰ƒCƒuˆê——
+ * @brief ãƒ‰ãƒ©ã‚¤ãƒ–ä¸€è¦§
  */
 class TSelDriveDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *EjectDriveAction;
 	TAction *EjectTrayAction;
 	TAction *PropertyAction;
@@ -84,7 +84,7 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall PropertyActionExecute(TObject *Sender);
 	void __fastcall ChgOptBtnClick(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	void __fastcall WmMenuChar(TMessage &msg)
 	{
 		if (msg.WParamHi==MF_POPUP) TForm::Dispatch(&msg); else msg.Result = MAKELONG(0, MNC_CLOSE);
@@ -95,8 +95,8 @@ private:	// ƒ†[ƒU[éŒ¾
 	void __fastcall ShowDriveMenu();
 	void __fastcall ShowDriveGraph();
 
-public:		// ƒ†[ƒU[éŒ¾
-	UsrScrollPanel *GridScrPanel;	//!< ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	UsrScrollPanel *GridScrPanel;	//!< ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 
 	__fastcall TSelDriveDlg(TComponent* Owner);
 	void __fastcall UpdateDriveList();

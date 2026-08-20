@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  CSV/TSVƒGƒNƒXƒ|[ƒg													//
+//  CSV/TSVã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ													//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -82,7 +82,7 @@ void __fastcall TExpCsvDlg::ItemListBoxDrawItem(TWinControl *Control, int Index,
 	cv->TextOut(Rect.Left + SCALED_THIS(4), Rect.Top + get_TopMargin(cv), lp->Items->Strings[Index]);
 }
 //---------------------------------------------------------------------------
-//€–Ú‚Ì’Ç‰Á
+//é …ç›®ã®è¿½åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TExpCsvDlg::AddItemActionExecute(TObject *Sender)
 {
@@ -105,7 +105,7 @@ void __fastcall TExpCsvDlg::AddAllItemActionExecute(TObject *Sender)
 void __fastcall TExpCsvDlg::RefOutNameBtnClick(TObject *Sender)
 {
 	UnicodeString fnam = Viewer->FileName;
-	UserModule->PrepareSaveDlg(_T("o—Íƒtƒ@ƒCƒ‹‚Ìw’è"),
+	UserModule->PrepareSaveDlg(_T("å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã®æŒ‡å®š"),
 		(TsvRadioBtn->Checked? F_FILTER_TSV : F_FILTER_CSV), fnam.c_str(), ExtractFileDir(fnam));
 	fnam = UserModule->SaveDlgExecute();
 	if (!fnam.IsEmpty()) OutNameEdit->Text = fnam;
@@ -128,7 +128,7 @@ void __fastcall TExpCsvDlg::DstListBoxKeyDown(TObject *Sender, WORD &Key, TShift
 }
 
 //---------------------------------------------------------------------------
-//ŠJn
+//é–‹å§‹
 //---------------------------------------------------------------------------
 void __fastcall TExpCsvDlg::ExportActionExecute(TObject *Sender)
 {
@@ -140,20 +140,20 @@ void __fastcall TExpCsvDlg::ExportActionExecute(TObject *Sender)
 	ExpBusy = true;
 	ExportAction->Update();
 	cursor_HourGlass();
-	//“Ç‚İ‚İ
+	//èª­ã¿è¾¼ã¿
 	std::unique_ptr<TStringList> i_buf(new TStringList());
 	if (load_text_ex(Viewer->FileName, i_buf.get())==0) {
 		msgbox_ERR(LoadUsrMsg(USTR_FaildLoad));
 		return;
 	}
 
-	//ƒ\[ƒg
+	//ã‚½ãƒ¼ãƒˆ
 	if (Viewer->SortMode!=0) {
 		for (int i=0; i<i_buf->Count; i++) i_buf->Objects[i] = (TObject*)(NativeInt)i;
 		i_buf->CustomSort(isTSV? comp_TsvNaturalOrder : comp_CsvNaturalOrder);
 	}
 
-	//ì¬
+	//ä½œæˆ
 	std::unique_ptr<TStringList> o_buf(new TStringList());
 	bool o_tsv = TsvRadioBtn->Checked;
 	for (int i=0; i<i_buf->Count; i++) {
@@ -173,9 +173,9 @@ void __fastcall TExpCsvDlg::ExportActionExecute(TObject *Sender)
 	cursor_Default();
 	ExpBusy = false;
 
-	//•Û‘¶
+	//ä¿å­˜
 	if (!saveto_TextFile(fnam, o_buf.get(), TxtViewer->TxtBufList->Encoding)) {
-		msgbox_ERR(LoadUsrMsg(USTR_FaildSave, _T("o—Íƒtƒ@ƒCƒ‹")));
+		msgbox_ERR(LoadUsrMsg(USTR_FaildSave, _T("å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«")));
 		return;
 	}
 
