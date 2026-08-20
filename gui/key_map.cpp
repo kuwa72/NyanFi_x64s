@@ -55,6 +55,14 @@ void KeyMap::LoadDefaults()
 	// gui/key_map.h 冒頭のコメントを参照)
 	Assign(_T("V"), _T("TextViewer"));
 
+	// 文字列検索 (GREP)。usr_cmdlist.cpp のコマンド表には "FV:Grep=文字列検索(GREP)"
+	// として載っているが、src/Global.cpp の既定キー表 (KeyFuncList->Text) には
+	// "Grep" に対応する行が無く、メニュー専用の操作だったと見られる (実測、
+	// F3=FindFileDlg というファイル名検索の割り当てはあるが内容検索は無い)。
+	// そのため Ctrl+F (多くのエディタの「ファイル内検索」の慣習) を
+	// Phase 2 骨格向けに新規で割り当てた (推測。要検証)
+	Assign(_T("Ctrl+F"), _T("Grep"));
+
 	// マーク
 	Assign(_T("SPACE"), _T("MarkItem"));
 	Assign(_T("Ctrl+A"), _T("MarkAll"));

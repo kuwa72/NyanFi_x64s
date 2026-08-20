@@ -189,6 +189,16 @@ void TextViewer::GotoEnd()
 	Refresh();
 }
 
+//---------------------------------------------------------------------------
+void TextViewer::GotoLine(int line)
+{
+	if (doc_.lines.empty()) return;
+	const int n = static_cast<int>(doc_.lines.size());
+	current_line_ = std::clamp(line, 0, n - 1);
+	EnsureCursorVisible();
+	Refresh();
+}
+
 void TextViewer::ScrollHorizontal(int delta)
 {
 	if (wrap_) return;  // 折り返し時は横スクロール不要 (禁則)

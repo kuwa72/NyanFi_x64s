@@ -17,6 +17,7 @@
 #include "gui/file_info_panel.h"
 #include "gui/file_open.h"
 #include "gui/file_ops.h"
+#include "gui/grep_dialog.h"
 #include "usr_cmdlist.h"
 #include "usr_file_ex.h"
 #include "usr_file_inf.h"
@@ -329,6 +330,9 @@ bool MainFrame::Execute(const UnicodeString &command)
 	}
 	else if (SameStr(command, _T("TextViewer"))) {
 		CmdTextViewer();
+	}
+	else if (SameStr(command, _T("Grep"))) {
+		CmdGrep();
 	}
 	else if (SameStr(command, _T("IncSearch"))) {
 		StartIncSearch();
@@ -932,4 +936,31 @@ void MainFrame::ShowViewer(bool show)
 	}
 	Layout();
 	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 文字列検索 (GREP、Ctrl+F、推測のキー。gui/key_map.cpp を参照)
+ * @details アクティブペインの現在のディレクトリを対象にする (要件1)。
+ * 検索条件の入力・進捗表示・結果一覧からの選択は gui/grep_dialog.h に
+ * まとめてあり、ここは選ばれたマッチをテキストビューアで開くだけ。
+ * grep_thread.cpp のような別スレッドは使っておらず、grep_dialog::Run が
+ * 同期的に走査する (wxProgressDialog でユーザーの中断を受け付ける)
+ */
+void MainFrame::CmdGrep()
+{
+	FilePane *pane = ActivePane();
+
+	grep_core::GrepMatch selected;
+	if (!grep_dialog::Run(this, pane->GetPath(), pane->GetMask(), selected)) return;
+
+	UnicodeString error;
+	if (!viewer_->LoadFile(selected.file, error)) {
+		wxMessageBox(to_wx(error), to_wx(_T("開けませんでした")), wxOK | wxICON_ERROR, this);
+		return;
+	}
+
+	// GrepMatch::line は1始まり、GotoLine は0始まりの行番号を取る
+	viewer_->GotoLine(selected.line - 1);
+	ShowViewer(true);
 }

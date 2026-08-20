@@ -82,6 +82,10 @@ private:
 	void CmdTextViewer();    //!< カーソル位置のファイルをビューアで開く (V)
 	void ShowViewer(bool show);  //!< ビューアの表示/非表示を切り替える
 
+	// 文字列検索 (gui/grep_dialog.h)。"FV:Grep" (usr_cmdlist.cpp のコマンド表)
+	// に既定キーの記載が無かったため、キー割り当ては推測 (gui/key_map.cpp 参照)
+	void CmdGrep();  //!< アクティブペインのディレクトリを対象に grep する
+
 	void LoadSettings();
 	void SaveSettings();
 

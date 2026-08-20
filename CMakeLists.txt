@@ -198,6 +198,11 @@ endif()
 # gui/navigation.cpp (インクリメンタルサーチの照合・ディレクトリ履歴・
 # ドライブ種別表示名・パス直接入力の解決) も同じ理由 (wx 非依存、
 # tests/core/test_gui_navigation.cpp から直接テストする) でここに含める。
+#
+# gui/grep.cpp (ファイル内容検索の走査・マッチ判定) も同じ理由 (wx 非依存、
+# tests/core/test_gui_grep.cpp から直接テストする) でここに含める。
+# 文字コード判定・バイナリ判定は gui/text_viewer_core.cpp の LoadForView を、
+# マッチ判定は移植済みの find_mlt/TRegEx (src/usr_str.cpp) をそのまま使う。
 #-----------------------------------------------------------------------------
 if(TARGET nyanfi_core)
 	add_library(nyanfi_gui_core STATIC
@@ -209,6 +214,7 @@ if(TARGET nyanfi_core)
 		gui/file_info.cpp
 		gui/text_viewer_core.cpp
 		gui/navigation.cpp
+		gui/grep.cpp
 	)
 	target_include_directories(nyanfi_gui_core PUBLIC ${PROJECT_SOURCE_DIR})
 	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core shell32)
