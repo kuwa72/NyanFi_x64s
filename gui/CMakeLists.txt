@@ -72,12 +72,15 @@ file(TO_CMAKE_PATH "${WX_MSW_RC}" WX_MSW_RC)
 message(STATUS "wx リソース: ${WX_MSW_RC}")
 configure_file(nyanfi.rc.in "${CMAKE_CURRENT_BINARY_DIR}/nyanfi.rc" @ONLY)
 
+# gui/settings.cpp と gui/key_map.cpp (wx 非依存の部分) は nyanfi_gui_core
+# (ルート CMakeLists.txt) で既にビルドされているのでここでは加えない。
+# wx に依存する KeyMap::KeyStrOf (gui/key_map_wx.cpp) だけをここで加える
 add_executable(nyanfi
 	"${CMAKE_CURRENT_BINARY_DIR}/nyanfi.rc"
 	nyanfi_app.cpp
 	main_frame.cpp
 	file_pane.cpp
-	key_map.cpp
+	key_map_wx.cpp
 	vcl_gui_bridge.cpp
 )
 
@@ -95,5 +98,5 @@ target_compile_options(nyanfi PRIVATE ${WX_CXXFLAGS_LIST})
 # wx の構造体の定義がずれるため、ビルド種別に関わらず揃えておく。
 target_compile_definitions(nyanfi PRIVATE NDEBUG)
 
-target_link_libraries(nyanfi PRIVATE nyanfi_core nyanfi_legacy_flags ${WX_LIBS_LIST})
+target_link_libraries(nyanfi PRIVATE nyanfi_gui_core nyanfi_core nyanfi_legacy_flags ${WX_LIBS_LIST})
 nyanfi_target_vcl_shim(nyanfi)

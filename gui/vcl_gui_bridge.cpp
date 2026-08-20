@@ -71,3 +71,13 @@ TDirect2DCanvas::TDirect2DCanvas(HDC, const TRect &)
 {
 	not_ported("TDirect2DCanvas");
 }
+
+/// フォームが表示モニタからはみ出していたら収まるように調整 (UserFunc.cpp)。
+/// src/UIniFile.cpp の LoadPosInfo(TForm*, ...) から参照されるが、gui/settings.cpp
+/// (Settings) は TForm を使わない独自の永続化なのでこの経路は呼ばれない。
+/// UIniFile.cpp を (LoadPosInfo 以外の目的で) リンクに含めた時点で GNU ld が
+/// この未定義参照を要求するため、ここで「未移植」として明示する。
+void adjust_form_pos(TForm *)
+{
+	not_ported("adjust_form_pos");
+}

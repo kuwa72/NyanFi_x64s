@@ -8,15 +8,35 @@
  * wx のキーイベントを橋渡しするだけで、割り当て表は VCL 版と同じ
  * 「キー名=コマンド名」の TStringList で保持する。
  *
- * 将来 ini から読み込む際も、この表に流し込めばよい (VCL 版の [Key] セクションと
- * 同じ形式)。
+ * 実測: VCL 版 (src/OptDlg.cpp の InpKeyBtnClick / ExpKeyBtnClick) は ini の
+ * "KeyFuncList" セクションに、1行 1エントリで
+ *     <モード文字>:<キー名>=<コマンド名>
+ * の形式 (TStringList の Name=Value) で持っている。モード文字は
+ * usr_cmdlist.cpp の `ScrModeIdStr = "FSVIL"` の1文字 (F=ファイルペイン /
+ * S=検索 / V=ビューア / I=画像ビューア / L=リスト、src/OptDlg.cpp の
+ * GetCmdModeStr 参照)。キー名は SELECT+ (選択操作用の修飾子、src/Global.cpp
+ * の KeyStr_SELECT) が付くことや、2ストロークキーを表す '~' 区切り
+ * ("Ctrl+K~D" 等、src/OptDlg.cpp の IsFirstCmdKey 参照) を含むことがある。
+ *
+ * Phase 2 の骨格はファイルペイン (F) 1面しか無く、SELECT+ (選択操作) と
+ * 2ストロークキーには対応していないため、ini 読み込みは
+ *  - モード文字が "F" のエントリだけを対象にする
+ *  - SELECT+ が付くもの、キー名に '~' を含むものは読み飛ばす (対応する
+ *    仕組みが無いため。無言で誤動作させるよりは何もしない方を選んだ)
+ * という単純化をしている (ParseKeyFuncListEntry)。将来 F 以外のモードや
+ * 選択操作、2ストロークキーに対応したら、この単純化を見直すこと。
  */
 #ifndef NYANFI_GUI_KEY_MAP_H
 #define NYANFI_GUI_KEY_MAP_H
 
 #include <memory>
 
-#include <wx/wx.h>
+// wxKeyEvent は KeyStrOf() の引数の型としてしか使わない (メンバとしては
+// 持たない) ので、前方宣言だけにして <wx/wx.h> の依存を避ける。これにより
+// tests/core/test_gui_settings.cpp のような wx 非リンクのテストからも
+// このヘッダを直接インクルードできる (実装は key_map.cpp 側で <wx/wx.h> を
+// 読み込む)。
+class wxKeyEvent;
 
 /**
  * @brief キー割り当て表
@@ -36,6 +56,18 @@ public:
 
 	/// 現在の割り当て一覧 ("キー名=コマンド名")
 	const TStringList *Entries() const { return entries_.get(); }
+
+	/// ini の "KeyFuncList" セクション (モード "F" のみ) を読み込み、
+	/// 既定の割り当てを上書きする。ini が存在しない/セクションが無い/
+	/// 読み込めるエントリが無い場合は何もしない (既定のまま)
+	void LoadFromIni(const UnicodeString &ini_path);
+
+	/// KeyFuncList の1エントリ (Name="F:Ctrl+Q" 等, Value=コマンド名) を
+	/// Phase 2 骨格が扱える形 (key_str, command) に変換する。
+	/// モードが "F" 以外、SELECT+ 付き、2ストローク ('~' を含む) は
+	/// 対応していないため false を返す
+	static bool ParseKeyFuncListEntry(const UnicodeString &name, const UnicodeString &value,
+	                                   UnicodeString &key_str_out, UnicodeString &command_out);
 
 private:
 	void LoadDefaults();

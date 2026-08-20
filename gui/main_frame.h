@@ -7,7 +7,9 @@
  *
  * 入力は MainFrame でまとめて拾い、キー名 → コマンド名 → 実行 の順に流す。
  * この流れは VCL 版と同じで、コマンド名の綴りも usr_cmdlist.cpp の表に合わせて
- * あるため、後から ini のキー割り当てをそのまま読み込める。
+ * あるため、ini のキー割り当てをそのまま読み込める (gui/key_map.h の
+ * LoadFromIni)。ウィンドウ位置・ペインのディレクトリは gui/settings.h の
+ * Settings が起動時に復元し、終了時に保存する。
  */
 #ifndef NYANFI_GUI_MAIN_FRAME_H
 #define NYANFI_GUI_MAIN_FRAME_H
@@ -18,6 +20,7 @@
 
 #include "gui/file_pane.h"
 #include "gui/key_map.h"
+#include "gui/settings.h"
 
 /**
  * @brief メインウィンドウ
@@ -40,11 +43,17 @@ private:
 	void UpdateStatus();
 	void ShowKeyList();
 	void ShowCmdList();
+	void ShowSortDialog();  //!< ソートダイアログ (S)。並べ替えキー/昇降順/Dir集約を選ぶ
+	void ShowMaskDialog();  //!< パスマスク入力 (Ctrl+M)。ファイル名マスクで一覧を絞り込む
+
+	void LoadSettings();
+	void SaveSettings();
 
 	FilePane *panes_[2] = {nullptr, nullptr};
 	wxStaticText *headers_[2] = {nullptr, nullptr};
 	int active_ = 0;
 	KeyMap keymap_;
+	Settings settings_{Settings::DefaultIniPath()};
 };
 
 #endif  // NYANFI_GUI_MAIN_FRAME_H

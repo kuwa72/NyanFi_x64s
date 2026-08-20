@@ -16,18 +16,23 @@
 
 namespace {
 
-/// 一覧の並び順: ".." が先頭、次にディレクトリ、その中は自然順
-bool less_item(const FileItem &a, const FileItem &b)
-{
-	if (a.is_parent != b.is_parent) return a.is_parent;
-	if (a.is_dir != b.is_dir) return a.is_dir;
-	return ::StrCmpLogicalW(a.name.c_str(), b.name.c_str()) < 0;
-}
-
 /// wxString への変換 (UnicodeString は UTF-16、wxString も MSW では UTF-16)
 inline wxString to_wx(const UnicodeString &s)
 {
 	return wxString(s.c_str(), static_cast<size_t>(s.Length()));
+}
+
+/// 並べ替えキーの表示名 (ソートダイアログ・列見出し共通)
+UnicodeString sort_key_name(SortKey key)
+{
+	switch (key) {
+	case SortKey::Name: return _T("名前");
+	case SortKey::Ext:  return _T("拡張子");
+	case SortKey::Date: return _T("日時");
+	case SortKey::Size: return _T("サイズ");
+	case SortKey::Attr: return _T("属性");
+	}
+	return UnicodeString();
 }
 
 }  // namespace
@@ -85,14 +90,7 @@ void FilePane::Reload()
 
 	Collect();
 
-	if (!cur.IsEmpty()) {
-		for (std::size_t i = 0; i < items_.size(); ++i) {
-			if (SameStr(items_[i].name, cur)) {
-				cursor_ = static_cast<int>(i);
-				break;
-			}
-		}
-	}
+	RestoreCursorByName(cur);
 	MoveCursorTo(cursor_);
 	Refresh();
 }
@@ -100,7 +98,7 @@ void FilePane::Reload()
 //---------------------------------------------------------------------------
 void FilePane::Collect()
 {
-	items_.clear();
+	all_items_.clear();
 
 	if (!is_root_dir(path_)) {
 		FileItem up;
@@ -108,7 +106,7 @@ void FilePane::Collect()
 		up.is_dir = true;
 		up.is_parent = true;
 		up.size = -1;
-		items_.push_back(up);
+		all_items_.push_back(up);
 	}
 
 	TSearchRec sr;
@@ -122,22 +120,61 @@ void FilePane::Collect()
 			itm.is_dir = (sr.Attr & faDirectory) != 0;
 			itm.size = itm.is_dir ? -1 : sr.Size;
 			itm.stamp = sr.TimeStamp;
-			items_.push_back(itm);
+			all_items_.push_back(itm);
 		} while (FindNext(sr) == 0);
 		FindClose(sr);
 	}
 
-	std::sort(items_.begin(), items_.end(), less_item);
+	ApplyFilterAndSort();
 
-	if (cursor_ >= static_cast<int>(items_.size())) cursor_ = static_cast<int>(items_.size()) - 1;
+	if (cursor_ >= GetItemCount()) cursor_ = GetItemCount() - 1;
 	if (cursor_ < 0) cursor_ = 0;
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @details all_items_ (ディスクの実体) から、マスクに一致する項目だけを選んで
+ * order_ (表示順の添字列) を作り直す。マーク状態は all_items_ 側にしか
+ * 持たせていないので、マスクや並べ替えを変えてもマークは消えない
+ * (Collect() でディレクトリを読み直したときだけリセットされる、既存の挙動のまま)。
+ */
+void FilePane::ApplyFilterAndSort()
+{
+	order_.clear();
+	order_.reserve(all_items_.size());
+
+	for (std::size_t i = 0; i < all_items_.size(); ++i) {
+		const FileItem &itm = all_items_[i];
+		// ".." はマスクに関わらず常に表示する
+		if (itm.is_parent || !HasMask() || MatchPathMask(mask_, itm.name, itm.is_dir)) {
+			order_.push_back(i);
+		}
+	}
+
+	std::sort(order_.begin(), order_.end(), [this](std::size_t ia, std::size_t ib) {
+		return CompareFileItems(all_items_[ia], all_items_[ib], sort_key_, sort_descending_, dirs_first_) < 0;
+	});
+}
+
+//---------------------------------------------------------------------------
+void FilePane::RestoreCursorByName(const UnicodeString &name)
+{
+	cursor_ = 0;
+	if (name.IsEmpty()) return;
+
+	for (int i = 0; i < GetItemCount(); ++i) {
+		if (SameStr(ItemAt(i).name, name)) {
+			cursor_ = i;
+			break;
+		}
+	}
 }
 
 //---------------------------------------------------------------------------
 const FileItem *FilePane::GetCurrentItem() const
 {
-	if (cursor_ < 0 || cursor_ >= static_cast<int>(items_.size())) return nullptr;
-	return &items_[static_cast<std::size_t>(cursor_)];
+	if (cursor_ < 0 || cursor_ >= GetItemCount()) return nullptr;
+	return &ItemAt(cursor_);
 }
 
 //---------------------------------------------------------------------------
@@ -148,7 +185,7 @@ void FilePane::MoveCursor(int delta)
 
 void FilePane::MoveCursorTo(int index)
 {
-	const int last = static_cast<int>(items_.size()) - 1;
+	const int last = GetItemCount() - 1;
 	cursor_ = std::clamp(index, 0, std::max(0, last));
 	EnsureVisible();
 	Refresh();
@@ -162,8 +199,8 @@ void FilePane::PageMove(int direction)
 //---------------------------------------------------------------------------
 void FilePane::ToggleMark()
 {
-	if (cursor_ < 0 || cursor_ >= static_cast<int>(items_.size())) return;
-	FileItem &itm = items_[static_cast<std::size_t>(cursor_)];
+	if (cursor_ < 0 || cursor_ >= GetItemCount()) return;
+	FileItem &itm = ItemAt(cursor_);
 	if (itm.is_parent) return;  // ".." はマークできない
 	itm.marked = !itm.marked;
 	MoveCursor(1);              // NyanFi と同じく、マークしたらカーソルを進める
@@ -171,7 +208,9 @@ void FilePane::ToggleMark()
 
 void FilePane::MarkAll(bool marked)
 {
-	for (FileItem &itm : items_) {
+	// 表示されている (マスクを通った) 項目だけを対象にする
+	for (int i = 0; i < GetItemCount(); ++i) {
+		FileItem &itm = ItemAt(i);
 		if (!itm.is_parent) itm.marked = marked;
 	}
 	Refresh();
@@ -180,8 +219,8 @@ void FilePane::MarkAll(bool marked)
 int FilePane::GetMarkedCount() const
 {
 	int n = 0;
-	for (const FileItem &itm : items_) {
-		if (itm.marked) ++n;
+	for (int i = 0; i < GetItemCount(); ++i) {
+		if (ItemAt(i).marked) ++n;
 	}
 	return n;
 }
@@ -205,12 +244,8 @@ bool FilePane::GoParent()
 
 	// 元いたディレクトリにカーソルを合わせる
 	const UnicodeString leaf = ExtractFileName(ExcludeTrailingPathDelimiter(here));
-	for (std::size_t i = 0; i < items_.size(); ++i) {
-		if (SameStr(items_[i].name, leaf)) {
-			MoveCursorTo(static_cast<int>(i));
-			break;
-		}
-	}
+	RestoreCursorByName(leaf);
+	MoveCursorTo(cursor_);
 	return true;
 }
 
@@ -229,7 +264,8 @@ UnicodeString FilePane::GetSummary() const
 {
 	int dirs = 0, files = 0;
 	Int64 total = 0;
-	for (const FileItem &itm : items_) {
+	for (int i = 0; i < GetItemCount(); ++i) {
+		const FileItem &itm = ItemAt(i);
 		if (itm.is_parent) continue;
 		if (itm.is_dir) {
 			++dirs;
@@ -249,9 +285,45 @@ UnicodeString FilePane::GetSummary() const
 }
 
 //---------------------------------------------------------------------------
+void FilePane::SetSortSettings(SortKey key, bool descending, bool dirs_first)
+{
+	const UnicodeString cur = (GetCurrentItem() != nullptr) ? GetCurrentItem()->name : UnicodeString();
+
+	sort_key_ = key;
+	sort_descending_ = descending;
+	dirs_first_ = dirs_first;
+	ApplyFilterAndSort();
+
+	RestoreCursorByName(cur);
+	MoveCursorTo(cursor_);
+	Refresh();
+}
+
+//---------------------------------------------------------------------------
+UnicodeString FilePane::GetSortSummary() const
+{
+	UnicodeString s = sort_key_name(sort_key_) + (sort_descending_ ? _T(" 降順") : _T(" 昇順"));
+	if (!dirs_first_) s += _T(" (Dir混在)");
+	return s;
+}
+
+//---------------------------------------------------------------------------
+void FilePane::SetMask(const UnicodeString &mask)
+{
+	const UnicodeString cur = (GetCurrentItem() != nullptr) ? GetCurrentItem()->name : UnicodeString();
+
+	mask_ = mask;
+	ApplyFilterAndSort();
+
+	RestoreCursorByName(cur);
+	MoveCursorTo(cursor_);
+	Refresh();
+}
+
+//---------------------------------------------------------------------------
 int FilePane::VisibleRows() const
 {
-	return std::max(1, GetClientSize().y / row_height_);
+	return std::max(1, (GetClientSize().y - HeaderHeight()) / row_height_);
 }
 
 void FilePane::EnsureVisible()
@@ -279,8 +351,11 @@ void FilePane::OnSetFocus(wxFocusEvent &event)
 void FilePane::OnLeftDown(wxMouseEvent &event)
 {
 	SetFocus();
-	const int row = top_ + event.GetY() / row_height_;
-	if (row >= 0 && row < static_cast<int>(items_.size())) MoveCursorTo(row);
+	const int y = event.GetY() - HeaderHeight();
+	if (y >= 0) {
+		const int row = top_ + y / row_height_;
+		if (row >= 0 && row < GetItemCount()) MoveCursorTo(row);
+	}
 	event.Skip();
 }
 
@@ -293,7 +368,7 @@ void FilePane::OnLeftDClick(wxMouseEvent &event)
 void FilePane::OnMouseWheel(wxMouseEvent &event)
 {
 	const int lines = event.GetWheelRotation() > 0 ? -3 : 3;
-	top_ = std::clamp(top_ + lines, 0, std::max(0, static_cast<int>(items_.size()) - 1));
+	top_ = std::clamp(top_ + lines, 0, std::max(0, GetItemCount() - 1));
 	Refresh();
 }
 
@@ -309,6 +384,8 @@ void FilePane::OnPaint(wxPaintEvent &)
 	const wxColour sel_bg = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
 	const wxColour sel_fg = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
 	const wxColour dir_fg = wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT);
+	const wxColour hdr_bg = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
+	const wxColour hdr_fg = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT);
 	const wxColour mark_fg = wxColour(0xE0, 0x60, 0x30);
 
 	const wxSize client = GetClientSize();
@@ -316,17 +393,46 @@ void FilePane::OnPaint(wxPaintEvent &)
 	dc.SetPen(*wxTRANSPARENT_PEN);
 	dc.DrawRectangle(0, 0, client.x, client.y);
 
-	const int rows = VisibleRows();
 	const int size_col = client.x - char_width_ * 32;
 	const int date_col = client.x - char_width_ * 22;
 	const int attr_col = client.x - char_width_ * 5;
 
+	// 列見出し行: 名前 / サイズ / 日時 / 属性。現在の並べ替えキーには矢印を付ける
+	// (拡張子キーは専用の列を持たないため、名前列の矢印で代用する)
+	{
+		dc.SetBrush(wxBrush(hdr_bg));
+		dc.SetPen(*wxTRANSPARENT_PEN);
+		dc.DrawRectangle(0, 0, client.x, HeaderHeight());
+		dc.SetTextForeground(hdr_fg);
+
+		const UnicodeString mark = sort_descending_ ? _T(" ▼") : _T(" ▲");
+		const bool name_active = (sort_key_ == SortKey::Name || sort_key_ == SortKey::Ext);
+
+		UnicodeString name_hdr = _T("名前");
+		if (name_active) name_hdr += mark;
+		dc.DrawText(to_wx(name_hdr), char_width_ / 2, 1);
+
+		UnicodeString size_hdr = _T("サイズ");
+		if (sort_key_ == SortKey::Size) size_hdr += mark;
+		dc.DrawText(to_wx(size_hdr), size_col, 1);
+
+		UnicodeString date_hdr = _T("日時");
+		if (sort_key_ == SortKey::Date) date_hdr += mark;
+		dc.DrawText(to_wx(date_hdr), date_col, 1);
+
+		UnicodeString attr_hdr = _T("属性");
+		if (sort_key_ == SortKey::Attr) attr_hdr += mark;
+		dc.DrawText(to_wx(attr_hdr), attr_col, 1);
+	}
+
+	const int rows = VisibleRows();
+
 	for (int i = 0; i < rows; ++i) {
 		const int index = top_ + i;
-		if (index < 0 || index >= static_cast<int>(items_.size())) break;
+		if (index < 0 || index >= GetItemCount()) break;
 
-		const FileItem &itm = items_[static_cast<std::size_t>(index)];
-		const int y = i * row_height_;
+		const FileItem &itm = ItemAt(index);
+		const int y = HeaderHeight() + i * row_height_;
 		const bool on_cursor = (index == cursor_);
 
 		wxColour text_fg = itm.marked ? mark_fg : (itm.is_dir ? dir_fg : fg);
