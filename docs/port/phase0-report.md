@@ -528,3 +528,31 @@ BCC64 での再ビルドは未検証)。現状 `gui/` からこれらの関数�
 `get_AppInf` / `get_duration` (実行ファイルのバージョン情報・メディアの再生時間) と
 `get_MetafileInf` (.wmf/.emf) は、未移植の `usr_SH` や `TMetafile` に依存するため
 **ファイル情報の表示から除外**している。
+
+## 14. C++Builder 側で検証が必要な変更の一覧
+
+この環境に BCC64 が無いため、**RAD Studio でのビルド確認が未実施**。`src/` への変更は
+以下に限られる (文字コード変換を除く)。いずれも標準 C++ のみで書き、`#ifdef` による
+分岐は入れていない。
+
+| ファイル | 変更 | 種類 |
+|---|---|---|
+| `src/*.cpp` `src/*.h` (230) | CP932 → BOM 無し UTF-8 | 文字コード変換のみ (内容差分ゼロ) |
+| `usr_shell.h` | `__property Items[int]` → 添字プロキシ (`TItemsProperty`) | C++Builder 拡張の置き換え |
+| `usr_mmfile.h` | `__property Bytes[unsigned]` → 添字プロキシ | 同上 |
+| `usr_scrpanel.h` | `__property KnobWidth` / `Visible` → プロキシ | 同上 |
+| `usr_scrpanel.cpp` | `std::max(int, KnobWidth)` に `(int)` キャスト 4箇所 | 上のプロキシ化の帰結 |
+| `usr_file_inf.cpp` | `try { } __finally { }` 3箇所 → RAII (`scope_exit`) | C++Builder 拡張の置き換え |
+| `usr_msg.cpp` | GUI 依存部を分離して縮小 | ファイル分割 |
+| `usr_msg_dlg.cpp` | **新規**。`usr_msg.cpp` から `msgbox_*` を移動 | ファイル分割 |
+| `NyanFi.cbproj` | `usr_msg_dlg.cpp` を `CppCompile` に登録 (BuildOrder 119) | プロジェクト設定 |
+| `file_filter.cpp` `htmconv.cpp` `usr_arc.cpp` `usr_cmdlist.cpp` `usr_exif.cpp` `usr_file_inf.cpp` `usr_id3.cpp` `usr_key.cpp` `usr_str.cpp` `usr_highlight.cpp` | 非 ASCII の narrow リテラルを `_T()` で包む (計 714箇所) | 機械変換 |
+
+### 確認してほしいこと
+
+1. **RAD Studio でビルドが通るか**。特に添字プロキシ (`TItemsProperty` / `TBytesProperty`) と
+   `scope_exit` が BCC64 で受理されるか
+2. `usr_msg_dlg.cpp` が正しくビルド対象に入っているか (`BuildOrder` の重複は元から多数あり、
+   119 は未使用だったので選んだ)
+3. `_T()` 化した箇所で、narrow (`char*`) を要求する API に渡している箇所が無いか
+   (mingw 側ではコンパイルが通っているので、あるとすれば C++Builder 固有の API)
