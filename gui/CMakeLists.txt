@@ -42,8 +42,21 @@ separate_arguments(WX_LIBS_LIST NATIVE_COMMAND "${WX_LIBS}")
 
 message(STATUS "wxWidgets ${WX_VERSION} (${WX_CONFIG})")
 
+# wx.rc を絶対パスで取り込む (windres へのインクルードパスの渡り方が環境依存のため)
+find_file(WX_MSW_RC
+	NAMES wx/msw/wx.rc
+	PATHS ${WX_INCLUDE_DIRS}
+	NO_DEFAULT_PATH
+)
+if(NOT WX_MSW_RC)
+	message(FATAL_ERROR "wx/msw/wx.rc が見つかりません (探索先: ${WX_INCLUDE_DIRS})")
+endif()
+file(TO_CMAKE_PATH "${WX_MSW_RC}" WX_MSW_RC)
+message(STATUS "wx リソース: ${WX_MSW_RC}")
+configure_file(nyanfi.rc.in "${CMAKE_CURRENT_BINARY_DIR}/nyanfi.rc" @ONLY)
+
 add_executable(nyanfi
-	nyanfi.rc
+	"${CMAKE_CURRENT_BINARY_DIR}/nyanfi.rc"
 	nyanfi_app.cpp
 	main_frame.cpp
 	file_pane.cpp

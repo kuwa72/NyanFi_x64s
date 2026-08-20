@@ -1,3 +1,0 @@
-// wxWidgets が MSW で必要とするリソース (マニフェスト・標準カーソル・アイコン)。
-// これをリンクしないと COMCTL32 v6 が有効にならず、wxApp の初期化に失敗する。
-#include "wx/msw/wx.rc"
