@@ -3,10 +3,16 @@
 # 目的は「誰でも無償でビルドでき、CI が回り、特定ベンダの許諾に依存しない」こと。
 # 対象は Win64 のみ (クロスプラットフォーム化は目的外)。
 #
-# 本番ターゲット: clang-cl + Windows SDK
-# ローカル検証   : mingw-w64 (cmake/toolchain-mingw-w64.cmake)
+# 基準ツールチェイン: MSYS2 UCRT64 (mingw-w64 GCC)
+#   cmake -B build -G Ninja && cmake --build build && ctest --test-dir build
+#
+# Linux ホストからのクロスビルド (同じ mingw-w64 ターゲット):
 #   cmake -B build -G Ninja --toolchain cmake/toolchain-mingw-w64.cmake
-#   cmake --build build && ctest --test-dir build
+#
+# clang-cl を採らない理由: clang は UTF-8 以外の実行時文字コードを扱えず
+# (`-fexec-charset=CP932` が invalid value)、非 ASCII の narrow リテラル
+# 1,944箇所を wide へ機械変換しない限りビルドできない。GCC-mingw なら不要。
+# 詳細は docs/port/phase0-report.md §4。
 
 cmake_minimum_required(VERSION 3.24)
 
@@ -22,6 +28,13 @@ if(NOT WIN32)
 endif()
 
 option(NYANFI_BUILD_TESTS "doctest によるテストをビルドする" ON)
+option(NYANFI_STATIC_LINK "ランタイム DLL に依存しない実行ファイルを作る" ON)
+
+# 実行ファイルを単体で配れるようにする (MSYS2 のネイティブビルドでも、
+# Linux からのクロスビルドでも同じ条件にする)
+if(MINGW AND NYANFI_STATIC_LINK)
+	add_link_options(-static -static-libgcc -static-libstdc++)
+endif()
 
 #-----------------------------------------------------------------------------
 # 共通のコンパイル設定

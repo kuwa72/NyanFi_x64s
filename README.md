@@ -22,8 +22,15 @@ VCL 依存を除き、無償のツールチェインだけでビルドできる�
 方針は [issue #1](https://github.com/kuwa72/NyanFi_x64s/issues/1)、現状は
 [docs/port/phase0-report.md](docs/port/phase0-report.md) を参照してください。
 
+基準ツールチェインは **MSYS2 UCRT64 (mingw-w64 GCC)** です。
+
 ```
+# Windows (MSYS2 UCRT64)
+pacman -S mingw-w64-ucrt-x86_64-{gcc,cmake,ninja}
+cmake -B build -G Ninja && cmake --build build && ctest --test-dir build
+
+# Linux からのクロスビルド
 brew install cmake ninja mingw-w64   # または各環境のパッケージマネージャ
-./scripts/build.sh                   # ロジック層のビルドとテスト
+./scripts/build.sh                   # ビルドとテストを一括実行
 ```
 

@@ -11,12 +11,30 @@ issue #1 の Phase 0「シム雛形 + CMake を用意し、フォーム非依存
 
 | 項目 | 決定 | 理由 |
 |---|---|---|
-| 本番ツールチェイン | clang-cl + Windows SDK + CMake + Ninja | issue #1 の方針どおり。無償入手可・GitHub ホストランナー標準搭載 |
-| ローカル検証ツールチェイン | **mingw-w64 (GCC 16.2)** | Windows 実機なしでコンパイルでき、生成した .exe を WSL interop でそのまま実行できるため doctest が回る。Phase 0 の反復速度が CI 待ちに律速されない |
+| 基準ツールチェイン | **MSYS2 UCRT64 (mingw-w64 GCC) + CMake + Ninja** | 完全に無償・パーミッシブで、Windows SDK にも Embarcadero にも依存しない。理由の実測根拠は §1.1 |
+| Linux ホストでのクロスビルド | mingw-w64 (GCC 16.2) | 同じ mingw-w64 ターゲットなのでソースと設定が共通。CI の Linux ジョブで常時確認する |
+| ローカルでのテスト実行 | WSL interop | mingw が生成した .exe をそのまま実行できるため、Windows 実機なしで doctest が回る |
+| clang-cl | **採用しない** | §1.1 のとおり、narrow リテラル 1,944箇所の機械変換が前提条件になる |
 | ソース文字コード | CP932 → **BOM 無し UTF-8** に一括変換 | `scripts/convert_to_utf8.py`。230 ファイルすべて往復検証済み |
 | narrow リテラルの実行時文字コード | **CP932** (`-fexec-charset=CP932`) | C++Builder と同じ意味論を保つため。詳細は §4 |
 | 新規コードの配置 | トップレベル `CMakeLists.txt` + `compat/` | 将来こちらが本流になる前提 |
-| 既存ソースの変更 | **しない** (src/ は文字コード変換以外ノータッチ) | `vcl_shim.h` を強制インクルード (`-include` / `/FI`) して C++Builder の暗黙 `vcl.h` を再現する方式を採った |
+| 既存ソースの変更 | 最小限 (文字コード変換 + C++Builder 拡張 5箇所) | `vcl_shim.h` を強制インクルード (`-include` / `/FI`) して C++Builder の暗黙 `vcl.h` を再現し、呼び出し側の書き換えを避けた。5箇所の詳細は §8.3 |
+
+### 1.1 ツールチェイン選定の実測根拠
+
+issue #1 は本番ターゲットを clang-cl + Windows SDK としていたが、Phase 0 の実測を踏まえて
+**mingw-w64 (GCC) を基準に変更した**。根拠:
+
+| 実測 | 内容 |
+|---|---|
+| `clang++ -fexec-charset=CP932` | **`error: invalid value 'CP932'`**。clang は UTF-8 以外の実行時文字コードを一切扱えない。clang-cl でも llvm-mingw でも同じ。つまり clang 系を採ると、非 ASCII の narrow リテラル **1,944箇所** を wide へ機械変換するのが着手の前提条件になる (§4) |
+| `(DWORD)obj` のポインタ縮小キャスト | GCC は `-fpermissive` で降格できるが clang には同等のオプションが無く、**16箇所**の修正が前提条件になる (§5) |
+| Windows SDK | clang-cl は SDK 必須。SDK は proprietary で EULA が付き、ホストも Windows に限られる。mingw-w64 なら Linux ホストからクロスビルドでき、CI を `ubuntu-latest` で回せる |
+| CRT | 現行の mingw-w64 ツールチェインが生成したバイナリの import テーブルは `api-ms-win-crt-*.dll`、すなわち **UCRT**。MSYS2 UCRT64 と同じ CRT を既に使っている |
+
+つまり「無償・CI・脱ロックイン」という目的に対して、mingw-w64 の方が前提条件が少なく、
+かつ Phase 0 の 14,088 行はその条件で既に通っている。clang-cl は、上記2つの機械変換を
+済ませた後の**任意の追加ターゲット**として扱う。
 
 ## 2. 実測: 文字コードとフォーム依存
 
@@ -75,7 +93,9 @@ Phase 0 の対象に残したのは以下の 15 ファイル (計 14,088 行)。
 
 C++Builder は narrow リテラルを CP932 として扱い、`UnicodeString(const char*)` は CP_ACP で変換していた。書庫 DLL (`unrar64.dll` など) が返す char バッファも同じ経路を通るため、**`UnicodeString(const char*)` を UTF-8 解釈に変えると実行時データが壊れる**。したがって RTL と同じ CP_ACP 意味論を維持し、リテラル側を `-fexec-charset=CP932` で合わせた (mingw-w64 で動作確認済み)。
 
-**問題**: 本番ターゲットの clang-cl は UTF-8 以外の実行時文字コードを扱えない。clang-cl へ移る前に、非 ASCII を含む narrow リテラルを wide (`_T(...)`) へ機械変換する必要がある。
+**基準ツールチェイン (mingw-w64 GCC) ではこの変換は不要**。`-fexec-charset=CP932` が使えるため、C++Builder と同じ意味論のままビルドできる。
+
+一方 **clang 系 (clang-cl / llvm-mingw) に移る場合は必須の前提条件**になる。`clang++ -fexec-charset=CP932` は `error: invalid value 'CP932'` で拒否されるため (実測)、非 ASCII を含む narrow リテラルを wide (`_T(...)`) へ機械変換しない限りビルドできない。これが clang-cl を基準から外した最大の理由 (§1.1)。
 
 `scripts/scan_narrow_literals.py` による実測:
 
@@ -85,7 +105,7 @@ C++Builder は narrow リテラルを CP932 として扱い、`UnicodeString(con
 | Phase 0 対象 15 ファイル | 712 箇所 |
 | 最多 | `usr_cmdlist.cpp` 583 (コマンド表の日本語説明)、`MainFrm.cpp` 259、`Global.cpp` 195、`OptDlg.cpp` 166 |
 
-変換自体は機械的 (リテラルを `_T()` で包む) で、`UnicodeString(const char*)` を経由していた箇所が `const wchar_t*` になるだけなので意味論の変化はない。Phase 1 の作業項目とする。
+変換自体は機械的 (リテラルを `_T()` で包む) で、`UnicodeString(const char*)` を経由していた箇所が `const wchar_t*` になるだけなので意味論の変化はない。**clang 系を追加ターゲットにする判断をした時点での作業項目**とする。
 
 ## 5. シムでは回避できないブロッカー: C++Builder 独自拡張
 
@@ -105,8 +125,8 @@ issue #1 は「Delphi 固有の厄介な機能への依存は薄い」として�
 
 | 事象 | 出現数 | 内容 |
 |---|---|---|
-| `(DWORD)obj` / `(int)obj` | 16箇所 | `TStringList` の `Objects` スロットに 32bit 値を詰めて取り出す書き方。C++ としては ill-formed で、GCC は `-fpermissive` で降格できるが **clang-cl には同等のオプションが無い**。`(DWORD)(DWORD_PTR)obj` へ直す必要がある |
-| 非 ASCII の narrow リテラル | 1,944箇所 | §4 のとおり |
+| `(DWORD)obj` / `(int)obj` | 16箇所 | `TStringList` の `Objects` スロットに 32bit 値を詰めて取り出す書き方。C++ としては ill-formed。GCC は `-fpermissive` で降格できるので基準ツールチェインでは通る。clang 系に移るなら `(DWORD)(DWORD_PTR)obj` へ要修正 |
+| 非 ASCII の narrow リテラル | 1,944箇所 | §4 のとおり。基準ツールチェインでは不要、clang 系では必須 |
 
 ## 6. 作成した互換シム
 
@@ -134,6 +154,17 @@ issue #1 は「Delphi 固有の厄介な機能への依存は薄い」として�
 | `mingw_patch.h` | ローカル検証用 mingw-w64 と Windows SDK の差分埋め |
 
 `#include <System.JSON.hpp>` のような RAD 形式の include をそのまま通すため、転送ヘッダ (`System.*.hpp` / `Vcl.*.hpp` / `utilcls.h` / `RestartManager.h`) も用意した。
+
+### wide printf の `%s` (CRT ではなく mingw の stdio 由来)
+
+mingw-w64 の wide printf 実装は `%s` を **マルチバイト文字列**として解釈する (wide は `%ls` / `%S`)。
+既存コードは `%s` に `wchar_t*` を渡す前提なので、`UnicodeString::sprintf` / `cat_sprintf` の中で
+書式を事前スキャンし、長さ修飾子なしの `%s` → `%ls`、`%c` → `%lc` に書き換えてから
+`vswprintf` に渡している。
+
+これは **msvcrt か UCRT かとは無関係** (現行ツールチェインは既に UCRT をリンクしているが挙動は同じ)。
+`__USE_MINGW_ANSI_STDIO` を定義しても変わらないことも実測済み。書き換え後の `%ls` は UCRT でも
+MSVC でも同じ意味なので、この対処はツールチェインを変えても外す必要がない。
 
 ### 正規表現: PCRE2 は Phase 1 で急がなくてよい
 
@@ -214,12 +245,13 @@ doctest。mingw-w64 が生成した .exe を WSL interop でそのまま実行�
 
 ### 8.4 検証できていないこと (無言のスキップを避けるため明記)
 
-1. **clang-cl + Windows SDK でのビルド**。本番ターゲットでの確認は未実施。§4 の narrow リテラルと §5 の `(DWORD)obj` キャストが確実に障害になる
-2. **C++Builder 12.1 での再ビルド**。§8.3 のとおり
-3. **GUI 依存関数の動作**。`compat/gui_stubs.h` は宣言のみで実装が無く、呼ぶとリンクエラーになる。`core_tests` では、同一オブジェクトファイル内の未使用関数がリンクを要求する分だけ `tests/core/test_link_stubs.cpp` が `std::abort()` するダミー定義を与えている (5シンボル: `TWinControl::LockDrawing` / `UnlockDrawing`、`TControl::Perform`、`TDirect2DCanvas` のコンストラクタと `Supported()`)
-4. **外部 DLL を要する経路**。`usr_arc.cpp` (書庫 DLL) / `usr_migemo.cpp` (migemo.dll) / `usr_xd2tx.cpp` (xd2txlib.dll) はコンパイル・リンクは通るが、実行時の動作は未確認
-5. **`TMultiReadExclusiveWriteSynchronizer` の再入**。Delphi 版は同一スレッドの再入を許すが、シムは SRWLOCK なので再入不可。呼び出し側 (`usr_tag.cpp` / `Global.cpp`) が再入していないかは Phase 1 で確認が必要
-6. **`TList` の終端解放**。派生クラスの `Notify` はデストラクタからは呼ばれない (C++ では基底デストラクタ実行時に vtable が巻き戻る)。`usr_shell.cpp` の最終 `delete` で `drop_target_rec` が解放されずリークする。クラッシュはしない
+1. **MSYS2 UCRT64 (Windows ホスト) でのビルド**。基準ツールチェインだが、この環境は Linux ホストなので直接は未検証。同じ mingw-w64 GCC + UCRT ターゲットであり、CI (`.github/workflows/port-ci.yml`) の `windows-ucrt64` ジョブで確認する
+2. **clang-cl でのビルド**。基準から外したため未実施。§4 の narrow リテラル 1,944箇所と §5 の `(DWORD)obj` 16箇所を機械変換すれば追加ターゲットにできる
+3. **C++Builder 12.1 での再ビルド**。§8.3 のとおり
+4. **GUI 依存関数の動作**。`compat/gui_stubs.h` は宣言のみで実装が無く、呼ぶとリンクエラーになる。`core_tests` では、同一オブジェクトファイル内の未使用関数がリンクを要求する分だけ `tests/core/test_link_stubs.cpp` が `std::abort()` するダミー定義を与えている (5シンボル: `TWinControl::LockDrawing` / `UnlockDrawing`、`TControl::Perform`、`TDirect2DCanvas` のコンストラクタと `Supported()`)
+5. **外部 DLL を要する経路**。`usr_arc.cpp` (書庫 DLL) / `usr_migemo.cpp` (migemo.dll) / `usr_xd2tx.cpp` (xd2txlib.dll) はコンパイル・リンクは通るが、実行時の動作は未確認
+6. **`TMultiReadExclusiveWriteSynchronizer` の再入**。Delphi 版は同一スレッドの再入を許すが、シムは SRWLOCK なので再入不可。呼び出し側 (`usr_tag.cpp` / `Global.cpp`) が再入していないかは Phase 1 で確認が必要
+7. **`TList` の終端解放**。派生クラスの `Notify` はデストラクタからは呼ばれない (C++ では基底デストラクタ実行時に vtable が巻き戻る)。`usr_shell.cpp` の最終 `delete` で `drop_target_rec` が解放されずリークする。クラッシュはしない
 
 ### 8.5 テストで判明した既存実装の挙動 (直していない)
 
@@ -235,9 +267,15 @@ doctest。mingw-w64 が生成した .exe を WSL interop でそのまま実行�
 
 ## 9. 次のアクション (Phase 1 の入口)
 
-1. `__property` 31箇所と `try/__finally` 14箇所を機械変換する (独立コミット)
-2. `(DWORD)obj` 16箇所を `(DWORD)(DWORD_PTR)obj` へ直す (clang-cl 必須)
-3. 非 ASCII の narrow リテラル 1,944箇所を `_T(...)` へ機械変換する (clang-cl 必須)
-4. GitHub Actions (windows-latest + clang-cl) の workflow を追加し、本番ターゲットでの通過状況を測る
-5. ロジック層の回帰テストを増やす (現状は §8 のとおり)
-6. `usr_swatch` / `usr_highlight` / `UIniFile` が `usr_scale.h` 経由で `Vcl.Grids.hpp` に依存している部分を切り離す
+基準ツールチェインを mingw-w64 に変更したため、優先順位が変わった。
+
+1. **CI を動かす**。`.github/workflows/port-ci.yml` を追加済み。`windows-ucrt64` (基準環境でのビルド + テスト + 成果物) と `linux-cross` (Linux からのクロスビルド確認)、タグ push でのリリースまで書いてある。あとは push して実際に回すだけ
+2. **ロジック層の残りを移植する**。`usr_tag.cpp` / `usr_scrpanel.cpp` / `usr_swatch.cpp` / `usr_highlight.cpp` / `UIniFile.cpp` は `Vcl.Grids.hpp` / `Vcl.CheckLst.hpp` 経由の依存を切り離せば通る見込み
+3. **回帰テストを増やす**。現状 `usr_file_ex.cpp` と `usr_exif.cpp` は未カバー
+4. **`Global.cpp` / `usr_shell.cpp` に着手する**。ここに `IShellFolder` 21 / `IContextMenu` 3 のシェル統合が入っている。`__uuidof` が 2箇所あり、GCC では使えないので `IID_IXxx` 定数に置き換える必要がある (Global.cpp)
+5. **Phase 2 (wxWidgets)**。ここからがアプリとして起動するための本体作業。wxWidgets 3.3 は mingw-w64 UCRT64 でビルドできる
+
+### 保留 (clang 系を追加ターゲットにする判断をした場合のみ)
+
+- 非 ASCII の narrow リテラル 1,944箇所を `_T(...)` へ機械変換 (§4)
+- `(DWORD)obj` 16箇所を `(DWORD)(DWORD_PTR)obj` へ修正 (§5)
