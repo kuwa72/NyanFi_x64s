@@ -185,10 +185,54 @@ UnicodeString::UnicodeString(wchar_t ch) : text_(1, ch)
 {
 }
 
+UnicodeString::UnicodeString(char ch)
+{
+	// CP_ACP で 1 バイトを変換する。ASCII なら素通り
+	const char buf[2] = {ch, '\0'};
+	wchar_t wc[4] = {0};
+	const int n = ::MultiByteToWideChar(CP_ACP, 0, buf, 1, wc, 4);
+	if (n > 0) text_.assign(wc, static_cast<std::size_t>(n));
+}
+
 UnicodeString::UnicodeString(int value)
 {
 	wchar_t buf[16];  // INT32_MIN は "-2147483648" (11 文字 + NUL) で足りる
 	const int n = std::swprintf(buf, sizeof(buf) / sizeof(buf[0]), L"%d", value);
+	if (n > 0) text_.assign(buf, static_cast<std::size_t>(n));
+}
+
+UnicodeString::UnicodeString(unsigned int value)
+{
+	wchar_t buf[16];
+	const int n = std::swprintf(buf, sizeof(buf) / sizeof(buf[0]), L"%u", value);
+	if (n > 0) text_.assign(buf, static_cast<std::size_t>(n));
+}
+
+UnicodeString::UnicodeString(long value)
+{
+	wchar_t buf[32];
+	const int n = std::swprintf(buf, sizeof(buf) / sizeof(buf[0]), L"%ld", value);
+	if (n > 0) text_.assign(buf, static_cast<std::size_t>(n));
+}
+
+UnicodeString::UnicodeString(unsigned long value)
+{
+	wchar_t buf[32];
+	const int n = std::swprintf(buf, sizeof(buf) / sizeof(buf[0]), L"%lu", value);
+	if (n > 0) text_.assign(buf, static_cast<std::size_t>(n));
+}
+
+UnicodeString::UnicodeString(long long value)
+{
+	wchar_t buf[32];  // INT64_MIN は 20 文字 + NUL
+	const int n = std::swprintf(buf, sizeof(buf) / sizeof(buf[0]), L"%lld", value);
+	if (n > 0) text_.assign(buf, static_cast<std::size_t>(n));
+}
+
+UnicodeString::UnicodeString(unsigned long long value)
+{
+	wchar_t buf[32];
+	const int n = std::swprintf(buf, sizeof(buf) / sizeof(buf[0]), L"%llu", value);
 	if (n > 0) text_.assign(buf, static_cast<std::size_t>(n));
 }
 

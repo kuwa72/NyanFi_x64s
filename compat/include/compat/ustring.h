@@ -132,8 +132,29 @@ public:
 	UnicodeString(const char *src);  //!< CP_ACP からの変換
 	UnicodeString(const char *src, int len);  //!< CP_ACP からの変換 (len バイト分、NUL 終端不要)
 	UnicodeString(wchar_t ch);
-	explicit UnicodeString(int value);     //!< 数値の文字列化 (C++Builder 互換)
-	explicit UnicodeString(double value);  //!< 数値の文字列化 (C++Builder 互換)
+	/// 1文字からの構築。`get_tkn_r(s, ',')` のように char リテラルをそのまま
+	/// 渡す慣用句が src 全体で多用されているため、**必須**。これが無いと
+	/// char は「昇格」で UnicodeString(int) に解決され、`','` が "44" になる
+	UnicodeString(char ch);
+
+	//-- 数値からの構築 --------------------------------------------------
+	// C++Builder の UnicodeString は数値からの変換が **暗黙** で、
+	// `val_str = v_ui;` のように整数を代入すると10進表記の文字列になる
+	// (実測: usr_exif.cpp に 9箇所、usr_str.cpp に 4箇所)。
+	//
+	// ここを explicit にすると、暗黙変換が UnicodeString(wchar_t) 経由に
+	// 落ちて「その整数値のコードポイント1文字」になり、コンパイルは通るのに
+	// 静かに壊れる。実際に Exif_GetImgSize が常に 0x0 を返す不具合になった。
+	//
+	// 型ごとに用意してあるのは曖昧さを避けるため。int だけにすると
+	// unsigned int の実引数が int と wchar_t のどちらにも変換できてしまう。
+	UnicodeString(int value);
+	UnicodeString(unsigned int value);
+	UnicodeString(long value);
+	UnicodeString(unsigned long value);
+	UnicodeString(long long value);
+	UnicodeString(unsigned long long value);
+	UnicodeString(double value);  //!< FloatToStr 相当 (General 書式)
 	UnicodeString(const AnsiString &src);
 	UnicodeString(const UTF8String &src);
 	explicit UnicodeString(const std::wstring &src);  //!< シム独自
