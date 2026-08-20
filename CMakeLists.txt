@@ -208,6 +208,11 @@ endif()
 # tests/core/test_gui_image_load.cpp から直接テストする) でここに含める。
 # デコードは自前で書かず、移植済みの WIC ラッパー (src/usr_wic.cpp、既に
 # nyanfi_core に含まれている) をそのまま使う。
+#
+# gui/tabs.cpp (タブの追加・削除・切り替えと ini 永続化) も同じ理由 (wx 非依存、
+# tests/core/test_gui_tabs.cpp から直接テストする) でここに含める。VCL 版の
+# tab_info (src/Global.h、実測) は左右ペイン共有の1本のタブバーだったため、
+# gui/tabs.h もそれに合わせた設計にしてある (詳細はそのファイルの解説を参照)。
 #-----------------------------------------------------------------------------
 if(TARGET nyanfi_core)
 	add_library(nyanfi_gui_core STATIC
@@ -221,6 +226,7 @@ if(TARGET nyanfi_core)
 		gui/navigation.cpp
 		gui/grep.cpp
 		gui/image_load.cpp
+		gui/tabs.cpp
 	)
 	target_include_directories(nyanfi_gui_core PUBLIC ${PROJECT_SOURCE_DIR})
 	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core shell32)

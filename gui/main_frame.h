@@ -10,6 +10,10 @@
  * あるため、ini のキー割り当てをそのまま読み込める (gui/key_map.h の
  * LoadFromIni)。ウィンドウ位置・ペインのディレクトリは gui/settings.h の
  * Settings が起動時に復元し、終了時に保存する。
+ *
+ * タブ (複数ディレクトリの切り替え) は gui/tabs.h の TabManager が状態を持つ。
+ * VCL 版の tab_info (実測。gui/tabs.h 冒頭のコメントを参照) が左右ペイン共有の
+ * 1本のタブバーだったため、ここでもペインごとの独立タブにはしていない。
  */
 #ifndef NYANFI_GUI_MAIN_FRAME_H
 #define NYANFI_GUI_MAIN_FRAME_H
@@ -24,7 +28,10 @@
 #include "gui/key_map.h"
 #include "gui/navigation.h"
 #include "gui/settings.h"
+#include "gui/tabs.h"
 #include "gui/text_viewer.h"
+
+class TabBar;  // gui/main_frame.cpp の無名名前空間で定義する自前描画のタブバー
 
 /**
  * @brief メインウィンドウ
@@ -100,6 +107,25 @@ private:
 	// に既定キーの記載が無かったため、キー割り当ては推測 (gui/key_map.cpp 参照)
 	void CmdGrep();  //!< アクティブペインのディレクトリを対象に grep する
 
+	// タブ (複数ディレクトリの切り替え。gui/tabs.h の TabManager)。VCL 版の
+	// tab_info (実測。gui/tabs.h 冒頭のコメントを参照) と同じく、左右ペイン
+	// 共有の1本のタブバーとして実装してある (ペインごとの独立タブではない)
+	void CmdAddTab();   //!< タブを追加する (Ctrl+T、推測のキー)。現在のタブを複製して末尾に追加
+	void CmdDelTab();   //!< 現在のタブを閉じる (Ctrl+W、推測のキー)。最後の1枚は閉じない
+	void CmdNextTab();  //!< 次のタブへ (Ctrl+Tab、推測のキー)
+	void CmdPrevTab();  //!< 前のタブへ (Shift+Ctrl+Tab、推測のキー)
+	void ShowTabListDialog();  //!< タブの一覧から選ぶ (Ctrl+E、推測のキー。F:PopupTab に相当)
+	/// 現在のタブの記録 (tabs_.MutableCurrent()) を、いま実際に両ペインが
+	/// 開いているディレクトリ・並べ替え設定で上書きする (VCL 版の
+	/// StoreTabStt/SetCurTab 相当。タブを切り替える・追加する・保存する前に必ず呼ぶ)
+	void StoreCurrentTabState();
+	/// tabs_ の指定タブの記録を両ペインへ適用する (VCL 版の TabControl1Change 相当)。
+	/// ディレクトリが現在のペインと同じなら SetPath を呼ばない (カーソル位置・
+	/// 履歴の重複を避けるため)。呼ぶ前に必要なら StoreCurrentTabState() で
+	/// 切り替え元のタブの記録を更新しておくこと
+	void ApplyTabState(const TabState &state);
+	void RefreshTabBar();  //!< tab_bar_ の表示 (キャプション一覧・現在位置) を更新する
+
 	void LoadSettings();
 	void SaveSettings();
 
@@ -121,6 +147,9 @@ private:
 	KeyMap keymap_;
 	Settings settings_{Settings::DefaultIniPath()};
 	IncrementalSearch incsearch_;  //!< インクリメンタルサーチの状態 (gui/navigation.h)
+
+	TabManager tabs_;       //!< タブの状態 (gui/tabs.h)。左右ペイン共有の1本のタブバー
+	TabBar *tab_bar_ = nullptr;  //!< タブの見た目 (自前描画。gui/main_frame.cpp を参照)
 };
 
 #endif  // NYANFI_GUI_MAIN_FRAME_H

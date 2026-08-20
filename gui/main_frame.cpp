@@ -6,11 +6,14 @@
 
 #include <algorithm>
 #include <array>
+#include <functional>
 #include <memory>
 #include <vector>
 
 #include <wx/choicdlg.h>
+#include <wx/dcbuffer.h>
 #include <wx/radiobox.h>
+#include <wx/settings.h>
 #include <wx/statline.h>
 #include <wx/textdlg.h>
 
@@ -71,6 +74,117 @@ bool ConfirmExecute(wxWindow *parent, const UnicodeString &full_path)
 }  // namespace
 
 //---------------------------------------------------------------------------
+/**
+ * @brief タブバー (自前描画)
+ * @details gui/main_frame.h から `class TabBar;` として前方宣言されるため、
+ * (無名名前空間だと別の型として扱われ食い違ってしまう) 無名名前空間の外
+ * (このファイルのグローバルスコープ) に置いてある。
+ *
+ * 色は wxSystemSettings から取る (gui/file_pane.cpp と同じ考え方。Windows の
+ * ライト/ダークモードに追従する)。VCL 版のタブの閉じるボタン (DelTabBtn) に
+ * 相当するものとして各タブの右端に "x" を描き、そこをクリックすると
+ * OnCloseTab を呼ぶ。末尾の "+" (VCL 版に対応するボタンは無い、Phase 2 骨格
+ * 向けの新規 UI) をクリックすると OnAddTab を呼ぶ
+ */
+class TabBar : public wxWindow {
+public:
+	explicit TabBar(wxWindow *parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition, wxSize(-1, 24))
+	{
+		SetBackgroundStyle(wxBG_STYLE_PAINT);
+		Bind(wxEVT_PAINT, &TabBar::OnPaint, this);
+		Bind(wxEVT_LEFT_DOWN, &TabBar::OnLeftDown, this);
+	}
+
+	std::function<void(int)> OnSelect;    //!< タブ本体をクリックしたとき (タブへ切り替え)
+	std::function<void(int)> OnCloseTab;  //!< "x" をクリックしたとき (そのタブを閉じる)
+	std::function<void()> OnAddTab;       //!< 末尾の "+" をクリックしたとき (タブを追加)
+
+	/// 表示するキャプション一覧と、現在アクティブなタブの添字を設定する
+	void SetTabs(const std::vector<UnicodeString> &captions, int current)
+	{
+		captions_ = captions;
+		current_ = current;
+		Refresh();
+	}
+
+private:
+	/// タブ・"x"・"+" それぞれの矩形 (OnPaint と OnLeftDown で同じ計算をするための共通処理)
+	struct Layout {
+		std::vector<wxRect> tab_rects;
+		std::vector<wxRect> close_rects;
+		wxRect add_rect;
+	};
+
+	Layout BuildLayout() const
+	{
+		Layout lay;
+		int x = 2;
+		const int h = std::max(1, GetClientSize().y);
+
+		wxClientDC dc(const_cast<TabBar *>(this));
+		for (const UnicodeString &cap : captions_) {
+			const wxSize ext = dc.GetTextExtent(to_wx(cap));
+			const int w = ext.x + 28;  // 文字幅 + 左右の余白 + "x" の幅
+			lay.tab_rects.push_back(wxRect(x, 1, w, h - 2));
+			lay.close_rects.push_back(wxRect(x + w - 18, 1, 16, h - 2));
+			x += w + 2;
+		}
+		lay.add_rect = wxRect(x, 1, h - 2, h - 2);  // 正方形の "+" ボタン
+		return lay;
+	}
+
+	void OnPaint(wxPaintEvent & /*event*/)
+	{
+		wxAutoBufferedPaintDC dc(this);
+
+		const wxColour bg = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
+		const wxColour active_bg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+		const wxColour fg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
+		const wxColour frame_col = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW);
+
+		dc.SetBackground(wxBrush(bg));
+		dc.Clear();
+		dc.SetTextForeground(fg);
+
+		const Layout lay = BuildLayout();
+		for (std::size_t i = 0; i < captions_.size(); ++i) {
+			const bool is_current = (static_cast<int>(i) == current_);
+			dc.SetPen(wxPen(frame_col));
+			dc.SetBrush(wxBrush(is_current ? active_bg : bg));
+			dc.DrawRectangle(lay.tab_rects[i]);
+			dc.DrawText(to_wx(captions_[i]), lay.tab_rects[i].x + 6, lay.tab_rects[i].y + 3);
+			dc.DrawText("x", lay.close_rects[i].x + 4, lay.close_rects[i].y + 3);
+		}
+
+		dc.SetPen(wxPen(frame_col));
+		dc.SetBrush(wxBrush(bg));
+		dc.DrawRectangle(lay.add_rect);
+		dc.DrawText("+", lay.add_rect.x + lay.add_rect.width / 2 - 4, lay.add_rect.y + 3);
+	}
+
+	void OnLeftDown(wxMouseEvent &event)
+	{
+		const wxPoint pos = event.GetPosition();
+		const Layout lay = BuildLayout();
+
+		for (std::size_t i = 0; i < captions_.size(); ++i) {
+			if (lay.close_rects[i].Contains(pos)) {
+				if (OnCloseTab) OnCloseTab(static_cast<int>(i));
+				return;
+			}
+			if (lay.tab_rects[i].Contains(pos)) {
+				if (OnSelect) OnSelect(static_cast<int>(i));
+				return;
+			}
+		}
+		if (lay.add_rect.Contains(pos) && OnAddTab) OnAddTab();
+	}
+
+	std::vector<UnicodeString> captions_;
+	int current_ = 0;
+};
+
+//---------------------------------------------------------------------------
 MainFrame::MainFrame()
 	: wxFrame(nullptr, wxID_ANY, "NyanFi (wxWidgets port)", wxDefaultPosition, wxSize(1000, 640))
 {
@@ -90,6 +204,28 @@ MainFrame::MainFrame()
 
 	root->SetSizer(columns);
 	root_ = root;
+
+	// タブバー (gui/tabs.h の TabManager の見た目)。root_ の上に横一列で置く
+	// (レイアウトの詳細は MainFrame::OnSize を参照)
+	tab_bar_ = new TabBar(this);
+	tab_bar_->OnSelect = [this](int index) {
+		if (index == tabs_.CurrentIndex()) return;
+		StoreCurrentTabState();
+		if (tabs_.SelectAt(index)) ApplyTabState(tabs_.Current());
+		RefreshTabBar();
+	};
+	tab_bar_->OnCloseTab = [this](int index) {
+		// 表示中のタブ以外を閉じても、表示中のタブ自体は切り替わらない
+		// (TabManager::CloseTabAt を参照)
+		const bool was_current = (index == tabs_.CurrentIndex());
+		if (!tabs_.CloseTabAt(index)) {
+			wxBell();  // 最後の1枚は閉じない
+			return;
+		}
+		if (was_current) ApplyTabState(tabs_.Current());
+		RefreshTabBar();
+	};
+	tab_bar_->OnAddTab = [this]() { CmdAddTab(); };
 
 	// テキストビューア。root_ と同じ領域に重ねて置き、開いていないときは隠す
 	// (ShowViewer で切り替える)。root_/viewer_ 双方の実サイズは
@@ -123,26 +259,63 @@ MainFrame::MainFrame()
 }
 
 //---------------------------------------------------------------------------
-/// root_ (2ペイン) と viewer_ (テキストビューア) を常にクライアント領域いっぱいに揃える
+/// tab_bar_ をクライアント領域の最上段に、root_ (2ペイン)・viewer_ (テキスト
+/// ビューア)・image_viewer_ (画像ビューア) をその下いっぱいに揃える
 void MainFrame::OnSize(wxSizeEvent &event)
 {
 	const wxSize sz = GetClientSize();
-	if (root_ != nullptr) root_->SetSize(sz);
-	if (viewer_ != nullptr) viewer_->SetSize(sz);
-	if (image_viewer_ != nullptr) image_viewer_->SetSize(sz);
+	const int tab_bar_h = (tab_bar_ != nullptr) ? tab_bar_->GetSize().y : 0;
+
+	if (tab_bar_ != nullptr) tab_bar_->SetSize(0, 0, sz.x, tab_bar_h);
+
+	const wxRect body(0, tab_bar_h, sz.x, std::max(0, sz.y - tab_bar_h));
+	if (root_ != nullptr) root_->SetSize(body);
+	if (viewer_ != nullptr) viewer_->SetSize(body);
+	if (image_viewer_ != nullptr) image_viewer_->SetSize(body);
 	event.Skip();
 }
 
 //---------------------------------------------------------------------------
-/// 起動時: settings_ (nyanfi_wx.ini) からウィンドウ位置・ペインのディレクトリを復元する
+/**
+ * @brief 起動時: settings_ (nyanfi_wx.ini) からウィンドウ位置・タブを復元する
+ * @details タブの永続化は tabs_ (gui/tabs.h) が担い、settings_ と同じ ini
+ * ファイル (settings_.Ini()) の別セクションに書く (gui/tabs.h の解説を参照)。
+ * 保存されたタブが無い (初回起動、または本機能より前の _wx.ini) 場合は、
+ * 旧来の settings_.LeftDir/RightDir (無ければ起動時のカレントディレクトリ)
+ * から1本だけのタブを作る
+ */
 void MainFrame::LoadSettings()
 {
 	const UnicodeString start = initial_path();
 
-	const UnicodeString left_dir  = settings_.LeftDir;
-	const UnicodeString right_dir = settings_.RightDir;
-	panes_[0]->SetPath(!left_dir.IsEmpty()  && dir_exists(left_dir)  ? left_dir  : start);
-	panes_[1]->SetPath(!right_dir.IsEmpty() && dir_exists(right_dir) ? right_dir : start);
+	tabs_.LoadFromIni(settings_.Ini());
+	if (tabs_.Count() == 0) {
+		// 通常は起こらない (TabManager は常に1本以上持つ) が、念のため
+		TabState fallback;
+		fallback.panes[0].directory = start;
+		fallback.panes[1].directory = start;
+		tabs_.AddTab(fallback);
+	}
+	else if (tabs_.Current().panes[0].directory.IsEmpty() && tabs_.Current().panes[1].directory.IsEmpty()) {
+		// ini にタブの記録が無かった場合 (TabManager の既定のまま)。
+		// 旧来の LeftDir/RightDir から1本だけのタブを組み立てる
+		TabState &cur = tabs_.MutableCurrent();
+		const UnicodeString left_dir  = settings_.LeftDir;
+		const UnicodeString right_dir = settings_.RightDir;
+		cur.panes[0].directory = (!left_dir.IsEmpty()  && dir_exists(left_dir))  ? left_dir  : start;
+		cur.panes[1].directory = (!right_dir.IsEmpty() && dir_exists(right_dir)) ? right_dir : start;
+	}
+
+	// タブの記録を両ペインへ適用する (初回なので record_history はどちらでも
+	// 差が出ないが、ApplyTabState と同じ経路を通すため false のまま統一する)
+	for (int i = 0; i < 2; ++i) {
+		const PaneTabState &pane_state = tabs_.Current().panes[i];
+		panes_[i]->SetSortSettings(pane_state.sort_key, pane_state.sort_descending, pane_state.dirs_first);
+		panes_[i]->SetPath(!pane_state.directory.IsEmpty() && dir_exists(pane_state.directory)
+		                        ? pane_state.directory : start,
+		                    /*record_history=*/false);
+	}
+	RefreshTabBar();
 
 	const WindowState &w = settings_.Window;
 	SetSize(wxSize(w.width, w.height));
@@ -151,9 +324,14 @@ void MainFrame::LoadSettings()
 }
 
 //---------------------------------------------------------------------------
-/// 終了時: 現在のウィンドウ位置・ペインのディレクトリを settings_ 経由で保存する
+/// 終了時: 現在のウィンドウ位置・タブを settings_ 経由で保存する
 void MainFrame::SaveSettings()
 {
+	StoreCurrentTabState();
+	tabs_.SaveToIni(settings_.Ini());
+
+	// 後方互換 (本機能より前の _wx.ini を読む古いビルドとの橋渡し)。
+	// タブが無い/未対応のビルドでも最後に開いていたディレクトリだけは復元できる
 	settings_.LeftDir  = panes_[0]->GetPath();
 	settings_.RightDir = panes_[1]->GetPath();
 
@@ -370,12 +548,34 @@ bool MainFrame::Execute(const UnicodeString &command)
 	else if (SameStr(command, _T("InputDir"))) {
 		ShowInputDirDialog();
 	}
+	else if (SameStr(command, _T("AddTab"))) {
+		CmdAddTab();
+	}
+	else if (SameStr(command, _T("DelTab"))) {
+		CmdDelTab();
+	}
+	else if (SameStr(command, _T("NextTab"))) {
+		CmdNextTab();
+	}
+	else if (SameStr(command, _T("PrevTab"))) {
+		CmdPrevTab();
+	}
+	else if (SameStr(command, _T("PopupTab"))) {
+		ShowTabListDialog();
+	}
 	else if (SameStr(command, _T("Exit"))) {
 		Close(true);
 	}
 	else {
 		return false;  // 未実装
 	}
+
+	// 現在のタブの記録 (ディレクトリ・並べ替え設定) を、いま実際にペインが
+	// 開いている状態に合わせておく。VCL 版が SetCurStt 等の広い箇所から
+	// SetCurTab を呼んでタブのキャプションを常に最新に保つのに対応する簡易版
+	// (個々のコマンドごとに呼び分けず、実行された全コマンドの後にまとめて行う)
+	StoreCurrentTabState();
+	RefreshTabBar();
 	return true;
 }
 
@@ -947,7 +1147,10 @@ void MainFrame::ShowViewer(bool show)
 	viewer_->Show(show);
 
 	if (show) {
-		viewer_->SetSize(GetClientSize());
+		// タブバー分を除いた領域に合わせる (MainFrame::OnSize と同じ計算)
+		const wxSize sz = GetClientSize();
+		const int tab_bar_h = (tab_bar_ != nullptr) ? tab_bar_->GetSize().y : 0;
+		viewer_->SetSize(wxRect(0, tab_bar_h, sz.x, std::max(0, sz.y - tab_bar_h)));
 		viewer_->SetFocus();
 	}
 	else {
@@ -1043,7 +1246,10 @@ void MainFrame::ShowImageViewer(bool show)
 	image_viewer_->Show(show);
 
 	if (show) {
-		image_viewer_->SetSize(GetClientSize());
+		// タブバー分を除いた領域に合わせる (MainFrame::OnSize と同じ計算)
+		const wxSize sz = GetClientSize();
+		const int tab_bar_h = (tab_bar_ != nullptr) ? tab_bar_->GetSize().y : 0;
+		image_viewer_->SetSize(wxRect(0, tab_bar_h, sz.x, std::max(0, sz.y - tab_bar_h)));
 		image_viewer_->SetFocus();
 	}
 	else {
@@ -1078,4 +1284,130 @@ void MainFrame::CmdGrep()
 	// GrepMatch::line は1始まり、GotoLine は0始まりの行番号を取る
 	viewer_->GotoLine(selected.line - 1);
 	ShowViewer(true);
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief タブを追加する (Ctrl+T、推測のキー。usr_cmdlist.cpp の "F:AddTab=タブを追加"
+ * と同じコマンド名)
+ * @details VCL 版 (AddTabActionExecute) の既定 (ActionParam 無し) と同じく、
+ * 現在の両ペインのディレクトリ・並べ替え設定を複製した新しいタブを末尾に
+ * 追加し、そこへ切り替える (ブラウザの「新しいタブ」に近い。VCL 版のような
+ * 空ディレクトリでの新規タブは無い)
+ */
+void MainFrame::CmdAddTab()
+{
+	StoreCurrentTabState();  // 現在のタブの記録を最新化してから複製する
+
+	TabState state = tabs_.Current();
+	tabs_.AddTab(state);
+	ApplyTabState(tabs_.Current());  // 内容は複製なので実際にはペインは変化しない
+	RefreshTabBar();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 現在のタブを閉じる (Ctrl+W、推測のキー。"F:DelTab=タブを削除" と同じコマンド名)
+ * @details 最後の1枚は閉じない (要件。TabManager::CloseCurrentTab を参照)
+ */
+void MainFrame::CmdDelTab()
+{
+	if (!tabs_.CloseCurrentTab()) {
+		wxBell();  // 最後の1枚は閉じない
+		return;
+	}
+	ApplyTabState(tabs_.Current());
+	RefreshTabBar();
+}
+
+//---------------------------------------------------------------------------
+/// 次のタブへ (Ctrl+Tab、推測のキー。"F:NextTab=次のタブへ" と同じコマンド名)
+void MainFrame::CmdNextTab()
+{
+	if (tabs_.Count() <= 1) return;
+	StoreCurrentTabState();
+	tabs_.NextTab();
+	ApplyTabState(tabs_.Current());
+	RefreshTabBar();
+}
+
+//---------------------------------------------------------------------------
+/// 前のタブへ (Shift+Ctrl+Tab、推測のキー。"F:PrevTab=前のタブへ" と同じコマンド名)
+void MainFrame::CmdPrevTab()
+{
+	if (tabs_.Count() <= 1) return;
+	StoreCurrentTabState();
+	tabs_.PrevTab();
+	ApplyTabState(tabs_.Current());
+	RefreshTabBar();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief タブの一覧から選ぶ (Ctrl+E、推測のキー。"F:PopupTab=タブ選択メニューを表示"
+ * と同じコマンド名)
+ * @details gui/main_frame.cpp::ShowDirHistoryDialog と同じ、wxGetSingleChoiceIndex
+ * によるシンプルな一覧選択。タブが1本しか無くても (選んでも変化が無いだけなので)表示する
+ */
+void MainFrame::ShowTabListDialog()
+{
+	const std::vector<UnicodeString> captions = tabs_.Captions();
+
+	wxArrayString choices;
+	for (const UnicodeString &cap : captions) choices.Add(to_wx(cap));
+
+	const int picked = wxGetSingleChoiceIndex(to_wx(_T("切り替え先のタブを選んでください")),
+	                                           to_wx(_T("タブの一覧")), choices, this);
+	if (picked == -1 || picked == tabs_.CurrentIndex()) return;
+
+	StoreCurrentTabState();
+	if (tabs_.SelectAt(picked)) ApplyTabState(tabs_.Current());
+	RefreshTabBar();
+}
+
+//---------------------------------------------------------------------------
+/// 現在のタブの記録を、いま実際に両ペインが開いている状態で上書きする
+/// (VCL 版の StoreTabStt/SetCurTab 相当)
+void MainFrame::StoreCurrentTabState()
+{
+	TabState &cur = tabs_.MutableCurrent();
+	for (int i = 0; i < 2; ++i) {
+		PaneTabState &pane_state = cur.panes[i];
+		pane_state.directory       = panes_[i]->GetPath();
+		pane_state.sort_key        = panes_[i]->GetSortKey();
+		pane_state.sort_descending = panes_[i]->IsSortDescending();
+		pane_state.dirs_first      = panes_[i]->IsDirsFirst();
+	}
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief タブの記録を両ペインへ適用する (VCL 版の TabControl1Change 相当)
+ * @details 並べ替え設定を先に適用してからディレクトリを開く (FilePane::SetPath
+ * は開き直す際に現在の並べ替え設定でソートし直すため、この順序でないと
+ * 一瞬古い並び順で読み込んでしまう)。ディレクトリが現在のペインと同じ場合は
+ * SetPath を呼ばない (カーソル位置を 0 に戻してしまわないため。VCL 版は
+ * sel_list で選択状態ごと復元するが Phase 2 骨格では未対応。報告に明記する)。
+ * ディレクトリ履歴への記録はしない (VCL 版の InhDirHist++/-- と同じ意図。
+ * タブの切り替えは「新しい場所への移動」ではないため)
+ */
+void MainFrame::ApplyTabState(const TabState &state)
+{
+	for (int i = 0; i < 2; ++i) {
+		const PaneTabState &pane_state = state.panes[i];
+		panes_[i]->SetSortSettings(pane_state.sort_key, pane_state.sort_descending, pane_state.dirs_first);
+
+		if (!pane_state.directory.IsEmpty() && !SameText(pane_state.directory, panes_[i]->GetPath())
+		    && dir_exists(pane_state.directory)) {
+			panes_[i]->SetPath(pane_state.directory, /*record_history=*/false);
+		}
+	}
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/// tab_bar_ の表示 (キャプション一覧・現在位置) を更新する
+void MainFrame::RefreshTabBar()
+{
+	if (tab_bar_ != nullptr) tab_bar_->SetTabs(tabs_.Captions(), tabs_.CurrentIndex());
 }

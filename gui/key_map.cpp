@@ -116,6 +116,23 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Alt+Enter"), _T("PropertyDlg"));
 	Assign(_T("Alt+F4"), _T("Exit"));
 	Assign(_T("Ctrl+Q"), _T("Exit"));
+
+	// タブ (複数ディレクトリの切り替え)。コマンド名は usr_cmdlist.cpp のコマンド表
+	// ("F:AddTab=タブを追加" 等、実測) と同じ綴り。ただし src/Global.cpp の
+	// 既定キー表 (KeyFuncList->Text) にはタブ系コマンドの既定キーが1つも無く
+	// (ツールバー・タブの右クリックメニュー専用の操作だったと見られる)、
+	// 以下はすべて Phase 2 骨格向けに新規で決めたもの (推測。要検証)。
+	// Ctrl+T/Ctrl+W はブラウザ等でのタブ追加・閉じるの慣習に、Ctrl+Tab/
+	// Shift+Ctrl+Tab は多くのタブ付きアプリでの次/前のタブ切替の慣習に合わせた
+	// (修飾子の順序は get_ShiftStr() (usr_key.cpp) の実測順 "Shift+"→"Ctrl+"→
+	// "Alt+" に合わせてある。TStringList の Name 比較は大小文字を区別しないため
+	// 大文字/小文字自体は Lookup に影響しない)。
+	// Ctrl+E (一覧から選ぶ、PopupTab) は他のキーと衝突しない空きキーから選んだ
+	Assign(_T("Ctrl+T"), _T("AddTab"));
+	Assign(_T("Ctrl+W"), _T("DelTab"));
+	Assign(_T("Ctrl+Tab"), _T("NextTab"));
+	Assign(_T("Shift+Ctrl+Tab"), _T("PrevTab"));
+	Assign(_T("Ctrl+E"), _T("PopupTab"));
 }
 
 //---------------------------------------------------------------------------
