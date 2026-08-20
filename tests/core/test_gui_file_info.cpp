@@ -66,10 +66,10 @@ TEST_CASE("BuildFileInfoLines: ファイルの基本情報 (名前・パス・�
 	BuildFileInfoLines(path, itm, lst.get());
 
 	const UnicodeString text = lst->Text;
-	CHECK(ContainsStr(text, "名前: hello.txt"));
-	CHECK(ContainsStr(text, "パス: " + path));
-	CHECK(ContainsStr(text, "種類: ファイル"));
-	CHECK(ContainsStr(text, "サイズ:"));
+	CHECK(ContainsStr(text, _T("名前: hello.txt")));
+	CHECK(ContainsStr(text, _T("パス: ") + path));
+	CHECK(ContainsStr(text, _T("種類: ファイル")));
+	CHECK(ContainsStr(text, _T("サイズ:")));
 }
 
 TEST_CASE("BuildFileInfoLines: ディレクトリはサイズ行と種別ごとの詳細を含まない")
@@ -82,8 +82,8 @@ TEST_CASE("BuildFileInfoLines: ディレクトリはサイズ行と種別ごと�
 	BuildFileInfoLines(dir.file("some_dir"), itm, lst.get());
 
 	const UnicodeString text = lst->Text;
-	CHECK(ContainsStr(text, "種類: ディレクトリ"));
-	CHECK(!ContainsStr(text, "サイズ:"));
+	CHECK(ContainsStr(text, _T("種類: ディレクトリ")));
+	CHECK(!ContainsStr(text, _T("サイズ:")));
 }
 
 //===========================================================================
@@ -99,7 +99,7 @@ TEST_CASE("BuildFileInfoLines: PDFのバージョンをヘッダから読み取�
 	std::unique_ptr<TStringList> lst(new TStringList());
 	BuildFileInfoLines(path, itm, lst.get());
 
-	CHECK(ContainsStr(lst->Text, "PDFバージョン: 1.4"));
+	CHECK(ContainsStr(lst->Text, _T("PDFバージョン: 1.4")));
 }
 
 TEST_CASE("BuildFileInfoLines: 実行可能ファイルは確認用の1行だけ追加する (get_AppInf は GUI 依存で未使用)")
@@ -113,7 +113,7 @@ TEST_CASE("BuildFileInfoLines: 実行可能ファイルは確認用の1行だけ
 	std::unique_ptr<TStringList> lst(new TStringList());
 	BuildFileInfoLines(path, itm, lst.get());
 
-	CHECK(ContainsStr(lst->Text, "実行可能ファイルです"));
+	CHECK(ContainsStr(lst->Text, _T("実行可能ファイルです")));
 }
 
 TEST_CASE("BuildFileInfoLines: 未知の拡張子は基本情報のみで、解析関数を呼ばずに例外も起きない")
@@ -125,7 +125,7 @@ TEST_CASE("BuildFileInfoLines: 未知の拡張子は基本情報のみで、解�
 	std::unique_ptr<TStringList> lst(new TStringList());
 	BuildFileInfoLines(path, itm, lst.get());
 
-	CHECK(ContainsStr(lst->Text, "名前: data.unknown_ext"));
+	CHECK(ContainsStr(lst->Text, _T("名前: data.unknown_ext")));
 }
 
 //===========================================================================

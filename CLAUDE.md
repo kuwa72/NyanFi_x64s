@@ -37,6 +37,13 @@ python3 scripts/convert_narrow_literals.py <paths>           # 変換
 doctest のマクロ (`TEST_CASE` / `SUBCASE` / `MESSAGE`) の引数は `const char*` 固定なので
 包まない (ツールが除外する)。
 
+**CI が機械チェックする** (`scripts/check_literals.py`)。手元でも同じコマンドで確認できる:
+```
+python3 scripts/check_literals.py
+```
+対象はビルドに入っているファイルだけ。未移植の GUI ファイル (MainFrm.cpp など) には
+未変換のリテラルが 1,200 箇所以上残っているが、それは Phase 3 の作業。
+
 ### 2. `compat/ustring.h` の UnicodeString のオーバーロード集合を削らない
 
 C++Builder の `UnicodeString` は数値・文字・文字列のすべてから **暗黙変換** できる。

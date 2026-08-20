@@ -54,7 +54,7 @@ namespace {
 [[noreturn]] void not_ported(const char *what)
 {
 	// GUI の移植が済んでいない経路に入った。静かに誤動作させない
-	wxLogError("%s は wx 版で未実装です", what);
+	wxLogError(_T("%s は wx 版で未実装です"), what);
 	throw std::logic_error(what);
 }
 

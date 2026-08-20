@@ -93,6 +93,12 @@ jobs:
           sudo apt-get install -y --no-install-recommends \
             g++-mingw-w64-x86-64 cmake ninja-build
 
+      # 規約チェック (CLAUDE.md 規約1)。ビルド対象に _T() で包まれていない
+      # 非 ASCII リテラルが残っていると、英語版 Windows で文字化けする。
+      # CI で2回検出したので機械チェックにした
+      - name: 非 ASCII の narrow リテラルが残っていないか
+        run: python3 scripts/check_literals.py
+
       - name: Configure
         run: |
           cmake -S . -B build -G Ninja \
