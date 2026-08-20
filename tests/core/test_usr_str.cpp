@@ -7,6 +7,7 @@
  * 仕様として疑わしい点があっても実装は直さず、報告にのみ記載する。
  */
 #include "doctest/doctest.h"
+#include "locale_guard.h"
 
 #include <memory>
 
@@ -864,6 +865,8 @@ TEST_CASE("param_to_mSec: S/M/H 指定をミリ秒に変換")
 //===========================================================================
 TEST_CASE("str_len_half: 半角換算の文字列長")
 {
+	NYANFI_REQUIRE_ACP_932();  //ACP=932 前提の検証 (tests/locale_guard.h)
+
 	CHECK(str_len_half("abc") == 3);
 	CHECK(str_len_half(_T("あいう")) == 6);  //全角は2文字換算
 	CHECK(str_len_half(_T("aあb")) == 4);
@@ -881,6 +884,8 @@ TEST_CASE("str_len_unicode: サロゲートペアを考慮した文字数")
 
 TEST_CASE("max_len_half: 最大幅の更新")
 {
+	NYANFI_REQUIRE_ACP_932();  //ACP=932 前提の検証 (tests/locale_guard.h)
+
 	int w = 0;
 	max_len_half(w, "ab");
 	CHECK(w == 2);

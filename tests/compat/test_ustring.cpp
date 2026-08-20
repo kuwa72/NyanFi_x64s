@@ -3,6 +3,7 @@
  * @brief UnicodeString / AnsiStringT / DynamicArray 互換シムの単体テスト
  */
 #include "doctest/doctest.h"
+#include "locale_guard.h"
 
 #include "compat/exception.h"
 #include "compat/ustring.h"
@@ -44,6 +45,8 @@ TEST_CASE("UnicodeString: operator[] は1始まり")
 
 TEST_CASE("UnicodeString: CP_ACP 往復 (narrow <-> wide)")
 {
+	NYANFI_REQUIRE_ACP_932();  //ACP=932 前提の検証 (tests/locale_guard.h)
+
 	// narrow リテラルは -fexec-charset=CP932 でビルドしているため、
 	// UnicodeString(const char*) は CP_ACP(=CP932) 変換で正しく戻るはず。
 	UnicodeString s(_T("あいうえお"));
@@ -100,6 +103,8 @@ TEST_CASE("UnicodeString(const char*, int): NUL終端に依存しないCP_ACP変
 
 TEST_CASE("UnicodeString(const char*, int): CP932マルチバイト境界を含む変換")
 {
+	NYANFI_REQUIRE_ACP_932();  //ACP=932 前提の検証 (tests/locale_guard.h)
+
 	// AnsiString(UnicodeString) で得た CP_ACP(=CP932) バイト列を、そのバイト
 	// 長で UnicodeString(const char*, int) に戻し、元の文字列と一致することを
 	// 確認する (日本語はCP932で2バイト/文字になるため境界を跨ぐ)。
@@ -450,6 +455,8 @@ TEST_CASE("DynamicArray: コピーは独立した実体になる")
 //===========================================================================
 TEST_CASE("AnsiString: UnicodeStringとの相互変換 (CP_ACP)")
 {
+	NYANFI_REQUIRE_ACP_932();  //ACP=932 前提の検証 (tests/locale_guard.h)
+
 	UnicodeString u(L"テスト123");
 	AnsiString a = u;
 	CHECK_FALSE(a.IsEmpty());

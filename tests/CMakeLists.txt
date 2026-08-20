@@ -6,7 +6,7 @@
 # ファイルを追加したら再 configure するだけでよいように GLOB を使う。
 
 add_library(doctest_main STATIC doctest_main.cpp)
-target_include_directories(doctest_main PUBLIC ${PROJECT_SOURCE_DIR}/third_party)
+target_include_directories(doctest_main PUBLIC ${PROJECT_SOURCE_DIR}/third_party ${PROJECT_SOURCE_DIR}/tests)
 target_link_libraries(doctest_main PUBLIC nyanfi_common_flags)
 
 file(GLOB NYANFI_COMPAT_TESTS CONFIGURE_DEPENDS compat/test_*.cpp)
