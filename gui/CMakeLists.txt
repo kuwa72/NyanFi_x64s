@@ -25,20 +25,37 @@ if(NOT WX_CONFIG)
 		"-DWX_CONFIG=<prefix>/bin/wx-config を指定してください")
 endif()
 
-execute_process(COMMAND "${WX_CONFIG}" --version
-	OUTPUT_VARIABLE WX_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
-execute_process(COMMAND "${WX_CONFIG}" --cxxflags
-	OUTPUT_VARIABLE WX_CXXFLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
-execute_process(COMMAND "${WX_CONFIG}" --libs core,base
-	OUTPUT_VARIABLE WX_LIBS OUTPUT_STRIP_TRAILING_WHITESPACE)
-# windres 用のインクルードパス (wx/msw/wx.rc を取り込むため)
-execute_process(COMMAND "${WX_CONFIG}" --cflags
-	OUTPUT_VARIABLE WX_CFLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
-string(REGEX MATCHALL "-I[^ ]+" WX_INCLUDE_FLAGS "${WX_CFLAGS}")
-string(REPLACE "-I" "" WX_INCLUDE_DIRS "${WX_INCLUDE_FLAGS}")
+# wx-config は #!/bin/sh のスクリプトで、Windows ネイティブの CMake は shebang を
+# 解釈できず直接実行できない (MSYS2 の CI で全ての問い合わせが空振りした)。
+# シェル経由で呼び、失敗したら黙って進まずエラーにする。
+find_program(NYANFI_SH NAMES sh bash)
+
+function(nyanfi_wx_config out_var)
+	if(NYANFI_SH)
+		execute_process(COMMAND "${NYANFI_SH}" "${WX_CONFIG}" ${ARGN}
+			OUTPUT_VARIABLE result RESULT_VARIABLE rc
+			OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_VARIABLE err)
+	else()
+		execute_process(COMMAND "${WX_CONFIG}" ${ARGN}
+			OUTPUT_VARIABLE result RESULT_VARIABLE rc
+			OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_VARIABLE err)
+	endif()
+	if(NOT rc EQUAL 0 OR result STREQUAL "")
+		message(FATAL_ERROR "wx-config ${ARGN} が失敗しました (rc=${rc}): ${err}")
+	endif()
+	set(${out_var} "${result}" PARENT_SCOPE)
+endfunction()
+
+nyanfi_wx_config(WX_VERSION --version)
+nyanfi_wx_config(WX_CXXFLAGS --cxxflags)
+nyanfi_wx_config(WX_LIBS --libs core,base)
 
 separate_arguments(WX_CXXFLAGS_LIST NATIVE_COMMAND "${WX_CXXFLAGS}")
 separate_arguments(WX_LIBS_LIST NATIVE_COMMAND "${WX_LIBS}")
+
+# windres 用のインクルードパス (wx/msw/wx.rc を絶対パスで取り込むため)
+string(REGEX MATCHALL "-I[^ ]+" WX_INCLUDE_FLAGS "${WX_CXXFLAGS}")
+string(REPLACE "-I" "" WX_INCLUDE_DIRS "${WX_INCLUDE_FLAGS}")
 
 message(STATUS "wxWidgets ${WX_VERSION} (${WX_CONFIG})")
 

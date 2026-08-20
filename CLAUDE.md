@@ -69,12 +69,24 @@ C++Builder の `UnicodeString` は数値・文字・文字列のすべてから 
 注意: `--gc-sections` は未定義参照を消してくれない (GNU ld のセクション回収はシンボル
 解決の後に走る)。未使用の関数からの参照でもリンクエラーになる。
 
-### 5. 既存実装のバグは直さず記録する
+### 5. 環境差で壊れやすい箇所を知っておく
+
+CI (英語版 Windows + MSYS2) と手元 (日本語 Windows + brew の mingw) で実際に差が出た箇所。
+新しいコードを足すときはここを疑う。
+
+| 箇所 | 差 |
+|---|---|
+| ANSI コードページ | CI は 1252、手元は 932。narrow リテラルと `AnsiString` の往復、半角換算幅が影響を受ける (規約1、`tests/locale_guard.h`) |
+| wxWidgets のバージョン | CI は MSYS2 の 3.2、手元は自前ビルドの 3.3.3。3.3 の API は `wxCHECK_VERSION` でガードする |
+| windres へのインクルードパス | MSYS2 では `-I` が効かず `wx/msw/wx.rc` を見つけられなかった。リソースの取り込みは **CMake の `find_file` で絶対パスに解決**してから `configure_file` で埋める |
+| mingw ヘッダと Windows SDK | mingw の `winternl.h` は `FILE_RENAME_INFORMATION` を定義する (SDK は定義しない)。`RestartManager.h` は mingw に無い。この種の差は `compat/mingw_patch.h` と `compat/include/RestartManager.h` に隔離する |
+
+### 6. 既存実装のバグは直さず記録する
 
 回帰テストの目的は「現在の挙動を固定する」こと。おかしいと思っても直さず、
 報告書 §8.5 / §12 に追記する (これまでに13件記録)。移植と挙動変更を混ぜない。
 
-### 6. ロケール依存の検証は `tests/locale_guard.h` で切り分ける
+### 7. ロケール依存の検証は `tests/locale_guard.h` で切り分ける
 
 `AnsiString` 往復や半角換算幅は ACP=932 前提。`NYANFI_REQUIRE_ACP_932()` を使い、
 スキップした事実を doctest の出力に残す (黙って消さない)。
