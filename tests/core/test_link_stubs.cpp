@@ -27,8 +27,22 @@
  *
  * 本番の compat/ 実装 (Phase 2 で wxWidgets 版に置き換わる予定) には
  * 一切影響しない。これはテストバイナリ限定のリンク成立用スタブである。
+ *
+ * Phase 1 (issue #1) で追加: UIniFile.cpp::LoadPosInfo(TForm*, bool, ...) が
+ * UserFunc.h::adjust_form_pos(TForm*) (GUI 依存、宣言のみ) を呼ぶ。
+ * test_UIniFile.cpp はこのオーバーロードを直接は呼ばないが、同じ .o に
+ * ある ReadString 等を参照すると UIniFile.cpp.o 全体がリンクに引き込まれる
+ * ため、同じ理由でスタブが要る。
  */
 #include <cstdlib>
+
+#include "UserFunc.h"
+
+void adjust_form_pos(TForm *frm)
+{
+	(void)frm;
+	std::abort();  //テストからは呼ばれない経路 (LoadPosInfo(TForm*, bool, ...) は対象外)
+}
 
 void TWinControl::LockDrawing()
 {

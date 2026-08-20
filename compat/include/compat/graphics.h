@@ -40,9 +40,12 @@
 #ifndef NYANFI_COMPAT_GRAPHICS_H
 #define NYANFI_COMPAT_GRAPHICS_H
 
+#include <algorithm>
+
 #include "compat/classes.h"
 #include "compat/config.h"
 #include "compat/property.h"
+#include "compat/set.h"
 #include "compat/ustring.h"
 
 //---------------------------------------------------------------------------
@@ -202,6 +205,21 @@ private:
 };
 
 //---------------------------------------------------------------------------
+/// System.Types::TPoint 相当 (usr_scrpanel.cpp / usr_swatch.cpp の Point() で使用)
+struct TPoint {
+	int X = 0;
+	int Y = 0;
+
+	TPoint() = default;
+	TPoint(int x, int y) : X(x), Y(y) {}
+};
+
+inline TPoint Point(int x, int y)
+{
+	return TPoint(x, y);
+}
+
+//---------------------------------------------------------------------------
 // TRect / Rect() — Vcl.Graphics 系 API (CopyRect 等) が要求するため最小限を実装
 // (実際の Delphi では System.Types 相当だが、依存先を増やさないためここに置く)
 //---------------------------------------------------------------------------
@@ -216,11 +234,67 @@ struct TRect {
 
 	int Width() const { return Right - Left; }
 	int Height() const { return Bottom - Top; }
+
+	/// 矩形内に点があるか (usr_scrpanel.cpp: `rc.PtInRect(Point(X, Y))`)
+	bool PtInRect(const TPoint &p) const { return p.X >= Left && p.X < Right && p.Y >= Top && p.Y < Bottom; }
+
+	/// 2 つの矩形の共通部分 (System.Types::TRect::Intersect 相当)
+	static TRect Intersect(const TRect &a, const TRect &b)
+	{
+		TRect r(std::max(a.Left, b.Left), std::max(a.Top, b.Top), std::min(a.Right, b.Right),
+		        std::min(a.Bottom, b.Bottom));
+		if (r.Right < r.Left) r.Right = r.Left;
+		if (r.Bottom < r.Top) r.Bottom = r.Top;
+		return r;
+	}
+
+	/// 左上位置の読み書き (Width/Height を保ったまま Left/Top を移動する)
+	/// (usr_scrpanel.cpp: `trc.Location = Point(x, y);`)
+	class LocationProperty {
+	public:
+		explicit LocationProperty(TRect *owner) : owner_(owner) {}
+		operator TPoint() const { return TPoint(owner_->Left, owner_->Top); }
+		LocationProperty &operator=(const TPoint &p)
+		{
+			const int w = owner_->Width();
+			const int h = owner_->Height();
+			owner_->Left = p.X;
+			owner_->Top = p.Y;
+			owner_->Right = p.X + w;
+			owner_->Bottom = p.Y + h;
+			return *this;
+		}
+
+	private:
+		TRect *owner_;
+	};
+	LocationProperty Location{this};
+
+	//プロパティを持つため、代入・コピーは明示的に位置/サイズのコピーとして定義する
+	//(Location が owner_ ポインタを保持するため、既定のコピー代入では壊れる)
+	TRect(const TRect &other) : Left(other.Left), Top(other.Top), Right(other.Right), Bottom(other.Bottom) {}
+	TRect &operator=(const TRect &other)
+	{
+		Left = other.Left;
+		Top = other.Top;
+		Right = other.Right;
+		Bottom = other.Bottom;
+		return *this;
+	}
 };
 
 inline TRect Rect(int left, int top, int right, int bottom)
 {
 	return TRect(left, top, right, bottom);
+}
+
+/// RECT 相当の膨張・収縮 (System.Types::InflateRect 相当。dx/dy 分だけ各辺を外側/内側へ広げる)
+inline void InflateRect(TRect &r, int dx, int dy)
+{
+	r.Left -= dx;
+	r.Top -= dy;
+	r.Right += dx;
+	r.Bottom += dy;
 }
 
 //---------------------------------------------------------------------------
@@ -252,11 +326,24 @@ public:
 	TBrushStyle Style = bsSolid;
 };
 
-/// TFont 相当 (最小実装。実測: Color / Height / Assign が usr_str.cpp で使用)
+/// Graphics::TFontStyle 相当 (実測: fsBold / fsItalic のみ使用)
+enum TFontStyle { fsBold, fsItalic, fsUnderline, fsStrikeOut };
+/// TFontStyle の集合 (Graphics::TFontStyles 相当)
+using TFontStyles = Set<TFontStyle, fsBold, fsStrikeOut>;
+
+/// Graphics::TFontCharset 相当 (Win32 の BYTE 文字セット値。DEFAULT_CHARSET 等は windows.h 由来)
+using TFontCharset = std::uint8_t;
+
+/// TFont 相当 (最小実装。実測: Color / Height / Assign が usr_str.cpp で使用。
+/// Name / Size / Charset / Style は UIniFile.cpp の ReadFontInf/WriteFontInf で使用)
 class TFont {
 public:
+	UnicodeString Name;
+	int Size = 11;
 	TColor Color = clWindowText;
 	int Height = -12;	//!< Delphi 既定に合わせた仮の値 (負値 = 文字高さ基準)
+	TFontCharset Charset = static_cast<TFontCharset>(DEFAULT_CHARSET);
+	TFontStyles Style;
 
 	/// source の内容をコピーする (usr_str.cpp: cv->Font->Assign(pp->Font) 等)
 	void Assign(TFont *source);
@@ -296,6 +383,10 @@ public:
 	/// 文字列の表示幅を取得する (GetTextExtentPoint32W。Font->Height を反映した
 	/// 一時フォントを選択して測る。実際の描画に使うフォント選択とは別経路)
 	int TextWidth(const UnicodeString &s) const;
+	/// 文字列の表示高を取得する (GetTextExtentPoint32W。usr_scale.cpp で使用)
+	int TextHeight(const UnicodeString &s) const;
+	/// 文字列を描画する (ExtTextOutW。usr_tag.cpp の DrawTags で使用)
+	void TextOut(int x, int y, const UnicodeString &s);
 
 	/// usr_str.cpp: cv->Handle = hDc; の形で代入されるため読み書き可能にしてある
 	compat::RWValueProperty<TCanvas, HDC, &TCanvas::GetHandle, &TCanvas::SetHandleValue> Handle{this};
@@ -394,8 +485,14 @@ using ::Graphics::TPixelFormat;
 
 using ::Graphics::bsClear;
 using ::Graphics::bsSolid;
+using ::Graphics::fsBold;
+using ::Graphics::fsItalic;
+using ::Graphics::fsStrikeOut;
+using ::Graphics::fsUnderline;
+using ::Graphics::InflateRect;
 using ::Graphics::pmCopy;
 using ::Graphics::pmNot;
+using ::Graphics::Point;
 using ::Graphics::psDash;
 using ::Graphics::psDot;
 using ::Graphics::psSolid;
@@ -404,9 +501,13 @@ using ::Graphics::TBrush;
 using ::Graphics::TBrushStyle;
 using ::Graphics::TCanvas;
 using ::Graphics::TFont;
+using ::Graphics::TFontCharset;
+using ::Graphics::TFontStyle;
+using ::Graphics::TFontStyles;
 using ::Graphics::TPen;
 using ::Graphics::TPenMode;
 using ::Graphics::TPenStyle;
+using ::Graphics::TPoint;
 using ::Graphics::TRect;
 
 using ::Vcl::Themes::TStyleManager;

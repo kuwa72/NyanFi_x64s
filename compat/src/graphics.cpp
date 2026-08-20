@@ -138,8 +138,12 @@ void TBitmap::Assign(TPersistent *source)
 void TFont::Assign(TFont *source)
 {
 	if (!source) return;
+	Name = source->Name;
+	Size = source->Size;
 	Color = source->Color;
 	Height = source->Height;
+	Charset = source->Charset;
+	Style = source->Style;
 }
 
 //---------------------------------------------------------------------------
@@ -205,6 +209,47 @@ int TCanvas::TextWidth(const UnicodeString &s) const
 		::DeleteObject(font);
 	}
 	return sz.cx;
+}
+
+//---------------------------------------------------------------------------
+int TCanvas::TextHeight(const UnicodeString &s) const
+{
+	if (!dc_) return 0;
+
+	HFONT font = ::CreateFontW(-std::abs(Font->Height), 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
+	                           OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
+	                           nullptr);
+	HGDIOBJ old = font ? ::SelectObject(dc_, font) : nullptr;
+
+	SIZE sz{};
+	::GetTextExtentPoint32W(dc_, s.c_str(), s.Length(), &sz);
+
+	if (font) {
+		::SelectObject(dc_, old);
+		::DeleteObject(font);
+	}
+	return sz.cy;
+}
+
+//---------------------------------------------------------------------------
+void TCanvas::TextOut(int x, int y, const UnicodeString &s)
+{
+	if (!dc_) return;
+
+	HFONT font = ::CreateFontW(-std::abs(Font->Height), 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
+	                           OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
+	                           nullptr);
+	HGDIOBJ old = font ? ::SelectObject(dc_, font) : nullptr;
+
+	::SetTextColor(dc_, static_cast<COLORREF>(ColorToRGB(Font->Color)));
+	::SetBkColor(dc_, static_cast<COLORREF>(ColorToRGB(Brush->Color)));
+	::SetBkMode(dc_, OPAQUE);
+	::ExtTextOutW(dc_, x, y, 0, nullptr, s.c_str(), s.Length(), nullptr);
+
+	if (font) {
+		::SelectObject(dc_, old);
+		::DeleteObject(font);
+	}
 }
 
 }  // namespace Graphics

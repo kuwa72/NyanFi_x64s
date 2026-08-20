@@ -18,6 +18,7 @@
 #ifndef NYANFI_COMPAT_VCL_FORWARD_H
 #define NYANFI_COMPAT_VCL_FORWARD_H
 
+class TComponent;
 class TForm;
 class TWinControl;
 class TControl;
@@ -26,24 +27,36 @@ class TEdit;
 class TLabeledEdit;
 class TMaskEdit;
 class TMemo;
+class TRichEdit;
 class TComboBox;
+class TCustomListBox;
 class TListBox;
 class TCheckListBox;
 class TStringGrid;
 class TDrawGrid;
 class TImage;
+class TLabel;
 class TPaintBox;
 class TToolBar;
+class TTabControl;
+class TTreeView;
+class THeaderControl;
 class TStatusBar;
 class TPageControl;
 class TTabSheet;
 class TAction;
+class TCheckBox;
+class TRadioGroup;
 class TMenuItem;
 class TPopupMenu;
 class TScrollBar;
 class TTimer;
 class TProgressBar;
 class TTrackBar;
+class TCustomEdit;
+class TSplitter;
+class TUpDown;
 class TApplication;
+class TScreen;
 
 #endif  // NYANFI_COMPAT_VCL_FORWARD_H

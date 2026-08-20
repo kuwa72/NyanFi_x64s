@@ -23,6 +23,17 @@ set(NYANFI_PHASE0_SOURCES
 	src/usr_str.cpp
 	src/usr_wic.cpp
 	src/usr_xd2tx.cpp
+
+	# Phase 1 (issue #1) で追加。Vcl.CheckLst.hpp / Vcl.Grids.hpp / Vcl.ComCtrls.hpp
+	# 経由の依存を compat/gui_stubs.h の拡張で切り離した (docs/port/phase0-report.md
+	# §9 の次アクション 2 に対応)。
+	src/usr_scale.cpp
+	src/usr_swatch.cpp
+	src/usr_tag.cpp
+	src/usr_scrpanel.cpp
+	src/UIniFile.cpp
+	src/usr_highlight.cpp
 )
 
-# 候補15ファイルすべてが通過している (2026-08-20)。
+# Phase 0 の候補15ファイル + Phase 1 で追加した6ファイル、計21ファイルが通過している
+# (2026-08-21)。

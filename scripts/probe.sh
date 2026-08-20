@@ -34,6 +34,12 @@ CANDIDATES=(
 	usr_file_ex
 	usr_file_inf
 	usr_str
+	usr_scale
+	usr_swatch
+	usr_tag
+	usr_scrpanel
+	UIniFile
+	usr_highlight
 )
 
 FLAGS=(

@@ -28,6 +28,9 @@ class TStream;    //!< compat/streams.h で定義 (循環回避のため前方�
 class TEncoding;  //!< compat/encoding.h で定義 (循環回避のため前方宣言に留める)
 
 //---------------------------------------------------------------------------
+/// System.Rtti 相当の最小限。compat/controls.h の __classid マクロと対で使う
+using TClass = const void *;
+
 /// TObject 互換 (ClassNameIs / Free のみ実装)
 class TObject {
 public:
@@ -37,12 +40,35 @@ public:
 	void Free() { delete this; }
 	virtual UnicodeString ClassName() const;
 	bool ClassNameIs(const UnicodeString &name) const;
+
+	/// @warning 宣言のみ。UserFunc.h::class_is_CustomEdit の型チェックのためだけに
+	/// 存在し、実際に呼ばれる経路は無い (未使用の inline 関数)
+	bool InheritsFrom(TClass cls) const;
 };
 
 /// TPersistent 互換 (Assign のみ)
 class TPersistent : public TObject {
 public:
 	virtual void Assign(TPersistent *source);
+};
+
+//---------------------------------------------------------------------------
+/**
+ * @brief TComponent 互換 (最小実装)
+ * @details 実測: usr_swatch.cpp の `UsrSwatchPanel(TComponent *Owner) : TPanel(Owner)`、
+ *          usr_scrpanel.cpp の `new TPaintBox(ParentPanel)` 等、GUI コントロールの
+ *          所有者チェーンを表すためだけに使われている。Phase 0/1 の範囲では
+ *          実際の所有・自動破棄は不要 (テストではオブジェクトを明示的に
+ *          new/delete しているため)。Name (コンポーネント名。UIniFile.cpp が
+ *          INI のセクション名キーとして使う) だけ実体を持たせる。
+ */
+class TComponent : public TPersistent {
+public:
+	TComponent() = default;
+	explicit TComponent(TComponent *owner) : Owner(owner) {}
+
+	TComponent *Owner = nullptr;
+	UnicodeString Name;
 };
 
 //---------------------------------------------------------------------------

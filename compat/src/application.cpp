@@ -7,9 +7,11 @@
 //---------------------------------------------------------------------------
 namespace {
 TApplication g_application;
+TScreen g_screen;
 }  // namespace
 
 TApplication *Application = &g_application;
+TScreen *Screen = &g_screen;
 
 HINSTANCE HInstance = ::GetModuleHandleW(nullptr);
 

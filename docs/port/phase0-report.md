@@ -226,10 +226,10 @@ doctest。mingw-w64 が生成した .exe を WSL interop でそのまま実行�
 | テスト | ケース数 | アサーション数 | 結果 |
 |---|---|---|---|
 | `compat_tests` (シム自体) | 155 | 619 | 全パス |
-| `core_tests` (既存ロジックの回帰) | 157 | 555 | 全パス |
-| **合計** | **312** | **1,174** | **全パス** |
+| `core_tests` (既存ロジックの回帰) | 281 | 884 | 全パス |
+| **合計** | **436** | **1,503** | **全パス** |
 
-`core_tests` の対象は `usr_str.cpp` (108ケース) / `usr_color.cpp` (13) / `file_filter.cpp` (14) / `htmconv.cpp` (11) / `usr_key.cpp` (11)。
+`core_tests` の対象は `usr_str.cpp` (108ケース) / `usr_file_ex.cpp` (87) / `usr_exif.cpp` (34) / `file_filter.cpp` (14) / `usr_color.cpp` (13) / `htmconv.cpp` (11) / `usr_key.cpp` (11)。
 
 ### 8.3 到達のために src へ入れた変更 (5箇所)
 
@@ -279,3 +279,76 @@ doctest。mingw-w64 が生成した .exe を WSL interop でそのまま実行�
 
 - 非 ASCII の narrow リテラル 1,944箇所を `_T(...)` へ機械変換 (§4)
 - `(DWORD)obj` 16箇所を `(DWORD)(DWORD_PTR)obj` へ修正 (§5)
+
+## 10. CI (GitHub Actions) と、それが見つけた欠陥
+
+`.github/workflows/port-ci.yml` を追加し、実際に回した結果を記録する。
+
+| ジョブ | 内容 | 結果 |
+|---|---|---|
+| `windows-ucrt64` | MSYS2 UCRT64 でビルド + `ctest` + 成果物アップロード。リンクした CRT も記録する | 成功 |
+| `linux-cross` | Linux ホストからのクロスビルド確認 | 成功 |
+| `release` | `v*` タグで成果物をまとめて GitHub Release を作成 | タグ待ち |
+
+CI で記録した `core_tests.exe` のインポート DLL は `api-ms-win-crt-*.dll` (UCRT) と
+`KERNEL32` / `USER32` / `GDI32` / `SHLWAPI` のみ。mingw のランタイム DLL には依存しない。
+
+### CI が実際に見つけた欠陥 (ローカル検証では出なかったもの)
+
+GitHub のランナーは **英語版 Windows (ACP=1252)** で、開発環境 (日本語 Windows) との差が
+そのまま欠陥として出た。これが CI を用意した最大の収穫。
+
+| 回 | 症状 | 原因 | 対応 |
+|---|---|---|---|
+| 1回目 | 13 アサーション失敗 | 日本語の narrow リテラルが CP932 バイトで埋め込まれ、`UnicodeString(const char*)` が CP_ACP で変換するため文字化け | src 713箇所 + テスト29箇所を `_T()` で wide 化 (§4)。**NyanFi がロケール非依存になった** |
+| 2回目 | 8 アサーション失敗 | `AnsiString` 往復と半角換算幅が本質的に ACP=932 依存 | 実装は変えず、テストをロケール条件付きに (`tests/locale_guard.h`)。§10.1 に既存の制限として記録 |
+
+### 10.1 既存の制限: 半角換算幅が ANSI コードページに依存する
+
+`str_len_half` (usr_str.cpp:1765) は `AnsiString` に変換したバイト長で全角/半角を判定している。
+ACP=932 なら全角1文字=2バイト=2半角で正しいが、**ACP≠932 の Windows では全角文字が
+1 と数えられ、ファイルペインの列幅がずれる**。C++Builder 版から引き継いだ挙動で、
+移植で持ち込んだものではない。
+
+恒久対策の候補 (未実施。挙動変更になるため本移植の範囲外とした):
+- 幅の判定を East Asian Width ベースに置き換える
+- 実行ファイルのマニフェストに `activeCodePage` を指定してプロセスの ACP を固定する (Windows 11 / Server 2025 以降)
+
+## 11. シムの設計で踏んだ罠: UnicodeString のオーバーロード集合
+
+C++Builder の `UnicodeString` は数値・文字・文字列のいずれからも **暗黙変換** できる。
+このオーバーロード集合を正確に再現しないと、**コンパイルは通るのに静かに壊れる**。
+実際に 3 段階で問題が連鎖した。記録として残す。
+
+| 段階 | 契約 | 起きたこと |
+|---|---|---|
+| 1 | `explicit UnicodeString(int)` | `val_str = v_ui;` (usr_exif.cpp に 9箇所、usr_str.cpp に 4箇所) が `UnicodeString(wchar_t)` 経由の暗黙変換に落ち、10進表記ではなく **そのコードポイント1文字** になった。`Exif_GetImgSize` が常に 0×0 を返していた |
+| 2 | `explicit` を外した | 今度は `char` リテラル (`get_tkn_r(s, ',')` のような慣用句) が `char`→`int` の **昇格** で `UnicodeString(int)` に解決され、`','` が `"44"` になった。回帰テスト 41ケースが検出 |
+| 3 | `UnicodeString(char)` を追加 | `char` に完全一致するオーバーロードができ、両方解決 |
+
+現在の契約 (いずれも非 explicit):
+
+```
+UnicodeString(wchar_t)                      1文字
+UnicodeString(char)                         1文字 (CP_ACP)
+UnicodeString(int / unsigned int / long /
+              unsigned long / long long /
+              unsigned long long)           10進表記
+UnicodeString(double)                       FloatToStr 相当
+```
+
+型ごとに用意しているのは曖昧さを避けるため。`int` だけにすると `unsigned int` の実引数が
+`int` と `wchar_t` の双方に変換可能で曖昧になる。**この集合を削ってはいけない。**
+
+いずれも回帰テストが検出した。逆に言えば、シムの意味論はテストなしでは担保できない。
+
+## 12. テストで判明した既存実装の問題 (直していない)
+
+§8.5 に加えて、`usr_file_ex.cpp` / `usr_exif.cpp` のテストを書く過程で判明したもの。
+
+| 箇所 | 内容 |
+|---|---|
+| `get_dirs` (usr_file_ex.h) | 宣言と Doxygen コメントがあるが **実装が src/ のどこにも無い**。呼ぶとリンクエラーになる |
+| `delete_Dirs` | 「サブディレクトリを含めたディレクトリの削除」と書かれているが、ファイルは削除せず無視する。そのため木の中にファイルが1つでも残っていると削除が失敗し、上位まで連鎖して木全体が消えない |
+| `chk_cre_dir` | 新規作成時のみ末尾 `\` 付きで返し、既存ディレクトリのときは引数をそのまま返す (末尾 `\` の有無が不定) |
+| `EXIF_format_inf` の ISO フォールバック | `get_tkn_r(lst->Values["NK:2"], ',')` は「最初の区切りより後ろ全部」を返すため、`"100,200,320"` から最右トークンではなく `"200,320"` が ISO 値として採用される |

@@ -14,8 +14,17 @@
 #define NYANFI_COMPAT_APPLICATION_H
 
 #include "compat/config.h"
+#include "compat/controls.h"
 #include "compat/property.h"
 #include "compat/ustring.h"
+#include "compat/vcl_forward.h"
+
+//前方宣言 (compat/graphics.h が namespace Graphics に完全定義する。ここではポインタで
+//持つだけなので前方宣言で足りる)
+namespace Graphics {
+class TFont;
+}  // namespace Graphics
+using ::Graphics::TFont;
 
 /**
  * @brief TApplication 互換 (Phase 0 で必要な最小限)
@@ -42,6 +51,14 @@ public:
 	compat::RWValueProperty<TApplication, bool, &TApplication::GetTerminated, &TApplication::SetTerminated>
 		Terminated{this};
 
+	/// メインフォーム (UIniFile.cpp / usr_scale.h が ReadScaledInteger 等の既定
+	/// コントロール解決に使う。Phase 0/1 では実フォームが無いため常に nullptr
+	/// になり得る。呼び出し側は NULL チェックの上で使うこと)
+	TForm *MainForm = nullptr;
+
+	/// 既定フォント (usr_scale.cpp::AssignScaledFont が既定値として使用)
+	TFont *DefaultFont = nullptr;
+
 private:
 	bool terminated_ = false;
 };
@@ -51,5 +68,36 @@ extern TApplication *Application;
 
 /// C++Builder のグローバル HInstance (自モジュールのインスタンスハンドル)
 extern HINSTANCE HInstance;
+
+//---------------------------------------------------------------------------
+/**
+ * @brief Vcl.Forms::TScreen 相当 (最小実装)
+ * @details 実測: UIniFile.cpp の LoadFormPos/LoadPosInfo (Width/Height/
+ *          MonitorCount によるフォーム位置補正)、usr_scale.h の GetCurPPI
+ *          (ActiveForm)、UserFunc.h::cursor_HourGlass/cursor_Default (Cursor)。
+ *          Width/Height は ::GetSystemMetrics(SM_CXSCREEN/SM_CYSCREEN) から
+ *          実測する。MonitorCount は ::GetSystemMetrics(SM_CMONITORS)。
+ *          ActiveForm / Cursor は実フォーム/実カーソルが無い Phase 0/1 では
+ *          設定されない (既定値のまま)。
+ */
+class TScreen {
+public:
+	int GetWidth() const { return ::GetSystemMetrics(SM_CXSCREEN); }
+	int GetHeight() const { return ::GetSystemMetrics(SM_CYSCREEN); }
+	int GetMonitorCount() const { return ::GetSystemMetrics(SM_CMONITORS); }
+
+	compat::ROProperty<TScreen, int, &TScreen::GetWidth> Width{this};
+	compat::ROProperty<TScreen, int, &TScreen::GetHeight> Height{this};
+	compat::ROProperty<TScreen, int, &TScreen::GetMonitorCount> MonitorCount{this};
+
+	/// アクティブフォーム (Phase 0/1 には実フォームが無いため常に nullptr)
+	TForm *ActiveForm = nullptr;
+	/// マウスカーソル形状 (実際の描画は行わない。UserFunc.h::cursor_HourGlass 等が
+	/// 読み書きするだけの値として使う)
+	TCursor Cursor = crDefault;
+};
+
+/// VCL のグローバル Screen 相当。プロセス内で 1 つ
+extern TScreen *Screen;
 
 #endif  // NYANFI_COMPAT_APPLICATION_H
