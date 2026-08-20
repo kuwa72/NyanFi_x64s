@@ -16,7 +16,7 @@
 
 cmake_minimum_required(VERSION 3.24)
 
-project(NyanFiPort LANGUAGES CXX)
+project(NyanFiPort LANGUAGES CXX RC)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -28,12 +28,16 @@ if(NOT WIN32)
 endif()
 
 option(NYANFI_BUILD_TESTS "doctest によるテストをビルドする" ON)
+option(NYANFI_BUILD_GUI "wxWidgets 版の GUI をビルドする (Phase 2 の骨格)" OFF)
 option(NYANFI_STATIC_LINK "ランタイム DLL に依存しない実行ファイルを作る" ON)
 
 # 実行ファイルを単体で配れるようにする (MSYS2 のネイティブビルドでも、
 # Linux からのクロスビルドでも同じ条件にする)
 if(MINGW AND NYANFI_STATIC_LINK)
 	add_link_options(-static -static-libgcc -static-libstdc++)
+endif()
+if(MINGW)
+	add_link_options(-Wl,--gc-sections)
 endif()
 
 #-----------------------------------------------------------------------------
@@ -62,6 +66,12 @@ else()
 	target_compile_options(nyanfi_common_flags INTERFACE
 		-finput-charset=UTF-8
 		-fexec-charset=CP932
+		# 関数単位でセクションを分け、リンク時に未使用分を落として実行ファイルを小さく保つ。
+		# 注意: これは「未使用関数が参照する未定義シンボル」を消してはくれない。
+		# GNU ld のセクション回収はシンボル解決の後に走るため、未使用の関数でも
+		# 参照先が無ければリンクエラーになる (gui/vcl_gui_bridge.cpp で対処)。
+		-ffunction-sections
+		-fdata-sections
 	)
 endif()
 
@@ -130,6 +140,16 @@ if(NYANFI_PHASE0_SOURCES)
 	nyanfi_target_vcl_shim(nyanfi_core)
 else()
 	message(STATUS "NYANFI_PHASE0_SOURCES が空のため nyanfi_core はスキップします")
+endif()
+
+#-----------------------------------------------------------------------------
+# GUI (Phase 2 の骨格)
+#-----------------------------------------------------------------------------
+if(NYANFI_BUILD_GUI)
+	if(NOT TARGET nyanfi_core)
+		message(FATAL_ERROR "GUI は nyanfi_core を必要とします")
+	endif()
+	add_subdirectory(gui)
 endif()
 
 #-----------------------------------------------------------------------------
