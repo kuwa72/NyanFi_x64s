@@ -23,6 +23,36 @@
 #pragma package(smart_init)
 
 //---------------------------------------------------------------------------
+//スコープを抜ける際に後始末を実行する
+//
+//C++Builder 拡張の try { } __finally { } の代替。__finally は clang-cl でも
+//BCC64 以外では通らないため、標準C++のRAIIに置き換えている (issue #1 Phase 0)。
+//---------------------------------------------------------------------------
+namespace {
+
+template <class F>
+class scope_exit
+{
+public:
+	explicit scope_exit(F fn) : fn_(fn) {}
+	~scope_exit() { fn_(); }
+
+	scope_exit(const scope_exit &) = delete;
+	scope_exit &operator=(const scope_exit &) = delete;
+
+private:
+	F fn_;
+};
+
+template <class F>
+scope_exit<F> make_scope_exit(F fn)
+{
+	return scope_exit<F>(fn);
+}
+
+}	//namespace
+
+//---------------------------------------------------------------------------
 //Exif情報取得可能の拡張子か?
 //---------------------------------------------------------------------------
 bool test_ExifExt(UnicodeString fext)
@@ -2226,7 +2256,8 @@ UnicodeString get_CRC32_str(
 	if (INVALID_HANDLE_VALUE==hFile) return EmptyStr;
 
 	UnicodeString ret_str;
-	try {
+	auto closer = make_scope_exit([&] { ::CloseHandle(hFile); });
+	{
 		try {
 			std::unique_ptr<BYTE[]> fbuf(new BYTE[FILE_RBUF_SIZE]);
 			uint32_t crc32 = 0xFFFFFFFF;
@@ -2250,9 +2281,6 @@ UnicodeString get_CRC32_str(
 		catch (...) {
 			ret_str = EmptyStr;
 		}
-	}
-	__finally {
-		::CloseHandle(hFile);
 	}
 
 	return ret_str;
@@ -2285,7 +2313,12 @@ UnicodeString get_HashStr(
 	}
 
 	UnicodeString ret_str;
-	try {
+	auto closer = make_scope_exit([&] {
+		::CryptDestroyHash(hHash);
+		::CryptReleaseContext(hProv, 0);
+		::CloseHandle(hFile);
+	});
+	{
 		try {
 			std::unique_ptr<BYTE[]> fbuf(new BYTE[FILE_RBUF_SIZE]);
 			DWORD dwSize;
@@ -2309,11 +2342,6 @@ UnicodeString get_HashStr(
 		catch (...) {
 			ret_str = EmptyStr;
 		}
-	}
-	__finally {
-		::CryptDestroyHash(hHash);
-		::CryptReleaseContext(hProv, 0);
-		::CloseHandle(hFile);
 	}
 
 	SetLastError(NO_ERROR);
@@ -2360,8 +2388,12 @@ UnicodeString get_TextHashStr(
 	}
 
 	UnicodeString ret_str;
-	try {
-		try {	
+	auto closer = make_scope_exit([&] {
+		::CryptDestroyHash(hHash);
+		::CryptReleaseContext(hProv, 0);
+	});
+	{
+		try {
 			int s_len = s.Length();
 			int b_len = ::WideCharToMultiByte(CP_UTF8, 0, s.c_str(), s_len, 0, NULL, NULL, NULL);
 			if (b_len==0) Abort();
@@ -2377,10 +2409,6 @@ UnicodeString get_TextHashStr(
 		catch (...) {
 			ret_str = EmptyStr;
 		}
-	}
-	__finally {
-		::CryptDestroyHash(hHash);
-		::CryptReleaseContext(hProv, 0);
 	}
 
 	SetLastError(NO_ERROR);

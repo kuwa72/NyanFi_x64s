@@ -147,7 +147,45 @@ private:
 	virtual void __fastcall Notify(void *Ptr, TListNotification Action);
 
 public:
-	__property drop_target_rec *Items[int Index] = {read=Get, write=Put};
+	/**
+	 * @brief Items[Index] の読み書き
+	 * @details 旧 `__property drop_target_rec *Items[int Index] = {read=Get, write=Put};`
+	 *          C++Builder 拡張のプロパティ構文は clang-cl / mingw-w64 では通らないため、
+	 *          呼び出し形 (`TargetList->Items[i]`) を変えずに済む添字プロキシへ置き換えた
+	 *          (issue #1 Phase 0)。標準C++のみで書いてあるので BCC64 でもそのまま通る。
+	 */
+	class TItemsProperty
+	{
+	public:
+		explicit TItemsProperty(TDropTargetList *owner) : Owner(owner) {}
+
+		/// 読み書き両対応の要素参照
+		class TItemRef
+		{
+		public:
+			TItemRef(TDropTargetList *owner, int index) : Owner(owner), Index(index) {}
+
+			operator drop_target_rec *() const { return Owner->Get(Index); }
+			drop_target_rec *operator->() const { return Owner->Get(Index); }
+
+			TItemRef &operator=(drop_target_rec *item)
+			{
+				Owner->Put(Index, item);
+				return *this;
+			}
+
+		private:
+			TDropTargetList *Owner;
+			int Index;
+		};
+
+		TItemRef operator[](int index) const { return TItemRef(Owner, index); }
+
+	private:
+		TDropTargetList *Owner;
+	};
+
+	TItemsProperty Items{this};
 
 	__fastcall TDropTargetList();
 	void __fastcall AddNew(TForm *form, TWinControl *ctrl);
