@@ -18,6 +18,7 @@
 #include "gui/file_open.h"
 #include "gui/file_ops.h"
 #include "gui/grep_dialog.h"
+#include "gui/image_load.h"
 #include "usr_cmdlist.h"
 #include "usr_file_ex.h"
 #include "usr_file_inf.h"
@@ -97,6 +98,12 @@ MainFrame::MainFrame()
 	viewer_->Hide();
 	viewer_->SetOnClose([this]() { ShowViewer(false); });
 
+	// 画像ビューア。viewer_ と同じく root_ に重ねて置き、閉じている間は隠す
+	image_viewer_ = new ImageViewer(this, wxID_ANY);
+	image_viewer_->Hide();
+	image_viewer_->SetOnClose([this]() { ShowImageViewer(false); });
+	image_viewer_->SetOnNavigate([this](int direction) { CmdImageNavigate(direction); });
+
 	CreateStatusBar(2);
 	SetStatusWidths(2, std::array<int, 2>{-3, -1}.data());
 
@@ -122,6 +129,7 @@ void MainFrame::OnSize(wxSizeEvent &event)
 	const wxSize sz = GetClientSize();
 	if (root_ != nullptr) root_->SetSize(sz);
 	if (viewer_ != nullptr) viewer_->SetSize(sz);
+	if (image_viewer_ != nullptr) image_viewer_->SetSize(sz);
 	event.Skip();
 }
 
@@ -208,6 +216,13 @@ void MainFrame::UpdateStatus()
 //---------------------------------------------------------------------------
 void MainFrame::OnCharHook(wxKeyEvent &event)
 {
+	// 画像ビューアが開いている間は、キー入力を丸ごとビューアに渡す
+	// (I モードのキー割り当ては KeyMap では扱わない。gui/image_viewer.cpp を参照)
+	if (image_viewer_ != nullptr && image_viewer_->IsShown()) {
+		if (!image_viewer_->HandleKey(event)) event.Skip();
+		return;
+	}
+
 	// テキストビューアが開いている間は、キー入力を丸ごとビューアに渡す
 	// (V モードのキー割り当ては KeyMap では扱わない。gui/key_map.cpp を参照)
 	if (viewer_ != nullptr && viewer_->IsShown()) {
@@ -330,6 +345,9 @@ bool MainFrame::Execute(const UnicodeString &command)
 	}
 	else if (SameStr(command, _T("TextViewer"))) {
 		CmdTextViewer();
+	}
+	else if (SameStr(command, _T("ImageViewer"))) {
+		CmdImageViewer();
 	}
 	else if (SameStr(command, _T("Grep"))) {
 		CmdGrep();
@@ -924,12 +942,109 @@ void MainFrame::CmdTextViewer()
  */
 void MainFrame::ShowViewer(bool show)
 {
+	if (show && image_viewer_ != nullptr && image_viewer_->IsShown()) image_viewer_->Show(false);
 	if (root_ != nullptr) root_->Show(!show);
 	viewer_->Show(show);
 
 	if (show) {
 		viewer_->SetSize(GetClientSize());
 		viewer_->SetFocus();
+	}
+	else {
+		ActivePane()->SetFocus();
+	}
+	Layout();
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 画像ビューアで開く (G。src/Global.cpp の既定キー表 "F:G=ImageViewer" と同じ)
+ * @details ディレクトリと ".." は対象外 (無視する。gui/text_viewer.cpp の
+ * CmdTextViewer と同じ判断)。画像として認識できない/デコードに失敗しても
+ * ビューア自体は開き、エラーメッセージを表示する (gui/image_viewer.h の
+ * LoadFile のコメントを参照。VCL 版の imgv_thread.cpp が壊れた画像1件で
+ * ビューアを閉じないのと同じ考え方)。前後の画像への移動 (Left/Right) の
+ * 対象は BuildImageNavList が作る一覧を参照
+ */
+void MainFrame::CmdImageViewer()
+{
+	FilePane *pane = ActivePane();
+	const FileItem *itm = pane->GetCurrentItem();
+	if (itm == nullptr || itm->is_parent || itm->is_dir) return;
+
+	BuildImageNavList(itm->name);
+
+	const UnicodeString full_path = pane->GetPath() + itm->name;
+	image_viewer_->LoadFile(full_path);
+	ShowImageViewer(true);
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 画像ビューアを開いた時点のディレクトリ内で、対応拡張子のファイルだけを
+ * 表示順 (アクティブペインの現在の並べ替え/マスク絞り込みを反映した順序) で
+ * 集めた一覧を作る
+ * @details FilePane::ItemAtVisible() で項目を引き、ディレクトリを除外してから
+ *          拡張子で判定する。拡張子だけで見ると "photo.jpg" という名前の
+ *          フォルダを画像として拾ってしまうため。
+ */
+void MainFrame::BuildImageNavList(const UnicodeString &current_name)
+{
+	FilePane *pane = ActivePane();
+
+	image_nav_dir_ = pane->GetPath();
+	image_nav_list_.clear();
+	image_nav_index_ = -1;
+
+	// ディレクトリを除外する。拡張子だけで判定すると "photo.jpg" という名前の
+	// フォルダを画像として拾ってしまう
+	const int count = pane->GetItemCount();
+	for (int i = 0; i < count; ++i) {
+		const FileItem *itm = pane->ItemAtVisible(i);
+		if (itm == nullptr || itm->is_dir || itm->is_parent) continue;
+		if (!image_load::IsSupportedExt(itm->name)) continue;
+
+		if (SameText(itm->name, current_name)) image_nav_index_ = static_cast<int>(image_nav_list_.size());
+		image_nav_list_.push_back(itm->name);
+	}
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 前後の画像へ移動する (Left/Right、推測のキー。gui/image_viewer.h の
+ * SetOnNavigate から呼ばれる)
+ * @details 一覧の端に達したら何もしない (src/Global.cpp の既定値
+ * LoopFilerCursor=false と同じ。src/Global.cpp::to_NextFile/to_PrevFile が
+ * ループしないのと同じ挙動。実測)
+ */
+void MainFrame::CmdImageNavigate(int direction)
+{
+	if (image_nav_list_.empty() || image_nav_index_ == -1) return;
+
+	const int next = image_nav_index_ + direction;
+	if (next < 0 || next >= static_cast<int>(image_nav_list_.size())) return;
+
+	image_nav_index_ = next;
+	const UnicodeString full_path = image_nav_dir_ + image_nav_list_[static_cast<std::size_t>(next)];
+	image_viewer_->LoadFile(full_path);
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 画像ビューアの表示/非表示を切り替える
+ * @details root_ (2ペイン)・viewer_ (テキストビューア)・image_viewer_
+ * (画像ビューア) は同じ領域に重ねてあり、常にどれか1つだけを表示する
+ */
+void MainFrame::ShowImageViewer(bool show)
+{
+	if (show && viewer_ != nullptr && viewer_->IsShown()) viewer_->Show(false);
+	if (root_ != nullptr) root_->Show(!show);
+	image_viewer_->Show(show);
+
+	if (show) {
+		image_viewer_->SetSize(GetClientSize());
+		image_viewer_->SetFocus();
 	}
 	else {
 		ActivePane()->SetFocus();

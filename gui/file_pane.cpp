@@ -240,6 +240,13 @@ std::vector<UnicodeString> FilePane::VisibleNames() const
 }
 
 //---------------------------------------------------------------------------
+const FileItem *FilePane::ItemAtVisible(int index) const
+{
+	if (index < 0 || index >= GetItemCount()) return nullptr;
+	return &ItemAt(index);
+}
+
+//---------------------------------------------------------------------------
 void FilePane::ApplyIncSearchHighlight(const UnicodeString &keyword)
 {
 	for (FileItem &itm : all_items_) itm.matched = IncrementalSearchMatch(itm.name, keyword);

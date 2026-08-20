@@ -55,6 +55,10 @@ public:
 	//   IncrementalSearch が持つ。gui/navigation.h を参照) ---------------------
 	/// 一覧の項目名を表示順で返す (FindIncrementalSearchMatch に渡す用)
 	std::vector<UnicodeString> VisibleNames() const;
+
+	/// 表示順の index (0 始まり) から項目を引く。範囲外は nullptr。
+	/// 画像ビューアの次/前の移動で「ディレクトリを画像と誤認しない」ために必要
+	const FileItem *ItemAtVisible(int index) const;
 	/// keyword に一致する項目の FileItem::matched を更新する (再描画も行う)
 	void ApplyIncSearchHighlight(const UnicodeString &keyword);
 	/// ハイライトを消す (ApplyIncSearchHighlight(EmptyStr) と同じ)

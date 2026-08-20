@@ -55,6 +55,12 @@ void KeyMap::LoadDefaults()
 	// gui/key_map.h 冒頭のコメントを参照)
 	Assign(_T("V"), _T("TextViewer"));
 
+	// 画像ビューア。"G" は src/Global.cpp の既定キー表 ("F:G=ImageViewer") と
+	// 同じ。ビューア自体のキー操作 (フィット/ズーム/前後移動/閉じる) は
+	// ImageViewer::HandleKey (gui/image_viewer.cpp) がこの KeyMap を経由せず
+	// 直接処理する (TextViewer と同じ作り)
+	Assign(_T("G"), _T("ImageViewer"));
+
 	// 文字列検索 (GREP)。usr_cmdlist.cpp のコマンド表には "FV:Grep=文字列検索(GREP)"
 	// として載っているが、src/Global.cpp の既定キー表 (KeyFuncList->Text) には
 	// "Grep" に対応する行が無く、メニュー専用の操作だったと見られる (実測、

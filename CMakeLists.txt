@@ -203,6 +203,11 @@ endif()
 # tests/core/test_gui_grep.cpp から直接テストする) でここに含める。
 # 文字コード判定・バイナリ判定は gui/text_viewer_core.cpp の LoadForView を、
 # マッチ判定は移植済みの find_mlt/TRegEx (src/usr_str.cpp) をそのまま使う。
+#
+# gui/image_load.cpp (画像ビューアの拡張子判定・読み込み) も同じ理由 (wx 非依存、
+# tests/core/test_gui_image_load.cpp から直接テストする) でここに含める。
+# デコードは自前で書かず、移植済みの WIC ラッパー (src/usr_wic.cpp、既に
+# nyanfi_core に含まれている) をそのまま使う。
 #-----------------------------------------------------------------------------
 if(TARGET nyanfi_core)
 	add_library(nyanfi_gui_core STATIC
@@ -215,6 +220,7 @@ if(TARGET nyanfi_core)
 		gui/text_viewer_core.cpp
 		gui/navigation.cpp
 		gui/grep.cpp
+		gui/image_load.cpp
 	)
 	target_include_directories(nyanfi_gui_core PUBLIC ${PROJECT_SOURCE_DIR})
 	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core shell32)

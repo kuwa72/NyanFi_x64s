@@ -15,10 +15,12 @@
 #define NYANFI_GUI_MAIN_FRAME_H
 
 #include <memory>
+#include <vector>
 
 #include <wx/wx.h>
 
 #include "gui/file_pane.h"
+#include "gui/image_viewer.h"
 #include "gui/key_map.h"
 #include "gui/navigation.h"
 #include "gui/settings.h"
@@ -82,6 +84,18 @@ private:
 	void CmdTextViewer();    //!< カーソル位置のファイルをビューアで開く (V)
 	void ShowViewer(bool show);  //!< ビューアの表示/非表示を切り替える
 
+	// 画像ビューア (gui/image_viewer.h)。"G" は src/Global.cpp の既定キー表
+	// ("F:G=ImageViewer") と同じ。前後の画像への移動キー (Left/Right) は
+	// 既定キー表に記載が無く推測 (gui/main_frame.cpp::CmdImageViewer 冒頭の
+	// コメントを参照)
+	void CmdImageViewer();      //!< カーソル位置の画像をビューアで開く (G)
+	void ShowImageViewer(bool show);  //!< 画像ビューアの表示/非表示を切り替える
+	/// アクティブペインの現在のディレクトリ内で、対応拡張子のファイルだけを
+	/// 表示順に集めた一覧を作り直す (image_nav_list_/image_nav_index_ を更新)
+	void BuildImageNavList(const UnicodeString &current_name);
+	/// Left/Right (前後の画像へ) が押されたときに呼ばれる (ImageViewer::SetOnNavigate)
+	void CmdImageNavigate(int direction);
+
 	// 文字列検索 (gui/grep_dialog.h)。"FV:Grep" (usr_cmdlist.cpp のコマンド表)
 	// に既定キーの記載が無かったため、キー割り当ては推測 (gui/key_map.cpp 参照)
 	void CmdGrep();  //!< アクティブペインのディレクトリを対象に grep する
@@ -93,6 +107,16 @@ private:
 	wxStaticText *headers_[2] = {nullptr, nullptr};
 	wxWindow *root_ = nullptr;      //!< 2ペインを収めた親パネル (ShowViewer でのサイズ調整用)
 	TextViewer *viewer_ = nullptr;  //!< テキストビューア (root_ と同じ領域に重ねて表示)
+	ImageViewer *image_viewer_ = nullptr;  //!< 画像ビューア (同じく root_ と同じ領域に重ねて表示)
+
+	// CmdImageViewer で画像ビューアを開いた時点のディレクトリ内の対象ファイル
+	// 一覧 (image_load::IsSupportedExt に一致するものだけ、".." は除く)。
+	// Left/Right での前後移動はこの一覧の中だけを動く (ファイルペインの
+	// カーソルとは独立。VCL 版の ViewFileList に相当する簡略版)
+	UnicodeString image_nav_dir_;
+	std::vector<UnicodeString> image_nav_list_;
+	int image_nav_index_ = -1;
+
 	int active_ = 0;
 	KeyMap keymap_;
 	Settings settings_{Settings::DefaultIniPath()};
