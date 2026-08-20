@@ -23,6 +23,16 @@
 #	define NOMINMAX
 #endif
 
+// dlgs.h (コモンダイアログのコントロール ID) は lst1..lst16 / edt1.. / cmb1.. /
+// psh1.. といった短い識別子をマクロにしてしまう。C++Builder の vcl.h はこれを
+// 取り込んでおらず、既存コードやテストの変数名 (lst2 など) と衝突するため、
+// windows.h より先にインクルードガードを立てて無効化する。
+// (Windows SDK 側のガード名 _DLGSH_INCLUDED_ と同じ)
+#ifndef _DLGSH_INCLUDED_
+#	define _DLGSH_INCLUDED_
+#	define NYANFI_SUPPRESSED_DLGS_H
+#endif
+
 #include <windows.h>
 #include <tchar.h>
 
@@ -31,6 +41,7 @@
 
 // C++Builder は暗黙に C ランタイムのヘッダを取り込んでいたため、既存コードは
 // fabs / modf / exp / log / memcpy などを宣言なしで使っている (usr_exif.cpp ほか)。
+#include <float.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>

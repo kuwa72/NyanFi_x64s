@@ -32,6 +32,8 @@
 
 #include "compat/encoding.h"
 #include "compat/graphics.h"
+#include "compat/gui_stubs.h"
+#include "compat/ioutils.h"
 #include "compat/json.h"
 #include "compat/regex.h"
 #include "compat/registry.h"

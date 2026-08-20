@@ -43,9 +43,7 @@ issue #1 は「フォーム非依存のコードが 23,780 行 / 26 ファイル
 
 `usr_tag.h` は `TCheckListBox*` を引数の型として参照するだけなので、前方宣言のみの転送ヘッダ (`compat/include/Vcl.CheckLst.hpp`) で `usr_cmdlist.cpp` からの取り込みは通る。
 
-Phase 0 の対象に残したのは以下の 15 ファイル。
-
-<!-- TODO: ビルド結果の表 (scripts/probe.sh の出力) -->
+Phase 0 の対象に残したのは以下の 15 ファイル (計 14,088 行)。結果は §8。
 
 ## 3. シムに必要だった API (実測)
 
@@ -89,4 +87,157 @@ C++Builder は narrow リテラルを CP932 として扱い、`UnicodeString(con
 
 変換自体は機械的 (リテラルを `_T()` で包む) で、`UnicodeString(const char*)` を経由していた箇所が `const wchar_t*` になるだけなので意味論の変化はない。Phase 1 の作業項目とする。
 
-<!-- TODO: §5 ビルド結果 / §6 テスト / §7 残課題 / §8 次のアクション -->
+## 5. シムでは回避できないブロッカー: C++Builder 独自拡張
+
+issue #1 は「Delphi 固有の厄介な機能への依存は薄い」としていたが、**C++Builder のコンパイラ拡張**への依存は残っていた。これらは互換シム (ライブラリ) では吸収できず、**clang-cl でも同様に通らない**ため、ソースの機械変換が必要になる。
+
+| 拡張 | 出現数 | Phase 0 での影響 | 対処方針 |
+|---|---|---|---|
+| `__property` (プロパティ構文) | **31箇所 / 17ファイル** | `usr_shell.h:150` と `usr_mmfile.h:41` の 2箇所が 4ファイルをブロック | どちらも添字プロパティ (`Items[int Index] = {read=Get, write=Put}`)。`compat/property.h` のプロキシへ機械変換できる |
+| `try { } __finally { }` | **14箇所 / 6ファイル** (`__try` は 0件) | `usr_file_inf.cpp` の 3箇所 | RAII ガードへの置き換え。機械的だが、例外経路の確認は必要 |
+
+内訳 (`__property`): task_thread.h 6 / thumb_thread.h 5 / MainFrm.h 5 / usr_scrpanel.h 2 / 他 13ファイル各1
+内訳 (`__finally`): usr_shell.cpp 7 / usr_file_inf.cpp 3 / usr_highlight.cpp・task_thread.cpp・Global.cpp・CalcDlg.cpp 各1
+
+合計 45箇所と小さいため、Phase 1 の最初の作業として独立したコミットで処理するのが妥当。
+
+その他、ソース変更が必要なもの:
+
+| 事象 | 出現数 | 内容 |
+|---|---|---|
+| `(DWORD)obj` / `(int)obj` | 16箇所 | `TStringList` の `Objects` スロットに 32bit 値を詰めて取り出す書き方。C++ としては ill-formed で、GCC は `-fpermissive` で降格できるが **clang-cl には同等のオプションが無い**。`(DWORD)(DWORD_PTR)obj` へ直す必要がある |
+| 非 ASCII の narrow リテラル | 1,944箇所 | §4 のとおり |
+
+## 6. 作成した互換シム
+
+`compat/` 配下。すべて新規で、`src/` は 1 行も変更していない (文字コード変換を除く)。
+
+| ヘッダ | 内容 |
+|---|---|
+| `config.h` | Windows ヘッダ、Delphi スカラ型別名、A/W マクロの調整 |
+| `win_headers.h` | シェル / COM / WIC ヘッダ (C++Builder が Vcl.* 経由で取り込んでいた分) |
+| `ustring.h` | `UnicodeString` (1始まり)、`AnsiStringT<CodePage>`、`DynamicArray<T>` |
+| `sysutils.h` / `datetime.h` / `math.h` | SysUtils / StrUtils の自由関数、`TDateTime`、`TSearchRec` と FindFirst 系 |
+| `classes.h` | `TObject` / `TStrings` / `TStringList` / `TList` |
+| `streams.h` / `encoding.h` | `TStream` 系、`TEncoding` |
+| `property.h` | `__property` 相当のプロパティプロキシ |
+| `set.h` | Delphi の集合型 `Set<T,min,max>` |
+| `exception.h` | `Exception` 階層 |
+| `regex.h` | `TRegEx` (std::wregex バックエンド) |
+| `json.h` | `System.JSON` 相当 (手書きパーサ) |
+| `graphics.h` | `TColor` / `TCanvas` / `TBitmap` (GDI DIB) / `TStyleManager` |
+| `registry.h` | `TRegistry` |
+| `cominterface.h` | `TComInterface<T>` (COM スマートポインタ) |
+| `application.h` | `Application->Active` / `ProcessMessages()` / `ExeName`、`HInstance` |
+| `controls.h` | `TShiftState` など入力系の型 |
+| `vcl_forward.h` / `gui_stubs.h` | GUI コントロール (詳細は §7) |
+| `mingw_patch.h` | ローカル検証用 mingw-w64 と Windows SDK の差分埋め |
+
+`#include <System.JSON.hpp>` のような RAD 形式の include をそのまま通すため、転送ヘッダ (`System.*.hpp` / `Vcl.*.hpp` / `utilcls.h` / `RestartManager.h`) も用意した。
+
+### 正規表現: PCRE2 は Phase 1 で急がなくてよい
+
+issue #1 は正規表現 366箇所を PCRE2 へ置き換える計画だが、**src 全体の `TRegEx` パターン (150以上の異なるリテラル) を実測したところ、PCRE 固有の構文は 1件も使われていなかった**。名前付きグループ `(?<name>)`、先読み・後読み `(?=` `(?!` `(?<=` `(?<!`、`\p{...}`、atomic / possessive group、`\A` `\z` はいずれも不使用。`TRegExOptions` も `roIgnoreCase` / `roMultiLine` / `roCompiled` の3つだけ。
+
+したがって Phase 0 は std::wregex バックエンドで足りており、PCRE2 への移行は「構文の互換性」ではなく **性能と `\w` の Unicode 解釈の忠実度** の問題に絞られる。優先度は下げてよい。
+
+## 7. GUI 依存部の扱い
+
+ロジック層のファイルには、GUI コントロールをポインタで受け取って数個のメンバに触るだけの関数が混ざっている (`usr_color.cpp` の `set_EditColor(TEdit*)`、`usr_str.cpp` の `get_WidthInPanel(TPanel*)`、`usr_cmdlist.cpp` の `TComboBox` 操作など)。
+
+Phase 0 ではこれらを **宣言だけのスタブ** (`compat/gui_stubs.h`) で通している。データメンバは宣言するが、メンバ関数の定義は書かない。したがって:
+
+- コンパイルは通る
+- 実際に呼ぶと **リンクエラーになる** (実装が無いことが静かに隠れない)
+- Phase 2 で wxWidgets のコントロールに置き換える対象がそのまま一覧になる
+
+このため「通った行数」は 2 段階で報告する必要がある (§8)。
+
+## 8. ビルド結果
+
+### 8.1 コンパイル・リンク
+
+**対象 15 ファイル (14,088 行) すべてが VCL 無しでコンパイルとリンクを通った。**
+
+| ファイル | 行数 | 結果 |
+|---|---|---|
+| `usr_str.cpp` | 3,314 | PASS |
+| `usr_file_inf.cpp` | 2,690 | PASS |
+| `usr_file_ex.cpp` | 1,371 | PASS |
+| `usr_cmdlist.cpp` | 1,273 | PASS |
+| `usr_arc.cpp` | 1,194 | PASS |
+| `usr_exif.cpp` | 1,089 | PASS |
+| `htmconv.cpp` | 980 | PASS |
+| `usr_wic.cpp` | 527 | PASS |
+| `file_filter.cpp` | 387 | PASS |
+| `usr_color.cpp` | 345 | PASS |
+| `usr_id3.cpp` | 320 | PASS |
+| `usr_key.cpp` | 278 | PASS |
+| `usr_mmfile.cpp` | 119 | PASS |
+| `usr_xd2tx.cpp` | 109 | PASS |
+| `usr_migemo.cpp` | 92 | PASS |
+| **合計** | **14,088** | **15/15** |
+
+成果物: `libnyanfi_core.a` (7.8MB, 15 オブジェクト) / `libnyanfi_compat.a` (9.9MB)
+
+再現手順:
+
+```
+brew install cmake ninja mingw-w64      # 未導入なら
+./scripts/build.sh                      # cmake + ninja + ctest
+./scripts/probe.sh                      # ファイル単位の通過状況の表
+```
+
+### 8.2 テスト
+
+doctest。mingw-w64 が生成した .exe を WSL interop でそのまま実行している。
+
+| テスト | ケース数 | アサーション数 | 結果 |
+|---|---|---|---|
+| `compat_tests` (シム自体) | 155 | 619 | 全パス |
+| `core_tests` (既存ロジックの回帰) | 157 | 555 | 全パス |
+| **合計** | **312** | **1,174** | **全パス** |
+
+`core_tests` の対象は `usr_str.cpp` (108ケース) / `usr_color.cpp` (13) / `file_filter.cpp` (14) / `htmconv.cpp` (11) / `usr_key.cpp` (11)。
+
+### 8.3 到達のために src へ入れた変更 (5箇所)
+
+「src 無変更」の方針は、対象15ファイル中4ファイル (4,210行) を C++Builder 独自拡張がブロックしていたため、最小限だけ破った。いずれも **標準 C++ のみ**で書き、`#ifdef` による分岐を入れていないので C++Builder 12.1 のビルドも通る想定。
+
+| ファイル | 変更 |
+|---|---|
+| `usr_file_inf.cpp` | `try { } __finally { }` 3箇所を RAII (`scope_exit`) に置換。ヘルパは同ファイル内の無名 namespace に置いた |
+| `usr_shell.h` | `__property drop_target_rec *Items[int Index]` を添字プロキシクラスに置換 (呼び出し形 `TargetList->Items[i]` は不変) |
+| `usr_mmfile.h` | `__property BYTE Bytes[unsigned int Index]` を同様に置換 |
+
+**未検証**: この 5箇所が C++Builder 12.1 (BCC64) で実際に通るかは、この環境に BCC64 が無いため確認できていない。標準 C++ の範囲で書いてあるため通る見込みだが、**RAD Studio 側でのビルド確認が必要**。
+
+### 8.4 検証できていないこと (無言のスキップを避けるため明記)
+
+1. **clang-cl + Windows SDK でのビルド**。本番ターゲットでの確認は未実施。§4 の narrow リテラルと §5 の `(DWORD)obj` キャストが確実に障害になる
+2. **C++Builder 12.1 での再ビルド**。§8.3 のとおり
+3. **GUI 依存関数の動作**。`compat/gui_stubs.h` は宣言のみで実装が無く、呼ぶとリンクエラーになる。`core_tests` では、同一オブジェクトファイル内の未使用関数がリンクを要求する分だけ `tests/core/test_link_stubs.cpp` が `std::abort()` するダミー定義を与えている (5シンボル: `TWinControl::LockDrawing` / `UnlockDrawing`、`TControl::Perform`、`TDirect2DCanvas` のコンストラクタと `Supported()`)
+4. **外部 DLL を要する経路**。`usr_arc.cpp` (書庫 DLL) / `usr_migemo.cpp` (migemo.dll) / `usr_xd2tx.cpp` (xd2txlib.dll) はコンパイル・リンクは通るが、実行時の動作は未確認
+5. **`TMultiReadExclusiveWriteSynchronizer` の再入**。Delphi 版は同一スレッドの再入を許すが、シムは SRWLOCK なので再入不可。呼び出し側 (`usr_tag.cpp` / `Global.cpp`) が再入していないかは Phase 1 で確認が必要
+6. **`TList` の終端解放**。派生クラスの `Notify` はデストラクタからは呼ばれない (C++ では基底デストラクタ実行時に vtable が巻き戻る)。`usr_shell.cpp` の最終 `delete` で `drop_target_rec` が解放されずリークする。クラッシュはしない
+
+### 8.5 テストで判明した既存実装の挙動 (直していない)
+
+回帰テストは「現状の挙動を固定する」ことが目的なので、以下は修正せず、テストで固定した上で記録する。
+
+| 箇所 | 内容 |
+|---|---|
+| `HtmConv::Convert` | `HtmDelBlkCls` / `HtmDelBlkId` が既定の空文字列のとき、`class` (または `id`) 属性を持たない `DIV` / `SECTION` / `TABLE` / `UL` などが丸ごと削除される。`SplitString("", ";")` が 1要素 `[""]` を返し、属性なしの `GetTagAtr()` の戻り値 `""` と一致するため |
+| `get_size_str_T` | 単位の繰り上げが `>` 判定なので、ちょうど 1GB は `"1024 MB"` と表示される |
+| `remove_text` | `ReplaceText` を使っており、最初の1件ではなく大小文字を無視して全件置換する |
+| `get_AlNumChar` | 仮想キーコードと ASCII を区別しないため、`VK_F1` (0x70) が `'p'` と衝突して `"p"` を返す |
+| `is_RuledLine("")` | 空文字列に対して 1 (罫線とみなす) を返す |
+
+## 9. 次のアクション (Phase 1 の入口)
+
+1. `__property` 31箇所と `try/__finally` 14箇所を機械変換する (独立コミット)
+2. `(DWORD)obj` 16箇所を `(DWORD)(DWORD_PTR)obj` へ直す (clang-cl 必須)
+3. 非 ASCII の narrow リテラル 1,944箇所を `_T(...)` へ機械変換する (clang-cl 必須)
+4. GitHub Actions (windows-latest + clang-cl) の workflow を追加し、本番ターゲットでの通過状況を測る
+5. ロジック層の回帰テストを増やす (現状は §8 のとおり)
+6. `usr_swatch` / `usr_highlight` / `UIniFile` が `usr_scale.h` 経由で `Vcl.Grids.hpp` に依存している部分を切り離す

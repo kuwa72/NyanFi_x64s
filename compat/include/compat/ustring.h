@@ -13,7 +13,9 @@
 #ifndef NYANFI_COMPAT_USTRING_H
 #define NYANFI_COMPAT_USTRING_H
 
+#include <cstdarg>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "compat/config.h"
@@ -128,6 +130,7 @@ public:
 	UnicodeString(const wchar_t *src);
 	UnicodeString(const wchar_t *src, int len);
 	UnicodeString(const char *src);  //!< CP_ACP からの変換
+	UnicodeString(const char *src, int len);  //!< CP_ACP からの変換 (len バイト分、NUL 終端不要)
 	UnicodeString(wchar_t ch);
 	explicit UnicodeString(int value);     //!< 数値の文字列化 (C++Builder 互換)
 	explicit UnicodeString(double value);  //!< 数値の文字列化 (C++Builder 互換)
@@ -199,6 +202,264 @@ public:
 private:
 	std::wstring text_;
 };
+
+//===========================================================================
+// テンプレート本体
+//
+// DynamicArray<T> / AnsiStringT<CodePage> はテンプレートであるため、
+// 各翻訳単位から実体化できるようヘッダに本体を置く (契約ヘッダの追記可)。
+// UnicodeString を値で返す関数があるため、UnicodeString の完全な定義より
+// 後ろに置くこと。
+//===========================================================================
+
+//---------------------------------------------------------------------------
+// DynamicArray<T>
+//---------------------------------------------------------------------------
+template <class T>
+DynamicArray<T>::DynamicArray() : items_()
+{
+}
+
+template <class T>
+DynamicArray<T>::DynamicArray(const DynamicArray &src) : items_(src.items_)
+{
+}
+
+template <class T>
+DynamicArray<T>::DynamicArray(DynamicArray &&src) noexcept : items_(std::move(src.items_))
+{
+}
+
+template <class T>
+DynamicArray<T>::DynamicArray(int len) : items_(static_cast<std::size_t>(len > 0 ? len : 0))
+{
+}
+
+template <class T>
+DynamicArray<T>::~DynamicArray() = default;
+
+template <class T>
+DynamicArray<T> &DynamicArray<T>::operator=(const DynamicArray &src)
+{
+	if (this != &src) items_ = src.items_;
+	return *this;
+}
+
+template <class T>
+DynamicArray<T> &DynamicArray<T>::operator=(DynamicArray &&src) noexcept
+{
+	if (this != &src) items_ = std::move(src.items_);
+	return *this;
+}
+
+template <class T>
+int DynamicArray<T>::get_length() const
+{
+	return static_cast<int>(items_.size());
+}
+
+template <class T>
+void DynamicArray<T>::set_length(int len)
+{
+	// vector::resize は既存要素を保持したまま伸縮する (Delphi SetLength と同じ)
+	items_.resize(static_cast<std::size_t>(len > 0 ? len : 0));
+}
+
+template <class T>
+T &DynamicArray<T>::operator[](int index)
+{
+	return items_[static_cast<std::size_t>(index)];
+}
+
+template <class T>
+const T &DynamicArray<T>::operator[](int index) const
+{
+	return items_[static_cast<std::size_t>(index)];
+}
+
+template <class T>
+typename DynamicArray<T>::LengthProxy &DynamicArray<T>::LengthProxy::operator=(int len)
+{
+	owner_->set_length(len);
+	return *this;
+}
+
+//---------------------------------------------------------------------------
+// AnsiStringT<CodePage>
+//---------------------------------------------------------------------------
+namespace compat_detail {
+
+/// @brief AnsiStringT<CodePage> の変換に使う実際の Win32 コードページを返す
+/// @details CodePage==0(AnsiString) と CodePage==0xFFFF(RawByteString) は
+///          埋め込みコードページ情報を持たないため、実行時 CP_ACP 変換で
+///          代用する (推測: RawByteString の「変換なし」は本シムでは対応しない)。
+template <unsigned short CodePage>
+constexpr unsigned int AnsiCodePageOf()
+{
+	if constexpr (CodePage == 65001)
+		return CP_UTF8;
+	else
+		return CP_ACP;
+}
+
+}  // namespace compat_detail
+
+template <unsigned short CodePage>
+AnsiStringT<CodePage>::AnsiStringT() : bytes_()
+{
+}
+
+template <unsigned short CodePage>
+AnsiStringT<CodePage>::AnsiStringT(const AnsiStringT &src) : bytes_(src.bytes_)
+{
+}
+
+template <unsigned short CodePage>
+AnsiStringT<CodePage>::AnsiStringT(const char *src) : bytes_(src != nullptr ? src : "")
+{
+}
+
+template <unsigned short CodePage>
+AnsiStringT<CodePage>::AnsiStringT(const char *src, int len)
+{
+	if (src != nullptr && len > 0) bytes_.assign(src, static_cast<std::size_t>(len));
+}
+
+template <unsigned short CodePage>
+AnsiStringT<CodePage>::AnsiStringT(const wchar_t *src)
+{
+	if (src == nullptr || *src == L'\0') return;
+
+	const unsigned int cp = compat_detail::AnsiCodePageOf<CodePage>();
+	const int wlen = static_cast<int>(std::char_traits<wchar_t>::length(src));
+	const int len = ::WideCharToMultiByte(cp, 0, src, wlen, nullptr, 0, nullptr, nullptr);
+	if (len > 0) {
+		bytes_.resize(static_cast<std::size_t>(len));
+		::WideCharToMultiByte(cp, 0, src, wlen, bytes_.data(), len, nullptr, nullptr);
+	}
+}
+
+template <unsigned short CodePage>
+AnsiStringT<CodePage>::AnsiStringT(const UnicodeString &src) : AnsiStringT(src.c_str())
+{
+}
+
+template <unsigned short CodePage>
+AnsiStringT<CodePage>::~AnsiStringT() = default;
+
+template <unsigned short CodePage>
+AnsiStringT<CodePage> &AnsiStringT<CodePage>::operator=(const AnsiStringT &src)
+{
+	bytes_ = src.bytes_;
+	return *this;
+}
+
+template <unsigned short CodePage>
+int AnsiStringT<CodePage>::Length() const
+{
+	return static_cast<int>(bytes_.size());
+}
+
+template <unsigned short CodePage>
+bool AnsiStringT<CodePage>::IsEmpty() const
+{
+	return bytes_.empty();
+}
+
+template <unsigned short CodePage>
+const char *AnsiStringT<CodePage>::c_str() const
+{
+	return bytes_.c_str();
+}
+
+template <unsigned short CodePage>
+char *AnsiStringT<CodePage>::data()
+{
+	return bytes_.data();
+}
+
+template <unsigned short CodePage>
+const char *AnsiStringT<CodePage>::data() const
+{
+	return bytes_.data();
+}
+
+template <unsigned short CodePage>
+Byte AnsiStringT<CodePage>::operator[](int index) const
+{
+	return static_cast<Byte>(bytes_[static_cast<std::size_t>(index - 1)]);
+}
+
+template <unsigned short CodePage>
+AnsiStringT<CodePage> AnsiStringT<CodePage>::SubString(int index, int count) const
+{
+	const int len = Length();
+	if (index < 1) index = 1;
+	if (index > len || count <= 0) return AnsiStringT();
+
+	const int avail = len - index + 1;
+	if (count > avail) count = avail;
+
+	AnsiStringT result;
+	result.bytes_ = bytes_.substr(static_cast<std::size_t>(index - 1), static_cast<std::size_t>(count));
+	return result;
+}
+
+template <unsigned short CodePage>
+int AnsiStringT<CodePage>::Pos(const AnsiStringT &sub) const
+{
+	if (sub.IsEmpty()) return 0;
+	const std::size_t p = bytes_.find(sub.bytes_);
+	return (p == std::string::npos) ? 0 : static_cast<int>(p) + 1;
+}
+
+template <unsigned short CodePage>
+AnsiStringT<CodePage> &AnsiStringT<CodePage>::SetLength(int len)
+{
+	bytes_.resize(static_cast<std::size_t>(len > 0 ? len : 0));
+	return *this;
+}
+
+template <unsigned short CodePage>
+UnicodeString AnsiStringT<CodePage>::ToUnicode() const
+{
+	if (bytes_.empty()) return UnicodeString();
+
+	const unsigned int cp = compat_detail::AnsiCodePageOf<CodePage>();
+	const int wlen = ::MultiByteToWideChar(cp, 0, bytes_.data(), static_cast<int>(bytes_.size()), nullptr, 0);
+	if (wlen <= 0) return UnicodeString();
+
+	std::wstring w(static_cast<std::size_t>(wlen), L'\0');
+	::MultiByteToWideChar(cp, 0, bytes_.data(), static_cast<int>(bytes_.size()), w.data(), wlen);
+	return UnicodeString(w);
+}
+
+template <unsigned short CodePage>
+bool AnsiStringT<CodePage>::operator==(const AnsiStringT &rhs) const
+{
+	return bytes_ == rhs.bytes_;
+}
+
+template <unsigned short CodePage>
+bool AnsiStringT<CodePage>::operator!=(const AnsiStringT &rhs) const
+{
+	return !(*this == rhs);
+}
+
+template <unsigned short CodePage>
+AnsiStringT<CodePage> AnsiStringT<CodePage>::operator+(const AnsiStringT &rhs) const
+{
+	AnsiStringT result(*this);
+	result.bytes_ += rhs.bytes_;
+	return result;
+}
+
+template <unsigned short CodePage>
+AnsiStringT<CodePage> &AnsiStringT<CodePage>::operator+=(const AnsiStringT &rhs)
+{
+	bytes_ += rhs.bytes_;
+	return *this;
+}
 
 //---------------------------------------------------------------------------
 // 演算子。const char* / const wchar_t* との混在を許すため非メンバで定義する。

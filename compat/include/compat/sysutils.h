@@ -38,6 +38,7 @@ constexpr int faSymLink = 0x00000400;
 constexpr int faCompressed = 0x00000800;
 constexpr int faEncrypted = 0x00004000;
 constexpr int faAnyFile = 0x000001FF;
+constexpr int faInvalid = -1;  //!< シム追加: FileGetAttr の失敗値 (usr_file_ex.cpp で使用)
 
 /**
  * @brief TSearchRec 互換
@@ -52,6 +53,7 @@ struct TSearchRec {
 	WIN32_FIND_DATAW FindData{};
 	HANDLE FindHandle = INVALID_HANDLE_VALUE;
 	UnicodeString ExcludeAttr;  //!< 未使用 (RTL 互換のための場所埋め)
+	int ExcludeAttrMask = 0;   //!< シム追加: FindFirst/FindNext 間で属性フィルタを保持する内部用フィールド
 };
 
 int FindFirst(const UnicodeString &path, int attr, TSearchRec &rec);  //!< 成功 0
@@ -119,6 +121,8 @@ UnicodeString MidStr(const UnicodeString &s, int start, int count);
 UnicodeString DupeString(const UnicodeString &s, int count);
 UnicodeString ReverseString(const UnicodeString &s);
 int PosEx(const UnicodeString &sub, const UnicodeString &text, int offset = 1);
+/// Delphi の自由関数 Pos。1 始まりで、見つからなければ 0 (実測: usr_str.cpp:953)
+int Pos(const UnicodeString &sub, const UnicodeString &text, int offset = 1);
 bool MatchStr(const UnicodeString &s, const TStringDynArray &values);
 bool MatchText(const UnicodeString &s, const TStringDynArray &values);
 UnicodeString IfThen(bool condition, const UnicodeString &whenTrue, const UnicodeString &whenFalse);
@@ -151,6 +155,9 @@ bool ForceDirectories(const UnicodeString &dir);
 int FileGetAttr(const UnicodeString &fileName);
 int FileSetAttr(const UnicodeString &fileName, int attr);
 TDateTime FileAge(const UnicodeString &fileName);
+/// シム追加のオーバーロード (usr_file_ex.cpp の `FileAge(fnam, ft)` 呼び出しに対応)。
+/// 実 Delphi RTL の `function FileAge(const AFileName: string; out FileDateTime: TDateTime): Boolean;` 相当
+bool FileAge(const UnicodeString &fileName, TDateTime &fileDateTime);
 UnicodeString GetCurrentDir();
 bool SetCurrentDir(const UnicodeString &dir);
 UnicodeString GetEnvironmentVariable(const UnicodeString &name);

@@ -31,7 +31,6 @@ target_compile_definitions(nyanfi_common_flags INTERFACE
 	UNICODE
 	_UNICODE
 	NOMINMAX
-	WIN32_LEAN_AND_MEAN=0
 	WINVER=0x0601        # Windows 7 以降 (README の動作対象に合わせる)
 	_WIN32_WINNT=0x0601
 )
@@ -75,6 +74,7 @@ add_library(nyanfi_compat STATIC
 	compat/src/classes.cpp
 	compat/src/streams.cpp
 	compat/src/encoding.cpp
+	compat/src/ioutils.cpp
 	compat/src/regex.cpp
 	compat/src/json.cpp
 	compat/src/graphics.cpp

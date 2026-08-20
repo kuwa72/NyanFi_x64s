@@ -15,3 +15,15 @@ INIファイルなどは、従来版のものを流用できます。
 ## 開発環境
 
 C++Builder 12.1 (BCC64)
+
+### OSS ツールチェインへの移植 (進行中)
+
+VCL 依存を除き、無償のツールチェインだけでビルドできるようにする作業を進めています。
+方針は [issue #1](https://github.com/kuwa72/NyanFi_x64s/issues/1)、現状は
+[docs/port/phase0-report.md](docs/port/phase0-report.md) を参照してください。
+
+```
+brew install cmake ninja mingw-w64   # または各環境のパッケージマネージャ
+./scripts/build.sh                   # ロジック層のビルドとテスト
+```
+
