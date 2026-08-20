@@ -57,17 +57,20 @@ jobs:
 
       - name: GUI が起動するか確認
         # GUI サブシステムなので出力は出ない。異常終了しないことだけを見る
-        # (wx のリソース未リンクだと OnInit が失敗して即終了する)
-        shell: pwsh
+        # (wx のリソース未リンクだと OnInit が失敗して即終了する)。
+        # msys2 シェルの中で実行すること: wx が共有ライブラリの場合、
+        # /ucrt64/bin が PATH に無いと DLL を読めない
         run: |
-          $p = Start-Process -FilePath build/gui/nyanfi.exe -PassThru
-          Start-Sleep -Seconds 5
-          if ($p.HasExited) {
-            Write-Error "nyanfi.exe が $($p.ExitCode) で終了しました"
+          ./build/gui/nyanfi.exe &
+          pid=$!
+          sleep 5
+          if ! kill -0 $pid 2>/dev/null; then
+            echo "nyanfi.exe が早期終了しました"
+            wait $pid; echo "終了コード=$?"
             exit 1
-          }
-          Stop-Process -Id $p.Id
-          Write-Output "5 秒間起動を維持しました"
+          fi
+          kill $pid
+          echo "5 秒間起動を維持しました"
 
       - uses: actions/upload-artifact@v4
         with:

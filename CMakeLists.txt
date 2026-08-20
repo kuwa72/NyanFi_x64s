@@ -33,8 +33,13 @@ option(NYANFI_STATIC_LINK "ランタイム DLL に依存しない実行ファイ
 
 # 実行ファイルを単体で配れるようにする (MSYS2 のネイティブビルドでも、
 # Linux からのクロスビルドでも同じ条件にする)
+# ランタイム DLL への依存を避ける。`-static` (システムライブラリまで静的) は
+# ここでは付けない: wxWidgets が共有ライブラリとして提供される環境 (MSYS2 の
+# パッケージ) では、インポートライブラリを使えなくなって `__imp_...` の未定義
+# 参照になる。完全静的にしたいのはテスト用の実行ファイルだけなので、そちらで
+# 個別に指定する (tests/CMakeLists.txt)。
 if(MINGW AND NYANFI_STATIC_LINK)
-	add_link_options(-static -static-libgcc -static-libstdc++)
+	add_link_options(-static-libgcc -static-libstdc++)
 endif()
 if(MINGW)
 	add_link_options(-Wl,--gc-sections)
@@ -140,6 +145,25 @@ if(NYANFI_PHASE0_SOURCES)
 	nyanfi_target_vcl_shim(nyanfi_core)
 else()
 	message(STATUS "NYANFI_PHASE0_SOURCES が空のため nyanfi_core はスキップします")
+endif()
+
+#-----------------------------------------------------------------------------
+# GUI の設定永続化・キー割り当て解析・並べ替え/マスク絞り込み (wx 非依存の部分)
+#
+# gui/settings.cpp (ini 永続化) と gui/key_map.cpp (割り当て表・ini 読み込み)、
+# gui/file_item.cpp (一覧の並べ替え比較・パスマスク照合の純粋ロジック) は
+# UsrIniFile と usr_str.h 系の API しか使わず wx に依存しないため、
+# NYANFI_BUILD_GUI=OFF (wxWidgets 未導入) でもビルド・テストできるよう、
+# GUI 本体 (gui/CMakeLists.txt, add_subdirectory(gui) は下記) とは切り離して
+# ここでライブラリ化する。tests/core/test_gui_settings.cpp・
+# tests/core/test_gui_file_item.cpp がこれを使う。
+# wx に依存する gui/key_map_wx.cpp (KeyMap::KeyStrOf) はここに含めない。
+#-----------------------------------------------------------------------------
+if(TARGET nyanfi_core)
+	add_library(nyanfi_gui_core STATIC gui/settings.cpp gui/key_map.cpp gui/file_item.cpp)
+	target_include_directories(nyanfi_gui_core PUBLIC ${PROJECT_SOURCE_DIR})
+	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core)
+	nyanfi_target_vcl_shim(nyanfi_gui_core)
 endif()
 
 #-----------------------------------------------------------------------------
