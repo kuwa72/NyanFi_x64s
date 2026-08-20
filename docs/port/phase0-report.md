@@ -556,3 +556,56 @@ BCC64 での再ビルドは未検証)。現状 `gui/` からこれらの関数�
    119 は未使用だったので選んだ)
 3. `_T()` 化した箇所で、narrow (`char*`) を要求する API に渡している箇所が無いか
    (mingw 側ではコンパイルが通っているので、あるとすれば C++Builder 固有の API)
+
+## 15. Phase 2 の到達点
+
+issue #1 の Phase 2 のゴールは「ファイラとして最低限使える NyanFi が起動する」だった。
+到達している。
+
+### 実装済みの操作 (キー割り当ては `src/Global.cpp` の既定と照合)
+
+| キー | 動作 | VCL 既定との一致 |
+|---|---|---|
+| `↑↓` `PgUp/PgDn` `Home/End` | カーソル移動 | `get_CsrKeyCmd()` をそのまま使用 |
+| `Enter` / `→` | ディレクトリに入る / ファイルを関連付けで開く | 一致 (`F:Enter=OpenStandard`) |
+| `Ctrl+Enter` | アプリケーションを選んで開く | 一致 (`F:Ctrl+Enter=OpenByApp`) |
+| `Alt+Enter` | ファイル情報 | 推測 (VCL に既定なし) |
+| `BackSpace` / `←` | 親ディレクトリへ | — |
+| `Tab` | ペイン切替 | — |
+| `Space` / `Ctrl+A` / `Ctrl+D` | マーク切替 / 全マーク / 全解除 | — |
+| `C` / `M` | コピー / 移動 (反対ペインへ) | 一致 (`F:C=Copy` / `F:M=Move`) |
+| `D` | ゴミ箱へ送る | 一致 (`F:D=Delete`) |
+| `K` / `R` | ディレクトリ作成 / 名前の変更 | 一致 (`F:K=CreateDir` / `F:R=RenameDlg`) |
+| `S` | 並べ替え (キー・昇降順・ディレクトリ集約) | 一致 (`F:S=SortDlg`) |
+| `Ctrl+M` / `Ctrl+U` | マスク絞り込み / 解除 | 推測 (VCL は UI から操作) |
+| `F` | インクリメンタルサーチ | 一致 (`F:F=IncSearch`) |
+| `B` / `Shift+B` | 履歴を戻る / 進む | `B` は一致、`Shift+B` は推測 |
+| `H` / `L` | 履歴一覧 / ドライブ一覧 | 一致 (`F:H=DirHistory` / `F:L=DriveList`) |
+| `Ctrl+G` | パス直接入力 | 推測 (VCL に既定なし) |
+| `V` | テキストビューア | 一致 (`F:V=TextViewer`) |
+| `F5` | 再読み込み | 一致 (`F:F5=ReloadList`) |
+| `F1` / `F12` | キー割り当て一覧 / コマンド表 | — |
+| `Ctrl+Q` / `Alt+F4` | 終了 | — |
+
+ウィンドウ位置・ペインのディレクトリ・履歴は `<exe名>_wx.ini` に永続化。
+本物の `NyanFi.ini` があれば `KeyFuncList` を読み取り専用で取り込む。
+配色は `wxSystemSettings` 由来で Windows のライト/ダークに追従する。
+
+### 規模
+
+| 層 | 行数 | 状態 |
+|---|---|---|
+| ロジック層 (`src/`) | **18,031** | 移植済み (22ファイル) |
+| GUI (`gui/`、新規) | 約 4,600 | 動作する |
+| テスト | — | **586ケース / 1,968アサーション** |
+| 未着手 (`Global.cpp` / `MainFrm.cpp` / 76フォーム) | 約 133,000 | Phase 3 |
+
+コードベース全体 151,010 行に対して、ビルドできているのは約 15%。
+
+### 常用に足りないもの (Phase 3 の候補)
+
+- 画像ビューア、書庫の中身の閲覧、grep、リネーム一括処理などの付加機能
+- タブ、ブックマーク、外部コマンド実行 (`usr_excmd.cpp` は `Global.h` 依存で未移植)
+- `msgbox_*` (確認ダイアログ) の wx 実装 — 現在は `gui/` 側で個別に wx のダイアログを
+  出しており、`src/usr_msg_dlg.cpp` は未移植のまま
+- シェル統合 (`IShellFolder` / `IContextMenu`)。`Global.cpp` / `usr_shell.cpp` の移植が前提
