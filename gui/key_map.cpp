@@ -48,6 +48,13 @@ void KeyMap::LoadDefaults()
 	Assign(_T("TAB"), _T("ChangePane"));
 	Assign(_T("F5"), _T("Refresh"));
 
+	// テキストビューア。"V" は src/Global.cpp の既定キー表 ("F:V=TextViewer")
+	// と同じ。ビューア自体のキー操作 (行移動・検索・折り返し切替・閉じる) は
+	// TextViewer::HandleKey (gui/text_viewer.cpp) がこの KeyMap を経由せず
+	// 直接処理する (V モードのキー割り当ては Phase 2 骨格では対応していない。
+	// gui/key_map.h 冒頭のコメントを参照)
+	Assign(_T("V"), _T("TextViewer"));
+
 	// マーク
 	Assign(_T("SPACE"), _T("MarkItem"));
 	Assign(_T("Ctrl+A"), _T("MarkAll"));

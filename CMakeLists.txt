@@ -189,6 +189,11 @@ endif()
 # 循環参照を避けるためここではなく nyanfi_core 側に置く (上の nyanfi_core の
 # コメントを参照)。nyanfi_gui_core は nyanfi_core を PUBLIC リンクしているので
 # 追加の設定なしで使える。
+#
+# gui/text_viewer_core.cpp (テキストビューアの文字コード判定・行分割・
+# 折り返し計算) も同じ理由 (wx 非依存、tests/core/test_gui_text_viewer.cpp
+# から直接テストする) でここに含める。文字コード判定は自前実装せず
+# src/usr_str.cpp の get_MemoryCodePage をそのまま使う。
 #-----------------------------------------------------------------------------
 if(TARGET nyanfi_core)
 	add_library(nyanfi_gui_core STATIC
@@ -198,6 +203,7 @@ if(TARGET nyanfi_core)
 		gui/file_ops.cpp
 		gui/file_open.cpp
 		gui/file_info.cpp
+		gui/text_viewer_core.cpp
 	)
 	target_include_directories(nyanfi_gui_core PUBLIC ${PROJECT_SOURCE_DIR})
 	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core shell32)

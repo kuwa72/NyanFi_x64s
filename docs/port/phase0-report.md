@@ -504,8 +504,26 @@ GUI から呼ぶために、リンクを通すための実装を置いた箇所�
 |---|---|---|
 | `TWinControl::LockDrawing` / `UnlockDrawing` | 何もしない | 再描画抑止は最適化なので影響なし |
 | `TDirect2DCanvas::Supported()` | `false` を返す | D2D 経路に入らなくなる (意図通り) |
-| `LoadUsrMsg` | メッセージ ID を含む簡易文字列を返す | **wx 版のメッセージ文言が本来の日本語と異なる**。`usr_msg.cpp` はメッセージボックス表示と一体で GUI 依存のため未移植。Phase 3 で移植する |
 | `TControl::Perform` / `TDirect2DCanvas` の構築 / `UserShell::get_PropInf` / `get_Duration` / `TMetafile::LoadFromFile` | 例外を投げる | 呼ばれたら落ちる。GUI 移植の残作業表そのもの |
+
+**追記 (port/phase2): `LoadUsrMsg` は移植済み。** メッセージ文字列テーブルと
+Abort系関数 (`UserAbort`/`SysErrAbort`/`LastErrAbort`/`TextAbort`/`SkipAbort`/
+`CancelAbort`/`EmptyAbort`) は GUI に依存しないため `src/usr_msg.cpp` のまま
+`cmake/phase0_sources.cmake` に追加してビルド対象にした。`gui/usr_file_inf_link_shim.cpp`
+の簡易実装 (メッセージIDを含むだけの文字列) は削除し、本物の日本語文言に差し替えた
+(`tests/core/test_usr_msg.cpp` で回帰テスト済み)。
+一方 `msgbox_ERR`/`msgbox_WARN`/`msgbox_OK`/`msgbox_Y_N`/`msgbox_Y_N_C`/
+`msgbox_Retry`/`msgbox_Sure`/`msgbox_SureAll` (メッセージボックス表示そのもの) は
+VCL の `CreateMessageDialog`/`TForm::ShowModal`/`TCheckBox` の実インスタンス化に
+依存しており、ヘッドレスな compat シムでは「宣言のみ」にしかできない。これらを
+`usr_msg.cpp` と同じ翻訳単位に残すと、GNU ld がオブジェクトファイル単位で取り込む
+ため (規約5と同じ事情)、`LoadUsrMsg` 目的でオブジェクトファイルが取り込まれた瞬間に
+未解決参照でビルドが落ちてしまう。そのため `src/usr_msg_dlg.cpp` に分離し、
+`cmake/phase0_sources.cmake` には載せていない (`src/NyanFi.cbproj` には
+`CppCompile` として追加済みなので C++Builder 側の挙動は変えていないが、
+BCC64 での再ビルドは未検証)。現状 `gui/` からこれらの関数を呼ぶ経路は無い
+(Phase 3 で MainFrm.cpp 等を移植する際に、wx (wxMessageDialog 等) で実装するか
+判断すること)。
 
 `get_AppInf` / `get_duration` (実行ファイルのバージョン情報・メディアの再生時間) と
 `get_MetafileInf` (.wmf/.emf) は、未移植の `usr_SH` や `TMetafile` に依存するため

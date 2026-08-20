@@ -18,15 +18,17 @@
  *
  * 方針は gui/vcl_gui_bridge.cpp と同じ2通り。
  *
- *   1. 意味を変えずに用意できるもの → 簡易実装する
- *      LoadUsrMsg/UserAbort/TextAbort (src/usr_msg.h) の実体 (src/usr_msg.cpp)
- *      はメッセージボックス表示と一体で GUI 依存のため未移植
- *      (`scripts/probe.sh usr_msg` で確認済み)。実際に使われる先
- *      (get_PngInf 等の `catch (EAbort&)` 節、get_IconInf 等の異常系) は
- *      文字列を組み立てて例外に載せるか警告行に足すだけなので、実際の
- *      日本語文言 (usr_msg.cpp の大きなメッセージテーブル) の代わりに
- *      メッセージIDを含む簡易な文字列を返す簡易版で十分機能する
- *      (診断用と割り切る。表示文言の完全一致は求めない)。
+ *   1. 意味を変えずに用意できるもの → 本物を使う
+ *      LoadUsrMsg/UserAbort/TextAbort (src/usr_msg.h) の実体は src/usr_msg.cpp
+ *      に移植済み (port/phase2)。メッセージ文字列テーブルと Abort 系関数は
+ *      GUI に依存しないため (`scripts/probe.sh usr_msg` で確認済み)、
+ *      cmake/phase0_sources.cmake に載せて nyanfi_core にリンクしている。
+ *      以前ここにあった「メッセージIDを含む簡易文字列を返す簡易版」は削除した
+ *      (docs/port/phase0-report.md §13.8 で指摘されていた不一致の解消)。
+ *      メッセージボックス表示そのもの (msgbox_ERR 等) は VCL の
+ *      CreateMessageDialog/TForm::ShowModal に依存するため src/usr_msg_dlg.cpp
+ *      に分離したままで、こちらは未移植 (呼ばれたらリンクエラー)。
+ *      現状 gui/ からは呼ばれていない。
  *
  *   2. 呼ばれたら確実に落とす → gui/file_info.cpp では呼んでいない経路
  *      - `UserShell::get_PropInf` / `get_Duration`: 実体 (src/usr_shell.cpp)
@@ -58,38 +60,9 @@ namespace {
 }  // namespace
 
 //---------------------------------------------------------------------------
-// 1. 簡易実装 (src/usr_msg.h)
+// 1. 本物を使う (LoadUsrMsg/UserAbort/TextAbort は src/usr_msg.cpp が提供。
+//    ここでは何もしない)
 //---------------------------------------------------------------------------
-UnicodeString LoadUsrMsg(int id, UnicodeString s)
-{
-	UnicodeString msg;
-	msg.sprintf(_T("エラー(#%d)"), id);
-	if (!s.IsEmpty()) msg += _T(": ") + s;
-	return msg;
-}
-
-UnicodeString LoadUsrMsg(int id, const _TCHAR *s)
-{
-	return LoadUsrMsg(id, UnicodeString(s));
-}
-
-UnicodeString LoadUsrMsg(int id, int id_s)
-{
-	return LoadUsrMsg(id, LoadUsrMsg(id_s));
-}
-
-/// Delphi の Abort() 相当 (メッセージID版)。呼び出し側はいずれも catch (...) や
-/// catch (EAbort&) で受けるだけなので、例外を投げれば実際の動作は変わらない
-void UserAbort(unsigned id)
-{
-	throw EAbort(LoadUsrMsg(static_cast<int>(id)));
-}
-
-/// Delphi の Abort() 相当 (メッセージ文字列版)
-void TextAbort(const _TCHAR *msg)
-{
-	throw EAbort(UnicodeString(msg));
-}
 
 //---------------------------------------------------------------------------
 // 2. 呼ばれたら落とす (未移植)

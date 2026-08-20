@@ -20,6 +20,7 @@ set(NYANFI_PHASE0_SOURCES
 	src/usr_key.cpp
 	src/usr_migemo.cpp
 	src/usr_mmfile.cpp
+	src/usr_msg.cpp
 	src/usr_str.cpp
 	src/usr_wic.cpp
 	src/usr_xd2tx.cpp
@@ -37,3 +38,8 @@ set(NYANFI_PHASE0_SOURCES
 
 # Phase 0 の候補15ファイル + Phase 1 で追加した6ファイル、計21ファイルが通過している
 # (2026-08-21)。
+#
+# src/usr_msg.cpp (port/phase2 で追加): メッセージ文字列テーブル (LoadUsrMsg) と
+# Abort 系関数は GUI に依存せず通過する。メッセージボックス表示そのもの
+# (msgbox_ERR 等、TForm::ShowModal 等 VCL 依存) は src/usr_msg_dlg.cpp に分離し、
+# こちらは未移植のためここには載せない (理由は同ファイル冒頭のコメント参照)。

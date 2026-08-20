@@ -81,6 +81,7 @@ add_executable(nyanfi
 	main_frame.cpp
 	file_pane.cpp
 	file_info_panel.cpp
+	text_viewer.cpp
 	key_map_wx.cpp
 	vcl_gui_bridge.cpp
 )

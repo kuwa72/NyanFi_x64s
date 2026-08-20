@@ -86,6 +86,14 @@ MainFrame::MainFrame()
 	}
 
 	root->SetSizer(columns);
+	root_ = root;
+
+	// テキストビューア。root_ と同じ領域に重ねて置き、開いていないときは隠す
+	// (ShowViewer で切り替える)。root_/viewer_ 双方の実サイズは
+	// MainFrame::OnSize で明示的に GetClientSize() へ合わせる
+	viewer_ = new TextViewer(this, wxID_ANY);
+	viewer_->Hide();
+	viewer_->SetOnClose([this]() { ShowViewer(false); });
 
 	CreateStatusBar(2);
 	SetStatusWidths(2, std::array<int, 2>{-3, -1}.data());
@@ -102,6 +110,17 @@ MainFrame::MainFrame()
 
 	Bind(wxEVT_CHAR_HOOK, &MainFrame::OnCharHook, this);
 	Bind(wxEVT_CLOSE_WINDOW, &MainFrame::OnClose, this);
+	Bind(wxEVT_SIZE, &MainFrame::OnSize, this);
+}
+
+//---------------------------------------------------------------------------
+/// root_ (2ペイン) と viewer_ (テキストビューア) を常にクライアント領域いっぱいに揃える
+void MainFrame::OnSize(wxSizeEvent &event)
+{
+	const wxSize sz = GetClientSize();
+	if (root_ != nullptr) root_->SetSize(sz);
+	if (viewer_ != nullptr) viewer_->SetSize(sz);
+	event.Skip();
 }
 
 //---------------------------------------------------------------------------
@@ -176,6 +195,13 @@ void MainFrame::UpdateStatus()
 //---------------------------------------------------------------------------
 void MainFrame::OnCharHook(wxKeyEvent &event)
 {
+	// テキストビューアが開いている間は、キー入力を丸ごとビューアに渡す
+	// (V モードのキー割り当ては KeyMap では扱わない。gui/key_map.cpp を参照)
+	if (viewer_ != nullptr && viewer_->IsShown()) {
+		if (!viewer_->HandleKey(event)) event.Skip();
+		return;
+	}
+
 	const UnicodeString key_str = KeyMap::KeyStrOf(event);
 	const UnicodeString command = keymap_.Lookup(key_str);
 
@@ -280,6 +306,9 @@ bool MainFrame::Execute(const UnicodeString &command)
 	}
 	else if (SameStr(command, _T("RenameDlg"))) {
 		CmdRenameDlg();
+	}
+	else if (SameStr(command, _T("TextViewer"))) {
+		CmdTextViewer();
 	}
 	else if (SameStr(command, _T("Exit"))) {
 		Close(true);
@@ -594,4 +623,50 @@ void MainFrame::CmdPropertyDlg()
 
 	const UnicodeString full_path = pane->GetPath() + itm->name;
 	ShowFileInfoDialog(this, full_path, *itm);
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief テキストビューアで開く (V。src/Global.cpp の既定キー表 "F:V=TextViewer" と同じ)
+ * @details ディレクトリと ".." は対象外 (無視する)。文字コード判定・行分割は
+ * gui/text_viewer_core.h (移植済みの get_MemoryCodePage を使う) を参照
+ */
+void MainFrame::CmdTextViewer()
+{
+	FilePane *pane = ActivePane();
+	const FileItem *itm = pane->GetCurrentItem();
+	if (itm == nullptr || itm->is_parent || itm->is_dir) return;
+
+	const UnicodeString full_path = pane->GetPath() + itm->name;
+
+	UnicodeString error;
+	if (!viewer_->LoadFile(full_path, error)) {
+		wxMessageBox(to_wx(error), to_wx(_T("開けませんでした")), wxOK | wxICON_ERROR, this);
+		return;
+	}
+
+	ShowViewer(true);
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief ビューアの表示/非表示を切り替える
+ * @details root_ (2ペイン) と viewer_ は同じ領域に重ねてあり、常に片方だけを
+ * 表示する。閉じたときはアクティブペインへフォーカスを戻す
+ * (TextViewer::HandleKey の Q/ESC → SetOnClose のコールバックから呼ばれる)
+ */
+void MainFrame::ShowViewer(bool show)
+{
+	if (root_ != nullptr) root_->Show(!show);
+	viewer_->Show(show);
+
+	if (show) {
+		viewer_->SetSize(GetClientSize());
+		viewer_->SetFocus();
+	}
+	else {
+		ActivePane()->SetFocus();
+	}
+	Layout();
+	UpdateStatus();
 }

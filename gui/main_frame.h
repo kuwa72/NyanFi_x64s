@@ -21,6 +21,7 @@
 #include "gui/file_pane.h"
 #include "gui/key_map.h"
 #include "gui/settings.h"
+#include "gui/text_viewer.h"
 
 /**
  * @brief メインウィンドウ
@@ -38,6 +39,7 @@ public:
 private:
 	void OnCharHook(wxKeyEvent &event);
 	void OnClose(wxCloseEvent &event);
+	void OnSize(wxSizeEvent &event);
 
 	void SetActivePane(int index);
 	void UpdateStatus();
@@ -59,11 +61,19 @@ private:
 	void CmdOpenByApp();     //!< アプリケーションから開く (Ctrl+Enter)
 	void CmdPropertyDlg();   //!< ファイル情報ダイアログ (Alt+Enter、推測のキー)
 
+	// テキストビューア (gui/text_viewer.h)。"V" (src/Global.cpp の既定キー表
+	// "F:V=TextViewer" と同じ) で開く。開いている間はキー入力を丸ごと
+	// TextViewer::HandleKey に渡す (OnCharHook を参照)
+	void CmdTextViewer();    //!< カーソル位置のファイルをビューアで開く (V)
+	void ShowViewer(bool show);  //!< ビューアの表示/非表示を切り替える
+
 	void LoadSettings();
 	void SaveSettings();
 
 	FilePane *panes_[2] = {nullptr, nullptr};
 	wxStaticText *headers_[2] = {nullptr, nullptr};
+	wxWindow *root_ = nullptr;      //!< 2ペインを収めた親パネル (ShowViewer でのサイズ調整用)
+	TextViewer *viewer_ = nullptr;  //!< テキストビューア (root_ と同じ領域に重ねて表示)
 	int active_ = 0;
 	KeyMap keymap_;
 	Settings settings_{Settings::DefaultIniPath()};
