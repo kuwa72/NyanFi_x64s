@@ -46,6 +46,7 @@ private:
 class EAbort : public Exception {
 public:
 	EAbort() : Exception(UnicodeString()) {}
+	using Exception::Exception;  //!< 実測: usr_exif.cpp:1007 が EAbort("...") を投げる
 };
 
 /// 数値変換の失敗 (UnicodeString::ToInt など)

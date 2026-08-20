@@ -11,8 +11,12 @@
 #define NYANFI_VCL_SHIM_H
 
 #include "compat/config.h"
+#include "compat/win_headers.h"
+#include "compat/mingw_patch.h"
 
+#include "compat/cominterface.h"
 #include "compat/property.h"
+#include "compat/vcl_forward.h"
 #include "compat/set.h"
 #include "compat/ustring.h"
 
@@ -21,7 +25,9 @@
 #include "compat/math.h"
 #include "compat/sysutils.h"
 
+#include "compat/application.h"
 #include "compat/classes.h"
+#include "compat/controls.h"
 #include "compat/streams.h"
 
 #include "compat/encoding.h"

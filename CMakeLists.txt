@@ -53,10 +53,21 @@ else()
 	)
 endif()
 
+# 既存コードは TStringList の Objects スロットに 32bit 値を詰めて `(DWORD)obj` で
+# 取り出す書き方をしている (実測 16箇所)。C++ としては ill-formed で、GCC も
+# clang も既定ではエラーにする。src/ を変更しない方針のため、GCC 側は
+# -fpermissive で降格させる。clang-cl には同等のオプションが無く、移行前に
+# `(DWORD)(DWORD_PTR)obj` へ直す必要がある (docs/port/phase0-report.md に記録)。
+add_library(nyanfi_legacy_flags INTERFACE)
+if(NOT MSVC)
+	target_compile_options(nyanfi_legacy_flags INTERFACE -fpermissive)
+endif()
+
 #-----------------------------------------------------------------------------
 # VCL 互換シム
 #-----------------------------------------------------------------------------
 add_library(nyanfi_compat STATIC
+	compat/src/application.cpp
 	compat/src/ustring.cpp
 	compat/src/sysutils.cpp
 	compat/src/datetime.cpp
@@ -80,6 +91,7 @@ target_link_libraries(nyanfi_compat PUBLIC
 	advapi32
 	gdi32
 	user32
+	rstrtmgr
 )
 
 #-----------------------------------------------------------------------------
@@ -101,7 +113,7 @@ include(cmake/phase0_sources.cmake)
 if(NYANFI_PHASE0_SOURCES)
 	add_library(nyanfi_core STATIC ${NYANFI_PHASE0_SOURCES})
 	target_include_directories(nyanfi_core PUBLIC src)
-	target_link_libraries(nyanfi_core PUBLIC nyanfi_compat)
+	target_link_libraries(nyanfi_core PUBLIC nyanfi_compat nyanfi_legacy_flags)
 	nyanfi_target_vcl_shim(nyanfi_core)
 else()
 	message(STATUS "NYANFI_PHASE0_SOURCES が空のため nyanfi_core はスキップします")

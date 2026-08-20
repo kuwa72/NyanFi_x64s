@@ -29,16 +29,24 @@
 #include <cstddef>
 #include <cstdint>
 
+// C++Builder は暗黙に C ランタイムのヘッダを取り込んでいたため、既存コードは
+// fabs / modf / exp / log / memcpy などを宣言なしで使っている (usr_exif.cpp ほか)。
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+
 //---------------------------------------------------------------------------
 // windows.h が A/W マクロで潰してしまう名前のうち、RTL 側に同名の関数がある
 // ものを外す。RTL 版のシグネチャは compat/sysutils.h で宣言する。
 //---------------------------------------------------------------------------
+// 外すのは「RTL に同名の関数があるもの」だけに限る。CopyFile / MoveFile /
+// RemoveDirectory は RTL 側に同名が無く、既存コードが `::CopyFile(...)` の形で
+// Win32 版を直接呼んでいるため外してはいけない。
 #undef DeleteFile
 #undef GetEnvironmentVariable
 #undef GetTempPath
-#undef RemoveDirectory
-#undef CopyFile
-#undef MoveFile
 
 //---------------------------------------------------------------------------
 // C++Builder 固有のキーワード
@@ -82,19 +90,32 @@ using Boolean = bool;
 using ByteBool = bool;
 using WordBool = bool;
 
+using WideChar = wchar_t;
+using AnsiChar = char;
+using Char = wchar_t;
+using UCS4Char = char32_t;
+
 using Pointer = void *;
 using PWideChar = wchar_t *;
 using PChar = wchar_t *;
+using PAnsiChar = char *;
 
 namespace System {
+using ::AnsiChar;
+using ::Boolean;
 using ::Byte;
 using ::Cardinal;
 using ::Extended;
 using ::Int64;
 using ::Integer;
+using ::LongInt;
+using ::LongWord;
 using ::NativeInt;
 using ::NativeUInt;
+using ::Pointer;
 using ::Single;
+using ::Smallint;
+using ::WideChar;
 using ::Word;
 }  // namespace System
 

@@ -4,7 +4,7 @@
 #   scripts/probe.sh            全候補をチェックして表を表示
 #   scripts/probe.sh usr_str    指定ファイルだけをチェックし、エラーを全部出す
 #
-# ログは build/probe/<name>.log に残る。エラーの分類は
+# ログは build-probe/<name>.log に残る。エラーの分類は
 # docs/port/phase0-report.md にまとめる。
 set -uo pipefail
 
@@ -13,7 +13,8 @@ if [[ -d /home/linuxbrew/.linuxbrew/bin ]]; then
 fi
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-LOGDIR="${ROOT}/build/probe"
+# ログは build/ の外に置く (並行して cmake --build や --clean が走るため)
+LOGDIR="${ROOT}/build-probe"
 CXX="${CXX:-x86_64-w64-mingw32-g++}"
 
 # Vcl.* を include せず GUI グローバルにも依存しない候補 (行数の少ない順)
@@ -38,6 +39,7 @@ CANDIDATES=(
 FLAGS=(
 	-std=c++20
 	-fsyntax-only
+	-fpermissive
 	-finput-charset=UTF-8
 	-fexec-charset=CP932
 	-DUNICODE -D_UNICODE -DNOMINMAX -DWINVER=0x0601 -D_WIN32_WINNT=0x0601
