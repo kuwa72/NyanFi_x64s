@@ -360,10 +360,11 @@ UnicodeString(double)                       FloatToStr 相当
 
 | 項目 | 内容 |
 |---|---|
-| 規模 | 約 900 行 (`file_pane` / `main_frame` / `key_map` / `vcl_gui_bridge` / `nyanfi_app`) |
+| 規模 | 約 1,900 行 (`file_pane` / `file_item` / `main_frame` / `key_map` / `settings` / `vcl_gui_bridge` / `nyanfi_app`) |
 | wxWidgets | 3.3.3。`scripts/build_wx.sh` が同じツールチェインでクロスビルドする |
 | 成果物 | `nyanfi.exe` (静的リンク、依存は Windows システム DLL と UCRT のみ) |
-| 実装済みの操作 | カーソル移動 / ディレクトリ移動 / ペイン切替 / マーク / 再読込 / 終了 / キー割り当て表示 |
+| 実装済みの操作 | カーソル移動 / ディレクトリ移動 / ペイン切替 / マーク / 再読込 / 並べ替え / マスク絞り込み / 設定の永続化 / キー割り当て表示 / 終了 |
+| CI | MSYS2 UCRT64 でビルドし、**起動を5秒維持することまで確認**している |
 
 ### 作り直さず、移植済みのコードを使っている
 
@@ -406,3 +407,44 @@ UnicodeString(double)                       FloatToStr 相当
 
 コードベース全体 151,010 行に対して、ビルドできているのは 12%。Phase 2 を「常用できる
 NyanFi」まで進めるには、`Global.cpp` の GUI 依存の切り離しが次の関門になる。
+
+### 13.3 ini との接続 (実測)
+
+「VCL 版の ini をそのまま流し込める」という設計上の主張を実証した。形式は推測ではなく
+`src/OptDlg.cpp` の `InpKeyBtnClick` / `ExpKeyBtnClick` から実測したもの。
+
+| 項目 | 実測結果 |
+|---|---|
+| セクション | `KeyFuncList` |
+| 形式 | `<モード文字>:<キー名>=<コマンド名>` (TStringList の Name=Value) |
+| モード文字 | `ScrModeIdStr = "FSVIL"` の1文字 (F=ファイルペイン / S=検索 / V=ビューア / I=画像 / L=リスト) |
+| 修飾 | `SELECT+` (選択操作用、`Global.cpp` の `KeyStr_SELECT`)、`~` 区切りの2ストロークキー (`Ctrl+K~D` など) |
+
+Phase 2 の骨格はモード `F` のみを読み、`SELECT+` と2ストロークキーは **読み飛ばす**
+(対応する仕組みが無いため、黙って誤動作させるより何もしない方を選んだ)。
+
+**ユーザーの ini は書き換えない。** `UsrIniFile::UpdateFile()` は読み込んだ全セクションを
+書き直す実装で、コメントや並び順が失われる。そのためウィンドウ位置とペインのディレクトリは
+別ファイル `<exe名>_wx.ini` に保存し、キー割り当ては本物の ini から読み取り専用で読む。
+
+### 13.4 並べ替えの意味論 (実測)
+
+`comp_NaturalOrder` / `comp_AscendOrder` (usr_str.cpp) は **ファイル一覧の並べ替えには
+使われていない**。実際の呼び出し箇所は `GenInfDlg.cpp` / `HistDlg.cpp` / `TxtViewer.cpp` /
+`ShareDlg.cpp` の行単位の `TStringList` だった。
+
+ファイル一覧の並べ替えは `Global.cpp` の `SortComp_Name` / `_Ext` / `_Time` / `_Size` /
+`_Attr` (未移植、GUI グローバル依存) が型付きのフィールドを直接比較し、同値のときだけ
+`StrCmpLogicalW` で自然順のタイブレークをしている。`gui/file_item.cpp` の
+`CompareFileItems` はこの意味論に合わせた。
+
+### 13.5 CI が見つけた環境差 (GUI 編)
+
+ローカル (日本語 Windows / 自前ビルドの静的 wx 3.3.3) では出ず、CI (英語版 Windows /
+MSYS2 の共有ライブラリ wx 3.2.11) で出た失敗。
+
+| 症状 | 真の原因 |
+|---|---|
+| `wx.rc が見つかりません (探索先: )` | **CMake on Windows は `#!/bin/sh` を実行できない**。`wx-config` の応答が全て空になり、空を黙って受け入れていたため誤った症状として現れた。シェル経由で呼び、空の結果を拒否するようにした |
+| `__imp__ZN8wxObject...` の未定義参照 | グローバルな `-static` が、共有ライブラリ版 wx のインポートライブラリを使えなくしていた。`-static` はテスト実行ファイルだけに限定した |
+| (GUI 起動確認で必要だったこと) | 共有ライブラリ版 wx を使う場合、`/ucrt64/bin` が PATH に無いと DLL を読めない。起動確認は msys2 シェルの中で行う |
