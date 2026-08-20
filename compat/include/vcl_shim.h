@@ -17,6 +17,7 @@
 #include "compat/ustring.h"
 
 #include "compat/datetime.h"
+#include "compat/exception.h"
 #include "compat/math.h"
 #include "compat/sysutils.h"
 

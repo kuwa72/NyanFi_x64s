@@ -50,7 +50,6 @@ else()
 	target_compile_options(nyanfi_common_flags INTERFACE
 		-finput-charset=UTF-8
 		-fexec-charset=CP932
-		-municode
 	)
 endif()
 

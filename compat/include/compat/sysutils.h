@@ -15,44 +15,10 @@
 #ifndef NYANFI_COMPAT_SYSUTILS_H
 #define NYANFI_COMPAT_SYSUTILS_H
 
-#include <exception>
-
 #include "compat/config.h"
 #include "compat/datetime.h"
+#include "compat/exception.h"
 #include "compat/ustring.h"
-
-//---------------------------------------------------------------------------
-// 例外 (Sysutils::Exception 階層)
-//---------------------------------------------------------------------------
-class Exception : public std::exception {
-public:
-	explicit Exception(const UnicodeString &msg);
-	const char *what() const noexcept override;
-
-	UnicodeString GetMessage() const { return message_; }
-	compat::ROProperty<Exception, UnicodeString, &Exception::GetMessage> Message{this};
-
-private:
-	UnicodeString message_;
-	std::string narrow_;  // what() 用のキャッシュ
-};
-
-class EAbort : public Exception {
-public:
-	EAbort() : Exception(UnicodeString()) {}
-};
-class EConvertError : public Exception {
-public:
-	using Exception::Exception;
-};
-class EInOutError : public Exception {
-public:
-	using Exception::Exception;
-};
-class EOSError : public Exception {
-public:
-	using Exception::Exception;
-};
 
 /// SysUtils::Abort。EAbort を投げて処理を打ち切る
 [[noreturn]] void Abort();

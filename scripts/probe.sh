@@ -38,7 +38,6 @@ CANDIDATES=(
 FLAGS=(
 	-std=c++20
 	-fsyntax-only
-	-municode
 	-finput-charset=UTF-8
 	-fexec-charset=CP932
 	-DUNICODE -D_UNICODE -DNOMINMAX -DWINVER=0x0601 -D_WIN32_WINNT=0x0601
