@@ -225,6 +225,22 @@ int FilePane::GetMarkedCount() const
 	return n;
 }
 
+std::vector<UnicodeString> FilePane::GetSelectedNames() const
+{
+	std::vector<UnicodeString> names;
+	for (int i = 0; i < GetItemCount(); ++i) {
+		const FileItem &itm = ItemAt(i);
+		if (itm.marked && !itm.is_parent) names.push_back(itm.name);
+	}
+
+	// マークが無ければカーソル位置の1件を対象にする (".." は対象外)
+	if (names.empty()) {
+		const FileItem *cur = GetCurrentItem();
+		if (cur != nullptr && !cur->is_parent) names.push_back(cur->name);
+	}
+	return names;
+}
+
 //---------------------------------------------------------------------------
 void FilePane::SetActive(bool active)
 {

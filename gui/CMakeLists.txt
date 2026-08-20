@@ -80,6 +80,7 @@ add_executable(nyanfi
 	nyanfi_app.cpp
 	main_frame.cpp
 	file_pane.cpp
+	file_info_panel.cpp
 	key_map_wx.cpp
 	vcl_gui_bridge.cpp
 )

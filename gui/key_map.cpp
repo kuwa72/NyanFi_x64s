@@ -38,8 +38,12 @@ void KeyMap::LoadDefaults()
 	Assign(_T("HOME"), _T("CursorTop"));
 	Assign(_T("END"), _T("CursorEnd"));
 
-	// 移動・実行
-	Assign(_T("ENTER"), _T("Execute"));
+	// 移動・実行。ENTER は src/Global.cpp の既定キー表の "F:Enter=OpenStandard"
+	// と同じ綴り (カーソル位置がディレクトリなら入る、ファイルなら関連付けで
+	// 開く。gui/main_frame.cpp::Execute() を参照)。Ctrl+Enter も既定キー表の
+	// "F:Ctrl+Enter=OpenByApp" (アプリケーションから開く) と同じ
+	Assign(_T("ENTER"), _T("OpenStandard"));
+	Assign(_T("Ctrl+Enter"), _T("OpenByApp"));
 	Assign(_T("BKSP"), _T("UpDir"));
 	Assign(_T("TAB"), _T("ChangePane"));
 	Assign(_T("F5"), _T("Refresh"));
@@ -57,9 +61,21 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Ctrl+M"), _T("SetPathMask"));
 	Assign(_T("Ctrl+U"), _T("ClearMask"));
 
-	// 表示・終了
+	// ファイル操作。src/Global.cpp の既定キー表 ("F:C=Copy" 等) と同じ綴り・
+	// 同じキーを使う (F5/F6/F7/F8 の慣習ではなく、NyanFi 本来の1文字キー)
+	Assign(_T("C"), _T("Copy"));
+	Assign(_T("M"), _T("Move"));
+	Assign(_T("D"), _T("Delete"));
+	Assign(_T("K"), _T("CreateDir"));
+	Assign(_T("R"), _T("RenameDlg"));
+
+	// 表示・終了。"FVI:PropertyDlg" (usr_cmdlist.cpp) には既定キーが無い
+	// (src/MainFrm.dfm の PropertyDlgAction にも ShortCut が無く、メニュー専用
+	// らしい)。Alt+Enter は Windows のプロパティ表示の慣習に合わせた
+	// Phase 2 骨格独自の割り当て (推測。要検証)
 	Assign(_T("F1"), _T("ShowKeyList"));
 	Assign(_T("F12"), _T("ShowCmdList"));
+	Assign(_T("Alt+Enter"), _T("PropertyDlg"));
 	Assign(_T("Alt+F4"), _T("Exit"));
 	Assign(_T("Ctrl+Q"), _T("Exit"));
 }

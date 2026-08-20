@@ -47,6 +47,10 @@ public:
 	void MarkAll(bool marked);
 	int GetMarkedCount() const;
 
+	/// ファイル操作 (Copy/Move/Delete) の対象名を返す。マーク済みがあれば
+	/// それら (".." を除く)、無ければカーソル位置の1件 (".." なら空)
+	std::vector<UnicodeString> GetSelectedNames() const;
+
 	//-- 状態 --------------------------------------------------------------
 	int GetItemCount() const { return static_cast<int>(order_.size()); }
 	bool IsActive() const { return active_; }

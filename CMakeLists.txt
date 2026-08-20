@@ -139,9 +139,27 @@ endfunction()
 include(cmake/phase0_sources.cmake)
 
 if(NYANFI_PHASE0_SOURCES)
-	add_library(nyanfi_core STATIC ${NYANFI_PHASE0_SOURCES})
+	# gui/usr_shell_fmt_shim.cpp (add_PropLine 等、usr_shell.h の書式化関数だけの
+	# 複製。詳細はそのファイルのコメントを参照) は、静的ライブラリの循環参照を
+	# 避けるため NYANFI_PHASE0_SOURCES (src/ の一覧) には入れず、ここで直接
+	# nyanfi_core に加える。
+	# 理由: src/usr_file_inf.cpp (get_ExifInf 等) がこれらの関数を必要とするが、
+	# もし nyanfi_gui_core 側に置くと「nyanfi_core → (このシム経由で)
+	# nyanfi_gui_core → nyanfi_core」という2つの静的ライブラリをまたぐ循環に
+	# なる。GNU ld は同一アーカイブ内なら未解決シンボルが増えるたびに再走査するが、
+	# 一度通り過ぎた別アーカイブへは戻らないため、この循環は解決できずリンクに
+	# 失敗する (実際に発生した。gui/CMakeLists.txt 経由の nyanfi 本体と
+	# core_tests の両方で再現)。usr_file_inf.cpp.obj と同じアーカイブ
+	# (nyanfi_core) に置けば、同一アーカイブ内の再走査で解決する。
+	# gui/usr_file_inf_link_shim.cpp も同じ理由でここに加える。usr_file_inf.cpp
+	# が (呼ばない関数を含めて) 参照する LoadUsrMsg/UserAbort/TextAbort
+	# (src/usr_msg.h、GUI 依存で未移植) と UserShell::get_PropInf/get_Duration・
+	# TMetafile::LoadFromFile (呼ばれたら落とす未移植スタブ) を解決する。
+	# 詳細はそのファイルのコメントを参照。imagehlp は get_DllExpFunc、winmm は
+	# get_duration (mciSendStringW) が使う実在の Win32 API のリンクに必要
+	add_library(nyanfi_core STATIC ${NYANFI_PHASE0_SOURCES} gui/usr_shell_fmt_shim.cpp gui/usr_file_inf_link_shim.cpp)
 	target_include_directories(nyanfi_core PUBLIC src)
-	target_link_libraries(nyanfi_core PUBLIC nyanfi_compat nyanfi_legacy_flags)
+	target_link_libraries(nyanfi_core PUBLIC nyanfi_compat nyanfi_legacy_flags imagehlp winmm)
 	nyanfi_target_vcl_shim(nyanfi_core)
 else()
 	message(STATUS "NYANFI_PHASE0_SOURCES が空のため nyanfi_core はスキップします")
@@ -158,11 +176,31 @@ endif()
 # ここでライブラリ化する。tests/core/test_gui_settings.cpp・
 # tests/core/test_gui_file_item.cpp がこれを使う。
 # wx に依存する gui/key_map_wx.cpp (KeyMap::KeyStrOf) はここに含めない。
+#
+# gui/file_ops.cpp (コピー・移動・名前変更・ディレクトリ作成・ゴミ箱送り) も
+# 同じ理由 (wx 非依存、tests/core/test_gui_file_ops.cpp から直接テストする)
+# でここに含める。ゴミ箱送りに使う SHFileOperationW (shell32.dll) のためだけ
+# shell32 をリンクする。
+#
+# gui/file_open.cpp (関連付けで開く/アプリケーションから開く) と
+# gui/file_info.cpp (ファイル情報の組み立て) も同じ理由でここに含める。
+# gui/file_info.cpp が呼ぶ src/usr_file_inf.cpp の解析関数群が必要とする
+# add_PropLine 等の書式化関数 (gui/usr_shell_fmt_shim.cpp) は、静的ライブラリの
+# 循環参照を避けるためここではなく nyanfi_core 側に置く (上の nyanfi_core の
+# コメントを参照)。nyanfi_gui_core は nyanfi_core を PUBLIC リンクしているので
+# 追加の設定なしで使える。
 #-----------------------------------------------------------------------------
 if(TARGET nyanfi_core)
-	add_library(nyanfi_gui_core STATIC gui/settings.cpp gui/key_map.cpp gui/file_item.cpp)
+	add_library(nyanfi_gui_core STATIC
+		gui/settings.cpp
+		gui/key_map.cpp
+		gui/file_item.cpp
+		gui/file_ops.cpp
+		gui/file_open.cpp
+		gui/file_info.cpp
+	)
 	target_include_directories(nyanfi_gui_core PUBLIC ${PROJECT_SOURCE_DIR})
-	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core)
+	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core shell32)
 	nyanfi_target_vcl_shim(nyanfi_gui_core)
 endif()
 

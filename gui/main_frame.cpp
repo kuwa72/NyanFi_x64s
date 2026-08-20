@@ -4,15 +4,21 @@
  */
 #include "gui/main_frame.h"
 
+#include <algorithm>
 #include <array>
 #include <memory>
+#include <vector>
 
 #include <wx/radiobox.h>
 #include <wx/statline.h>
 #include <wx/textdlg.h>
 
+#include "gui/file_info_panel.h"
+#include "gui/file_open.h"
+#include "gui/file_ops.h"
 #include "usr_cmdlist.h"
 #include "usr_file_ex.h"
+#include "usr_file_inf.h"
 #include "usr_str.h"
 
 namespace {
@@ -33,6 +39,30 @@ UnicodeString initial_path()
 {
 	const UnicodeString cur = IncludeTrailingPathDelimiter(GetCurrentDir());
 	return dir_exists(cur) ? cur : UnicodeString(_T("C:\\"));
+}
+
+/// 破壊的操作 (コピー・移動・削除) の前に出す確認ダイアログ
+/// @details 件数と、対象の先頭数件の名前、コピー/移動先 (削除なら空) を明示する
+bool ConfirmItems(wxWindow *parent, const UnicodeString &title, const UnicodeString &verb,
+                   const std::vector<UnicodeString> &names, const UnicodeString &dest)
+{
+	UnicodeString text;
+	text.sprintf(_T("%d 件を%sします。よろしいですか?\n\n"), static_cast<int>(names.size()), verb.c_str());
+
+	const std::size_t show = std::min<std::size_t>(names.size(), 8);
+	for (std::size_t i = 0; i < show; ++i) text += _T("・") + names[i] + _T("\n");
+	if (names.size() > show) text.cat_sprintf(_T("...ほか %d 件\n"), static_cast<int>(names.size() - show));
+
+	if (!dest.IsEmpty()) text += _T("\n宛先: ") + dest;
+
+	return wxMessageBox(to_wx(text), to_wx(title), wxYES_NO | wxICON_QUESTION, parent) == wxYES;
+}
+
+/// 実行可能ファイルを開く前の確認 (誤って起動してしまう事故を防ぐ)
+bool ConfirmExecute(wxWindow *parent, const UnicodeString &full_path)
+{
+	const UnicodeString text = _T("実行可能ファイルです。開いてもよろしいですか?\n\n") + full_path;
+	return wxMessageBox(to_wx(text), to_wx(_T("実行の確認")), wxYES_NO | wxICON_WARNING, parent) == wxYES;
 }
 
 }  // namespace
@@ -191,8 +221,14 @@ bool MainFrame::Execute(const UnicodeString &command)
 	else if (SameStr(command, _T("CursorEnd"))) {
 		pane->CursorEnd();
 	}
-	else if (SameStr(command, _T("Execute"))) {
-		if (!pane->EnterCurrent()) return true;  // ファイルの実行は未実装
+	else if (SameStr(command, _T("OpenStandard"))) {
+		if (!pane->EnterCurrent()) CmdOpenStandard();  // ディレクトリでなければ関連付けで開く
+	}
+	else if (SameStr(command, _T("OpenByApp"))) {
+		CmdOpenByApp();
+	}
+	else if (SameStr(command, _T("PropertyDlg"))) {
+		CmdPropertyDlg();
 	}
 	else if (SameStr(command, _T("UpDir")) || SameStr(command, _T("ToLeft"))) {
 		pane->GoParent();
@@ -229,6 +265,21 @@ bool MainFrame::Execute(const UnicodeString &command)
 	}
 	else if (SameStr(command, _T("ClearMask"))) {
 		pane->SetMask(EmptyStr);
+	}
+	else if (SameStr(command, _T("Copy"))) {
+		CmdCopy();
+	}
+	else if (SameStr(command, _T("Move"))) {
+		CmdMove();
+	}
+	else if (SameStr(command, _T("Delete"))) {
+		CmdDelete();
+	}
+	else if (SameStr(command, _T("CreateDir"))) {
+		CmdCreateDir();
+	}
+	else if (SameStr(command, _T("RenameDlg"))) {
+		CmdRenameDlg();
 	}
 	else if (SameStr(command, _T("Exit"))) {
 		Close(true);
@@ -343,4 +394,204 @@ void MainFrame::ShowMaskDialog()
 	if (dlg.ShowModal() != wxID_OK) return;
 
 	pane->SetMask(to_us(dlg.GetValue()));
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief コピー (C)
+ * @details 対象はアクティブペインの選択項目 (マーク済み、無ければカーソル位置の
+ * 1件)。宛先は反対側のペインの現在のディレクトリ固定 (指定ディレクトリへの
+ * コピー(CopyTo)は対象外)。実行前に必ず確認ダイアログを出し、実行後は必ず
+ * 結果 (成功/スキップ/失敗の件数) を表示する。ディレクトリの再帰コピー・
+ * 上書き回避の判断は gui/file_ops.h を参照
+ */
+void MainFrame::CmdCopy()
+{
+	FilePane *pane = ActivePane();
+	FilePane *dst_pane = OppositePane();
+
+	const std::vector<UnicodeString> names = pane->GetSelectedNames();
+	if (names.empty()) {
+		wxMessageBox(to_wx(_T("コピー対象がありません")), to_wx(_T("コピー")), wxOK | wxICON_INFORMATION, this);
+		return;
+	}
+
+	const UnicodeString dst_dir = dst_pane->GetPath();
+	if (!ConfirmItems(this, _T("コピー"), _T("コピー"), names, dst_dir)) return;
+
+	std::vector<UnicodeString> paths;
+	for (const UnicodeString &name : names) paths.push_back(pane->GetPath() + name);
+
+	const file_ops::FileOpResult result = file_ops::CopyItems(paths, dst_dir);
+
+	pane->Reload();
+	dst_pane->Reload();
+
+	wxMessageBox(to_wx(file_ops::Summarize(result)), to_wx(_T("コピーの結果")), wxOK | wxICON_INFORMATION, this);
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 移動 (M)
+ * @details Copy と同じ対象の決め方・確認・結果表示。ディレクトリの移動が
+ * ボリュームを跨ぐ場合は失敗として報告する (gui/file_ops.h を参照)
+ */
+void MainFrame::CmdMove()
+{
+	FilePane *pane = ActivePane();
+	FilePane *dst_pane = OppositePane();
+
+	const std::vector<UnicodeString> names = pane->GetSelectedNames();
+	if (names.empty()) {
+		wxMessageBox(to_wx(_T("移動対象がありません")), to_wx(_T("移動")), wxOK | wxICON_INFORMATION, this);
+		return;
+	}
+
+	const UnicodeString dst_dir = dst_pane->GetPath();
+	if (!ConfirmItems(this, _T("移動"), _T("移動"), names, dst_dir)) return;
+
+	std::vector<UnicodeString> paths;
+	for (const UnicodeString &name : names) paths.push_back(pane->GetPath() + name);
+
+	const file_ops::FileOpResult result = file_ops::MoveItems(paths, dst_dir);
+
+	pane->Reload();
+	dst_pane->Reload();
+
+	wxMessageBox(to_wx(file_ops::Summarize(result)), to_wx(_T("移動の結果")), wxOK | wxICON_INFORMATION, this);
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 削除 (D)
+ * @details 完全削除ではなく、SHFileOperationW (FOF_ALLOWUNDO) でゴミ箱へ送る
+ * だけ。delete_Dir/delete_Dirs (完全削除、しかも delete_Dirs はファイルを
+ * 削除しない既知の不具合がある) は使わない
+ */
+void MainFrame::CmdDelete()
+{
+	FilePane *pane = ActivePane();
+
+	const std::vector<UnicodeString> names = pane->GetSelectedNames();
+	if (names.empty()) {
+		wxMessageBox(to_wx(_T("削除対象がありません")), to_wx(_T("削除")), wxOK | wxICON_INFORMATION, this);
+		return;
+	}
+
+	if (!ConfirmItems(this, _T("削除"), _T("ゴミ箱へ移動"), names, EmptyStr)) return;
+
+	std::vector<UnicodeString> paths;
+	for (const UnicodeString &name : names) paths.push_back(pane->GetPath() + name);
+
+	UnicodeString error;
+	const bool ok = file_ops::SendToTrash(paths, error, static_cast<HWND>(GetHandle()));
+
+	pane->Reload();
+
+	if (ok) {
+		UnicodeString msg;
+		msg.sprintf(_T("%d 件をゴミ箱へ送りました"), static_cast<int>(paths.size()));
+		wxMessageBox(to_wx(msg), to_wx(_T("削除の結果")), wxOK | wxICON_INFORMATION, this);
+	}
+	else {
+		wxMessageBox(to_wx(error), to_wx(_T("削除に失敗しました")), wxOK | wxICON_ERROR, this);
+	}
+}
+
+//---------------------------------------------------------------------------
+/// ディレクトリの作成 (K)
+void MainFrame::CmdCreateDir()
+{
+	FilePane *pane = ActivePane();
+
+	wxTextEntryDialog dlg(this, to_wx(_T("作成するディレクトリ名")), to_wx(_T("ディレクトリの作成")));
+	if (dlg.ShowModal() != wxID_OK) return;
+
+	const UnicodeString name = to_us(dlg.GetValue());
+	UnicodeString error;
+	if (!file_ops::MakeDirectory(pane->GetPath(), name, error)) {
+		wxMessageBox(to_wx(error), to_wx(_T("ディレクトリを作成できません")), wxOK | wxICON_ERROR, this);
+		return;
+	}
+
+	pane->Reload();
+}
+
+//---------------------------------------------------------------------------
+/// 名前等の変更 (R)。カーソル位置の1件のみ (複数選択には対応しない)
+void MainFrame::CmdRenameDlg()
+{
+	FilePane *pane = ActivePane();
+	const FileItem *itm = pane->GetCurrentItem();
+	if (itm == nullptr || itm->is_parent) {
+		wxMessageBox(to_wx(_T("対象がありません")), to_wx(_T("名前の変更")), wxOK | wxICON_INFORMATION, this);
+		return;
+	}
+
+	wxTextEntryDialog dlg(this, to_wx(_T("新しい名前")), to_wx(_T("名前等の変更")), to_wx(itm->name));
+	if (dlg.ShowModal() != wxID_OK) return;
+
+	const UnicodeString new_name = to_us(dlg.GetValue());
+	UnicodeString error;
+	if (!file_ops::RenameItem(pane->GetPath(), itm->name, new_name, error)) {
+		wxMessageBox(to_wx(error), to_wx(_T("名前を変更できません")), wxOK | wxICON_ERROR, this);
+		return;
+	}
+
+	pane->Reload();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 関連付けで開く (ENTER。カーソル位置がディレクトリでなかった場合のみ呼ばれる)
+ * @details 実行可能ファイル (test_ExeExt、FEXT_EXECUTE) は誤って起動する事故を
+ * 防ぐため必ず確認ダイアログを出す。関連付けが無い拡張子の場合は
+ * ShellExecuteExW 自身が Windows 標準の「開く方法を選んでください」
+ * ダイアログを出す (gui/file_open.h を参照)
+ */
+void MainFrame::CmdOpenStandard()
+{
+	FilePane *pane = ActivePane();
+	const FileItem *itm = pane->GetCurrentItem();
+	if (itm == nullptr || itm->is_parent || itm->is_dir) return;
+
+	const UnicodeString full_path = pane->GetPath() + itm->name;
+	if (test_ExeExt(get_extension(full_path)) && !ConfirmExecute(this, full_path)) return;
+
+	UnicodeString error;
+	if (!file_open::OpenStandard(full_path, error, static_cast<HWND>(GetHandle())) && !error.IsEmpty()) {
+		wxMessageBox(to_wx(error), to_wx(_T("開けませんでした")), wxOK | wxICON_ERROR, this);
+	}
+}
+
+//---------------------------------------------------------------------------
+/// アプリケーションから開く (Ctrl+Enter)。ディレクトリでも呼べる (関連付けダイアログ側の判断に任せる)
+void MainFrame::CmdOpenByApp()
+{
+	FilePane *pane = ActivePane();
+	const FileItem *itm = pane->GetCurrentItem();
+	if (itm == nullptr || itm->is_parent) return;
+
+	const UnicodeString full_path = pane->GetPath() + itm->name;
+
+	UnicodeString error;
+	if (!file_open::OpenWithDialog(full_path, error, static_cast<HWND>(GetHandle())) && !error.IsEmpty()) {
+		wxMessageBox(to_wx(error), to_wx(_T("アプリケーションから開く")), wxOK | wxICON_ERROR, this);
+	}
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief ファイル情報ダイアログ (Alt+Enter、推測のキー。gui/key_map.cpp 参照)
+ * @details ディレクトリでもファイルでも表示できる (usr_cmdlist.cpp の
+ * "FVI:PropertyDlg" は種別を問わない)
+ */
+void MainFrame::CmdPropertyDlg()
+{
+	FilePane *pane = ActivePane();
+	const FileItem *itm = pane->GetCurrentItem();
+	if (itm == nullptr || itm->is_parent) return;
+
+	const UnicodeString full_path = pane->GetPath() + itm->name;
+	ShowFileInfoDialog(this, full_path, *itm);
 }

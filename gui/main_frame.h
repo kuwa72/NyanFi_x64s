@@ -46,6 +46,19 @@ private:
 	void ShowSortDialog();  //!< ソートダイアログ (S)。並べ替えキー/昇降順/Dir集約を選ぶ
 	void ShowMaskDialog();  //!< パスマスク入力 (Ctrl+M)。ファイル名マスクで一覧を絞り込む
 
+	// ファイル操作 (gui/file_ops.h)。いずれも確認ダイアログを出してから実行し、
+	// 結果 (成功/スキップ/失敗の件数) を必ず表示する。詳細は main_frame.cpp を参照
+	void CmdCopy();       //!< アクティブペインの選択項目を、反対側のペインへコピーする (C)
+	void CmdMove();       //!< アクティブペインの選択項目を、反対側のペインへ移動する (M)
+	void CmdDelete();     //!< アクティブペインの選択項目をゴミ箱へ送る (D)
+	void CmdCreateDir();  //!< アクティブペインにディレクトリを作成する (K)
+	void CmdRenameDlg();  //!< カーソル位置の項目の名前を変更する (R)
+
+	// ファイルを開く (gui/file_open.h) とファイル情報 (gui/file_info_panel.h)
+	void CmdOpenStandard();  //!< 関連付けで開く (ENTER)。ディレクトリなら入る
+	void CmdOpenByApp();     //!< アプリケーションから開く (Ctrl+Enter)
+	void CmdPropertyDlg();   //!< ファイル情報ダイアログ (Alt+Enter、推測のキー)
+
 	void LoadSettings();
 	void SaveSettings();
 
