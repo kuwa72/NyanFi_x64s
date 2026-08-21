@@ -15,6 +15,7 @@
 #ifndef NYANFI_COMPAT_CLASSES_H
 #define NYANFI_COMPAT_CLASSES_H
 
+#include <functional>
 #include <memory>
 #include <vector>
 
@@ -22,6 +23,9 @@
 #include "compat/exception.h"
 #include "compat/property.h"
 #include "compat/ustring.h"
+// ShortCutToKey が TShiftState を返すために必要。controls.h は config.h と
+// set.h しか見ないので、ここから読んでも循環にならない
+#include "compat/controls.h"
 
 class TStrings;
 class TStream;    //!< compat/streams.h で定義 (循環回避のため前方宣言に留める)
@@ -65,10 +69,83 @@ public:
 class TComponent : public TPersistent {
 public:
 	TComponent() = default;
-	explicit TComponent(TComponent *owner) : Owner(owner) {}
+	explicit TComponent(TComponent *owner) : Owner(owner)
+	{
+		if (Owner) Owner->owned_.push_back(this);
+	}
+	~TComponent() override
+	{
+		// 所有者のリストから自分を外す
+		if (Owner) {
+			auto &v = Owner->owned_;
+			for (std::size_t i = 0; i < v.size(); ++i) {
+				if (v[i] == this) {
+					v.erase(v.begin() + static_cast<std::ptrdiff_t>(i));
+					break;
+				}
+			}
+		}
+		// 自分が所有していた側の Owner を切る (VCL と違い**破棄はしない**。
+		// 下のコメント参照)
+		for (TComponent *child : owned_) child->Owner = nullptr;
+	}
 
 	TComponent *Owner = nullptr;
 	UnicodeString Name;
+
+	/// 汎用のユーザーデータ。VCL と同じく **NativeInt** (ポインタが入る幅)。
+	/// 実測: src/Global.cpp の BringOptionByTag / ApplyOptionByTag が
+	/// `*(bool*)cp->Tag` `*(UnicodeString*)cp->Tag` のように **変数へのポインタ**を
+	/// 入れて使っている (20箇所)。int にすると 64bit でポインタが切れる。
+	/// (compat/gui_stubs.h 側のコメントが「Tag は TComponent 側の担当」としている箇所)
+	NativeInt Tag = 0;
+
+	//-- 所有コンポーネントの列挙 ------------------------------------------
+	// 実測: `for (int i=0; i<fp->ComponentCount; i++) fp->Components[i]` の形で
+	// Global.cpp に 4箇所、UserMdl.cpp / MainFrm.cpp に各1箇所。いずれも
+	// 「フォーム上の全コンポーネントを走査して Tag を見る」用途。
+	//
+	// VCL と違うところ: **所有権は持たない** (デストラクタで配下を delete しない)。
+	// Phase 0/1 のテストがオブジェクトを明示的に new/delete しているため、
+	// 自動破棄を入れると二重解放になる。列挙のためだけの登録に留める。
+	int GetComponentCount() const { return static_cast<int>(owned_.size()); }
+	TComponent *ComponentAt(int index) const { return owned_[static_cast<std::size_t>(index)]; }
+
+	class ComponentsProperty {
+	public:
+		explicit ComponentsProperty(TComponent *owner) : owner_(owner) {}
+		TComponent *operator[](int index) const { return owner_->ComponentAt(index); }
+
+	private:
+		TComponent *owner_;
+	};
+
+	compat::ROProperty<TComponent, int, &TComponent::GetComponentCount> ComponentCount{this};
+	ComponentsProperty Components{this};
+
+private:
+	std::vector<TComponent *> owned_;
+};
+
+//---------------------------------------------------------------------------
+/**
+ * @brief TDataModule 互換 (System.Classes::TDataModule)
+ * @details 実測: 継承しているのは src/UserMdl.h:72 の `class TUserModule : public TDataModule`
+ *          だけで、`__fastcall TUserModule::TUserModule(TComponent* Owner) : TDataModule(Owner)`
+ *          (src/UserMdl.cpp:37) 以外に TDataModule 自身のメンバを呼ぶ箇所は無い
+ *          (`UserModule->...` の呼び出しは 300箇所以上あるが、すべて TUserModule
+ *          自身が持つコンポーネントかメソッド)。
+ *
+ *          データモジュールは「非ビジュアルなコンポーネントの入れ物」でしかなく、
+ *          .dfm を読んでコンポーネントを生成する部分は Phase 3 の GUI 移植で
+ *          作り直すことになる。よって規約4 に従い**コンストラクタは宣言のみ**に
+ *          してある。UserMdl.cpp をビルドに入れた時点でリンクエラーになり、
+ *          「まだ実装していない」ことが黙って隠れない。
+ */
+class TDataModule : public TComponent {
+public:
+	/// @warning 宣言のみ (規約4)。定義を書くのは .dfm 相当の生成処理を移植するとき
+	explicit __fastcall TDataModule(TComponent *owner);
 };
 
 //---------------------------------------------------------------------------
@@ -395,6 +472,15 @@ public:
 	public:
 		ItemRef(TList *owner, int index) : owner_(owner), index_(index) {}
 		operator void *() const { return owner_->Get(index_); }
+
+		/// `(HMENU)m_lst->Items[i]` のような C 形式キャスト用
+		/// (src/usr_shell.cpp:742,818)。C++Builder では Items[i] が素の `void *`
+		/// なのでキャストがそのまま通るが、プロキシ経由だと
+		/// 「ユーザ定義変換 → void* → reinterpret」の 2段になり static_cast の
+		/// 範囲を超える。explicit にしてあるのは、暗黙変換の候補に入って
+		/// `Items[i] == NULL` などを曖昧にしないため
+		template <class T>
+		explicit operator T *() const { return static_cast<T *>(owner_->Get(index_)); }
 		ItemRef &operator=(void *value)
 		{
 			owner_->Put(index_, value);
@@ -426,6 +512,110 @@ protected:
 };
 
 //---------------------------------------------------------------------------
+/// TThread::Priority の値 (Delphi の TThreadPriority)
+enum TThreadPriority { tpIdle, tpLowest, tpLower, tpNormal, tpHigher, tpHighest, tpTimeCritical };
+
+/**
+ * @brief Synchronize の待ち行列をメインスレッドで処理する
+ * @details Delphi の System.Classes::CheckSynchronize 相当。通常は
+ *          TThread のコンストラクタが作るメッセージ専用ウィンドウ経由で
+ *          自動的に呼ばれるので、GUI 側から呼ぶ必要は無い。メッセージ
+ *          ループを持たない実行形態 (テストなど) から明示的に排出したい
+ *          ときのために公開している。
+ * @return bool 1件以上処理したら true
+ * @warning メインスレッド以外から呼んでも何もせず false を返す
+ */
+bool CheckSynchronize();
+
+/**
+ * @brief TThread 互換 (System.Classes::TThread)
+ * @details 実測 (src/*.h, src/*.cpp を grep して確認):
+ *          - 継承: TCheckPathThread / TTaskThread / TGrepThread / TImgViewThread /
+ *            TGetIconThread / TThumbnailThread の 6クラス
+ *          - `__fastcall TXxx(bool CreateSuspended) : TThread(CreateSuspended)` 6箇所
+ *          - `Priority = tpLowest;` 4箇所 / `Priority = tpNormal;` 2箇所
+ *          - `FreeOnTerminate = true;` 6箇所 (全スレッドが自己解放)
+ *          - `while (!Terminated)` 5箇所 (Execute のループ条件)
+ *          - `->Terminate()` 8箇所 / `->Start()` 6箇所
+ *          - `Synchronize(&Method)` 12箇所 (imgv_thread.cpp / grep_thread.cpp)
+ *          - `void __fastcall Execute();` を private でオーバーライド
+ *
+ *          **実際に呼ばれているのはこれだけ**なので、Suspend / Resume / WaitFor /
+ *          ReturnValue / OnTerminate / Queue / CheckTerminated / Handle / ThreadID /
+ *          静的な TThread::Synchronize などは足していない。
+ *
+ *          `Tag` は TThread ではなく TTaskThread 自身のメンバ (task_thread.h:271)。
+ *
+ *          C++Builder の `TThread::Sleep` (クラスメソッド) も足していない。
+ *          src/task_thread.cpp:1598 の `Sleep(MIN_INTERVAL)` は windows.h の
+ *          `::Sleep` に解決され、Delphi の TThread.Sleep も結局 Windows の
+ *          Sleep を呼ぶだけなので挙動は変わらない。
+ */
+class TThread : public TObject {
+public:
+	/**
+	 * @brief スレッドを作る
+	 * @param createSuspended true なら Start() まで走らせない
+	 * @details Delphi/C++Builder と同じく、OS スレッドは常に「中断状態で作って
+	 *          から必要なら即再開する」。src の 6クラスはすべて true を渡し、
+	 *          呼び出し側が別途 Start() している。
+	 */
+	explicit __fastcall TThread(bool createSuspended = false);
+	~TThread() override;
+	TThread(const TThread &) = delete;
+	TThread &operator=(const TThread &) = delete;
+
+	/// 中断状態で作ったスレッドを走らせる (2回目以降は何もしない)
+	void __fastcall Start();
+	/// 終了を「要求」するだけ。待たない (Delphi と同じ)
+	void __fastcall Terminate();
+
+	/**
+	 * @brief メンバ関数をメインスレッドで実行し、終わるまで待つ
+	 * @details 呼び出し形は C++Builder の閉包構文 `Synchronize(&AddResult)`。
+	 *          素の C++ では `&AddResult` は不正だが、ビルドで使っている
+	 *          `-fpermissive` により `&T::AddResult` (メンバ関数ポインタ) に
+	 *          降格して受理される。レシーバは呼び出し元の this なので、
+	 *          compat/events.h の TClosureEvent と違ってここでは正しく束縛できる。
+	 * @note メインスレッドから呼んだ場合はその場で直接呼ぶ (Delphi と同じ)
+	 */
+	template <class T>
+	void __fastcall Synchronize(void (T::*method)())
+	{
+		T *self = static_cast<T *>(this);
+		SynchronizeImpl([self, method] { (self->*method)(); });
+	}
+
+	//-- プロパティのアクセサ (プロキシから呼ばれる) -----------------------
+	bool GetTerminated() const { return terminated_; }
+	bool GetFreeOnTerminate() const { return free_on_terminate_; }
+	void SetFreeOnTerminate(bool value) { free_on_terminate_ = value; }
+	TThreadPriority GetPriority() const { return priority_; }
+	void SetPriority(TThreadPriority value);
+
+	compat::ROProperty<TThread, bool, &TThread::GetTerminated> Terminated{this};
+	compat::RWValueProperty<TThread, bool, &TThread::GetFreeOnTerminate, &TThread::SetFreeOnTerminate>
+		FreeOnTerminate{this};
+	compat::RWValueProperty<TThread, TThreadPriority, &TThread::GetPriority, &TThread::SetPriority> Priority{this};
+
+protected:
+	/// 派生クラスが `void __fastcall Execute();` で上書きする (private でも構わない)
+	virtual void __fastcall Execute() = 0;
+
+private:
+	static unsigned __stdcall ThreadEntry(void *param);
+	void SynchronizeImpl(const std::function<void()> &fn);
+
+	HANDLE handle_ = nullptr;
+	unsigned thread_id_ = 0;
+	volatile bool terminated_ = false;
+	volatile bool started_ = false;
+	volatile bool finished_ = false;
+	bool free_on_terminate_ = false;
+	TThreadPriority priority_ = tpNormal;
+};
+
+//---------------------------------------------------------------------------
 /**
  * @brief TMultiReadExclusiveWriteSynchronizer 互換 (多重読み / 排他書き)
  * @details 実測: BeginWrite/EndWrite 各40箇所、BeginRead/EndRead 各17箇所。
@@ -453,16 +643,75 @@ private:
 
 using TMREWSync = TMultiReadExclusiveWriteSynchronizer;
 
+//---------------------------------------------------------------------------
+// ショートカットキー (System.Classes::TShortCut と Vcl.Menus の変換関数)
+//---------------------------------------------------------------------------
+/**
+ * @brief ショートカットキーの表現 (仮想キーコード | 修飾ビット)
+ * @details Delphi では TShortCut は System.Classes、変換関数は Vcl.Menus にある。
+ *          Vcl.Menus.hpp は compat/gui_stubs.h へ転送されるが、この 3関数は
+ *          GUI に一切依存しない純粋な変換なのでここに置く
+ *          (gui_stubs.h から見える必要があれば classes.h 経由で届く)。
+ */
+using TShortCut = Word;
+
+const TShortCut scNone = 0;
+const TShortCut scCommand = 0x1000;
+const TShortCut scShift = 0x2000;
+const TShortCut scCtrl = 0x4000;
+const TShortCut scAlt = 0x8000;
+
+/**
+ * @brief TShortCut を仮想キーコードと修飾キーに分解する
+ * @param shortCut 分解するショートカット
+ * @param key      仮想キーコード (出力)
+ * @param shift    修飾キーの集合 (出力)
+ * @details 実測: src/Global.cpp:11124 の `ShortCutToKey(shortcut, vkcode, ss);` 1箇所のみ。
+ *          呼び出し側は直後に `ss.Contains(ssShift/ssAlt/ssCtrl)` を見て
+ *          RegisterHotKey の MOD_ フラグに変換している。
+ */
+void __fastcall ShortCutToKey(TShortCut shortCut, Word &key, TShiftState &shift);
+
+/**
+ * @brief TShortCut を "Ctrl+Shift+F5" 形式の文字列にする (Vcl.Menus 相当)
+ * @param shortCut 変換するショートカット
+ * @return UnicodeString 表現できないキーなら空文字列
+ * @details src/ からの直接呼び出しは無い (確認したが該当なし) が、
+ *          TextToShortCut が Delphi の実装どおりこの関数の総当たりで
+ *          逆引きするため公開する。
+ */
+UnicodeString __fastcall ShortCutToText(TShortCut shortCut);
+
+/**
+ * @brief "Ctrl+Shift+F5" 形式の文字列を TShortCut にする (Vcl.Menus 相当)
+ * @param text 変換する文字列
+ * @return TShortCut 解釈できなければ 0
+ * @details 実測: src/Global.cpp:11121 の `TShortCut shortcut = TextToShortCut(kstr);`
+ *          1箇所のみ。kstr は src/usr_key.cpp の make_KeyList が作る NyanFi 独自の
+ *          キー名 ("A" "F5" "Del" "PgUp" "10Key_5" "^" など) に
+ *          KeyStr_Shift/Ctrl/Alt ("Shift+" "Ctrl+" "Alt+") を前置したもの。
+ *          Delphi の MenuKeyCaps と綴りが一致するキー名 (BkSp/Tab/Esc/Enter/
+ *          Space/PgUp/PgDn/End/Home/Left/Up/Right/Down/Ins/Del) だけが表から
+ *          引ける点も Delphi と同じ。
+ */
+TShortCut __fastcall TextToShortCut(const UnicodeString &text);
+
 namespace System {
 namespace Classes {
+using ::CheckSynchronize;
 using ::EStringListError;
+using ::TDataModule;
 using ::TDuplicates;
 using ::TList;
 using ::TListNotification;
+using ::TComponent;
 using ::TObject;
 using ::TPersistent;
+using ::TShortCut;
 using ::TStringList;
 using ::TStrings;
+using ::TThread;
+using ::TThreadPriority;
 }  // namespace Classes
 using namespace Classes;
 }  // namespace System

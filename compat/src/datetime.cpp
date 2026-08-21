@@ -197,7 +197,74 @@ void DecodeTime(const TDateTime &dt, unsigned short &hour, unsigned short &min, 
 // 実測 (yyyy/mm/dd, hh:nn:ss, yyyymmddhhnnss, hh:nn:ss.zzz 系のみ) に基づき
 // 未実装 (無言のスキップではなく、ここに明記する)。
 //---------------------------------------------------------------------------
-UnicodeString FormatDateTime(const UnicodeString &format, const TDateTime &dt)
+//---------------------------------------------------------------------------
+// TFormatSettings
+//---------------------------------------------------------------------------
+namespace {
+
+/// 曜日の添字 (0=日曜)。TDateTime のシリアル値 0 は 1899-12-30 の土曜日なので、
+/// (serial + 6) % 7 で日曜始まりの添字になる
+int day_of_week_index(const TDateTime &dt)
+{
+	const long long serial = static_cast<long long>(std::floor(static_cast<double>(dt)));
+	int idx = static_cast<int>((serial + 6) % 7);
+	if (idx < 0) idx += 7;
+	return idx;
+}
+
+/// GetLocaleInfoEx の1項目を UnicodeString で取る
+UnicodeString locale_str(const wchar_t *localeName, LCTYPE type)
+{
+	wchar_t buf[128] = {};
+	const int n = ::GetLocaleInfoEx(localeName, type, buf, 128);
+	return (n > 0)? UnicodeString(buf) : UnicodeString();
+}
+
+/// 名前表を localeName から埋める。localeName が nullptr なら利用者の既定
+void fill_format_settings(TFormatSettings &fs, const wchar_t *localeName)
+{
+	// Windows の LOCALE_SDAYNAME1 は**月曜**。Delphi の曜日配列は日曜始まりなので
+	// 添字を詰め替える (0=日曜)。日曜は LOCALE_SDAYNAME7
+	static const LCTYPE kLongDay[7] = {
+		LOCALE_SDAYNAME7, LOCALE_SDAYNAME1, LOCALE_SDAYNAME2, LOCALE_SDAYNAME3,
+		LOCALE_SDAYNAME4, LOCALE_SDAYNAME5, LOCALE_SDAYNAME6,
+	};
+	static const LCTYPE kShortDay[7] = {
+		LOCALE_SABBREVDAYNAME7, LOCALE_SABBREVDAYNAME1, LOCALE_SABBREVDAYNAME2,
+		LOCALE_SABBREVDAYNAME3, LOCALE_SABBREVDAYNAME4, LOCALE_SABBREVDAYNAME5,
+		LOCALE_SABBREVDAYNAME6,
+	};
+	for (int i = 0; i < 7; i++) {
+		fs.LongDayNames[i] = locale_str(localeName, kLongDay[i]);
+		fs.ShortDayNames[i] = locale_str(localeName, kShortDay[i]);
+	}
+	for (int i = 0; i < 12; i++) {
+		fs.LongMonthNames[i] = locale_str(localeName, LOCALE_SMONTHNAME1 + i);
+		fs.ShortMonthNames[i] = locale_str(localeName, LOCALE_SABBREVMONTHNAME1 + i);
+	}
+	fs.TimeAMString = locale_str(localeName, LOCALE_S1159);
+	fs.TimePMString = locale_str(localeName, LOCALE_S2359);
+}
+
+}  // namespace
+
+TFormatSettings TFormatSettings::Create()
+{
+	TFormatSettings fs;
+	fill_format_settings(fs, LOCALE_NAME_USER_DEFAULT);
+	return fs;
+}
+
+TFormatSettings TFormatSettings::Create(const UnicodeString &localeName)
+{
+	TFormatSettings fs;
+	fill_format_settings(fs, localeName.IsEmpty()? LOCALE_NAME_USER_DEFAULT : localeName.c_str());
+	return fs;
+}
+
+//---------------------------------------------------------------------------
+UnicodeString FormatDateTime(const UnicodeString &format, const TDateTime &dt,
+                              const TFormatSettings &settings)
 {
 	unsigned short y, mo, d, h, mi, se, ms;
 	DecodeDate(dt, y, mo, d);
@@ -241,16 +308,39 @@ UnicodeString FormatDateTime(const UnicodeString &format, const TDateTime &dt)
 		}
 		if (c == L'm' || c == L'M') {
 			int n = countRun(L'm');
-			std::swprintf(buf, 16, (n >= 2) ? L"%02u" : L"%u", mo);
-			out += buf;
+			// Delphi: m/mm = 月番号、mmm = 月名(短)、mmmm = 月名(長)
+			if (n == 3)      out += settings.ShortMonthNames[mo - 1].c_str();
+			else if (n >= 4) out += settings.LongMonthNames[mo - 1].c_str();
+			else {
+				std::swprintf(buf, 16, (n >= 2) ? L"%02u" : L"%u", mo);
+				out += buf;
+			}
 			p += n;
 			continue;
 		}
 		if (c == L'd' || c == L'D') {
 			int n = countRun(L'd');
-			std::swprintf(buf, 16, (n >= 2) ? L"%02u" : L"%u", d);
-			out += buf;
+			// Delphi: d/dd = 日、ddd = 曜日名(短)、dddd = 曜日名(長)。
+			// **以前は ddd/dddd も日の数字を出していて C++Builder と食い違っていた**
+			if (n >= 3) {
+				const int dow = day_of_week_index(dt);  // 0=日曜
+				out += (n == 3)? settings.ShortDayNames[dow].c_str()
+				               : settings.LongDayNames[dow].c_str();
+			}
+			else {
+				std::swprintf(buf, 16, (n >= 2) ? L"%02u" : L"%u", d);
+				out += buf;
+			}
 			p += n;
+			continue;
+		}
+		// ampm / am/pm (Delphi の書式。h は 12時間制にはしない点も Delphi と同じで、
+		// 呼び出し側が hh と組み合わせて使う)
+		if ((c == L'a' || c == L'A') && end - p >= 4 &&
+		    (::wcsnicmp(p, L"ampm", 4) == 0 || ::wcsnicmp(p, L"am/pm", 5) == 0)) {
+			const int len = (::wcsnicmp(p, L"am/pm", 5) == 0)? 5 : 4;
+			out += (h < 12)? settings.TimeAMString.c_str() : settings.TimePMString.c_str();
+			p += len;
 			continue;
 		}
 		if (c == L'h' || c == L'H') {
@@ -287,6 +377,17 @@ UnicodeString FormatDateTime(const UnicodeString &format, const TDateTime &dt)
 	return UnicodeString(out);
 }
 
+//---------------------------------------------------------------------------
+UnicodeString FormatDateTime(const UnicodeString &format, const TDateTime &dt)
+{
+	// Delphi と同じく、名前を使うトークンは利用者の既定ロケールの名前になる。
+	// 毎回 GetLocaleInfoEx を叩かないよう1回だけ作って使い回す
+	// (VCL も起動時に1回だけ作る)
+	static const TFormatSettings kDefault = TFormatSettings::Create();
+	return FormatDateTime(format, dt, kDefault);
+}
+
+//---------------------------------------------------------------------------
 UnicodeString DateTimeToStr(const TDateTime &dt)
 {
 	// 【注意】実 RTL は FormatSettings (ロケール) 依存。本シムは対象コードで
@@ -445,4 +546,126 @@ unsigned short DaysInMonth(const TDateTime &dt)
 	}
 	if (mo >= 1 && mo <= 12) return kDays[mo - 1];
 	return 30;  // 不正な月 (呼ばれない想定だが RTL は範囲チェック例外。ここは保守的な既定値)
+}
+
+//---------------------------------------------------------------------------
+// 日付・時刻の切り出し (System.DateUtils)
+//---------------------------------------------------------------------------
+TDateTime DateOf(const TDateTime &dt)
+{
+	// Delphi の DateOf は Trunc (0 方向への丸め)。std::trunc をそのまま使う
+	return TDateTime(std::trunc(dt.Val()));
+}
+
+TDateTime TimeOf(const TDateTime &dt)
+{
+	// Delphi の TimeOf は Frac (符号つきの小数部)
+	const double v = dt.Val();
+	return TDateTime(v - std::trunc(v));
+}
+
+TDateTime Today()
+{
+	return Date();
+}
+
+bool IsSameDay(const TDateTime &value, const TDateTime &basis)
+{
+	return DateOf(value).Val() == DateOf(basis).Val();
+}
+
+bool IsToday(const TDateTime &value)
+{
+	return IsSameDay(value, Now());
+}
+
+//---------------------------------------------------------------------------
+// 加算 (System.DateUtils)
+//---------------------------------------------------------------------------
+TDateTime IncMilliSecond(const TDateTime &dt, Int64 numberOfMilliSeconds)
+{
+	// Delphi の実装をそのまま写す (負の TDateTime では符号を反転して加算する)
+	const double v = dt.Val();
+	const double ms = static_cast<double>(numberOfMilliSeconds);
+	if (v > 0.0) return TDateTime(((v * 86400000.0) + ms) / 86400000.0);
+	return TDateTime(((v * 86400000.0) - ms) / 86400000.0);
+}
+
+TDateTime IncSecond(const TDateTime &dt, Int64 numberOfSeconds)
+{
+	return IncMilliSecond(dt, numberOfSeconds * 1000);
+}
+
+TDateTime IncMinute(const TDateTime &dt, Int64 numberOfMinutes)
+{
+	return IncSecond(dt, numberOfMinutes * 60);
+}
+
+TDateTime IncHour(const TDateTime &dt, Int64 numberOfHours)
+{
+	return IncMinute(dt, numberOfHours * 60);
+}
+
+//---------------------------------------------------------------------------
+// 期間 (System.DateUtils)
+//---------------------------------------------------------------------------
+Int64 DateTimeToMilliseconds(const TDateTime &dt)
+{
+	// 45,000 日 * 86,400,000 = 約 3.9e12。double の仮数 53bit (約 9e15) に
+	// 十分収まるので、ミリ秒の分解能は落ちない
+	return static_cast<Int64>(std::llround(dt.Val() * 86400000.0));
+}
+
+Int64 MilliSecondsBetween(const TDateTime &aNow, const TDateTime &aThen)
+{
+	const Int64 a = DateTimeToMilliseconds(aNow);
+	const Int64 b = DateTimeToMilliseconds(aThen);
+	return (a >= b) ? (a - b) : (b - a);
+}
+
+Int64 SecondsBetween(const TDateTime &aNow, const TDateTime &aThen)
+{
+	return MilliSecondsBetween(aNow, aThen) / 1000;
+}
+
+int DaysBetween(const TDateTime &aNow, const TDateTime &aThen)
+{
+	return static_cast<int>(MilliSecondsBetween(aNow, aThen) / 86400000);
+}
+
+bool WithinPastMilliSeconds(const TDateTime &aNow, const TDateTime &aThen, Int64 aMilliSeconds)
+{
+	return MilliSecondsBetween(aNow, aThen) <= aMilliSeconds;
+}
+
+//---------------------------------------------------------------------------
+// 比較 (System.DateUtils)
+//---------------------------------------------------------------------------
+bool SameDateTime(const TDateTime &a, const TDateTime &b)
+{
+	return std::fabs(a.Val() - b.Val()) < OneMillisecond;
+}
+
+bool SameTime(const TDateTime &a, const TDateTime &b)
+{
+	return std::fabs(TimeOf(a).Val() - TimeOf(b).Val()) < OneMillisecond;
+}
+
+TValueRelationship CompareDate(const TDateTime &a, const TDateTime &b)
+{
+	if (IsSameDay(a, b)) return EqualsValue;
+	return (a.Val() < b.Val()) ? LessThanValue : GreaterThanValue;
+}
+
+TValueRelationship CompareDateTime(const TDateTime &a, const TDateTime &b)
+{
+	if (SameDateTime(a, b)) return EqualsValue;
+	return (a.Val() < b.Val()) ? LessThanValue : GreaterThanValue;
+}
+
+TValueRelationship CompareTime(const TDateTime &a, const TDateTime &b)
+{
+	// Delphi の CompareTime は SameTime で等値を見たあと、Frac 同士を比べる
+	if (SameTime(a, b)) return EqualsValue;
+	return (TimeOf(a).Val() < TimeOf(b).Val()) ? LessThanValue : GreaterThanValue;
 }

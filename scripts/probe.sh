@@ -40,6 +40,7 @@ CANDIDATES=(
 	usr_scrpanel
 	UIniFile
 	usr_highlight
+	usr_msg
 )
 
 FLAGS=(

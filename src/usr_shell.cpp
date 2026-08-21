@@ -639,7 +639,11 @@ UnicodeString UserShell::ShowContextMenu(
 	TFPUExceptionMask orgMask = GetExceptionMask();
 	SetExceptionMask(FpuTmpMask);
 
-	try {
+	{
+		//try { ... } __finally { ... } を RAII に置き換えたもの (compat/scope_exit.h)。
+		//__finally との差は make_scope_exit を作る前に投げた場合だけで、
+		//そのときは後始末の対象がまだ無いので呼ばない方が正しい
+		const auto nf_cleanup = compat::make_scope_exit([&] { SetExceptionMask(orgMask); ::ILFree(dir_pidl); });
 		try {
 			if (flist->Count==0) Abort();
 
@@ -817,10 +821,6 @@ UnicodeString UserShell::ShowContextMenu(
 			ret_str = "ERROR";
 		}
 	}
-	__finally {
-		SetExceptionMask(orgMask);
-		::ILFree(dir_pidl);
-	}
 	return ret_str;
 }
 
@@ -846,7 +846,11 @@ UnicodeString UserShell::DriveContextMenu(
 	ITEMIDLIST  *pidlComputer = NULL;
 	ITEMIDLIST  *pidlEnum	  = NULL;
 
-	try {
+	{
+		//try { ... } __finally { ... } を RAII に置き換えたもの (compat/scope_exit.h)。
+		//__finally との差は make_scope_exit を作る前に投げた場合だけで、
+		//そのときは後始末の対象がまだ無いので呼ばない方が正しい
+		const auto nf_cleanup = compat::make_scope_exit([&] { ::ILFree(pidlComputer); ::ILFree(pidlEnum); });
 		try {
 			//デスクトップの IShellFolder インターフェイスを取得
 			TComInterface<IShellFolder> desktop;
@@ -934,10 +938,6 @@ UnicodeString UserShell::DriveContextMenu(
 			ret_str = "ERROR";
 		}
 	}
-	__finally {
-		::ILFree(pidlComputer);
-		::ILFree(pidlEnum);
-	}
 
 	return ret_str;
 }
@@ -950,7 +950,11 @@ bool UserShell::InvokeMenuCmd(HWND hWnd, UnicodeString dnam, TStringList *flist,
 	bool ok = false;
 	ITEMIDLIST *dir_pidl = NULL;
 
-	try {
+	{
+		//try { ... } __finally { ... } を RAII に置き換えたもの (compat/scope_exit.h)。
+		//__finally との差は make_scope_exit を作る前に投げた場合だけで、
+		//そのときは後始末の対象がまだ無いので呼ばない方が正しい
+		const auto nf_cleanup = compat::make_scope_exit([&] { ::ILFree(dir_pidl); });
 		try {
 			if (flist->Count==0) Abort();
 
@@ -993,9 +997,6 @@ bool UserShell::InvokeMenuCmd(HWND hWnd, UnicodeString dnam, TStringList *flist,
 		catch (...) {
 			;
 		}
-	}
-	__finally {
-		::ILFree(dir_pidl);
 	}
 	return ok;
 }
@@ -1064,7 +1065,11 @@ UnicodeString UserShell::get_PropInf(
 	TFPUExceptionMask orgMask = GetExceptionMask();
 	SetExceptionMask(FpuTmpMask);
 
-	try {
+	{
+		//try { ... } __finally { ... } を RAII に置き換えたもの (compat/scope_exit.h)。
+		//__finally との差は make_scope_exit を作る前に投げた場合だけで、
+		//そのときは後始末の対象がまだ無いので呼ばない方が正しい
+		const auto nf_cleanup = compat::make_scope_exit([&] { SetExceptionMask(orgMask); ::ILFree(dir_pidl); ::ILFree(object); });
 		try {
 			TComInterface<IShellFolder> desktop;
 			if (FAILED(SHGetDesktopFolder(&desktop))) Abort();
@@ -1201,11 +1206,6 @@ UnicodeString UserShell::get_PropInf(
 			typ_str = EmptyStr;
 		}
 	}
-	__finally {
-		SetExceptionMask(orgMask);
-		::ILFree(dir_pidl);
-		::ILFree(object);
-	}
 
 	return typ_str;
 }
@@ -1223,7 +1223,11 @@ UnicodeString UserShell::get_PropStr(UnicodeString fnam, UnicodeString prp_nam)
 	TFPUExceptionMask orgMask = GetExceptionMask();
 	SetExceptionMask(FpuTmpMask);
 
-	try {
+	{
+		//try { ... } __finally { ... } を RAII に置き換えたもの (compat/scope_exit.h)。
+		//__finally との差は make_scope_exit を作る前に投げた場合だけで、
+		//そのときは後始末の対象がまだ無いので呼ばない方が正しい
+		const auto nf_cleanup = compat::make_scope_exit([&] { SetExceptionMask(orgMask); ::ILFree(dir_pidl); ::ILFree(object); });
 		try {
 			TComInterface<IShellFolder> desktop;
 			if (FAILED(SHGetDesktopFolder(&desktop))) Abort();
@@ -1250,11 +1254,6 @@ UnicodeString UserShell::get_PropStr(UnicodeString fnam, UnicodeString prp_nam)
 		catch (...) {
 			ret_str = EmptyStr;
 		}
-	}
-	__finally {
-		SetExceptionMask(orgMask);
-		::ILFree(dir_pidl);
-		::ILFree(object);
 	}
 	return ret_str;
 }
@@ -1680,7 +1679,11 @@ HICON UserShell::get_Icon(
 	bool res = true;
 	ITEMIDLIST *dir_pidl = NULL;
 	ITEMIDLIST *object	 = NULL;
-	try {
+	{
+		//try { ... } __finally { ... } を RAII に置き換えたもの (compat/scope_exit.h)。
+		//__finally との差は make_scope_exit を作る前に投げた場合だけで、
+		//そのときは後始末の対象がまだ無いので呼ばない方が正しい
+		const auto nf_cleanup = compat::make_scope_exit([&] { ::ILFree(dir_pidl); ::ILFree(object); });
 		try {
 			//デスクトップの IShellFolder インターフェイスを取得
 			TComInterface<IShellFolder> desktop;
@@ -1723,10 +1726,6 @@ HICON UserShell::get_Icon(
 				res = (hIcon!=NULL);
 			}
 		}
-	}
-	__finally {
-		::ILFree(dir_pidl);
-		::ILFree(object);
 	}
 	if (!res) return NULL;
 
@@ -1799,7 +1798,11 @@ bool UserShell::get_Thumbnail(UnicodeString fnam, Graphics::TBitmap *o_bmp, int 
 	ITEMIDLIST *dir_pidl = NULL;
 	ITEMIDLIST *object	 = NULL;
 
-	try {
+	{
+		//try { ... } __finally { ... } を RAII に置き換えたもの (compat/scope_exit.h)。
+		//__finally との差は make_scope_exit を作る前に投げた場合だけで、
+		//そのときは後始末の対象がまだ無いので呼ばない方が正しい
+		const auto nf_cleanup = compat::make_scope_exit([&] { ::ILFree(dir_pidl); ::ILFree(object); });
 		try {
 			//デスクトップの IShellFolder インターフェイスを取得
 			TComInterface<IShellFolder> desktop;
@@ -1836,10 +1839,6 @@ bool UserShell::get_Thumbnail(UnicodeString fnam, Graphics::TBitmap *o_bmp, int 
 		catch (...) {
 			res = false;
 		}
-	}
-	__finally {
-		::ILFree(dir_pidl);
-		::ILFree(object);
 	}
 	return res;
 }

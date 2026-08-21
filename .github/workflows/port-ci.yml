@@ -35,9 +35,15 @@ jobs:
             mingw-w64-ucrt-x86_64-gcc
             mingw-w64-ucrt-x86_64-cmake
             mingw-w64-ucrt-x86_64-ninja
+            mingw-w64-ucrt-x86_64-wxwidgets3.2-msw
 
+      # GUI (Phase 2 の骨格) も一緒にビルドする。MSYS2 のパッケージは wx 3.2 なので、
+      # 3.3 の API (MSWEnableDarkMode) はソース側でバージョンガードしてある。
       - name: Configure
-        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+        run: |
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
+            -DNYANFI_BUILD_GUI=ON \
+            -DWX_CONFIG=/ucrt64/bin/wx-config
 
       - name: Build
         run: cmake --build build
@@ -49,10 +55,28 @@ jobs:
         run: |
           objdump -p build/tests/core_tests.exe | grep -i "DLL Name" | sort -u
 
+      - name: GUI が起動するか確認
+        # GUI サブシステムなので出力は出ない。異常終了しないことだけを見る
+        # (wx のリソース未リンクだと OnInit が失敗して即終了する)。
+        # msys2 シェルの中で実行すること: wx が共有ライブラリの場合、
+        # /ucrt64/bin が PATH に無いと DLL を読めない
+        run: |
+          ./build/gui/nyanfi.exe &
+          pid=$!
+          sleep 5
+          if ! kill -0 $pid 2>/dev/null; then
+            echo "nyanfi.exe が早期終了しました"
+            wait $pid; echo "終了コード=$?"
+            exit 1
+          fi
+          kill $pid
+          echo "5 秒間起動を維持しました"
+
       - uses: actions/upload-artifact@v4
         with:
           name: nyanfi-port-ucrt64
           path: |
+            build/gui/nyanfi.exe
             build/tests/*.exe
             build/*.a
           if-no-files-found: error
@@ -68,6 +92,18 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
             g++-mingw-w64-x86-64 cmake ninja-build
+
+      # 規約チェック (CLAUDE.md 規約1)。ビルド対象に _T() で包まれていない
+      # 非 ASCII リテラルが残っていると、英語版 Windows で文字化けする。
+      # CI で2回検出したので機械チェックにした
+      - name: 非 ASCII の narrow リテラルが残っていないか
+        run: python3 scripts/check_literals.py
+
+      # コマンド名が VCL の表 (usr_cmdlist.cpp) と一致しているか。
+      # ずれていると本物の ini (KeyFuncList) を読んでもそのコマンドだけ
+      # 黙って効かない。実際に8件ずれていた
+      - name: コマンド名が VCL の表と一致しているか
+        run: python3 scripts/check_commands.py
 
       - name: Configure
         run: |

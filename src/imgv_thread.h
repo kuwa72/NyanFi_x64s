@@ -63,7 +63,13 @@ private:
 		FTaskBusy = Value;
 		TaskRWLock->EndWrite();
 	}
-	__property bool TaskBusy = {read = GetTaskBusy,  write = SetTaskBusy};
+	// __property を読み書きプロキシに置き換えたもの (排他ロックを取るため
+	// getter が非 const・setter が値渡し。src 側の宣言は変えていない)
+	compat::RWMutableProperty<TImgViewThread, bool,
+	                          &TImgViewThread::GetTaskBusy, &TImgViewThread::SetTaskBusy> TaskBusy{this};
+
+	template <class O, class T, T (O::*G)(), void (O::*S)(T)>
+	friend class compat::RWMutableProperty;
 
 	void __fastcall ClearImage();
 	void __fastcall DrawImage();

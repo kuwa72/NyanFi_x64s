@@ -5,6 +5,8 @@
 #include "compat/math.h"
 
 #include <cmath>
+#include <cstdint>
+#include <random>
 
 double Power(double base, double exponent)
 {
@@ -111,4 +113,74 @@ TFPUExceptionMask SetExceptionMask(TFPUExceptionMask mask)
 	::_controlfp_s(&cw, bits, _MCW_EM);
 
 	return prev;
+}
+
+//---------------------------------------------------------------------------
+// 値の比較 (System.Math)
+//---------------------------------------------------------------------------
+bool SameValue(double a, double b, double epsilon)
+{
+	if (epsilon <= 0.0) {
+		const double lo = std::fabs(a) < std::fabs(b) ? std::fabs(a) : std::fabs(b);
+		const double e = lo * DoubleResolution;
+		epsilon = (e > DoubleResolution) ? e : DoubleResolution;
+	}
+	return std::fabs(a - b) <= epsilon;
+}
+
+TValueRelationship CompareValue(int a, int b)
+{
+	if (a == b) return EqualsValue;
+	return (a < b) ? LessThanValue : GreaterThanValue;
+}
+
+TValueRelationship CompareValue(Int64 a, Int64 b)
+{
+	if (a == b) return EqualsValue;
+	return (a < b) ? LessThanValue : GreaterThanValue;
+}
+
+TValueRelationship CompareValue(double a, double b, double epsilon)
+{
+	if (SameValue(a, b, epsilon)) return EqualsValue;
+	return (a < b) ? LessThanValue : GreaterThanValue;
+}
+
+//---------------------------------------------------------------------------
+// 乱数
+//---------------------------------------------------------------------------
+namespace {
+
+/// スレッドごとの乱数エンジン。src/task_thread.cpp がワーカースレッドから
+/// Random を呼ぶため、グローバル 1 個にするとデータ競合になる
+std::mt19937 &rand_engine()
+{
+	static thread_local std::mt19937 engine{[] {
+		std::random_device rd;
+		// random_device が使えない環境 (mingw の実装は決定的になり得る) でも
+		// 時刻とスレッド ID で差がつくようにしておく
+		const std::uint64_t seed = static_cast<std::uint64_t>(rd())
+			^ (static_cast<std::uint64_t>(::GetTickCount64()) << 16)
+			^ (static_cast<std::uint64_t>(::GetCurrentThreadId()) << 32);
+		return static_cast<std::mt19937::result_type>(seed);
+	}()};
+	return engine;
+}
+
+}  // namespace
+
+void Randomize()
+{
+	std::random_device rd;
+	const std::uint64_t seed = static_cast<std::uint64_t>(rd())
+		^ (static_cast<std::uint64_t>(::GetTickCount64()) << 16)
+		^ (static_cast<std::uint64_t>(::GetCurrentThreadId()) << 32);
+	rand_engine().seed(static_cast<std::mt19937::result_type>(seed));
+}
+
+int Random(int range)
+{
+	if (range <= 0) return 0;
+	std::uniform_int_distribution<int> dist(0, range - 1);
+	return dist(rand_engine());
 }

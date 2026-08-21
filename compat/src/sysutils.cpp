@@ -957,3 +957,146 @@ int Pos(const UnicodeString &sub, const UnicodeString &text, int offset)
 {
 	return PosEx(sub, text, offset);
 }
+
+//---------------------------------------------------------------------------
+// ディスク容量 (System.SysUtils)
+//---------------------------------------------------------------------------
+namespace {
+
+/// GetDiskFreeSpaceEx をまとめて呼ぶ。失敗なら false
+///
+/// drive は 0=カレント, 1=A, 2=B ...。**drive==0 では Delphi の実装と同じく
+/// ルートパスに NULL を渡す** (カレントディレクトリのあるディスク)。
+/// "カレントドライブの文字を採ってきて 'X:\\' を組み立てる" ようにすると、
+/// カレントディレクトリが UNC パス (\\\\server\\share\\...) のときに
+/// ドライブ文字が無くて失敗する。実際に WSL 上でテストを走らせたときに
+/// カレントが \\\\wsl.localhost\\... になって -1 が返り、これで気づいた。
+bool query_disk_space(Byte drive, ULARGE_INTEGER &availToCaller, ULARGE_INTEGER &total)
+{
+	wchar_t rootBuf[4] = {0};
+	const wchar_t *root = nullptr;  // drive==0 はカレントディスク
+	if (drive != 0) {
+		if (drive > 26) return false;
+		rootBuf[0] = static_cast<wchar_t>(L'A' + (drive - 1));
+		rootBuf[1] = L':';
+		rootBuf[2] = L'\\';
+		rootBuf[3] = L'\0';
+		root = rootBuf;
+	}
+
+	ULARGE_INTEGER freeTotal = {};
+	availToCaller.QuadPart = 0;
+	total.QuadPart = 0;
+	// エラーダイアログ (リムーバブルの空ドライブ) を抑止する。Delphi の
+	// DiskSize/DiskFree も SetErrorMode で同じことをしている
+	const UINT prevMode = ::SetErrorMode(SEM_FAILCRITICALERRORS);
+	const BOOL ok = ::GetDiskFreeSpaceExW(root, &availToCaller, &total, &freeTotal);
+	::SetErrorMode(prevMode);
+	return ok != FALSE;
+}
+
+}  // namespace
+
+Int64 DiskSize(Byte drive)
+{
+	ULARGE_INTEGER avail = {}, total = {};
+	if (!query_disk_space(drive, avail, total)) return -1;
+	return static_cast<Int64>(total.QuadPart);
+}
+
+Int64 DiskFree(Byte drive)
+{
+	ULARGE_INTEGER avail = {}, total = {};
+	if (!query_disk_space(drive, avail, total)) return -1;
+	return static_cast<Int64>(avail.QuadPart);
+}
+
+//---------------------------------------------------------------------------
+// バージョン情報 (System.SysUtils)
+//---------------------------------------------------------------------------
+bool GetProductVersion(const UnicodeString &fileName, unsigned &major, unsigned &minor, unsigned &build)
+{
+	major = 0;
+	minor = 0;
+	build = 0;
+	if (fileName.IsEmpty()) return false;
+
+	DWORD handle = 0;
+	const DWORD size = ::GetFileVersionInfoSizeW(fileName.c_str(), &handle);
+	if (size == 0) return false;
+
+	std::vector<BYTE> buf(size);
+	if (!::GetFileVersionInfoW(fileName.c_str(), handle, size, buf.data())) return false;
+
+	VS_FIXEDFILEINFO *fi = nullptr;
+	UINT len = 0;
+	if (!::VerQueryValueW(buf.data(), L"\\", reinterpret_cast<LPVOID *>(&fi), &len)) return false;
+	if (fi == nullptr || len < sizeof(VS_FIXEDFILEINFO)) return false;
+
+	// ProductVersion (FileVersion ではない) の a.b.c.d のうち a/b/c を返す
+	major = static_cast<unsigned>(HIWORD(fi->dwProductVersionMS));
+	minor = static_cast<unsigned>(LOWORD(fi->dwProductVersionMS));
+	build = static_cast<unsigned>(HIWORD(fi->dwProductVersionLS));
+	return true;
+}
+
+//---------------------------------------------------------------------------
+// OS バージョン (System.SysUtils の TOSVersion)
+//---------------------------------------------------------------------------
+namespace {
+
+/// RtlGetVersion で真の OS バージョンを採る。互換性マニフェストの影響を
+/// 受けないのが GetVersionEx との違い (ヘッダのコメント参照)
+const RTL_OSVERSIONINFOW &real_os_version()
+{
+	static const RTL_OSVERSIONINFOW info = [] {
+		RTL_OSVERSIONINFOW vi = {};
+		vi.dwOSVersionInfoSize = sizeof(vi);
+
+		using RtlGetVersionFn = LONG(WINAPI *)(PRTL_OSVERSIONINFOW);
+		if (HMODULE ntdll = ::GetModuleHandleW(L"ntdll.dll")) {
+			auto fn = reinterpret_cast<RtlGetVersionFn>(
+				reinterpret_cast<void *>(::GetProcAddress(ntdll, "RtlGetVersion")));
+			if (fn != nullptr && fn(&vi) == 0) return vi;
+		}
+
+		// ntdll から採れない場合のフォールバック。GetVersionEx はマニフェスト
+		// が無いと 6.2 で頭打ちになるが、何も返さないよりはよい
+		OSVERSIONINFOW ovi = {};
+		ovi.dwOSVersionInfoSize = sizeof(ovi);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+		if (::GetVersionExW(&ovi)) {
+			vi.dwMajorVersion = ovi.dwMajorVersion;
+			vi.dwMinorVersion = ovi.dwMinorVersion;
+			vi.dwBuildNumber = ovi.dwBuildNumber;
+		}
+#pragma GCC diagnostic pop
+		return vi;
+	}();
+	return info;
+}
+
+}  // namespace
+
+const int TOSVersion::Major = static_cast<int>(real_os_version().dwMajorVersion);
+const int TOSVersion::Minor = static_cast<int>(real_os_version().dwMinorVersion);
+const int TOSVersion::Build = static_cast<int>(real_os_version().dwBuildNumber);
+
+//---------------------------------------------------------------------------
+/**
+ * @brief "{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}" を GUID にする
+ * @details 詳細と実呼び出し箇所は compat/sysutils.h のコメントを参照。
+ *          `CLSIDFromString` は波括弧付きの形式を受け取る (Delphi の
+ *          StringToGUID と同じ)。
+ */
+TGUID StringToGUID(const UnicodeString &s)
+{
+	TGUID guid = {};
+	if (::CLSIDFromString(const_cast<LPOLESTR>(s.c_str()), &guid) != NOERROR) {
+		// Delphi は EConvertError。呼び出し側 (usr_shell.cpp:1858) が
+		// catch (...) で受けるので、種類は合わせなくてよい
+		throw EConvertError(UnicodeString(_T("GUID に変換できません: ")) + s);
+	}
+	return guid;
+}

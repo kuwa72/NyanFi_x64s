@@ -10242,8 +10242,12 @@ int load_ImageFile(
 	TColor trans_bg)	//透過背景色	(default = clNone)
 {
 	int res = 0;
-	try {
-		o_bmp->Canvas->Lock();
+	//try { ... } __finally { o_bmp->Canvas->Unlock(); } を RAII に置き換えたもの。
+	//Lock() 自体が投げた場合、__finally は Unlock() を呼ぶがこちらは呼ばない
+	//(そのときは Lock されていないので呼ばない方が正しい)
+	o_bmp->Canvas->Lock();
+	{
+		const auto unlock = compat::make_scope_exit([&] { o_bmp->Canvas->Unlock(); });
 		try {
 			if (fnam.IsEmpty()) Abort();
 			UnicodeString fext = get_extension(fnam);
@@ -10282,9 +10286,6 @@ int load_ImageFile(
 		catch (...) {
 			res = 0;
 		}
-	}
-	__finally {
-		o_bmp->Canvas->Unlock();
 	}
 	return res;
 }

@@ -53,7 +53,24 @@ namespace compat {
 	template <class... A>                                                              \
 	auto ToDouble(A &&...a) const { return get().ToDouble(std::forward<A>(a)...); }     \
 	template <class... A>                                                              \
-	auto LastDelimiter(A &&...a) const { return get().LastDelimiter(std::forward<A>(a)...); }
+	auto LastDelimiter(A &&...a) const { return get().LastDelimiter(std::forward<A>(a)...); } \
+	/* Insert は「一時オブジェクトを書き換えて捨てる」= 何もしない。            */   \
+	/* C++Builder でも __property の読みは値返しなので挙動は同じで、意図的に     */   \
+	/* そちらに合わせてある (規約6: 既存のバグは直さず記録する)。               */   \
+	/* 実際に src/Global.cpp:15077 の `cb_buf->Text.Insert(...)` は何もしておらず、*/  \
+	/* 「AD (クリップボードに追加)」が効いていない (報告書 §12)。               */   \
+	/* 戻り値を void にしてあるのは、UnicodeString::Insert が参照を返すため      */   \
+	/* そのまま転送すると破棄済みの一時オブジェクトへの参照になるから。          */   \
+	template <class... A>                                                              \
+	void Insert(A &&...a) const { auto tmp = get(); tmp.Insert(std::forward<A>(a)...); } \
+	/* c_str は「その式の中でだけ使う」ことが前提。プロパティの読みは値返しなので */  \
+	/* 一時オブジェクトを指し、式を抜けると無効になる。                          */  \
+	/*   OK : ::PathIsDirectory(PathName.c_str())   (check_thread.cpp:35)        */  \
+	/*   NG : const wchar_t *p = obj->Prop.c_str(); (式を抜けた時点でダングリング) */  \
+	/* **C++Builder の __property でもまったく同じ**なので、危険度は移植で         */  \
+	/* 増えていない。src は C++Builder 向けに書かれているため、ここで通る形は      */  \
+	/* 向こうでも通っていたことになる。                                           */  \
+	auto c_str() const { return get().c_str(); }
 
 /// 読み取り専用プロパティ: `obj->Count`
 template <class Owner, class T, T (Owner::*Getter)() const>
@@ -66,6 +83,11 @@ public:
 	operator T() const { return (owner_->*Getter)(); }
 	T operator()() const { return (owner_->*Getter)(); }
 	T get() const { return (owner_->*Getter)(); }
+
+	/// 値がポインタのときに `obj->Prop->Member` と書けるようにする
+	/// (`Screen->Fonts->IndexOf(...)` = src/Global.cpp:5979)。
+	/// T がポインタでない場合はこのメンバが実体化されないので害は無い
+	auto operator->() const { return (owner_->*Getter)(); }
 
 	NYANFI_PROPERTY_FORWARD_CONST_METHODS
 
@@ -129,6 +151,97 @@ public:
 		(owner_->*Setter)(static_cast<T>(rhs));
 		return *this;
 	}
+
+private:
+	Owner *owner_;
+};
+
+/// 値型の読み書きプロパティ (getter が非 const、setter が値渡しの場合)
+///
+/// `src/task_thread.h` などスレッド系のクラスは
+/// `bool __fastcall GetTaskReady()` / `void __fastcall SetTaskReady(bool Value)`
+/// のように **getter が非 const、setter が値渡し** で書かれている
+/// (排他ロックを取るため const にできない)。RWValueProperty はこの形に
+/// 束縛できないので、専用の版を用意する。src 側の宣言は変えない (規約3)。
+template <class Owner, class T, T (Owner::*Getter)(), void (Owner::*Setter)(T)>
+class RWMutableProperty {
+public:
+	explicit RWMutableProperty(Owner *owner) : owner_(owner) {}
+	RWMutableProperty(const RWMutableProperty &) = delete;
+
+	operator T() const { return (owner_->*Getter)(); }
+	T operator()() const { return (owner_->*Getter)(); }
+	T get() const { return (owner_->*Getter)(); }
+
+	NYANFI_PROPERTY_FORWARD_CONST_METHODS
+
+	RWMutableProperty &operator=(const T &value)
+	{
+		(owner_->*Setter)(value);
+		return *this;
+	}
+
+	RWMutableProperty &operator=(const RWMutableProperty &rhs)
+	{
+		(owner_->*Setter)(static_cast<T>(rhs));
+		return *this;
+	}
+
+private:
+	Owner *owner_;
+};
+
+/// 読み取り専用プロパティ (getter が非 const の場合)
+template <class Owner, class T, T (Owner::*Getter)()>
+class ROMutableProperty {
+public:
+	explicit ROMutableProperty(Owner *owner) : owner_(owner) {}
+	ROMutableProperty(const ROMutableProperty &) = delete;
+
+	operator T() const { return (owner_->*Getter)(); }
+	T operator()() const { return (owner_->*Getter)(); }
+	T get() const { return (owner_->*Getter)(); }
+
+	NYANFI_PROPERTY_FORWARD_CONST_METHODS
+
+private:
+	Owner *owner_;
+};
+
+/// ポインタ要素の添字プロパティ: `lst->Items[i]` / `lst->Items[i] = p`
+///
+/// `__property T * Items[int Index] = {read=Get, write=Put};` の置き換え。
+/// `src/usr_shell.h` の `TItemsProperty` を手で書いた実例があるが、同じ形が
+/// `MarkList.h` と `task_thread.h` にも出てきたのでテンプレートにまとめた。
+///
+/// `operator->` を持たせてあるのは、既存コードに `Items[i]->Member` の書き方が
+/// あるため。`operator T *` だけだと `->` が通らない。
+template <class Owner, class T, T *(Owner::*Getter)(int), void (Owner::*Setter)(int, T *)>
+class IndexedPtrProperty {
+public:
+	explicit IndexedPtrProperty(Owner *owner) : owner_(owner) {}
+	IndexedPtrProperty(const IndexedPtrProperty &) = delete;
+
+	/// 1要素への参照。読みと書きの両方に使う
+	class Ref {
+	public:
+		Ref(Owner *owner, int index) : owner_(owner), index_(index) {}
+
+		operator T *() const { return (owner_->*Getter)(index_); }
+		T *operator->() const { return (owner_->*Getter)(index_); }
+
+		Ref &operator=(T *item)
+		{
+			(owner_->*Setter)(index_, item);
+			return *this;
+		}
+
+	private:
+		Owner *owner_;
+		int index_;
+	};
+
+	Ref operator[](int index) const { return Ref(owner_, index); }
 
 private:
 	Owner *owner_;
