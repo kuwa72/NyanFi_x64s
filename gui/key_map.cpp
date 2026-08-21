@@ -199,6 +199,12 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Ctrl+V"), _T("Paste"));
 	Assign(_T("Ctrl+Shift+C"), _T("CopyFileName"));
 
+	// リンク・属性。VCL の既定表に無いので推測
+	Assign(_T("Ctrl+L"), _T("CreateShortcut"));
+	Assign(_T("Ctrl+Shift+K"), _T("CreateHardLink"));
+	Assign(_T("Ctrl+Shift+Y"), _T("CreateSymLink"));
+	Assign(_T("Ctrl+Shift+I"), _T("SetDirTime"));
+
 	// 並べ替え・絞り込み。"S" は src/Global.cpp の既定キー表にある実際の割り当て
 	// ("F:S=SortDlg") と同じ。Ctrl+M / Ctrl+U は既定キー表に対応する記載が無く
 	// (パスマスクはコンボボックス操作が前提で単独のキー割り当てが見当たらない)、

@@ -978,6 +978,74 @@ void MainFrame::CmdPaste()
 }
 
 //---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// リンク・属性 (機能群6)
+//---------------------------------------------------------------------------
+void MainFrame::CmdCreateLinks(links::LinkKind kind)
+{
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> names = pane->GetSelectedNames();
+	const UnicodeString verb = (kind == links::LinkKind::Shortcut)? _T("ショートカット")
+	                         : (kind == links::LinkKind::Hard)?     _T("ハードリンク")
+	                                                              : _T("シンボリックリンク");
+	if (names.empty()) { SetStatusWarning(verb + _T("の対象がありません")); return; }
+
+	// VCL と同じく**反対ペインのディレクトリ**に作る (MainFrm.cpp:15873)
+	const UnicodeString dst = OppositePane()->GetPath();
+
+	if (kind == links::LinkKind::Hard) {
+		// 同一ボリュームかつ NTFS でなければ作れない (MainFrm.cpp:15707)
+		wchar_t fs[32] = {};
+		const UnicodeString dst_root = get_drive_str(dst);
+		::GetVolumeInformationW(dst_root.c_str(), NULL, 0, NULL, NULL, NULL, fs, 32);
+		if (!links::CanCreateHardLink(get_drive_str(pane->GetPath()), dst_root, UnicodeString(fs))) {
+			wxMessageBox(to_wx(_T("ハードリンクは同じボリュームの NTFS 上にしか作れません")),
+			             to_wx(verb), wxOK | wxICON_WARNING, this);
+			return;
+		}
+	}
+
+	if (!ConfirmItems(this, verb + _T("の作成"), verb + _T("を作成")   , names, dst)) return;
+
+	std::vector<UnicodeString> paths;
+	for (const UnicodeString &name : names) paths.push_back(pane->GetPath() + name);
+
+	const file_ops::FileOpResult result = links::CreateLinks(paths, dst, kind);
+	OppositePane()->Reload();
+	wxMessageBox(to_wx(file_ops::Summarize(result)), to_wx(verb + _T("の結果")),
+	             wxOK | wxICON_INFORMATION, this);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdSetDirTime()
+{
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> names = pane->GetSelectedNames();
+
+	std::vector<UnicodeString> dirs;
+	for (const UnicodeString &name : names) {
+		const UnicodeString p = pane->GetPath() + name;
+		if (dir_exists(p)) dirs.push_back(p);
+	}
+	if (dirs.empty()) { SetStatusWarning(_T("対象のディレクトリがありません")); return; }
+
+	// タイムスタンプの変更も元に戻せないので確認する
+	if (!ConfirmItems(this, _T("タイムスタンプの変更"), _T("配下の最新に合わせ"),
+	                  names, pane->GetPath())) return;
+
+	int done = 0;
+	for (const UnicodeString &d : dirs) {
+		// 表示の設定 (隠し/システム) をそのまま渡す。VCL も同じものを見る
+		if (static_cast<double>(links::SetDirTimeRecursive(d, pane->GetShowHidden(),
+		                                                   pane->GetShowSystem())) > 0.0) done++;
+	}
+	pane->Reload();
+	SetStatusWarning(UnicodeString().sprintf(_T("%d 件のディレクトリの日時を変更しました"), done));
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
 void MainFrame::UpdateStatus()
 {
 	for (int i = 0; i < 2; ++i) {
@@ -1308,6 +1376,19 @@ bool MainFrame::Execute(const UnicodeString &command)
 	}
 	else if (SameStr(command, _T("Paste"))) {
 		CmdPaste();
+	}
+	//-- リンク・属性 ---------------------------------------------------------
+	else if (SameStr(command, _T("CreateShortcut"))) {
+		CmdCreateLinks(links::LinkKind::Shortcut);
+	}
+	else if (SameStr(command, _T("CreateHardLink"))) {
+		CmdCreateLinks(links::LinkKind::Hard);
+	}
+	else if (SameStr(command, _T("CreateSymLink"))) {
+		CmdCreateLinks(links::LinkKind::Symbolic);
+	}
+	else if (SameStr(command, _T("SetDirTime"))) {
+		CmdSetDirTime();
 	}
 	else if (SameStr(command, _T("KeyList"))) {
 		ShowKeyList();

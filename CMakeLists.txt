@@ -240,6 +240,7 @@ if(TARGET nyanfi_core)
 		gui/selection.cpp
 		gui/view_state.cpp
 		gui/clipboard_files.cpp
+		gui/links.cpp
 	)
 	target_include_directories(nyanfi_gui_core PUBLIC ${PROJECT_SOURCE_DIR})
 	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core shell32)
