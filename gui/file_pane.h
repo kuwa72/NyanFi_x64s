@@ -47,6 +47,20 @@ public:
 	const FileItem *GetCurrentItem() const;
 
 	//-- マーク ------------------------------------------------------------
+	//-- 表示の切り替え (gui/view_state.h の純関数が判断を持つ) ---------------
+	/// 隠しファイルを出すか (ShowHideAtr)。変えたら Reload() が要る
+	void SetShowHidden(bool v) { show_hidden_ = v; }
+	bool GetShowHidden() const { return show_hidden_; }
+	/// システムファイルを出すか (ShowSystemAtr)。同上
+	void SetShowSystem(bool v) { show_system_ = v; }
+	bool GetShowSystem() const { return show_system_; }
+	/// サイズをバイト単位で出すか (ShowByteSize)。再描画で足りる
+	void SetByteSize(bool v) { byte_size_ = v; Refresh(); }
+	bool GetByteSize() const { return byte_size_; }
+	/// サイズと更新日時を隠すか (HideSizeTime)。再描画で足りる
+	void SetHideSizeTime(bool v) { hide_size_time_ = v; Refresh(); }
+	bool GetHideSizeTime() const { return hide_size_time_; }
+
 	void ToggleMark();
 	/// カーソルを動かさずに選択を反転する (Shift+↑↓ / SelectUp 用。
 	/// VCL は「反転してから移動」の順で、移動先は反転しない)
@@ -152,6 +166,11 @@ private:
 	const FileItem &ItemAt(int index) const { return all_items_[order_[static_cast<std::size_t>(index)]]; }
 
 	UnicodeString path_;
+	bool show_hidden_ = false;      //!< 隠しファイルを出すか (ShowHideAtr)
+	bool show_system_ = false;      //!< システムファイルを出すか (ShowSystemAtr)
+	bool byte_size_ = false;        //!< サイズをバイト単位で出すか (ShowByteSize)
+	bool hide_size_time_ = false;   //!< サイズと更新日時を隠すか (HideSizeTime)
+
 	std::vector<FileItem> all_items_;   //!< ディスクから読み取った全件の実体 (マーク状態もここが正)
 	std::vector<std::size_t> order_;    //!< マスク絞り込み + 並べ替え後に表示する all_items_ の添字列
 	int cursor_ = 0;

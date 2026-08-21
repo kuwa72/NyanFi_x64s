@@ -4,6 +4,8 @@
  */
 #include "gui/file_pane.h"
 
+#include "gui/view_state.h"
+
 #include <wx/dcbuffer.h>
 #include <wx/settings.h>
 
@@ -118,6 +120,10 @@ void FilePane::Collect()
 	if (FindFirst(path_ + "*", faAnyFile, sr) == 0) {
 		do {
 			if (SameStr(sr.Name, ".") || SameStr(sr.Name, "..")) continue;
+
+			// 隠し属性・システム属性の絞り込み。VCL も列挙時に弾くので、
+			// 設定を変えたら読み直しが要る (gui/view_state.h)
+			if (!view_state::IsListedByAttr(sr.Attr, show_hidden_, show_system_)) continue;
 
 			FileItem itm;
 			itm.name = sr.Name;
@@ -586,15 +592,21 @@ void FilePane::OnPaint(wxPaintEvent &)
 		if (name.Length() > name_cols) name = name.SubString(1, name_cols - 1) + _T("…");
 		dc.DrawText(to_wx(name), char_width_ / 2, y + 1);
 
-		if (itm.is_dir) {
-			dc.DrawText(itm.is_parent ? "<UP>" : "<DIR>", size_col, y + 1);
-		}
-		else {
-			const wxString size_str = to_wx(get_size_str_B(itm.size, 14).Trim());
-			dc.DrawText(size_str, size_col + char_width_ * 8 - dc.GetTextExtent(size_str).x, y + 1);
-		}
+		// HideSizeTime のときはサイズと更新日時を出さない (MainFrm.cpp:19514)
+		if (!hide_size_time_) {
+			if (itm.is_dir) {
+				dc.DrawText(itm.is_parent ? "<UP>" : "<DIR>", size_col, y + 1);
+			}
+			else {
+				// ShowByteSize ならバイト単位でそのまま (MainFrm.cpp:25901)
+				const UnicodeString sz = byte_size_? IntToStr(itm.size)
+				                                   : get_size_str_B(itm.size, 14).Trim();
+				const wxString size_str = to_wx(sz);
+				dc.DrawText(size_str, size_col + char_width_ * 8 - dc.GetTextExtent(size_str).x, y + 1);
+			}
 
-		dc.DrawText(to_wx(FormatDateTime(_T("yyyy/mm/dd hh:nn"), itm.stamp)), date_col, y + 1);
+			dc.DrawText(to_wx(FormatDateTime(_T("yyyy/mm/dd hh:nn"), itm.stamp)), date_col, y + 1);
+		}
 		dc.DrawText(to_wx(get_file_attr_str(itm.attr)), attr_col, y + 1);
 	}
 }

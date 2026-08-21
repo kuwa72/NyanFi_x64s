@@ -127,6 +127,17 @@ private:
 	void MarkBetween(FilePane *pane, int from, int to);
 	/// 指定文字列を含む項目を選択する (MatchSelect)
 	void CmdMatchSelect();
+
+	//-- 表示の切り替え (判断は gui/view_state.h の純関数が持つ) --------------
+	/// 左ペインの取り分を変えて配置し直す
+	void SetBorderRatio(double ratio);
+	/// 両ペインに同じ表示切り替えを適用する (VCL も MAX_FILELIST 全部に効く)
+	void ToggleBothPanes(const std::function<void(FilePane *)> &fn, bool reload);
+	/// 左右のディレクトリとカーソルを入れ替える (SwapLR)
+	void CmdSwapLR();
+
+	double border_ratio_ = 0.5;   //!< 左ペインの取り分 (gui/view_state.h)
+	wxBoxSizer *columns_ = nullptr;  //!< 左右のペインを並べる sizer (比率を変えるため保持)
 	void CmdPrevTab();  //!< 前のタブへ (Shift+Ctrl+Tab、推測のキー)
 	void ShowTabListDialog();  //!< タブの一覧から選ぶ (Ctrl+E、推測のキー。F:PopupTab に相当)
 	/// 現在のタブの記録 (tabs_.MutableCurrent()) を、いま実際に両ペインが

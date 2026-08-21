@@ -24,6 +24,7 @@
 #include "gui/image_load.h"
 #include "gui/rename_dialog.h"
 #include "gui/selection.h"
+#include "gui/view_state.h"
 #include "usr_cmdlist.h"
 #include "usr_file_ex.h"
 #include "usr_file_inf.h"
@@ -206,6 +207,7 @@ MainFrame::MainFrame()
 
 	root->SetSizer(columns);
 	root_ = root;
+	columns_ = columns;
 
 	// タブバー (gui/tabs.h の TabManager の見た目)。root_ の上に横一列で置く
 	// (レイアウトの詳細は MainFrame::OnSize を参照)
@@ -419,6 +421,48 @@ void MainFrame::CmdMatchSelect()
 }
 
 //---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// 表示の切り替え (判断は gui/view_state.h の純関数が持つ。規約8)
+//---------------------------------------------------------------------------
+void MainFrame::SetBorderRatio(double ratio)
+{
+	border_ratio_ = view_state::ClampRatio(ratio);
+	if (columns_ == nullptr) return;
+
+	// sizer の比率は整数なので、100 分率にして割り当てる
+	const int left = static_cast<int>(border_ratio_ * 100.0 + 0.5);
+	columns_->GetItem(static_cast<size_t>(0))->SetProportion(left);
+	columns_->GetItem(static_cast<size_t>(1))->SetProportion(100 - left);
+	root_->Layout();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::ToggleBothPanes(const std::function<void(FilePane *)> &fn, bool reload)
+{
+	// VCL も MAX_FILELIST を回して両方に効かせる (MainFrm.cpp:25904)
+	for (int i = 0; i < 2; ++i) {
+		fn(panes_[i]);
+		if (reload) panes_[i]->Reload();
+	}
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdSwapLR()
+{
+	// VCL の SwapLRActionExecute (MainFrm.cpp:26531) は CurPath とカーソルを入れ替える
+	const UnicodeString left = panes_[0]->GetPath();
+	const UnicodeString right = panes_[1]->GetPath();
+	const int csr0 = panes_[0]->GetCursor();
+	const int csr1 = panes_[1]->GetCursor();
+
+	panes_[0]->SetPath(right);
+	panes_[1]->SetPath(left);
+	panes_[0]->MoveCursorTo(csr1);
+	panes_[1]->MoveCursorTo(csr0);
+	UpdateStatus();  // ヘッダのパス表示もここで更新される
+}
+
+//---------------------------------------------------------------------------
 void MainFrame::UpdateStatus()
 {
 	for (int i = 0; i < 2; ++i) {
@@ -602,6 +646,62 @@ bool MainFrame::Execute(const UnicodeString &command)
 		const int from = pane->GetCursor();
 		if (SameStr(command, _T("CursorTopSel"))) pane->CursorTop(); else pane->CursorEnd();
 		MarkBetween(pane, from, pane->GetCursor());
+	}
+	//-- 表示の切り替え -------------------------------------------------------
+	else if (SameStr(command, _T("ShowHideAtr"))) {
+		// 列挙のしかたが変わるので読み直しが要る (MainFrm.cpp:25992 の ReloadList)
+		const bool v = !pane->GetShowHidden();
+		ToggleBothPanes([v](FilePane *p) { p->SetShowHidden(v); }, true);
+		SetStatusWarning(v? _T("隠しファイルを表示します") : _T("隠しファイルを隠します"));
+	}
+	else if (SameStr(command, _T("ShowSystemAtr"))) {
+		const bool v = !pane->GetShowSystem();
+		ToggleBothPanes([v](FilePane *p) { p->SetShowSystem(v); }, true);
+		SetStatusWarning(v? _T("システムファイルを表示します") : _T("システムファイルを隠します"));
+	}
+	else if (SameStr(command, _T("ShowByteSize"))) {
+		// 表示だけなので再描画で足りる (MainFrm.cpp:25901)
+		const bool v = !pane->GetByteSize();
+		ToggleBothPanes([v](FilePane *p) { p->SetByteSize(v); }, false);
+	}
+	else if (SameStr(command, _T("HideSizeTime"))) {
+		const bool v = !pane->GetHideSizeTime();
+		ToggleBothPanes([v](FilePane *p) { p->SetHideSizeTime(v); }, false);
+	}
+	//-- 左右の境界 -----------------------------------------------------------
+	else if (SameStr(command, _T("BorderLeft"))) {
+		SetBorderRatio(view_state::MoveBorder(border_ratio_, -1));
+	}
+	else if (SameStr(command, _T("BorderRight"))) {
+		SetBorderRatio(view_state::MoveBorder(border_ratio_, 1));
+	}
+	else if (SameStr(command, _T("BorderCenter")) || SameStr(command, _T("EqualListWidth"))) {
+		// EqualListWidth は WidenCurList に "50"/"Left" を渡したもの (MainFrm.cpp:17244)
+		SetBorderRatio(view_state::WidenSide(true, 0.5));
+	}
+	else if (SameStr(command, _T("WidenCurList"))) {
+		SetBorderRatio(view_state::WidenSide(active_ == 0));
+	}
+	else if (SameStr(command, _T("SwapLR"))) {
+		CmdSwapLR();
+	}
+	//-- ウィンドウ -----------------------------------------------------------
+	else if (SameStr(command, _T("WinMaximize"))) {
+		Maximize(true);
+	}
+	else if (SameStr(command, _T("WinMinimize"))) {
+		Iconize(true);
+	}
+	else if (SameStr(command, _T("WinNormal"))) {
+		if (IsMaximized()) Maximize(false);
+		if (IsIconized()) Iconize(false);
+	}
+	else if (SameStr(command, _T("ShowStatusBar"))) {
+		wxStatusBar *sb = GetStatusBar();
+		if (sb != nullptr) { sb->Show(!sb->IsShown()); Layout(); }
+	}
+	else if (SameStr(command, _T("ShowTabBar"))) {
+		if (tab_bar_ != nullptr) { tab_bar_->Show(!tab_bar_->IsShown()); Layout(); }
 	}
 	else if (SameStr(command, _T("KeyList"))) {
 		ShowKeyList();
