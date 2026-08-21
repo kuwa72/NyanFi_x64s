@@ -190,8 +190,14 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Shift+M"), _T("MoveTo"));
 	Assign(_T("Ctrl+Shift+U"), _T("NameToUpper"));
 	Assign(_T("Ctrl+Shift+N"), _T("NameToLower"));
-	Assign(_T("Ctrl+C"), _T("CopyFileName"));
 	Assign(_T("Ctrl+N"), _T("NewFile"));
+	// クリップボード経由。エクスプローラと同じ Ctrl+C / Ctrl+X / Ctrl+V にした。
+	// **Ctrl+C はファイル名のコピーではなくファイルのコピー**にしてある
+	// (エクスプローラの慣習を優先。名前のコピーは Ctrl+Shift+C)
+	Assign(_T("Ctrl+C"), _T("CopyToClip"));
+	Assign(_T("Ctrl+X"), _T("CutToClip"));
+	Assign(_T("Ctrl+V"), _T("Paste"));
+	Assign(_T("Ctrl+Shift+C"), _T("CopyFileName"));
 
 	// 並べ替え・絞り込み。"S" は src/Global.cpp の既定キー表にある実際の割り当て
 	// ("F:S=SortDlg") と同じ。Ctrl+M / Ctrl+U は既定キー表に対応する記載が無く
