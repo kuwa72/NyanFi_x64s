@@ -144,6 +144,16 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Ctrl+A"), _T("SelAllItem"));
 	Assign(_T("Ctrl+D"), _T("ClearAll"));
 
+	// 選択しながらカーソル移動。Shift+Up / Shift+Down は
+	// src/Global.cpp:2113-2114 の既定表にある実際の割り当て
+	Assign(_T("Shift+UP"), _T("CursorUpSel"));
+	Assign(_T("Shift+DOWN"), _T("CursorDownSel"));
+	// 以下は VCL の既定表に無いので推測 (上2つと対になるように決めた)
+	Assign(_T("Shift+PGUP"), _T("PageUpSel"));
+	Assign(_T("Shift+PGDN"), _T("PageDownSel"));
+	Assign(_T("Shift+HOME"), _T("CursorTopSel"));
+	Assign(_T("Shift+END"), _T("CursorEndSel"));
+
 	// 並べ替え・絞り込み。"S" は src/Global.cpp の既定キー表にある実際の割り当て
 	// ("F:S=SortDlg") と同じ。Ctrl+M / Ctrl+U は既定キー表に対応する記載が無く
 	// (パスマスクはコンボボックス操作が前提で単独のキー割り当てが見当たらない)、

@@ -23,6 +23,7 @@
 #include "gui/grep_dialog.h"
 #include "gui/image_load.h"
 #include "gui/rename_dialog.h"
+#include "gui/selection.h"
 #include "usr_cmdlist.h"
 #include "usr_file_ex.h"
 #include "usr_file_inf.h"
@@ -362,6 +363,62 @@ void MainFrame::SetActivePane(int index)
 }
 
 //---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// 選択操作の受け渡し (判断は gui/selection.h の純関数が持つ。規約8)
+//---------------------------------------------------------------------------
+void MainFrame::SetStatusWarning(const UnicodeString &text)
+{
+	SetStatusText(to_wx(text), 0);
+}
+
+//---------------------------------------------------------------------------
+bool MainFrame::ApplySelection(FilePane *pane, const std::function<void(std::vector<FileItem> &)> &fn)
+{
+	std::vector<FileItem> items = pane->VisibleItems();
+	fn(items);
+	pane->ApplyMarks(items);
+	return selection::MarkedCount(items) > 0;
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::MarkCurrentAndMove(FilePane *pane, int delta)
+{
+	// VCL の SelectUpActionExecute (MainFrm.cpp:25031) と同じ順序。
+	// 「今の位置を反転してから動く」なので、動いた先は反転されない
+	pane->ToggleMarkNoMove();
+	pane->MoveCursor(delta);
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::MarkBetween(FilePane *pane, int from, int to)
+{
+	std::vector<FileItem> items = pane->VisibleItems();
+	// 移動元と移動先の**両方を含む**範囲を選択する。
+	// selection::MarkRange は [from, to) なので、下限・上限を作って +1 する
+	const int lo = (from < to)? from : to;
+	const int hi = (from < to)? to : from;
+	selection::MarkRange(items, lo, hi + 1);
+	pane->ApplyMarks(items);
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdMatchSelect()
+{
+	const wxString word = wxGetTextFromUser(
+		to_wx(_T("名前に含む文字列を入力してください")), to_wx(_T("指定文字列を含むファイルを選択")),
+		wxEmptyString, this);
+	if (word.IsEmpty()) return;
+
+	FilePane *pane = ActivePane();
+	std::vector<FileItem> items = pane->VisibleItems();
+	const int n = selection::SelectMatching(items, to_us(word));
+	pane->ApplyMarks(items);
+
+	if (n == 0) SetStatusWarning(_T("一致する項目がありません"));
+	else SetStatusWarning(UnicodeString().sprintf(_T("%d 件を選択しました"), n));
+}
+
+//---------------------------------------------------------------------------
 void MainFrame::UpdateStatus()
 {
 	for (int i = 0; i < 2; ++i) {
@@ -493,6 +550,58 @@ bool MainFrame::Execute(const UnicodeString &command)
 	}
 	else if (SameStr(command, _T("ClearAll"))) {
 		pane->MarkAll(false);
+	}
+	//-- 選択操作 -------------------------------------------------------------
+	// 判断は gui/selection.h の純関数が持ち、ここは受け渡しだけにする (規約8)
+	else if (SameStr(command, _T("SelAllFile"))) {
+		ApplySelection(pane, [](std::vector<FileItem> &v) { selection::ToggleAllFiles(v); });
+	}
+	else if (SameStr(command, _T("SelReverse"))) {
+		ApplySelection(pane, [](std::vector<FileItem> &v) { selection::ReverseFiles(v); });
+	}
+	else if (SameStr(command, _T("SelReverseAll"))) {
+		ApplySelection(pane, [](std::vector<FileItem> &v) { selection::ReverseAll(v); });
+	}
+	else if (SameStr(command, _T("SelSameExt"))) {
+		const int csr = pane->GetCursor();
+		if (!ApplySelection(pane, [csr](std::vector<FileItem> &v) { selection::SelectSameExt(v, csr); }))
+			SetStatusWarning(_T("カーソル位置がファイルではありません"));
+	}
+	else if (SameStr(command, _T("SelSameName"))) {
+		const int csr = pane->GetCursor();
+		if (!ApplySelection(pane, [csr](std::vector<FileItem> &v) { selection::SelectSameName(v, csr); }))
+			SetStatusWarning(_T("カーソル位置がファイルではありません"));
+	}
+	else if (SameStr(command, _T("MatchSelect"))) {
+		CmdMatchSelect();
+	}
+	else if (SameStr(command, _T("NextSelItem")) || SameStr(command, _T("PrevSelItem"))) {
+		const bool forward = SameStr(command, _T("NextSelItem"));
+		const std::vector<FileItem> v = pane->VisibleItems();
+		const int idx = selection::FindNextMarked(v, pane->GetCursor(), forward);
+		if (idx == -1) SetStatusWarning(_T("選択項目がありません"));
+		else pane->MoveCursorTo(idx);
+	}
+	else if (SameStr(command, _T("SelectUp"))) {
+		// VCL の SelectUpActionExecute (MainFrm.cpp:25031): 選択を反転してから上へ
+		MarkCurrentAndMove(pane, -1);
+	}
+	//-- 選択しながらカーソル移動 (Shift+↑↓ など) -----------------------------
+	else if (SameStr(command, _T("CursorUpSel"))) {
+		MarkCurrentAndMove(pane, -1);
+	}
+	else if (SameStr(command, _T("CursorDownSel"))) {
+		MarkCurrentAndMove(pane, 1);
+	}
+	else if (SameStr(command, _T("PageUpSel")) || SameStr(command, _T("PageDownSel"))) {
+		const int from = pane->GetCursor();
+		pane->PageMove(SameStr(command, _T("PageUpSel"))? -1 : 1);
+		MarkBetween(pane, from, pane->GetCursor());
+	}
+	else if (SameStr(command, _T("CursorTopSel")) || SameStr(command, _T("CursorEndSel"))) {
+		const int from = pane->GetCursor();
+		if (SameStr(command, _T("CursorTopSel"))) pane->CursorTop(); else pane->CursorEnd();
+		MarkBetween(pane, from, pane->GetCursor());
 	}
 	else if (SameStr(command, _T("KeyList"))) {
 		ShowKeyList();

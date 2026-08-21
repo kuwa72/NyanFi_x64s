@@ -204,11 +204,17 @@ void FilePane::PageMove(int direction)
 //---------------------------------------------------------------------------
 void FilePane::ToggleMark()
 {
+	ToggleMarkNoMove();
+	MoveCursor(1);  // NyanFi と同じく、マークしたらカーソルを進める
+}
+
+void FilePane::ToggleMarkNoMove()
+{
 	if (cursor_ < 0 || cursor_ >= GetItemCount()) return;
 	FileItem &itm = ItemAt(cursor_);
 	if (itm.is_parent) return;  // ".." はマークできない
 	itm.marked = !itm.marked;
-	MoveCursor(1);              // NyanFi と同じく、マークしたらカーソルを進める
+	Refresh();
 }
 
 void FilePane::MarkAll(bool marked)
@@ -277,6 +283,22 @@ std::vector<UnicodeString> FilePane::GetSelectedNames() const
 		if (cur != nullptr && !cur->is_parent) names.push_back(cur->name);
 	}
 	return names;
+}
+
+std::vector<FileItem> FilePane::VisibleItems() const
+{
+	std::vector<FileItem> items;
+	items.reserve(static_cast<std::size_t>(GetItemCount()));
+	for (int i = 0; i < GetItemCount(); ++i) items.push_back(ItemAt(i));
+	return items;
+}
+
+void FilePane::ApplyMarks(const std::vector<FileItem> &items)
+{
+	// 件数が食い違っていたら何もしない (取り出してから並びが変わった場合)
+	if (static_cast<int>(items.size()) != GetItemCount()) return;
+	for (int i = 0; i < GetItemCount(); ++i) ItemAt(i).marked = items[static_cast<std::size_t>(i)].marked;
+	Refresh();
 }
 
 std::vector<FileItem> FilePane::GetSelectedItems() const

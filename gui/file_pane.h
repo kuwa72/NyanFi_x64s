@@ -48,6 +48,9 @@ public:
 
 	//-- マーク ------------------------------------------------------------
 	void ToggleMark();
+	/// カーソルを動かさずに選択を反転する (Shift+↑↓ / SelectUp 用。
+	/// VCL は「反転してから移動」の順で、移動先は反転しない)
+	void ToggleMarkNoMove();
 	void MarkAll(bool marked);
 	int GetMarkedCount() const;
 
@@ -74,6 +77,15 @@ public:
 	/// 1件) を FileItem (name/is_dir を含む) で返す。一括リネーム
 	/// (gui/rename_dialog.h) がディレクトリと拡張子付きファイルを区別するために使う
 	std::vector<FileItem> GetSelectedItems() const;
+
+	/// 表示中の項目を並び順のまま取り出す (選択操作の純粋ロジック
+	/// `gui/selection.h` に渡すため。絞り込みで隠れている項目は含まない)
+	std::vector<FileItem> VisibleItems() const;
+
+	/// `VisibleItems()` で取り出したものの選択状態を書き戻す。
+	/// **並び順が変わっていないことが前提**なので、取り出してから
+	/// 書き戻すまでの間に再読み込みや並べ替えを挟まないこと
+	void ApplyMarks(const std::vector<FileItem> &items);
 
 	//-- 状態 --------------------------------------------------------------
 	int GetItemCount() const { return static_cast<int>(order_.size()); }
