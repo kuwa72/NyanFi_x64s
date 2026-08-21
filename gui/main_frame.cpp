@@ -21,6 +21,7 @@
 
 #include "gui/file_info_panel.h"
 #include "gui/file_open.h"
+#include "gui/archive.h"
 #include "gui/clipboard_files.h"
 #include "gui/file_ops.h"
 #include "gui/grep_dialog.h"
@@ -1046,6 +1047,117 @@ void MainFrame::CmdSetDirTime()
 }
 
 //---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// 書庫 (機能群7)
+//
+// 実体は移植済みの src/usr_arc.cpp。**外部の書庫 DLL** (7-zip32.dll など) を
+// 読むので、入っていない環境では「利用できない」と理由を出して中止する。
+// VCL 版も同じ前提。
+//---------------------------------------------------------------------------
+void MainFrame::CmdListArchive()
+{
+	FilePane *pane = ActivePane();
+	const FileItem *itm = pane->GetCurrentItem();
+	if (itm == nullptr || itm->is_dir) { SetStatusWarning(_T("カーソル位置が書庫ではありません")); return; }
+
+	const UnicodeString path = pane->GetPath() + itm->name;
+	std::vector<archive::Entry> entries;
+	UnicodeString error;
+	if (!archive::ListEntries(path, entries, error)) {
+		wxMessageBox(to_wx(error), to_wx(_T("書庫の一覧")), wxOK | wxICON_WARNING, this);
+		return;
+	}
+
+	UnicodeString text;
+	text.sprintf(_T("%s  (%d 項目)\r\n\r\n"), itm->name.c_str(), static_cast<int>(entries.size()));
+	int shown = 0;
+	for (const archive::Entry &e : entries) {
+		if (shown++ >= 200) { text += _T("...\r\n(以下省略)\r\n"); break; }
+		text += _T("  ") + e.name + _T("\r\n");
+	}
+	wxMessageBox(to_wx(text), to_wx(_T("書庫の一覧")), wxOK | wxICON_INFORMATION, this);
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdTestArchive()
+{
+	FilePane *pane = ActivePane();
+	const FileItem *itm = pane->GetCurrentItem();
+	if (itm == nullptr || itm->is_dir) { SetStatusWarning(_T("カーソル位置が書庫ではありません")); return; }
+
+	UnicodeString error;
+	if (archive::TestArchive(pane->GetPath() + itm->name, error)) {
+		wxMessageBox(to_wx(_T("問題は見つかりませんでした")), to_wx(_T("書庫の検査")),
+		             wxOK | wxICON_INFORMATION, this);
+	}
+	else {
+		wxMessageBox(to_wx(error), to_wx(_T("書庫の検査")), wxOK | wxICON_WARNING, this);
+	}
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdUnPack(bool to_current)
+{
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> names = pane->GetSelectedNames();
+	if (names.empty()) { SetStatusWarning(_T("展開する書庫がありません")); return; }
+
+	// VCL と同じく既定は反対ペイン、ToCurrent 付きならカレント
+	const UnicodeString dst = to_current? pane->GetPath() : OppositePane()->GetPath();
+	if (!ConfirmItems(this, _T("展開"), _T("展開"), names, dst)) return;
+
+	int ok = 0;
+	std::vector<UnicodeString> failures;
+	for (const UnicodeString &name : names) {
+		UnicodeString error;
+		if (archive::Extract(pane->GetPath() + name, dst, error)) ok++;
+		else failures.push_back(name + _T(": ") + error);
+	}
+
+	panes_[0]->Reload();
+	panes_[1]->Reload();
+
+	UnicodeString msg;
+	msg.sprintf(_T("%d 件を展開しました"), ok);
+	for (const UnicodeString &f : failures) msg += _T("\r\n") + f;
+	wxMessageBox(to_wx(msg), to_wx(_T("展開の結果")), wxOK | wxICON_INFORMATION, this);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdPack(bool to_current)
+{
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> names = pane->GetSelectedNames();
+	if (names.empty()) { SetStatusWarning(_T("書庫に詰めるものがありません")); return; }
+
+	const FileItem *cur = pane->GetCurrentItem();
+	const UnicodeString base = archive::DefaultArchiveBaseName(
+		(cur != nullptr && !cur->is_parent)? cur->name : EmptyStr, names);
+
+	const wxString input = wxGetTextFromUser(
+		to_wx(_T("作る書庫の名前を入力してください (拡張子で形式が決まります)")),
+		to_wx(_T("書庫の作成")), to_wx(base + _T(".zip")), this);
+	if (input.IsEmpty()) return;
+
+	const UnicodeString dst_dir = to_current? pane->GetPath() : OppositePane()->GetPath();
+	const UnicodeString arc = IncludeTrailingPathDelimiter(dst_dir) + to_us(input);
+
+	if (!ConfirmItems(this, _T("書庫の作成"), _T("書庫に追加"), names, arc)) return;
+
+	UnicodeString error;
+	if (!archive::Create(arc, pane->GetPath(), names, error)) {
+		wxMessageBox(to_wx(error), to_wx(_T("書庫の作成")), wxOK | wxICON_WARNING, this);
+		return;
+	}
+
+	panes_[0]->Reload();
+	panes_[1]->Reload();
+	SetStatusWarning(_T("書庫を作成しました: ") + to_us(input));
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
 void MainFrame::UpdateStatus()
 {
 	for (int i = 0; i < 2; ++i) {
@@ -1389,6 +1501,25 @@ bool MainFrame::Execute(const UnicodeString &command)
 	}
 	else if (SameStr(command, _T("SetDirTime"))) {
 		CmdSetDirTime();
+	}
+	//-- 書庫 -----------------------------------------------------------------
+	else if (SameStr(command, _T("ListArchive"))) {
+		CmdListArchive();
+	}
+	else if (SameStr(command, _T("TestArchive"))) {
+		CmdTestArchive();
+	}
+	else if (SameStr(command, _T("UnPack"))) {
+		CmdUnPack(false);
+	}
+	else if (SameStr(command, _T("UnPackToCurr"))) {
+		CmdUnPack(true);
+	}
+	else if (SameStr(command, _T("Pack"))) {
+		CmdPack(false);
+	}
+	else if (SameStr(command, _T("PackToCurr"))) {
+		CmdPack(true);
 	}
 	else if (SameStr(command, _T("KeyList"))) {
 		ShowKeyList();
