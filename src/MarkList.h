@@ -22,6 +22,11 @@ private:
 		TList::Put(Index, Item);
 	}
 
+	// Items (下の添字プロキシ) から Get/Put を呼ぶため。__property は private の
+	// アクセサを読めるが、素の C++ のプロキシは friend が要る
+	template <class O, class T, T *(O::*G)(int), void (O::*S)(int, T *)>
+	friend class compat::IndexedPtrProperty;
+
 public:
 	__fastcall MarkList(Classes::TComponent* AOwner);
 	__fastcall ~MarkList();
@@ -52,7 +57,10 @@ public:
 	TForm *MarkOwner;
 	TColor MarkColor;
 
-	__property TShape * Items[int Index] = {read=Get, write=Put};
+	// __property TShape * Items[int Index] = {read=Get, write=Put};
+	// C++Builder の __property を添字プロキシに置き換えたもの。
+	// 呼び出し側の `Items[i]` / `Items[i] = p` はそのまま通る
+	compat::IndexedPtrProperty<MarkList, TShape, &MarkList::Get, &MarkList::Put> Items{this};
 };
 //---------------------------------------------------------------------------
 #endif

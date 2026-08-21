@@ -23,6 +23,8 @@ struct FileItem {
 	bool is_dir = false;   //!< ディレクトリか
 	bool is_parent = false;//!< ".." か
 	bool marked = false;   //!< マーク済みか
+	bool matched = false;  //!< インクリメンタルサーチのキーワードに一致しているか
+	                       //!< (表示のハイライトにのみ使う一時的な状態。gui/navigation.h を参照)
 };
 
 /// 並べ替えキー。SrtModDlg (ソートダイアログ) の並び (名前/拡張子/更新日時/サイズ/属性) に合わせてある

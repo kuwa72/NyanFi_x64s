@@ -58,6 +58,12 @@ public:
 	/// 実行ファイルと同じ場所の既定の設定ファイルパス (`<exe名>_wx.ini`)
 	static UnicodeString DefaultIniPath();
 
+	/// 同じ ini ファイルを共有するための参照 (gui/tabs.h の TabManager::
+	/// SaveToIni/LoadFromIni に渡す用)。別ファイルにすると UsrIniFile が
+	/// それぞれ別に全セクションを持ち直し、片方の UpdateFile がもう片方の
+	/// 書き込みを消してしまうため、同じ UsrIniFile インスタンスを共有する
+	UsrIniFile &Ini() { return *ini_; }
+
 	WindowState Window;
 	UnicodeString LeftDir;   //!< 左ペインの最後に開いていたディレクトリ
 	UnicodeString RightDir;  //!< 右ペインの最後に開いていたディレクトリ

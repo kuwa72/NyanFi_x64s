@@ -107,6 +107,8 @@ add_library(nyanfi_compat STATIC
 	compat/src/json.cpp
 	compat/src/graphics.cpp
 	compat/src/registry.cpp
+	compat/src/iduri.cpp
+	compat/src/netencoding.cpp
 )
 target_include_directories(nyanfi_compat PUBLIC compat/include)
 target_link_libraries(nyanfi_compat PUBLIC
@@ -120,6 +122,7 @@ target_link_libraries(nyanfi_compat PUBLIC
 	gdi32
 	user32
 	rstrtmgr
+	dwmapi	# DwmGetWindowAttribute (Global.cpp / UserFunc.cpp)
 )
 
 #-----------------------------------------------------------------------------
@@ -194,6 +197,31 @@ endif()
 # 折り返し計算) も同じ理由 (wx 非依存、tests/core/test_gui_text_viewer.cpp
 # から直接テストする) でここに含める。文字コード判定は自前実装せず
 # src/usr_str.cpp の get_MemoryCodePage をそのまま使う。
+#
+# gui/navigation.cpp (インクリメンタルサーチの照合・ディレクトリ履歴・
+# ドライブ種別表示名・パス直接入力の解決) も同じ理由 (wx 非依存、
+# tests/core/test_gui_navigation.cpp から直接テストする) でここに含める。
+#
+# gui/grep.cpp (ファイル内容検索の走査・マッチ判定) も同じ理由 (wx 非依存、
+# tests/core/test_gui_grep.cpp から直接テストする) でここに含める。
+# 文字コード判定・バイナリ判定は gui/text_viewer_core.cpp の LoadForView を、
+# マッチ判定は移植済みの find_mlt/TRegEx (src/usr_str.cpp) をそのまま使う。
+#
+# gui/image_load.cpp (画像ビューアの拡張子判定・読み込み) も同じ理由 (wx 非依存、
+# tests/core/test_gui_image_load.cpp から直接テストする) でここに含める。
+# デコードは自前で書かず、移植済みの WIC ラッパー (src/usr_wic.cpp、既に
+# nyanfi_core に含まれている) をそのまま使う。
+#
+# gui/tabs.cpp (タブの追加・削除・切り替えと ini 永続化) も同じ理由 (wx 非依存、
+# tests/core/test_gui_tabs.cpp から直接テストする) でここに含める。VCL 版の
+# tab_info (src/Global.h、実測) は左右ペイン共有の1本のタブバーだったため、
+# gui/tabs.h もそれに合わせた設計にしてある (詳細はそのファイルの解説を参照)。
+#
+# gui/rename.cpp (一括リネームのプレビュー計算・衝突判定・実行) も同じ理由
+# (wx 非依存、tests/core/test_gui_rename.cpp から直接テストする) でここに
+# 含める。正規表現置換は移植済みの TRegEx (compat/include/compat/regex.h)・
+# replace_regex_2 (src/usr_str.cpp) を、実際のリネームは移植済みの
+# rename_File (src/usr_file_ex.h) をそのまま使う。
 #-----------------------------------------------------------------------------
 if(TARGET nyanfi_core)
 	add_library(nyanfi_gui_core STATIC
@@ -204,6 +232,11 @@ if(TARGET nyanfi_core)
 		gui/file_open.cpp
 		gui/file_info.cpp
 		gui/text_viewer_core.cpp
+		gui/navigation.cpp
+		gui/grep.cpp
+		gui/image_load.cpp
+		gui/tabs.cpp
+		gui/rename.cpp
 	)
 	target_include_directories(nyanfi_gui_core PUBLIC ${PROJECT_SOURCE_DIR})
 	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core shell32)

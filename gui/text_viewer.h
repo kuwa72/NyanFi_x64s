@@ -48,6 +48,11 @@ public:
 	/// ステータスバー表示用の要約 (ファイル名・コードページ・行数・折り返し等)
 	UnicodeString GetStatusSummary() const;
 
+	/// 指定行 (0ベース) へカーソルを移動する。範囲外は clamp する
+	/// (grep 検索結果から「該当行にカーソルを合わせて開く」ための公開 API。
+	/// gui/grep_dialog.cpp から呼ばれる)
+	void GotoLine(int line);
+
 private:
 	void OnPaint(wxPaintEvent &event);
 	void OnSize(wxSizeEvent &event);

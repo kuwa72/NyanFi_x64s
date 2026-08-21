@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <memory>
 
+#include "gui/navigation.h"
 #include "usr_file_ex.h"
 #include "usr_file_inf.h"
 #include "usr_str.h"
@@ -68,7 +69,7 @@ void FilePane::UpdateMetrics()
 }
 
 //---------------------------------------------------------------------------
-bool FilePane::SetPath(const UnicodeString &path)
+bool FilePane::SetPath(const UnicodeString &path, bool record_history)
 {
 	const UnicodeString newpath = IncludeTrailingPathDelimiter(path);
 	if (!dir_exists(newpath)) return false;
@@ -78,6 +79,10 @@ bool FilePane::SetPath(const UnicodeString &path)
 	top_ = 0;
 	Collect();
 	Refresh();
+
+	// 履歴をたどる移動 (GoBackDirHistory 等) からは record_history=false で
+	// 呼ばれる。二重に記録すると戻る/進むの位置がずれるため
+	if (record_history) history_.Navigate(path_);
 	return true;
 }
 
@@ -225,6 +230,39 @@ int FilePane::GetMarkedCount() const
 	return n;
 }
 
+//---------------------------------------------------------------------------
+std::vector<UnicodeString> FilePane::VisibleNames() const
+{
+	std::vector<UnicodeString> names;
+	names.reserve(all_items_.size());
+	for (std::size_t i = 0; i < order_.size(); ++i) names.push_back(all_items_[order_[i]].name);
+	return names;
+}
+
+//---------------------------------------------------------------------------
+const FileItem *FilePane::ItemAtVisible(int index) const
+{
+	if (index < 0 || index >= GetItemCount()) return nullptr;
+	return &ItemAt(index);
+}
+
+//---------------------------------------------------------------------------
+void FilePane::ApplyIncSearchHighlight(const UnicodeString &keyword)
+{
+	for (FileItem &itm : all_items_) itm.matched = IncrementalSearchMatch(itm.name, keyword);
+	Refresh();
+}
+
+//---------------------------------------------------------------------------
+int FilePane::GetMatchedCount() const
+{
+	int n = 0;
+	for (int i = 0; i < GetItemCount(); ++i) {
+		if (ItemAt(i).matched) ++n;
+	}
+	return n;
+}
+
 std::vector<UnicodeString> FilePane::GetSelectedNames() const
 {
 	std::vector<UnicodeString> names;
@@ -239,6 +277,21 @@ std::vector<UnicodeString> FilePane::GetSelectedNames() const
 		if (cur != nullptr && !cur->is_parent) names.push_back(cur->name);
 	}
 	return names;
+}
+
+std::vector<FileItem> FilePane::GetSelectedItems() const
+{
+	std::vector<FileItem> items;
+	for (int i = 0; i < GetItemCount(); ++i) {
+		const FileItem &itm = ItemAt(i);
+		if (itm.marked && !itm.is_parent) items.push_back(itm);
+	}
+
+	if (items.empty()) {
+		const FileItem *cur = GetCurrentItem();
+		if (cur != nullptr && !cur->is_parent) items.push_back(*cur);
+	}
+	return items;
 }
 
 //---------------------------------------------------------------------------
@@ -273,6 +326,32 @@ bool FilePane::EnterCurrent()
 
 	if (itm->is_parent) return GoParent();
 	return SetPath(path_ + itm->name);
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @details VCL 版の MoveDirHistCore(true) に相当 (履歴配列の簡略版なので
+ * ワークリスト遷移や比較モードへの対応は無い)。移動先が既に存在しない場合
+ * (訪問後に削除された等) は履歴の位置だけが進んで一覧は変わらない。稀な
+ * 事象のため、Phase 2 骨格では復旧処理を持たない (既知の制約として報告に明記)
+ */
+bool FilePane::GoBackDirHistory()
+{
+	if (!history_.CanBack()) return false;
+	return SetPath(history_.Back(), false);
+}
+
+bool FilePane::GoForwardDirHistory()
+{
+	if (!history_.CanForward()) return false;
+	return SetPath(history_.Forward(), false);
+}
+
+bool FilePane::GoDirHistoryIndex(int index)
+{
+	const UnicodeString target = history_.JumpTo(index);
+	if (target.IsEmpty()) return false;
+	return SetPath(target, false);
 }
 
 //---------------------------------------------------------------------------
@@ -403,6 +482,9 @@ void FilePane::OnPaint(wxPaintEvent &)
 	const wxColour hdr_bg = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
 	const wxColour hdr_fg = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT);
 	const wxColour mark_fg = wxColour(0xE0, 0x60, 0x30);
+	// インクリメンタルサーチの一致項目の背景 (VCL 版の col_matchItem に相当)。
+	// ツールチップ相当の配色はライト/ダーク双方で背景と衝突しにくいため採用した
+	const wxColour match_bg = wxSystemSettings::GetColour(wxSYS_COLOUR_INFOBK);
 
 	const wxSize client = GetClientSize();
 	dc.SetBrush(wxBrush(bg));
@@ -466,6 +548,12 @@ void FilePane::OnPaint(wxPaintEvent &)
 				dc.SetPen(wxPen(sel_bg));
 				dc.DrawRectangle(0, y, client.x, row_height_);
 			}
+		}
+		else if (itm.matched) {
+			// インクリメンタルサーチの一致項目 (カーソル行は上で処理済みなのでここには来ない)
+			dc.SetBrush(wxBrush(match_bg));
+			dc.SetPen(*wxTRANSPARENT_PEN);
+			dc.DrawRectangle(0, y, client.x, row_height_);
 		}
 
 		dc.SetTextForeground(text_fg);

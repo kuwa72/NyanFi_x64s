@@ -34,8 +34,13 @@
  *   RegisterStyleHook / Engine / TrySetStyle (MainFrm.cpp, NyanFi.cpp が使用)
  *   は GUI 生成後の話であり Phase 0 では未実装 (報告に明記)。
  *
- * Graphics::TIcon は Global.cpp 等 GUI ファイルで使われているが、担当範囲の
- * 実測対象 (usr_wic.cpp 等) には現れず、今回は未実装 (報告に明記)。
+ * Phase 3 (Global.cpp を通す作業) で追加した画像クラス:
+ *   TGraphic / TIcon / TPngImage / TGIFImage / TPicture。いずれも
+ *   gui_stubs.h と同じ「宣言のみ」の方針 (規約4) で、実際の画像処理は
+ *   持たない。追加したメンバは src/ の実呼び出し箇所を grep して決めており、
+ *   根拠は各クラスの Doxygen コメントに書いてある。
+ *   TCanvas にも Draw / TextRect / Polygon / FrameRect / Ellipse /
+ *   DrawFocusRect を宣言のみで追加した。
  */
 #ifndef NYANFI_COMPAT_GRAPHICS_H
 #define NYANFI_COMPAT_GRAPHICS_H
@@ -137,6 +142,40 @@ enum TPixelFormat { pfDevice, pf1bit, pf4bit, pf8bit, pf15bit, pf16bit, pf24bit,
 enum TAlphaFormat { afIgnored, afDefined, afPremultiplied };
 
 class TCanvas;
+struct TRect;	//!< このファイルの後方で定義 (TGraphic の宣言だけなら不完全型で足りる)
+
+//---------------------------------------------------------------------------
+/**
+ * @brief Vcl.Graphics::TGraphic 相当 (画像クラスの共通基底)
+ * @details TBitmap / TIcon / TPngImage / TGIFImage / TMetafile の共通の親。
+ *          `TCanvas::Draw(x, y, graphic)` の引数型として必要になったので
+ *          Phase 3 で追加した。
+ *
+ * 実測 (Phase 3 で grep して確定):
+ *   - Transparent: Global.cpp:12599,12633 (`bmp->Transparent = true`)、
+ *     Global.cpp:10255,10268 (`png_img/gif_img->Transparent = true`)、
+ *     AppDlg.cpp:657、SubView.cpp:109
+ *   - LoadFromFile: Global.cpp:7439,10254,10267、usr_shell.cpp:1624、
+ *     SubView.cpp:107,115、AppDlg.cpp:656
+ *   - Draw(TCanvas*, TRect): Global.cpp:7441 (`png_buf->Draw(cv, Rect(...))`)、
+ *     AppDlg.cpp:1052
+ *
+ * @warning Width / Height / Empty は基底には置いていない。Graphics::TBitmap が
+ *          既に compat::ROProperty で持っており、基底にデータメンバを足すと
+ *          隠蔽されて紛らわしくなるため、各派生クラスが個別に宣言する。
+ */
+class TGraphic : public TPersistent {
+public:
+	/// 透過描画の指定 (単純な値の保持のみ。実際の透過処理は Phase 3 の GUI 実装で行う)
+	bool Transparent = false;
+
+	/// @warning 宣言のみ。実際にこの経路がリンクされると未定義参照になる
+	void LoadFromFile(const UnicodeString &fileName);
+	/// @warning 宣言のみ (rect に収まるように描画する。実描画は未実装)
+	/// @note VCL では TGraphic::Draw は protected だが、C++Builder 版の既存コード
+	///       (AppDlg.cpp:1052 / Global.cpp:7441) が外から呼んでいるので public にした
+	void Draw(TCanvas *canvas, const TRect &rect);
+};
 
 //---------------------------------------------------------------------------
 /**
@@ -144,7 +183,7 @@ class TCanvas;
  * @details CreateDIBSection による 24bpp トップダウン DIB を実体に持つ。
  *          ScanLine[i] は常に上から i 行目 (VCL の TBitmap と同じ向き)。
  */
-class TBitmap : public TPersistent {
+class TBitmap : public TGraphic {
 public:
 	TBitmap();
 	~TBitmap() override;
@@ -165,6 +204,23 @@ public:
 	void SetAlphaFormat(TAlphaFormat fmt) { alpha_format_ = fmt; }
 
 	HBITMAP GetHandle() const { return hbmp_; }
+	/// 保持している HBITMAP を差し替える (NULL を渡すと解放して空にする)。
+	/// 実測: Global.cpp:10315 / LoupeFrm.cpp:115 が `bmp->Handle = NULL;` とする。
+	/// 実データの付け替えは DIB の作り直しを伴う実処理なので、規約4 に従い
+	/// **宣言のみ**にしてある
+	/// @warning 宣言のみ
+	void SetHandle(HBITMAP handle);
+
+	/// @brief 保持している HBITMAP の所有権を呼び出し側へ渡し、自身は空になる
+	/// @details Vcl.Graphics::TBitmap::ReleaseHandle 相当。
+	///          実測: task_thread.cpp:1483 / thumb_thread.cpp:186,197 の
+	///          `i_bp->Handle = r_bp->ReleaseHandle();` (別のビットマップが
+	///          作った結果をそのまま引き取る)。
+	///          対になる SetHandle が「DIB の作り直しを伴う実処理」なので
+	///          宣言のみにしてあり、こちらも揃えてある (片方だけ実装すると
+	///          「解放したのに付け替わらない」経路が静かに通ってしまう)。
+	/// @warning 宣言のみ
+	HBITMAP ReleaseHandle();
 
 	/// ScanLine[] プロパティ (1 行分の先頭ポインタ。上から index 行目)
 	class ScanLineProperty {
@@ -183,7 +239,7 @@ public:
 		this};
 	compat::RWValueProperty<TBitmap, TAlphaFormat, &TBitmap::GetAlphaFormat, &TBitmap::SetAlphaFormat> AlphaFormat{
 		this};
-	compat::ROProperty<TBitmap, HBITMAP, &TBitmap::GetHandle> Handle{this};
+	compat::RWValueProperty<TBitmap, HBITMAP, &TBitmap::GetHandle, &TBitmap::SetHandle> Handle{this};
 	ScanLineProperty ScanLine{this};
 	/// bmp->Canvas->Xxx (アロー呼び出し) と TCanvas *cv = bmp->Canvas; (生ポインタ
 	/// 代入) の両方の呼び出し形が src/ にあるため、生ポインタとして公開する。
@@ -205,14 +261,44 @@ private:
 };
 
 //---------------------------------------------------------------------------
-/// System.Types::TPoint 相当 (usr_scrpanel.cpp / usr_swatch.cpp の Point() で使用)
+/**
+ * @brief System.Types::TPoint 相当 (usr_scrpanel.cpp / usr_swatch.cpp の Point() で使用)
+ *
+ * @details C++Builder の TPoint は Win32 の `POINT` (tagPOINT) を継承した
+ *          レコードなので、Delphi 由来の大文字 `X`/`Y` と POINT 由来の小文字
+ *          `x`/`y` の**どちらでも**読み書きできる。
+ *
+ *          実測 (src を grep): 小文字は 40 箇所
+ *          (UserFunc.cpp:106、usr_hintwin.cpp:53-54、usr_shell.cpp 経由の
+ *          `Mouse->CursorPos.x`、MainFrm.cpp / OptDlg.cpp / AppDlg.cpp ほか)。
+ *          **大文字は src に 0 箇所**だが、シム自身 (TRect::PtInRect /
+ *          TRect::LocationProperty) と gui/ が大文字を使っているので両方残す。
+ *
+ *          実現方法は **無名共用体**にした。理由:
+ *            - 参照メンバ (`int &x = X;`) にすると sizeof が 8→16 になり、
+ *              コピー代入演算子が暗黙 delete される (TPoint は値で配列にも
+ *              入る型なので影響が大きい)
+ *            - `POINT` を継承して `X`/`Y` を別のデータメンバとして足すと
+ *              「`x` に書いたのに `X` が変わらない」という**静かな壊れ方**を
+ *              する (規約2 と同じ罠)
+ *          無名共用体なら int 2 つのままで、`X` と `x` が同じ記憶域を指す。
+ */
 struct TPoint {
-	int X = 0;
-	int Y = 0;
+	union { int X; int x; };
+	union { int Y; int y; };
 
-	TPoint() = default;
-	TPoint(int x, int y) : X(x), Y(y) {}
+	TPoint() : X(0), Y(0) {}
+	TPoint(int ax, int ay) : X(ax), Y(ay) {}
+
+	/// 座標の一致比較 (System.Types::TPoint の演算子相当)。
+	/// 実測: ColPicker.cpp:98 `if (p!=Mouse->CursorPos) Mouse->CursorPos = p;`
+	/// (カーソルが既に目的位置なら動かさない)。
+	/// C++20 では == を書けば != も自動で導かれる
+	friend bool operator==(const TPoint &a, const TPoint &b) { return a.X == b.X && a.Y == b.Y; }
 };
+
+//レイアウトが POINT (int 2 つ) から外れていないことをコンパイル時に確認する
+static_assert(sizeof(TPoint) == 2 * sizeof(int), "TPoint は int 2 つのままでなければならない");
 
 inline TPoint Point(int x, int y)
 {
@@ -237,6 +323,40 @@ struct TRect {
 
 	/// 矩形内に点があるか (usr_scrpanel.cpp: `rc.PtInRect(Point(X, Y))`)
 	bool PtInRect(const TPoint &p) const { return p.X >= Left && p.X < Right && p.Y >= Top && p.Y < Bottom; }
+
+	/// 矩形を平行移動する (System.Types::TRect::Offset 相当。
+	/// 実測: Global.cpp:10364 `t_rc.Offset((c_wd - wd)/2, (c_hi - hi)/2);`)
+	void Offset(int dx, int dy)
+	{
+		Left += dx;
+		Right += dx;
+		Top += dy;
+		Bottom += dy;
+	}
+
+	/// 左上を動かさずに幅だけを変える (System.Types::TRect::SetWidth 相当)
+	/// 実測: usr_hintwin.cpp:49 `if (rc.Width()<min_w) rc.SetWidth(min_w);`、
+	///       AppDlg.cpp:925,950,993,1051,1375
+	void SetWidth(int value) { Right = Left + value; }
+	/// 左上を動かさずに高さだけを変える (実測: AppDlg.cpp:926,951,994,1051)
+	void SetHeight(int value) { Bottom = Top + value; }
+
+	/// @brief 自分の中央に r と同じ大きさの矩形を置いたものを返す
+	/// @details System.Types::TRect::CenteredRect 相当。**自分は変えない**。
+	///          Delphi の実装と同じく `(幅の差) div 2` の切り捨て
+	///          (C++ の int 除算と同じ 0 方向の切り捨て) で中央を求める。
+	/// 実測: usr_hintwin.cpp:51 / UserFunc.cpp:93 (TForm::BoundsRect 経由) /
+	///       NewDlg.cpp:37 / InpExDlg.cpp:108,117 / ShareDlg.cpp:62 /
+	///       MainFrm.cpp:164。いずれも `.Location` を取って
+	///       ClientToScreen へ渡す形で、返り値の大きさは r と同じ
+	TRect CenteredRect(const TRect &r) const
+	{
+		const int w = r.Width();
+		const int h = r.Height();
+		const int x = (Right - Left - w) / 2 + Left;
+		const int y = (Bottom - Top - h) / 2 + Top;
+		return TRect(x, y, x + w, y + h);
+	}
 
 	/// 2 つの矩形の共通部分 (System.Types::TRect::Intersect 相当)
 	static TRect Intersect(const TRect &a, const TRect &b)
@@ -297,6 +417,17 @@ inline void InflateRect(TRect &r, int dx, int dy)
 	r.Bottom += dy;
 }
 
+/// @brief 矩形の平行移動 (System.Types::OffsetRect 相当)
+/// @details Win32 にも同名の `OffsetRect(LPRECT, int, int)` があるが、
+///          Graphics::TRect は RECT と同一レイアウトではない (win_rect.h 参照)
+///          ので参照で受けるオーバーロードを足す。InflateRect と同じ扱い。
+///          実測: UserFunc.cpp:77 / AppDlg.cpp:932 / TxtViewer.cpp:1971,2367 /
+///          MainFrm.cpp:10351,30440。いずれも `TRect` の実体を渡している
+inline void OffsetRect(TRect &r, int dx, int dy)
+{
+	r.Offset(dx, dy);
+}
+
 //---------------------------------------------------------------------------
 /// TPenMode 相当 (実測: pmCopy / pmNot のみ使用)
 enum TPenMode {
@@ -317,6 +448,22 @@ public:
 	int Width = 1;
 	TPenMode Mode = pmCopy;
 	TPenStyle Style = psSolid;
+
+	/// @brief GDI のペンハンドルの付け替え
+	/// @details 実測: UserFunc.cpp:621 の draw_Line が `::ExtCreatePen` で作った
+	///          HPEN を `cv->Pen->Handle = hPen;` の形で預ける (端点フラットな
+	///          太線を引くため)。
+	///
+	///          TCanvas::LineTo (compat/src/graphics.cpp:156) は Style / Width /
+	///          Color から**毎回 CreatePen し直す**実装なので、ここで受けた
+	///          ハンドルを単なるデータメンバに置くと**黙って無視され、線種が
+	///          変わらない**という壊れ方をする。規約4 に従い宣言のみにして
+	///          リンク時に気づけるようにしてある。
+	/// @warning 宣言のみ
+	HPEN GetHandle() const;
+	/// @warning 宣言のみ
+	void SetHandle(HPEN value);
+	compat::RWValueProperty<TPen, HPEN, &TPen::GetHandle, &TPen::SetHandle> Handle{this};
 };
 
 /// TBrush 相当 (最小実装)
@@ -380,6 +527,16 @@ public:
 	void CopyRect(const TRect &dest, TCanvas *src, const TRect &srcRect);
 	/// graphic (TBitmap) を rect に収まるよう拡大縮小して描画する
 	void StretchDraw(const TRect &rect, TBitmap *graphic);
+	/// @brief TBitmap 以外の TGraphic を拡大縮小して描画する
+	/// @details VCL の StretchDraw は `TGraphic` を受ける。実測で TBitmap 以外が
+	///          渡るのは **TMetafile** の 3 箇所
+	///          (task_thread.cpp:1431 / thumb_thread.cpp:134 / imgv_thread.cpp:204。
+	///          いずれも EMF/WMF のサムネイル描画)。
+	///          既存の TBitmap* 版は実装済みなので**オーバーロードとして足した**
+	///          (TBitmap* の実引数は完全一致でそちらが選ばれ、挙動は変わらない)。
+	///          EMF/WMF の実描画は未実装なので、こちらは宣言のみ。
+	/// @warning 宣言のみ
+	void StretchDraw(const TRect &rect, TGraphic *graphic);
 	/// 文字列の表示幅を取得する (GetTextExtentPoint32W。Font->Height を反映した
 	/// 一時フォントを選択して測る。実際の描画に使うフォント選択とは別経路)
 	int TextWidth(const UnicodeString &s) const;
@@ -387,6 +544,30 @@ public:
 	int TextHeight(const UnicodeString &s) const;
 	/// 文字列を描画する (ExtTextOutW。usr_tag.cpp の DrawTags で使用)
 	void TextOut(int x, int y, const UnicodeString &s);
+
+	//-- Phase 3 で Global.cpp から要求されたメンバ (いずれも宣言のみ) ------
+	// 実測した呼び出し箇所:
+	//   Draw           : Global.cpp:10262,10275 (`o_bmp->Canvas->Draw(0, 0, png_img.get())`)
+	//   TextRect       : Global.cpp:11510,12031,12050,12296,12302
+	//   Polygon        : Global.cpp:12514,16389 (`cv->Polygon(mrk, 2)`)
+	//   FrameRect      : Global.cpp:12760
+	//   Ellipse        : Global.cpp:16346
+	//   DrawFocusRect  : Global.cpp:12714,12726 (draw_ListCursor / draw_ListCursor2)
+
+	/// @warning 宣言のみ。graphic を (x, y) に等倍で描画する
+	void Draw(int x, int y, TGraphic *graphic);
+	/// @warning 宣言のみ。rect でクリップして (x, y) に文字列を描画する
+	void TextRect(const TRect &rect, int x, int y, const UnicodeString &s);
+	/// @warning 宣言のみ。多角形を塗りつぶす
+	/// @param points     頂点の配列
+	/// @param pointsHigh 最終要素の**添字** (Delphi の開いた配列の High。要素数-1)
+	void Polygon(const TPoint *points, int pointsHigh);
+	/// @warning 宣言のみ。Brush->Color で矩形の枠だけを描く
+	void FrameRect(const TRect &rect);
+	/// @warning 宣言のみ。外接矩形を指定して楕円を描く
+	void Ellipse(int x1, int y1, int x2, int y2);
+	/// @warning 宣言のみ。フォーカス枠 (点線の反転矩形) を描く
+	void DrawFocusRect(const TRect &rect);
 
 	/// usr_str.cpp: cv->Handle = hDc; の形で代入されるため読み書き可能にしてある
 	compat::RWValueProperty<TCanvas, HDC, &TCanvas::GetHandle, &TCanvas::SetHandleValue> Handle{this};
@@ -396,6 +577,100 @@ public:
 
 private:
 	HDC dc_;
+};
+
+//---------------------------------------------------------------------------
+/**
+ * @brief Graphics::TIcon 相当
+ * @details 実測 (Phase 3 で grep して確定。`Graphics::TIcon` の形でも
+ *          `TIcon` の形でも使われている):
+ *            - `Handle` の代入: Global.cpp:7348,7580,7620,7646、icon_thread.cpp:77、
+ *              Splash.cpp:61、About.cpp:21
+ *            - `Handle` の読み取り: Global.cpp:7339,7401,7471,7526,7574、
+ *              ShareDlg.cpp:413、DriveDlg.cpp:253
+ *            - `SetSize()` / `LoadFromFile()` / `ReleaseHandle()`:
+ *              usr_shell.cpp:1622-1625
+ *            - `TObject*` へのキャスト (TStrings::AddObject の対象):
+ *              Global.cpp:7349,7583,7623 → TPersistent 経由で TObject を継承する必要がある
+ *            - `Graphics::TBitmap::Assign(icon)`: Global.cpp:7658、About.cpp:22
+ *
+ *          Handle は VCL ではプロパティ (代入すると内部の HICON を差し替える) だが、
+ *          既存コードは「作った直後に一度だけ代入」「あとは読むだけ」の使い方しか
+ *          していないので、単純なデータメンバにしてある。
+ * @warning HICON の所有権は管理しない (VCL は DestroyIcon するが、既存コードは
+ *          `ReleaseHandle()` で明示的に手放している箇所がある)。
+ */
+class TIcon : public TGraphic {
+public:
+	HICON Handle = nullptr;
+
+	/// @warning 宣言のみ (取得するアイコンのサイズを指定する。usr_shell.cpp:1623)
+	void SetSize(int width, int height);
+	/// @warning 宣言のみ (HICON の所有権を呼び出し側へ渡す。usr_shell.cpp:1625)
+	HICON ReleaseHandle();
+};
+
+//---------------------------------------------------------------------------
+/**
+ * @brief Vcl.Imaging.pngimage::TPngImage 相当
+ * @details 実測: Global.cpp:7438-7441 (`LoadFromFile` / `Transparent` / `Draw`)、
+ *          Global.cpp:10253-10262 (`Width` / `Height` /
+ *          `SupportsPartialTransparency`)、AppDlg.cpp:1047,1052 (`Empty` / `Draw`)。
+ *          LoadFromFile / Draw / Transparent は TGraphic から継承する。
+ */
+class TPngImage : public TGraphic {
+public:
+	int Width = 0;
+	int Height = 0;
+	/// 画像が空か (VCL は読取専用プロパティ。実データが無いシムでは常に既定値のまま)
+	bool Empty = true;
+	/// アルファチャンネルを持つか (Global.cpp:10258 が透過背景の塗り分けに使う)
+	bool SupportsPartialTransparency = false;
+};
+
+//---------------------------------------------------------------------------
+/**
+ * @brief Vcl.Imaging.GIFImg::TGIFImage 相当
+ * @details 実測: Global.cpp:10266-10275 (`LoadFromFile` / `Transparent` /
+ *          `Width` / `Height`)、SubView.cpp:106-110 (`Animate`)。
+ */
+class TGIFImage : public TGraphic {
+public:
+	int Width = 0;
+	int Height = 0;
+	/// アニメーション GIF を再生するか (SubView.cpp:108)
+	bool Animate = false;
+};
+
+//---------------------------------------------------------------------------
+/**
+ * @brief Vcl.Graphics::TPicture 相当
+ * @details 実測: Global.cpp:15154-15157 (`copy_to_Clipboard(TPicture*)` が
+ *          `Clipboard()->Assign(pic)` と `pic->Width` / `pic->Height`)、
+ *          SubView.cpp:57,67,78-79,95,110,116 (`Assign()` / `Width` / `Height`)、
+ *          imgv_thread.cpp:122-123 / usr_shell.cpp:1783 / HistFrm.cpp:30
+ *          (`Picture->Bitmap->...`)。
+ *
+ *          Width / Height は VCL では「今保持している TGraphic のサイズ」を返す
+ *          算出プロパティで、単純なデータメンバでは表現できない。規約4 に従い
+ *          getter を**宣言のみ**にしてあるので、この経路がリンクされると
+ *          未定義参照になる。
+ */
+class TPicture : public TPersistent {
+public:
+	/// @warning 宣言のみ
+	int GetWidth() const;
+	/// @warning 宣言のみ
+	int GetHeight() const;
+
+	compat::ROProperty<TPicture, int, &TPicture::GetWidth> Width{this};
+	compat::ROProperty<TPicture, int, &TPicture::GetHeight> Height{this};
+
+	/// VCL の TPicture は Bitmap を要求されたときに生成して所有する。
+	/// ここでは生成しないので、この経路を通ると nullptr 参照になる
+	/// (メンバ関数ではないためリンクエラーにはできない。Phase 3 の GUI 実装で
+	/// 実体を持たせる対象)
+	TBitmap *Bitmap = nullptr;
 };
 
 }  // namespace Graphics
@@ -490,6 +765,7 @@ using ::Graphics::fsItalic;
 using ::Graphics::fsStrikeOut;
 using ::Graphics::fsUnderline;
 using ::Graphics::InflateRect;
+using ::Graphics::OffsetRect;
 using ::Graphics::pmCopy;
 using ::Graphics::pmNot;
 using ::Graphics::Point;
@@ -504,9 +780,16 @@ using ::Graphics::TFont;
 using ::Graphics::TFontCharset;
 using ::Graphics::TFontStyle;
 using ::Graphics::TFontStyles;
+//Phase 3 で追加した画像クラス。既存コードは `TPngImage` のように非修飾で書く
+//箇所と `Graphics::TIcon` のように修飾する箇所の両方がある
+using ::Graphics::TGIFImage;
+using ::Graphics::TGraphic;
+using ::Graphics::TIcon;
 using ::Graphics::TPen;
 using ::Graphics::TPenMode;
 using ::Graphics::TPenStyle;
+using ::Graphics::TPicture;
+using ::Graphics::TPngImage;
 using ::Graphics::TPoint;
 using ::Graphics::TRect;
 

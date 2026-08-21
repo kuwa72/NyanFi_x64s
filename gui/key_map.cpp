@@ -24,6 +24,76 @@ KeyMap::KeyMap() : entries_(new TStringList())
 }
 
 //---------------------------------------------------------------------------
+namespace {
+
+/// wx/defs.h の `wxKeyCode` の値を、wx をリンクせずに書き写したもの。
+/// 本物との一致は gui/key_map_wx.cpp の static_assert が確認する
+/// (wx を更新して値がずれたらコンパイルが通らない)。
+enum WxKeyCode {
+	kWxStart    = 300,
+	kWxPause    = kWxStart + 10,
+	kWxEnd      = kWxStart + 12,
+	kWxHome     = kWxStart + 13,
+	kWxLeft     = kWxStart + 14,
+	kWxUp       = kWxStart + 15,
+	kWxRight    = kWxStart + 16,
+	kWxDown     = kWxStart + 17,
+	kWxInsert   = kWxStart + 22,
+	kWxNumpad0  = kWxStart + 24,
+	kWxMultiply = kWxStart + 34,
+	kWxAdd      = kWxStart + 35,
+	kWxSubtract = kWxStart + 37,
+	kWxDecimal  = kWxStart + 38,
+	kWxDivide   = kWxStart + 39,
+	kWxF1       = kWxStart + 40,
+	kWxPageUp   = kWxStart + 66,
+	kWxPageDown = kWxStart + 67,
+	kWxDelete   = 127,
+};
+
+}  // namespace
+
+//---------------------------------------------------------------------------
+WORD KeyMap::VkFromWxKeyCode(int wx_keycode)
+{
+	// F1〜F12 と 10キーの数字は連番なので範囲で捌く
+	if (wx_keycode >= kWxF1 && wx_keycode <= kWxF1 + 11) {
+		return static_cast<WORD>(VK_F1 + (wx_keycode - kWxF1));
+	}
+	if (wx_keycode >= kWxNumpad0 && wx_keycode <= kWxNumpad0 + 9) {
+		return static_cast<WORD>(VK_NUMPAD0 + (wx_keycode - kWxNumpad0));
+	}
+
+	switch (wx_keycode) {
+	case kWxLeft:		return VK_LEFT;
+	case kWxRight:		return VK_RIGHT;
+	case kWxUp:			return VK_UP;
+	case kWxDown:		return VK_DOWN;
+	case kWxPageUp:		return VK_PRIOR;
+	case kWxPageDown:	return VK_NEXT;
+	case kWxHome:		return VK_HOME;
+	case kWxEnd:		return VK_END;
+	case kWxInsert:		return VK_INSERT;
+	case kWxDelete:		return VK_DELETE;
+	case kWxPause:		return VK_PAUSE;
+	case kWxMultiply:	return VK_MULTIPLY;
+	case kWxAdd:		return VK_ADD;
+	case kWxSubtract:	return VK_SUBTRACT;
+	case kWxDecimal:	return VK_DECIMAL;
+	case kWxDivide:		return VK_DIVIDE;
+	default:			break;
+	}
+
+	// ここから下は wx の値と VK が同値の範囲。
+	// BackSpace(8) / Tab(9) / Enter(13) / Esc(27) / Space(32) と、
+	// 英数字 ('0'-'9' / 'A'-'Z' は VK_0-VK_9 / VK_A-VK_Z と同値)
+	if (wx_keycode > 0 && wx_keycode < 128) return static_cast<WORD>(wx_keycode);
+
+	return 0;  // WXK_SHIFT など、キー名を持たないもの
+}
+
+
+//---------------------------------------------------------------------------
 /**
  * @brief 既定のキー割り当て
  * @details VCL 版は ini の [Key] セクションから読む。Phase 2 の骨格では
@@ -44,9 +114,9 @@ void KeyMap::LoadDefaults()
 	// "F:Ctrl+Enter=OpenByApp" (アプリケーションから開く) と同じ
 	Assign(_T("ENTER"), _T("OpenStandard"));
 	Assign(_T("Ctrl+Enter"), _T("OpenByApp"));
-	Assign(_T("BKSP"), _T("UpDir"));
-	Assign(_T("TAB"), _T("ChangePane"));
-	Assign(_T("F5"), _T("Refresh"));
+	Assign(_T("BKSP"), _T("ToParent"));
+	Assign(_T("TAB"), _T("ToOpposite"));
+	Assign(_T("F5"), _T("ReloadList"));
 
 	// テキストビューア。"V" は src/Global.cpp の既定キー表 ("F:V=TextViewer")
 	// と同じ。ビューア自体のキー操作 (行移動・検索・折り返し切替・閉じる) は
@@ -55,10 +125,24 @@ void KeyMap::LoadDefaults()
 	// gui/key_map.h 冒頭のコメントを参照)
 	Assign(_T("V"), _T("TextViewer"));
 
+	// 画像ビューア。"G" は src/Global.cpp の既定キー表 ("F:G=ImageViewer") と
+	// 同じ。ビューア自体のキー操作 (フィット/ズーム/前後移動/閉じる) は
+	// ImageViewer::HandleKey (gui/image_viewer.cpp) がこの KeyMap を経由せず
+	// 直接処理する (TextViewer と同じ作り)
+	Assign(_T("G"), _T("ImageViewer"));
+
+	// 文字列検索 (GREP)。usr_cmdlist.cpp のコマンド表には "FV:Grep=文字列検索(GREP)"
+	// として載っているが、src/Global.cpp の既定キー表 (KeyFuncList->Text) には
+	// "Grep" に対応する行が無く、メニュー専用の操作だったと見られる (実測、
+	// F3=FindFileDlg というファイル名検索の割り当てはあるが内容検索は無い)。
+	// そのため Ctrl+F (多くのエディタの「ファイル内検索」の慣習) を
+	// Phase 2 骨格向けに新規で割り当てた (推測。要検証)
+	Assign(_T("Ctrl+F"), _T("Grep"));
+
 	// マーク
-	Assign(_T("SPACE"), _T("MarkItem"));
-	Assign(_T("Ctrl+A"), _T("MarkAll"));
-	Assign(_T("Ctrl+D"), _T("UnMarkAll"));
+	Assign(_T("SPACE"), _T("Select"));
+	Assign(_T("Ctrl+A"), _T("SelAllItem"));
+	Assign(_T("Ctrl+D"), _T("ClearAll"));
 
 	// 並べ替え・絞り込み。"S" は src/Global.cpp の既定キー表にある実際の割り当て
 	// ("F:S=SortDlg") と同じ。Ctrl+M / Ctrl+U は既定キー表に対応する記載が無く
@@ -76,15 +160,49 @@ void KeyMap::LoadDefaults()
 	Assign(_T("K"), _T("CreateDir"));
 	Assign(_T("R"), _T("RenameDlg"));
 
+	// インクリメンタルサーチ・ディレクトリ移動の効率化。"F"/"B"/"H"/"L" は
+	// src/Global.cpp の既定キー表 ("F:F=IncSearch" / "F:B=BackDirHist" /
+	// "F:H=DirHistory" / "F:L=DriveList") と同じ
+	Assign(_T("F"), _T("IncSearch"));
+	Assign(_T("B"), _T("BackDirHist"));
+	Assign(_T("H"), _T("DirHistory"));
+	Assign(_T("L"), _T("DriveList"));
+	// ForwardDirHist (履歴を進む) は既定キー表に対応するキーが無い
+	// (マウスの第2ボタン X2BtnCmdF の既定値も空文字列で、割り当てが無い)。
+	// "B" (戻る) と対になるよう Phase 2 骨格向けに新規で決めたもの
+	// (推測。要検証)
+	Assign(_T("Shift+B"), _T("ForwardDirHist"));
+	// InputDir (パスを直接入力して移動) も既定キー表に対応するキーが無い。
+	// 多くのエディタ/ファイラの「Go to」の慣習に合わせた Phase 2 骨格独自の
+	// 割り当て (推測。要検証)
+	Assign(_T("Ctrl+G"), _T("InputDir"));
+
 	// 表示・終了。"FVI:PropertyDlg" (usr_cmdlist.cpp) には既定キーが無い
 	// (src/MainFrm.dfm の PropertyDlgAction にも ShortCut が無く、メニュー専用
 	// らしい)。Alt+Enter は Windows のプロパティ表示の慣習に合わせた
 	// Phase 2 骨格独自の割り当て (推測。要検証)
-	Assign(_T("F1"), _T("ShowKeyList"));
+	Assign(_T("F1"), _T("KeyList"));
 	Assign(_T("F12"), _T("ShowCmdList"));
 	Assign(_T("Alt+Enter"), _T("PropertyDlg"));
 	Assign(_T("Alt+F4"), _T("Exit"));
 	Assign(_T("Ctrl+Q"), _T("Exit"));
+
+	// タブ (複数ディレクトリの切り替え)。コマンド名は usr_cmdlist.cpp のコマンド表
+	// ("F:AddTab=タブを追加" 等、実測) と同じ綴り。ただし src/Global.cpp の
+	// 既定キー表 (KeyFuncList->Text) にはタブ系コマンドの既定キーが1つも無く
+	// (ツールバー・タブの右クリックメニュー専用の操作だったと見られる)、
+	// 以下はすべて Phase 2 骨格向けに新規で決めたもの (推測。要検証)。
+	// Ctrl+T/Ctrl+W はブラウザ等でのタブ追加・閉じるの慣習に、Ctrl+Tab/
+	// Shift+Ctrl+Tab は多くのタブ付きアプリでの次/前のタブ切替の慣習に合わせた
+	// (修飾子の順序は get_ShiftStr() (usr_key.cpp) の実測順 "Shift+"→"Ctrl+"→
+	// "Alt+" に合わせてある。TStringList の Name 比較は大小文字を区別しないため
+	// 大文字/小文字自体は Lookup に影響しない)。
+	// Ctrl+E (一覧から選ぶ、PopupTab) は他のキーと衝突しない空きキーから選んだ
+	Assign(_T("Ctrl+T"), _T("AddTab"));
+	Assign(_T("Ctrl+W"), _T("DelTab"));
+	Assign(_T("Ctrl+Tab"), _T("NextTab"));
+	Assign(_T("Shift+Ctrl+Tab"), _T("PrevTab"));
+	Assign(_T("Ctrl+E"), _T("PopupTab"));
 }
 
 //---------------------------------------------------------------------------
