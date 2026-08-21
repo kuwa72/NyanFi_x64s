@@ -136,6 +136,20 @@ private:
 	/// 左右のディレクトリとカーソルを入れ替える (SwapLR)
 	void CmdSwapLR();
 
+	//-- ディレクトリ移動 -----------------------------------------------------
+	void CmdToRoot();               //!< ルートディレクトリへ (ToRoot)
+	void CmdCopyPath(bool to_opp);  //!< カレント⇄反対のパスを揃える (CurrToOpp / CurrFromOpp)
+	void CmdCsrDirToOpp();          //!< カーソル位置のディレクトリを反対側に開く
+	void CmdToOppSameItem();        //!< 反対側の同名項目へカーソルを移す
+	void CmdParentOn(int index);    //!< 指定ペインを親ディレクトリへ
+	void CmdCycleDrive(bool forward);  //!< 次/前のドライブへ (NextDrive / PrevDrive)
+	void CmdPushDir();
+	void CmdPopDir();
+	void CmdShowDirStack();
+
+	DirStack dir_stack_;          //!< ディレクトリ・スタック (PushDir / PopDir)
+	bool sync_lr_ = false;        //!< 左右のディレクトリを同期させるか (SyncLR)
+
 	double border_ratio_ = 0.5;   //!< 左ペインの取り分 (gui/view_state.h)
 	wxBoxSizer *columns_ = nullptr;  //!< 左右のペインを並べる sizer (比率を変えるため保持)
 	void CmdPrevTab();  //!< 前のタブへ (Shift+Ctrl+Tab、推測のキー)

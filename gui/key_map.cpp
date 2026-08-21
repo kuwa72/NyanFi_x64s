@@ -163,6 +163,18 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Ctrl+Shift+E"), _T("EqualListWidth"));
 	Assign(_T("Ctrl+Shift+S"), _T("SwapLR"));
 
+	// ディレクトリ移動。O / Shift+O は src/Global.cpp:2089,2112 の既定表にある
+	// 実際の割り当て
+	Assign(_T("O"), _T("CurrFromOpp"));
+	Assign(_T("Shift+O"), _T("CurrToOpp"));
+	// 以下は既定表に無いので推測
+	Assign(_T("Ctrl+HOME"), _T("ToRoot"));
+	Assign(_T("Ctrl+RIGHT"), _T("CsrDirToOpp"));
+	Assign(_T("Ctrl+PGDN"), _T("NextDrive"));
+	Assign(_T("Ctrl+PGUP"), _T("PrevDrive"));
+	Assign(_T("Ctrl+Shift+D"), _T("PushDir"));
+	Assign(_T("Ctrl+Shift+P"), _T("PopDir"));
+
 	// 並べ替え・絞り込み。"S" は src/Global.cpp の既定キー表にある実際の割り当て
 	// ("F:S=SortDlg") と同じ。Ctrl+M / Ctrl+U は既定キー表に対応する記載が無く
 	// (パスマスクはコンボボックス操作が前提で単独のキー割り当てが見当たらない)、

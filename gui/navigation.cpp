@@ -111,3 +111,54 @@ bool ResolveDirectoryInput(const UnicodeString &input, const UnicodeString &base
 	resolved_out = s;
 	return true;
 }
+
+//---------------------------------------------------------------------------
+// ディレクトリ・スタック (設計と VCL の該当行は gui/navigation.h を参照)
+//---------------------------------------------------------------------------
+void DirStack::Push(const UnicodeString &path, int cursor)
+{
+	if (path.IsEmpty()) return;
+	Entry e;
+	e.path = path;
+	e.cursor = cursor;
+	// VCL は Insert(0, ...) で**先頭に挿入**する (MainFrm.cpp:24100)
+	entries_.insert(entries_.begin(), e);
+}
+
+//---------------------------------------------------------------------------
+bool DirStack::Pop(Entry &out, const std::function<bool(const UnicodeString &)> &exists)
+{
+	// 存在しなくなったディレクトリは読み飛ばす (MainFrm.cpp:23715)。
+	// 消えたディレクトリでスタックが詰まらないようにするため
+	while (!entries_.empty()) {
+		const Entry e = entries_.front();
+		entries_.erase(entries_.begin());
+		if (exists(e.path)) {
+			out = e;
+			return true;
+		}
+	}
+	return false;
+}
+
+//---------------------------------------------------------------------------
+UnicodeString NextDriveOf(const std::vector<UnicodeString> &drives,
+                          const UnicodeString &current, bool forward)
+{
+	if (drives.empty()) return EmptyStr;
+
+	// VCL は「現在より辞書順で大きい最初のもの。無ければ先頭」
+	// (MainFrm.cpp:22368-22372)。一覧中の位置を +1 するのではない
+	if (forward) {
+		for (const UnicodeString &d : drives) {
+			if (CompareText(current, d) < 0) return d;
+		}
+		return drives.front();
+	}
+
+	// 前へ回るのは VCL の PrevDrive。向きを逆にしたもの
+	for (auto it = drives.rbegin(); it != drives.rend(); ++it) {
+		if (CompareText(current, *it) > 0) return *it;
+	}
+	return drives.back();
+}
