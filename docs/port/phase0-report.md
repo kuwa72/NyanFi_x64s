@@ -764,3 +764,25 @@ raw code が取れない場合の保険として `KeyMap::VkFromWxKeyCode()` を
 
 CI に足せる検証としては、`SendInput`/`PostMessage` でキーを送って一覧のカーソル位置が
 動くことを見る E2E が考えられる (未実装)。
+
+---
+
+## 19. リンクエラーで捕まらないスタブ (静かに間違いうる箇所)
+
+規約4 の「GUI スタブは宣言のみ」は、**呼んだらリンクエラーになる**ことで実装漏れが
+隠れないようにする仕掛けである。しかし**データメンバや定数はリンクエラーにならない**。
+Phase 3 の第1段で入れたもののうち、そこに当たるものをここに集める。
+
+差し替えるまでは「そう動く」ことを承知の上で使う。**新しく足すときはこの表に書く。**
+
+| 箇所 | 静かにどうなるか |
+|---|---|
+| `THeaderSections::Count` (常に 0) | `Global.cpp:12542` の `sp->Index < Sections->Count-1` が常に偽になり、**ヘッダの区切り線が描かれない**。他の 6箇所は `Items[i]` も触るのでリンクで落ちる |
+| `TPicture::Bitmap` / `TImage::Picture` / `TImageCollectionItem::SourceImages` (nullptr) | VCL は自動生成するがシムは nullptr のまま。**リンクエラーではなく nullptr 参照**になる |
+| `TPngImage::Empty` / `SupportsPartialTransparency` / `TMetafile::Empty` (固定の bool) | 変化しないので、分岐すると常に「空 / 透過なし」側を通る |
+| `TScreen::Forms` / `FormCount` (常に空) | `for (i<FormCount) Forms[i]` の走査が 0回になる。**フォームが1つも無い状態と区別がつかない** |
+| `TApplication::MainFormHandle` (GUI が代入するまで NULL) | `SendMessage(NULL, ...)` は**エラーも出さずに 0 を返す**。`grep_thread.cpp:167` の完了通知が届かない |
+| `TApplication::ShowHint` (保持するだけ) | 読む箇所は src に無いので現状は無害 |
+
+このうち `MainFormHandle` だけは **GUI 側で代入すれば直る**ので、Phase 3 の第2段で
+`gui/nyanfi_app.cpp` に入れる。

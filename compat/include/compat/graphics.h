@@ -211,6 +211,17 @@ public:
 	/// @warning 宣言のみ
 	void SetHandle(HBITMAP handle);
 
+	/// @brief 保持している HBITMAP の所有権を呼び出し側へ渡し、自身は空になる
+	/// @details Vcl.Graphics::TBitmap::ReleaseHandle 相当。
+	///          実測: task_thread.cpp:1483 / thumb_thread.cpp:186,197 の
+	///          `i_bp->Handle = r_bp->ReleaseHandle();` (別のビットマップが
+	///          作った結果をそのまま引き取る)。
+	///          対になる SetHandle が「DIB の作り直しを伴う実処理」なので
+	///          宣言のみにしてあり、こちらも揃えてある (片方だけ実装すると
+	///          「解放したのに付け替わらない」経路が静かに通ってしまう)。
+	/// @warning 宣言のみ
+	HBITMAP ReleaseHandle();
+
 	/// ScanLine[] プロパティ (1 行分の先頭ポインタ。上から index 行目)
 	class ScanLineProperty {
 	public:
@@ -250,14 +261,44 @@ private:
 };
 
 //---------------------------------------------------------------------------
-/// System.Types::TPoint 相当 (usr_scrpanel.cpp / usr_swatch.cpp の Point() で使用)
+/**
+ * @brief System.Types::TPoint 相当 (usr_scrpanel.cpp / usr_swatch.cpp の Point() で使用)
+ *
+ * @details C++Builder の TPoint は Win32 の `POINT` (tagPOINT) を継承した
+ *          レコードなので、Delphi 由来の大文字 `X`/`Y` と POINT 由来の小文字
+ *          `x`/`y` の**どちらでも**読み書きできる。
+ *
+ *          実測 (src を grep): 小文字は 40 箇所
+ *          (UserFunc.cpp:106、usr_hintwin.cpp:53-54、usr_shell.cpp 経由の
+ *          `Mouse->CursorPos.x`、MainFrm.cpp / OptDlg.cpp / AppDlg.cpp ほか)。
+ *          **大文字は src に 0 箇所**だが、シム自身 (TRect::PtInRect /
+ *          TRect::LocationProperty) と gui/ が大文字を使っているので両方残す。
+ *
+ *          実現方法は **無名共用体**にした。理由:
+ *            - 参照メンバ (`int &x = X;`) にすると sizeof が 8→16 になり、
+ *              コピー代入演算子が暗黙 delete される (TPoint は値で配列にも
+ *              入る型なので影響が大きい)
+ *            - `POINT` を継承して `X`/`Y` を別のデータメンバとして足すと
+ *              「`x` に書いたのに `X` が変わらない」という**静かな壊れ方**を
+ *              する (規約2 と同じ罠)
+ *          無名共用体なら int 2 つのままで、`X` と `x` が同じ記憶域を指す。
+ */
 struct TPoint {
-	int X = 0;
-	int Y = 0;
+	union { int X; int x; };
+	union { int Y; int y; };
 
-	TPoint() = default;
-	TPoint(int x, int y) : X(x), Y(y) {}
+	TPoint() : X(0), Y(0) {}
+	TPoint(int ax, int ay) : X(ax), Y(ay) {}
+
+	/// 座標の一致比較 (System.Types::TPoint の演算子相当)。
+	/// 実測: ColPicker.cpp:98 `if (p!=Mouse->CursorPos) Mouse->CursorPos = p;`
+	/// (カーソルが既に目的位置なら動かさない)。
+	/// C++20 では == を書けば != も自動で導かれる
+	friend bool operator==(const TPoint &a, const TPoint &b) { return a.X == b.X && a.Y == b.Y; }
 };
+
+//レイアウトが POINT (int 2 つ) から外れていないことをコンパイル時に確認する
+static_assert(sizeof(TPoint) == 2 * sizeof(int), "TPoint は int 2 つのままでなければならない");
 
 inline TPoint Point(int x, int y)
 {
@@ -291,6 +332,30 @@ struct TRect {
 		Right += dx;
 		Top += dy;
 		Bottom += dy;
+	}
+
+	/// 左上を動かさずに幅だけを変える (System.Types::TRect::SetWidth 相当)
+	/// 実測: usr_hintwin.cpp:49 `if (rc.Width()<min_w) rc.SetWidth(min_w);`、
+	///       AppDlg.cpp:925,950,993,1051,1375
+	void SetWidth(int value) { Right = Left + value; }
+	/// 左上を動かさずに高さだけを変える (実測: AppDlg.cpp:926,951,994,1051)
+	void SetHeight(int value) { Bottom = Top + value; }
+
+	/// @brief 自分の中央に r と同じ大きさの矩形を置いたものを返す
+	/// @details System.Types::TRect::CenteredRect 相当。**自分は変えない**。
+	///          Delphi の実装と同じく `(幅の差) div 2` の切り捨て
+	///          (C++ の int 除算と同じ 0 方向の切り捨て) で中央を求める。
+	/// 実測: usr_hintwin.cpp:51 / UserFunc.cpp:93 (TForm::BoundsRect 経由) /
+	///       NewDlg.cpp:37 / InpExDlg.cpp:108,117 / ShareDlg.cpp:62 /
+	///       MainFrm.cpp:164。いずれも `.Location` を取って
+	///       ClientToScreen へ渡す形で、返り値の大きさは r と同じ
+	TRect CenteredRect(const TRect &r) const
+	{
+		const int w = r.Width();
+		const int h = r.Height();
+		const int x = (Right - Left - w) / 2 + Left;
+		const int y = (Bottom - Top - h) / 2 + Top;
+		return TRect(x, y, x + w, y + h);
 	}
 
 	/// 2 つの矩形の共通部分 (System.Types::TRect::Intersect 相当)
@@ -352,6 +417,17 @@ inline void InflateRect(TRect &r, int dx, int dy)
 	r.Bottom += dy;
 }
 
+/// @brief 矩形の平行移動 (System.Types::OffsetRect 相当)
+/// @details Win32 にも同名の `OffsetRect(LPRECT, int, int)` があるが、
+///          Graphics::TRect は RECT と同一レイアウトではない (win_rect.h 参照)
+///          ので参照で受けるオーバーロードを足す。InflateRect と同じ扱い。
+///          実測: UserFunc.cpp:77 / AppDlg.cpp:932 / TxtViewer.cpp:1971,2367 /
+///          MainFrm.cpp:10351,30440。いずれも `TRect` の実体を渡している
+inline void OffsetRect(TRect &r, int dx, int dy)
+{
+	r.Offset(dx, dy);
+}
+
 //---------------------------------------------------------------------------
 /// TPenMode 相当 (実測: pmCopy / pmNot のみ使用)
 enum TPenMode {
@@ -372,6 +448,22 @@ public:
 	int Width = 1;
 	TPenMode Mode = pmCopy;
 	TPenStyle Style = psSolid;
+
+	/// @brief GDI のペンハンドルの付け替え
+	/// @details 実測: UserFunc.cpp:621 の draw_Line が `::ExtCreatePen` で作った
+	///          HPEN を `cv->Pen->Handle = hPen;` の形で預ける (端点フラットな
+	///          太線を引くため)。
+	///
+	///          TCanvas::LineTo (compat/src/graphics.cpp:156) は Style / Width /
+	///          Color から**毎回 CreatePen し直す**実装なので、ここで受けた
+	///          ハンドルを単なるデータメンバに置くと**黙って無視され、線種が
+	///          変わらない**という壊れ方をする。規約4 に従い宣言のみにして
+	///          リンク時に気づけるようにしてある。
+	/// @warning 宣言のみ
+	HPEN GetHandle() const;
+	/// @warning 宣言のみ
+	void SetHandle(HPEN value);
+	compat::RWValueProperty<TPen, HPEN, &TPen::GetHandle, &TPen::SetHandle> Handle{this};
 };
 
 /// TBrush 相当 (最小実装)
@@ -435,6 +527,16 @@ public:
 	void CopyRect(const TRect &dest, TCanvas *src, const TRect &srcRect);
 	/// graphic (TBitmap) を rect に収まるよう拡大縮小して描画する
 	void StretchDraw(const TRect &rect, TBitmap *graphic);
+	/// @brief TBitmap 以外の TGraphic を拡大縮小して描画する
+	/// @details VCL の StretchDraw は `TGraphic` を受ける。実測で TBitmap 以外が
+	///          渡るのは **TMetafile** の 3 箇所
+	///          (task_thread.cpp:1431 / thumb_thread.cpp:134 / imgv_thread.cpp:204。
+	///          いずれも EMF/WMF のサムネイル描画)。
+	///          既存の TBitmap* 版は実装済みなので**オーバーロードとして足した**
+	///          (TBitmap* の実引数は完全一致でそちらが選ばれ、挙動は変わらない)。
+	///          EMF/WMF の実描画は未実装なので、こちらは宣言のみ。
+	/// @warning 宣言のみ
+	void StretchDraw(const TRect &rect, TGraphic *graphic);
 	/// 文字列の表示幅を取得する (GetTextExtentPoint32W。Font->Height を反映した
 	/// 一時フォントを選択して測る。実際の描画に使うフォント選択とは別経路)
 	int TextWidth(const UnicodeString &s) const;
@@ -663,6 +765,7 @@ using ::Graphics::fsItalic;
 using ::Graphics::fsStrikeOut;
 using ::Graphics::fsUnderline;
 using ::Graphics::InflateRect;
+using ::Graphics::OffsetRect;
 using ::Graphics::pmCopy;
 using ::Graphics::pmNot;
 using ::Graphics::Point;
