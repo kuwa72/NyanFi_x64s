@@ -24,6 +24,8 @@
 #include "gui/archive.h"
 #include "gui/clipboard_files.h"
 #include "gui/compare.h"
+#include "gui/text_ops.h"
+#include "gui/text_viewer_core.h"
 #include "gui/file_ops.h"
 #include "gui/grep_dialog.h"
 #include "gui/image_load.h"
@@ -1287,6 +1289,131 @@ void MainFrame::CmdDiffDir()
 }
 
 //---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// テキスト操作 (機能群9)
+//---------------------------------------------------------------------------
+void MainFrame::CmdCountLines()
+{
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> names = pane->GetSelectedNames();
+	if (names.empty()) { SetStatusWarning(_T("対象がありません")); return; }
+
+	UnicodeString text = _T("ファイル                        全行     空白   空白以外\r\n");
+	int t_total = 0, t_blank = 0;
+	int counted = 0;
+
+	for (const UnicodeString &name : names) {
+		const UnicodeString p = pane->GetPath() + name;
+		if (dir_exists(p)) continue;
+
+		const text_viewer_core::LoadResult r = text_viewer_core::LoadForView(p);
+		if (!r.ok || r.is_binary) {
+			text += name + _T("  (テキストではありません)\r\n");
+			continue;
+		}
+		const text_ops::LineStats st = text_ops::CountLines(r.lines);
+		text.cat_sprintf(_T("%-28s %8d %8d %8d\r\n"), name.c_str(), st.total, st.blank, st.non_blank);
+		t_total += st.total;
+		t_blank += st.blank;
+		counted++;
+	}
+
+	if (counted == 0) { SetStatusWarning(_T("テキストファイルがありません")); return; }
+	text.cat_sprintf(_T("\r\n合計 (%d ファイル) %8d %8d %8d\r\n"),
+	                 counted, t_total, t_blank, t_total - t_blank);
+	// VCL はコメント行も分けて数えるが、その定義はユーザ設定 (UserHighlight) 側に
+	// あり、まだリンク対象に入っていない。**内訳を出さないことを明示する**
+	text += _T("\r\n(コメント行の内訳は未対応)");
+
+	wxMessageBox(to_wx(text), to_wx(_T("行数のカウント")), wxOK | wxICON_INFORMATION, this);
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdJoinText()
+{
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> names = pane->GetSelectedNames();
+	if (names.size() < 2) { SetStatusWarning(_T("2件以上を選んでください")); return; }
+
+	const wxString input = wxGetTextFromUser(
+		to_wx(_T("出力するファイル名を入力してください (UTF-8 で書きます)")),
+		to_wx(_T("テキストの結合")), to_wx(_T("joined.txt")), this);
+	if (input.IsEmpty()) return;
+
+	const UnicodeString out = IncludeTrailingPathDelimiter(pane->GetPath()) + to_us(input);
+	if (!ConfirmItems(this, _T("テキストの結合"), _T("結合"), names, out)) return;
+
+	std::vector<UnicodeString> paths;
+	for (const UnicodeString &name : names) paths.push_back(pane->GetPath() + name);
+
+	const text_ops::JoinResult r = text_ops::JoinTextFiles(paths, out);
+	pane->Reload();
+
+	UnicodeString msg;
+	msg.sprintf(_T("%d 件を結合しました"), r.joined);
+	for (const UnicodeString &f : r.failures) msg += _T("\r\n") + f;
+	wxMessageBox(to_wx(msg), to_wx(_T("テキストの結合")), wxOK | wxICON_INFORMATION, this);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdConvertTextEnc()
+{
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> names = pane->GetSelectedNames();
+	if (names.empty()) { SetStatusWarning(_T("対象がありません")); return; }
+
+	wxArrayString choices;
+	choices.Add(to_wx(_T("UTF-8 (BOM 無し)")));
+	choices.Add(to_wx(_T("UTF-8 (BOM 付き)")));
+	choices.Add(to_wx(_T("Shift_JIS")));
+	const int sel = wxGetSingleChoiceIndex(to_wx(_T("変換先の文字コードを選んでください")),
+	                                       to_wx(_T("文字コードの変換")), choices, this);
+	if (sel < 0) return;
+
+	const int cp = (sel == 2)? 932 : CP_UTF8;
+	const bool bom = (sel == 1);
+
+	// **その場で書き換える破壊的な操作**なので必ず確認する
+	if (!ConfirmItems(this, _T("文字コードの変換"), _T("変換"), names, pane->GetPath())) return;
+
+	int ok = 0;
+	std::vector<UnicodeString> failures;
+	for (const UnicodeString &name : names) {
+		const UnicodeString p = pane->GetPath() + name;
+		if (dir_exists(p)) continue;
+		UnicodeString error;
+		if (text_ops::ConvertEncoding(p, cp, bom, error)) ok++;
+		else failures.push_back(name + _T(": ") + error);
+	}
+
+	pane->Reload();
+	UnicodeString msg;
+	msg.sprintf(_T("%d 件を変換しました"), ok);
+	for (const UnicodeString &f : failures) msg += _T("\r\n") + f;
+	wxMessageBox(to_wx(msg), to_wx(_T("文字コードの変換")), wxOK | wxICON_INFORMATION, this);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdListFileName()
+{
+	FilePane *pane = ActivePane();
+	const std::vector<FileItem> items = pane->VisibleItems();
+
+	UnicodeString text;
+	int shown = 0;
+	for (const FileItem &it : items) {
+		if (it.is_parent) continue;
+		if (shown++ >= 500) { text += _T("...\r\n(以下省略)\r\n"); break; }
+		text += it.name + (it.is_dir? _T("\\") : EmptyStr) + _T("\r\n");
+	}
+	if (text.IsEmpty()) { SetStatusWarning(_T("項目がありません")); return; }
+
+	wxMessageBox(to_wx(text), to_wx(_T("ファイル名の一覧")), wxOK | wxICON_INFORMATION, this);
+}
+
+//---------------------------------------------------------------------------
 void MainFrame::UpdateStatus()
 {
 	for (int i = 0; i < 2; ++i) {
@@ -1665,6 +1792,19 @@ bool MainFrame::Execute(const UnicodeString &command)
 	}
 	else if (SameStr(command, _T("DiffDir"))) {
 		CmdDiffDir();
+	}
+	//-- テキスト操作 ---------------------------------------------------------
+	else if (SameStr(command, _T("CountLines"))) {
+		CmdCountLines();
+	}
+	else if (SameStr(command, _T("JoinText"))) {
+		CmdJoinText();
+	}
+	else if (SameStr(command, _T("ConvertTextEnc"))) {
+		CmdConvertTextEnc();
+	}
+	else if (SameStr(command, _T("ListFileName"))) {
+		CmdListFileName();
 	}
 	else if (SameStr(command, _T("KeyList"))) {
 		ShowKeyList();

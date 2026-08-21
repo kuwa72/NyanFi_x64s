@@ -188,6 +188,12 @@ private:
 	void CmdToOppSameHash();  //!< 反対側の同ハッシュ項目へ
 	void CmdDiffDir();        //!< 左右のディレクトリを比較
 
+	//-- テキスト操作 (機能群9) -----------------------------------------------
+	void CmdCountLines();      //!< 行数を数える
+	void CmdJoinText();        //!< テキストを1つに結合する
+	void CmdConvertTextEnc();  //!< 文字コードを変換する (破壊的)
+	void CmdListFileName();    //!< ファイル名の一覧を出す
+
 	DirStack dir_stack_;          //!< ディレクトリ・スタック (PushDir / PopDir)
 	bool sync_lr_ = false;        //!< 左右のディレクトリを同期させるか (SyncLR)
 
