@@ -14,6 +14,36 @@
 #include "usr_key.h"
 
 //---------------------------------------------------------------------------
+// gui/key_map.cpp の VkFromWxKeyCode() は wx をリンクせずに単体テストできるよう
+// wxKeyCode の値を数値で書き写している。本物とずれていないかをここで確認する。
+// wx を更新して値が変わったら、この static_assert でコンパイルが止まる。
+// (メッセージが英語なのは static_assert が narrow リテラルしか取れないため。
+//  コンパイル時にしか出ないので ACP 依存の実害は無いが、規約1 の機械チェックに
+//  例外を作らないよう ASCII にしてある)
+//---------------------------------------------------------------------------
+static_assert(WXK_START    == 300,           "wxKeyCode value changed; update VkFromWxKeyCode");
+static_assert(WXK_PAUSE    == WXK_START + 10, "wxKeyCode value changed; update VkFromWxKeyCode");
+static_assert(WXK_END      == WXK_START + 12, "wxKeyCode value changed; update VkFromWxKeyCode");
+static_assert(WXK_HOME     == WXK_START + 13, "wxKeyCode value changed; update VkFromWxKeyCode");
+static_assert(WXK_LEFT     == WXK_START + 14, "wxKeyCode value changed; update VkFromWxKeyCode");
+static_assert(WXK_UP       == WXK_START + 15, "wxKeyCode value changed; update VkFromWxKeyCode");
+static_assert(WXK_RIGHT    == WXK_START + 16, "wxKeyCode value changed; update VkFromWxKeyCode");
+static_assert(WXK_DOWN     == WXK_START + 17, "wxKeyCode value changed; update VkFromWxKeyCode");
+static_assert(WXK_INSERT   == WXK_START + 22, "wxKeyCode value changed; update VkFromWxKeyCode");
+static_assert(WXK_NUMPAD0  == WXK_START + 24, "wxKeyCode value changed; update VkFromWxKeyCode");
+static_assert(WXK_NUMPAD9  == WXK_START + 33, "wxKeyCode value changed; update VkFromWxKeyCode");
+static_assert(WXK_MULTIPLY == WXK_START + 34, "wxKeyCode value changed; update VkFromWxKeyCode");
+static_assert(WXK_ADD      == WXK_START + 35, "wxKeyCode value changed; update VkFromWxKeyCode");
+static_assert(WXK_SUBTRACT == WXK_START + 37, "wxKeyCode value changed; update VkFromWxKeyCode");
+static_assert(WXK_DECIMAL  == WXK_START + 38, "wxKeyCode value changed; update VkFromWxKeyCode");
+static_assert(WXK_DIVIDE   == WXK_START + 39, "wxKeyCode value changed; update VkFromWxKeyCode");
+static_assert(WXK_F1       == WXK_START + 40, "wxKeyCode value changed; update VkFromWxKeyCode");
+static_assert(WXK_F12      == WXK_START + 51, "wxKeyCode value changed; update VkFromWxKeyCode");
+static_assert(WXK_PAGEUP   == WXK_START + 66, "wxKeyCode value changed; update VkFromWxKeyCode");
+static_assert(WXK_PAGEDOWN == WXK_START + 67, "wxKeyCode value changed; update VkFromWxKeyCode");
+static_assert(WXK_DELETE   == 127,            "wxKeyCode value changed; update VkFromWxKeyCode");
+
+//---------------------------------------------------------------------------
 UnicodeString KeyMap::KeyStrOf(const wxKeyEvent &event)
 {
 	// wx の修飾キー状態を VCL の TShiftState に移す。移植済みの
@@ -23,7 +53,20 @@ UnicodeString KeyMap::KeyStrOf(const wxKeyEvent &event)
 	if (event.ControlDown()) shift << ssCtrl;
 	if (event.AltDown()) shift << ssAlt;
 
-	// wx の KeyCode は MSW では仮想キーコードと同じ値になる
-	const WORD vk = static_cast<WORD>(event.GetKeyCode());
+	// MSW では GetRawKeyCode() が WM_KEYDOWN の wParam = 仮想キーコードその物に
+	// なる (wx 3.3.3 src/msw/window.cpp の MSWInitAnyKeyEvent で
+	// `event.m_rawCode = (wxUint32) wParam;`。wxEVT_CHAR_HOOK もこれを通る)。
+	// VCL 版の TForm::OnKeyDown が受け取る値と同じなので、get_KeyStr() には
+	// これを渡すのが正しい。
+	//
+	// GetKeyCode() を渡してはいけない。あれは仮想キーコードではなく、矢印や
+	// F キーは WXK_START (300) からの連番になる。英数字だけ偶然 VK と同値なので
+	// 「G は効くのに上下キーが無反応」という壊れ方をする (報告書 §16.5)。
+	WORD vk = static_cast<WORD>(event.GetRawKeyCode());
+
+	// raw code が取れない環境向けの保険 (MSW では通らない)。OEM キーは
+	// wx が ASCII に畳んでしまっているので戻せない
+	if (vk == 0) vk = VkFromWxKeyCode(event.GetKeyCode());
+
 	return get_KeyStr(vk, shift);
 }

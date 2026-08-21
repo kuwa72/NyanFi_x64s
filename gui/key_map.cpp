@@ -24,6 +24,76 @@ KeyMap::KeyMap() : entries_(new TStringList())
 }
 
 //---------------------------------------------------------------------------
+namespace {
+
+/// wx/defs.h の `wxKeyCode` の値を、wx をリンクせずに書き写したもの。
+/// 本物との一致は gui/key_map_wx.cpp の static_assert が確認する
+/// (wx を更新して値がずれたらコンパイルが通らない)。
+enum WxKeyCode {
+	kWxStart    = 300,
+	kWxPause    = kWxStart + 10,
+	kWxEnd      = kWxStart + 12,
+	kWxHome     = kWxStart + 13,
+	kWxLeft     = kWxStart + 14,
+	kWxUp       = kWxStart + 15,
+	kWxRight    = kWxStart + 16,
+	kWxDown     = kWxStart + 17,
+	kWxInsert   = kWxStart + 22,
+	kWxNumpad0  = kWxStart + 24,
+	kWxMultiply = kWxStart + 34,
+	kWxAdd      = kWxStart + 35,
+	kWxSubtract = kWxStart + 37,
+	kWxDecimal  = kWxStart + 38,
+	kWxDivide   = kWxStart + 39,
+	kWxF1       = kWxStart + 40,
+	kWxPageUp   = kWxStart + 66,
+	kWxPageDown = kWxStart + 67,
+	kWxDelete   = 127,
+};
+
+}  // namespace
+
+//---------------------------------------------------------------------------
+WORD KeyMap::VkFromWxKeyCode(int wx_keycode)
+{
+	// F1〜F12 と 10キーの数字は連番なので範囲で捌く
+	if (wx_keycode >= kWxF1 && wx_keycode <= kWxF1 + 11) {
+		return static_cast<WORD>(VK_F1 + (wx_keycode - kWxF1));
+	}
+	if (wx_keycode >= kWxNumpad0 && wx_keycode <= kWxNumpad0 + 9) {
+		return static_cast<WORD>(VK_NUMPAD0 + (wx_keycode - kWxNumpad0));
+	}
+
+	switch (wx_keycode) {
+	case kWxLeft:		return VK_LEFT;
+	case kWxRight:		return VK_RIGHT;
+	case kWxUp:			return VK_UP;
+	case kWxDown:		return VK_DOWN;
+	case kWxPageUp:		return VK_PRIOR;
+	case kWxPageDown:	return VK_NEXT;
+	case kWxHome:		return VK_HOME;
+	case kWxEnd:		return VK_END;
+	case kWxInsert:		return VK_INSERT;
+	case kWxDelete:		return VK_DELETE;
+	case kWxPause:		return VK_PAUSE;
+	case kWxMultiply:	return VK_MULTIPLY;
+	case kWxAdd:		return VK_ADD;
+	case kWxSubtract:	return VK_SUBTRACT;
+	case kWxDecimal:	return VK_DECIMAL;
+	case kWxDivide:		return VK_DIVIDE;
+	default:			break;
+	}
+
+	// ここから下は wx の値と VK が同値の範囲。
+	// BackSpace(8) / Tab(9) / Enter(13) / Esc(27) / Space(32) と、
+	// 英数字 ('0'-'9' / 'A'-'Z' は VK_0-VK_9 / VK_A-VK_Z と同値)
+	if (wx_keycode > 0 && wx_keycode < 128) return static_cast<WORD>(wx_keycode);
+
+	return 0;  // WXK_SHIFT など、キー名を持たないもの
+}
+
+
+//---------------------------------------------------------------------------
 /**
  * @brief 既定のキー割り当て
  * @details VCL 版は ini の [Key] セクションから読む。Phase 2 の骨格では

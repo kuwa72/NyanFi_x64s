@@ -16,6 +16,7 @@
 
 #include "gui/key_map.h"
 #include "gui/settings.h"
+#include "usr_key.h"  // get_KeyStr (VkFromWxKeyCode の結果をキー名まで通して確認する)
 
 #include "temp_dir.h"
 
@@ -133,6 +134,101 @@ TEST_CASE("KeyMap: Assign は同じキーなら上書きする")
 
 	km.Assign(_T("Ctrl+Z"), _T("Undo"));
 	CHECK(km.Lookup(_T("Ctrl+Z")) == UnicodeString(_T("Undo")));
+}
+
+//===========================================================================
+// KeyMap::VkFromWxKeyCode: wx のキーコード → 仮想キーコード
+//
+// この変換にテストが無く、KeyStrOf() が wx の GetKeyCode() をそのまま
+// get_KeyStr() に渡していたため、英数字キーだけ効いて上下キー・PgUp/PgDn・
+// F キーが全部無反応になっていた (報告書 §16.5)。
+//
+// wxKeyCode の実際の値との一致は gui/key_map_wx.cpp の static_assert が
+// コンパイル時に確認する。ここでは「VK に落ちてキー名まで通ること」を見る。
+//===========================================================================
+
+TEST_CASE("VkFromWxKeyCode: 矢印キーが仮想キーコードになる")
+{
+	// WXK_LEFT=314 / WXK_UP=315 / WXK_RIGHT=316 / WXK_DOWN=317
+	CHECK(KeyMap::VkFromWxKeyCode(314) == VK_LEFT);
+	CHECK(KeyMap::VkFromWxKeyCode(315) == VK_UP);
+	CHECK(KeyMap::VkFromWxKeyCode(316) == VK_RIGHT);
+	CHECK(KeyMap::VkFromWxKeyCode(317) == VK_DOWN);
+
+	// wx の値をそのまま get_KeyStr() に渡していた頃の壊れ方を記録しておく。
+	// 315 は VK として意味を持たないが、get_KeyStr() の default 節の
+	// `if (_istalnum(Key)) keystr = (char)Key;` に落ちるため **空にならない**。
+	// (char)315 は下位1バイトの 59 = ';' になり、上下キーが ';' '=' という
+	// 別のキー名として引かれていた (割り当てが無いので無反応。もし ';' に
+	// 何か割り当てていたら誤動作していた)
+	CHECK(get_KeyStr(315) == UnicodeString(_T(";")));
+	CHECK(get_KeyStr(317) == UnicodeString(_T("=")));
+}
+
+TEST_CASE("VkFromWxKeyCode: ページ移動・行頭行末・挿入削除")
+{
+	CHECK(KeyMap::VkFromWxKeyCode(366) == VK_PRIOR);   // WXK_PAGEUP
+	CHECK(KeyMap::VkFromWxKeyCode(367) == VK_NEXT);    // WXK_PAGEDOWN
+	CHECK(KeyMap::VkFromWxKeyCode(313) == VK_HOME);    // WXK_HOME
+	CHECK(KeyMap::VkFromWxKeyCode(312) == VK_END);     // WXK_END
+	CHECK(KeyMap::VkFromWxKeyCode(322) == VK_INSERT);  // WXK_INSERT
+	CHECK(KeyMap::VkFromWxKeyCode(127) == VK_DELETE);  // WXK_DELETE
+}
+
+TEST_CASE("VkFromWxKeyCode: F1〜F12 が連番で対応する")
+{
+	for (int i = 0; i < 12; i++) {
+		CHECK(KeyMap::VkFromWxKeyCode(340 + i) == VK_F1 + i);  // WXK_F1 = 340
+	}
+}
+
+TEST_CASE("VkFromWxKeyCode: 10キーの数字と演算子")
+{
+	for (int i = 0; i < 10; i++) {
+		CHECK(KeyMap::VkFromWxKeyCode(324 + i) == VK_NUMPAD0 + i);  // WXK_NUMPAD0 = 324
+	}
+	CHECK(KeyMap::VkFromWxKeyCode(334) == VK_MULTIPLY);
+	CHECK(KeyMap::VkFromWxKeyCode(335) == VK_ADD);
+	CHECK(KeyMap::VkFromWxKeyCode(337) == VK_SUBTRACT);
+	CHECK(KeyMap::VkFromWxKeyCode(338) == VK_DECIMAL);
+	CHECK(KeyMap::VkFromWxKeyCode(339) == VK_DIVIDE);
+}
+
+TEST_CASE("VkFromWxKeyCode: VK と同値の範囲はそのまま通す")
+{
+	// 英数字は wx も VK も同値。ここが一致していたので G や R だけ効いていた
+	CHECK(KeyMap::VkFromWxKeyCode('G') == 'G');
+	CHECK(KeyMap::VkFromWxKeyCode('0') == '0');
+
+	// 制御キーも偶然一致している組
+	CHECK(KeyMap::VkFromWxKeyCode(8)  == VK_BACK);
+	CHECK(KeyMap::VkFromWxKeyCode(9)  == VK_TAB);
+	CHECK(KeyMap::VkFromWxKeyCode(13) == VK_RETURN);
+	CHECK(KeyMap::VkFromWxKeyCode(27) == VK_ESCAPE);
+	CHECK(KeyMap::VkFromWxKeyCode(32) == VK_SPACE);
+}
+
+TEST_CASE("VkFromWxKeyCode: キー名を持たないものは 0")
+{
+	CHECK(KeyMap::VkFromWxKeyCode(306) == 0);  // WXK_SHIFT
+	CHECK(KeyMap::VkFromWxKeyCode(308) == 0);  // WXK_CONTROL
+	CHECK(KeyMap::VkFromWxKeyCode(0)   == 0);  // WXK_NONE
+}
+
+TEST_CASE("VkFromWxKeyCode: 変換した値が get_KeyStr でキー名になる")
+{
+	// 実際の経路 (wx のキーコード → VK → キー名 → コマンド名) を通す
+	KeyMap km;
+	CHECK(get_KeyStr(KeyMap::VkFromWxKeyCode(315)) == UnicodeString(_T("UP")));
+	CHECK(get_KeyStr(KeyMap::VkFromWxKeyCode(317)) == UnicodeString(_T("DOWN")));
+	CHECK(get_KeyStr(KeyMap::VkFromWxKeyCode(366)) == UnicodeString(_T("PGUP")));
+	CHECK(get_KeyStr(KeyMap::VkFromWxKeyCode(344)) == UnicodeString(_T("F5")));
+
+	// 上下キーは get_CsrKeyCmd 経由でコマンドに解決される
+	CHECK_FALSE(km.Lookup(get_KeyStr(KeyMap::VkFromWxKeyCode(315))).IsEmpty());
+	CHECK_FALSE(km.Lookup(get_KeyStr(KeyMap::VkFromWxKeyCode(317))).IsEmpty());
+	CHECK(km.Lookup(get_KeyStr(KeyMap::VkFromWxKeyCode(366))) == UnicodeString(_T("PageUp")));
+	CHECK(km.Lookup(get_KeyStr(KeyMap::VkFromWxKeyCode(344))) == UnicodeString(_T("Refresh")));
 }
 
 //===========================================================================

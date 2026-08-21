@@ -48,6 +48,21 @@ public:
 	/// wx のキーイベントを NyanFi のキー名 ("DOWN" / "Ctrl+F5" など) にする
 	static UnicodeString KeyStrOf(const wxKeyEvent &event);
 
+	/// wx のキーコード (`wxKeyEvent::GetKeyCode()`) を Windows の仮想キーコードにする。
+	/// 対応するものが無ければ 0。
+	///
+	/// **wx の `GetKeyCode()` は仮想キーコードではない。** 英数字と一部の制御キー
+	/// (BackSpace=8 / Tab=9 / Enter=13 / Esc=27 / Space=32) は VK と同値だが、
+	/// 矢印・PgUp/PgDn・Home/End・Ins/Del・F1〜F12 は `WXK_START` (300) からの
+	/// 連番 (wx/defs.h の `wxKeyCode`) で、VK とはまったく別の値になる。
+	/// これを `get_KeyStr(WORD, TShiftState)` にそのまま渡すと、英数字だけ動いて
+	/// カーソル移動や F キーが無反応になる (実際にそうなっていた。報告書 §16.5)。
+	///
+	/// MSW では `GetRawKeyCode()` が `WM_KEYDOWN` の wParam = 仮想キーコードその物
+	/// なので `KeyStrOf()` はそちらを優先する。この関数はそれが取れなかったときの
+	/// 経路で、OEM キー (`:` `@` `[` など) は wx が ASCII に畳んでいるため戻せない。
+	static WORD VkFromWxKeyCode(int wx_keycode);
+
 	/// キー名に割り当てられたコマンド名を返す。無ければ空文字列
 	UnicodeString Lookup(const UnicodeString &key_str) const;
 
