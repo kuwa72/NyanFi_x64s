@@ -238,6 +238,7 @@ if(TARGET nyanfi_core)
 		gui/tabs.cpp
 		gui/rename.cpp
 		gui/selection.cpp
+		gui/view_state.cpp
 	)
 	target_include_directories(nyanfi_gui_core PUBLIC ${PROJECT_SOURCE_DIR})
 	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core shell32)

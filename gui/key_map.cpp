@@ -154,6 +154,15 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Shift+HOME"), _T("CursorTopSel"));
 	Assign(_T("Shift+END"), _T("CursorEndSel"));
 
+	// 表示の切り替え。**VCL の既定表 (src/Global.cpp) に1つも無い**ので
+	// すべて推測。エクスプローラや他のファイラの慣習に寄せた
+	Assign(_T("Ctrl+H"), _T("ShowHideAtr"));      // 隠しファイル
+	Assign(_T("Ctrl+B"), _T("ShowByteSize"));     // バイト単位
+	Assign(_T("Shift+LEFT"), _T("BorderLeft"));   // 境界を左へ
+	Assign(_T("Shift+RIGHT"), _T("BorderRight")); // 境界を右へ
+	Assign(_T("Ctrl+Shift+E"), _T("EqualListWidth"));
+	Assign(_T("Ctrl+Shift+S"), _T("SwapLR"));
+
 	// 並べ替え・絞り込み。"S" は src/Global.cpp の既定キー表にある実際の割り当て
 	// ("F:S=SortDlg") と同じ。Ctrl+M / Ctrl+U は既定キー表に対応する記載が無く
 	// (パスマスクはコンボボックス操作が前提で単独のキー割り当てが見当たらない)、
