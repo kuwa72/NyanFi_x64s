@@ -463,6 +463,131 @@ void MainFrame::CmdSwapLR()
 }
 
 //---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// ディレクトリ移動 (判断は gui/navigation.h の純関数・クラスが持つ。規約8)
+//---------------------------------------------------------------------------
+void MainFrame::CmdToRoot()
+{
+	FilePane *pane = ActivePane();
+	const UnicodeString root = get_drive_str(pane->GetPath());
+	if (root.IsEmpty()) { SetStatusWarning(_T("ルートを特定できません")); return; }
+	pane->SetPath(root);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdCopyPath(bool to_opp)
+{
+	// CurrToOpp: カレントのパスを反対側にも開く (MainFrm.cpp:16073)
+	// CurrFromOpp: その逆
+	const int cur = active_;
+	const int opp = 1 - active_;
+	const int from = to_opp? cur : opp;
+	const int to = to_opp? opp : cur;
+
+	panes_[to]->SetPath(panes_[from]->GetPath());
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdCsrDirToOpp()
+{
+	FilePane *pane = ActivePane();
+	const FileItem *itm = pane->GetCurrentItem();
+	if (itm == nullptr || !itm->is_dir || itm->is_parent) {
+		SetStatusWarning(_T("カーソル位置がディレクトリではありません"));
+		return;
+	}
+	panes_[1 - active_]->SetPath(IncludeTrailingPathDelimiter(pane->GetPath()) + itm->name);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdToOppSameItem()
+{
+	FilePane *pane = ActivePane();
+	const FileItem *itm = pane->GetCurrentItem();
+	if (itm == nullptr) return;
+
+	FilePane *opp = panes_[1 - active_];
+	const std::vector<UnicodeString> names = opp->VisibleNames();
+	for (std::size_t i = 0; i < names.size(); ++i) {
+		if (SameText(names[i], itm->name)) {
+			opp->MoveCursorTo(static_cast<int>(i));
+			UpdateStatus();
+			return;
+		}
+	}
+	SetStatusWarning(_T("反対側に同名の項目がありません"));
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdParentOn(int index)
+{
+	if (index < 0 || index > 1) return;
+	panes_[index]->GoParent();
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdCycleDrive(bool forward)
+{
+	std::unique_ptr<TStringList> drives(new TStringList());
+	get_available_drive_list(drives.get());
+
+	std::vector<UnicodeString> list;
+	for (int i = 0; i < drives->Count; ++i) list.push_back(drives->Strings[i]);
+
+	FilePane *pane = ActivePane();
+	const UnicodeString next = NextDriveOf(list, get_drive_str(pane->GetPath()), forward);
+	if (next.IsEmpty()) { SetStatusWarning(_T("利用可能なドライブがありません")); return; }
+
+	if (!pane->SetPath(next)) SetStatusWarning(_T("ドライブを開けません: ") + next);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdPushDir()
+{
+	FilePane *pane = ActivePane();
+	dir_stack_.Push(pane->GetPath(), pane->GetCursor());
+	SetStatusWarning(UnicodeString().sprintf(_T("ディレクトリを積みました (%d 件)"), dir_stack_.Count()));
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdPopDir()
+{
+	DirStack::Entry e;
+	// 存在しなくなったディレクトリは DirStack::Pop が読み飛ばす
+	if (!dir_stack_.Pop(e, [](const UnicodeString &p) { return dir_exists(p); })) {
+		SetStatusWarning(_T("積んであるディレクトリがありません"));
+		return;
+	}
+	FilePane *pane = ActivePane();
+	pane->SetPath(e.path);
+	pane->MoveCursorTo(e.cursor);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdShowDirStack()
+{
+	// VCL も空なら何も出さない (MainFrm.cpp:16780)
+	if (dir_stack_.IsEmpty()) { SetStatusWarning(_T("積んであるディレクトリがありません")); return; }
+
+	wxArrayString choices;
+	for (const DirStack::Entry &e : dir_stack_.Entries()) choices.Add(to_wx(e.path));
+
+	const int sel = wxGetSingleChoiceIndex(to_wx(_T("移動先を選んでください")),
+	                                       to_wx(_T("ディレクトリ・スタック")), choices, this);
+	if (sel < 0) return;
+
+	FilePane *pane = ActivePane();
+	pane->SetPath(dir_stack_.Entries()[static_cast<std::size_t>(sel)].path);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
 void MainFrame::UpdateStatus()
 {
 	for (int i = 0; i < 2; ++i) {
@@ -702,6 +827,50 @@ bool MainFrame::Execute(const UnicodeString &command)
 	}
 	else if (SameStr(command, _T("ShowTabBar"))) {
 		if (tab_bar_ != nullptr) { tab_bar_->Show(!tab_bar_->IsShown()); Layout(); }
+	}
+	//-- ディレクトリ移動 -----------------------------------------------------
+	else if (SameStr(command, _T("ToRoot"))) {
+		CmdToRoot();
+	}
+	else if (SameStr(command, _T("CurrToOpp"))) {
+		CmdCopyPath(true);
+	}
+	else if (SameStr(command, _T("CurrFromOpp"))) {
+		CmdCopyPath(false);
+	}
+	else if (SameStr(command, _T("CsrDirToOpp"))) {
+		CmdCsrDirToOpp();
+	}
+	else if (SameStr(command, _T("ToOppSameItem"))) {
+		CmdToOppSameItem();
+	}
+	else if (SameStr(command, _T("ToParentOnLeft"))) {
+		CmdParentOn(0);
+	}
+	else if (SameStr(command, _T("ToParentOnRight"))) {
+		CmdParentOn(1);
+	}
+	else if (SameStr(command, _T("NextDrive"))) {
+		CmdCycleDrive(true);
+	}
+	else if (SameStr(command, _T("PrevDrive"))) {
+		CmdCycleDrive(false);
+	}
+	else if (SameStr(command, _T("PushDir"))) {
+		CmdPushDir();
+	}
+	else if (SameStr(command, _T("PopDir"))) {
+		CmdPopDir();
+	}
+	else if (SameStr(command, _T("DirStack"))) {
+		CmdShowDirStack();
+	}
+	else if (SameStr(command, _T("SyncLR"))) {
+		// VCL はトグルで、有効にした直後に反対側を同名項目へ合わせる
+		// (MainFrm.cpp:26706 の `if (SyncLR) ExeCommandAction("ToOppSameItem", "NO")`)
+		sync_lr_ = !sync_lr_;
+		SetStatusWarning(sync_lr_? _T("左右の同期: 有効") : _T("左右の同期: 解除"));
+		if (sync_lr_) CmdToOppSameItem();
 	}
 	else if (SameStr(command, _T("KeyList"))) {
 		ShowKeyList();

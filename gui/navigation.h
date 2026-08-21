@@ -15,6 +15,7 @@
 #ifndef NYANFI_GUI_NAVIGATION_H
 #define NYANFI_GUI_NAVIGATION_H
 
+#include <functional>
 #include <vector>
 
 //---------------------------------------------------------------------------
@@ -164,6 +165,60 @@ private:
  * @details Global.cpp (SetDriveInfo 相当箇所、実測) の type_str への
  * 割り当てと同じ文言を使う
  */
+/**
+ * @brief ディレクトリ・スタック (PushDir / PopDir / DirStack)
+ * @details VCL の `DirStack` (TStringList) 相当。実測した点:
+ *          - `PushDir` は**先頭に挿入**する (MainFrm.cpp:24100 の `Insert(0, ...)`)。
+ *            末尾に足すのではないので、後入れ先出しになる
+ *          - `PopDir` は**存在しなくなったディレクトリを読み飛ばす**
+ *            (MainFrm.cpp:23715 の `while (...) if (dir_exists(...))`)。
+ *            消えたディレクトリでスタックが詰まらないようにするため
+ *          - 空のときは何もしない (DirStack の表示も出さない)
+ *
+ *          VCL はパスと一緒にカーソル位置と並べ替えも積むが、ここでは
+ *          パスとカーソル位置だけにした (並べ替えはペインの設定として
+ *          持っており、スタックで戻す対象にしていないため)。
+ */
+class DirStack {
+public:
+	struct Entry {
+		UnicodeString path;
+		int cursor = 0;
+	};
+
+	/// 先頭に積む
+	void Push(const UnicodeString &path, int cursor);
+
+	/**
+	 * @brief 先頭から取り出す。存在しないディレクトリは読み飛ばす
+	 * @param out 取り出せた項目
+	 * @return 取り出せたら true。スタックが空 (または全部消えていた) なら false
+	 * @param exists ディレクトリの存在判定。テストから差し替えられるようにしてある
+	 */
+	bool Pop(Entry &out, const std::function<bool(const UnicodeString &)> &exists);
+
+	int Count() const { return static_cast<int>(entries_.size()); }
+	bool IsEmpty() const { return entries_.empty(); }
+	const std::vector<Entry> &Entries() const { return entries_; }
+	void Clear() { entries_.clear(); }
+
+private:
+	std::vector<Entry> entries_;
+};
+
+/**
+ * @brief 次 (または前) のドライブを選ぶ (NextDrive / PrevDrive)
+ * @param drives 利用できるドライブの一覧 ("C:\\" のような文字列)
+ * @param current 現在のドライブ
+ * @param forward true なら次、false なら前
+ * @return 選んだドライブ。一覧が空なら空文字列
+ * @details VCL の実装 (MainFrm.cpp:22361) は「現在より**辞書順で大きい**最初の
+ *          ドライブ。無ければ先頭」。一覧中の位置を +1 するのではないので、
+ *          現在のドライブが一覧に無くても動く (取り外した直後など)
+ */
+UnicodeString NextDriveOf(const std::vector<UnicodeString> &drives,
+                          const UnicodeString &current, bool forward);
+
 UnicodeString DriveTypeLabel(unsigned int drive_type);
 
 //---------------------------------------------------------------------------
