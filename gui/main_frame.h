@@ -78,7 +78,7 @@ private:
 	void CmdMove();       //!< アクティブペインの選択項目を、反対側のペインへ移動する (M)
 	void CmdDelete();     //!< アクティブペインの選択項目をゴミ箱へ送る (D)
 	void CmdCreateDir();  //!< アクティブペインにディレクトリを作成する (K)
-	void CmdRenameDlg();  //!< カーソル位置の項目の名前を変更する (R)
+	void CmdRenameDlg();  //!< 選択項目 (マーク済み、無ければカーソル位置) の一括リネーム (R)
 
 	// ファイルを開く (gui/file_open.h) とファイル情報 (gui/file_info_panel.h)
 	void CmdOpenStandard();  //!< 関連付けで開く (ENTER)。ディレクトリなら入る

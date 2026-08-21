@@ -22,6 +22,7 @@
 #include "gui/file_ops.h"
 #include "gui/grep_dialog.h"
 #include "gui/image_load.h"
+#include "gui/rename_dialog.h"
 #include "usr_cmdlist.h"
 #include "usr_file_ex.h"
 #include "usr_file_inf.h"
@@ -1032,27 +1033,33 @@ void MainFrame::CmdCreateDir()
 }
 
 //---------------------------------------------------------------------------
-/// 名前等の変更 (R)。カーソル位置の1件のみ (複数選択には対応しない)
+/**
+ * @brief 一括リネーム (R)
+ * @details 対象はアクティブペインの選択項目 (マーク済み、無ければカーソル位置の
+ * 1件。CmdCopy 等と同じ `GetSelectedItems()`)。実際の方式選択・プレビュー・
+ * 確認・実行は gui/rename_dialog.h に委ねる (正規表現置換・連番付与・
+ * 大文字小文字変換の3方式。詳細は gui/rename.h のコメントを参照)
+ */
 void MainFrame::CmdRenameDlg()
 {
 	FilePane *pane = ActivePane();
-	const FileItem *itm = pane->GetCurrentItem();
-	if (itm == nullptr || itm->is_parent) {
-		wxMessageBox(to_wx(_T("対象がありません")), to_wx(_T("名前の変更")), wxOK | wxICON_INFORMATION, this);
+
+	const std::vector<FileItem> items = pane->GetSelectedItems();
+	if (items.empty()) {
+		wxMessageBox(to_wx(_T("対象がありません")), to_wx(_T("一括リネーム")), wxOK | wxICON_INFORMATION, this);
 		return;
 	}
 
-	wxTextEntryDialog dlg(this, to_wx(_T("新しい名前")), to_wx(_T("名前等の変更")), to_wx(itm->name));
-	if (dlg.ShowModal() != wxID_OK) return;
-
-	const UnicodeString new_name = to_us(dlg.GetValue());
-	UnicodeString error;
-	if (!file_ops::RenameItem(pane->GetPath(), itm->name, new_name, error)) {
-		wxMessageBox(to_wx(error), to_wx(_T("名前を変更できません")), wxOK | wxICON_ERROR, this);
-		return;
+	std::vector<rename_core::RenameTarget> targets;
+	targets.reserve(items.size());
+	for (const FileItem &itm : items) {
+		rename_core::RenameTarget t;
+		t.name = itm.name;
+		t.is_dir = itm.is_dir;
+		targets.push_back(t);
 	}
 
-	pane->Reload();
+	if (rename_dialog::Run(this, pane->GetPath(), targets)) pane->Reload();
 }
 
 //---------------------------------------------------------------------------

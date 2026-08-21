@@ -70,6 +70,11 @@ public:
 	/// それら (".." を除く)、無ければカーソル位置の1件 (".." なら空)
 	std::vector<UnicodeString> GetSelectedNames() const;
 
+	/// GetSelectedNames() と同じ対象選択 (マーク済み、無ければカーソル位置の
+	/// 1件) を FileItem (name/is_dir を含む) で返す。一括リネーム
+	/// (gui/rename_dialog.h) がディレクトリと拡張子付きファイルを区別するために使う
+	std::vector<FileItem> GetSelectedItems() const;
+
 	//-- 状態 --------------------------------------------------------------
 	int GetItemCount() const { return static_cast<int>(order_.size()); }
 	bool IsActive() const { return active_; }

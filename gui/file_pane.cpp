@@ -279,6 +279,21 @@ std::vector<UnicodeString> FilePane::GetSelectedNames() const
 	return names;
 }
 
+std::vector<FileItem> FilePane::GetSelectedItems() const
+{
+	std::vector<FileItem> items;
+	for (int i = 0; i < GetItemCount(); ++i) {
+		const FileItem &itm = ItemAt(i);
+		if (itm.marked && !itm.is_parent) items.push_back(itm);
+	}
+
+	if (items.empty()) {
+		const FileItem *cur = GetCurrentItem();
+		if (cur != nullptr && !cur->is_parent) items.push_back(*cur);
+	}
+	return items;
+}
+
 //---------------------------------------------------------------------------
 void FilePane::SetActive(bool active)
 {
