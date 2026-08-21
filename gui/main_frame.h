@@ -24,6 +24,7 @@
 
 #include <wx/wx.h>
 
+#include "gui/dir_info.h"
 #include "gui/external.h"
 #include "gui/file_ops.h"
 #include "gui/links.h"
@@ -202,6 +203,12 @@ private:
 	void CmdOpenTrash();       //!< ごみ箱を開く
 	void CmdFileRun();         //!< 「ファイル名を指定して実行」
 	void CmdOpenCtrlPanel();   //!< コントロールパネルを開く
+
+	//-- 情報系 (機能群11/12) -------------------------------------------------
+	void CmdCalcDirSize(bool all);  //!< ディレクトリ容量を計算 (CalcDirSize / All)
+	void CmdFileExtList();          //!< 拡張子別の一覧
+	void CmdListTree();             //!< ディレクトリ構造のツリー
+	void CmdAbout();                //!< バージョン情報
 
 	DirStack dir_stack_;          //!< ディレクトリ・スタック (PushDir / PopDir)
 	bool sync_lr_ = false;        //!< 左右のディレクトリを同期させるか (SyncLR)

@@ -1599,6 +1599,111 @@ void MainFrame::CmdFileRun()
 }
 
 //---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// 情報系 (機能群11/12)
+//---------------------------------------------------------------------------
+void MainFrame::CmdCalcDirSize(bool all)
+{
+	FilePane *pane = ActivePane();
+
+	std::vector<UnicodeString> targets;
+	if (all) {
+		// 一覧にあるディレクトリを全部
+		for (const FileItem &it : pane->VisibleItems()) {
+			if (it.is_dir && !it.is_parent) targets.push_back(it.name);
+		}
+	}
+	else {
+		for (const UnicodeString &n : pane->GetSelectedNames()) {
+			if (dir_exists(pane->GetPath() + n)) targets.push_back(n);
+		}
+	}
+	if (targets.empty()) { SetStatusWarning(_T("対象のディレクトリがありません")); return; }
+
+	UnicodeString text;
+	Int64 grand = 0;
+	bool any_truncated = false;
+	for (const UnicodeString &n : targets) {
+		const dir_info::DirSize r = dir_info::CalcDirSize(pane->GetPath() + n,
+		                                                   pane->GetShowHidden(),
+		                                                   pane->GetShowSystem());
+		grand += r.bytes;
+		any_truncated = any_truncated || r.truncated;
+		text.cat_sprintf(_T("%-28s %14s  (%d ファイル)\r\n"), n.c_str(),
+		                 get_size_str_B(r.bytes, 14).Trim().c_str(), r.files);
+	}
+	text.cat_sprintf(_T("\r\n合計 %s\r\n"), get_size_str_B(grand, 14).Trim().c_str());
+	// 打ち切ったら黙っていない (規約: 上限を超えたことを明示する)
+	if (any_truncated) {
+		text.cat_sprintf(_T("\r\n※ %d ファイルで打ち切りました。数字は途中までです"),
+		                 dir_info::kMaxScanFiles);
+	}
+
+	wxMessageBox(to_wx(text), to_wx(_T("ディレクトリ容量")), wxOK | wxICON_INFORMATION, this);
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdFileExtList()
+{
+	FilePane *pane = ActivePane();
+	bool truncated = false;
+	const auto stats = dir_info::CalcExtStats(pane->GetPath(), false, pane->GetShowHidden(),
+	                                           pane->GetShowSystem(), truncated);
+	if (stats.empty()) { SetStatusWarning(_T("ファイルがありません")); return; }
+
+	UnicodeString text = _T("拡張子            件数           容量\r\n");
+	for (const dir_info::ExtStat &st : stats) {
+		text.cat_sprintf(_T("%-16s %6d %14s\r\n"), st.ext.c_str(), st.count,
+		                 get_size_str_B(st.bytes, 14).Trim().c_str());
+	}
+	if (truncated) text += _T("\r\n※ 上限に達して打ち切りました");
+
+	wxMessageBox(to_wx(text), to_wx(_T("拡張子別一覧")), wxOK | wxICON_INFORMATION, this);
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdListTree()
+{
+	FilePane *pane = ActivePane();
+	bool truncated = false;
+	// 深さの上限はこちらの判断。深いところまで一気に出すと読めなくなる
+	const auto lines = dir_info::BuildTree(pane->GetPath(), 4, pane->GetShowHidden(),
+	                                        pane->GetShowSystem(), truncated);
+	if (lines.empty()) { SetStatusWarning(_T("サブディレクトリがありません")); return; }
+
+	UnicodeString text = pane->GetPath() + _T("\r\n");
+	int shown = 0;
+	for (const dir_info::TreeLine &l : lines) {
+		if (shown++ >= 500) { text += _T("...\r\n(以下省略)\r\n"); break; }
+		for (int i = 0; i <= l.depth; ++i) text += _T("  ");
+		text += l.name + _T("\r\n");
+	}
+	if (truncated) text += _T("\r\n※ 上限に達して打ち切りました");
+
+	wxMessageBox(to_wx(text), to_wx(_T("ディレクトリ構造")), wxOK | wxICON_INFORMATION, this);
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdAbout()
+{
+	UnicodeString text = _T("NyanFi (wxWidgets 版)\r\n\r\n");
+	text += _T("キーボード操作主体の2画面ファイラ NyanFi を、C++Builder / VCL から\r\n");
+	text += _T("OSS のツールチェイン (mingw-w64 + wxWidgets) へ移植したものです。\r\n\r\n");
+	text += _T("本家: https://nyanfi.dip.jp/\r\n");
+	text += _T("移植: https://github.com/kuwa72/NyanFi_x64s\r\n\r\n");
+
+	// 実行ファイルのバージョン情報を出す (無ければ出さない)
+	unsigned mj = 0, mi = 0, bl = 0;
+	if (GetProductVersion(Application->ExeName, mj, mi, bl)) {
+		text.cat_sprintf(_T("バージョン: %u.%u.%u\r\n"), mj, mi, bl);
+	}
+	text.cat_sprintf(_T("wxWidgets: %d.%d.%d\r\n"), wxMAJOR_VERSION, wxMINOR_VERSION,
+	                 wxRELEASE_NUMBER);
+
+	wxMessageBox(to_wx(text), to_wx(_T("バージョン情報")), wxOK | wxICON_INFORMATION, this);
+}
+
+//---------------------------------------------------------------------------
 void MainFrame::UpdateStatus()
 {
 	for (int i = 0; i < 2; ++i) {
@@ -2015,6 +2120,22 @@ bool MainFrame::Execute(const UnicodeString &command)
 	}
 	else if (SameStr(command, _T("FileRun"))) {
 		CmdFileRun();
+	}
+	//-- 情報系 ---------------------------------------------------------------
+	else if (SameStr(command, _T("CalcDirSize"))) {
+		CmdCalcDirSize(false);
+	}
+	else if (SameStr(command, _T("CalcDirSizeAll"))) {
+		CmdCalcDirSize(true);
+	}
+	else if (SameStr(command, _T("FileExtList"))) {
+		CmdFileExtList();
+	}
+	else if (SameStr(command, _T("ListTree"))) {
+		CmdListTree();
+	}
+	else if (SameStr(command, _T("AboutNyanFi"))) {
+		CmdAbout();
 	}
 	else if (SameStr(command, _T("KeyList"))) {
 		ShowKeyList();
