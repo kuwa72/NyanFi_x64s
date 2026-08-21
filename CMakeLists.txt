@@ -246,9 +246,10 @@ if(TARGET nyanfi_core)
 		gui/text_ops.cpp
 		gui/external.cpp
 		gui/dir_info.cpp
+		gui/misc_ops.cpp
 	)
 	target_include_directories(nyanfi_gui_core PUBLIC ${PROJECT_SOURCE_DIR})
-	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core shell32)
+	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core shell32 netapi32)
 	nyanfi_target_vcl_shim(nyanfi_gui_core)
 endif()
 

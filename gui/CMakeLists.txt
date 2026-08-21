@@ -103,5 +103,6 @@ target_compile_options(nyanfi PRIVATE ${WX_CXXFLAGS_LIST})
 # wx の構造体の定義がずれるため、ビルド種別に関わらず揃えておく。
 target_compile_definitions(nyanfi PRIVATE NDEBUG)
 
-target_link_libraries(nyanfi PRIVATE nyanfi_gui_core nyanfi_core nyanfi_legacy_flags ${WX_LIBS_LIST})
+# mpr: WNetConnectionDialog / WNetDisconnectDialog (ネットワークドライブの割り当て)
+target_link_libraries(nyanfi PRIVATE nyanfi_gui_core nyanfi_core nyanfi_legacy_flags mpr ${WX_LIBS_LIST})
 nyanfi_target_vcl_shim(nyanfi)

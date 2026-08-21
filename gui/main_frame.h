@@ -26,6 +26,7 @@
 
 #include "gui/dir_info.h"
 #include "gui/external.h"
+#include "gui/misc_ops.h"
 #include "gui/file_ops.h"
 #include "gui/links.h"
 #include "gui/file_pane.h"
@@ -209,6 +210,14 @@ private:
 	void CmdFileExtList();          //!< 拡張子別の一覧
 	void CmdListTree();             //!< ディレクトリ構造のツリー
 	void CmdAbout();                //!< バージョン情報
+
+	//-- 設定・その他 (機能群13) ----------------------------------------------
+	void CmdIniFile(bool edit);   //!< ini を編集 / 閲覧する
+	void CmdNameFromClip();       //!< クリップボードの内容にファイル名を変える (破壊的)
+	void CmdShareList();          //!< 共有フォルダ一覧
+	void CmdNetConnect(bool disconnect);  //!< ネットワークドライブの割り当て / 切断
+	void CmdListClipboard();      //!< クリップボードの内容を表示
+	void CmdRestart();            //!< 再起動
 
 	DirStack dir_stack_;          //!< ディレクトリ・スタック (PushDir / PopDir)
 	bool sync_lr_ = false;        //!< 左右のディレクトリを同期させるか (SyncLR)

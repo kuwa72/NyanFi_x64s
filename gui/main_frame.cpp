@@ -1704,6 +1704,164 @@ void MainFrame::CmdAbout()
 }
 
 //---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// 設定・その他 (機能群13)
+//---------------------------------------------------------------------------
+void MainFrame::CmdIniFile(bool edit)
+{
+	// **本フォークの ini** (<exe名>_wx.ini) を対象にする。
+	// 本物の NyanFi.ini は読み取り専用で参照するだけなので、ここでは開かない
+	// (誤って書き換えると VCL 版の設定が壊れる)
+	const UnicodeString path = Settings::DefaultIniPath();
+	if (!file_exists(path)) {
+		SetStatusWarning(_T("設定ファイルがまだありません: ") + path);
+		return;
+	}
+
+	if (edit) {
+		external::LaunchSpec spec;
+		spec.file = path;
+		// 「編集」なので open ではなく edit の動詞で開く
+		const HINSTANCE r = ::ShellExecuteW(static_cast<HWND>(GetHandle()), L"edit",
+		                                     path.c_str(), NULL, NULL, SW_SHOWNORMAL);
+		if (reinterpret_cast<INT_PTR>(r) <= 32) {
+			// edit の関連付けが無い環境があるので open で試し直す
+			::ShellExecuteW(static_cast<HWND>(GetHandle()), L"open", path.c_str(),
+			                NULL, NULL, SW_SHOWNORMAL);
+		}
+		return;
+	}
+	UnicodeString error;
+	if (!viewer_->LoadFile(path, error)) {
+		wxMessageBox(to_wx(error), to_wx(_T("開けませんでした")), wxOK | wxICON_ERROR, this);
+		return;
+	}
+	ShowViewer(true);
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdNameFromClip()
+{
+	FilePane *pane = ActivePane();
+	const FileItem *itm = pane->GetCurrentItem();
+	if (itm == nullptr || itm->is_parent) { SetStatusWarning(_T("対象がありません")); return; }
+
+	UnicodeString clip;
+	if (wxTheClipboard->Open()) {
+		if (wxTheClipboard->IsSupported(wxDF_TEXT)) {
+			wxTextDataObject data;
+			if (wxTheClipboard->GetData(data)) clip = to_us(data.GetText());
+		}
+		wxTheClipboard->Close();
+	}
+
+	UnicodeString error;
+	const UnicodeString name = misc_ops::NameFromClipboard(clip, error);
+	if (name.IsEmpty()) {
+		wxMessageBox(to_wx(error), to_wx(_T("名前の変更")), wxOK | wxICON_WARNING, this);
+		return;
+	}
+	if (SameStr(name, itm->name)) { SetStatusWarning(_T("名前が同じです")); return; }
+
+	// 改名は元に戻しにくいので確認する
+	UnicodeString msg;
+	msg.sprintf(_T("%s\r\n  ↓\r\n%s\r\n\r\n名前を変更しますか?"), itm->name.c_str(), name.c_str());
+	if (wxMessageBox(to_wx(msg), to_wx(_T("名前の変更")), wxYES_NO | wxICON_QUESTION, this) != wxYES) return;
+
+	UnicodeString err2;
+	if (!file_ops::RenameItem(pane->GetPath(), itm->name, name, err2)) {
+		wxMessageBox(to_wx(err2), to_wx(_T("名前の変更")), wxOK | wxICON_WARNING, this);
+		return;
+	}
+	pane->Reload();
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdShareList()
+{
+	std::vector<misc_ops::ShareEntry> shares;
+	UnicodeString error;
+	if (!misc_ops::EnumLocalShares(shares, error)) {
+		wxMessageBox(to_wx(error), to_wx(_T("共有フォルダ一覧")), wxOK | wxICON_WARNING, this);
+		return;
+	}
+	if (shares.empty()) { SetStatusWarning(_T("共有フォルダがありません")); return; }
+
+	wxArrayString choices;
+	std::vector<UnicodeString> paths;
+	for (const misc_ops::ShareEntry &e : shares) {
+		UnicodeString label = e.name;
+		if (!e.path.IsEmpty()) label += _T("  ") + e.path;
+		if (!e.remark.IsEmpty()) label += _T("  (") + e.remark + _T(")");
+		choices.Add(to_wx(label));
+		paths.push_back(e.path);
+	}
+
+	const int sel = wxGetSingleChoiceIndex(to_wx(_T("開く共有フォルダを選んでください")),
+	                                       to_wx(_T("共有フォルダ一覧")), choices, this);
+	if (sel < 0) return;
+	const UnicodeString p = paths[static_cast<std::size_t>(sel)];
+	if (p.IsEmpty() || !dir_exists(p)) { SetStatusWarning(_T("パスを開けません")); return; }
+	ActivePane()->SetPath(p);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdNetConnect(bool disconnect)
+{
+	// Windows の標準ダイアログをそのまま出す (VCL も同じ。MainFrm.cpp:22258)
+	const DWORD r = disconnect? ::WNetDisconnectDialog(static_cast<HWND>(GetHandle()), RESOURCETYPE_DISK)
+	                          : ::WNetConnectionDialog(static_cast<HWND>(GetHandle()), RESOURCETYPE_DISK);
+	if (r != NO_ERROR && r != static_cast<DWORD>(-1)) {
+		SetStatusWarning(_T("ネットワークドライブの操作に失敗しました"));
+	}
+	panes_[0]->Reload();
+	panes_[1]->Reload();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdListClipboard()
+{
+	UnicodeString text;
+	if (wxTheClipboard->Open()) {
+		if (wxTheClipboard->IsSupported(wxDF_TEXT)) {
+			wxTextDataObject data;
+			if (wxTheClipboard->GetData(data)) text = to_us(data.GetText());
+		}
+		wxTheClipboard->Close();
+	}
+	if (text.IsEmpty()) { SetStatusWarning(_T("クリップボードにテキストがありません")); return; }
+
+	// 長いと表示が破綻するので切る。切ったことは明示する
+	const int kMax = 8000;
+	if (text.Length() > kMax) {
+		text = text.SubString(1, kMax) + _T("\r\n...\r\n(以下省略)");
+	}
+	wxMessageBox(to_wx(text), to_wx(_T("クリップボードの内容")), wxOK | wxICON_INFORMATION, this);
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdRestart()
+{
+	if (wxMessageBox(to_wx(_T("再起動しますか? (設定は保存されます)")), to_wx(_T("再起動")),
+	                 wxYES_NO | wxICON_QUESTION, this) != wxYES) return;
+
+	SaveSettings();
+
+	external::LaunchSpec spec;
+	spec.file = Application->ExeName;
+	spec.directory = ExcludeTrailingPathDelimiter(ActivePane()->GetPath());
+	const HINSTANCE r = ::ShellExecuteW(NULL, L"open", spec.file.c_str(), NULL,
+	                                     spec.directory.c_str(), SW_SHOWNORMAL);
+	if (reinterpret_cast<INT_PTR>(r) <= 32) {
+		SetStatusWarning(_T("再起動できません"));
+		return;
+	}
+	Close(true);
+}
+
+//---------------------------------------------------------------------------
 void MainFrame::UpdateStatus()
 {
 	for (int i = 0; i < 2; ++i) {
@@ -2136,6 +2294,31 @@ bool MainFrame::Execute(const UnicodeString &command)
 	}
 	else if (SameStr(command, _T("AboutNyanFi"))) {
 		CmdAbout();
+	}
+	//-- 設定・その他 ---------------------------------------------------------
+	else if (SameStr(command, _T("EditIniFile"))) {
+		CmdIniFile(true);
+	}
+	else if (SameStr(command, _T("ViewIniFile"))) {
+		CmdIniFile(false);
+	}
+	else if (SameStr(command, _T("NameFromClip"))) {
+		CmdNameFromClip();
+	}
+	else if (SameStr(command, _T("ShareList"))) {
+		CmdShareList();
+	}
+	else if (SameStr(command, _T("NetConnect"))) {
+		CmdNetConnect(false);
+	}
+	else if (SameStr(command, _T("NetDisconnect"))) {
+		CmdNetConnect(true);
+	}
+	else if (SameStr(command, _T("ListClipboard"))) {
+		CmdListClipboard();
+	}
+	else if (SameStr(command, _T("Restart"))) {
+		CmdRestart();
 	}
 	else if (SameStr(command, _T("KeyList"))) {
 		ShowKeyList();
