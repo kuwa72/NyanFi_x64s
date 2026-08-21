@@ -103,7 +103,7 @@ Phase 0 で `usr_*.cpp` を通したときと**同じ種類の作業**で、規�
 
 ## 3. 着手順
 
-### 第1段: `Global.h` / `Global.cpp` を通す (ボトルネック解消)
+### 第1段: `Global.h` / `Global.cpp` を通す (ボトルネック解消) — **完了 2026-08-21**
 
 - 不足ヘッダ 20種の転送ヘッダを足す
 - 不足している型 25種を `compat/gui_stubs.h` に**宣言のみ**で足す (規約4)
@@ -114,6 +114,37 @@ Phase 0 で `usr_*.cpp` を通したときと**同じ種類の作業**で、規�
 
 これが済むと `usr_excmd` / `task_thread` / `UserFunc` / `UserMdl` / `InpCmds`
 (計 7,400行) も射程に入る。
+
+#### 結果 (実測)
+
+`Global.cpp` は **458 → 0 エラー**。ロジック層への波及:
+
+| ファイル | 行数 | 着手前 | 現在 |
+|---|---|---|---|
+| `Global.cpp` | 16,550 | 458 | **0** |
+| `usr_spbar.cpp` | 110 | 10 | **0** |
+| `usr_excmd.cpp` | 2,050 | 1 | 1 |
+| `UserMdl.cpp` | 1,306 | 1 | 1 |
+| `grep_thread.cpp` | 171 | 1 | 1 |
+| `icon_thread.cpp` | 97 | 1 | 1 |
+| `check_thread.cpp` | 48 | 9 | 1 |
+| `imgv_thread.cpp` | 782 | 1 | 1 |
+| `thumb_thread.cpp` | 298 | 1 | 3 |
+| `task_thread.cpp` | 1,964 | 1 | 10 |
+| `InpCmds.cpp` | 463 | 1 | 14 |
+| `usr_hintwin.cpp` | 68 | 1 | 16 |
+| `usr_shell.cpp` | 1,974 | 46 | 35 |
+| `UserFunc.cpp` | 1,642 | 152 | 71 |
+
+**着手前に「1」だったものが増えているのは後退ではない。** 以前は `Global.h` の
+解決に失敗して最初の fatal error で止まっていたため、その先が見えていなかった。
+
+第1段で足したもの: VCL ヘッダの転送 20種、`TThread` / `TDataModule` /
+`TShortCut` (compat/classes.h)、VCL コントロールの宣言 30種超 (compat/gui_stubs.h)、
+DateUtils / Math / SysUtils のランタイム API (compat/datetime.h ほか)、
+`TApplication` / `TScreen` の不足メンバ、`__property` → プロキシ (src 9ヘッダ)、
+`try/__finally` → RAII (compat/scope_exit.h)、`TRect*` を受ける Win32
+オーバーロード (compat/win_rect.h)。
 
 ### 第2段: `MainFrm.cpp` のコマンド実装を機能群ごとに取り出す
 
