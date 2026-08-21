@@ -209,6 +209,9 @@ public:
 	//-- 書式化 (可変引数。戻り値は *this) --------------------------------
 	UnicodeString &sprintf(const wchar_t *format, ...);
 	UnicodeString &cat_sprintf(const wchar_t *format, ...);
+	/// cat_sprintf と同じ。C++Builder は両方の綴りを持ち、src/Global.cpp:5572 が
+	/// こちらを使っている (src 全体でこの1箇所だけ)
+	UnicodeString &cat_printf(const wchar_t *format, ...);
 	UnicodeString &vprintf(const wchar_t *format, va_list args);
 	UnicodeString &cat_vprintf(const wchar_t *format, va_list args);
 

@@ -16,6 +16,7 @@
 
 #include "compat/cominterface.h"
 #include "compat/property.h"
+#include "compat/scope_exit.h"
 #include "compat/vcl_forward.h"
 #include "compat/set.h"
 #include "compat/types.h"
@@ -33,6 +34,7 @@
 
 #include "compat/encoding.h"
 #include "compat/graphics.h"
+#include "compat/win_rect.h"
 #include "compat/gui_stubs.h"
 #include "compat/ioutils.h"
 #include "compat/json.h"

@@ -76,6 +76,11 @@ public:
 	T operator()() const { return (owner_->*Getter)(); }
 	T get() const { return (owner_->*Getter)(); }
 
+	/// 値がポインタのときに `obj->Prop->Member` と書けるようにする
+	/// (`Screen->Fonts->IndexOf(...)` = src/Global.cpp:5979)。
+	/// T がポインタでない場合はこのメンバが実体化されないので害は無い
+	auto operator->() const { return (owner_->*Getter)(); }
+
 	NYANFI_PROPERTY_FORWARD_CONST_METHODS
 
 private:

@@ -695,6 +695,7 @@ using ::TDataModule;
 using ::TDuplicates;
 using ::TList;
 using ::TListNotification;
+using ::TComponent;
 using ::TObject;
 using ::TPersistent;
 using ::TShortCut;
