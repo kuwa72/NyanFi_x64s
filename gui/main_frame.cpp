@@ -23,6 +23,7 @@
 #include "gui/file_open.h"
 #include "gui/archive.h"
 #include "gui/clipboard_files.h"
+#include "gui/compare.h"
 #include "gui/file_ops.h"
 #include "gui/grep_dialog.h"
 #include "gui/image_load.h"
@@ -1158,6 +1159,134 @@ void MainFrame::CmdPack(bool to_current)
 }
 
 //---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// 比較・ハッシュ (機能群8)
+//
+// ハッシュの計算は移植済みの get_HashStr() (src/usr_file_inf.h) が持つ。
+// ここは「どう比べるか」(gui/compare.h) と受け渡しだけ。
+//---------------------------------------------------------------------------
+namespace {
+
+/// 既定のハッシュ方式。VCL も既定は MD5 (MainFrm.cpp:14804 ほか)
+const wchar_t *const kDefaultHashId = L"MD5";
+
+}  // namespace
+
+void MainFrame::CmdGetHash()
+{
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> names = pane->GetSelectedNames();
+	if (names.empty()) { SetStatusWarning(_T("対象がありません")); return; }
+
+	UnicodeString text;
+	for (const UnicodeString &name : names) {
+		const UnicodeString p = pane->GetPath() + name;
+		if (dir_exists(p)) continue;  // ディレクトリは対象外
+		const UnicodeString h = get_HashStr(p, UnicodeString(kDefaultHashId));
+		text += name + _T("\r\n  ") + (h.IsEmpty()? _T("(取得できません)") : h) + _T("\r\n");
+	}
+	if (text.IsEmpty()) { SetStatusWarning(_T("対象のファイルがありません")); return; }
+
+	wxMessageBox(to_wx(text), to_wx(UnicodeString(kDefaultHashId) + _T(" ハッシュ値")),
+	             wxOK | wxICON_INFORMATION, this);
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdCompareHash()
+{
+	FilePane *pane = ActivePane();
+	const FileItem *itm = pane->GetCurrentItem();
+	if (itm == nullptr || itm->is_dir) { SetStatusWarning(_T("カーソル位置がファイルではありません")); return; }
+
+	const UnicodeString here = pane->GetPath() + itm->name;
+	const UnicodeString there = OppositePane()->GetPath() + itm->name;
+	if (!file_exists(there)) {
+		wxMessageBox(to_wx(_T("反対側に同名のファイルがありません: ") + itm->name),
+		             to_wx(_T("ハッシュの比較")), wxOK | wxICON_WARNING, this);
+		return;
+	}
+
+	const UnicodeString a = get_HashStr(here, UnicodeString(kDefaultHashId));
+	const UnicodeString b = get_HashStr(there, UnicodeString(kDefaultHashId));
+	if (a.IsEmpty() || b.IsEmpty()) {
+		wxMessageBox(to_wx(_T("ハッシュ値を取得できません")), to_wx(_T("ハッシュの比較")),
+		             wxOK | wxICON_WARNING, this);
+		return;
+	}
+
+	UnicodeString msg = itm->name + _T("\r\n\r\n  ") + a + _T("\r\n  ") + b + _T("\r\n\r\n");
+	msg += SameText(a, b)? _T("一致しました") : _T("**一致しません**");
+	wxMessageBox(to_wx(msg), to_wx(_T("ハッシュの比較")), wxOK | wxICON_INFORMATION, this);
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdSelOnlyCur()
+{
+	FilePane *pane = ActivePane();
+	std::vector<FileItem> here = pane->VisibleItems();
+	const std::vector<FileItem> there = OppositePane()->VisibleItems();
+
+	const std::vector<int> idx = compare::IndicesOnlyHere(here, there, compare::MatchBy::Name);
+	for (FileItem &it : here) it.marked = false;
+	for (int i : idx) here[static_cast<std::size_t>(i)].marked = true;
+	pane->ApplyMarks(here);
+
+	SetStatusWarning(UnicodeString().sprintf(_T("カレント側だけにある %d 件を選択しました"),
+	                                         static_cast<int>(idx.size())));
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdToOppSameHash()
+{
+	FilePane *pane = ActivePane();
+	const FileItem *itm = pane->GetCurrentItem();
+	if (itm == nullptr || itm->is_dir) { SetStatusWarning(_T("カーソル位置がファイルではありません")); return; }
+
+	const UnicodeString target = get_HashStr(pane->GetPath() + itm->name,
+	                                          UnicodeString(kDefaultHashId));
+	if (target.IsEmpty()) { SetStatusWarning(_T("ハッシュ値を取得できません")); return; }
+
+	FilePane *opp = OppositePane();
+	const std::vector<FileItem> items = opp->VisibleItems();
+	for (std::size_t i = 0; i < items.size(); ++i) {
+		if (items[i].is_dir || items[i].is_parent) continue;
+		// サイズが違えば計算するまでもない (大きな一覧で全部計算しないための枝刈り)
+		if (items[i].size != itm->size) continue;
+
+		const UnicodeString h = get_HashStr(opp->GetPath() + items[i].name,
+		                                     UnicodeString(kDefaultHashId));
+		if (SameText(h, target)) {
+			opp->MoveCursorTo(static_cast<int>(i));
+			UpdateStatus();
+			return;
+		}
+	}
+	SetStatusWarning(_T("反対側に同じ内容のファイルがありません"));
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdDiffDir()
+{
+	const std::vector<compare::DiffRow> rows = compare::DiffDirectories(
+		panes_[0]->VisibleItems(), panes_[1]->VisibleItems(), compare::MatchBy::NameSize);
+
+	if (rows.empty()) {
+		wxMessageBox(to_wx(_T("違いは見つかりませんでした (名前とサイズで比較)")),
+		             to_wx(_T("ディレクトリの比較")), wxOK | wxICON_INFORMATION, this);
+		return;
+	}
+
+	UnicodeString text = _T("名前とサイズで比較しました\r\n\r\n");
+	int shown = 0;
+	for (const compare::DiffRow &r : rows) {
+		if (shown++ >= 200) { text += _T("...\r\n(以下省略)\r\n"); break; }
+		const UnicodeString mark = r.differs? _T("[異] ") : (r.in_left? _T("[左] ") : _T("[右] "));
+		text += mark + r.name + _T("\r\n");
+	}
+	wxMessageBox(to_wx(text), to_wx(_T("ディレクトリの比較")), wxOK | wxICON_INFORMATION, this);
+}
+
+//---------------------------------------------------------------------------
 void MainFrame::UpdateStatus()
 {
 	for (int i = 0; i < 2; ++i) {
@@ -1520,6 +1649,22 @@ bool MainFrame::Execute(const UnicodeString &command)
 	}
 	else if (SameStr(command, _T("PackToCurr"))) {
 		CmdPack(true);
+	}
+	//-- 比較・ハッシュ -------------------------------------------------------
+	else if (SameStr(command, _T("GetHash"))) {
+		CmdGetHash();
+	}
+	else if (SameStr(command, _T("CompareHash"))) {
+		CmdCompareHash();
+	}
+	else if (SameStr(command, _T("SelOnlyCur"))) {
+		CmdSelOnlyCur();
+	}
+	else if (SameStr(command, _T("ToOppSameHash"))) {
+		CmdToOppSameHash();
+	}
+	else if (SameStr(command, _T("DiffDir"))) {
+		CmdDiffDir();
 	}
 	else if (SameStr(command, _T("KeyList"))) {
 		ShowKeyList();

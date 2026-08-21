@@ -181,6 +181,13 @@ private:
 	void CmdUnPack(bool to_current);//!< 書庫を展開する (UnPack / UnPackToCurr)
 	void CmdPack(bool to_current);  //!< 書庫を作る (Pack / PackToCurr)
 
+	//-- 比較・ハッシュ (機能群8) ---------------------------------------------
+	void CmdGetHash();        //!< 選択項目のハッシュ値を出す
+	void CmdCompareHash();    //!< 反対側の同名ファイルとハッシュを比べる
+	void CmdSelOnlyCur();     //!< カレント側だけにあるファイルを選択
+	void CmdToOppSameHash();  //!< 反対側の同ハッシュ項目へ
+	void CmdDiffDir();        //!< 左右のディレクトリを比較
+
 	DirStack dir_stack_;          //!< ディレクトリ・スタック (PushDir / PopDir)
 	bool sync_lr_ = false;        //!< 左右のディレクトリを同期させるか (SyncLR)
 
