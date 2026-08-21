@@ -102,7 +102,9 @@ jobs:
       # コマンド名が VCL の表 (usr_cmdlist.cpp) と一致しているか。
       # ずれていると本物の ini (KeyFuncList) を読んでもそのコマンドだけ
       # 黙って効かない。実際に8件ずれていた
-      - name: コマンド名が VCL の表と一致しているか
+      # コマンド名が VCL の表と一致しているか、および
+      # 同じキーへの二重割り当て (後勝ちで先の割り当てが黙って消える) が無いか
+      - name: コマンド名とキー割り当ての確認
         run: python3 scripts/check_commands.py
 
       - name: Configure
