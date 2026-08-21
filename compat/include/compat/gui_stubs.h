@@ -221,6 +221,46 @@ struct TMessage {
 
 	TMessage() : WParam(0), LParam(0), Result(0) {}
 };
+
+//---------------------------------------------------------------------------
+// メッセージ別の構造体 (Winapi.Messages 相当)
+//
+// VCL は WM_* ごとに TMessage と同じ大きさの構造体を用意し、
+// VCL_MESSAGE_HANDLER で `*static_cast<type *>(Message)` として被せる。
+// **TMessage と同じレイアウトでなければならない** (別物を被せることになる)。
+// src が使うのは3種だけ (grep 済み)。
+//---------------------------------------------------------------------------
+
+/// WM_DROPFILES。実測: src/AppDlg.cpp:305,311 が `(HDROP)msg.Drop` として使う
+struct TWMDropFiles {
+	unsigned Msg;
+	NativeUInt Drop;	//!< HDROP (wParam)
+	NativeInt Unused;
+	NativeInt Result;
+};
+
+/// WM_SYSCOMMAND。実測: src/HistFrm.h:38 / MainFrm.h:2158 の
+/// `if (SysCom.CmdType==SC_CLOSE)`
+struct TWMSysCommand {
+	unsigned Msg;
+	NativeUInt CmdType;	//!< wParam (SC_CLOSE など)
+	NativeInt Key;
+	NativeInt Result;
+};
+
+/// WM_GETMINMAXINFO。実測: src/MainFrm.cpp:1973-1985 が
+/// `msg.MinMaxInfo->ptMaxSize` などを書き換える
+struct TWMGetMinMaxInfo {
+	unsigned Msg;
+	NativeUInt Unused;
+	::MINMAXINFO *MinMaxInfo;	//!< lParam
+	NativeInt Result;
+};
+
+static_assert(sizeof(TWMDropFiles) == sizeof(TMessage), "TMessage と同じ大きさでなければならない");
+static_assert(sizeof(TWMSysCommand) == sizeof(TMessage), "TMessage と同じ大きさでなければならない");
+static_assert(sizeof(TWMGetMinMaxInfo) == sizeof(TMessage), "TMessage と同じ大きさでなければならない");
+
 /// Vcl.Controls::TWndMethod 相当 (ウィンドウ・プロシージャの差し替え用)
 using TWndMethod = TClosureEvent<TMessage &>;
 
@@ -525,6 +565,59 @@ public:
 	TColor GradientStartColor = clBtnFace;
 	TColor GradientEndColor = clBtnFace;
 	TColor HotTrackColor = clBtnFace;
+};
+
+/**
+ * @brief Vcl.ExtCtrls::TBevel 相当 (見た目だけの区切り線・枠)
+ * @details 実測: `src/OptDlg.h:764-766` が 3つ保持するだけで、
+ *          `.cpp` からのメンバアクセスは1件も無い (grep 済み)。
+ *          描画専用の部品なのでメンバは足さない。
+ */
+class TBevel : public TControl {
+};
+
+/**
+ * @brief Vcl.ExtCtrls::TColorBox 相当 (色を選ぶコンボボックス)
+ * @details 実測: `Selected` 2箇所 / `Color` 1箇所だけ。
+ *          Color は TControl 側にあるので Selected だけを足す。
+ */
+class TColorBox : public TWinControl {
+public:
+	/// 選択中の色
+	TColor Selected = clBlack;
+};
+
+/// Vcl.Forms の TForm::OnHelp が受け取る第2引数。
+/// 実測: `bool __fastcall FormHelp(WORD Command, THelpEventData Data, bool &CallHelp)`
+/// の形でフォーム側が受けるだけで、**中身を読む箇所は1つも無い** (grep 済み)。
+/// VCL では NativeInt (ヘルプの文脈 ID かキーワード文字列のポインタ)。
+using THelpEventData = NativeInt;
+
+/**
+ * @brief Vcl.ComCtrls::TToolButton 相当
+ * @details ツールバー上のボタン。フォームのヘッダが 79箇所で
+ *          `TToolButton *XxxBtn;` として保持している。
+ *
+ *          実測 (`*Btn->` / `*Button->` のメンバアクセスを集計):
+ *          Checked 93 / Enabled 33 / Visible 13 / Hint 10 / SetFocus 9 /
+ *          Action 4 / Top 4 / Width 3 / Left 3 / Click 3 / Height 2 / Tag 1。
+ *          Enabled / Visible / Hint / Top / Left / Width / Height / Action /
+ *          SetFocus は TControl・TWinControl 側にあるので、ここは Checked と
+ *          Click だけでよい。
+ */
+class TToolButton : public TControl {
+public:
+	/// 押し込み状態 (実測 93箇所。ほとんどが表示モードの ON/OFF)
+	bool Checked = false;
+
+	/// グループ化された排他ボタンか
+	bool Grouped = false;
+	/// 区切り (tbsSeparator) などのスタイル
+	int Style = 0;
+
+	/// @warning 宣言のみ。押下を模擬するとアクションが走ってしまうので、
+	///          実装せずリンクエラーにする (規約4)
+	void Click();
 };
 
 /// TSplitter 相当 (最小実装。Color は TControl から継承。

@@ -247,6 +247,40 @@ private:
 	Owner *owner_;
 };
 
+/// 読みはデータメンバ直読み、書きはセッター経由のプロパティ
+///
+/// `__property bool TopIsHeader = {read = FTopIsHeader, write = SetTopIsHeader};`
+/// (src/TxtViewer.h:224) の形。C++Builder の __property は read にメンバ変数を
+/// 直接書けるが、他のプロキシは getter 関数を要求するので専用の版を用意する。
+/// src 側に getter を足さずに済ませるため (規約3)。
+template <class Owner, class T, T Owner::*Field, void (Owner::*Setter)(T)>
+class FieldRWProperty {
+public:
+	explicit FieldRWProperty(Owner *owner) : owner_(owner) {}
+	FieldRWProperty(const FieldRWProperty &) = delete;
+
+	operator T() const { return owner_->*Field; }
+	T operator()() const { return owner_->*Field; }
+	T get() const { return owner_->*Field; }
+
+	NYANFI_PROPERTY_FORWARD_CONST_METHODS
+
+	FieldRWProperty &operator=(const T &value)
+	{
+		(owner_->*Setter)(value);
+		return *this;
+	}
+
+	FieldRWProperty &operator=(const FieldRWProperty &rhs)
+	{
+		(owner_->*Setter)(static_cast<T>(rhs));
+		return *this;
+	}
+
+private:
+	Owner *owner_;
+};
+
 }  // namespace compat
 
 #endif  // NYANFI_COMPAT_PROPERTY_H

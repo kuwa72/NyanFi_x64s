@@ -116,8 +116,15 @@ private:
 		TList::Put(Index, Item);
 	}
 
+	// Items (添字プロキシ) から private の Get/Put を呼ぶため
+	template <class O, class T, T *(O::*G)(int), void (O::*S)(int, T *)>
+	friend class compat::IndexedPtrProperty;
+
 public:
-	__property AppWinInf *Items[int Index] = {read=Get, write=Put};
+	// __property AppWinInf *Items[int Index] = {read=Get, write=Put};
+	// C++Builder の __property を添字プロキシに置き換えたもの
+	compat::IndexedPtrProperty<TAppWinList, AppWinInf,
+	                           &TAppWinList::Get, &TAppWinList::Put> Items{this};
 
 	__fastcall TAppWinList();
 };
