@@ -175,6 +175,12 @@ private:
 	void CmdCreateLinks(links::LinkKind kind);  //!< 反対ペインにリンクを作る
 	void CmdSetDirTime();                       //!< ディレクトリの日時を配下の最新に
 
+	//-- 書庫 (機能群7) -------------------------------------------------------
+	void CmdListArchive();          //!< 書庫の中身を一覧する
+	void CmdTestArchive();          //!< 書庫の正当性を検査する
+	void CmdUnPack(bool to_current);//!< 書庫を展開する (UnPack / UnPackToCurr)
+	void CmdPack(bool to_current);  //!< 書庫を作る (Pack / PackToCurr)
+
 	DirStack dir_stack_;          //!< ディレクトリ・スタック (PushDir / PopDir)
 	bool sync_lr_ = false;        //!< 左右のディレクトリを同期させるか (SyncLR)
 

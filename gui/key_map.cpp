@@ -205,6 +205,14 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Ctrl+Shift+Y"), _T("CreateSymLink"));
 	Assign(_T("Ctrl+Shift+I"), _T("SetDirTime"));
 
+	// 書庫。P / U は src/Global.cpp:2090,2094 の既定表にある実際の割り当て
+	Assign(_T("P"), _T("Pack"));
+	Assign(_T("U"), _T("UnPack"));
+	// 以下は既定表に無いので推測
+	Assign(_T("Shift+P"), _T("PackToCurr"));
+	Assign(_T("Shift+U"), _T("UnPackToCurr"));
+	Assign(_T("Ctrl+Shift+A"), _T("ListArchive"));
+
 	// 並べ替え・絞り込み。"S" は src/Global.cpp の既定キー表にある実際の割り当て
 	// ("F:S=SortDlg") と同じ。Ctrl+M / Ctrl+U は既定キー表に対応する記載が無く
 	// (パスマスクはコンボボックス操作が前提で単独のキー割り当てが見当たらない)、
