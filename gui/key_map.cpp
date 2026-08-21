@@ -1,17 +1,97 @@
 /**
  * @file gui/key_map.cpp
- * @brief キー割り当て表の実装
+ * @brief キー割り当て表の実装 (ini 読み込みを含む、wx 非依存の部分)
+ *
+ * @details wx に依存する KeyStrOf() の実装だけは gui/key_map_wx.cpp に分けてある。
+ *          こちらは UsrIniFile と usr_str.h/usr_cmdlist.h/usr_key.h の
+ *          UnicodeString ベースの API しか使わないため wx 無しでも単体テストできる
+ *          (tests/core/test_gui_settings.cpp、CMakeLists.txt の
+ *          `nyanfi_gui_core` ライブラリ)。
  */
 #include "gui/key_map.h"
 
+#include <memory>
+
+#include "UIniFile.h"
 #include "usr_cmdlist.h"
 #include "usr_key.h"
+#include "usr_str.h"
 
 //---------------------------------------------------------------------------
 KeyMap::KeyMap() : entries_(new TStringList())
 {
 	LoadDefaults();
 }
+
+//---------------------------------------------------------------------------
+namespace {
+
+/// wx/defs.h の `wxKeyCode` の値を、wx をリンクせずに書き写したもの。
+/// 本物との一致は gui/key_map_wx.cpp の static_assert が確認する
+/// (wx を更新して値がずれたらコンパイルが通らない)。
+enum WxKeyCode {
+	kWxStart    = 300,
+	kWxPause    = kWxStart + 10,
+	kWxEnd      = kWxStart + 12,
+	kWxHome     = kWxStart + 13,
+	kWxLeft     = kWxStart + 14,
+	kWxUp       = kWxStart + 15,
+	kWxRight    = kWxStart + 16,
+	kWxDown     = kWxStart + 17,
+	kWxInsert   = kWxStart + 22,
+	kWxNumpad0  = kWxStart + 24,
+	kWxMultiply = kWxStart + 34,
+	kWxAdd      = kWxStart + 35,
+	kWxSubtract = kWxStart + 37,
+	kWxDecimal  = kWxStart + 38,
+	kWxDivide   = kWxStart + 39,
+	kWxF1       = kWxStart + 40,
+	kWxPageUp   = kWxStart + 66,
+	kWxPageDown = kWxStart + 67,
+	kWxDelete   = 127,
+};
+
+}  // namespace
+
+//---------------------------------------------------------------------------
+WORD KeyMap::VkFromWxKeyCode(int wx_keycode)
+{
+	// F1〜F12 と 10キーの数字は連番なので範囲で捌く
+	if (wx_keycode >= kWxF1 && wx_keycode <= kWxF1 + 11) {
+		return static_cast<WORD>(VK_F1 + (wx_keycode - kWxF1));
+	}
+	if (wx_keycode >= kWxNumpad0 && wx_keycode <= kWxNumpad0 + 9) {
+		return static_cast<WORD>(VK_NUMPAD0 + (wx_keycode - kWxNumpad0));
+	}
+
+	switch (wx_keycode) {
+	case kWxLeft:		return VK_LEFT;
+	case kWxRight:		return VK_RIGHT;
+	case kWxUp:			return VK_UP;
+	case kWxDown:		return VK_DOWN;
+	case kWxPageUp:		return VK_PRIOR;
+	case kWxPageDown:	return VK_NEXT;
+	case kWxHome:		return VK_HOME;
+	case kWxEnd:		return VK_END;
+	case kWxInsert:		return VK_INSERT;
+	case kWxDelete:		return VK_DELETE;
+	case kWxPause:		return VK_PAUSE;
+	case kWxMultiply:	return VK_MULTIPLY;
+	case kWxAdd:		return VK_ADD;
+	case kWxSubtract:	return VK_SUBTRACT;
+	case kWxDecimal:	return VK_DECIMAL;
+	case kWxDivide:		return VK_DIVIDE;
+	default:			break;
+	}
+
+	// ここから下は wx の値と VK が同値の範囲。
+	// BackSpace(8) / Tab(9) / Enter(13) / Esc(27) / Space(32) と、
+	// 英数字 ('0'-'9' / 'A'-'Z' は VK_0-VK_9 / VK_A-VK_Z と同値)
+	if (wx_keycode > 0 && wx_keycode < 128) return static_cast<WORD>(wx_keycode);
+
+	return 0;  // WXK_SHIFT など、キー名を持たないもの
+}
+
 
 //---------------------------------------------------------------------------
 /**
@@ -28,22 +108,101 @@ void KeyMap::LoadDefaults()
 	Assign(_T("HOME"), _T("CursorTop"));
 	Assign(_T("END"), _T("CursorEnd"));
 
-	// 移動・実行
-	Assign(_T("ENTER"), _T("Execute"));
-	Assign(_T("BKSP"), _T("UpDir"));
-	Assign(_T("TAB"), _T("ChangePane"));
-	Assign(_T("F5"), _T("Refresh"));
+	// 移動・実行。ENTER は src/Global.cpp の既定キー表の "F:Enter=OpenStandard"
+	// と同じ綴り (カーソル位置がディレクトリなら入る、ファイルなら関連付けで
+	// 開く。gui/main_frame.cpp::Execute() を参照)。Ctrl+Enter も既定キー表の
+	// "F:Ctrl+Enter=OpenByApp" (アプリケーションから開く) と同じ
+	Assign(_T("ENTER"), _T("OpenStandard"));
+	Assign(_T("Ctrl+Enter"), _T("OpenByApp"));
+	Assign(_T("BKSP"), _T("ToParent"));
+	Assign(_T("TAB"), _T("ToOpposite"));
+	Assign(_T("F5"), _T("ReloadList"));
+
+	// テキストビューア。"V" は src/Global.cpp の既定キー表 ("F:V=TextViewer")
+	// と同じ。ビューア自体のキー操作 (行移動・検索・折り返し切替・閉じる) は
+	// TextViewer::HandleKey (gui/text_viewer.cpp) がこの KeyMap を経由せず
+	// 直接処理する (V モードのキー割り当ては Phase 2 骨格では対応していない。
+	// gui/key_map.h 冒頭のコメントを参照)
+	Assign(_T("V"), _T("TextViewer"));
+
+	// 画像ビューア。"G" は src/Global.cpp の既定キー表 ("F:G=ImageViewer") と
+	// 同じ。ビューア自体のキー操作 (フィット/ズーム/前後移動/閉じる) は
+	// ImageViewer::HandleKey (gui/image_viewer.cpp) がこの KeyMap を経由せず
+	// 直接処理する (TextViewer と同じ作り)
+	Assign(_T("G"), _T("ImageViewer"));
+
+	// 文字列検索 (GREP)。usr_cmdlist.cpp のコマンド表には "FV:Grep=文字列検索(GREP)"
+	// として載っているが、src/Global.cpp の既定キー表 (KeyFuncList->Text) には
+	// "Grep" に対応する行が無く、メニュー専用の操作だったと見られる (実測、
+	// F3=FindFileDlg というファイル名検索の割り当てはあるが内容検索は無い)。
+	// そのため Ctrl+F (多くのエディタの「ファイル内検索」の慣習) を
+	// Phase 2 骨格向けに新規で割り当てた (推測。要検証)
+	Assign(_T("Ctrl+F"), _T("Grep"));
 
 	// マーク
-	Assign(_T("SPACE"), _T("MarkItem"));
-	Assign(_T("Ctrl+A"), _T("MarkAll"));
-	Assign(_T("Ctrl+D"), _T("UnMarkAll"));
+	Assign(_T("SPACE"), _T("Select"));
+	Assign(_T("Ctrl+A"), _T("SelAllItem"));
+	Assign(_T("Ctrl+D"), _T("ClearAll"));
 
-	// 表示・終了
-	Assign(_T("F1"), _T("ShowKeyList"));
+	// 並べ替え・絞り込み。"S" は src/Global.cpp の既定キー表にある実際の割り当て
+	// ("F:S=SortDlg") と同じ。Ctrl+M / Ctrl+U は既定キー表に対応する記載が無く
+	// (パスマスクはコンボボックス操作が前提で単独のキー割り当てが見当たらない)、
+	// Phase 2 骨格向けに新規で決めたもの (推測)
+	Assign(_T("S"), _T("SortDlg"));
+	Assign(_T("Ctrl+M"), _T("SetPathMask"));
+	Assign(_T("Ctrl+U"), _T("ClearMask"));
+
+	// ファイル操作。src/Global.cpp の既定キー表 ("F:C=Copy" 等) と同じ綴り・
+	// 同じキーを使う (F5/F6/F7/F8 の慣習ではなく、NyanFi 本来の1文字キー)
+	Assign(_T("C"), _T("Copy"));
+	Assign(_T("M"), _T("Move"));
+	Assign(_T("D"), _T("Delete"));
+	Assign(_T("K"), _T("CreateDir"));
+	Assign(_T("R"), _T("RenameDlg"));
+
+	// インクリメンタルサーチ・ディレクトリ移動の効率化。"F"/"B"/"H"/"L" は
+	// src/Global.cpp の既定キー表 ("F:F=IncSearch" / "F:B=BackDirHist" /
+	// "F:H=DirHistory" / "F:L=DriveList") と同じ
+	Assign(_T("F"), _T("IncSearch"));
+	Assign(_T("B"), _T("BackDirHist"));
+	Assign(_T("H"), _T("DirHistory"));
+	Assign(_T("L"), _T("DriveList"));
+	// ForwardDirHist (履歴を進む) は既定キー表に対応するキーが無い
+	// (マウスの第2ボタン X2BtnCmdF の既定値も空文字列で、割り当てが無い)。
+	// "B" (戻る) と対になるよう Phase 2 骨格向けに新規で決めたもの
+	// (推測。要検証)
+	Assign(_T("Shift+B"), _T("ForwardDirHist"));
+	// InputDir (パスを直接入力して移動) も既定キー表に対応するキーが無い。
+	// 多くのエディタ/ファイラの「Go to」の慣習に合わせた Phase 2 骨格独自の
+	// 割り当て (推測。要検証)
+	Assign(_T("Ctrl+G"), _T("InputDir"));
+
+	// 表示・終了。"FVI:PropertyDlg" (usr_cmdlist.cpp) には既定キーが無い
+	// (src/MainFrm.dfm の PropertyDlgAction にも ShortCut が無く、メニュー専用
+	// らしい)。Alt+Enter は Windows のプロパティ表示の慣習に合わせた
+	// Phase 2 骨格独自の割り当て (推測。要検証)
+	Assign(_T("F1"), _T("KeyList"));
 	Assign(_T("F12"), _T("ShowCmdList"));
+	Assign(_T("Alt+Enter"), _T("PropertyDlg"));
 	Assign(_T("Alt+F4"), _T("Exit"));
 	Assign(_T("Ctrl+Q"), _T("Exit"));
+
+	// タブ (複数ディレクトリの切り替え)。コマンド名は usr_cmdlist.cpp のコマンド表
+	// ("F:AddTab=タブを追加" 等、実測) と同じ綴り。ただし src/Global.cpp の
+	// 既定キー表 (KeyFuncList->Text) にはタブ系コマンドの既定キーが1つも無く
+	// (ツールバー・タブの右クリックメニュー専用の操作だったと見られる)、
+	// 以下はすべて Phase 2 骨格向けに新規で決めたもの (推測。要検証)。
+	// Ctrl+T/Ctrl+W はブラウザ等でのタブ追加・閉じるの慣習に、Ctrl+Tab/
+	// Shift+Ctrl+Tab は多くのタブ付きアプリでの次/前のタブ切替の慣習に合わせた
+	// (修飾子の順序は get_ShiftStr() (usr_key.cpp) の実測順 "Shift+"→"Ctrl+"→
+	// "Alt+" に合わせてある。TStringList の Name 比較は大小文字を区別しないため
+	// 大文字/小文字自体は Lookup に影響しない)。
+	// Ctrl+E (一覧から選ぶ、PopupTab) は他のキーと衝突しない空きキーから選んだ
+	Assign(_T("Ctrl+T"), _T("AddTab"));
+	Assign(_T("Ctrl+W"), _T("DelTab"));
+	Assign(_T("Ctrl+Tab"), _T("NextTab"));
+	Assign(_T("Shift+Ctrl+Tab"), _T("PrevTab"));
+	Assign(_T("Ctrl+E"), _T("PopupTab"));
 }
 
 //---------------------------------------------------------------------------
@@ -72,16 +231,62 @@ UnicodeString KeyMap::Lookup(const UnicodeString &key_str) const
 }
 
 //---------------------------------------------------------------------------
-UnicodeString KeyMap::KeyStrOf(const wxKeyEvent &event)
-{
-	// wx の修飾キー状態を VCL の TShiftState に移す。移植済みの
-	// get_KeyStr(WORD, TShiftState) をそのまま使えるようにするため
-	TShiftState shift;
-	if (event.ShiftDown()) shift << ssShift;
-	if (event.ControlDown()) shift << ssCtrl;
-	if (event.AltDown()) shift << ssAlt;
+// KeyMap::KeyStrOf() は wx に依存するため gui/key_map_wx.cpp に定義がある
+//---------------------------------------------------------------------------
 
-	// wx の KeyCode は MSW では仮想キーコードと同じ値になる
-	const WORD vk = static_cast<WORD>(event.GetKeyCode());
-	return get_KeyStr(vk, shift);
+//---------------------------------------------------------------------------
+/**
+ * @brief KeyFuncList の1エントリを解析する
+ * @details 形式の実測結果は gui/key_map.h 冒頭のコメントを参照。
+ *          "F:" (ファイルペイン) 以外のモード、SELECT+ 付き、2ストローク
+ *          ('~' を含む) は Phase 2 骨格が対応する仕組みを持たないため、
+ *          誤動作させるより読み飛ばす方を選び false を返す。
+ */
+bool KeyMap::ParseKeyFuncListEntry(
+	const UnicodeString &name, const UnicodeString &value,
+	UnicodeString &key_str_out, UnicodeString &command_out)
+{
+	// モード文字 "F:" (ファイルペイン) 以外は非対応
+	static const UnicodeString kModePrefix = _T("F:");
+	if (!StartsText(kModePrefix, name)) return false;
+
+	UnicodeString key_str = name.SubString(kModePrefix.Length() + 1);
+	if (key_str.IsEmpty()) return false;
+
+	// SELECT+ (選択操作の修飾子。src/Global.cpp の KeyStr_SELECT = "SELECT+")
+	// は対応する選択モデルが無いため非対応
+	if (StartsText(_T("SELECT+"), key_str)) return false;
+
+	// 2ストロークキー ("Ctrl+K~D" 等) は非対応
+	if (ContainsStr(key_str, _T("~"))) return false;
+
+	if (value.IsEmpty()) return false;
+
+	key_str_out = key_str;
+	command_out = value;
+	return true;
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief ini の KeyFuncList セクションから読み込み、既定の割り当てに上書きする
+ * @details 読み込みは寛容にする (ini が無い/セクションが無い/1行も解釈でき
+ *          ないときは何もせず既定のまま)。書き込みは一切行わない
+ *          (UsrIniFile::UpdateFile を呼ばない) ので、VCL 版の既存 ini を
+ *          読むだけなら壊れる心配が無い。
+ */
+void KeyMap::LoadFromIni(const UnicodeString &ini_path)
+{
+	if (!FileExists(ini_path)) return;
+
+	std::unique_ptr<UsrIniFile> ini(new UsrIniFile(ini_path));
+	std::unique_ptr<TStringList> lst(new TStringList());
+	ini->ReadSection(_T("KeyFuncList"), lst.get());
+
+	for (int i = 0; i < lst->Count; ++i) {
+		UnicodeString key_str, command;
+		if (ParseKeyFuncListEntry(lst->Names[i], lst->ValueFromIndex[i], key_str, command)) {
+			Assign(key_str, command);
+		}
+	}
 }

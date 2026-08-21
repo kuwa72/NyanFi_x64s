@@ -577,6 +577,16 @@ UnicodeString &UnicodeString::cat_sprintf(const wchar_t *format, ...)
 }
 
 //---------------------------------------------------------------------------
+UnicodeString &UnicodeString::cat_printf(const wchar_t *format, ...)
+{
+	va_list args;
+	va_start(args, format);
+	cat_vprintf(format, args);
+	va_end(args);
+	return *this;
+}
+
+//---------------------------------------------------------------------------
 // 比較
 //---------------------------------------------------------------------------
 int UnicodeString::CompareIC(const UnicodeString &rhs) const

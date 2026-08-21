@@ -184,3 +184,109 @@ TEST_CASE("faAnyFile による FindFirst は . と .. を含む (実 RTL の Exc
 		CHECK(sawDotDot);
 	}
 }
+
+//---------------------------------------------------------------------------
+// Phase 3 で src/Global.cpp のために足した分
+//---------------------------------------------------------------------------
+TEST_CASE("DiskSize/DiskFree はバイト単位で返し、不正なドライブは -1")
+{
+	// src の呼び出し形: `int dn = (char)dstr[1] - 'A' + 1; DiskSize(dn)`
+	// 妥当性の判定も src と同じ `sTotal>0 && sFree>=0`
+	Int64 total = DiskSize(0);  // 0 = カレントドライブ
+	Int64 avail = DiskFree(0);
+	REQUIRE(total > 0);
+	CHECK(avail >= 0);
+	CHECK(avail <= total);
+	CHECK(total > static_cast<Int64>(1024) * 1024);  // バイト単位 (セクタ数ではない)
+
+	// ドライブ文字から作った 1 始まりの番号でも読める。
+	// カレントディレクトリはドライブ文字を持たないことがある (WSL から実行すると
+	// \\wsl.localhost\... になる) ので、システムディレクトリのドライブを使う
+	wchar_t sysdir[MAX_PATH + 1] = {0};
+	REQUIRE(::GetSystemDirectoryW(sysdir, MAX_PATH) > 0);
+	REQUIRE(sysdir[1] == L':');
+	Byte dn = static_cast<Byte>(UpperCase(UnicodeString(sysdir).SubString(1, 1))[1] - L'A' + 1);
+	Int64 sysTotal = DiskSize(dn);
+	CHECK(sysTotal > 0);
+	CHECK(DiskFree(dn) >= 0);
+	CHECK(DiskFree(dn) <= sysTotal);
+
+	// 範囲外のドライブ番号は -1 (src は負値を弾いている)
+	CHECK(DiskSize(200) == -1);
+	CHECK(DiskFree(200) == -1);
+}
+
+TEST_CASE("GetProductVersion はバージョンリソースの a.b.c を返す")
+{
+	// バージョンリソースを必ず持っているファイルとして kernel32.dll を使う
+	wchar_t sysdir[MAX_PATH + 1] = {0};
+	REQUIRE(::GetSystemDirectoryW(sysdir, MAX_PATH) > 0);
+	UnicodeString dll = UnicodeString(sysdir) + "\\kernel32.dll";
+
+	unsigned mj = 999, mi = 999, bl = 999;
+	REQUIRE(GetProductVersion(dll, mj, mi, bl));
+	CHECK(mj >= 6);        // Windows 7 以降が対象 (WINVER=0x0601)
+	CHECK(mj < 100);
+	CHECK(mi < 100);
+	CHECK(bl > 0);
+
+	// 失敗時は false を返し、出力を 0 にする
+	unsigned a = 7, b = 7, c = 7;
+	CHECK_FALSE(GetProductVersion(GetCurrentDir() + "\\no_such_file_12345.exe", a, b, c));
+	CHECK(a == 0);
+	CHECK(b == 0);
+	CHECK(c == 0);
+	CHECK_FALSE(GetProductVersion(EmptyStr, a, b, c));
+}
+
+TEST_CASE("TOSVersion は実際の OS バージョンを返す")
+{
+	// src/Global.cpp:2278 は "%u.%u.%u" で表示し、直後にビルド番号で
+	// Windows 11 (>=22000) を判定する
+	CHECK(TOSVersion::Major >= 6);   // Windows 7 以降
+	CHECK(TOSVersion::Major <= 20);  // 桁が壊れていないこと
+	CHECK(TOSVersion::Minor >= 0);
+	CHECK(TOSVersion::Build > 0);
+
+	// GetVersionEx は互換性マニフェストが無いと 6.2 で頭打ちになる。
+	// RtlGetVersion を使っているので、Windows 10/11 上では 10 が返るはず。
+	// ただし Windows 7/8 の CI も否定しないよう、ここでは緩く見る
+	MESSAGE("TOSVersion = " << TOSVersion::Major << "." << TOSVersion::Minor << "."
+	                        << TOSVersion::Build);
+}
+
+//===========================================================================
+// StringToGUID
+//
+// 実測: src/usr_shell.cpp:1853 の KnownGuidStrToPath が唯一の呼び出しで、
+// 結果を ::SHGetKnownFolderPath にそのまま渡す。
+//===========================================================================
+
+TEST_CASE("StringToGUID: 波括弧付きの GUID 文字列を変換する")
+{
+	// FOLDERID_Windows = {F38BF404-1D43-42F2-9305-67DE0B28FC23}
+	const TGUID g = StringToGUID(_T("{F38BF404-1D43-42F2-9305-67DE0B28FC23}"));
+	CHECK(g.Data1 == 0xF38BF404);
+	CHECK(g.Data2 == 0x1D43);
+	CHECK(g.Data3 == 0x42F2);
+	CHECK(g.Data4[0] == 0x93);
+	CHECK(g.Data4[7] == 0x23);
+}
+
+TEST_CASE("StringToGUID: 大文字小文字と既知フォルダの値")
+{
+	// 呼び出し側 (KnownGuidStrToPath) は結果を SHGetKnownFolderPath に渡すので、
+	// 値がそのまま一致することが要件。ここでは shlobj を引かずに値だけを見る
+	// (SHGetKnownFolderPath 経由の確認は src/usr_shell.cpp 側のテストで行う)
+	const TGUID a = StringToGUID(_T("{f38bf404-1d43-42f2-9305-67de0b28fc23}"));
+	const TGUID b = StringToGUID(_T("{F38BF404-1D43-42F2-9305-67DE0B28FC23}"));
+	CHECK(::IsEqualGUID(a, b));
+}
+
+TEST_CASE("StringToGUID: 不正な文字列は例外を投げる")
+{
+	// 黙って空 GUID を返すと SHGetKnownFolderPath が別のフォルダを返しかねない。
+	// 呼び出し側は catch (...) で受けている
+	CHECK_THROWS(StringToGUID(_T("not-a-guid")));
+	CHECK_THROWS(StringToGUID(UnicodeString()));
+}

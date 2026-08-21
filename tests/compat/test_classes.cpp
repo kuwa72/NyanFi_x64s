@@ -452,3 +452,233 @@ TEST_CASE("TList: Notify は Add で lnAdded、Delete/Remove/Clear で lnDeleted
 	CHECK(lst->deletedCount == 3);  // 残り 2 件 + 前段の 1 件
 	CHECK(lst->Count == 0);
 }
+
+//===========================================================================
+// TThread
+//
+// 実装のあるシム (宣言のみのスタブではない) なのでテストで固定する (規約9)。
+// src の 6クラス (TCheckPathThread / TTaskThread / TGrepThread /
+// TImgViewThread / TGetIconThread / TThumbnailThread) がこれを継承する。
+//
+// 実際に OS スレッドを起こすため、待ち合わせは「回数が増えるまで」ではなく
+// 「フラグが立つまで上限つきで待つ」形にして、遅いマシンでも落ちないようにする。
+//===========================================================================
+
+namespace {
+
+/// 中断状態で作り、Start() されたら Terminate() されるまで回るスレッド
+class CountingThread : public TThread {
+public:
+	CountingThread() : TThread(true) {}
+
+	volatile bool entered = false;
+	volatile int loops = 0;
+
+private:
+	void __fastcall Execute() override
+	{
+		entered = true;
+		while (!Terminated) {
+			loops++;
+			::Sleep(1);
+		}
+	}
+};
+
+/// 指定のフラグが立つまで最大 ms ミリ秒待つ。立ったら true
+bool wait_until(const volatile bool &flag, int ms = 3000)
+{
+	for (int i = 0; i < ms; i++) {
+		if (flag) return true;
+		::Sleep(1);
+	}
+	return static_cast<bool>(flag);
+}
+
+}  // namespace
+
+TEST_CASE("TThread: 中断状態で作ると Start() まで走らない")
+{
+	CountingThread th;
+	::Sleep(30);
+	CHECK_FALSE(th.entered);  // src の 6クラスはすべて CreateSuspended=true で作る
+
+	th.Start();
+	CHECK(wait_until(th.entered));
+
+	th.Terminate();
+	CHECK(th.Terminated);
+}
+
+TEST_CASE("TThread: Terminate() でループが止まる")
+{
+	CountingThread th;
+	th.Start();
+	REQUIRE(wait_until(th.entered));
+
+	th.Terminate();
+	::Sleep(50);
+	const int a = th.loops;
+	::Sleep(50);
+	CHECK(th.loops == a);  // 止まっている
+}
+
+TEST_CASE("TThread: Start() は 2回目以降なにもしない")
+{
+	// Delphi は起動済みへの Start で例外を投げるが、シムでは何もしない
+	// (この差はシムのコメントに明記してある)
+	CountingThread th;
+	th.Start();
+	REQUIRE(wait_until(th.entered));
+	th.Start();  // ここで落ちないこと
+	th.Terminate();
+}
+
+TEST_CASE("TThread: Start しないまま破棄してもハングしない")
+{
+	// FreeOnTerminate の自己解放経路と二重解放にならないこと
+	{
+		CountingThread th;
+	}
+	CHECK(true);  // ここに到達すれば合格 (デストラクタでデッドロックしない)
+}
+
+TEST_CASE("TThread: Priority の読み書き")
+{
+	CountingThread th;
+	th.Priority = tpLowest;   // src の check/imgv/icon/thumb が使う
+	CHECK(th.Priority == tpLowest);
+	th.Priority = tpNormal;   // grep/task が使う
+	CHECK(th.Priority == tpNormal);
+}
+
+TEST_CASE("TThread: FreeOnTerminate の読み書き")
+{
+	CountingThread th;
+	CHECK_FALSE(th.FreeOnTerminate);
+	th.FreeOnTerminate = true;
+	CHECK(th.FreeOnTerminate);
+	th.FreeOnTerminate = false;  // ここでは自己解放させない
+}
+
+//===========================================================================
+// TMultiReadExclusiveWriteSynchronizer
+//===========================================================================
+
+TEST_CASE("TMREWSync: 読みは多重に取れる")
+{
+	// SRWLOCK の共有ロック。同一スレッドでも複数回 BeginRead できる
+	TMultiReadExclusiveWriteSynchronizer sync;
+	sync.BeginRead();
+	sync.BeginRead();
+	sync.EndRead();
+	sync.EndRead();
+	CHECK(true);
+}
+
+TEST_CASE("TMREWSync: 書きの取得と解放")
+{
+	TMultiReadExclusiveWriteSynchronizer sync;
+	CHECK(sync.BeginWrite());
+	sync.EndWrite();
+}
+
+TEST_CASE("TMREWSync: 別スレッドからの書きは待たされる")
+{
+	// src のスレッド系 (task_thread.h ほか) はこれでプロパティを守っている
+	struct WriterThread : public TThread {
+		WriterThread(TMultiReadExclusiveWriteSynchronizer *s) : TThread(true), sync(s) {}
+		TMultiReadExclusiveWriteSynchronizer *sync;
+		volatile bool got = false;
+		void __fastcall Execute() override
+		{
+			sync->BeginWrite();
+			got = true;
+			sync->EndWrite();
+		}
+	};
+
+	TMultiReadExclusiveWriteSynchronizer sync;
+	WriterThread th(&sync);
+
+	sync.BeginWrite();     // メインスレッドが書きロックを持つ
+	th.Start();
+	::Sleep(50);
+	CHECK_FALSE(th.got);   // ワーカーは取れずに待っている
+
+	sync.EndWrite();
+	CHECK(wait_until(th.got));
+}
+
+//===========================================================================
+// ショートカットキーの変換 (TShortCut)
+//
+// 実測: src/Global.cpp:11121,11124 の 2行だけが使う。
+//   TShortCut shortcut = TextToShortCut(kstr);
+//   ShortCutToKey(shortcut, vkcode, ss);
+// キー名の綴りは src/usr_key.cpp の make_KeyList が作るものと同じ。
+//===========================================================================
+
+TEST_CASE("TextToShortCut / ShortCutToKey: 修飾なしのファンクションキー")
+{
+	const TShortCut sc = TextToShortCut(_T("F5"));
+	CHECK(sc != scNone);
+
+	Word key = 0;
+	TShiftState shift;
+	ShortCutToKey(sc, key, shift);
+	CHECK(key == VK_F5);
+	CHECK_FALSE(shift.Contains(ssShift));
+	CHECK_FALSE(shift.Contains(ssCtrl));
+	CHECK_FALSE(shift.Contains(ssAlt));
+}
+
+TEST_CASE("TextToShortCut / ShortCutToKey: 修飾つき")
+{
+	Word key = 0;
+	TShiftState shift;
+
+	ShortCutToKey(TextToShortCut(_T("Ctrl+Shift+F5")), key, shift);
+	CHECK(key == VK_F5);
+	CHECK(shift.Contains(ssCtrl));
+	CHECK(shift.Contains(ssShift));
+	CHECK_FALSE(shift.Contains(ssAlt));
+
+	key = 0; shift = TShiftState();
+	ShortCutToKey(TextToShortCut(_T("Alt+A")), key, shift);
+	CHECK(key == 'A');
+	CHECK(shift.Contains(ssAlt));
+	CHECK_FALSE(shift.Contains(ssCtrl));
+}
+
+TEST_CASE("TextToShortCut: 特殊キーの綴りは usr_key.cpp と揃っている")
+{
+	Word key = 0;
+	TShiftState shift;
+
+	ShortCutToKey(TextToShortCut(_T("Ctrl+Del")), key, shift);
+	CHECK(key == VK_DELETE);
+	CHECK(shift.Contains(ssCtrl));
+
+	key = 0; shift = TShiftState();
+	ShortCutToKey(TextToShortCut(_T("Enter")), key, shift);
+	CHECK(key == VK_RETURN);
+}
+
+TEST_CASE("TextToShortCut: 表に無いキー名は scNone")
+{
+	// 10Key_* / App / 記号キーは Delphi の MenuKeyCaps に無いので 0 になる。
+	// **本物の VCL と同じ挙動**なので直さない (規約6)。
+	// つまり NyanFi の ini でこれらにホットキーを割り当てても VCL 版でも
+	// 登録されない
+	CHECK(TextToShortCut(_T("10Key_5")) == scNone);
+	CHECK(TextToShortCut(_T("NoSuchKey")) == scNone);
+	CHECK(TextToShortCut(UnicodeString()) == scNone);
+}
+
+TEST_CASE("ShortCutToText: TextToShortCut と往復する")
+{
+	CHECK(ShortCutToText(TextToShortCut(_T("F5"))) == UnicodeString(_T("F5")));
+	CHECK(ShortCutToText(TextToShortCut(_T("Ctrl+F5"))) == UnicodeString(_T("Ctrl+F5")));
+	CHECK(ShortCutToText(scNone).IsEmpty());
+}

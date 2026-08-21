@@ -1298,7 +1298,11 @@ void __fastcall TTaskThread::Task_CVIMG(UnicodeString prm)
 
 	std::unique_ptr<Graphics::TBitmap> i_img(new Graphics::TBitmap());
 	std::unique_ptr<Graphics::TBitmap> r_img(new Graphics::TBitmap());
-	try {
+	{
+		//try { ... } __finally { ... } を RAII に置き換えたもの (compat/scope_exit.h)。
+		//__finally との差は make_scope_exit を作る前に投げた場合だけで、
+		//そのときは後始末の対象がまだ無いので呼ばない方が正しい
+		const auto nf_cleanup = compat::make_scope_exit([&] { i_img->Canvas->Unlock(); r_img->Canvas->Unlock(); });
 		i_img->Canvas->Lock();
 		r_img->Canvas->Lock();
 		try {
@@ -1533,10 +1537,6 @@ void __fastcall TTaskThread::Task_CVIMG(UnicodeString prm)
 			ErrCount++;
 			msg[1] = 'E';
 		}
-	}
-	__finally {
-		i_img->Canvas->Unlock();
-		r_img->Canvas->Unlock();
 	}
 
 	AddLog(msg);

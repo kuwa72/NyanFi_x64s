@@ -352,6 +352,7 @@ UnicodeString(double)                       FloatToStr 相当
 | `delete_Dirs` | 「サブディレクトリを含めたディレクトリの削除」と書かれているが、ファイルは削除せず無視する。そのため木の中にファイルが1つでも残っていると削除が失敗し、上位まで連鎖して木全体が消えない |
 | `chk_cre_dir` | 新規作成時のみ末尾 `\` 付きで返し、既存ディレクトリのときは引数をそのまま返す (末尾 `\` の有無が不定) |
 | `EXIF_format_inf` の ISO フォールバック | `get_tkn_r(lst->Values["NK:2"], ',')` は「最初の区切りより後ろ全部」を返すため、`"100,200,320"` から最右トークンではなく `"200,320"` が ISO 値として採用される |
+| `Global.cpp:15077` のリストコピー「AD」 | `cb_buf->Text.Insert(GetClipboardText(), 1)` が**何もしていない**。`__property` の読みは値返しなので、返ってきた一時オブジェクトを書き換えても元に反映されず、2行下の `copy_to_Clipboard(cb_buf->Text)` はクリップボードの内容を含まない。つまり「AD (クリップボードに追加)」が効かない。C++Builder でも同じ挙動になるため移植で持ち込んだものではない。シム側も同じ挙動に揃え、`tests/compat/test_property.cpp` で固定した |
 
 ## 13. Phase 2 の骨格 (wxWidgets)
 
@@ -360,10 +361,11 @@ UnicodeString(double)                       FloatToStr 相当
 
 | 項目 | 内容 |
 |---|---|
-| 規模 | 約 900 行 (`file_pane` / `main_frame` / `key_map` / `vcl_gui_bridge` / `nyanfi_app`) |
+| 規模 | 約 1,900 行 (`file_pane` / `file_item` / `main_frame` / `key_map` / `settings` / `vcl_gui_bridge` / `nyanfi_app`) |
 | wxWidgets | 3.3.3。`scripts/build_wx.sh` が同じツールチェインでクロスビルドする |
 | 成果物 | `nyanfi.exe` (静的リンク、依存は Windows システム DLL と UCRT のみ) |
-| 実装済みの操作 | カーソル移動 / ディレクトリ移動 / ペイン切替 / マーク / 再読込 / 終了 / キー割り当て表示 |
+| 実装済みの操作 | カーソル移動 / ディレクトリ移動 / ペイン切替 / マーク / 再読込 / 並べ替え / マスク絞り込み / 設定の永続化 / キー割り当て表示 / 終了 |
+| CI | MSYS2 UCRT64 でビルドし、**起動を5秒維持することまで確認**している |
 
 ### 作り直さず、移植済みのコードを使っている
 
@@ -406,3 +408,381 @@ UnicodeString(double)                       FloatToStr 相当
 
 コードベース全体 151,010 行に対して、ビルドできているのは 12%。Phase 2 を「常用できる
 NyanFi」まで進めるには、`Global.cpp` の GUI 依存の切り離しが次の関門になる。
+
+### 13.3 ini との接続 (実測)
+
+「VCL 版の ini をそのまま流し込める」という設計上の主張を実証した。形式は推測ではなく
+`src/OptDlg.cpp` の `InpKeyBtnClick` / `ExpKeyBtnClick` から実測したもの。
+
+| 項目 | 実測結果 |
+|---|---|
+| セクション | `KeyFuncList` |
+| 形式 | `<モード文字>:<キー名>=<コマンド名>` (TStringList の Name=Value) |
+| モード文字 | `ScrModeIdStr = "FSVIL"` の1文字 (F=ファイルペイン / S=検索 / V=ビューア / I=画像 / L=リスト) |
+| 修飾 | `SELECT+` (選択操作用、`Global.cpp` の `KeyStr_SELECT`)、`~` 区切りの2ストロークキー (`Ctrl+K~D` など) |
+
+Phase 2 の骨格はモード `F` のみを読み、`SELECT+` と2ストロークキーは **読み飛ばす**
+(対応する仕組みが無いため、黙って誤動作させるより何もしない方を選んだ)。
+
+**ユーザーの ini は書き換えない。** `UsrIniFile::UpdateFile()` は読み込んだ全セクションを
+書き直す実装で、コメントや並び順が失われる。そのためウィンドウ位置とペインのディレクトリは
+別ファイル `<exe名>_wx.ini` に保存し、キー割り当ては本物の ini から読み取り専用で読む。
+
+### 13.4 並べ替えの意味論 (実測)
+
+`comp_NaturalOrder` / `comp_AscendOrder` (usr_str.cpp) は **ファイル一覧の並べ替えには
+使われていない**。実際の呼び出し箇所は `GenInfDlg.cpp` / `HistDlg.cpp` / `TxtViewer.cpp` /
+`ShareDlg.cpp` の行単位の `TStringList` だった。
+
+ファイル一覧の並べ替えは `Global.cpp` の `SortComp_Name` / `_Ext` / `_Time` / `_Size` /
+`_Attr` (未移植、GUI グローバル依存) が型付きのフィールドを直接比較し、同値のときだけ
+`StrCmpLogicalW` で自然順のタイブレークをしている。`gui/file_item.cpp` の
+`CompareFileItems` はこの意味論に合わせた。
+
+### 13.5 CI が見つけた環境差 (GUI 編)
+
+ローカル (日本語 Windows / 自前ビルドの静的 wx 3.3.3) では出ず、CI (英語版 Windows /
+MSYS2 の共有ライブラリ wx 3.2.11) で出た失敗。
+
+| 症状 | 真の原因 |
+|---|---|
+| `wx.rc が見つかりません (探索先: )` | **CMake on Windows は `#!/bin/sh` を実行できない**。`wx-config` の応答が全て空になり、空を黙って受け入れていたため誤った症状として現れた。シェル経由で呼び、空の結果を拒否するようにした |
+| `__imp__ZN8wxObject...` の未定義参照 | グローバルな `-static` が、共有ライブラリ版 wx のインポートライブラリを使えなくしていた。`-static` はテスト実行ファイルだけに限定した |
+| (GUI 起動確認で必要だったこと) | 共有ライブラリ版 wx を使う場合、`/ucrt64/bin` が PATH に無いと DLL を読めない。起動確認は msys2 シェルの中で行う |
+
+### 13.6 ファイル操作とファイルを開く機能
+
+Phase 2 の骨格に、ファイラとして最低限必要な操作を足した。キー割り当ては
+`src/Global.cpp` の既定 (`KeyFuncList`) を実測して合わせている。
+
+| キー | コマンド | 内容 | VCL 既定との一致 |
+|---|---|---|---|
+| `C` | `Copy` | 反対ペインへコピー | 一致 (`F:C=Copy`) |
+| `M` | `Move` | 反対ペインへ移動 | 一致 (`F:M=Move`) |
+| `D` | `Delete` | **ゴミ箱へ送る** | 一致 (`F:D=Delete`) |
+| `K` | `CreateDir` | ディレクトリ作成 | 一致 (`F:K=CreateDir`) |
+| `R` | `RenameDlg` | 名前の変更 | 一致 (`F:R=RenameDlg`) |
+| `Enter` | `OpenStandard` | ディレクトリなら入る / ファイルは関連付けで開く | 一致 (`F:Enter=OpenStandard`) |
+| `Ctrl+Enter` | `OpenByApp` | アプリケーションを選んで開く | 一致 (`F:Ctrl+Enter=OpenByApp`) |
+| `Alt+Enter` | `PropertyDlg` | ファイル情報の表示 | **推測** (VCL に既定キーが無い) |
+
+二画面ファイラの慣習である F5〜F8 ではなく単キーなのは、NyanFi の実際の既定がそうだった
+ため (`F:F5=ReloadList`)。
+
+### 13.7 破壊的操作の安全策
+
+ユーザーのファイルを操作するため、以下を方針として決めた。
+
+| 方針 | 理由 |
+|---|---|
+| **削除はゴミ箱送りのみ。完全削除は実装しない** | `SHFileOperationW` + `FOF_ALLOWUNDO`。`Global.cpp` の `delete_File(use_trash=true)` と同じフラグ。移植済みの `delete_Dir` / `delete_Dirs` は完全削除で、しかも後者はファイルを削除しない不具合がある (§12) ので使わない |
+| **既存ファイルを上書きしない** | `copy_File` / `move_File` は Win32 の仕様で黙って上書きするため、呼ぶ前に存在を確認してスキップする |
+| **全ての破壊的操作の前に確認ダイアログ** | 件数・宛先・対象名 (最大8件) を表示する |
+| **結果を必ず報告** | 成功 / スキップ / 失敗の件数を表示。失敗は理由付きで一覧する |
+| **実行可能ファイルを開く前に確認** | `test_ExeExt` で判定。意図しない実行は事故になる |
+
+#### 統合時に見つけて直した穴
+
+`CopyItems` に **自分自身の配下へのコピーを弾く防御が無かった**。左ペインで `C:\work` を
+選び、右ペインが `C:\work\sub` にある状態でコピーすると、作ったコピーを再び走査して
+**無限再帰でディスクを埋め尽くす**。同一ディレクトリへのコピーもスタックオーバーフローに
+なる。
+
+`IsSameOrInside()` を追加して両方を弾き、移動側にも同じガードを入れた
+(Win32 も拒否するが、意味の分かるメッセージにするため)。パス区切りを見て前方一致を
+判定するので `C:\work\a` と `C:\work\ab` を誤検出しない。
+
+**この経路にはテストが存在しなかった。** 破壊的操作は「テストが通っている」だけでは
+不十分という例として記録する。
+
+### 13.8 移植が不完全なまま動かしている箇所
+
+GUI から呼ぶために、リンクを通すための実装を置いた箇所がある
+(`gui/vcl_gui_bridge.cpp` / `gui/usr_file_inf_link_shim.cpp` / `gui/usr_shell_fmt_shim.cpp`)。
+方針は「無害化して実装」と「呼ばれたら落とす」の2分類。
+
+| シンボル | 扱い | 影響 |
+|---|---|---|
+| `TWinControl::LockDrawing` / `UnlockDrawing` | 何もしない | 再描画抑止は最適化なので影響なし |
+| `TDirect2DCanvas::Supported()` | `false` を返す | D2D 経路に入らなくなる (意図通り) |
+| `TControl::Perform` / `TDirect2DCanvas` の構築 / `UserShell::get_PropInf` / `get_Duration` / `TMetafile::LoadFromFile` | 例外を投げる | 呼ばれたら落ちる。GUI 移植の残作業表そのもの |
+
+**追記 (port/phase2): `LoadUsrMsg` は移植済み。** メッセージ文字列テーブルと
+Abort系関数 (`UserAbort`/`SysErrAbort`/`LastErrAbort`/`TextAbort`/`SkipAbort`/
+`CancelAbort`/`EmptyAbort`) は GUI に依存しないため `src/usr_msg.cpp` のまま
+`cmake/phase0_sources.cmake` に追加してビルド対象にした。`gui/usr_file_inf_link_shim.cpp`
+の簡易実装 (メッセージIDを含むだけの文字列) は削除し、本物の日本語文言に差し替えた
+(`tests/core/test_usr_msg.cpp` で回帰テスト済み)。
+一方 `msgbox_ERR`/`msgbox_WARN`/`msgbox_OK`/`msgbox_Y_N`/`msgbox_Y_N_C`/
+`msgbox_Retry`/`msgbox_Sure`/`msgbox_SureAll` (メッセージボックス表示そのもの) は
+VCL の `CreateMessageDialog`/`TForm::ShowModal`/`TCheckBox` の実インスタンス化に
+依存しており、ヘッドレスな compat シムでは「宣言のみ」にしかできない。これらを
+`usr_msg.cpp` と同じ翻訳単位に残すと、GNU ld がオブジェクトファイル単位で取り込む
+ため (規約5と同じ事情)、`LoadUsrMsg` 目的でオブジェクトファイルが取り込まれた瞬間に
+未解決参照でビルドが落ちてしまう。そのため `src/usr_msg_dlg.cpp` に分離し、
+`cmake/phase0_sources.cmake` には載せていない (`src/NyanFi.cbproj` には
+`CppCompile` として追加済みなので C++Builder 側の挙動は変えていないが、
+BCC64 での再ビルドは未検証)。現状 `gui/` からこれらの関数を呼ぶ経路は無い
+(Phase 3 で MainFrm.cpp 等を移植する際に、wx (wxMessageDialog 等) で実装するか
+判断すること)。
+
+`get_AppInf` / `get_duration` (実行ファイルのバージョン情報・メディアの再生時間) と
+`get_MetafileInf` (.wmf/.emf) は、未移植の `usr_SH` や `TMetafile` に依存するため
+**ファイル情報の表示から除外**している。
+
+## 14. C++Builder 側で検証が必要な変更の一覧
+
+この環境に BCC64 が無いため、**RAD Studio でのビルド確認が未実施**。`src/` への変更は
+以下に限られる (文字コード変換を除く)。いずれも標準 C++ のみで書き、`#ifdef` による
+分岐は入れていない。
+
+| ファイル | 変更 | 種類 |
+|---|---|---|
+| `src/*.cpp` `src/*.h` (230) | CP932 → BOM 無し UTF-8 | 文字コード変換のみ (内容差分ゼロ) |
+| `usr_shell.h` | `__property Items[int]` → 添字プロキシ (`TItemsProperty`) | C++Builder 拡張の置き換え |
+| `usr_mmfile.h` | `__property Bytes[unsigned]` → 添字プロキシ | 同上 |
+| `usr_scrpanel.h` | `__property KnobWidth` / `Visible` → プロキシ | 同上 |
+| `usr_scrpanel.cpp` | `std::max(int, KnobWidth)` に `(int)` キャスト 4箇所 | 上のプロキシ化の帰結 |
+| `usr_file_inf.cpp` | `try { } __finally { }` 3箇所 → RAII (`scope_exit`) | C++Builder 拡張の置き換え |
+| `usr_msg.cpp` | GUI 依存部を分離して縮小 | ファイル分割 |
+| `usr_msg_dlg.cpp` | **新規**。`usr_msg.cpp` から `msgbox_*` を移動 | ファイル分割 |
+| `NyanFi.cbproj` | `usr_msg_dlg.cpp` を `CppCompile` に登録 (BuildOrder 119) | プロジェクト設定 |
+| `file_filter.cpp` `htmconv.cpp` `usr_arc.cpp` `usr_cmdlist.cpp` `usr_exif.cpp` `usr_file_inf.cpp` `usr_id3.cpp` `usr_key.cpp` `usr_str.cpp` `usr_highlight.cpp` | 非 ASCII の narrow リテラルを `_T()` で包む (計 714箇所) | 機械変換 |
+
+### 確認してほしいこと
+
+1. **RAD Studio でビルドが通るか**。特に添字プロキシ (`TItemsProperty` / `TBytesProperty`) と
+   `scope_exit` が BCC64 で受理されるか
+2. `usr_msg_dlg.cpp` が正しくビルド対象に入っているか (`BuildOrder` の重複は元から多数あり、
+   119 は未使用だったので選んだ)
+3. `_T()` 化した箇所で、narrow (`char*`) を要求する API に渡している箇所が無いか
+   (mingw 側ではコンパイルが通っているので、あるとすれば C++Builder 固有の API)
+
+## 15. Phase 2 の到達点
+
+issue #1 の Phase 2 のゴールは「ファイラとして最低限使える NyanFi が起動する」だった。
+到達している。
+
+### 実装済みの操作 (キー割り当ては `src/Global.cpp` の既定と照合)
+
+| キー | 動作 | VCL 既定との一致 |
+|---|---|---|
+| `↑↓` `PgUp/PgDn` `Home/End` | カーソル移動 | `get_CsrKeyCmd()` をそのまま使用 |
+| `Enter` / `→` | ディレクトリに入る / ファイルを関連付けで開く | 一致 (`F:Enter=OpenStandard`) |
+| `Ctrl+Enter` | アプリケーションを選んで開く | 一致 (`F:Ctrl+Enter=OpenByApp`) |
+| `Alt+Enter` | ファイル情報 | 推測 (VCL に既定なし) |
+| `BackSpace` / `←` | 親ディレクトリへ | — |
+| `Tab` | ペイン切替 | — |
+| `Space` / `Ctrl+A` / `Ctrl+D` | マーク切替 / 全マーク / 全解除 | — |
+| `C` / `M` | コピー / 移動 (反対ペインへ) | 一致 (`F:C=Copy` / `F:M=Move`) |
+| `D` | ゴミ箱へ送る | 一致 (`F:D=Delete`) |
+| `K` / `R` | ディレクトリ作成 / 一括リネーム | 一致 (`F:K=CreateDir` / `F:R=RenameDlg`) |
+| `S` | 並べ替え (キー・昇降順・ディレクトリ集約) | 一致 (`F:S=SortDlg`) |
+| `Ctrl+M` / `Ctrl+U` | マスク絞り込み / 解除 | 推測 (VCL は UI から操作) |
+| `F` | インクリメンタルサーチ | 一致 (`F:F=IncSearch`) |
+| `B` / `Shift+B` | 履歴を戻る / 進む | `B` は一致、`Shift+B` は推測 |
+| `H` / `L` | 履歴一覧 / ドライブ一覧 | 一致 (`F:H=DirHistory` / `F:L=DriveList`) |
+| `Ctrl+G` | パス直接入力 | 推測 (VCL に既定なし) |
+| `V` | テキストビューア | 一致 (`F:V=TextViewer`) |
+| `F5` | 再読み込み | 一致 (`F:F5=ReloadList`) |
+| `F1` / `F12` | キー割り当て一覧 / コマンド表 | — |
+| `Ctrl+Q` / `Alt+F4` | 終了 | — |
+
+ウィンドウ位置・ペインのディレクトリ・履歴は `<exe名>_wx.ini` に永続化。
+本物の `NyanFi.ini` があれば `KeyFuncList` を読み取り専用で取り込む。
+配色は `wxSystemSettings` 由来で Windows のライト/ダークに追従する。
+
+### 規模
+
+§16 までを含めた最終の数字。
+
+| 層 | 行数 | 状態 |
+|---|---|---|
+| ロジック層 (`src/`) | **18,031** | 移植済み (22ファイル) |
+| GUI (`gui/`、新規) | **7,795** | 動作する |
+| テスト (`tests/`) | **9,898** | compat 155 + core 496 ケース / 2,176 アサーション |
+| 未着手 (`Global.cpp` / `MainFrm.cpp` / 76フォーム) | 約 125,000 | Phase 3 |
+
+コードベース全体 151,194 行に対して、ビルドできているのは約 17%。
+
+### 常用に足りないもの (Phase 3 の候補)
+
+§16 で画像ビューア・grep・タブ・一括リネームを入れたので、残りはこれだけになった。
+
+- 書庫の中身の閲覧 (`usr_arc.cpp` 系は未移植)
+- ブックマーク、外部コマンド実行 (`usr_excmd.cpp` は `Global.h` 依存で未移植)
+- `msgbox_*` (確認ダイアログ) の wx 実装 — 現在は `gui/` 側で個別に wx のダイアログを
+  出しており、`src/usr_msg_dlg.cpp` は未移植のまま ([decisions-needed.md](decisions-needed.md) §3)
+- シェル統合 (`IShellFolder` / `IContextMenu`)。`Global.cpp` / `usr_shell.cpp` の移植が前提
+- 一括リネームの文字種変換・かな変換 (§16.4)
+
+## 16. Phase 2 の追加機能 (閲覧・検索・ナビゲーション・タブ)
+
+§15 の一覧に加えて実装したもの。
+
+| キー | 動作 | VCL 既定との一致 |
+|---|---|---|
+| `V` | テキストビューア (文字コード自動判定 / 検索 `F` / 折り返し `W`) | 一致 (`F:V=TextViewer`、`V:Q=Close`、`V:F=FindText`) |
+| `G` | 画像ビューア (ホイールでズーム / 中クリックでフィット) | 一致 (`F:G=ImageViewer`、`I:Q=Close`、`WheelCmdI1`、`WheelBtnCmdI`) |
+| `Ctrl+F` | grep (リテラル / 正規表現、マスク、サブディレクトリ) | 推測 (VCL はメニュー専用) |
+| `Ctrl+T` / `Ctrl+W` / `Ctrl+Tab` / `Shift+Ctrl+Tab` / `Ctrl+E` | タブ 追加 / 閉じる / 次 / 前 / 一覧 | **すべて推測**。`Global.cpp` の `KeyFuncList` にタブのエントリが1件も無く、VCL ではツールバー/メニュー専用だった |
+
+### 16.1 実測が依頼の前提を訂正した例
+
+サブエージェントに「実装前に src の実呼び出し箇所を実測せよ」と指示している効果として、
+**コーディネータ (私) の誤った前提が訂正された**ケースが2件あった。記録しておく。
+
+| 誤った前提 | 実測結果 |
+|---|---|
+| タブはペインごとに独立している | **左右で共有する1本のタブバー**。`Global.h` の `tab_info` は `sel_list[2]` / `sort_mode[2]` のように2要素配列を持ち、`TabList` の CSV は `path0,path1,caption,icon,home0,home1,nwl_mode,nwl,sync_lr` の9項目。`MainFrm.cpp::TabControl1Change` も単一の `TabIndex` で両ペインを切り替えている |
+| ファイル一覧の並べ替えに `comp_NaturalOrder` を使えるはず | 使っていない。`comp_*` は行単位の `TStringList` 専用で、ファイル一覧は `Global.cpp::SortComp_*` が型付きフィールドを直接比較し、自然順は同値時のタイブレークのみ |
+
+### 16.2 grep と画像ビューアで決めた上限値
+
+VCL に対応する値が無いため、こちらで決めたもの。いずれも超えたことを画面に明示する
+(黙って打ち切らない)。
+
+| 対象 | 上限 | 超えたときの挙動 |
+|---|---|---|
+| grep の走査ファイル数 | 20,000 | 打ち切って結果に明示 |
+| grep の一致件数 | 5,000 | 打ち切って結果に明示 |
+| grep / テキストビューアの1ファイル | 8 MB | 先頭のみ読み、切り詰めたことを明示 |
+| 画像のデコード | 2億ピクセル | **デコード前に**弾く (`WIC_get_img_size` はヘッダのみ読むため即座に判定できる) |
+
+VCL 版は画像の読み込みをワーカースレッド (`TImgViewThread`) で行っており、上限ではなく
+非同期化で解決している。wx 版は同期デコードなので、上限内でも大きな画像では一瞬待たされる
+(未対応。要検討)。
+
+### 16.3 コーディネータ側で見つけて直した不具合
+
+サブエージェントの成果を統合する際に見つけたもの。いずれも**テストが存在しない経路**だった。
+
+| 不具合 | 影響 |
+|---|---|
+| `CopyItems` に自分自身の配下へのコピーを弾く防御が無い | 無限再帰でディスクを埋め尽くす。同一ディレクトリへのコピーはスタックオーバーフロー |
+| 画像ビューアの次/前の一覧が拡張子だけで判定 | `photo.jpg` という名前のディレクトリを画像として扱う |
+| 一括リネームの2段目 (一時名→最終名) が失敗するとファイルが `~nfren_0000.tmp` のまま残る | ユーザーには「ファイルが消えた」ように見える |
+
+3件とも同じパターンで見つかっている。**破壊的な操作を書いた人以外がコードを読む**という
+運用が、テストの網羅では拾えない穴を実際に3回拾った。
+
+### 16.4 一括リネーム (`R`)
+
+`src/RenDlg.cpp` (`TRenameDlg`) は未移植。そのうち3機能を移植した。
+
+| 実装した | していない |
+|---|---|
+| 正規表現による置換 (`UpdateNewNameList()` L.649-748 相当) | 文字種変換 (`CnvCharCheckBox`) |
+| 連番の付与 (`SerNoEdit` / `IncNoEdit`) | かな変換 (`CnvKanaCheckBox`) |
+| 大文字/小文字の変換 | ダイアログ設定の ini への記憶 |
+
+**リネームの実行方法が VCL と変わる。** 2件以上のときは常に一時名 (`~nfren_%04d.tmp`) を
+経由する2段階リネームにした。VCL 版 (`RenOkActionExecute`) は同種の一時名方式
+(`$~NFnnnn.~TMP`) を持つが、**重複を検出したときだけ**使う。結果は同じ
+(`a→b, b→c` の連鎖や `a↔b` の交換がどちらも成功する) が、経路が1本なのでバグが入りにくい。
+代わりに、プロセスが強制終了した場合に一時名が残る可能性は VCL 版より広い。
+判断は [decisions-needed.md](decisions-needed.md) §1 に出した。
+
+2段目が失敗したときは元の名前へ戻す。戻すことにも失敗した場合は、現在の名前 (一時名) を
+メッセージに必ず含める (§16.3)。テストは `RenamePlan` を手で組んで既存ディレクトリと
+衝突させ、2段目を実際に失敗させて検証している。
+
+---
+
+## 17. 現在の到達点のまとめ
+
+| 項目 | 状態 |
+|---|---|
+| ビルド | Linux ホストから mingw-w64 クロス / MSYS2 UCRT64 のどちらでも通る。VCL 依存ゼロ |
+| テスト | compat 155 + core 496 ケース / 2,176 アサーション、すべて通過 |
+| CI | GitHub Actions で Windows (UCRT64) ビルド + テスト + GUI 起動確認、Linux クロスビルド、リテラル規約の機械チェック |
+| GUI | 2画面ファイラとして常用できる範囲まで動く (§15 の表 + §16) |
+| 未検証 | **C++Builder 12.1 での再ビルドのみ** ([decisions-needed.md](decisions-needed.md) §8) |
+
+残っている作業は Phase 3 (`Global.cpp` / `MainFrm.cpp` / 76フォーム、約 125,000 行) で、
+これは「移植」ではなく「wx 版として書き直す」規模になる。§15 の「常用に足りないもの」が
+その入口。
+
+---
+
+## 18. キー入力が英数字以外で全滅していた不具合 (§16.5 として記録)
+
+実機で触ってもらって発覚した。**`G` (画像ビューア) は動くのに上下キーが無反応**。
+
+### 原因
+
+`gui/key_map_wx.cpp` が wx の `GetKeyCode()` を `get_KeyStr(WORD, TShiftState)` に
+そのまま渡していた。**wx の `GetKeyCode()` は仮想キーコードではない。**
+
+| キー | wx の値 | 仮想キーコード |
+|---|---|---|
+| 英数字 (`G`) | `'G'` = 71 | `VK_G` = 71 (**偶然一致**) |
+| BackSpace / Tab / Enter / Esc / Space | 8 / 9 / 13 / 27 / 32 | 同値 (**偶然一致**) |
+| `↑` | `WXK_UP` = **315** | `VK_UP` = **38** |
+| `↓` | `WXK_DOWN` = **317** | `VK_DOWN` = **40** |
+| `PgUp` | `WXK_PAGEUP` = **366** | `VK_PRIOR` = **33** |
+| `F5` | `WXK_F5` = **344** | `VK_F5` = **116** |
+| `Del` | `WXK_DELETE` = **127** | `VK_DELETE` = **46** |
+
+`WXK_START` (300) 以降は wx 独自の連番 (`wx/defs.h` の `wxKeyCode`) で、VK とは別体系。
+偶然一致する範囲だけが動いていた。
+
+さらに悪いことに、**キー名が空にならずに別のキーの名前になっていた**。
+`get_KeyStr()` の default 節は `if (_istalnum(Key)) keystr = (char)Key;` なので、
+`_istalnum(315)` が真になり `(char)315` = 59 = `;` を返す。つまり:
+
+| キー | 生成されていたキー名 |
+|---|---|
+| `↑` | `;` |
+| `↓` | `=` |
+
+既定の割り当てに `;` `=` が無いので無反応だったが、**もし `;` に何か割り当てていたら
+上キーでそれが動いていた**。無反応より悪い壊れ方をしうる状態だった。
+
+### 直し方
+
+MSW では `wxKeyEvent::GetRawKeyCode()` が `WM_KEYDOWN` の wParam = 仮想キーコード
+その物になる (wx 3.3.3 `src/msw/window.cpp` の `MSWInitAnyKeyEvent` で
+`event.m_rawCode = (wxUint32) wParam;`。`wxEVT_CHAR_HOOK` もこの経路を通ることを
+ソースで確認した)。**VCL 版の `TForm::OnKeyDown` が受け取る値と同じ**なので、
+`get_KeyStr()` にはこれを渡すのが正しい。
+
+raw code が取れない場合の保険として `KeyMap::VkFromWxKeyCode()` を足した。
+これは wx 非依存 (`nyanfi_gui_core`) なので単体テストできる。wxKeyCode の実際の値との
+一致は `gui/key_map_wx.cpp` の `static_assert` がコンパイル時に確認する
+(wx を更新して値がずれたらビルドが止まる)。
+
+### なぜ CI をすり抜けたか
+
+**ここにテストが1件も無かった。** `KeyStrOf()` は wx に依存するため
+`nyanfi_gui_core` に入っておらず、テストの対象外だった。CI の GUI 確認は
+「5秒間プロセスが生きていること」しか見ていないので、キーが効かなくても通る。
+
+対策として、変換の本体を wx 非依存の純関数に切り出して7ケース/57アサーションを足した。
+**「テストが存在しない経路」で見つかった不具合はこれで4件目**で、4件とも
+*テストの網羅ではなく人が触るか読むかで* 見つかっている (§16.3)。
+
+CI に足せる検証としては、`SendInput`/`PostMessage` でキーを送って一覧のカーソル位置が
+動くことを見る E2E が考えられる (未実装)。
+
+---
+
+## 19. リンクエラーで捕まらないスタブ (静かに間違いうる箇所)
+
+規約4 の「GUI スタブは宣言のみ」は、**呼んだらリンクエラーになる**ことで実装漏れが
+隠れないようにする仕掛けである。しかし**データメンバや定数はリンクエラーにならない**。
+Phase 3 の第1段で入れたもののうち、そこに当たるものをここに集める。
+
+差し替えるまでは「そう動く」ことを承知の上で使う。**新しく足すときはこの表に書く。**
+
+| 箇所 | 静かにどうなるか |
+|---|---|
+| `THeaderSections::Count` (常に 0) | `Global.cpp:12542` の `sp->Index < Sections->Count-1` が常に偽になり、**ヘッダの区切り線が描かれない**。他の 6箇所は `Items[i]` も触るのでリンクで落ちる |
+| `TPicture::Bitmap` / `TImage::Picture` / `TImageCollectionItem::SourceImages` (nullptr) | VCL は自動生成するがシムは nullptr のまま。**リンクエラーではなく nullptr 参照**になる |
+| `TPngImage::Empty` / `SupportsPartialTransparency` / `TMetafile::Empty` (固定の bool) | 変化しないので、分岐すると常に「空 / 透過なし」側を通る |
+| `TScreen::Forms` / `FormCount` (常に空) | `for (i<FormCount) Forms[i]` の走査が 0回になる。**フォームが1つも無い状態と区別がつかない** |
+| `TApplication::MainFormHandle` (GUI が代入するまで NULL) | `SendMessage(NULL, ...)` は**エラーも出さずに 0 を返す**。`grep_thread.cpp:167` の完了通知が届かない |
+| `TApplication::ShowHint` (保持するだけ) | 読む箇所は src に無いので現状は無害 |
+
+このうち `MainFormHandle` だけは **GUI 側で代入すれば直る**ので、Phase 3 の第2段で
+`gui/nyanfi_app.cpp` に入れる。

@@ -87,13 +87,20 @@ private:
 		TList::Put(Index, Item);
 	}
 
+	// Items (添字プロキシ) から private の Get/Put を呼ぶため
+	template <class O, class T, T *(O::*G)(int), void (O::*S)(int, T *)>
+	friend class compat::IndexedPtrProperty;
+
 public:
 	__fastcall TaskConfigList();
 	__fastcall ~TaskConfigList();
 
 	void __fastcall ClearAll();
 
-	__property TaskConfig * Items[int Index] = {read=Get, write=Put};
+	// __property TaskConfig * Items[int Index] = {read=Get, write=Put};
+	// C++Builder の __property を添字プロキシに置き換えたもの
+	compat::IndexedPtrProperty<TaskConfigList, TaskConfig,
+	                           &TaskConfigList::Get, &TaskConfigList::Put> Items{this};
 };
 
 //---------------------------------------------------------------------------
@@ -246,12 +253,20 @@ private:
 		TaskRWLock->EndWrite();
 	}
 
+	// 下のプロパティ・プロキシから private のアクセサを呼ぶため
+	template <class O, class T, T (O::*G)(), void (O::*S)(T)>
+	friend class compat::RWMutableProperty;
+	template <class O, class T, T (O::*G)()>
+	friend class compat::ROMutableProperty;
+
 public:
-	__property bool TaskReady	 = {read = GetTaskReady,	write = SetTaskReady};
-	__property bool TaskFinished = {read = GetTaskFinished,	write = SetTaskFinished};	//!< タスクが終了
-	__property bool TaskCancel	 = {read = GetTaskCancel,	write = SetTaskCancel};		//!< 中断
-	__property bool TaskPause	 = {read = GetTaskPause,	write = SetTaskPause};		//!< 一旦停止
-	__property bool TaskAskSame  = {read = GetTaskAskSame,	write = SetTaskAskSame};	//!< 同名ファイル処理を要求
+	// __property を読み書きプロキシに置き換えたもの。getter が非 const・setter が
+	// 値渡しなのは排他ロック (TaskRWLock) を取るためで、src 側の宣言は変えていない
+	compat::RWMutableProperty<TTaskThread, bool, &TTaskThread::GetTaskReady,    &TTaskThread::SetTaskReady>    TaskReady{this};
+	compat::RWMutableProperty<TTaskThread, bool, &TTaskThread::GetTaskFinished, &TTaskThread::SetTaskFinished> TaskFinished{this};	//!< タスクが終了
+	compat::RWMutableProperty<TTaskThread, bool, &TTaskThread::GetTaskCancel,   &TTaskThread::SetTaskCancel>   TaskCancel{this};		//!< 中断
+	compat::RWMutableProperty<TTaskThread, bool, &TTaskThread::GetTaskPause,    &TTaskThread::SetTaskPause>    TaskPause{this};		//!< 一旦停止
+	compat::RWMutableProperty<TTaskThread, bool, &TTaskThread::GetTaskAskSame,  &TTaskThread::SetTaskAskSame>  TaskAskSame{this};	//!< 同名ファイル処理を要求
 
 	int Tag;
 	int ID;

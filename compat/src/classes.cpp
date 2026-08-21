@@ -5,10 +5,14 @@
 #include "compat/classes.h"
 
 #include <cxxabi.h>
+#include <process.h>
 
 #include <algorithm>
 #include <cstdlib>
+#include <deque>
+#include <exception>
 #include <functional>
+#include <mutex>
 #include <string>
 #include <vector>
 
@@ -701,4 +705,361 @@ bool TMultiReadExclusiveWriteSynchronizer::BeginWrite()
 void TMultiReadExclusiveWriteSynchronizer::EndWrite()
 {
 	::ReleaseSRWLockExclusive(&lock_);
+}
+
+//===========================================================================
+// TThread と Synchronize
+//===========================================================================
+namespace {
+
+//---------------------------------------------------------------------------
+// Synchronize の待ち行列
+//
+// Delphi の TThread.Synchronize は「メインスレッドに実行を委ね、終わるまで待つ」。
+// VCL では Application.Idle が CheckSynchronize を呼んで排出するが、本シムは
+// wx にも VCL にも依存しないので、メインスレッドが持つ**メッセージ専用ウィンドウ**
+// (HWND_MESSAGE) に自前のメッセージを投げて排出させる。ウィンドウメッセージを
+// 回すループさえあれば (wx でも素の Win32 でも) 追加の呼び出しなしで動く。
+//
+// 規約8 に沿って、wx 側に「毎回 CheckSynchronize を呼ぶ」という約束事を
+// 作らずに済ませるための選択。メッセージループが無い実行形態のために
+// CheckSynchronize() も公開してある。
+//---------------------------------------------------------------------------
+
+/// 静的初期化はプロセスの起動スレッド (= メインスレッド) で走る
+const DWORD kMainThreadId = ::GetCurrentThreadId();
+
+/// メッセージ専用ウィンドウのクラス名とメッセージ番号 (自前のクラスなので値は任意)
+const wchar_t kSyncWindowClass[] = L"NyanFiCompatSyncWindow";
+const UINT kSyncMessage = WM_APP + 1;
+
+struct SyncRequest {
+	const std::function<void()> *fn = nullptr;
+	HANDLE done = nullptr;
+	std::exception_ptr error;
+};
+
+std::mutex g_sync_mutex;
+std::deque<SyncRequest *> g_sync_queue;
+HWND g_sync_wnd = nullptr;
+
+/// 待ち行列を空になるまで実行する (メインスレッドでのみ呼ばれる)
+bool DrainSyncQueue()
+{
+	bool handled = false;
+	for (;;) {
+		SyncRequest *req = nullptr;
+		{
+			std::lock_guard<std::mutex> lock(g_sync_mutex);
+			if (g_sync_queue.empty()) break;
+			req = g_sync_queue.front();
+			g_sync_queue.pop_front();
+		}
+		try {
+			(*req->fn)();
+		}
+		catch (...) {
+			// Delphi と同じく、例外は Synchronize の呼び出し元へ送り返す
+			req->error = std::current_exception();
+		}
+		::SetEvent(req->done);
+		handled = true;
+	}
+	return handled;
+}
+
+LRESULT CALLBACK SyncWndProc(HWND wnd, UINT msg, WPARAM wparam, LPARAM lparam)
+{
+	if (msg == kSyncMessage) {
+		DrainSyncQueue();
+		return 0;
+	}
+	return ::DefWindowProcW(wnd, msg, wparam, lparam);
+}
+
+/// メインスレッドから呼ばれたときだけウィンドウを作る
+/// @return bool ウィンドウが使える状態なら true
+bool EnsureSyncWindow()
+{
+	if (::GetCurrentThreadId() != kMainThreadId) return g_sync_wnd != nullptr;
+	if (g_sync_wnd != nullptr) return true;
+
+	static bool registered = false;
+	if (!registered) {
+		WNDCLASSEXW wc = {};
+		wc.cbSize = sizeof(wc);
+		wc.lpfnWndProc = &SyncWndProc;
+		wc.hInstance = ::GetModuleHandleW(nullptr);
+		wc.lpszClassName = kSyncWindowClass;
+		::RegisterClassExW(&wc);
+		registered = true;
+	}
+	g_sync_wnd = ::CreateWindowExW(0, kSyncWindowClass, nullptr, 0, 0, 0, 0, 0, HWND_MESSAGE, nullptr,
+								   ::GetModuleHandleW(nullptr), nullptr);
+	return g_sync_wnd != nullptr;
+}
+
+/// TThreadPriority → Win32 のスレッド優先度
+int ToWin32Priority(TThreadPriority priority)
+{
+	switch (priority) {
+	case tpIdle:		 return THREAD_PRIORITY_IDLE;
+	case tpLowest:		 return THREAD_PRIORITY_LOWEST;
+	case tpLower:		 return THREAD_PRIORITY_BELOW_NORMAL;
+	case tpHigher:		 return THREAD_PRIORITY_ABOVE_NORMAL;
+	case tpHighest:		 return THREAD_PRIORITY_HIGHEST;
+	case tpTimeCritical: return THREAD_PRIORITY_TIME_CRITICAL;
+	case tpNormal:
+	default:			 return THREAD_PRIORITY_NORMAL;
+	}
+}
+
+}  // namespace
+
+//---------------------------------------------------------------------------
+bool CheckSynchronize()
+{
+	if (::GetCurrentThreadId() != kMainThreadId) return false;
+	EnsureSyncWindow();
+	return DrainSyncQueue();
+}
+
+//---------------------------------------------------------------------------
+__fastcall TThread::TThread(bool createSuspended)
+{
+	// スレッドを作るのは (src の全 6クラスとも) メインスレッドなので、ここで
+	// Synchronize 用のウィンドウも用意できる
+	EnsureSyncWindow();
+
+	unsigned id = 0;
+	// CRT を使うスレッドなので CreateThread ではなく _beginthreadex を使う。
+	// Delphi と同じく必ず中断状態で作り、createSuspended が false なら即再開する
+	const uintptr_t handle =
+		::_beginthreadex(nullptr, 0, &TThread::ThreadEntry, this, CREATE_SUSPENDED, &id);
+	if (handle == 0) throw Exception(_T("スレッドを作成できませんでした"));
+
+	handle_ = reinterpret_cast<HANDLE>(handle);
+	thread_id_ = id;
+	::SetThreadPriority(handle_, ToWin32Priority(priority_));
+
+	if (!createSuspended) Start();
+}
+
+//---------------------------------------------------------------------------
+/// @note FreeOnTerminate の経路ではスレッド自身から呼ばれる。自分を待つと
+///       デッドロックするので、そのときだけ待たない
+TThread::~TThread()
+{
+	terminated_ = true;
+	if (handle_ == nullptr) return;
+
+	if (static_cast<unsigned>(::GetCurrentThreadId()) != thread_id_) {
+		if (!started_) {
+			// Start() されないまま破棄された。ThreadEntry は terminated_ を見て
+			// Execute を呼ばずに戻る。自己解放させると二重解放になるので先に落とす
+			free_on_terminate_ = false;
+			started_ = true;
+			::ResumeThread(handle_);
+		}
+		::WaitForSingleObject(handle_, INFINITE);
+	}
+	::CloseHandle(handle_);
+	handle_ = nullptr;
+}
+
+//---------------------------------------------------------------------------
+unsigned __stdcall TThread::ThreadEntry(void *param)
+{
+	TThread *self = static_cast<TThread *>(param);
+
+	// Delphi の ThreadProc と同じく、走り出す前に Terminate されていたら
+	// Execute を呼ばない
+	if (!self->terminated_) {
+		try {
+			self->Execute();
+		}
+		catch (...) {
+			// Delphi は FatalException に格納するだけで再送出しない。
+			// 実測では FatalException を読む箇所が無いので握りつぶす
+		}
+	}
+	self->finished_ = true;
+
+	if (self->free_on_terminate_) delete self;
+	return 0;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TThread::Start()
+{
+	if (handle_ == nullptr || started_) return;
+	started_ = true;
+	::ResumeThread(handle_);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TThread::Terminate()
+{
+	terminated_ = true;
+}
+
+//---------------------------------------------------------------------------
+void TThread::SetPriority(TThreadPriority value)
+{
+	priority_ = value;
+	if (handle_ != nullptr) ::SetThreadPriority(handle_, ToWin32Priority(value));
+}
+
+//---------------------------------------------------------------------------
+void TThread::SynchronizeImpl(const std::function<void()> &fn)
+{
+	// メインスレッドから呼ばれたら、そのまま実行する (Delphi と同じ)
+	if (::GetCurrentThreadId() == kMainThreadId) {
+		fn();
+		return;
+	}
+
+	if (g_sync_wnd == nullptr) {
+		// メインスレッドが一度も TThread を作らず CheckSynchronize も呼んでいない。
+		// このまま待つと黙ってハングするので、はっきり落とす (規約4 と同じ考え方)
+		throw Exception(_T("Synchronize の受け口が未初期化です (メインスレッドで TThread を生成するか CheckSynchronize を呼んでください)"));
+	}
+
+	SyncRequest req;
+	req.fn = &fn;
+	req.done = ::CreateEventW(nullptr, TRUE, FALSE, nullptr);
+	if (req.done == nullptr) throw Exception(_T("Synchronize 用のイベントを作成できませんでした"));
+
+	{
+		std::lock_guard<std::mutex> lock(g_sync_mutex);
+		g_sync_queue.push_back(&req);
+	}
+	::PostMessageW(g_sync_wnd, kSyncMessage, 0, 0);
+	::WaitForSingleObject(req.done, INFINITE);
+	::CloseHandle(req.done);
+
+	if (req.error) std::rethrow_exception(req.error);
+}
+
+//===========================================================================
+// ショートカットキー (Vcl.Menus の TextToShortCut / ShortCutToText 相当)
+//===========================================================================
+namespace {
+
+/// Delphi の TMenuKeyCap の並び順
+enum TMenuKeyCap {
+	mkcBkSp, mkcTab, mkcEsc, mkcEnter, mkcSpace, mkcPgUp, mkcPgDn, mkcEnd, mkcHome,
+	mkcLeft, mkcUp, mkcRight, mkcDown, mkcIns, mkcDel, mkcShift, mkcCtrl, mkcAlt
+};
+
+/// Delphi の MenuKeyCaps。英語リソースの綴りをそのまま使う
+/// (src/usr_key.cpp の make_KeyList / KeyStr_Shift ほかも同じ綴りなので一致する)
+const wchar_t *const kMenuKeyCaps[] = {
+	L"BkSp", L"Tab", L"Esc", L"Enter", L"Space", L"PgUp", L"PgDn", L"End", L"Home",
+	L"Left", L"Up", L"Right", L"Down", L"Ins", L"Del", L"Shift+", L"Ctrl+", L"Alt+"
+};
+
+/// Delphi の GetSpecialName 相当。キーボードレイアウト依存の名前を引く
+UnicodeString GetSpecialName(TShortCut shortCut)
+{
+	const UINT scan = ::MapVirtualKeyW(LOBYTE(shortCut), MAPVK_VK_TO_VSC) << 16;
+	if (scan == 0) return UnicodeString();
+
+	wchar_t buf[256] = {};
+	if (::GetKeyNameTextW(static_cast<LONG>(scan), buf, static_cast<int>(std::size(buf))) == 0) {
+		return UnicodeString();
+	}
+	return UnicodeString(buf);
+}
+
+/// text が front で始まっていれば、その分を削って true を返す (大小文字無視)
+bool CompareFront(UnicodeString &text, const UnicodeString &front)
+{
+	const int len = front.Length();
+	if (len == 0 || text.Length() < len) return false;
+	if (!SameText(text.SubString(1, len), front)) return false;
+	text.Delete(1, len);
+	return true;
+}
+
+}  // namespace
+
+//---------------------------------------------------------------------------
+void __fastcall ShortCutToKey(TShortCut shortCut, Word &key, TShiftState &shift)
+{
+	key = static_cast<Word>(shortCut & ~(scShift | scCtrl | scAlt));
+	shift.Clear();
+	if (shortCut & scShift) shift << ssShift;
+	if (shortCut & scCtrl)  shift << ssCtrl;
+	if (shortCut & scAlt)   shift << ssAlt;
+}
+
+//---------------------------------------------------------------------------
+UnicodeString __fastcall ShortCutToText(TShortCut shortCut)
+{
+	const Byte lo = LOBYTE(shortCut);
+	UnicodeString name;
+
+	if (lo == 0x08 || lo == 0x09) {
+		name = kMenuKeyCaps[mkcBkSp + (lo - 0x08)];
+	}
+	else if (lo == 0x0D) {
+		name = kMenuKeyCaps[mkcEnter];
+	}
+	else if (lo == 0x1B) {
+		name = kMenuKeyCaps[mkcEsc];
+	}
+	else if (lo >= 0x20 && lo <= 0x28) {
+		name = kMenuKeyCaps[mkcSpace + (lo - 0x20)];
+	}
+	else if (lo == 0x2D || lo == 0x2E) {
+		name = kMenuKeyCaps[mkcIns + (lo - 0x2D)];
+	}
+	else if (lo >= 0x30 && lo <= 0x39) {
+		name = UnicodeString(static_cast<wchar_t>(L'0' + (lo - 0x30)));
+	}
+	else if (lo >= 0x41 && lo <= 0x5A) {
+		name = UnicodeString(static_cast<wchar_t>(L'A' + (lo - 0x41)));
+	}
+	else if (lo >= 0x60 && lo <= 0x69) {
+		name = UnicodeString(static_cast<wchar_t>(L'0' + (lo - 0x60)));	//テンキー
+	}
+	else if (lo >= 0x70 && lo <= 0x87) {
+		name = UnicodeString(L"F") + IntToStr(lo - 0x6F);
+	}
+	else {
+		name = GetSpecialName(shortCut);
+	}
+	if (name.IsEmpty()) return UnicodeString();
+
+	UnicodeString result;
+	if (shortCut & scShift) result += kMenuKeyCaps[mkcShift];
+	if (shortCut & scCtrl)  result += kMenuKeyCaps[mkcCtrl];
+	if (shortCut & scAlt)   result += kMenuKeyCaps[mkcAlt];
+	return result + name;
+}
+
+//---------------------------------------------------------------------------
+TShortCut __fastcall TextToShortCut(const UnicodeString &text)
+{
+	UnicodeString rest = text;
+	TShortCut shift = scNone;
+
+	for (;;) {
+		if      (CompareFront(rest, kMenuKeyCaps[mkcShift])) shift |= scShift;
+		else if (CompareFront(rest, L"^"))					 shift |= scCtrl;
+		else if (CompareFront(rest, kMenuKeyCaps[mkcCtrl]))  shift |= scCtrl;
+		else if (CompareFront(rest, kMenuKeyCaps[mkcAlt]))	 shift |= scAlt;
+		else break;
+	}
+	if (rest.IsEmpty()) return scNone;
+
+	// Delphi は $08〜$255 (10進 597) を総当たりするが、ShortCutToText が見るのは
+	// 下位1バイトだけなので $FF を超える分は $08〜$FF の繰り返しにしかならない。
+	// 最初に一致したものを返す仕様なので、走査範囲を $FF までに縮めても結果は同じ
+	for (int i = 0x08; i <= 0xFF; i++) {
+		const UnicodeString name = ShortCutToText(static_cast<TShortCut>(i));
+		if (!name.IsEmpty() && SameText(name, rest)) return static_cast<TShortCut>(i) | shift;
+	}
+	return scNone;
 }
