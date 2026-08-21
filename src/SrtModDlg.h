@@ -1,6 +1,6 @@
 /**
  * @file SrtModDlg.h
- * @brief ƒ\[ƒgƒ_ƒCƒAƒƒO
+ * @brief ã‚½ãƒ¼ãƒˆãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 //---------------------------------------------------------------------------
 #ifndef SrtModDlgH
@@ -19,11 +19,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒ\[ƒgƒ_ƒCƒAƒƒO
+ * @brief ã‚½ãƒ¼ãƒˆãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TSortModeDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *ExOptAction;
 	TAction *OkAction;
 	TActionList *ActionList1;
@@ -72,7 +72,7 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall SubModeRadioGroupClick(TObject *Sender);
 	void __fastcall AccDtoTCheckBoxClick(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	bool Changed;
 	bool SelByKey;
 
@@ -83,7 +83,7 @@ private:	// ƒ†[ƒU[éŒ¾
 
 	void __fastcall SetAccDT();
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	bool DlgInitialized;
 	bool InhOk;
 

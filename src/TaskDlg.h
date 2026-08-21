@@ -1,6 +1,6 @@
 /**
  * @file TaskDlg.h
- * @brief ƒ^ƒXƒNƒ}ƒl[ƒWƒƒ
+ * @brief ã‚¿ã‚¹ã‚¯ãƒãƒãƒ¼ã‚¸ãƒ£
  */
 //---------------------------------------------------------------------------
 #ifndef TaskDlgH
@@ -20,11 +20,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒ^ƒXƒNƒ}ƒl[ƒWƒƒ
+ * @brief ã‚¿ã‚¹ã‚¯ãƒãƒãƒ¼ã‚¸ãƒ£
  */
 class TTaskManDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *CancelTaskAction;
 	TAction *CanTaskAllAction;
 	TAction *ExtStartAction;
@@ -74,14 +74,14 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall ExtStartActionExecute(TObject *Sender);
 	void __fastcall ExtStartActionUpdate(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	TTaskThread * __fastcall get_CurTask();
 	int RsrCellHi;
 
 	void __fastcall WmFormShowed(TMessage &msg);
 
-public:		// ƒ†[ƒU[éŒ¾
-	UsrScrollPanel *GridScrPanel;	//!< ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	UsrScrollPanel *GridScrPanel;	//!< ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 
 	__fastcall TTaskManDlg(TComponent* Owner);
 

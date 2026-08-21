@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒCƒ“ƒXƒyƒNƒ^														//
+//  ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿														//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "Global.h"
@@ -40,7 +40,7 @@ void __fastcall TInspectForm::FormShow(TObject *Sender)
 
 	TStringGrid *gp = InspectGrid;
 	InitializeListGrid(gp, ViewerFont);
-	InitializeListHeader(InspectHeader, _T("Œ^|’l"));
+	InitializeListHeader(InspectHeader, _T("å‹|å€¤"));
 	IniFile->LoadGridColWidth(gp, 2, 180,200);
 	set_HeaderFromGrid(gp, InspectHeader);
 	set_UsrScrPanel(InspectScrPanel);
@@ -49,7 +49,7 @@ void __fastcall TInspectForm::FormShow(TObject *Sender)
 
 	gp = CodePageGrid;
 	InitializeListGrid(gp, ViewerFont);
-	InitializeListHeader(CodePageHeader, _T("•¶šƒR[ƒh|•¶š—ñ"));
+	InitializeListHeader(CodePageHeader, _T("æ–‡å­—ã‚³ãƒ¼ãƒ‰|æ–‡å­—åˆ—"));
 	IniFile->LoadGridColWidth(gp, 2, 120,280);
 	set_HeaderFromGrid(gp, CodePageHeader);
 	set_UsrScrPanel(CodeScrPanel);
@@ -85,7 +85,7 @@ void __fastcall TInspectForm::FormKeyDown(TObject *Sender, WORD &Key, TShiftStat
 }
 
 //---------------------------------------------------------------------------
-//ƒwƒbƒ_‚Ì•`‰æ
+//ãƒ˜ãƒƒãƒ€ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TInspectForm::InsStatusBarDrawPanel(TStatusBar *StatusBar, TStatusPanel *Panel,
 	const TRect &Rect)
@@ -116,7 +116,7 @@ void __fastcall TInspectForm::InspectHeaderSectionResize(THeaderControl *HeaderC
 }
 
 //---------------------------------------------------------------------------
-//ƒR[ƒhƒy[ƒWEƒwƒbƒ_‚Ì•`‰æ
+//ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸ãƒ»ãƒ˜ãƒƒãƒ€ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TInspectForm::CodePageHeaderDrawSection(THeaderControl *HeaderControl,
 	THeaderSection *Section, const TRect &Rect, bool Pressed)
@@ -156,13 +156,13 @@ void __fastcall TInspectForm::OptCheckBoxClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//•\¦’l‚ÌXV
+//è¡¨ç¤ºå€¤ã®æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TInspectForm::UpdateValue()
 {
 	if (UnInitializing) return;
 
-	//ƒwƒbƒ_
+	//ãƒ˜ãƒƒãƒ€
 	UnicodeString hstr;
 	if (Address!=-1) {
 		hstr = get_AddrStr(Address);
@@ -184,14 +184,14 @@ void __fastcall TInspectForm::UpdateValue()
 	}
 	InsStatusBar->Panels->Items[0]->Text = hstr;
 
-	//’l
+	//å€¤
 	TStringGrid *gp = InspectGrid;
 	for (int i=0; i<gp->RowCount; i++) gp->Cells[1][i] = EmptyStr;
 
 	UnicodeString vstr;
 	ColorRef = clBlack;
 
-	//1ƒoƒCƒg
+	//1ãƒã‚¤ãƒˆ
 	BYTE buf[8];
 	if (Bytes.Length>=1) {
 		BYTE n = Bytes[0];
@@ -199,22 +199,22 @@ void __fastcall TInspectForm::UpdateValue()
 			vstr.sprintf(_T("%u"), (unsigned char)n);
 		else
 			vstr.sprintf(_T("%d"), (char)n);
-		//ƒrƒbƒg•\¦
+		//ãƒ“ãƒƒãƒˆè¡¨ç¤º
 		vstr += "\t(";
 		unsigned int b = 0x0080;
 		for (int i=0; i<8; i++,b>>=1) vstr.cat_sprintf(_T("%u"), (n & b)? 1 : 0);
 		vstr += ")";
-		//ASCII•\¦
+		//ASCIIè¡¨ç¤º
 		if (isprint((char)n)) vstr.cat_sprintf(_T(" '%c'"), (char)n);
 		gp->Cells[1][0] = vstr;
 	}
-	//2ƒoƒCƒg
+	//2ãƒã‚¤ãƒˆ
 	if (Bytes.Length>=2) {
 		for (int i=0; i<2; i++) buf[BigEndianAction->Checked? 1 - i : i] = Bytes[i];
 		gp->Cells[1][1] = UnsignedAction->Checked ? FormatFloat(",0", *(unsigned short*)&buf[0])
 												  : FormatFloat(",0", *(short*)&buf[0]);
 	}
-	//4ƒoƒCƒg
+	//4ãƒã‚¤ãƒˆ
 	if (Bytes.Length>=4) {
 		for (int i=0; i<4; i++) buf[BigEndianAction->Checked? 3 - i : i] = Bytes[i];
 		gp->Cells[1][2] = UnsignedAction->Checked ? FormatFloat(",0", *(unsigned int*)&buf[0])
@@ -232,14 +232,14 @@ void __fastcall TInspectForm::UpdateValue()
 			(((buf[0]&0x7f) << 21) + ((buf[1]&0x7f) << 14) + ((buf[2]&0x7f) << 7) + (buf[3] & 0x7f));
 		gp->Cells[1][6] = FormatFloat(",0", sn);
 	}
-	//8ƒoƒCƒg
+	//8ãƒã‚¤ãƒˆ
 	if (Bytes.Length>=8) {
 		for (int i=0; i<8; i++) buf[BigEndianAction->Checked? 7-i : i] = Bytes[i];
 		if (UnsignedAction->Checked)
 			vstr.sprintf(_T("%Lu"), *(unsigned __int64*)&buf[0]);
 		else
 			vstr.sprintf(_T("%Ld"), *(__int64*)&buf[0]);
-		//int64 ‚ÉƒJƒ“ƒ}‘}“ü
+		//int64 ã«ã‚«ãƒ³ãƒæŒ¿å…¥
 		int n = vstr.Length();
 		if (StartsStr('-', vstr)) n--;
 		for (int j=4,p=2; j<20 && j<=n; j+=3,p+=4) vstr.Insert(",", vstr.Length() - p);
@@ -251,11 +251,11 @@ void __fastcall TInspectForm::UpdateValue()
 		gp->Cells[1][5] = vstr;
 	}
 
-	//•¶šƒR[ƒh‰ğÍ
+	//æ–‡å­—ã‚³ãƒ¼ãƒ‰è§£æ
 	gp = CodePageGrid;
 	for (int i=0; i<gp->RowCount; i++) gp->Cells[1][i] = EmptyStr;
 	if (Bytes.Length>=4) {
-		//ŠeíƒR[ƒhƒy[ƒW‚Å‹­§“I‚ÉƒfƒR[ƒh
+		//å„ç¨®ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸ã§å¼·åˆ¶çš„ã«ãƒ‡ã‚³ãƒ¼ãƒ‰
 		std::unique_ptr<TStringList> lst(new TStringList());
 		lst->Text = CodePageList;
 		for (int i=0; i<lst->Count; i++) {
@@ -277,7 +277,7 @@ void __fastcall TInspectForm::UpdateValue()
 }
 
 //---------------------------------------------------------------------------
-//ƒZƒ‹‚Ì•`‰æ
+//ã‚»ãƒ«ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TInspectForm::InspectGridDrawCell(TObject *Sender, System::LongInt ACol, System::LongInt ARow,
 		TRect &Rect, TGridDrawState State)
@@ -289,7 +289,7 @@ void __fastcall TInspectForm::InspectGridDrawCell(TObject *Sender, System::LongI
 	int yp = Rect.Top  + get_TopMargin2(cv);
 	UnicodeString cellstr = gp->Cells[ACol][ARow];
 
-	//’l‰ğÍ
+	//å€¤è§£æ
 	if (gp->Tag==0) {
 		cv->Brush->Color = get_ListBgCol();
 		cv->FillRect(Rect);
@@ -311,32 +311,32 @@ void __fastcall TInspectForm::InspectGridDrawCell(TObject *Sender, System::LongI
 			}
 		}
 	}
-	//•¶š‰ğÍ
+	//æ–‡å­—è§£æ
 	else {
 		cv->Brush->Color = State.Contains(gdSelected)? col_selItem : get_ListBgCol();
 		cv->FillRect(Rect);
 		TabCrTextOut(cellstr, cv, xp, yp, is_SelFgCol(State)? col_fgSelItem : get_ListFgCol());
 	}
 
-	//‹æØ‚èü
+	//åŒºåˆ‡ã‚Šç·š
 	cv->Pen->Width = SCALED_THIS(1);
 	cv->Pen->Color = SelectWorB(cv->Brush->Color, 0.3);
 	cv->MoveTo(Rect.Right, Rect.Top);  cv->LineTo(Rect.Right, Rect.Bottom);
 }
 //---------------------------------------------------------------------------
-//ƒRƒs[
+//ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TInspectForm::CopyItemClick(TObject *Sender)
 {
 	UnicodeString cpystr = InsStatusBar->Panels->Items[0]->Text + "\r\n";
 	TStringGrid *gp;
-	//’l
+	//å€¤
 	if (InspectGrid->Focused()) {
 		gp = InspectGrid;
 		for (int i=0; i<gp->RowCount; i++)
 			cpystr.cat_sprintf(_T("%s\t%s\r\n"), gp->Cells[0][i].c_str(), gp->Cells[1][i].c_str());
 	}
-	//•¶š
+	//æ–‡å­—
 	else if (CodePageGrid->Focused()) {
 		gp = CodePageGrid;
 		cpystr.cat_sprintf(_T("%s\t%s"), gp->Cells[0][gp->Row].c_str(), gp->Cells[1][gp->Row].c_str());

@@ -1,6 +1,6 @@
 /**
  * @file CreDirsDlg.h
- * @brief ƒfƒBƒŒƒNƒgƒŠˆêŠ‡ì¬ƒ_ƒCƒAƒƒO
+ * @brief ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä¸€æ‹¬ä½œæˆãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 //---------------------------------------------------------------------------
 #ifndef CreDirsDlgH
@@ -21,11 +21,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒfƒBƒŒƒNƒgƒŠˆêŠ‡ì¬ƒ_ƒCƒAƒƒO
+ * @brief ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä¸€æ‹¬ä½œæˆãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TCreateDirsDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *AddDateAction;
 	TAction *AddSerAction;
 	TAction *AddStrAction;
@@ -94,11 +94,11 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall CreateActionExecute(TObject *Sender);
 	void __fastcall CreateActionUpdate(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	UnicodeString UndoBuf;
 	UnicodeString RefDir;
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	__fastcall TCreateDirsDlg(TComponent* Owner);
 };
 //---------------------------------------------------------------------------

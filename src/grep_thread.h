@@ -1,6 +1,6 @@
 /**
  * @file grep_thread.h
- * @brief GREPˆ—ƒXƒŒƒbƒh
+ * @brief GREPå‡¦ç†ã‚¹ãƒ¬ãƒƒãƒ‰
  */
 //---------------------------------------------------------------------------
 #ifndef TGrepThreadH
@@ -10,44 +10,44 @@
 #include <System.Classes.hpp>
 
 //---------------------------------------------------------------------------
-#define MAX_GREP_THREAD		4		//!< Å‘åƒXƒŒƒbƒh”
-#define REFRESH_INTERVAL	250		//!< ƒƒCƒ“ƒtƒH[ƒ€‚ÌXVŠÔŠu
+#define MAX_GREP_THREAD		4		//!< æœ€å¤§ã‚¹ãƒ¬ãƒƒãƒ‰æ•°
+#define REFRESH_INTERVAL	250		//!< ãƒ¡ã‚¤ãƒ³ãƒ•ã‚©ãƒ¼ãƒ ã®æ›´æ–°é–“éš”
 
 //---------------------------------------------------------------------------
 enum GrepOpt {goRegEx, goAnd, goCaseSens, goWord, goOneMatch, goExcludeTag};
 
-/*** @brief ŒŸõƒIƒvƒVƒ‡ƒ“ */
+/*** @brief æ¤œç´¢ã‚ªãƒ—ã‚·ãƒ§ãƒ³ */
 typedef Set <GrepOpt, goRegEx, goExcludeTag> GrepOption;
 
 //---------------------------------------------------------------------------
 /**
- * @brief GREPˆ—ƒXƒŒƒbƒh
+ * @brief GREPå‡¦ç†ã‚¹ãƒ¬ãƒƒãƒ‰
  */
 class TGrepThread : public TThread
 {
 private:
 	void __fastcall Execute();
 
-	int ID;						//!< ƒXƒŒƒbƒh¯•ÊID
-	int IndexTag;				//!< ƒCƒ“ƒfƒbƒNƒXƒ^ƒO
-	UnicodeString FileName;		//!< ‘ÎÛƒtƒ@ƒCƒ‹–¼
-	UnicodeString Keyword;		//!< ŒŸõ•¶š—ñ
-	UnicodeString Filter;		//!< ƒtƒBƒ‹ƒ^
-	GrepOption    Options;		//!< ŒŸõƒIƒvƒVƒ‡ƒ“
+	int ID;						//!< ã‚¹ãƒ¬ãƒƒãƒ‰è­˜åˆ¥ID
+	int IndexTag;				//!< ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚¿ã‚°
+	UnicodeString FileName;		//!< å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«å
+	UnicodeString Keyword;		//!< æ¤œç´¢æ–‡å­—åˆ—
+	UnicodeString Filter;		//!< ãƒ•ã‚£ãƒ«ã‚¿
+	GrepOption    Options;		//!< æ¤œç´¢ã‚ªãƒ—ã‚·ãƒ§ãƒ³
 
 	TStringList *ResultList;
 	void __fastcall AddResult();
 
 public:
 	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	 * @param CreateSuspended 
-	 * @param id ƒXƒŒƒbƒh¯•ÊID
-	 * @param idx_tag ƒCƒ“ƒfƒbƒNƒXƒ^ƒO
-	 * @param fnam ‘ÎÛƒtƒ@ƒCƒ‹–¼
-	 * @param kwd ŒŸõ•¶š—ñ
-	 * @param opt ŒŸõƒIƒvƒVƒ‡ƒ“
-	 * @param filter ƒtƒBƒ‹ƒ^
+	 * @param id ã‚¹ãƒ¬ãƒƒãƒ‰è­˜åˆ¥ID
+	 * @param idx_tag ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚¿ã‚°
+	 * @param fnam å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«å
+	 * @param kwd æ¤œç´¢æ–‡å­—åˆ—
+	 * @param opt æ¤œç´¢ã‚ªãƒ—ã‚·ãƒ§ãƒ³
+	 * @param filter ãƒ•ã‚£ãƒ«ã‚¿
 	 */
 	__fastcall TGrepThread(bool CreateSuspended, int id,
 					int idx_tag, UnicodeString fnam, UnicodeString kwd,

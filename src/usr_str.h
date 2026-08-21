@@ -1,6 +1,6 @@
 /**
  * @file usr_str.h
- * @brief •¶š—ñ‘€ì—p‚Ì”Ä—pŠÖ”
+ * @brief æ–‡å­—åˆ—æ“ä½œç”¨ã®æ±ç”¨é–¢æ•°
  */
 //---------------------------------------------------------------------------
 #ifndef UsrStrH
@@ -10,35 +10,35 @@
 #include <System.JSON.hpp>
 
 //---------------------------------------------------------------------------
-extern bool DebugOut;	//!< ƒfƒoƒbƒO•¶š—ñ‘—o(‰B‚µİ’è)
+extern bool DebugOut;	//!< ãƒ‡ãƒãƒƒã‚°æ–‡å­—åˆ—é€å‡º(éš ã—è¨­å®š)
 
 /**
- * @brief ƒfƒoƒbƒO•¶š—ñ‘—o
- * @details DebugOut=true ‚Ìê‡AƒfƒoƒbƒO•¶š—ñ‚ğ‘—o‚µ‚Ü‚·(OutputDebugString)B
- * @param s •¶š—ñ
+ * @brief ãƒ‡ãƒãƒƒã‚°æ–‡å­—åˆ—é€å‡º
+ * @details DebugOut=true ã®å ´åˆã€ãƒ‡ãƒãƒƒã‚°æ–‡å­—åˆ—ã‚’é€å‡ºã—ã¾ã™(OutputDebugString)ã€‚
+ * @param s æ–‡å­—åˆ—
  */
 void OutDebugStr(UnicodeString s);
 
 //---------------------------------------------------------------------------
-extern const _TCHAR *null_TCHAR;	//!< ‹ó•¶š—ñ‚Ö‚Ìƒ|ƒCƒ“ƒ^
+extern const _TCHAR *null_TCHAR;	//!< ç©ºæ–‡å­—åˆ—ã¸ã®ãƒã‚¤ãƒ³ã‚¿
 
 //---------------------------------------------------------------------------
-int __fastcall comp_NaturalOrder(TStringList *List, int Index1, int Index2);	//!< ©‘R‡
-int __fastcall comp_AscendOrder(TStringList *List, int Index1, int Index2);		//!< ¸‡
-int __fastcall comp_DescendOrder(TStringList *List, int Index1, int Index2);	//!< ~‡
-int __fastcall comp_ObjectsOrder(TStringList *List, int Index1, int Index2);	//!< Objects ¸‡
+int __fastcall comp_NaturalOrder(TStringList *List, int Index1, int Index2);	//!< è‡ªç„¶é †
+int __fastcall comp_AscendOrder(TStringList *List, int Index1, int Index2);		//!< æ˜‡é †
+int __fastcall comp_DescendOrder(TStringList *List, int Index1, int Index2);	//!< é™é †
+int __fastcall comp_ObjectsOrder(TStringList *List, int Index1, int Index2);	//!< Objects æ˜‡é †
 
 //---------------------------------------------------------------------------
-#define TXLIMIT_MARK "\x03\x03\x03"	//!< s”§ŒÀƒ}[ƒN
+#define TXLIMIT_MARK "\x03\x03\x03"	//!< è¡Œæ•°åˆ¶é™ãƒãƒ¼ã‚¯
 
-extern int  USR_CsvCol;				//!< ƒ\[ƒg‘ÎÛ—ñ
-extern int  USR_CsvSortMode;		//!< ƒ\[ƒgƒ‚[ƒh(1:¸‡/ -1~‡)
-extern bool USR_CsvTopIsHdr;		//!< æ“ªs‚Í€–Ú–¼
+extern int  USR_CsvCol;				//!< ã‚½ãƒ¼ãƒˆå¯¾è±¡åˆ—
+extern int  USR_CsvSortMode;		//!< ã‚½ãƒ¼ãƒˆãƒ¢ãƒ¼ãƒ‰(1:æ˜‡é †/ -1é™é †)
+extern bool USR_CsvTopIsHdr;		//!< å…ˆé ­è¡Œã¯é …ç›®å
 
 /**
- * @brief •¶š—ñ‚ğ”’l‚Æ‚µ‚Ä”äŠr
- * @param s1 ”äŠr‘ÎÛ•¶š—ñ1
- * @param s2 ”äŠr‘ÎÛ•¶š—ñ2
+ * @brief æ–‡å­—åˆ—ã‚’æ•°å€¤ã¨ã—ã¦æ¯”è¼ƒ
+ * @param s1 æ¯”è¼ƒå¯¾è±¡æ–‡å­—åˆ—1
+ * @param s2 æ¯”è¼ƒå¯¾è±¡æ–‡å­—åˆ—2
  * @retval >0 s1>s2
  * @retval <0 s1<s2
  * @retval 0 s1==s2
@@ -46,10 +46,10 @@ extern bool USR_CsvTopIsHdr;		//!< æ“ªs‚Í€–Ú–¼
 int comp_NumStr(UnicodeString s1, UnicodeString s2);
 
 /**
- * @brief TStringList.CustomSort —p‚Ì”äŠrŠÖ”: CSV©‘R¸‡
- * @details ‘ÎÛ‚ğCSVƒŠƒXƒg‚Æ‚İ‚È‚µA©‘R¸‡‚Å”äŠr‚µ‚Ü‚·B@n
- * ”’l‚Æ‚µ‚Ä”äŠr‚Å‚«‚È‚¯‚ê‚Î•¶š—ñ‡A“¯‚¶‚È‚ç‚Îs”Ô†‡((int)Objects)‚É‚È‚è‚Ü‚·B@n
- * ”äŠr‚ÍAUSR_CsvColAUSR_CsvSortModeAUSR_CsvTopIsHdr ‚ÉŠî‚Ã‚¢‚Äs‚í‚ê‚Ü‚·B
+ * @brief TStringList.CustomSort ç”¨ã®æ¯”è¼ƒé–¢æ•°: CSVè‡ªç„¶æ˜‡é †
+ * @details å¯¾è±¡ã‚’CSVãƒªã‚¹ãƒˆã¨ã¿ãªã—ã€è‡ªç„¶æ˜‡é †ã§æ¯”è¼ƒã—ã¾ã™ã€‚@n
+ * æ•°å€¤ã¨ã—ã¦æ¯”è¼ƒã§ããªã‘ã‚Œã°æ–‡å­—åˆ—é †ã€åŒã˜ãªã‚‰ã°è¡Œç•ªå·é †((int)Objects)ã«ãªã‚Šã¾ã™ã€‚@n
+ * æ¯”è¼ƒã¯ã€USR_CsvColã€USR_CsvSortModeã€USR_CsvTopIsHdr ã«åŸºã¥ã„ã¦è¡Œã‚ã‚Œã¾ã™ã€‚
  * @sa USR_CsvCol
  * @sa USR_CsvSortMode
  * @sa USR_CsvTopIsHdr
@@ -57,394 +57,394 @@ int comp_NumStr(UnicodeString s1, UnicodeString s2);
 int __fastcall comp_CsvNaturalOrder(TStringList *List, int Index1, int Index2);
 
 /**
- * @brief TStringList.CustomSort —p‚Ì”äŠrŠÖ”: TSV©‘R¸‡
- * @details ‘ÎÛ‚ğTSVƒŠƒXƒg‚Æ‚İ‚È‚µA©‘R¸‡‚Å”äŠr‚µ‚Ü‚·B@n
- * ”’l‚Æ‚µ‚Ä”äŠr‚Å‚«‚È‚¯‚ê‚Î•¶š—ñ‡A“¯‚¶‚È‚ç‚Îs”Ô†‡((int)Objects)‚É‚È‚è‚Ü‚·B@n
- * ”äŠr‚ÍAUSR_CsvColAUSR_CsvSortModeAUSR_CsvTopIsHdr ‚ÉŠî‚Ã‚¢‚Äs‚í‚ê‚Ü‚·B
+ * @brief TStringList.CustomSort ç”¨ã®æ¯”è¼ƒé–¢æ•°: TSVè‡ªç„¶æ˜‡é †
+ * @details å¯¾è±¡ã‚’TSVãƒªã‚¹ãƒˆã¨ã¿ãªã—ã€è‡ªç„¶æ˜‡é †ã§æ¯”è¼ƒã—ã¾ã™ã€‚@n
+ * æ•°å€¤ã¨ã—ã¦æ¯”è¼ƒã§ããªã‘ã‚Œã°æ–‡å­—åˆ—é †ã€åŒã˜ãªã‚‰ã°è¡Œç•ªå·é †((int)Objects)ã«ãªã‚Šã¾ã™ã€‚@n
+ * æ¯”è¼ƒã¯ã€USR_CsvColã€USR_CsvSortModeã€USR_CsvTopIsHdr ã«åŸºã¥ã„ã¦è¡Œã‚ã‚Œã¾ã™ã€‚
  * @sa USR_CsvCol
  * @sa USR_CsvSortMode
  * @sa USR_CsvTopIsHdr
  */
 int __fastcall comp_TsvNaturalOrder(TStringList *List, int Index1, int Index2);
 
-/** @brief TStringList.CustomSort —p‚Ì”äŠrŠÖ”: TSV•¶š—ñ‡ */
+/** @brief TStringList.CustomSort ç”¨ã®æ¯”è¼ƒé–¢æ•°: TSVæ–‡å­—åˆ—é † */
 int __fastcall comp_TsvTextOrder(TStringList *List, int Index1, int Index2);
 
 //---------------------------------------------------------------------------
 /**
- * @brief w’èƒZƒpƒŒ[ƒ^‚Ì‘O‚Ì•¶š—ñ‚ğæ“¾
- * @details * w’è‚µ‚½ƒZƒpƒŒ[ƒ^•¶š—ñ‚Ì‘O‚É‚ ‚é•¶š—ñ‚ğæ“¾‚µ‚Ü‚·B@n
- * ƒZƒpƒŒ[ƒ^‚ªŒ©‚Â‚©‚ç‚È‚¢ê‡‚ÍA•¶š—ñ‚ğ‚»‚Ì‚Ü‚Ü•Ô‚µ‚Ü‚·B
- * @param s ‘ÎÛ•¶š—ñ
- * @param sp ƒZƒpƒŒ[ƒ^•¶š—ñ
+ * @brief æŒ‡å®šã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿ã®å‰ã®æ–‡å­—åˆ—ã‚’å–å¾—
+ * @details * æŒ‡å®šã—ãŸã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿æ–‡å­—åˆ—ã®å‰ã«ã‚ã‚‹æ–‡å­—åˆ—ã‚’å–å¾—ã—ã¾ã™ã€‚@n
+ * ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿ãŒè¦‹ã¤ã‹ã‚‰ãªã„å ´åˆã¯ã€æ–‡å­—åˆ—ã‚’ãã®ã¾ã¾è¿”ã—ã¾ã™ã€‚
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param sp ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿æ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString get_tkn(UnicodeString s, UnicodeString sp);
 
 /**
- * @brief w’èƒZƒpƒŒ[ƒ^‚ÌŒã‚Ì•¶š—ñ‚ğæ“¾
- * @details w’è‚µ‚½ƒZƒpƒŒ[ƒ^•¶š—ñ‚ÌŒã‚É‚ ‚é•¶š—ñ‚ğæ“¾‚µ‚Ü‚·B@n
- * ƒZƒpƒŒ[ƒ^‚ªŒ©‚Â‚©‚ç‚È‚¢ê‡‚ÍAEmptyStr ‚ğ•Ô‚µ‚Ü‚·B
- * @param s ‘ÎÛ•¶š—ñ
- * @param sp ƒZƒpƒŒ[ƒ^•¶š—ñ
+ * @brief æŒ‡å®šã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿ã®å¾Œã®æ–‡å­—åˆ—ã‚’å–å¾—
+ * @details æŒ‡å®šã—ãŸã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿æ–‡å­—åˆ—ã®å¾Œã«ã‚ã‚‹æ–‡å­—åˆ—ã‚’å–å¾—ã—ã¾ã™ã€‚@n
+ * ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿ãŒè¦‹ã¤ã‹ã‚‰ãªã„å ´åˆã¯ã€EmptyStr ã‚’è¿”ã—ã¾ã™ã€‚
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param sp ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿æ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString get_tkn_r(UnicodeString s, UnicodeString sp);
 
 /**
- * @brief w’èƒZƒpƒŒ[ƒ^ŠÔ‚Ì•¶š—ñ‚ğæ“¾
- * @details w’è‚µ‚½2‚Â‚ÌƒZƒpƒŒ[ƒ^•¶š—ñ‚ÌŠÔ‚É‚ ‚é•¶š—ñ‚ğæ“¾‚µ‚Ü‚·B@n
- * ƒZƒpƒŒ[ƒ^2‚ªŒ©‚Â‚©‚ç‚È‚¢ê‡‚ÍAƒZƒpƒŒ[ƒ^1ˆÈ~‚Ì•¶š—ñ‚ğ•Ô‚µ‚Ü‚·B
- * @param s ‘ÎÛ•¶š—ñ
- * @param sp1 ƒZƒpƒŒ[ƒ^•¶š—ñ1
- * @param sp2 ƒZƒpƒŒ[ƒ^•¶š—ñ2
+ * @brief æŒ‡å®šã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿é–“ã®æ–‡å­—åˆ—ã‚’å–å¾—
+ * @details æŒ‡å®šã—ãŸ2ã¤ã®ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿æ–‡å­—åˆ—ã®é–“ã«ã‚ã‚‹æ–‡å­—åˆ—ã‚’å–å¾—ã—ã¾ã™ã€‚@n
+ * ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿2ãŒè¦‹ã¤ã‹ã‚‰ãªã„å ´åˆã¯ã€ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿1ä»¥é™ã®æ–‡å­—åˆ—ã‚’è¿”ã—ã¾ã™ã€‚
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param sp1 ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿æ–‡å­—åˆ—1
+ * @param sp2 ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿æ–‡å­—åˆ—2
  * @return UnicodeString
  */
 UnicodeString get_tkn_m(UnicodeString s, UnicodeString sp1, UnicodeString sp2);
 
 /**
- * @brief ƒ^ƒu•¶š‚Ì‘O‚É‚ ‚é•¶š—ñ‚ğæ“¾
- * @details ƒ^ƒu•¶š‚Ì‘O‚É‚ ‚é•¶š—ñ‚ğæ“¾‚µ‚Ü‚·Bƒ^ƒu•¶š‚ª‚È‚¢ê‡‚ÍA•¶š—ñ‚ğ‚»‚Ì‚Ü‚Ü•Ô‚µ‚Ü‚·B
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief ã‚¿ãƒ–æ–‡å­—ã®å‰ã«ã‚ã‚‹æ–‡å­—åˆ—ã‚’å–å¾—
+ * @details ã‚¿ãƒ–æ–‡å­—ã®å‰ã«ã‚ã‚‹æ–‡å­—åˆ—ã‚’å–å¾—ã—ã¾ã™ã€‚ã‚¿ãƒ–æ–‡å­—ãŒãªã„å ´åˆã¯ã€æ–‡å­—åˆ—ã‚’ãã®ã¾ã¾è¿”ã—ã¾ã™ã€‚
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString get_pre_tab(UnicodeString s);
 
 /**
- * @brief ƒ^ƒu•¶š‚ÌŒã‚É‚ ‚é•¶š—ñ‚ğæ“¾
- * @details ƒ^ƒu•¶š‚ÌŒã‚É‚ ‚é•¶š—ñ‚ğæ“¾‚µ‚Ü‚·Bƒ^ƒu•¶š‚ª‚È‚¢ê‡‚ÍAEmptyStr ‚ğ•Ô‚µ‚Ü‚·B
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief ã‚¿ãƒ–æ–‡å­—ã®å¾Œã«ã‚ã‚‹æ–‡å­—åˆ—ã‚’å–å¾—
+ * @details ã‚¿ãƒ–æ–‡å­—ã®å¾Œã«ã‚ã‚‹æ–‡å­—åˆ—ã‚’å–å¾—ã—ã¾ã™ã€‚ã‚¿ãƒ–æ–‡å­—ãŒãªã„å ´åˆã¯ã€EmptyStr ã‚’è¿”ã—ã¾ã™ã€‚
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString get_post_tab(UnicodeString s);
 
 /**
- * @brief •¡”s•¶š—ñ‚Ì1s–Ú‚Ì“à—e‚ğæ“¾
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief è¤‡æ•°è¡Œæ–‡å­—åˆ—ã®1è¡Œç›®ã®å†…å®¹ã‚’å–å¾—
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString get_first_line(UnicodeString s);
 
 /**
- * @brief •¶š—ñ’†‚É‚ ‚éŠ‡ŒÊ“à (`) ‚Ì•¶š—ñ‚ğæ“¾
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ä¸­ã«ã‚ã‚‹æ‹¬å¼§å†… (ï½) ã®æ–‡å­—åˆ—ã‚’å–å¾—
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString get_in_paren(UnicodeString s);
 
 /**
- * @brief •¶š—ñ’†‚É‚ ‚éŠ‡ŒÊ“à (`) ‚Ì•¶š—ñ‚ğæ“¾
- * @details •¶š—ñ’†‚É‚ ‚éŠ‡ŒÊ“à (`) ‚Ì•¶š—ñ‚ğæ“¾‚µ‚Ü‚·BŒ³•¶š—ñ‚Í (`) ‚ÌŒã‘±•¶š—ñ‚É‚È‚è‚Ü‚·B
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ä¸­ã«ã‚ã‚‹æ‹¬å¼§å†… (ï½) ã®æ–‡å­—åˆ—ã‚’å–å¾—
+ * @details æ–‡å­—åˆ—ä¸­ã«ã‚ã‚‹æ‹¬å¼§å†… (ï½) ã®æ–‡å­—åˆ—ã‚’å–å¾—ã—ã¾ã™ã€‚å…ƒæ–‡å­—åˆ—ã¯ (ï½) ã®å¾Œç¶šæ–‡å­—åˆ—ã«ãªã‚Šã¾ã™ã€‚
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString split_in_paren(UnicodeString &s);
 
 /**
- * @brief ‘OŒã‚Éƒ^ƒu‚ğŠÜ‚Ü‚È‚¢•¶š—ñ‚ğæ“¾
- * @details ‘OŒã‚Éƒ^ƒu‚ğŠÜ‚Ü‚È‚¢•¶š—ñ‚ğæ“¾‚µ‚Ü‚·B‘ÎÛ‚ª•¡”s‚Ìê‡A‹ó‚Å‚È‚¢Å‰‚Ì•¶š—ñ‚ğ•Ô‚µ‚Ü‚·B
- * @param s ‘ÎÛ•¶š—ñ
- * @param trim_sw ‘OŒã‚Ì‹ó”’‚â§Œä•¶š‚ğíœ
+ * @brief å‰å¾Œã«ã‚¿ãƒ–ã‚’å«ã¾ãªã„æ–‡å­—åˆ—ã‚’å–å¾—
+ * @details å‰å¾Œã«ã‚¿ãƒ–ã‚’å«ã¾ãªã„æ–‡å­—åˆ—ã‚’å–å¾—ã—ã¾ã™ã€‚å¯¾è±¡ãŒè¤‡æ•°è¡Œã®å ´åˆã€ç©ºã§ãªã„æœ€åˆã®æ–‡å­—åˆ—ã‚’è¿”ã—ã¾ã™ã€‚
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param trim_sw å‰å¾Œã®ç©ºç™½ã‚„åˆ¶å¾¡æ–‡å­—ã‚’å‰Šé™¤
  * @return UnicodeString
  */
 UnicodeString get_norm_str(UnicodeString s, bool trim_sw = false);
 
 /**
- * @brief w’èƒZƒpƒŒ[ƒ^‘O‚Ì•¶š—ñ‚ğ•ª—£‚µ‚Äæ“¾
- * @details w’è‚µ‚½ƒZƒpƒŒ[ƒ^•¶š—ñ‚Ì‘O‚É‚ ‚é•¶š—ñ‚ğ•ª—£‚µ‚Äæ“¾‚µ‚Ü‚·B@n
- * Œ³•¶š—ñ‚ÍAƒZƒpƒŒ[ƒ^•¶š—ñ‚ÌŒã‘±•¶š—ñ‚É‚È‚è‚Ü‚·B@n
- * ƒZƒpƒŒ[ƒ^‚ªŒ©‚Â‚©‚ç‚È‚¢ê‡‚ÍA•¶š—ñ‚ğ‚»‚Ì‚Ü‚Ü•Ô‚µAŒ³•¶š—ñ‚Í‹ó‚É‚È‚è‚Ü‚·B
- * @param s ‘ÎÛ•¶š—ñ
- * @param sp ƒZƒpƒŒ[ƒ^•¶š—ñ
+ * @brief æŒ‡å®šã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿å‰ã®æ–‡å­—åˆ—ã‚’åˆ†é›¢ã—ã¦å–å¾—
+ * @details æŒ‡å®šã—ãŸã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿æ–‡å­—åˆ—ã®å‰ã«ã‚ã‚‹æ–‡å­—åˆ—ã‚’åˆ†é›¢ã—ã¦å–å¾—ã—ã¾ã™ã€‚@n
+ * å…ƒæ–‡å­—åˆ—ã¯ã€ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿æ–‡å­—åˆ—ã®å¾Œç¶šæ–‡å­—åˆ—ã«ãªã‚Šã¾ã™ã€‚@n
+ * ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿ãŒè¦‹ã¤ã‹ã‚‰ãªã„å ´åˆã¯ã€æ–‡å­—åˆ—ã‚’ãã®ã¾ã¾è¿”ã—ã€å…ƒæ–‡å­—åˆ—ã¯ç©ºã«ãªã‚Šã¾ã™ã€‚
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param sp ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿æ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString split_tkn(UnicodeString &s, UnicodeString sp);
 
 /**
- * @brief ‹ó”’‹æØ‚è‘O‚Ì•¶š—ñ‚ğ•ª—£‚µ‚Äæ“¾
- * @details ‹ó”’‹æØ‚è‚Ì‘O‚É‘O‚É‚ ‚é•¶š—ñ‚ğ•ª—£‚µ‚Äæ“¾‚µ‚Ü‚·B@n
- * æ“ª•”•ª‚É‚ ‚é‹ó”’‚ÍA‹æØ‚è‚ÆŒ©‚È‚³‚ê‚Ü‚¹‚ñB—á‚¦‚ÎAsplit_tkn_spc("  abc def") ‚Í "  abc" ‚ğ•Ô‚µ‚Ü‚·B
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief ç©ºç™½åŒºåˆ‡ã‚Šå‰ã®æ–‡å­—åˆ—ã‚’åˆ†é›¢ã—ã¦å–å¾—
+ * @details ç©ºç™½åŒºåˆ‡ã‚Šã®å‰ã«å‰ã«ã‚ã‚‹æ–‡å­—åˆ—ã‚’åˆ†é›¢ã—ã¦å–å¾—ã—ã¾ã™ã€‚@n
+ * å…ˆé ­éƒ¨åˆ†ã«ã‚ã‚‹ç©ºç™½ã¯ã€åŒºåˆ‡ã‚Šã¨è¦‹ãªã•ã‚Œã¾ã›ã‚“ã€‚ä¾‹ãˆã°ã€split_tkn_spc("  abc def") ã¯ "  abc" ã‚’è¿”ã—ã¾ã™ã€‚
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString split_tkn_spc(UnicodeString &s);
 
 /**
- * @brief ƒ^ƒu‘O‚Ì•¶š—ñ‚ğ•ª—£‚µ‚Äæ“¾
- * @details ƒ^ƒu•¶š‚Ì‘O‚É‚ ‚é•¶š—ñ‚ğ•ª—£‚µ‚Äæ“¾‚µ‚Ü‚·BŒ³•¶š—ñ‚ÍAƒ^ƒu‚ÌŒã‘±•¶š—ñ‚É‚È‚è‚Ü‚·B@n
- * ƒ^ƒu‚ª‚È‚¢ê‡‚ÍA•¶š—ñ‚ğ‚»‚Ì‚Ü‚Ü•Ô‚µAŒ³•¶š—ñ‚Í‹ó‚É‚È‚è‚Ü‚·B
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief ã‚¿ãƒ–å‰ã®æ–‡å­—åˆ—ã‚’åˆ†é›¢ã—ã¦å–å¾—
+ * @details ã‚¿ãƒ–æ–‡å­—ã®å‰ã«ã‚ã‚‹æ–‡å­—åˆ—ã‚’åˆ†é›¢ã—ã¦å–å¾—ã—ã¾ã™ã€‚å…ƒæ–‡å­—åˆ—ã¯ã€ã‚¿ãƒ–ã®å¾Œç¶šæ–‡å­—åˆ—ã«ãªã‚Šã¾ã™ã€‚@n
+ * ã‚¿ãƒ–ãŒãªã„å ´åˆã¯ã€æ–‡å­—åˆ—ã‚’ãã®ã¾ã¾è¿”ã—ã€å…ƒæ–‡å­—åˆ—ã¯ç©ºã«ãªã‚Šã¾ã™ã€‚
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString split_pre_tab(UnicodeString &s);
 
 /**
- * @brief •¶š—ñ‚©‚çà–¾•”•ª(^:`:)‚ğ•ª—£‚µ‚Äæ“¾
- * @details ‘ÎÛ•¶š—ñ‚Ìæ“ª‚É‚ ‚éà–¾•”•ª(^:`:)‚ğ•ª—£‚µ‚Äæ“¾‚µ‚Ü‚·BŒ³•¶š—ñ‚ÍAà–¾•”•ª‚ÌŒã‘±•¶š—ñ‚É‚È‚è‚Ü‚·B
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã‹ã‚‰èª¬æ˜éƒ¨åˆ†(^:ï½:)ã‚’åˆ†é›¢ã—ã¦å–å¾—
+ * @details å¯¾è±¡æ–‡å­—åˆ—ã®å…ˆé ­ã«ã‚ã‚‹èª¬æ˜éƒ¨åˆ†(^:ï½:)ã‚’åˆ†é›¢ã—ã¦å–å¾—ã—ã¾ã™ã€‚å…ƒæ–‡å­—åˆ—ã¯ã€èª¬æ˜éƒ¨åˆ†ã®å¾Œç¶šæ–‡å­—åˆ—ã«ãªã‚Šã¾ã™ã€‚
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString split_dsc(UnicodeString &s);
 
 /**
- * @brief •¶š—ñ‚©‚çæ“ª•¶š‚ğ•ª—£‚µ‚Äæ“¾
- * @details •¶š—ñ‚Ìæ“ª‚É‚ ‚é•¶š‚ğ•ª—£‚µ‚Äæ“¾‚µ‚Ü‚·BŒ³•¶š—ñ‚ÍA2•¶š–ÚˆÈ~‚Ì•¶š—ñ‚É‚È‚è‚Ü‚·B
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã‹ã‚‰å…ˆé ­æ–‡å­—ã‚’åˆ†é›¢ã—ã¦å–å¾—
+ * @details æ–‡å­—åˆ—ã®å…ˆé ­ã«ã‚ã‚‹æ–‡å­—ã‚’åˆ†é›¢ã—ã¦å–å¾—ã—ã¾ã™ã€‚å…ƒæ–‡å­—åˆ—ã¯ã€2æ–‡å­—ç›®ä»¥é™ã®æ–‡å­—åˆ—ã«ãªã‚Šã¾ã™ã€‚
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString split_top_ch(UnicodeString &s);
 
 /**
- * @brief •¶š—ñ‚©‚çæ“ª•¶š‚ğ•ª—£‚µ‚Äæ“¾
- * @details •¶š—ñ‚Ìæ“ª‚É‚ ‚é•¶š‚ğ•ª—£‚µ‚Äæ“¾‚µ‚Ü‚·BŒ³•¶š—ñ‚ÍA2•¶š–ÚˆÈ~‚Ì•¶š—ñ‚É‚È‚è‚Ü‚·B
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã‹ã‚‰å…ˆé ­æ–‡å­—ã‚’åˆ†é›¢ã—ã¦å–å¾—
+ * @details æ–‡å­—åˆ—ã®å…ˆé ­ã«ã‚ã‚‹æ–‡å­—ã‚’åˆ†é›¢ã—ã¦å–å¾—ã—ã¾ã™ã€‚å…ƒæ–‡å­—åˆ—ã¯ã€2æ–‡å­—ç›®ä»¥é™ã®æ–‡å­—åˆ—ã«ãªã‚Šã¾ã™ã€‚
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return WideChar
  */
 WideChar split_top_wch(UnicodeString &s);
 
 /**
- * @brief ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“‚ğƒpƒ‰ƒ[ƒ^‚É•ª‰ğ
- * @details ‘ÎÛ•¶š—ñ‚ğƒRƒ}ƒ“ƒhƒ‰ƒCƒ“‚Æ‚İ‚È‚µAƒpƒ‰ƒ[ƒ^‚ÌƒŠƒXƒg‚ğì¬‚µ‚Ü‚·B
- * @param s ‘ÎÛ•¶š—ñ
- * @param[out] lst ƒpƒ‰ƒ[ƒ^‚ÌƒŠƒXƒg
+ * @brief ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã‚’ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã«åˆ†è§£
+ * @details å¯¾è±¡æ–‡å­—åˆ—ã‚’ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã¨ã¿ãªã—ã€ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®ãƒªã‚¹ãƒˆã‚’ä½œæˆã—ã¾ã™ã€‚
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param[out] lst ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®ãƒªã‚¹ãƒˆ
  * @return int
  */
 int split_cmd_line(UnicodeString s, TStringList *lst);
 
 /**
- * @brief ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“‚©‚çƒtƒ@ƒCƒ‹–¼‚ğ•ª—£
- * @details ‘ÎÛ•¶š—ñ‚ğƒRƒ}ƒ“ƒhƒ‰ƒCƒ“‚Æ‚İ‚È‚µAæ“ª‚Ìƒtƒ@ƒCƒ‹–¼•”•ª‚ğ•ª—£‚µ‚Äæ“¾‚µ‚Ü‚·B@n
- * Œ³•¶š—ñ‚ÍAƒtƒ@ƒCƒ‹–¼ˆÈ~‚Ìƒpƒ‰ƒ[ƒ^•”•ª‚É‚È‚è‚Ü‚·B
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã‹ã‚‰ãƒ•ã‚¡ã‚¤ãƒ«åã‚’åˆ†é›¢
+ * @details å¯¾è±¡æ–‡å­—åˆ—ã‚’ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã¨ã¿ãªã—ã€å…ˆé ­ã®ãƒ•ã‚¡ã‚¤ãƒ«åéƒ¨åˆ†ã‚’åˆ†é›¢ã—ã¦å–å¾—ã—ã¾ã™ã€‚@n
+ * å…ƒæ–‡å­—åˆ—ã¯ã€ãƒ•ã‚¡ã‚¤ãƒ«åä»¥é™ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿éƒ¨åˆ†ã«ãªã‚Šã¾ã™ã€‚
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString split_file_param(UnicodeString &s);
 
 /**
- * @brief •¶š—ñ‚ğƒ^ƒu•¶š‚Å•ªŠ„‚µ”z—ñ‚Æ‚µ‚Äæ“¾
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã‚’ã‚¿ãƒ–æ–‡å­—ã§åˆ†å‰²ã—é…åˆ—ã¨ã—ã¦å–å¾—
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return TStringDynArray
  */
 TStringDynArray split_strings_tab(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚ğƒZƒ~ƒRƒƒ“‚Å•ªŠ„‚µ”z—ñ‚Æ‚µ‚Äæ“¾
- * @param s ‘ÎÛ•¶š—ñ
- * @param del_empty EmptyStr‚ğœŠO
+ * @brief æ–‡å­—åˆ—ã‚’ã‚»ãƒŸã‚³ãƒ­ãƒ³ã§åˆ†å‰²ã—é…åˆ—ã¨ã—ã¦å–å¾—
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param del_empty EmptyStrã‚’é™¤å¤–
  * @return TStringDynArray 
  */
 TStringDynArray split_strings_semicolon(UnicodeString s, bool del_empty = false);
 
 /**
- * @brief •¶š—ñ‚©‚çŒŸõ•¶š—ñ‚ğíœ
- * @param s ‘ÎÛ•¶š—ñ
- * @param w ŒŸõ•¶š—ñ
- * @return true ŒŸõ•¶š—ñ‚ğíœ‚µ‚½
- * @return false ŒŸõ•¶š—ñ‚ªŠÜ‚Ü‚ê‚Ä‚¢‚È‚¢
+ * @brief æ–‡å­—åˆ—ã‹ã‚‰æ¤œç´¢æ–‡å­—åˆ—ã‚’å‰Šé™¤
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param w æ¤œç´¢æ–‡å­—åˆ—
+ * @return true æ¤œç´¢æ–‡å­—åˆ—ã‚’å‰Šé™¤ã—ãŸ
+ * @return false æ¤œç´¢æ–‡å­—åˆ—ãŒå«ã¾ã‚Œã¦ã„ãªã„
  */
 bool remove_text(UnicodeString &s, UnicodeString w);
 
 /**
- * @brief •¶š—ñ‚Ìæ“ª‚ÉŒŸõ•¶š—ñ‚ª‚ ‚Á‚½‚çíœ(‘å¬•¶š‚ğ–³‹)
- * @param s ‘ÎÛ•¶š—ñ
- * @param w ŒŸõ•¶š—ñ
- * @return true æ“ª‚ÌŒŸõ•¶š—ñ‚ğíœ‚µ‚½
- * @return false æ“ª‚ÉŒŸõ•¶š—ñ‚ª‚È‚¢
+ * @brief æ–‡å­—åˆ—ã®å…ˆé ­ã«æ¤œç´¢æ–‡å­—åˆ—ãŒã‚ã£ãŸã‚‰å‰Šé™¤(å¤§å°æ–‡å­—ã‚’ç„¡è¦–)
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param w æ¤œç´¢æ–‡å­—åˆ—
+ * @return true å…ˆé ­ã®æ¤œç´¢æ–‡å­—åˆ—ã‚’å‰Šé™¤ã—ãŸ
+ * @return false å…ˆé ­ã«æ¤œç´¢æ–‡å­—åˆ—ãŒãªã„
  */
 bool remove_top_text(UnicodeString &s, UnicodeString w);
 
 /**
- * @brief •¶š—ñ‚Ìæ“ª‚ÉŒŸõ•¶š—ñ‚ª‚ ‚Á‚½‚çíœ(‘å¬•¶š‚ğ‹æ•Ê)
- * @param s ‘ÎÛ•¶š—ñ
- * @param w ŒŸõ•¶š—ñ
- * @return true æ“ª‚ÌŒŸõ•¶š—ñ‚ğíœ‚µ‚½
- * @return false æ“ª‚ÉŒŸõ•¶š—ñ‚ª‚È‚¢
+ * @brief æ–‡å­—åˆ—ã®å…ˆé ­ã«æ¤œç´¢æ–‡å­—åˆ—ãŒã‚ã£ãŸã‚‰å‰Šé™¤(å¤§å°æ–‡å­—ã‚’åŒºåˆ¥)
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param w æ¤œç´¢æ–‡å­—åˆ—
+ * @return true å…ˆé ­ã®æ¤œç´¢æ–‡å­—åˆ—ã‚’å‰Šé™¤ã—ãŸ
+ * @return false å…ˆé ­ã«æ¤œç´¢æ–‡å­—åˆ—ãŒãªã„
  */
 bool remove_top_s(UnicodeString &s, UnicodeString w);
 
 /**
- * @brief •¶š—ñ‚Ìæ“ª‚É @ ‚ª‚ ‚Á‚½‚çíœ
- * @param s ‘ÎÛ•¶š—ñ
- * @return true æ“ª‚Ì @ ‚ğíœ‚µ‚½
- * @return false æ“ª‚É @ ‚ª‚È‚¢
+ * @brief æ–‡å­—åˆ—ã®å…ˆé ­ã« @ ãŒã‚ã£ãŸã‚‰å‰Šé™¤
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @return true å…ˆé ­ã® @ ã‚’å‰Šé™¤ã—ãŸ
+ * @return false å…ˆé ­ã« @ ãŒãªã„
  */
 bool remove_top_AT(UnicodeString &s);
 
 /**
- * @brief •¶š—ñ‚Ìæ“ª‚É $ ‚ª‚ ‚Á‚½‚çíœ
- * @param s ‘ÎÛ•¶š—ñ
- * @return true æ“ª‚Ì $ ‚ğíœ‚µ‚½
- * @return false æ“ª‚É $ ‚ª‚È‚¢
+ * @brief æ–‡å­—åˆ—ã®å…ˆé ­ã« $ ãŒã‚ã£ãŸã‚‰å‰Šé™¤
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @return true å…ˆé ­ã® $ ã‚’å‰Šé™¤ã—ãŸ
+ * @return false å…ˆé ­ã« $ ãŒãªã„
  */
 bool remove_top_Dollar(UnicodeString &s);
 
 /**
- * @brief •¶š—ñ‚Ì––”ö‚ÉŒŸõ•¶š—ñ‚ª‚ ‚Á‚½‚çíœ(‘å¬•¶š‚ğ–³‹)
- * @param s ‘ÎÛ•¶š—ñ
- * @param w ŒŸõ•¶š—ñ
- * @return true ––”ö‚ÌŒŸõ•¶š—ñ‚ğíœ‚µ‚½
- * @return false ––”ö‚ÉŒŸõ•¶š—ñ‚ª‚È‚¢
+ * @brief æ–‡å­—åˆ—ã®æœ«å°¾ã«æ¤œç´¢æ–‡å­—åˆ—ãŒã‚ã£ãŸã‚‰å‰Šé™¤(å¤§å°æ–‡å­—ã‚’ç„¡è¦–)
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param w æ¤œç´¢æ–‡å­—åˆ—
+ * @return true æœ«å°¾ã®æ¤œç´¢æ–‡å­—åˆ—ã‚’å‰Šé™¤ã—ãŸ
+ * @return false æœ«å°¾ã«æ¤œç´¢æ–‡å­—åˆ—ãŒãªã„
  */
 bool remove_end_text(UnicodeString &s, UnicodeString w);
 
 /**
- * @brief •¶š—ñ‚Ì––”ö‚ÉŒŸõ•¶š—ñ‚ª‚ ‚Á‚½‚çíœ(‘å¬•¶š‚ğ‹æ•Ê)
- * @param s ‘ÎÛ•¶š—ñ
- * @param w ŒŸõ•¶š—ñ
- * @return true ––”ö‚ÌŒŸõ•¶š—ñ‚ğíœ‚µ‚½
- * @return false ––”ö‚ÉŒŸõ•¶š—ñ‚ª‚È‚¢
+ * @brief æ–‡å­—åˆ—ã®æœ«å°¾ã«æ¤œç´¢æ–‡å­—åˆ—ãŒã‚ã£ãŸã‚‰å‰Šé™¤(å¤§å°æ–‡å­—ã‚’åŒºåˆ¥)
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param w æ¤œç´¢æ–‡å­—åˆ—
+ * @return true æœ«å°¾ã®æ¤œç´¢æ–‡å­—åˆ—ã‚’å‰Šé™¤ã—ãŸ
+ * @return false æœ«å°¾ã«æ¤œç´¢æ–‡å­—åˆ—ãŒãªã„
  */
 bool remove_end_s(UnicodeString &s, UnicodeString w);
 
 /**
- * @brief •¶š—ñ‚Ì––”ö‚ğ1•¶šíœ
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã®æœ«å°¾ã‚’1æ–‡å­—å‰Šé™¤
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  */
 void delete_end(UnicodeString &s);
 
 /**
- * @brief æ“ª‚Ì1•¶š‚ğœŠO‚µ‚½•¶š—ñ‚ğæ“¾
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief å…ˆé ­ã®1æ–‡å­—ã‚’é™¤å¤–ã—ãŸæ–‡å­—åˆ—ã‚’å–å¾—
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString exclude_top(UnicodeString s);
 
 /**
- * @brief æ“ª‚Æ––”ö‚Ì•¶š‚ğœŠO‚µ‚½•¶š—ñ‚ğæ“¾
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief å…ˆé ­ã¨æœ«å°¾ã®æ–‡å­—ã‚’é™¤å¤–ã—ãŸæ–‡å­—åˆ—ã‚’å–å¾—
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString exclude_top_end(UnicodeString s);
 
 /**
- * @brief ‘SŠp‹ó”’‚àl—¶‚µ‚½ƒgƒŠƒ~ƒ“ƒO
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief å…¨è§’ç©ºç™½ã‚‚è€ƒæ…®ã—ãŸãƒˆãƒªãƒŸãƒ³ã‚°
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString trim_ex(UnicodeString s);
 
 /**
- * @brief ^ ‚É‚æ‚éæ“ª‚Ì˜A‘±íœ‚ğ‰ñ”ğ‚µ‚½’uŠ·
- * @param s ‘ÎÛ•¶š—ñ
- * @param ptn ƒpƒ^[ƒ“
- * @param rep ’uŠ·•¶š—ñ
- * @param opt ƒIƒvƒVƒ‡ƒ“
+ * @brief ^ ã«ã‚ˆã‚‹å…ˆé ­ã®é€£ç¶šå‰Šé™¤ã‚’å›é¿ã—ãŸç½®æ›
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param ptn ãƒ‘ã‚¿ãƒ¼ãƒ³
+ * @param rep ç½®æ›æ–‡å­—åˆ—
+ * @param opt ã‚ªãƒ—ã‚·ãƒ§ãƒ³
  * @return UnicodeString 
  */
 UnicodeString replace_regex_2(UnicodeString s, UnicodeString ptn, UnicodeString rep, TRegExOptions opt);
 
 /**
- * @brief //ƒŠƒXƒg(ŒŸõ•¶š—ñ [TAB] ’uŠ·•¶š—ñ)‚É‚µ‚½‚ª‚Á‚Ä•¶š—ñ‚ğ’uŠ·
- * @param s ‘ÎÛ•¶š—ñ
- * @param lst ƒŠƒXƒg
+ * @brief //ãƒªã‚¹ãƒˆ(æ¤œç´¢æ–‡å­—åˆ— [TAB] ç½®æ›æ–‡å­—åˆ—)ã«ã—ãŸãŒã£ã¦æ–‡å­—åˆ—ã‚’ç½®æ›
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param lst ãƒªã‚¹ãƒˆ
  * @return UnicodeString 
  */
 UnicodeString replace_str_by_list(UnicodeString s, TStringList *lst);
 
 /**
- * @brief ; ‹æØ‚è‚Å•¶š—ñ‚ğ’Ç‰Á
+ * @brief ; åŒºåˆ‡ã‚Šã§æ–‡å­—åˆ—ã‚’è¿½åŠ 
  *
- * ‘ÎÛ•¶š—ñ‚ª‹ó‚Å‚È‚¢AƒZƒ~ƒRƒƒ“‚Å‹æØ‚Á‚Ä•¶š—ñ‚ğ’Ç‰Á‚µ‚Ü‚·B
+ * å¯¾è±¡æ–‡å­—åˆ—ãŒç©ºã§ãªã„ã€ã‚»ãƒŸã‚³ãƒ­ãƒ³ã§åŒºåˆ‡ã£ã¦æ–‡å­—åˆ—ã‚’è¿½åŠ ã—ã¾ã™ã€‚
  *
- * @param s ‘ÎÛ•¶š—ñ
- * @param t ’Ç‰Á•¶š—ñ
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param t è¿½åŠ æ–‡å­—åˆ—
  */
 void cat_str_semicolon(UnicodeString &s, UnicodeString t);
 
 /**
- * @brief •¶š—ñ‚ªw’è’·‚É‚È‚é‚Ü‚Åæ“ª‚É‹ó”’‚ğ‘}“ü
- * @param s ‘ÎÛ•¶š—ñ
- * @param len •¶š—ñ‚Ì’·‚³
+ * @brief æ–‡å­—åˆ—ãŒæŒ‡å®šé•·ã«ãªã‚‹ã¾ã§å…ˆé ­ã«ç©ºç™½ã‚’æŒ¿å…¥
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param len æ–‡å­—åˆ—ã®é•·ã•
  * @return UnicodeString
  */
 UnicodeString ins_spc_length(UnicodeString s, int len);
 
 /**
- * @brief •¶š—ñ‚ª‹ó‚È‚çƒfƒtƒHƒ‹ƒg•¶š—ñ‚ğæ“¾
- * @param s ‘ÎÛ•¶š—ñ
- * @param def ƒfƒtƒHƒ‹ƒg•¶š—ñ
+ * @brief æ–‡å­—åˆ—ãŒç©ºãªã‚‰ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆæ–‡å­—åˆ—ã‚’å–å¾—
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param def ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆæ–‡å­—åˆ—
  * @return UnicodeString 
  */
 UnicodeString def_if_empty(UnicodeString s, UnicodeString def);
 
 /**
- * @brief •¶š—ñ‚ª‹ó‚Å‚È‚¢‚È‚ç‹æØ‚è•¶š—ñ‚ğ’Ç‰Á
- * @param s ‘ÎÛ•¶š—ñ
- * @param sep ‹æØ‚è•¶š—ñ
+ * @brief æ–‡å­—åˆ—ãŒç©ºã§ãªã„ãªã‚‰åŒºåˆ‡ã‚Šæ–‡å­—åˆ—ã‚’è¿½åŠ 
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param sep åŒºåˆ‡ã‚Šæ–‡å­—åˆ—
  */
 void cat_separator(UnicodeString &s, UnicodeString sep);
 
 /**
- * @brief •¶š—ñ‚ª‹ó‚Å‚È‚¢‚È‚ç‹æØ‚è•¶š—ñ‚ğ‘}“ü‚µ‚ÄAw’è•¶š—ñ‚ğ’Ç‰Á
- * @param s ‘ÎÛ•¶š—ñ
- * @param sep ‹æØ‚è•¶š—ñ
- * @param s2 ’Ç‰Á•¶š—ñ
+ * @brief æ–‡å­—åˆ—ãŒç©ºã§ãªã„ãªã‚‰åŒºåˆ‡ã‚Šæ–‡å­—åˆ—ã‚’æŒ¿å…¥ã—ã¦ã€æŒ‡å®šæ–‡å­—åˆ—ã‚’è¿½åŠ 
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param sep åŒºåˆ‡ã‚Šæ–‡å­—åˆ—
+ * @param s2 è¿½åŠ æ–‡å­—åˆ—
  */
 void ins_sep_cat(UnicodeString &s, UnicodeString sep, UnicodeString s2);
 
 /**
- * @brief •¶š—ñ‚ğ NativeInt ’l‚É•ÏŠ·
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã‚’ NativeInt å€¤ã«å¤‰æ›
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return NativeInt
  */
 NativeInt str_to_NativeInt(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚©‚ç®”’l‚ğ’Šo
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã‹ã‚‰æ•´æ•°å€¤ã‚’æŠ½å‡º
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return int
- * @exception ¸”s‚µ‚½ê‡‚Í—áŠO‚ğ‘—o
+ * @exception å¤±æ•—ã—ãŸå ´åˆã¯ä¾‹å¤–ã‚’é€å‡º
  */
 int extract_int(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚©‚ç®”’l‚ğ’Šo
- * @details •¶š—ñ‚©‚ç®”’l‚ğ’Šo‚µ‚Ü‚·B—LŒø‚È’l‚ªæ“¾‚Å‚«‚È‚¢ê‡‚ÍAƒfƒtƒHƒ‹ƒg’l‚ğ•Ô‚µ‚Ü‚·B
- * @param s ‘ÎÛ•¶š—ñ
- * @param def ƒfƒtƒHƒ‹ƒg’l
+ * @brief æ–‡å­—åˆ—ã‹ã‚‰æ•´æ•°å€¤ã‚’æŠ½å‡º
+ * @details æ–‡å­—åˆ—ã‹ã‚‰æ•´æ•°å€¤ã‚’æŠ½å‡ºã—ã¾ã™ã€‚æœ‰åŠ¹ãªå€¤ãŒå–å¾—ã§ããªã„å ´åˆã¯ã€ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã‚’è¿”ã—ã¾ã™ã€‚
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param def ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤
  * @return int
  */
 int extract_int_def(UnicodeString s, int def = 0);
 
 /**
- * @brief •¶š—ñ‚Ìæ“ª‚©‚ç”’l•”•ª‚Ì•¶š—ñ‚ğæ“¾
- * @details •¶š—ñ‚Ìæ“ª‚©‚ç”’l•”•ª‚Ì•¶š—ñ‚ğæ“¾‚µ‚Ü‚·BƒJƒ“ƒ}‚Í–³‹A+/-AƒRƒ“ƒ}‚É‘Î‰‚µ‚Ä‚¢‚Ü‚·B
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã®å…ˆé ­ã‹ã‚‰æ•°å€¤éƒ¨åˆ†ã®æ–‡å­—åˆ—ã‚’å–å¾—
+ * @details æ–‡å­—åˆ—ã®å…ˆé ­ã‹ã‚‰æ•°å€¤éƒ¨åˆ†ã®æ–‡å­—åˆ—ã‚’å–å¾—ã—ã¾ã™ã€‚ã‚«ãƒ³ãƒã¯ç„¡è¦–ã€+/-ã€ã‚³ãƒ³ãƒã«å¯¾å¿œã—ã¦ã„ã¾ã™ã€‚
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString extract_top_num_str(UnicodeString s);
 
 /**
- * @brief long double ’l‚ğ•¶š—ñ‚É•ÏŠ·
- * @param v ”’l
- * @param f_w ¬”•”‚ÌŒ…”
+ * @brief long double å€¤ã‚’æ–‡å­—åˆ—ã«å¤‰æ›
+ * @param v æ•°å€¤
+ * @param f_w å°æ•°éƒ¨ã®æ¡æ•°
  * @return UnicodeString
  */
 UnicodeString ldouble_to_str(long double v, int f_w = 3);
 
 /**
- * @brief ƒTƒCƒY‚Ì”’l‚ğ•¶š—ñ‚É•ÏŠ·(TB‚Ü‚Å)
- * @param sz ƒTƒCƒY
- * @param dg Œ…”
+ * @brief ã‚µã‚¤ã‚ºã®æ•°å€¤ã‚’æ–‡å­—åˆ—ã«å¤‰æ›(TBã¾ã§)
+ * @param sz ã‚µã‚¤ã‚º
+ * @param dg æ¡æ•°
  * @return UnicodeString
  */
 UnicodeString get_size_str_T(__int64 sz, int dg);
 
 /**
- * @brief ƒTƒCƒY‚Ì”’l‚ğ•¶š—ñ‚É•ÏŠ·(GB‚Ü‚Å)
- * @param sz ƒTƒCƒY
- * @param wd Œ…w’è
- * @param dg ¬”Œ…”
+ * @brief ã‚µã‚¤ã‚ºã®æ•°å€¤ã‚’æ–‡å­—åˆ—ã«å¤‰æ›(GBã¾ã§)
+ * @param sz ã‚µã‚¤ã‚º
+ * @param wd æ¡æŒ‡å®š
+ * @param dg å°æ•°æ¡æ•°
  * @return UnicodeString
  */
 UnicodeString get_size_str_G(__int64 sz, int wd = 10, int dg = 1);
 
 /**
- * @brief ƒTƒCƒY‚Ì”’l‚ğ•¶š—ñ‚É•ÏŠ·(GB‚Ü‚Å)
- * @param sz ƒTƒCƒY
- * @param wd Œ…w’è
- * @param dg ¬”Œ…”
- * @param fmt_mode •\¦ƒ‚[ƒh(0:GB/MB/ƒoƒCƒg  1:GB/MB/KB/ƒoƒCƒg  2:GB/MB/KB);
+ * @brief ã‚µã‚¤ã‚ºã®æ•°å€¤ã‚’æ–‡å­—åˆ—ã«å¤‰æ›(GBã¾ã§)
+ * @param sz ã‚µã‚¤ã‚º
+ * @param wd æ¡æŒ‡å®š
+ * @param dg å°æ•°æ¡æ•°
+ * @param fmt_mode è¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰(0:GB/MB/ãƒã‚¤ãƒˆ  1:GB/MB/KB/ãƒã‚¤ãƒˆ  2:GB/MB/KB);
  * @return UnicodeString
  */
 UnicodeString get_size_str_G(__int64 sz, int wd, int dg, int fmt_mode);
@@ -454,48 +454,48 @@ UnicodeString get_size_str_C(int sz);
 UnicodeString get_size_str_K(SIZE_T sz);
 
 /**
- * @brief RRGGBBŒ`®‚Ì•¶š—ñ‚ğ TColor ‚É•ÏŠ·
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief RRGGBBå½¢å¼ã®æ–‡å­—åˆ—ã‚’ TColor ã«å¤‰æ›
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return TColor
  */
 TColor xRRGGBB_to_col(UnicodeString s);
 
 /**
- * @brief TColor ’l‚ğRRGGBBŒ`®‚Ì•¶š—ñ‚É•ÏŠ·
+ * @brief TColor å€¤ã‚’RRGGBBå½¢å¼ã®æ–‡å­—åˆ—ã«å¤‰æ›
  * @param col
  * @return UnicodeString
  */
 UnicodeString col_to_xRRGGBB(TColor col);
 
 /**
- * @brief w’è•¶š—ñ‚ÌˆÊ’u‚ğæ“¾(‘å¬•¶š‚ğ–³‹)
- * @param wd ŒŸõ•¶š—ñ
- * @param s ‘ÎÛ•¶š—ñ
- * @return int •¶šƒCƒ“ƒfƒbƒNƒX(1ƒx[ƒXAŒ©‚Â‚©‚ç‚È‚¢ê‡‚Í 0)
+ * @brief æŒ‡å®šæ–‡å­—åˆ—ã®ä½ç½®ã‚’å–å¾—(å¤§å°æ–‡å­—ã‚’ç„¡è¦–)
+ * @param wd æ¤œç´¢æ–‡å­—åˆ—
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @return int æ–‡å­—ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹(1ãƒ™ãƒ¼ã‚¹ã€è¦‹ã¤ã‹ã‚‰ãªã„å ´åˆã¯ 0)
  */
 int pos_i(UnicodeString wd, UnicodeString s);
 
 /**
- * @brief w’è•¶š—ñ‚ªÅŒã‚ÉŒ»‚ê‚éˆÊ’u‚ğæ“¾(‘å¬•¶š‚ğ‹æ•Ê)
- * @param wd ŒŸõ•¶š—ñ
- * @param s ‘ÎÛ•¶š—ñ
- * @return int •¶šƒCƒ“ƒfƒbƒNƒX(1ƒx[ƒXAŒ©‚Â‚©‚ç‚È‚¢ê‡‚Í 0)
+ * @brief æŒ‡å®šæ–‡å­—åˆ—ãŒæœ€å¾Œã«ç¾ã‚Œã‚‹ä½ç½®ã‚’å–å¾—(å¤§å°æ–‡å­—ã‚’åŒºåˆ¥)
+ * @param wd æ¤œç´¢æ–‡å­—åˆ—
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @return int æ–‡å­—ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹(1ãƒ™ãƒ¼ã‚¹ã€è¦‹ã¤ã‹ã‚‰ãªã„å ´åˆã¯ 0)
  */
 int pos_r(UnicodeString wd, UnicodeString s);
 
 /**
- * @brief w’è•¶š—ñ‚ªÅŒã‚ÉŒ»‚ê‚éˆÊ’u‚ğæ“¾(‘å¬•¶š‚ğ–³‹)
- * @param wd ŒŸõ•¶š—ñ
- * @param s ‘ÎÛ•¶š—ñ
- * @return int •¶šƒCƒ“ƒfƒbƒNƒX(1ƒx[ƒXAŒ©‚Â‚©‚ç‚È‚¢ê‡‚Í 0)
+ * @brief æŒ‡å®šæ–‡å­—åˆ—ãŒæœ€å¾Œã«ç¾ã‚Œã‚‹ä½ç½®ã‚’å–å¾—(å¤§å°æ–‡å­—ã‚’ç„¡è¦–)
+ * @param wd æ¤œç´¢æ–‡å­—åˆ—
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @return int æ–‡å­—ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹(1ãƒ™ãƒ¼ã‚¹ã€è¦‹ã¤ã‹ã‚‰ãªã„å ´åˆã¯ 0)
  */
 int pos_r_i(UnicodeString wd, UnicodeString s);
 
 /**
- * @brief ˆø—p•„ŠO‚ÅAw’è•¶š—ñ‚ªÅŒã‚ÉŒ»‚ê‚éˆÊ’u‚ğæ“¾(‘å¬•¶š‚ğ‹æ•Ê)
- * @param wd ŒŸõ•¶š—ñ
- * @param s ‘ÎÛ•¶š—ñ
- * @return int •¶šƒCƒ“ƒfƒbƒNƒX(1ƒx[ƒXAŒ©‚Â‚©‚ç‚È‚¢ê‡‚Í 0)
+ * @brief å¼•ç”¨ç¬¦å¤–ã§ã€æŒ‡å®šæ–‡å­—åˆ—ãŒæœ€å¾Œã«ç¾ã‚Œã‚‹ä½ç½®ã‚’å–å¾—(å¤§å°æ–‡å­—ã‚’åŒºåˆ¥)
+ * @param wd æ¤œç´¢æ–‡å­—åˆ—
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @return int æ–‡å­—ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹(1ãƒ™ãƒ¼ã‚¹ã€è¦‹ã¤ã‹ã‚‰ãªã„å ´åˆã¯ 0)
  */
 int pos_r_q(UnicodeString wd, UnicodeString s);
 int pos_r_q_colon(UnicodeString s);
@@ -503,12 +503,12 @@ int pos_r_q_colon(UnicodeString s);
 bool contains_upper(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚ÉŒŸõ•¶š—ñ‚ªŠÜ‚Ü‚ê‚Ä‚¢‚é‚©H
- * @details ‘ÎÛ•¶š—ñ‚ÉŒŸõ•¶š—ñ‚ªŠÜ‚Ü‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğ’²‚×‚Ü‚·B@n
- * ŒŸõ•¶š—ñ‚Å‚ÍAAND(' ') / OR('|') w’è‚ª‰Â”\‚Å‚·B
- * @param s ‘ÎÛ•¶š—ñ
- * @param kwd ŒŸõ•¶š—ñ
- * @param case_sw ‘å¬•¶š‹æ•Ê
+ * @brief æ–‡å­—åˆ—ã«æ¤œç´¢æ–‡å­—åˆ—ãŒå«ã¾ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
+ * @details å¯¾è±¡æ–‡å­—åˆ—ã«æ¤œç´¢æ–‡å­—åˆ—ãŒå«ã¾ã‚Œã¦ã„ã‚‹ã‹ã©ã†ã‹ã‚’èª¿ã¹ã¾ã™ã€‚@n
+ * æ¤œç´¢æ–‡å­—åˆ—ã§ã¯ã€AND(' ') / OR('|') æŒ‡å®šãŒå¯èƒ½ã§ã™ã€‚
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param kwd æ¤œç´¢æ–‡å­—åˆ—
+ * @param case_sw å¤§å°æ–‡å­—åŒºåˆ¥
  * @return true
  * @return false
  */
@@ -516,112 +516,112 @@ bool contains_word_and_or(UnicodeString s, UnicodeString kwd, bool case_sw = fal
 bool contains_fuzzy_word(UnicodeString s, UnicodeString kwd, bool case_sw = false, UnicodeString sp = EmptyStr);
 
 /**
- * @brief ŒŸõ•¶š—ñ‚ª | ‹æØ‚èƒŠƒXƒg‚ÉŠÜ‚Ü‚ê‚Ä‚¢‚é‚©(‘å¬•¶š‚ğ–³‹)?
- * @param lst | ‹æØ‚èƒŠƒXƒg
- * @param wd ŒŸõ•¶š—ñ
+ * @brief æ¤œç´¢æ–‡å­—åˆ—ãŒ | åŒºåˆ‡ã‚Šãƒªã‚¹ãƒˆã«å«ã¾ã‚Œã¦ã„ã‚‹ã‹(å¤§å°æ–‡å­—ã‚’ç„¡è¦–)?
+ * @param lst | åŒºåˆ‡ã‚Šãƒªã‚¹ãƒˆ
+ * @param wd æ¤œç´¢æ–‡å­—åˆ—
  * @return true
  * @return false
  */
 bool contained_wd_i(UnicodeString lst, UnicodeString wd);
 
 /**
- * @brief ‘ÎÛ•¶š—ñ‚ª | ‹æØ‚èƒŠƒXƒg‚ÌŒê‚ğŠÜ‚ñ‚Å‚¢‚é‚©(‘å¬•¶š‚ğ–³‹)H
- * @param s ‘ÎÛ•¶š—ñ
- * @param lst | ‹æØ‚èƒŠƒXƒg
+ * @brief å¯¾è±¡æ–‡å­—åˆ—ãŒ | åŒºåˆ‡ã‚Šãƒªã‚¹ãƒˆã®èªã‚’å«ã‚“ã§ã„ã‚‹ã‹(å¤§å°æ–‡å­—ã‚’ç„¡è¦–)ï¼Ÿ
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param lst | åŒºåˆ‡ã‚Šãƒªã‚¹ãƒˆ
  * @return true
  * @return false
  */
 bool contains_wd_i(UnicodeString s, UnicodeString lst);
 
 /**
- * @brief | ‹æØ‚èƒŠƒXƒg‚©‚çw’èƒCƒ“ƒfƒbƒNƒX‚Ì•¶š—ñ‚ğæ“¾(‘å¬•¶š‚ğ–³‹)
- * @param lst | ‹æØ‚èƒŠƒXƒg
- * @param idx ƒCƒ“ƒfƒbƒNƒX(0ƒx[ƒX)
+ * @brief | åŒºåˆ‡ã‚Šãƒªã‚¹ãƒˆã‹ã‚‰æŒ‡å®šã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®æ–‡å­—åˆ—ã‚’å–å¾—(å¤§å°æ–‡å­—ã‚’ç„¡è¦–)
+ * @param lst | åŒºåˆ‡ã‚Šãƒªã‚¹ãƒˆ
+ * @param idx ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹(0ãƒ™ãƒ¼ã‚¹)
  * @return UnicodeString
  */
 UnicodeString get_word_i_idx(UnicodeString lst, int idx);
 
 /**
- * @brief | ‹æØ‚èƒŠƒXƒg‚©‚çŒŸõ•¶š—ñ‚ÌƒCƒ“ƒfƒbƒNƒX‚ğæ“¾(‘å¬•¶š‚ğ–³‹)
- * @param lst | ‹æØ‚èƒŠƒXƒg
- * @param wd ŒŸõ•¶š—ñ
- * @return int ƒCƒ“ƒfƒbƒNƒX(0ƒx[ƒXAŒ©‚Â‚©‚ç‚È‚¢ê‡‚Í -1)
+ * @brief | åŒºåˆ‡ã‚Šãƒªã‚¹ãƒˆã‹ã‚‰æ¤œç´¢æ–‡å­—åˆ—ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’å–å¾—(å¤§å°æ–‡å­—ã‚’ç„¡è¦–)
+ * @param lst | åŒºåˆ‡ã‚Šãƒªã‚¹ãƒˆ
+ * @param wd æ¤œç´¢æ–‡å­—åˆ—
+ * @return int ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹(0ãƒ™ãƒ¼ã‚¹ã€è¦‹ã¤ã‹ã‚‰ãªã„å ´åˆã¯ -1)
  */
 int idx_of_word_i(UnicodeString lst, UnicodeString wd);
 
 /**
- * @brief ŒŸõ•¶š—ñ‚ª | ‹æØ‚èƒŠƒXƒg‚É‚ ‚é‚©H
- * @param w ŒŸõ•¶š—ñ
- * @param list | ‹æØ‚èƒŠƒXƒg
+ * @brief æ¤œç´¢æ–‡å­—åˆ—ãŒ | åŒºåˆ‡ã‚Šãƒªã‚¹ãƒˆã«ã‚ã‚‹ã‹ï¼Ÿ
+ * @param w æ¤œç´¢æ–‡å­—åˆ—
+ * @param list | åŒºåˆ‡ã‚Šãƒªã‚¹ãƒˆ
  * @return true
  * @return false
  */
 bool test_word_i(UnicodeString w, UnicodeString list);
 
 /**
- * @brief ƒƒCƒ‹ƒhƒJ[ƒh‚ğŠÜ‚Şƒpƒ^[ƒ“‚É‚æ‚é•¶š—ñƒ}ƒbƒ`
- * @param ptn ƒpƒ^[ƒ“
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief ãƒ¯ã‚¤ãƒ«ãƒ‰ã‚«ãƒ¼ãƒ‰ã‚’å«ã‚€ãƒ‘ã‚¿ãƒ¼ãƒ³ã«ã‚ˆã‚‹æ–‡å­—åˆ—ãƒãƒƒãƒ
+ * @param ptn ãƒ‘ã‚¿ãƒ¼ãƒ³
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return true
  * @return false
  */
 bool str_match(UnicodeString ptn, UnicodeString s);
 
 /**
- * @brief ³‚µ‚¢³‹K•\Œ»ƒpƒ^[ƒ“‚©H
- * @param ptn ƒpƒ^[ƒ“
+ * @brief æ­£ã—ã„æ­£è¦è¡¨ç¾ãƒ‘ã‚¿ãƒ¼ãƒ³ã‹ï¼Ÿ
+ * @param ptn ãƒ‘ã‚¿ãƒ¼ãƒ³
  * @return true
  * @return false
  */
 bool chk_RegExPtn(UnicodeString ptn);
 
 /**
- * @brief ; ‹æØ‚è•¶š—ñ‚©‚ç³‹K•\Œ»ƒpƒ^[ƒ“(/`/)‚ğ’Šo
- * @param s ‘ÎÛ•¶š—ñ(; ‹æØ‚è)
+ * @brief ; åŒºåˆ‡ã‚Šæ–‡å­—åˆ—ã‹ã‚‰æ­£è¦è¡¨ç¾ãƒ‘ã‚¿ãƒ¼ãƒ³(/ï½/)ã‚’æŠ½å‡º
+ * @param s å¯¾è±¡æ–‡å­—åˆ—(; åŒºåˆ‡ã‚Š)
  * @return UnicodeString
  */
 UnicodeString extract_prm_RegExPtn(UnicodeString &s);
 
 /**
- * @brief •¶š—ñ‚Éw’è•¶š—ñ/ƒpƒ^[ƒ“‚ªŠÜ‚Ü‚ê‚Ä‚¢‚é‚©H
- * @param ptn •¶š—ñ/ƒpƒ^[ƒ“
- * @param s ‘ÎÛ•¶š—ñ
- * @return UnicodeString ƒ}ƒbƒ`‚µ‚½•”•ª‚Ì•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã«æŒ‡å®šæ–‡å­—åˆ—/ãƒ‘ã‚¿ãƒ¼ãƒ³ãŒå«ã¾ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
+ * @param ptn æ–‡å­—åˆ—/ãƒ‘ã‚¿ãƒ¼ãƒ³
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @return UnicodeString ãƒãƒƒãƒã—ãŸéƒ¨åˆ†ã®æ–‡å­—åˆ—
  */
 UnicodeString ptn_match_str(UnicodeString ptn, UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚ªw’èŒê/ƒpƒ^[ƒ“‚Ån‚Ü‚Á‚Ä‚¢‚é‚©H
- * @param ptn •¶š—ñ(/`/ ‚È‚ç³‹K•\Œ»ƒpƒ^[ƒ“)
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ãŒæŒ‡å®šèª/ãƒ‘ã‚¿ãƒ¼ãƒ³ã§å§‹ã¾ã£ã¦ã„ã‚‹ã‹ï¼Ÿ
+ * @param ptn æ–‡å­—åˆ—(/ï½/ ãªã‚‰æ­£è¦è¡¨ç¾ãƒ‘ã‚¿ãƒ¼ãƒ³)
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return true
  * @return false
  */
 bool starts_ptn(UnicodeString ptn, UnicodeString s);
 
 /**
- * @brief ‚ ‚¢‚Ü‚¢ŒŸõ‚Ì‚½‚ß‚Ì³‹K•\Œ»ƒpƒ^[ƒ“‚ğæ“¾
- * @param kwd ƒL[ƒ[ƒh
- * @param sep_sw \s,\\,/ ‹æØ‚è‚ğ‚Ü‚½‚ª‚È‚¢
+ * @brief ã‚ã„ã¾ã„æ¤œç´¢ã®ãŸã‚ã®æ­£è¦è¡¨ç¾ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’å–å¾—
+ * @param kwd ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰
+ * @param sep_sw \s,\\,/ åŒºåˆ‡ã‚Šã‚’ã¾ãŸãŒãªã„
  * @return UnicodeString
  */
 UnicodeString get_fuzzy_ptn(UnicodeString kwd, bool sep_sw = false);
 
 /**
- * @brief ŒŸõŒêƒŠƒXƒgì¬
- * @param wd ‘ÎÛ•¶š—ñ
+ * @brief æ¤œç´¢èªãƒªã‚¹ãƒˆä½œæˆ
+ * @param wd å¯¾è±¡æ–‡å­—åˆ—
  * @param[out] lst
  */
 void get_find_wd_list(UnicodeString wd, TStringList *lst);
 
 /**
- * @brief •¡”‚Ì•¶š—ñ‚ğ OR/AND ŒŸõ
- * @param wd ŒŸõŒê(•¡”‚Ìê‡‚Í”¼Šp‚Ü‚½‚Í‘SŠp‹ó”’‚Å‹æØ‚é)
- * @param s ‘ÎÛ•¶š—ñ
- * @param and_sw ANDŒŸõ
- * @param not_sw NOTŒŸõ
- * @param case_sw ‘å¬•¶š‚ğ‹æ•Ê
- * @param word_sw ’PŒê’PˆÊ
+ * @brief è¤‡æ•°ã®æ–‡å­—åˆ—ã‚’ OR/AND æ¤œç´¢
+ * @param wd æ¤œç´¢èª(è¤‡æ•°ã®å ´åˆã¯åŠè§’ã¾ãŸã¯å…¨è§’ç©ºç™½ã§åŒºåˆ‡ã‚‹)
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param and_sw ANDæ¤œç´¢
+ * @param not_sw NOTæ¤œç´¢
+ * @param case_sw å¤§å°æ–‡å­—ã‚’åŒºåˆ¥
+ * @param word_sw å˜èªå˜ä½
  * @return true 
  * @return false 
  */
@@ -629,97 +629,97 @@ bool find_mlt(UnicodeString wd, UnicodeString s,
 		bool and_sw = false, bool not_sw = false, bool case_sw = false, bool word_sw = false);
 
 /**
- * @brief •¡”‚Ì•¶š—ñ‚ğŒŸõ‚µAƒ}ƒbƒ`‚µ‚½Œê‚ÌƒŠƒXƒg‚ğæ“¾‚·‚é
- * @param wd ŒŸõŒê (•¡”‚Ìê‡‚Í”¼Šp‚Ü‚½‚Í‘SŠp‹ó”’‚Å‹æØ‚é)
- * @param s ‘ÎÛ•¶š—ñ
- * @param[out] lst ƒ}ƒbƒ`‚µ‚½Œê‚ÌƒŠƒXƒg
- * @param case_sw ‘å¬•¶š‚ğ‹æ•Ê
+ * @brief è¤‡æ•°ã®æ–‡å­—åˆ—ã‚’æ¤œç´¢ã—ã€ãƒãƒƒãƒã—ãŸèªã®ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
+ * @param wd æ¤œç´¢èª (è¤‡æ•°ã®å ´åˆã¯åŠè§’ã¾ãŸã¯å…¨è§’ç©ºç™½ã§åŒºåˆ‡ã‚‹)
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param[out] lst ãƒãƒƒãƒã—ãŸèªã®ãƒªã‚¹ãƒˆ
+ * @param case_sw å¤§å°æ–‡å­—ã‚’åŒºåˆ¥
  * @return true 
  * @return false 
  */
 bool find_mlt_str(UnicodeString wd, UnicodeString s, TStringList *lst, bool case_sw);
 
 /**
- * @brief •¶š—ñ‚Ìs”‚ğæ“¾
- * @param s ‘ÎÛ•¶š—ñ
- * @return int s”
+ * @brief æ–‡å­—åˆ—ã®è¡Œæ•°ã‚’å–å¾—
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @return int è¡Œæ•°
  */
 int get_line_count(UnicodeString s);
 
 /**
- * @brief TStringDynArray ‚É•¶š—ñ‚ğ’Ç‰Á
+ * @brief TStringDynArray ã«æ–‡å­—åˆ—ã‚’è¿½åŠ 
  * @param lst
- * @param s ’Ç‰Á•¶š—ñ
- * @param no_dupl Šù‘¶‚Ìê‡‚Í’Ç‰Á‚µ‚È‚¢
+ * @param s è¿½åŠ æ–‡å­—åˆ—
+ * @param no_dupl æ—¢å­˜ã®å ´åˆã¯è¿½åŠ ã—ãªã„
  */
 void add_dyn_array(TStringDynArray &lst, UnicodeString s, bool no_dupl = false);
 
 /**
- * @brief TStringDynArray ‚Ìw’èƒCƒ“ƒfƒbƒNƒX€–Ú‚ğæ“¾
+ * @brief TStringDynArray ã®æŒ‡å®šã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹é …ç›®ã‚’å–å¾—
  * @param items
- * @param idx ƒCƒ“ƒfƒbƒNƒX
+ * @param idx ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
  * @return UnicodeString
  */
 UnicodeString get_array_item(TStringDynArray items, int idx);
 
 /**
- * @brief TStringDynArray ‚Ì‘S—v‘f‚ğw’è‹æØ‚è•¶š—ñ‚ğ—p‚¢‚ÄŒ‹‡
+ * @brief TStringDynArray ã®å…¨è¦ç´ ã‚’æŒ‡å®šåŒºåˆ‡ã‚Šæ–‡å­—åˆ—ã‚’ç”¨ã„ã¦çµåˆ
  * @param lst
- * @param sep ‹æØ‚è•¶š—ñ
+ * @param sep åŒºåˆ‡ã‚Šæ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString join_dynarray(TStringDynArray lst, UnicodeString sep);
 
 /**
- * @brief CSV•¶š—ñ‚Ì€–Ú“à—e‚ğ TStringDynArray ‚Æ‚µ‚Äæ“¾
- * @param src ‘ÎÛ•¶š—ñ
- * @param size €–Ú”
- * @param force_size €–Ú”‚ğ‹­§“I‚Éİ’è
+ * @brief CSVæ–‡å­—åˆ—ã®é …ç›®å†…å®¹ã‚’ TStringDynArray ã¨ã—ã¦å–å¾—
+ * @param src å¯¾è±¡æ–‡å­—åˆ—
+ * @param size é …ç›®æ•°
+ * @param force_size é …ç›®æ•°ã‚’å¼·åˆ¶çš„ã«è¨­å®š
  * @return TStringDynArray
  */
 TStringDynArray get_csv_array(UnicodeString src, int size, bool force_size = false);
 
 /**
- * @brief CSV•¶š—ñ‚Ì€–Ú“à—e‚ğ TStringDynArray ‚Æ‚µ‚Äæ“¾(ˆø—p•„‚ğl—¶)
- * @param src ‘ÎÛ•¶š—ñ
- * @param size €–Ú”
- * @param del_q ˆø—p•„‚ğŠO‚·
+ * @brief CSVæ–‡å­—åˆ—ã®é …ç›®å†…å®¹ã‚’ TStringDynArray ã¨ã—ã¦å–å¾—(å¼•ç”¨ç¬¦ã‚’è€ƒæ…®)
+ * @param src å¯¾è±¡æ–‡å­—åˆ—
+ * @param size é …ç›®æ•°
+ * @param del_q å¼•ç”¨ç¬¦ã‚’å¤–ã™
  * @return TStringDynArray
  */
 TStringDynArray get_csv_array_Q(UnicodeString src, int size, bool del_q = true);
 
 /**
- * @brief CSV•¶š—ñ‚©‚çw’èƒCƒ“ƒfƒbƒNƒX‚Ì€–Ú‚ğæ“¾
- * @param src ‘ÎÛ•¶š—ñ
- * @param idx ƒCƒ“ƒfƒbƒNƒX
+ * @brief CSVæ–‡å­—åˆ—ã‹ã‚‰æŒ‡å®šã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®é …ç›®ã‚’å–å¾—
+ * @param src å¯¾è±¡æ–‡å­—åˆ—
+ * @param idx ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
  * @return UnicodeString
  */
 UnicodeString get_csv_item(UnicodeString src, int idx);
 
 /**
- * @brief TSV•¶š—ñ‚©‚çw’èƒCƒ“ƒfƒbƒNƒX‚Ì€–Ú‚ğæ“¾
- * @param src ‘ÎÛ•¶š—ñ
- * @param idx ƒCƒ“ƒfƒbƒNƒX
+ * @brief TSVæ–‡å­—åˆ—ã‹ã‚‰æŒ‡å®šã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®é …ç›®ã‚’å–å¾—
+ * @param src å¯¾è±¡æ–‡å­—åˆ—
+ * @param idx ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
  * @return UnicodeString
  */
 UnicodeString get_tsv_item(UnicodeString src, int idx);
 
 /**
- * @brief CSV€–Ú‚ğì¬
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief CSVé …ç›®ã‚’ä½œæˆ
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString make_csv_str(UnicodeString s);
 
 /**
- * @brief bool ’l‚ÌCSV€–Ú‚ğì¬
+ * @brief bool å€¤ã®CSVé …ç›®ã‚’ä½œæˆ
  * @param sw
  * @return UnicodeString
  */
 UnicodeString make_csv_str(bool sw);
 
 /**
- * @brief TStringDynArray ‚©‚çCSV•¶š—ñ‚ğì¬
+ * @brief TStringDynArray ã‹ã‚‰CSVæ–‡å­—åˆ—ã‚’ä½œæˆ
  * @param lst
  * @return UnicodeString
  */
@@ -727,299 +727,299 @@ UnicodeString make_csv_rec_str(TStringDynArray lst);
 UnicodeString make_csv_rec_str(std::initializer_list<UnicodeString> lst);
 
 /**
- * @brief CSVƒŠƒXƒg‚©‚çAw’è—ñƒCƒ“ƒfƒbƒNƒX‚Ì€–Ú‚ªŒŸõ•¶š—ñ‚Éˆê’v‚·‚ésƒCƒ“ƒfƒbƒNƒX‚ğæ“¾
- * @param lst CSVƒŠƒXƒg
- * @param s ŒŸõ•¶š—ñ
- * @param p —ñƒCƒ“ƒfƒbƒNƒX
+ * @brief CSVãƒªã‚¹ãƒˆã‹ã‚‰ã€æŒ‡å®šåˆ—ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®é …ç›®ãŒæ¤œç´¢æ–‡å­—åˆ—ã«ä¸€è‡´ã™ã‚‹è¡Œã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’å–å¾—
+ * @param lst CSVãƒªã‚¹ãƒˆ
+ * @param s æ¤œç´¢æ–‡å­—åˆ—
+ * @param p åˆ—ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
  * @return int
  */
 int indexof_csv_list(TStringList *lst, UnicodeString s, int p);
 
 /**
- * @brief CSV‚ÌƒŠƒXƒg‚©‚ç p ”Ô–Ú‚Ì€–Ú‚ª s ‚ÌƒŒƒR[ƒh‚ğæ“¾
- * @param lst CSVƒŠƒXƒg
- * @param s ŒŸõ•¶š—ñ
- * @param p —ñƒCƒ“ƒfƒbƒNƒX
- * @param size —ñƒTƒCƒY
+ * @brief CSVã®ãƒªã‚¹ãƒˆã‹ã‚‰ p ç•ªç›®ã®é …ç›®ãŒ s ã®ãƒ¬ã‚³ãƒ¼ãƒ‰ã‚’å–å¾—
+ * @param lst CSVãƒªã‚¹ãƒˆ
+ * @param s æ¤œç´¢æ–‡å­—åˆ—
+ * @param p åˆ—ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
+ * @param size åˆ—ã‚µã‚¤ã‚º
  * @return TStringDynArray
  */
 TStringDynArray record_of_csv_list(TStringList *lst, UnicodeString s, int p, int size);
 
 /**
- * @brief ƒGƒXƒP[ƒvƒV[ƒPƒ“ƒX•¶š‚Ì•ÏŠ·
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã‚·ãƒ¼ã‚±ãƒ³ã‚¹æ–‡å­—ã®å¤‰æ›
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString conv_esc_char(UnicodeString s);
 
 /**
- * @brief \\ ‚ğ / ‚É’uŠ·
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief \\ ã‚’ / ã«ç½®æ›
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString yen_to_slash(UnicodeString s);
 
 /**
- * @brief / ‚ğ \\ ‚É’uŠ·
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief / ã‚’ \\ ã«ç½®æ›
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString slash_to_yen(UnicodeString s);
 
 /**
- * @brief SHA-1 ‚ğ7Œ…‚Ì’ZkŒ`‚É•ÏŠ·
- * @param s ‘ÎÛƒnƒbƒVƒ…•¶š—ñ
+ * @brief SHA-1 ã‚’7æ¡ã®çŸ­ç¸®å½¢ã«å¤‰æ›
+ * @param s å¯¾è±¡ãƒãƒƒã‚·ãƒ¥æ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString sha1_to_short(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚Í "1" ‚©H
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã¯ "1" ã‹ï¼Ÿ
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return true
  * @return false
  */
 bool equal_1(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚Í "0" ‚©H
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã¯ "0" ã‹ï¼Ÿ
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return true
  * @return false
  */
 bool equal_0(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚Í "ENTER" ‚©H
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã¯ "ENTER" ã‹ï¼Ÿ
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return true
  * @return false
  */
 bool equal_ENTER(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚Í "ESC" ‚©H
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã¯ "ESC" ã‹ï¼Ÿ
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return true
  * @return false
  */
 bool equal_ESC(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚Í "TAB" ‚©H
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã¯ "TAB" ã‹ï¼Ÿ
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return true
  * @return false
  */
 bool equal_TAB(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚Í "DEL" ‚©H
+ * @brief æ–‡å­—åˆ—ã¯ "DEL" ã‹ï¼Ÿ
  *
- * @param s ‘ÎÛ•¶š—ñ
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return true
  * @return false
  */
 bool equal_DEL(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚Í "LEFT" ‚©H
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã¯ "LEFT" ã‹ï¼Ÿ
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return true
  * @return false
  */
 bool equal_LEFT(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚Í "RIGHT" ‚©H
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã¯ "RIGHT" ã‹ï¼Ÿ
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return true
  * @return false
  */
 bool equal_RIGHT(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚Í "UP" ‚©H
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã¯ "UP" ã‹ï¼Ÿ
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return true
  * @return false
  */
 bool equal_UP(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚Í "DOWN" ‚©H
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã¯ "DOWN" ã‹ï¼Ÿ
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return true
  * @return false
  */
 bool equal_DOWN(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚Í "HOME" ‚©H
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã¯ "HOME" ã‹ï¼Ÿ
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return true
  * @return false
  */
 bool equal_HOME(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚Í "END" ‚©H
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã¯ "END" ã‹ï¼Ÿ
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return true
  * @return false
  */
 bool equal_END(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚Í "F1" ‚©H
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã¯ "F1" ã‹ï¼Ÿ
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return true
  * @return false
  */
 bool equal_F1(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚Í "F5" ‚©H
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã¯ "F5" ã‹ï¼Ÿ
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return true
  * @return false
  */
 bool equal_F5(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚ÍƒZƒpƒŒ[ƒ^("-")‚©H
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã¯ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿("-")ã‹ï¼Ÿ
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return true
  * @return false
  */
 bool is_separator(UnicodeString s);
 
 /**
- * @brief ‰p”•¶š—ñ‚©H
- * @param s ‘ÎÛ•¶š—ñ 
+ * @brief è‹±æ•°æ–‡å­—åˆ—ã‹ï¼Ÿ
+ * @param s å¯¾è±¡æ–‡å­—åˆ— 
  * @return true 
  * @return false 
  */
 bool is_alnum_str(UnicodeString s);
 
 /**
- * @brief ‰p’PŒê‚©H
- * @param s ‘ÎÛ•¶š—ñ
- * @param p ˆÊ’u
- * @param len ’·‚³
+ * @brief è‹±å˜èªã‹ï¼Ÿ
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param p ä½ç½®
+ * @param len é•·ã•
  * @return true 
  * @return false 
  */
 bool is_word(UnicodeString s, int p, int len);
 
 /**
- * @brief •¶š—ñ‚Ìæ“ª‚ªw’è•¶šƒŠƒXƒg‚Ì‚¢‚¸‚ê‚©‚Éˆê’v‚·‚é‚©H
- * @param lst •¶šƒŠƒXƒg
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã®å…ˆé ­ãŒæŒ‡å®šæ–‡å­—ãƒªã‚¹ãƒˆã®ã„ãšã‚Œã‹ã«ä¸€è‡´ã™ã‚‹ã‹ï¼Ÿ
+ * @param lst æ–‡å­—ãƒªã‚¹ãƒˆ
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return true
  * @return false
  */
 bool starts_tchs(UnicodeString lst, UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚Ì––”ö‚ªw’è•¶šƒŠƒXƒg‚Ì‚¢‚¸‚ê‚©‚Éˆê’v‚·‚é‚©H
- * @param lst •¶šƒŠƒXƒg
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã®æœ«å°¾ãŒæŒ‡å®šæ–‡å­—ãƒªã‚¹ãƒˆã®ã„ãšã‚Œã‹ã«ä¸€è‡´ã™ã‚‹ã‹ï¼Ÿ
+ * @param lst æ–‡å­—ãƒªã‚¹ãƒˆ
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return true
  * @return false
  */
 bool ends_tchs(UnicodeString lst, UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚ª @ ‚Ån‚Ü‚Á‚Ä‚¢‚é‚© ?
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ãŒ @ ã§å§‹ã¾ã£ã¦ã„ã‚‹ã‹ ?
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return true
  * @return false
  */
 bool starts_AT(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚ª $ ‚Ån‚Ü‚Á‚Ä‚¢‚é‚© ?
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ãŒ $ ã§å§‹ã¾ã£ã¦ã„ã‚‹ã‹ ?
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return true
  * @return false
  */
 bool starts_Dollar(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚Ì––”ö‚ª \ ‚©H
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã®æœ«å°¾ãŒ \ ã‹ï¼Ÿ
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return true
  * @return false
  */
 bool ends_PathDlmtr(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚É \ ‚ªŠÜ‚Ü‚ê‚Ä‚¢‚é‚©H
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã« \ ãŒå«ã¾ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return true
  * @return false
  */
 bool contains_PathDlmtr(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚É / ‚ªŠÜ‚Ü‚ê‚Ä‚¢‚é‚©H
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã« / ãŒå«ã¾ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return true
  * @return false
  */
 bool contains_Slash(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚ÉŠÜ‚Ü‚ê‚Ä‚¢‚é \ ‚ÌŒÂ”‚ğæ“¾
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã«å«ã¾ã‚Œã¦ã„ã‚‹ \ ã®å€‹æ•°ã‚’å–å¾—
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return int
  */
 int  count_PathDlmtr(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚Í³‹K•\Œ»(/`/)‚©H
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã¯æ­£è¦è¡¨ç¾(/ï½/)ã‹ï¼Ÿ
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return true
  * @return false
  */
 bool is_regex_slash(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚ªˆø—p•„‚ÅˆÍ‚Ü‚ê‚Ä‚¢‚é‚©H
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ãŒå¼•ç”¨ç¬¦ã§å›²ã¾ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return true
  * @return false
  */
 bool is_quot(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚ª‹ó”’‚ğŠÜ‚ñ‚Å‚¢‚½‚çˆø—p•„‚ÅˆÍ‚Ş
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ãŒç©ºç™½ã‚’å«ã‚“ã§ã„ãŸã‚‰å¼•ç”¨ç¬¦ã§å›²ã‚€
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString add_quot_if_spc(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚Ìˆø—p•„‚ğŠO‚·
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã®å¼•ç”¨ç¬¦ã‚’å¤–ã™
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString exclude_quot(UnicodeString s);
 
 /**
- * @brief TStringList Vlues[name] ‚Ì®”’l‚ğæ“¾
- * @param lst ‘ÎÛƒŠƒXƒg
- * @param name –¼‘O
- * @param def ƒfƒtƒHƒ‹ƒg’l 
+ * @brief TStringList Vlues[name] ã®æ•´æ•°å€¤ã‚’å–å¾—
+ * @param lst å¯¾è±¡ãƒªã‚¹ãƒˆ
+ * @param name åå‰
+ * @param def ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ 
  * @return int 
  */
 int  get_ListIntVal(TStringList *lst, UnicodeString name, int def = 0);
 
 /**
- * @brief TStringList Vlues[name] ‚ª‹ó‚©H
- * @param lst ‘ÎÛƒŠƒXƒg
- * @param name –¼‘O
+ * @brief TStringList Vlues[name] ãŒç©ºã‹ï¼Ÿ
+ * @param lst å¯¾è±¡ãƒªã‚¹ãƒˆ
+ * @param name åå‰
  * @return true 
  * @return false 
  */
@@ -1027,218 +1027,218 @@ bool ListVal_is_empty(TStringList *lst, UnicodeString name);
 
 /**
  * @brief TStringList Vlues[name]=="1"?
- * @param lst ‘ÎÛƒŠƒXƒg
- * @param name –¼‘O
+ * @param lst å¯¾è±¡ãƒªã‚¹ãƒˆ
+ * @param name åå‰
  * @return true 
  * @return false 
  */
 bool ListVal_equal_1(TStringList *lst, UnicodeString name);
 
 /**
- * @brief •¶š—ñ‚ğ—š—ğ‚Æ‚µ‚Äd•¡‚È‚µ‚ÅƒŠƒXƒg’Ç‰Á
- * @param[in,out] lst ƒŠƒXƒg
- * @param s ’Ç‰Á•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã‚’å±¥æ­´ã¨ã—ã¦é‡è¤‡ãªã—ã§ãƒªã‚¹ãƒˆè¿½åŠ 
+ * @param[in,out] lst ãƒªã‚¹ãƒˆ
+ * @param s è¿½åŠ æ–‡å­—åˆ—
  */
 void add_as_history(TStrings *lst, UnicodeString s);
 
 /**
- * @brief m•b‚ğŠÔ•¶š—ñ‚É•ÏŠ·
- * @param ms ƒ~ƒŠ•b’l
- * @param cs 1/100•b‚ğ•\¦
+ * @brief mç§’ã‚’æ™‚é–“æ–‡å­—åˆ—ã«å¤‰æ›
+ * @param ms ãƒŸãƒªç§’å€¤
+ * @param cs 1/100ç§’ã‚’è¡¨ç¤º
  * @return UnicodeString
  */
 UnicodeString __fastcall mSecToTStr(unsigned int ms, bool cs = true);
 
 /**
- * @brief ƒpƒ‰ƒ[ƒ^•¶š—ñ(S/M/H‚ğŠÜ‚Ş)‚ğm•b’l‚É•ÏŠ·
- * @param prm ƒpƒ‰ƒ[ƒ^•¶š—ñ
+ * @brief ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æ–‡å­—åˆ—(S/M/Hã‚’å«ã‚€)ã‚’mç§’å€¤ã«å¤‰æ›
+ * @param prm ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æ–‡å­—åˆ—
  * @return int
  */
 int param_to_mSec(UnicodeString prm);
 
 /**
- * @brief •¶š—ñ‚Ì•\¦•‚ğæ“¾
- * @param cv ƒLƒƒƒ“ƒoƒX
- * @param s ‘ÎÛ•¶š—ñ
- * @param spc_sw ”¼/‘SŠp‹ó”’‚Ì‘ã‘Ö•¶š‚ğl—¶
- * @return int •\¦•
+ * @brief æ–‡å­—åˆ—ã®è¡¨ç¤ºå¹…ã‚’å–å¾—
+ * @param cv ã‚­ãƒ£ãƒ³ãƒã‚¹
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param spc_sw åŠ/å…¨è§’ç©ºç™½ã®ä»£æ›¿æ–‡å­—ã‚’è€ƒæ…®
+ * @return int è¡¨ç¤ºå¹…
  */
 int get_TextWidth(TCanvas *cv, UnicodeString s, bool spc_sw = false);
 
 int get_CharWidth(TCanvas *cv, int n, int mgn = 0);
 
 /**
- * @brief TPanel “à‚Å‚Ì•¶š—ñ•‚ğæ“¾
- * @param s ‘ÎÛ•¶š—ñ 
- * @param pp ƒpƒlƒ‹
- * @param d2d_sw Direct2D ‚Åæ“¾
+ * @brief TPanel å†…ã§ã®æ–‡å­—åˆ—å¹…ã‚’å–å¾—
+ * @param s å¯¾è±¡æ–‡å­—åˆ— 
+ * @param pp ãƒ‘ãƒãƒ«
+ * @param d2d_sw Direct2D ã§å–å¾—
  * @return int 
  */
 int get_WidthInPanel(UnicodeString s, TPanel *pp, bool d2d_sw = false);
 
 /**
- * @brief ”¼ŠpŠ·Z‚Ì•¶š—ñ’·‚ğæ“¾
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief åŠè§’æ›ç®—ã®æ–‡å­—åˆ—é•·ã‚’å–å¾—
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return int
  */
 int str_len_half(UnicodeString s);
 
 /**
- * @brief ƒTƒƒQ[ƒgƒyƒA‚ğl—¶‚µ‚Ä•¶š’·‚ğæ“¾
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief ã‚µãƒ­ã‚²ãƒ¼ãƒˆãƒšã‚¢ã‚’è€ƒæ…®ã—ã¦æ–‡å­—é•·ã‚’å–å¾—
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return int
  */
 int str_len_unicode(UnicodeString s);
 
 /**
- * @brief ”¼ŠpŠ·Z‚ÌÅ‘å•‚ğXV
- * @param[o] w Å‘å•
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief åŠè§’æ›ç®—ã®æœ€å¤§å¹…ã‚’æ›´æ–°
+ * @param[o] w æœ€å¤§å¹…
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  */
 void max_len_half(int &w, UnicodeString s);
 
 /**
- * @brief w’è•(”¼Šp’PˆÊ)“à‚Å•¶š—ñ‚ª‰E‹l‚É‚È‚é‚æ‚¤‚É‹ó”’‚ğ‘}“ü
- * @param s ‘ÎÛ•¶š—ñ
- * @param wd •
- * @param post_s ’Ç‰Á•¶š—ñ
+ * @brief æŒ‡å®šå¹…(åŠè§’å˜ä½)å†…ã§æ–‡å­—åˆ—ãŒå³è©°ã«ãªã‚‹ã‚ˆã†ã«ç©ºç™½ã‚’æŒ¿å…¥
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param wd å¹…
+ * @param post_s è¿½åŠ æ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString align_r_str(UnicodeString s, int wd, UnicodeString post_s = EmptyStr);
 
 /**
- * @brief w’è•(”¼Šp’PˆÊ)“à‚Å•¶š—ñ‚ª¶‹l‚É‚È‚é‚æ‚¤‚É‹ó”’‚ğ‘}“ü
- * @param s ‘ÎÛ•¶š—ñ
- * @param wd •
- * @param post_s ’Ç‰Á•¶š—ñ
+ * @brief æŒ‡å®šå¹…(åŠè§’å˜ä½)å†…ã§æ–‡å­—åˆ—ãŒå·¦è©°ã«ãªã‚‹ã‚ˆã†ã«ç©ºç™½ã‚’æŒ¿å…¥
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param wd å¹…
+ * @param post_s è¿½åŠ æ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString align_l_str(UnicodeString s, int wd, UnicodeString post_s = EmptyStr);
 
 /**
- * @brief •¶š—ñ‚ªw’è•‚Éû‚Ü‚é‚æ‚¤‚É’²®
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ãŒæŒ‡å®šå¹…ã«åã¾ã‚‹ã‚ˆã†ã«èª¿æ•´
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @param cv 
- * @param wd §ŒÀ•
- * @param omit_end ––”ö‚ğÈ—ª (false: ’†ŠÔ‚ğÈ—ª)
- * @param spc_sw ”¼/‘SŠp‹ó”’‚Ì‘ã‘Ö•¶š‚ğl—¶
+ * @param wd åˆ¶é™å¹…
+ * @param omit_end æœ«å°¾ã‚’çœç•¥ (false: ä¸­é–“ã‚’çœç•¥)
+ * @param spc_sw åŠ/å…¨è§’ç©ºç™½ã®ä»£æ›¿æ–‡å­—ã‚’è€ƒæ…®
  * @return UnicodeString 
  */
 UnicodeString minimize_str(UnicodeString s, TCanvas *cv, int wd, bool omit_end = false, bool spc_sw = false);
 
 /**
- * @brief •¶š—ñ‚ªw’è•‚É‚È‚é‚æ‚¤‚ÉÈ—ª/‹ó”’’Ç‰Á
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ãŒæŒ‡å®šå¹…ã«ãªã‚‹ã‚ˆã†ã«çœç•¥/ç©ºç™½è¿½åŠ 
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @param cv
- * @param wd §ŒÀ•
- * @param omit_end ––”ö‚ğÈ—ª(false ‚Ìê‡‚Í’†ŠÔ‚ğÈ—ª)
+ * @param wd åˆ¶é™å¹…
+ * @param omit_end æœ«å°¾ã‚’çœç•¥(false ã®å ´åˆã¯ä¸­é–“ã‚’çœç•¥)
  * @return UnicodeString
  */
 UnicodeString fit_str(UnicodeString s, TCanvas *cv, int wd, bool omit_end = false);
 
 /**
- * @brief //‘SŠp/”¼Šp•ÏŠ·
- * @param s ‘ÎÛ•¶š—ñ
- * @param to_w ‘SŠp‚É•ÏŠ·
+ * @brief //å…¨è§’/åŠè§’å¤‰æ›
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
+ * @param to_w å…¨è§’ã«å¤‰æ›
  * @return UnicodeString
  */
 UnicodeString to_Full_or_Half(UnicodeString s, bool to_w);
 
 /**
- * @brief ‘SŠp‚É•ÏŠ·
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief å…¨è§’ã«å¤‰æ›
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString to_FullWidth(UnicodeString s);
 
 /**
- * @brief ”¼Šp‚É•ÏŠ·
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief åŠè§’ã«å¤‰æ›
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return UnicodeString
  */
 UnicodeString to_HalfWidth(UnicodeString s);
 
 /**
- * @brief ƒ^ƒu‚ğ‹ó”’‚É•ÏŠ·(“™•ƒtƒHƒ“ƒg—p)
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief ã‚¿ãƒ–ã‚’ç©ºç™½ã«å¤‰æ›(ç­‰å¹…ãƒ•ã‚©ãƒ³ãƒˆç”¨)
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @param cv
  * @return UnicodeString
  */
 UnicodeString cv_TabToSpc(UnicodeString s, TCanvas *cv);
 
 /**
- * @brief •¶š—ñ‚ÍŒrüs‚©H
- * @param s ‘ÎÛ•¶š—ñ
+ * @brief æ–‡å­—åˆ—ã¯ç½«ç·šè¡Œã‹ï¼Ÿ
+ * @param s å¯¾è±¡æ–‡å­—åˆ—
  * @return int
  */
 int is_RuledLine(UnicodeString s);
 
 /**
- * @brief Œrüs•¶š—ñ‚ğæ“¾
- * @param cnt ƒuƒƒbƒN”
- * @param ... ƒuƒƒbƒN•
+ * @brief ç½«ç·šè¡Œæ–‡å­—åˆ—ã‚’å–å¾—
+ * @param cnt ãƒ–ãƒ­ãƒƒã‚¯æ•°
+ * @param ... ãƒ–ãƒ­ãƒƒã‚¯å¹…
  * @return UnicodeString
  */
 UnicodeString make_RuledLine(int cnt, ...);
 
 /**
- * @brief ƒAƒhƒŒƒX•¶š—ñ‚ğæ“¾
- * @param adr ƒAƒhƒŒƒX’l
- * @param w •\¦Œ…
+ * @brief ã‚¢ãƒ‰ãƒ¬ã‚¹æ–‡å­—åˆ—ã‚’å–å¾—
+ * @param adr ã‚¢ãƒ‰ãƒ¬ã‚¹å€¤
+ * @param w è¡¨ç¤ºæ¡
  * @return UnicodeString
  */
 UnicodeString get_AddrStr(__int64 adr, int w = 0);
 
 /**
- * @brief ƒAƒXƒyƒNƒg”ä•¶š—ñ‚ğæ“¾
- * @param w •
- * @param h ‚‚³
+ * @brief ã‚¢ã‚¹ãƒšã‚¯ãƒˆæ¯”æ–‡å­—åˆ—ã‚’å–å¾—
+ * @param w å¹…
+ * @param h é«˜ã•
  * @return UnicodeString
  */
 UnicodeString get_AspectStr(int w, int h);
 
 /**
- * @brief •¶šƒZƒbƒg–¼‚ğæ“¾
+ * @brief æ–‡å­—ã‚»ãƒƒãƒˆåã‚’å–å¾—
  * @param charset
  * @return UnicodeString
  */
 UnicodeString get_NameOfCharSet(int charset);
 
 /**
- * @brief •¶š‚ÌƒEƒGƒCƒg–¼‚ğæ“¾
+ * @brief æ–‡å­—ã®ã‚¦ã‚¨ã‚¤ãƒˆåã‚’å–å¾—
  * @param w
  * @return UnicodeString
  */
 UnicodeString get_NameOfWeight(int w);
 
-extern const UnicodeString CodePageList;	//!< ƒR[ƒhƒy[ƒWƒŠƒXƒg
-extern const UnicodeString CodePageListX;	//!< ƒR[ƒhƒy[ƒWƒŠƒXƒg
+extern const UnicodeString CodePageList;	//!< ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸ãƒªã‚¹ãƒˆ
+extern const UnicodeString CodePageListX;	//!< ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸ãƒªã‚¹ãƒˆ
 
 /**
- * @brief ƒR[ƒhƒy[ƒW‚Ì–¼‘O‚ğæ“¾
- * @param code_page ƒR[ƒhƒy[ƒW
- * @param long_sw ’·‚¢–¼‘O
- * @param has_bom BOM‚Ì—L–³
+ * @brief ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸ã®åå‰ã‚’å–å¾—
+ * @param code_page ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸
+ * @param long_sw é•·ã„åå‰
+ * @param has_bom BOMã®æœ‰ç„¡
  * @return UnicodeString
  */
 UnicodeString get_NameOfCodePage(int code_page, bool long_sw = false, bool has_bom = false);
 
 /**
- * @brief w’è‚µ‚½–¼‘O‚ÌƒR[ƒhƒy[ƒW‚ğæ“¾
- * @param code_name –¼‘O
+ * @brief æŒ‡å®šã—ãŸåå‰ã®ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸ã‚’å–å¾—
+ * @param code_name åå‰
  * @return int
  */
 int get_CodePageOfName(UnicodeString code_name);
 
 /**
- * @brief UnicodeƒuƒƒbƒN–¼‚ğæ“¾
+ * @brief Unicodeãƒ–ãƒ­ãƒƒã‚¯åã‚’å–å¾—
  * @param code 
  * @return UnicodeString 
  */
 UnicodeString get_UnicodeBlockName(int code);
 
 /**
- * @brief •¶š—ñ‚©‚ç³‹K•\Œ»ƒpƒ^[ƒ“‚ÉŠî‚Ã‚¢‚Äƒ†ƒjƒR[ƒhƒ|ƒCƒ“ƒg‚ğ’Šo
+ * @brief æ–‡å­—åˆ—ã‹ã‚‰æ­£è¦è¡¨ç¾ãƒ‘ã‚¿ãƒ¼ãƒ³ã«åŸºã¥ã„ã¦ãƒ¦ãƒ‹ã‚³ãƒ¼ãƒ‰ãƒã‚¤ãƒ³ãƒˆã‚’æŠ½å‡º
  * @param s 
  * @param ptn 
  * @param dec_sw 
@@ -1247,71 +1247,71 @@ UnicodeString get_UnicodeBlockName(int code);
 int extract_UnicodePoint(UnicodeString &s, UnicodeString ptn, bool dec_sw = false);
 
 /**
- * @brief ƒ†ƒjƒR[ƒhƒ|ƒCƒ“ƒg‚ğ•¶š‚É•ÏŠ·
- * @param uc ƒ†ƒjƒR[ƒhƒ|ƒCƒ“ƒg
+ * @brief ãƒ¦ãƒ‹ã‚³ãƒ¼ãƒ‰ãƒã‚¤ãƒ³ãƒˆã‚’æ–‡å­—ã«å¤‰æ›
+ * @param uc ãƒ¦ãƒ‹ã‚³ãƒ¼ãƒ‰ãƒã‚¤ãƒ³ãƒˆ
  * @return UnicodeString 
  */
 UnicodeString UnicodePointToStr(int uc);
 
 /**
- * @brief ƒTƒƒQ[ƒgƒyƒA‚ğƒ†ƒjƒR[ƒhƒ|ƒCƒ“ƒg‚É•ÏŠ·
+ * @brief ã‚µãƒ­ã‚²ãƒ¼ãƒˆãƒšã‚¢ã‚’ãƒ¦ãƒ‹ã‚³ãƒ¼ãƒ‰ãƒã‚¤ãƒ³ãƒˆã«å¤‰æ›
  * @param c 
- * @return int ƒ†ƒjƒR[ƒhƒ|ƒCƒ“ƒg
+ * @return int ãƒ¦ãƒ‹ã‚³ãƒ¼ãƒ‰ãƒã‚¤ãƒ³ãƒˆ
  */
 int SurrogateToUnicodePoint(UnicodeString c);
 
 /**
- * @brief •¶šÀ‘ÌQÆ‚©‚ç”’l•¶šQÆ‚Ö
+ * @brief æ–‡å­—å®Ÿä½“å‚ç…§ã‹ã‚‰æ•°å€¤æ–‡å­—å‚ç…§ã¸
  * @param s 
  * @return UnicodeString 
  */
 UnicodeString ChEntRef_to_NumChRef(UnicodeString s);
 
 /**
- * @brief UTF8‚Æ‚µ‚Ä“KØ‚©
- * @param bp ƒ`ƒFƒbƒN‘ÎÛ
- * @param size ƒTƒCƒY
+ * @brief UTF8ã¨ã—ã¦é©åˆ‡ã‹
+ * @param bp ãƒã‚§ãƒƒã‚¯å¯¾è±¡
+ * @param size ã‚µã‚¤ã‚º
  * @return int
  */
 int check_UTF8(BYTE *bp, int size);
 
 /**
- * @brief ƒƒ‚ƒŠƒXƒgƒŠ[ƒ€‚ÌƒR[ƒhƒy[ƒW‚ğæ“¾
+ * @brief ãƒ¡ãƒ¢ãƒªã‚¹ãƒˆãƒªãƒ¼ãƒ ã®ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸ã‚’å–å¾—
  * @param ms
  * @param has_bom
- * @return int ƒR[ƒhƒy[ƒW(0:•s–¾/ -1:ƒoƒCƒiƒŠ)
+ * @return int ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸(0:ä¸æ˜/ -1:ãƒã‚¤ãƒŠãƒª)
  */
 int  get_MemoryCodePage(TMemoryStream *ms, bool *has_bom = NULL);
 
 /**
- * @brief ƒƒ‚ƒŠƒXƒgƒŠ[ƒ€‚ÌƒR[ƒhƒy[ƒW‚ğ”»’è‚µ•¶š—ñ‚Æ‚µ‚Äæ“¾
- * @param ms ƒƒ‚ƒŠƒXƒgƒŠ[ƒ€
+ * @brief ãƒ¡ãƒ¢ãƒªã‚¹ãƒˆãƒªãƒ¼ãƒ ã®ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸ã‚’åˆ¤å®šã—æ–‡å­—åˆ—ã¨ã—ã¦å–å¾—
+ * @param ms ãƒ¡ãƒ¢ãƒªã‚¹ãƒˆãƒªãƒ¼ãƒ 
  * @return UnicodeString
  */
 UnicodeString get_MemoryStrins(TMemoryStream *ms);
 
 /**
- * @brief ƒTƒƒQ[ƒgƒyƒA•¶š‚ğƒ`ƒFƒbƒN
+ * @brief ã‚µãƒ­ã‚²ãƒ¼ãƒˆãƒšã‚¢æ–‡å­—ã‚’ãƒã‚§ãƒƒã‚¯
  * @param s
- * @return UnicodeString Œ©‚Â‚©‚Á‚½•¶š‚ğ‹ó”’‹æØ‚è‚Å˜AŒ‹‚µ‚Ä‚µ‚Ü‚·B‚È‚¯‚ê‚Î EmptyStr
+ * @return UnicodeString è¦‹ã¤ã‹ã£ãŸæ–‡å­—ã‚’ç©ºç™½åŒºåˆ‡ã‚Šã§é€£çµã—ã¦ã—ã¾ã™ã€‚ãªã‘ã‚Œã° EmptyStr
  */
 UnicodeString check_Surrogates(UnicodeString s);
 
 /**
- * @brief ŠÂ‹«ˆË‘¶•¶š(ƒ[ƒ}”šAˆÍ‚İ•¶šA’PˆÊ‹L†A‡¬•¶š‚È‚Ç)‚ğƒ`ƒFƒbƒN
+ * @brief ç’°å¢ƒä¾å­˜æ–‡å­—(ãƒ­ãƒ¼ãƒæ•°å­—ã€å›²ã¿æ–‡å­—ã€å˜ä½è¨˜å·ã€åˆæˆæ–‡å­—ãªã©)ã‚’ãƒã‚§ãƒƒã‚¯
  * @param s
- * @return UnicodeString Œ©‚Â‚©‚Á‚½•¶š‚ğ‹ó”’‹æØ‚è‚Å˜AŒ‹‚µ‚Ä•Ô‚µ‚Ü‚·B‚È‚¯‚ê‚Î EmptyStr
+ * @return UnicodeString è¦‹ã¤ã‹ã£ãŸæ–‡å­—ã‚’ç©ºç™½åŒºåˆ‡ã‚Šã§é€£çµã—ã¦è¿”ã—ã¾ã™ã€‚ãªã‘ã‚Œã° EmptyStr
  */
 UnicodeString check_EnvDepandChars(UnicodeString s);
 
 /**
- * @brief •W€‰»‚³‚ê‚½ƒŒ[ƒxƒ“ƒVƒ…ƒ^ƒCƒ“‹——£‚ğæ“¾(Å‘å”äŠr•¶š”=256)
- * @param s1 ‘ÎÛ•¶š—ñ1
- * @param s2 ‘ÎÛ•¶š—ñ2
- * @param ig_case ‘å¬•¶š‚ğ–³‹
- * @param ig_num ”š•”•ª‚ğ–³‹
- * @param ig_fh ‘SŠp/”¼Šp‚ğ–³‹
- * @return int ‹——£(0`1000)
+ * @brief æ¨™æº–åŒ–ã•ã‚ŒãŸãƒ¬ãƒ¼ãƒ™ãƒ³ã‚·ãƒ¥ã‚¿ã‚¤ãƒ³è·é›¢ã‚’å–å¾—(æœ€å¤§æ¯”è¼ƒæ–‡å­—æ•°=256)
+ * @param s1 å¯¾è±¡æ–‡å­—åˆ—1
+ * @param s2 å¯¾è±¡æ–‡å­—åˆ—2
+ * @param ig_case å¤§å°æ–‡å­—ã‚’ç„¡è¦–
+ * @param ig_num æ•°å­—éƒ¨åˆ†ã‚’ç„¡è¦–
+ * @param ig_fh å…¨è§’/åŠè§’ã‚’ç„¡è¦–
+ * @return int è·é›¢(0ï½1000)
  */
 int get_NrmLevenshteinDistance(UnicodeString s1, UnicodeString s2,
 	bool ig_case = false, bool ig_num = false, bool ig_fh = false);
@@ -1319,7 +1319,7 @@ int get_NrmLevenshteinDistance(UnicodeString s1, UnicodeString s2,
 UnicodeString get_JsonValStr(TJSONValue *val);
 
 /**
- * @brief JSON•¶š—ñ‚Ì®Œ`
+ * @brief JSONæ–‡å­—åˆ—ã®æ•´å½¢
  * @param val 
  * @param[out] lst 
  * @param lvl 
@@ -1331,32 +1331,32 @@ UnicodeString decode_TxtVal(UnicodeString s, bool with_q = false);
 UnicodeString conv_DfmText(UnicodeString s);
 
 /**
- * @brief .dfm ƒtƒ@ƒCƒ‹“à‚Ì•¶š‚ğƒfƒR[ƒh
+ * @brief .dfm ãƒ•ã‚¡ã‚¤ãƒ«å†…ã®æ–‡å­—ã‚’ãƒ‡ã‚³ãƒ¼ãƒ‰
  * @param[in,out] txt_lst 
  */
 void conv_DfmText(TStringList *txt_lst);
 
 /**
- * @brief ƒCƒ“ƒfƒbƒNƒX‚©‚çƒƒjƒ…[—pƒAƒNƒZƒ‰ƒŒ[ƒ^•¶š—ñ‚ğì¬
- * @param idx ƒCƒ“ƒfƒbƒNƒX”Ô†
- * @param alp_sw A`Z‚ğg—p(false: 1`9,0 ‚Ì‚İ)
+ * @brief ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‹ã‚‰ãƒ¡ãƒ‹ãƒ¥ãƒ¼ç”¨ã‚¢ã‚¯ã‚»ãƒ©ãƒ¬ãƒ¼ã‚¿æ–‡å­—åˆ—ã‚’ä½œæˆ
+ * @param idx ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ç•ªå·
+ * @param alp_sw Aï½Zã‚’ä½¿ç”¨(false: 1ï½9,0 ã®ã¿)
  * @return UnicodeString 
  */
 UnicodeString make_MenuAccStr(int idx, bool alp_sw = false);
 
 /**
- * @brief Ÿ‚ÌƒAƒ‹ƒtƒ@ƒxƒbƒg•¶š—ñ‚ğæ“¾
- * @param s ‘ÎÛ•¶š—ñ 
+ * @brief æ¬¡ã®ã‚¢ãƒ«ãƒ•ã‚¡ãƒ™ãƒƒãƒˆæ–‡å­—åˆ—ã‚’å–å¾—
+ * @param s å¯¾è±¡æ–‡å­—åˆ— 
  * @return UnicodeString 
  */
 UnicodeString get_NextAlStr(UnicodeString s);
 
 /**
- * @brief •¶š—ñ‚ğ TDateTime ‚É•ÏŠ·
- * @param ts ‘ÎÛ•¶š—ñ
- * @param sw_dt ”š‚ğ“ú•t‚É•ÏŠ·
+ * @brief æ–‡å­—åˆ—ã‚’ TDateTime ã«å¤‰æ›
+ * @param ts å¯¾è±¡æ–‡å­—åˆ—
+ * @param sw_dt æ•°å­—ã‚’æ—¥ä»˜ã«å¤‰æ›
  * @return TDateTime 
- * @exception •ÏŠ·‚Å‚«‚È‚¢ê‡—áŠO‚ğ‘—o
+ * @exception å¤‰æ›ã§ããªã„å ´åˆä¾‹å¤–ã‚’é€å‡º
  */
 TDateTime str_to_DateTime(UnicodeString ts, bool sw_dt = false);
 //---------------------------------------------------------------------------

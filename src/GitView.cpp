@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  Gitƒrƒ…[ƒA															//
+//  Gitãƒ“ãƒ¥ãƒ¼ã‚¢															//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -43,7 +43,7 @@ void __fastcall TGitViewer::FormCreate(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::FormShow(TObject *Sender)
 {
-	Caption = yen_to_delimiter(WorkDir) + " - Gitƒrƒ…[ƒA";
+	Caption = yen_to_delimiter(WorkDir) + " - Gitãƒ“ãƒ¥ãƒ¼ã‚¢";
 
 	IniFile->LoadPosInfo(this, DialogCenter);
 
@@ -148,8 +148,8 @@ void __fastcall TGitViewer::DiffPanelResize(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//gitÀsŒ‹‰Ê•¶š—ñ‚ğæ“¾
-//  •K—v‚É‰‚¶‚Äˆê——‚ğXV
+//gitå®Ÿè¡Œçµæœæ–‡å­—åˆ—ã‚’å–å¾—
+//  å¿…è¦ã«å¿œã˜ã¦ä¸€è¦§ã‚’æ›´æ–°
 //---------------------------------------------------------------------------
 UnicodeString __fastcall TGitViewer::GitExeStr(UnicodeString prm)
 {
@@ -168,7 +168,7 @@ UnicodeString __fastcall TGitViewer::GitExeStr(UnicodeString prm)
 		}
 		else {
 			ret_str = o_lst->Text;
-			//ó‘Ô‚ğXV
+			//çŠ¶æ…‹ã‚’æ›´æ–°
 			if (StartsText("reset HEAD", prm) || contained_wd_i("add|rm", cmd)) {
 				GitBusy = true;
 				UnicodeString stt_str = get_post_tab(UpdateStatusList());
@@ -196,7 +196,7 @@ UnicodeString __fastcall TGitViewer::GitExeStr(UnicodeString prm)
 					UpdateDiffList(true);
 				}
 			}
-			//ƒRƒ~ƒbƒg—š—ğ‚ğXV
+			//ã‚³ãƒŸãƒƒãƒˆå±¥æ­´ã‚’æ›´æ–°
 			else if (!contained_wd_i("archive|cat-file|config|difftool|gui|rev-parse|show", cmd)) {
 				UpdateCommitList();
 			}
@@ -205,8 +205,8 @@ UnicodeString __fastcall TGitViewer::GitExeStr(UnicodeString prm)
 	return ret_str;
 }
 //---------------------------------------------------------------------------
-//gitÀsŒ‹‰Ê‚ğ TStringDynArray ‚Åæ“¾
-//  ƒGƒ‰[•\¦/ ˆê——‚ÌXV‚Ís‚í‚È‚¢/ Œx‚ğ•ª—£æ“¾
+//gitå®Ÿè¡Œçµæœã‚’ TStringDynArray ã§å–å¾—
+//  ã‚¨ãƒ©ãƒ¼è¡¨ç¤º/ ä¸€è¦§ã®æ›´æ–°ã¯è¡Œã‚ãªã„/ è­¦å‘Šã‚’åˆ†é›¢å–å¾—
 //---------------------------------------------------------------------------
 TStringDynArray __fastcall TGitViewer::GitExeStrArray(UnicodeString prm)
 {
@@ -225,7 +225,7 @@ TStringDynArray __fastcall TGitViewer::GitExeStrArray(UnicodeString prm)
 }
 
 //---------------------------------------------------------------------------
-//gitÀsŒ‹‰Ê‚ğƒŠƒXƒg‚Åæ“¾ (ƒqƒ“ƒg•\¦‰Â)
+//gitå®Ÿè¡Œçµæœã‚’ãƒªã‚¹ãƒˆã§å–å¾— (ãƒ’ãƒ³ãƒˆè¡¨ç¤ºå¯)
 //---------------------------------------------------------------------------
 bool __fastcall TGitViewer::GitExeList(UnicodeString prm, TStringList *o_lst, UnicodeString hint)
 {
@@ -269,8 +269,8 @@ void __fastcall TGitViewer::ClearCommitList()
 }
 
 //---------------------------------------------------------------------------
-//ó‘ÔƒŠƒXƒg‚ÌXV
-//  –ß‚è’l: ‘S‘Ì‚Ìó‘Ô [TAB ] ƒ[ƒLƒ“ƒOƒcƒŠ[ [TAB] ƒCƒ“ƒfƒbƒNƒX
+//çŠ¶æ…‹ãƒªã‚¹ãƒˆã®æ›´æ–°
+//  æˆ»ã‚Šå€¤: å…¨ä½“ã®çŠ¶æ…‹ [TAB ] ãƒ¯ãƒ¼ã‚­ãƒ³ã‚°ãƒ„ãƒªãƒ¼ [TAB] ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
 //---------------------------------------------------------------------------
 UnicodeString __fastcall TGitViewer::UpdateStatusList()
 {
@@ -287,16 +287,16 @@ UnicodeString __fastcall TGitViewer::UpdateStatusList()
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒ~ƒbƒgˆê——‚ğXV
+//ã‚³ãƒŸãƒƒãƒˆä¸€è¦§ã‚’æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::UpdateCommitList(
-	UnicodeString commit_id)	//‘ÎÛƒRƒ~ƒbƒgID	(default = EmptyStr : HEAD)
+	UnicodeString commit_id)	//å¯¾è±¡ã‚³ãƒŸãƒƒãƒˆID	(default = EmptyStr : HEAD)
 {
 	ClearCommitList();
 	CommitScrPanel->ClearHitLine();
 
 	TListBox *c_lp = CommitListBox;
-	MsgHint->ShowMsgHint("ƒtƒ@ƒCƒ‹’Šo’†...", c_lp, col_bgHint);
+	MsgHint->ShowMsgHint("ãƒ•ã‚¡ã‚¤ãƒ«æŠ½å‡ºä¸­...", c_lp, col_bgHint);
 	GitBusy = true;
 
 	std::unique_ptr<TStringList> c_lst(new TStringList());
@@ -315,36 +315,36 @@ void __fastcall TGitViewer::UpdateCommitList(
 			gp->msg		 = lbuf;
 			c_lst->AddObject(EmptyStr, (TObject *)gp);
 		}
-		//ƒZƒpƒŒ[ƒ^
+		//ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿
 		gp = cre_GitRec();
 		gp->graph = "-";
 		c_lst->AddObject(EmptyStr, (TObject *)gp);
 	}
 
-	//ƒ[ƒLƒ“ƒOƒcƒŠ[/ƒCƒ“ƒfƒbƒNƒX
+	//ãƒ¯ãƒ¼ã‚­ãƒ³ã‚°ãƒ„ãƒªãƒ¼/ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
 	UnicodeString stt_str = get_post_tab(UpdateStatusList());
 	if (!stt_str.IsEmpty()) {
 		UnicodeString stt_wk = get_pre_tab(stt_str);
 		UnicodeString stt_ix = get_post_tab(stt_str);
 
-		//ƒ[ƒLƒ“ƒOƒcƒŠ[
+		//ãƒ¯ãƒ¼ã‚­ãƒ³ã‚°ãƒ„ãƒªãƒ¼
 		git_rec *gp  = cre_GitRec(stt_wk);
 		gp->is_work  = true;
 		gp->graph	 = "*";
 
 		c_lst->AddObject(EmptyStr, (TObject *)gp);
-		//ƒCƒ“ƒfƒbƒNƒX
+		//ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
 		gp  = cre_GitRec(stt_ix);
 		gp->is_index = true;
 		gp->graph	 = "*";
 		c_lst->AddObject(EmptyStr, (TObject *)gp);
-		//ƒZƒpƒŒ[ƒ^
+		//ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿
 		gp  = cre_GitRec();
 		gp->graph	= "-";
 		c_lst->AddObject(EmptyStr, (TObject *)gp);
 	}
 
-	//ƒRƒ~ƒbƒg—š—ğ
+	//ã‚³ãƒŸãƒƒãƒˆå±¥æ­´
 	prm = "log --graph";
 	if (ShowBranchesAction->Checked && commit_id.IsEmpty()) prm += " --branches";
 	if (HistoryLimit>0) prm.cat_sprintf(_T(" -%u"), HistoryLimit);
@@ -353,7 +353,7 @@ void __fastcall TGitViewer::UpdateCommitList(
 	if (!commit_id.IsEmpty())  prm.cat_sprintf(_T(" %s"), commit_id.c_str());
 	if (!FilterName.IsEmpty()) prm.cat_sprintf(_T(" \"%s\""), FilterName.c_str());
 
-	//ƒOƒ‰ƒt / ƒRƒ~ƒbƒgID / eID / “ú / Œ–¼ / ƒuƒ‰ƒ“ƒ` / ƒ^ƒO / Author–¼
+	//ã‚°ãƒ©ãƒ• / ã‚³ãƒŸãƒƒãƒˆID / è¦ªID / æ—¥æ™‚ / ä»¶å / ãƒ–ãƒ©ãƒ³ãƒ / ã‚¿ã‚° / Authorå
 	int idx_h = -1;
 	UnicodeString last_parent;
 	DWORD exit_code;
@@ -413,7 +413,7 @@ void __fastcall TGitViewer::UpdateCommitList(
 		MaxGrWidth = (max_gr_len + 1) * c_lp->ItemHeight / 3;
 		MaxAnWidth = max_an_wd;
 
-		//c‚è‚ÌƒRƒ~ƒbƒg”
+		//æ®‹ã‚Šã®ã‚³ãƒŸãƒƒãƒˆæ•°
 		if (!last_parent.IsEmpty()) {
 			prm.sprintf(_T("rev-list --count %s"), last_parent.c_str());
 			if (!FilterName.IsEmpty()) prm.cat_sprintf(_T(" -- %s"), add_quot_if_spc(FilterName).c_str());
@@ -422,7 +422,7 @@ void __fastcall TGitViewer::UpdateCommitList(
 				int cnt = o_lst->Strings[0].ToIntDef(0);
 				if (cnt>0) {
 					git_rec *gp = cre_GitRec(
-						UnicodeString().sprintf(_T("ccc ‚±‚êˆÈ‘O‚É %u ŒÂ‚ÌƒRƒ~ƒbƒg‚ª‚ ‚è‚Ü‚· ccc"), cnt));
+						UnicodeString().sprintf(_T("â€¦â€¦â€¦ ã“ã‚Œä»¥å‰ã« %u å€‹ã®ã‚³ãƒŸãƒƒãƒˆãŒã‚ã‚Šã¾ã™ â€¦â€¦â€¦"), cnt));
 					gp->graph = "#";
 					c_lst->AddObject(EmptyStr, (TObject *)gp);
 				}
@@ -441,7 +441,7 @@ void __fastcall TGitViewer::UpdateCommitList(
 
 	if (idx_h==-1) idx_h = 0;
 
-	//ƒŠƒXƒgƒ{ƒbƒNƒX‚ÉŠ„‚è“–‚Ä
+	//ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã«å‰²ã‚Šå½“ã¦
 	c_lp->Items->Assign(c_lst.get());
 	SetCommitListIndex(idx_h);
 	CommitScrPanel->UpdateKnob();
@@ -455,13 +455,13 @@ void __fastcall TGitViewer::UpdateCommitList(
 }
 
 //---------------------------------------------------------------------------
-//ƒuƒ‰ƒ“ƒ`ˆê——‚ÌXV
+//ãƒ–ãƒ©ãƒ³ãƒä¸€è¦§ã®æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::UpdateBranchList()
 {
 	GitBusy = true;
 
-	//ƒ[ƒJƒ‹
+	//ãƒ­ãƒ¼ã‚«ãƒ«
 	TListBox *b_lp = BranchListBox;
 	b_lp->Clear();
 	int idx = -1;
@@ -469,7 +469,7 @@ void __fastcall TGitViewer::UpdateBranchList()
 	std::unique_ptr<TStringList> o_lst(new TStringList());
 	if (GitShellExe("branch", WorkDir, o_lst.get(), NULL, WarnList)) {
 		std::unique_ptr<TStringList> lst(new TStringList());
-		lst->AddObject("ƒuƒ‰ƒ“ƒ`", (TObject *)(NativeInt)(GIT_FLAG_HDRLN|GIT_FLAG_LOCAL));
+		lst->AddObject("ãƒ–ãƒ©ãƒ³ãƒ", (TObject *)(NativeInt)(GIT_FLAG_HDRLN|GIT_FLAG_LOCAL));
 		for (int i=0; i<o_lst->Count; i++) {
 			UnicodeString lbuf = o_lst->Strings[i];
 			bool is_hd = remove_top_s(lbuf, '*');
@@ -481,13 +481,13 @@ void __fastcall TGitViewer::UpdateBranchList()
 		}
 		b_lp->Items->Assign(lst.get());
 	}
-	//ƒŠƒ‚[ƒg
+	//ãƒªãƒ¢ãƒ¼ãƒˆ
 	if (ShowRBranchAction->Checked) {
 		o_lst->Clear();
 		if (GitShellExe("branch -r", WorkDir, o_lst.get(), NULL, WarnList)) {
 			std::unique_ptr<TStringList> lst(new TStringList());
 			lst->AddObject(EmptyStr, (TObject *)(NativeInt)GIT_FLAG_BLANK);
-			lst->AddObject("ƒŠƒ‚[ƒg", (TObject *)(NativeInt)(GIT_FLAG_HDRLN|GIT_FLAG_REMOTE));
+			lst->AddObject("ãƒªãƒ¢ãƒ¼ãƒˆ", (TObject *)(NativeInt)(GIT_FLAG_HDRLN|GIT_FLAG_REMOTE));
 			for (int i=0; i<o_lst->Count; i++) {
 				UnicodeString lbuf = Trim(o_lst->Strings[i]);
 				bool is_hd = ContainsStr(lbuf, "/HEAD -> ");
@@ -499,13 +499,13 @@ void __fastcall TGitViewer::UpdateBranchList()
 			b_lp->Items->AddStrings(lst.get());
 		}
 	}
-	//ƒ^ƒO
+	//ã‚¿ã‚°
 	if (ShowTagAction->Checked) {
 		o_lst->Clear();
 		UnicodeString prm = "tag --sort=";
 		prm += (DescTagAction->Checked? "-v:refname" : "v:refname"); 
 		if (GitShellExe(prm, WorkDir, o_lst.get(), NULL, WarnList)) {
-			//ƒRƒ~ƒbƒgˆê——‚É‚ ‚éƒ^ƒO‚ÌƒŠƒXƒg‚ğì¬
+			//ã‚³ãƒŸãƒƒãƒˆä¸€è¦§ã«ã‚ã‚‹ã‚¿ã‚°ã®ãƒªã‚¹ãƒˆã‚’ä½œæˆ
 			std::unique_ptr<TStringList> tag_lst(new TStringList());
 			for (int i=0; i<CommitListBox->Count; i++) {
 				git_rec *gp = (git_rec *)CommitListBox->Items->Objects[i];
@@ -516,10 +516,10 @@ void __fastcall TGitViewer::UpdateBranchList()
 					}
 				}
 			}
-			//ƒ^ƒO€–Ú‚ğ’Ç‰Á
+			//ã‚¿ã‚°é …ç›®ã‚’è¿½åŠ 
 			std::unique_ptr<TStringList> lst(new TStringList());
 			lst->AddObject(EmptyStr, (TObject *)(NativeInt)GIT_FLAG_BLANK);
-			lst->AddObject("ƒ^ƒO", (TObject *)(NativeInt)(GIT_FLAG_HDRLN|GIT_FLAG_TAG));
+			lst->AddObject("ã‚¿ã‚°", (TObject *)(NativeInt)(GIT_FLAG_HDRLN|GIT_FLAG_TAG));
 			for (int i=0; i<o_lst->Count; i++) {
 				UnicodeString tag = o_lst->Strings[i];
 				if (tag.IsEmpty()) continue;
@@ -545,7 +545,7 @@ void __fastcall TGitViewer::WaitTimerTimer(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::UpdateDiffList(
-	bool keep_idx)	//ItemIndex ‚ğˆÛ	(default = false);
+	bool keep_idx)	//ItemIndex ã‚’ç¶­æŒ	(default = false);
 {
 	int org_idx = DiffListBox->ItemIndex;
 	DiffListBox->Clear();
@@ -590,11 +590,11 @@ void __fastcall TGitViewer::UpdateDiffList(
 			}
 		}
 
-		//ì‹ÆƒcƒŠ[‚É ? ƒtƒ@ƒCƒ‹‚ğ’Ç‰Á
+		//ä½œæ¥­ãƒ„ãƒªãƒ¼ã« ? ãƒ•ã‚¡ã‚¤ãƒ«ã‚’è¿½åŠ 
 		if (gp->is_work && StatusList->Text.Pos('?')) {
 			o_lst->Add(EmptyStr);
 			o_lst->Add("-");
-			o_lst->Add("*’ÇÕ‚³‚ê‚Ä‚¢‚È‚¢ƒtƒ@ƒCƒ‹");
+			o_lst->Add("*è¿½è·¡ã•ã‚Œã¦ã„ãªã„ãƒ•ã‚¡ã‚¤ãƒ«");
 			std::unique_ptr<TStringList> u_lst(new TStringList());
 			for (int i=0; i<StatusList->Count; i++) {
 				UnicodeString lbuf = StatusList->Strings[i];
@@ -602,7 +602,7 @@ void __fastcall TGitViewer::UpdateDiffList(
 			}
 		}
 
-		//ƒŠƒXƒgƒ{ƒbƒNƒX‚ÉŠ„‚è“–‚Ä
+		//ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã«å‰²ã‚Šå½“ã¦
 		TListBox *d_lp = DiffListBox;
 		int max_fwd = 0;
 		for (int i=0; i<o_lst->Count; i++) {
@@ -618,12 +618,12 @@ void __fastcall TGitViewer::UpdateDiffList(
 }
 
 //---------------------------------------------------------------------------
-//ƒJ[ƒ\ƒ‹ˆÊ’u‚Ìƒuƒ‰ƒ“ƒ`–¼‚ğæ“¾
+//ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®ãƒ–ãƒ©ãƒ³ãƒåã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString __fastcall TGitViewer::GetCurBranchName(
-	bool lc_only,	//ƒ[ƒJƒ‹‚Ì‚İ	(default = false)
-	bool br_only,	//ƒuƒ‰ƒ“ƒ`‚Ì‚İ	(default = false)
-	bool av_only)	//—LŒø‚Ì‚İ		(default = true)
+	bool lc_only,	//ãƒ­ãƒ¼ã‚«ãƒ«ã®ã¿	(default = false)
+	bool br_only,	//ãƒ–ãƒ©ãƒ³ãƒã®ã¿	(default = false)
+	bool av_only)	//æœ‰åŠ¹ã®ã¿		(default = true)
 {
 	TListBox *lp = BranchListBox;
 	int idx = lp->ItemIndex;
@@ -641,7 +641,7 @@ UnicodeString __fastcall TGitViewer::GetCurBranchName(
 }
 
 //---------------------------------------------------------------------------
-//ƒuƒ‰ƒ“ƒ`ˆê——‚Ì•`‰æ
+//ãƒ–ãƒ©ãƒ³ãƒä¸€è¦§ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::BranchListBoxDrawItem(TWinControl *Control, int Index, TRect &Rect,
 	TOwnerDrawState State)
@@ -658,19 +658,19 @@ void __fastcall TGitViewer::BranchListBoxDrawItem(TWinControl *Control, int Inde
 	int xp = Rect.Left + SCALED_THIS(4);
 	int yp = Rect.Top  + SCALED_THIS(2);
 	UnicodeString lbuf = lp->Items->Strings[Index];
-	//ƒwƒbƒ_
+	//ãƒ˜ãƒƒãƒ€
 	if (flag & GIT_FLAG_HDRLN) {
 		out_TextEx(cv, xp, yp, lbuf, get_ListHdrFgCol(), get_ListHdrBgCol());
 	}
-	//€–Ú
+	//é …ç›®
 	else {
-		//HEADƒ}[ƒN
+		//HEADãƒãƒ¼ã‚¯
 		if (flag & GIT_FLAG_HEAD) {
 			cv->Font->Color = (flag & GIT_FLAG_REMOTE)? col_GitBraR : col_GitHEAD;
 			cv->TextOut(xp, yp, HEAD_Mark);
 		}
 		xp += cv->TextWidth(HEAD_Mark);
-		//ƒuƒ‰ƒ“ƒ`/ƒ^ƒO
+		//ãƒ–ãƒ©ãƒ³ãƒ/ã‚¿ã‚°
 		cv->Font->Color = is_SelFgCol(State)? col_fgSelItem : (flag & GIT_FLAG_INVAL)? col_InvItem : get_ListFgCol();
 		cv->TextOut(xp, yp, lbuf);
 	}
@@ -696,7 +696,7 @@ void __fastcall TGitViewer::BranchListBoxClick(TObject *Sender)
 
 	TagNames = EmptyStr;
 
-	//ƒRƒ~ƒbƒg—š—ğ‚ÌƒJ[ƒ\ƒ‹ˆÊ’u‚É”½‰f
+	//ã‚³ãƒŸãƒƒãƒˆå±¥æ­´ã®ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã«åæ˜ 
 	if (idx!=-1) {
 		int flag = (int)b_lp->Items->Objects[b_lp->ItemIndex];
 		UnicodeString lbuf	 = b_lp->Items->Strings[idx];
@@ -749,7 +749,7 @@ void __fastcall TGitViewer::BranchListBoxKeyDown(TObject *Sender, WORD &Key, TSh
 	Key = 0;
 }
 //---------------------------------------------------------------------------
-// ƒRƒ~ƒbƒg—š—ğ‚Ì•`‰æ
+// ã‚³ãƒŸãƒƒãƒˆå±¥æ­´ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::CommitListBoxDrawItem(TWinControl *Control, int Index, TRect &Rect,
 	TOwnerDrawState State)
@@ -781,13 +781,13 @@ void __fastcall TGitViewer::CommitListBoxDrawItem(TWinControl *Control, int Inde
 	}
 	if (SameStr(gp->graph, "...")) {
 		cv->Font->Color = col_LineNo;
-		out_TextEx(cv, xp, yp, "cc");
+		out_TextEx(cv, xp, yp, "â€¦â€¦");
 	}
-	//ƒZƒpƒŒ[ƒ^
+	//ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿
 	else if (SameStr(gp->graph, "-")) {
 		draw_Separator(cv, Rect);
 	}
-	//ƒOƒ‰ƒt
+	//ã‚°ãƒ©ãƒ•
 	else if (!gp->graph.IsEmpty()) {
 		git_rec *gp1 = (Index>0)? (git_rec *)lp->Items->Objects[Index - 1] : NULL;
 		git_rec *gp2 = (Index<(lp->Count - 1))? (git_rec *)lp->Items->Objects[Index + 1] : NULL;
@@ -806,15 +806,15 @@ void __fastcall TGitViewer::CommitListBoxDrawItem(TWinControl *Control, int Inde
 		out_TextEx(cv, xp, yp, s, get_ListFgCol(), col_None);
 	}
 	if (gp->is_work || gp->is_index) {
-		UnicodeString s1 = "ì‹ÆƒcƒŠ[ ";
-		UnicodeString s2 = "ƒCƒ“ƒfƒbƒNƒX ";
+		UnicodeString s1 = "ä½œæ¥­ãƒ„ãƒªãƒ¼ ";
+		UnicodeString s2 = "ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ ";
 		UnicodeString s  = gp->is_work? s1 : s2;
 		xp += (std::max(cv->TextWidth(s1), cv->TextWidth(s2)) - cv->TextWidth(s));
 		out_TextEx(cv, xp, yp, s, col_Folder, col_None, 0);
 		out_TextEx(cv, xp, yp, gp->msg, get_ListFgCol());
 	}
 	else if (!gp->hash.IsEmpty()) {
-		//ƒnƒbƒVƒ…
+		//ãƒãƒƒã‚·ãƒ¥
 		cv->Font->Color = col_GitHash;
 		for (int i=1; i<8; i++) {
 			UnicodeString c = gp->hash.SubString(i, 1);
@@ -830,18 +830,18 @@ void __fastcall TGitViewer::CommitListBoxDrawItem(TWinControl *Control, int Inde
 			xp += (MaxAnWidth + s_8);
 		}
 
-		//“ú
+		//æ—¥æ™‚
 		out_TextEx(cv, xp, yp, get_TimeStampStr(gp->f_time), get_TimeColor(gp->f_time, get_ListFgCol()), 
 			col_None, max_h_wd);
 
-		//ƒ^ƒO
+		//ã‚¿ã‚°
 		if (!gp->tags.IsEmpty()) {
 			TStringDynArray t_lst = split_strings_tab(gp->tags);
 			for (int i=0; i<t_lst.Length; i++) draw_GitTag(cv, xp, yp, t_lst[i], s_4);
 			xp += s_4;
 		}
 
-		//ƒuƒ‰ƒ“ƒ`–¼
+		//ãƒ–ãƒ©ãƒ³ãƒå
 		if (!gp->branch.IsEmpty()) {
 			TStringDynArray b_buf = SplitString(gp->branch, ",");
 			for (int i=0; i<b_buf.Length; i++) {
@@ -856,7 +856,7 @@ void __fastcall TGitViewer::CommitListBoxDrawItem(TWinControl *Control, int Inde
 			out_TextEx(cv, xp, yp, gp->branch_r, get_ListBgCol(), col_GitBraR, s_8);
 		}
 
-		//ƒƒbƒZ[ƒW
+		//ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
 		out_TextEx(cv, xp, yp, gp->msg, get_ListFgCol());
 	}
 
@@ -865,7 +865,7 @@ void __fastcall TGitViewer::CommitListBoxDrawItem(TWinControl *Control, int Inde
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::CommitListBoxClick(TObject *Sender)
 {
-	//ƒRƒ~ƒbƒg‚Å‚Í‚È‚¢€–Ú‚ğƒXƒLƒbƒv
+	//ã‚³ãƒŸãƒƒãƒˆã§ã¯ãªã„é …ç›®ã‚’ã‚¹ã‚­ãƒƒãƒ—
 	TListBox *c_lp = CommitListBox;
 	if (c_lp->ItemIndex==-1) return;
 	if (c_lp->ItemIndex!=LastCmListIdx) {
@@ -909,7 +909,7 @@ void __fastcall TGitViewer::CommitListBoxKeyDown(TObject *Sender, WORD &Key, TSh
 }
 
 //---------------------------------------------------------------------------
-//·•ªŠT—ª‚Ì•`‰æ
+//å·®åˆ†æ¦‚ç•¥ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::DiffListBoxDrawItem(TWinControl *Control, int Index, TRect &Rect,
 	TOwnerDrawState State)
@@ -926,7 +926,7 @@ void __fastcall TGitViewer::DiffListBoxDrawItem(TWinControl *Control, int Index,
 	if (lbuf.Pos(" | ")) {
 		UnicodeString s = split_tkn(lbuf, " | ");
 
-		//ƒfƒBƒŒƒNƒgƒŠ–¼
+		//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå
 		int p = pos_r('/', s);
 		if (p>1) {
 			UnicodeString dnam = s.SubString(1, p);
@@ -934,36 +934,36 @@ void __fastcall TGitViewer::DiffListBoxDrawItem(TWinControl *Control, int Index,
 			if (dnam.Pos(" => ")) {
 				UnicodeString s1 = split_tkn(dnam, " => ");
 				out_TextEx(cv, xp, yp, s1, col_Folder, col_None, 0);
-				out_TextEx(cv, xp, yp, " ¨ ", get_ListFgCol(), col_None, 0);
+				out_TextEx(cv, xp, yp, " â†’ ", get_ListFgCol(), col_None, 0);
 			}
 			out_TextEx(cv, xp, yp, dnam, col_Folder, col_None, 0);
 		}
 
-		//ƒtƒ@ƒCƒ‹–¼
+		//ãƒ•ã‚¡ã‚¤ãƒ«å
 		if (s.Pos(" => ")) {
 			UnicodeString s1 = split_tkn(s, " => ");
 			out_TextEx(cv, xp, yp, s1, get_ExtColor(get_extension(s1), get_ListFgCol()), col_None, 0);
-			out_TextEx(cv, xp, yp, " ¨ ", get_ListFgCol());
+			out_TextEx(cv, xp, yp, " â†’ ", get_ListFgCol());
 		}
 		out_TextEx(cv, xp, yp, s, get_ExtColor(get_extension(Trim(s)), get_ListFgCol()));
 
-		//Œrü
+		//ç½«ç·š
 		TRect rc = Rect; rc.Left = xp = MaxDfWidth;
-		RuledLnTextOut("„ ", cv, rc, get_ListFgCol());
+		RuledLnTextOut("â”‚", cv, rc, get_ListFgCol());
 		xp = rc.Left;
-		//“Œv
+		//çµ±è¨ˆ
 		s = split_tkn_spc(lbuf) + " ";
 		if (StartsText("Bin", Trim(s))) {
 			out_TextEx(cv, xp, yp, s, AdjustColor(get_ListFgCol(), ADJCOL_FGLIST));
-			lbuf = ReplaceStr(lbuf, "->", "¨");
+			lbuf = ReplaceStr(lbuf, "->", "â†’");
 			out_TextEx(cv, xp, yp, lbuf, get_ListFgCol());
 		}
 		else {
-			//•ÏX”
+			//å¤‰æ›´æ•°
 			UnicodeString tmp = ReplaceStr(s, " ", "0");
 			xp += (cv->TextWidth(tmp) - cv->TextWidth(s));
 			out_TextEx(cv, xp, yp, s, get_ListFgCol());
-			//ƒOƒ‰ƒt
+			//ã‚°ãƒ©ãƒ•
 			int g_w = rc.Height() / 3;
 			TRect g_rc = rc;
 			g_rc.Left = xp; g_rc.SetWidth(g_w); g_rc.SetHeight(g_w); g_rc.Offset(0, g_w);
@@ -977,20 +977,20 @@ void __fastcall TGitViewer::DiffListBoxDrawItem(TWinControl *Control, int Index,
 			}
 		}
 	}
-	//ƒZƒpƒŒ[ƒ^
+	//ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿
 	else if (SameStr(lbuf, "-")) {
 		draw_Separator(cv, Rect);
 	}
-	//’ÇÕ‚³‚ê‚Ä‚¢‚È‚¢`
+	//è¿½è·¡ã•ã‚Œã¦ã„ãªã„ï½
 	else if (lbuf.Pos('*')) {
 		out_TextEx(cv, xp, yp, ReplaceStr(lbuf, "*", "?"), col_Headline);
 	}
-	//? ƒtƒ@ƒCƒ‹
+	//? ãƒ•ã‚¡ã‚¤ãƒ«
 	else if (SameStr(lbuf.SubString(2, 1), "?")) {
 		lbuf.Delete(1, 2);
 		out_TextEx(cv, xp, yp, lbuf, get_ExtColor(get_extension(Trim(lbuf)), get_ListFgCol()));
 	}
-	//Œv
+	//è¨ˆ
 	else {
 		TStringDynArray t_buf = get_csv_array(lbuf, 3);
 		if (t_buf.Length==3) {
@@ -1065,7 +1065,7 @@ void __fastcall TGitViewer::GitListBoxMouseDown(TObject *Sender, TMouseButton Bu
 }
 
 //---------------------------------------------------------------------------
-//ƒ`ƒFƒbƒNƒAƒEƒg
+//ãƒã‚§ãƒƒã‚¯ã‚¢ã‚¦ãƒˆ
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::CheckoutActionExecute(TObject *Sender)
 {
@@ -1085,11 +1085,11 @@ void __fastcall TGitViewer::CheckoutActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒuƒ‰ƒ“ƒ`‚Ìì¬
+//ãƒ–ãƒ©ãƒ³ãƒã®ä½œæˆ
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::CreBranchActionExecute(TObject *Sender)
 {
-	UnicodeString bnam = InputBox("ƒuƒ‰ƒ“ƒ`‚Ìì¬", "ƒuƒ‰ƒ“ƒ`–¼", EmptyStr);
+	UnicodeString bnam = InputBox("ãƒ–ãƒ©ãƒ³ãƒã®ä½œæˆ", "ãƒ–ãƒ©ãƒ³ãƒå", EmptyStr);
 	if (!bnam.IsEmpty()) GitExeStr("branch " + bnam);
 }
 //---------------------------------------------------------------------------
@@ -1099,20 +1099,20 @@ void __fastcall TGitViewer::CreBranchActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒuƒ‰ƒ“ƒ`‚Ìíœ
+//ãƒ–ãƒ©ãƒ³ãƒã®å‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::DelBranchActionExecute(TObject *Sender)
 {
 	UnicodeString bnam = GetCurBranchName(true, true);
 	if (!bnam.IsEmpty()) {
 		UnicodeString msg;
-		msg.sprintf(_T("ƒuƒ‰ƒ“ƒ`[%s]‚ğíœ‚µ‚Ä‚à‚æ‚¢‚Å‚·‚©?"), bnam.c_str());
+		msg.sprintf(_T("ãƒ–ãƒ©ãƒ³ãƒ[%s]ã‚’å‰Šé™¤ã—ã¦ã‚‚ã‚ˆã„ã§ã™ã‹?"), bnam.c_str());
 		Screen->MessageFont->Assign(Font);
 		TForm *MsgDlg = CreateMessageDialog(msg, mtConfirmation,
 							TMsgDlgButtons() << mbYes << mbNo << mbCancel, mbNo);
 		TCheckBox *cp = new TCheckBox(MsgDlg);
 		MsgDlg->ClientHeight = MsgDlg->ClientHeight + cp->Height + 12;
-		cp->Caption = "‹­§“I‚Éíœ(&D)";
+		cp->Caption = "å¼·åˆ¶çš„ã«å‰Šé™¤(&D)";
 		cp->Parent	= MsgDlg;
 		cp->Left	= 20;
 		cp->Top		= MsgDlg->ClientHeight - cp->Height - 12;
@@ -1135,13 +1135,13 @@ void __fastcall TGitViewer::DelBranchActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒuƒ‰ƒ“ƒ`‚Ì–¼‘O‚ğ•ÏX
+//ãƒ–ãƒ©ãƒ³ãƒã®åå‰ã‚’å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::RenBranchActionExecute(TObject *Sender)
 {
 	UnicodeString bnam = GetCurBranchName(true, true, false);
 	if (!bnam.IsEmpty()) {
-		UnicodeString new_nam = InputBox("ƒuƒ‰ƒ“ƒ`‚Ì–¼‘O‚ğ•ÏX", "ƒuƒ‰ƒ“ƒ`–¼", bnam);
+		UnicodeString new_nam = InputBox("ãƒ–ãƒ©ãƒ³ãƒã®åå‰ã‚’å¤‰æ›´", "ãƒ–ãƒ©ãƒ³ãƒå", bnam);
 		if (!new_nam.IsEmpty()) {
 			UnicodeString prm;
 			prm.sprintf(_T("branch -m %s %s"), bnam.c_str(), new_nam.c_str());
@@ -1156,11 +1156,11 @@ void __fastcall TGitViewer::RenBranchActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒO‚ğ•t‚¯‚é
+//ã‚¿ã‚°ã‚’ä»˜ã‘ã‚‹
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::SetTagActionExecute(TObject *Sender)
 {
-	if (!SetGitTagDlg) SetGitTagDlg = new TSetGitTagDlg(this);	//‰‰ñ‚É“®“Iì¬
+	if (!SetGitTagDlg) SetGitTagDlg = new TSetGitTagDlg(this);	//åˆå›ã«å‹•çš„ä½œæˆ
 	SetGitTagDlg->CommitID	  = BranchListBox->Focused()? GetCurBranchName(true, true) : CommitID;
 	SetGitTagDlg->EditMsgFile = IncludeTrailingPathDelimiter(WorkDir) + ".git\\TAG_EDITMSG";
 	if (SetGitTagDlg->ShowModal()==mrOk) GitExeStr(SetGitTagDlg->GitParam);
@@ -1174,14 +1174,14 @@ void __fastcall TGitViewer::SetTagActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒO‚Ìíœ
+//ã‚¿ã‚°ã®å‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::DelTagActionExecute(TObject *Sender)
 {
 	UnicodeString tag = get_pre_tab(TagNames);
 	if (!tag.IsEmpty()) {
 		UnicodeString msg;
-		msg.sprintf(_T("ƒ^ƒO [%s] ‚ğíœ‚µ‚Ä‚à‚æ‚¢‚Å‚·‚©?"), tag.c_str());
+		msg.sprintf(_T("ã‚¿ã‚° [%s] ã‚’å‰Šé™¤ã—ã¦ã‚‚ã‚ˆã„ã§ã™ã‹?"), tag.c_str());
 		if (msgbox_Sure(msg)) GitExeStr("tag -d " + tag);
 	}
 }
@@ -1192,14 +1192,14 @@ void __fastcall TGitViewer::DelTagActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒ}[ƒW
+//ãƒãƒ¼ã‚¸
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::MergeActionExecute(TObject *Sender)
 {
 	UnicodeString bnam = GetCurBranchName(true, true);
 	if (!CurIsHEAD() && !bnam.IsEmpty()) {
 		UnicodeString msg;
-		msg.sprintf(_T("[%s] ‚ğ [%s] ‚Éƒ}[ƒW‚µ‚Ü‚·‚©?"), bnam.c_str(), RefHEAD.c_str());
+		msg.sprintf(_T("[%s] ã‚’ [%s] ã«ãƒãƒ¼ã‚¸ã—ã¾ã™ã‹?"), bnam.c_str(), RefHEAD.c_str());
 		if (msgbox_Sure(msg)) GitExeStr("merge " + bnam);
 	}
 }
@@ -1210,13 +1210,13 @@ void __fastcall TGitViewer::MergeActionUpdate(TObject *Sender)
 	((TAction *)Sender)->Visible = !(flag & GIT_FLAG_HEAD) && (flag & GIT_FLAG_LOCAL);
 }
 //---------------------------------------------------------------------------
-//ƒ`ƒFƒŠ[ƒsƒbƒN
+//ãƒã‚§ãƒªãƒ¼ãƒ”ãƒƒã‚¯
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::CherryPickActionExecute(TObject *Sender)
 {
 	git_rec *gp = GetCurCommitPtr();
 	if (!SameText(gp->branch, RefHEAD)) {
-		if (msgbox_Sure("‚±‚ÌƒRƒ~ƒbƒg‚ğƒ`ƒFƒŠ[ƒsƒbƒN‚µ‚Ü‚·‚©?")) GitExeStr("cherry-pick " + gp->hash);
+		if (msgbox_Sure("ã“ã®ã‚³ãƒŸãƒƒãƒˆã‚’ãƒã‚§ãƒªãƒ¼ãƒ”ãƒƒã‚¯ã—ã¾ã™ã‹?")) GitExeStr("cherry-pick " + gp->hash);
 	}
 }
 //---------------------------------------------------------------------------
@@ -1226,7 +1226,7 @@ void __fastcall TGitViewer::CherryPickActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒuƒ‰ƒ“ƒ`–¼‚ğƒRƒs[
+//ãƒ–ãƒ©ãƒ³ãƒåã‚’ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::CopyBranchNameActionExecute(TObject *Sender)
 {
@@ -1246,7 +1246,7 @@ void __fastcall TGitViewer::CopyBranchNameActionUpdate(TObject *Sender)
 	((TAction *)Sender)->Visible = !BranchName.IsEmpty();
 }
 //---------------------------------------------------------------------------
-//ƒRƒ~ƒbƒgID‚ğƒRƒs[
+//ã‚³ãƒŸãƒƒãƒˆIDã‚’ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::CopyCommitIDActionExecute(TObject *Sender)
 {
@@ -1259,7 +1259,7 @@ void __fastcall TGitViewer::CopyCommitIDActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//’¼‘O‚ÌƒRƒ~ƒbƒg‚É–ß‚·
+//ç›´å‰ã®ã‚³ãƒŸãƒƒãƒˆã«æˆ»ã™
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::BrPopupMenuPopup(TObject *Sender)
 {
@@ -1272,22 +1272,22 @@ void __fastcall TGitViewer::ResetItemClick(TObject *Sender)
 	int tag = ((TMenuItem *)Sender)->Tag;
 	UnicodeString prm = (tag==2)? "Hard" : (tag==0)? "Soft" : "Mixed";
 	UnicodeString msg;
-	msg.sprintf(_T("[%s] ‚ğ’¼‘O‚ÌƒRƒ~ƒbƒg‚É–ß‚µ‚Ü‚·‚©(%s)?"), RefHEAD.c_str(), prm.c_str());
+	msg.sprintf(_T("[%s] ã‚’ç›´å‰ã®ã‚³ãƒŸãƒƒãƒˆã«æˆ»ã—ã¾ã™ã‹(%s)?"), RefHEAD.c_str(), prm.c_str());
 	if (msgbox_Sure(msg)) GitExeStr("reset --" + prm.LowerCase() + " HEAD^");
 }
 
 //---------------------------------------------------------------------------
-//ƒA[ƒJƒCƒuì¬
+//ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ä½œæˆ
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::ArchiveActionExecute(TObject *Sender)
 {
 	if (!CommitID.IsEmpty()) {
-		UserModule->PrepareSaveDlg(_T("ƒA[ƒJƒCƒu‚Ìì¬"), _T("ƒA[ƒJƒCƒu (*.zip)|*.zip"), _T("archive.zip"), WorkDir);
+		UserModule->PrepareSaveDlg(_T("ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ã®ä½œæˆ"), _T("ã‚¢ãƒ¼ã‚«ã‚¤ãƒ– (*.zip)|*.zip"), _T("archive.zip"), WorkDir);
 		UnicodeString arc_name = UserModule->SaveDlgExecute();
 		if (!arc_name.IsEmpty()) {
 			UnicodeString prm;
 			prm.sprintf(_T("archive --format=zip %s --output=\"%s\""), CommitID.c_str(), yen_to_slash(arc_name).c_str());
-			GitExeList(prm, NULL, "ƒA[ƒJƒCƒuì¬’†...");
+			GitExeList(prm, NULL, "ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ä½œæˆä¸­...");
 		}
 	}
 }
@@ -1297,7 +1297,7 @@ void __fastcall TGitViewer::ArchiveActionUpdate(TObject *Sender)
 	((TAction *)Sender)->Visible = !CommitID.IsEmpty();
 }
 //---------------------------------------------------------------------------
-//ˆêƒA[ƒJƒCƒu‚Æ‚µ‚ÄŠJ‚­
+//ä¸€æ™‚ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ã¨ã—ã¦é–‹ã
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::OpenTmpArcActionExecute(TObject *Sender)
 {
@@ -1305,7 +1305,7 @@ void __fastcall TGitViewer::OpenTmpArcActionExecute(TObject *Sender)
 		UnicodeString tmp_name = TempPathA + CommitID.SubString(1, 8) + "_" + get_dir_name(WorkDir) + ".zip";
 		UnicodeString prm;
 		prm.sprintf(_T("archive --format=zip %s --output=\"%s\""), CommitID.c_str(), yen_to_slash(tmp_name).c_str());
-		if (GitExeList(prm, NULL, "ƒA[ƒJƒCƒuì¬’†...") && file_exists(tmp_name)) {
+		if (GitExeList(prm, NULL, "ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ä½œæˆä¸­...") && file_exists(tmp_name)) {
 			RetArcFile	= tmp_name;
 			ModalResult = mrOk;
 		}
@@ -1313,7 +1313,7 @@ void __fastcall TGitViewer::OpenTmpArcActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//‚±‚ÌƒRƒ~ƒbƒg‚Ü‚Å‚Ì—š—ğ‚ğ•\¦
+//ã“ã®ã‚³ãƒŸãƒƒãƒˆã¾ã§ã®å±¥æ­´ã‚’è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::LogThisCommitActionExecute(TObject *Sender)
 {
@@ -1326,7 +1326,7 @@ void __fastcall TGitViewer::LogThisCommitActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//eƒRƒ~ƒbƒg‚ğblame
+//è¦ªã‚³ãƒŸãƒƒãƒˆã‚’blame
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::BlameActionExecute(TObject *Sender)
 {
@@ -1340,7 +1340,7 @@ void __fastcall TGitViewer::BlameActionExecute(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//‚±‚Ìƒtƒ@ƒCƒ‹‚ÌƒRƒ~ƒbƒg—š—ğ‚ğ•\¦
+//ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚³ãƒŸãƒƒãƒˆå±¥æ­´ã‚’è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::LogThisFileActionExecute(TObject *Sender)
 {
@@ -1349,22 +1349,22 @@ void __fastcall TGitViewer::LogThisFileActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒ~ƒbƒgî•ñ‚ğ•\¦
+//ã‚³ãƒŸãƒƒãƒˆæƒ…å ±ã‚’è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::CommitInfoActionExecute(TObject *Sender)
 {
 	std::unique_ptr<TStringList> i_lst(new TStringList());
 	WarnList->Clear();
 
-	//Šî–{î•ñ
+	//åŸºæœ¬æƒ…å ±
 	UnicodeString prm =
 		"show --no-patch --date=format:\"%Y/%m/%d %H:%M:%S\" --pretty=format:\""
-		"ƒRƒ~ƒbƒg=%H\n"
-		"ƒcƒŠ[=%T\n"
-		"e=%P\n\n"
-		"ìÒ=%an\nìÒEmail=%ae\nìÒ“ú•t=%ad\n"
-		"ƒRƒ~ƒbƒ^=%cn\nƒRƒ~ƒbƒ^Email=%ce\nƒRƒ~ƒbƒ^“ú•t=%cd\n\n"
-		"Œ–¼=%s\n\"";
+		"ã‚³ãƒŸãƒƒãƒˆ=%H\n"
+		"ãƒ„ãƒªãƒ¼=%T\n"
+		"è¦ª=%P\n\n"
+		"ä½œè€…=%an\nä½œè€…Email=%ae\nä½œè€…æ—¥ä»˜=%ad\n"
+		"ã‚³ãƒŸãƒƒã‚¿=%cn\nã‚³ãƒŸãƒƒã‚¿Email=%ce\nã‚³ãƒŸãƒƒã‚¿æ—¥ä»˜=%cd\n\n"
+		"ä»¶å=%s\n\"";
 	prm.cat_sprintf(_T(" %s"), CommitID.c_str());
 	TStringDynArray r_buf = GitExeStrArray(prm);
 	if (r_buf.Length>0) {
@@ -1376,8 +1376,8 @@ void __fastcall TGitViewer::CommitInfoActionExecute(TObject *Sender)
 			else {
 				UnicodeString vstr = get_tkn_r(r_buf[i], '=');
 				if (vstr.IsEmpty()) continue;
-				int flag = (i<3)? LBFLG_GIT_HASH : EndsStr("“ú•t", nstr)? LBFLG_TIME_FIF : 0;
-				if (SameText(nstr, "e")) {
+				int flag = (i<3)? LBFLG_GIT_HASH : EndsStr("æ—¥ä»˜", nstr)? LBFLG_TIME_FIF : 0;
+				if (SameText(nstr, "è¦ª")) {
 					for (int j=0; !vstr.IsEmpty(); j++) {
 						add_PropLine((j==0)? nstr : UnicodeString(" "), split_tkn_spc(vstr), i_lst.get(), flag);
 					}
@@ -1389,7 +1389,7 @@ void __fastcall TGitViewer::CommitInfoActionExecute(TObject *Sender)
 		}
 	}
 
-	//ƒƒbƒZ[ƒW
+	//ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
 	prm.sprintf(_T("show --no-patch --pretty=medium %s"), CommitID.c_str());
 	r_buf = GitExeStrArray(prm);
 	if (r_buf.Length>0) {
@@ -1407,36 +1407,36 @@ void __fastcall TGitViewer::CommitInfoActionExecute(TObject *Sender)
 		}
 	}
 
-	//’ß
+	//æ³¨é‡ˆ
 	prm.sprintf(_T("notes show %s"), CommitID.c_str());
 	r_buf = GitExeStrArray(prm);
 	if (r_buf.Length>0) {
 		for (int i=0; i<r_buf.Length; i++) {
 			UnicodeString lbuf = r_buf[i];
 			if (r_buf.Length==1) lbuf = Trim(lbuf);
-			add_PropLine((i==0)? "’ß" : " ", lbuf, i_lst.get());
+			add_PropLine((i==0)? "æ³¨é‡ˆ" : " ", lbuf, i_lst.get());
 		}
 	}
 
 	i_lst->Add(EmptyStr);
 
-	//ƒuƒ‰ƒ“ƒ`
+	//ãƒ–ãƒ©ãƒ³ãƒ
 	prm.sprintf(_T("branch --contains %s"), CommitID.c_str());
 	r_buf = GitExeStrArray(prm);
 	if (r_buf.Length>0) {
 		for (int i=0; i<r_buf.Length; i++) {
 			UnicodeString lbuf = r_buf[i];
 			if (r_buf.Length==1) lbuf = Trim(lbuf);
-			add_PropLine((i==0)? "ƒuƒ‰ƒ“ƒ`" : " ", lbuf, i_lst.get());
+			add_PropLine((i==0)? "ãƒ–ãƒ©ãƒ³ãƒ" : " ", lbuf, i_lst.get());
 		}
 	}
 
-	//ƒ^ƒO
+	//ã‚¿ã‚°
 	if (!TagNames.IsEmpty()) {
 		TStringDynArray t_lst = split_strings_tab(TagNames);
 		for (int i=0; i<t_lst.Length; i++) {
-			add_PropLine("ƒ^ƒO", t_lst[i], i_lst.get(), LBFLG_GIT_TAG);
-			//’ß
+			add_PropLine("ã‚¿ã‚°", t_lst[i], i_lst.get(), LBFLG_GIT_TAG);
+			//æ³¨é‡ˆ
 			prm = "show --no-patch --oneline " + t_lst[i];
 			r_buf = GitExeStrArray(prm);
 			if (r_buf.Length>0) {
@@ -1456,24 +1456,24 @@ void __fastcall TGitViewer::CommitInfoActionExecute(TObject *Sender)
 			}
 		}
 	}
-	//ÅVƒ^ƒO
+	//æœ€æ–°ã‚¿ã‚°
 	else {
 		prm.sprintf(_T("describe --tags --abbrev=0 %s"), CommitID.c_str());
 		r_buf = GitExeStrArray(prm);
 		if (r_buf.Length>0) {
-			add_PropLine("ÅVƒ^ƒO", r_buf[0], i_lst.get(), LBFLG_GIT_TAG);
+			add_PropLine("æœ€æ–°ã‚¿ã‚°", r_buf[0], i_lst.get(), LBFLG_GIT_TAG);
 		}
 	}
 
-	//‘Š‘ÎQÆ
+	//ç›¸å¯¾å‚ç…§
 	prm.sprintf(_T("name-rev --name-only %s"), CommitID.c_str());
 	r_buf = GitExeStrArray(prm);
 	if (r_buf.Length>0) {
-		add_PropLine("‘Š‘ÎQÆ", r_buf[0], i_lst.get(),
+		add_PropLine("ç›¸å¯¾å‚ç…§", r_buf[0], i_lst.get(),
 			StartsStr("tags/", r_buf[0])? LBFLG_GIT_TAG : 0);
 	}
 
-	//Œx
+	//è­¦å‘Š
 	if (WarnList->Count>0) {
 		i_lst->Add(EmptyStr);
 		i_lst->AddStrings(WarnList);
@@ -1496,7 +1496,7 @@ void __fastcall TGitViewer::CommitInfoActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//‚±‚Ìƒtƒ@ƒCƒ‹‚ÌƒnƒbƒVƒ…‚ğƒRƒs[
+//ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒãƒƒã‚·ãƒ¥ã‚’ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::CopyFileHashActionExecute(TObject *Sender)
 {
@@ -1505,7 +1505,7 @@ void __fastcall TGitViewer::CopyFileHashActionExecute(TObject *Sender)
 	copy_to_Clipboard(GitExeStr(prm));
 }
 //---------------------------------------------------------------------------
-//‚±‚Ìƒtƒ@ƒCƒ‹‚ÌƒpƒX‚ğƒRƒs[
+//ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹ã‚’ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::CopyPathActionExecute(TObject *Sender)
 {
@@ -1520,7 +1520,7 @@ void __fastcall TGitViewer::CopyFileInfActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//‚±‚Ìƒtƒ@ƒCƒ‹‚Ì·•ªÚ×‚ğ•\¦
+//ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã®å·®åˆ†è©³ç´°ã‚’è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::DiffDetailActionExecute(TObject *Sender)
 {
@@ -1560,7 +1560,7 @@ void __fastcall TGitViewer::DiffDetailActionExecute(TObject *Sender)
 	if (ok) {
 		UnicodeString tit = "$ git " + sha1_to_short(prm);
 		o_lst->Insert(0, tit);
-		GeneralInfoDlg->Caption = tit.sprintf(_T("·•ªÚ× - %s"), fnam2.c_str());
+		GeneralInfoDlg->Caption = tit.sprintf(_T("å·®åˆ†è©³ç´° - %s"), fnam2.c_str());
 		GeneralInfoDlg->fromGitView = true;
 		if (gp->is_work || gp->is_index)
 			GeneralInfoDlg->FileName = IncludeTrailingPathDelimiter(WorkDir) + slash_to_yen(fnam1);
@@ -1574,7 +1574,7 @@ void __fastcall TGitViewer::DiffDetailActionUpdate(TObject *Sender)
 	((TAction *)Sender)->Enabled = !GetDiffFileName().IsEmpty();
 }
 //---------------------------------------------------------------------------
-//‚±‚Ìƒtƒ@ƒCƒ‹‚Ì“à—e‚ğ•\¦
+//ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã®å†…å®¹ã‚’è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::ViewFileActionExecute(TObject *Sender)
 {
@@ -1599,11 +1599,11 @@ void __fastcall TGitViewer::ViewFileActionExecute(TObject *Sender)
 			else
 				prm.cat_sprintf(_T(" %s:%s"), CommitID.c_str(), fnam.c_str());
 
-			ok = GitExeList(prm, o_lst.get(), "ƒtƒ@ƒCƒ‹’Šo’†...");
+			ok = GitExeList(prm, o_lst.get(), "ãƒ•ã‚¡ã‚¤ãƒ«æŠ½å‡ºä¸­...");
 		}
 
 		if (ok) {
-			GeneralInfoDlg->Caption     = UnicodeString().sprintf(_T("ƒtƒ@ƒCƒ‹“à—e - %s"), fnam.c_str());
+			GeneralInfoDlg->Caption     = UnicodeString().sprintf(_T("ãƒ•ã‚¡ã‚¤ãƒ«å†…å®¹ - %s"), fnam.c_str());
 			GeneralInfoDlg->FileName    = fnam;
 			GeneralInfoDlg->isNonFile   = !gp->is_work;
 			GeneralInfoDlg->fromGitView = true;
@@ -1620,7 +1620,7 @@ void __fastcall TGitViewer::ViewFileActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒŠƒ‚[ƒgƒuƒ‰ƒ“ƒ`‚ğ•\¦
+//ãƒªãƒ¢ãƒ¼ãƒˆãƒ–ãƒ©ãƒ³ãƒã‚’è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::ShowRBranchActionExecute(TObject *Sender)
 {
@@ -1628,7 +1628,7 @@ void __fastcall TGitViewer::ShowRBranchActionExecute(TObject *Sender)
 	UpdateBranchList();
 }
 //---------------------------------------------------------------------------
-//ƒ^ƒO‚ğ•\¦
+//ã‚¿ã‚°ã‚’è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::ShowTagActionExecute(TObject *Sender)
 {
@@ -1636,7 +1636,7 @@ void __fastcall TGitViewer::ShowTagActionExecute(TObject *Sender)
 	UpdateBranchList();
 }
 //---------------------------------------------------------------------------
-//ƒ^ƒO‚ğ~‡‚Å•\¦
+//ã‚¿ã‚°ã‚’é™é †ã§è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::DescTagActionExecute(TObject *Sender)
 {
@@ -1645,7 +1645,7 @@ void __fastcall TGitViewer::DescTagActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//‘¼‚Ìƒuƒ‰ƒ“ƒ`‚à•\¦
+//ä»–ã®ãƒ–ãƒ©ãƒ³ãƒã‚‚è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::ShowBranchesActionExecute(TObject *Sender)
 {
@@ -1653,7 +1653,7 @@ void __fastcall TGitViewer::ShowBranchesActionExecute(TObject *Sender)
 	UpdateCommitList();
 }
 //---------------------------------------------------------------------------
-//ƒŠƒ‚[ƒgQÆ‚ğ•\¦
+//ãƒªãƒ¢ãƒ¼ãƒˆå‚ç…§ã‚’è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::ShowRemoteActionExecute(TObject *Sender)
 {
@@ -1661,7 +1661,7 @@ void __fastcall TGitViewer::ShowRemoteActionExecute(TObject *Sender)
 	UpdateCommitList();
 }
 //---------------------------------------------------------------------------
-//Author ‚Ì–¼‘O‚ğ•\¦
+//Author ã®åå‰ã‚’è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::ShowAuthorActionExecute(TObject *Sender)
 {
@@ -1736,7 +1736,7 @@ void __fastcall TGitViewer::FindCommitEditExit(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒ~ƒbƒgŒŸõ
+//ã‚³ãƒŸãƒƒãƒˆæ¤œç´¢
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::FindUpActionExecute(TObject *Sender)
 {
@@ -1792,7 +1792,7 @@ void __fastcall TGitViewer::FindBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//XV
+//æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::UpdateLogActionExecute(TObject *Sender)
 {
@@ -1801,7 +1801,7 @@ void __fastcall TGitViewer::UpdateLogActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//Diffƒc[ƒ‹‚ğ‹N“®
+//Diffãƒ„ãƒ¼ãƒ«ã‚’èµ·å‹•
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::DiffToolActionExecute(TObject *Sender)
 {
@@ -1836,11 +1836,11 @@ void __fastcall TGitViewer::DiffActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//Git GREP ‚ğŠJ‚­
+//Git GREP ã‚’é–‹ã
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::GrepActionExecute(TObject *Sender)
 {
-	if (!GitGrepForm) GitGrepForm = new TGitGrepForm(this);	//‰‰ñ‚É“®“Iì¬
+	if (!GitGrepForm) GitGrepForm = new TGitGrepForm(this);	//åˆå›ã«å‹•çš„ä½œæˆ
 	GitGrepForm->WorkDir  = WorkDir;
 	GitGrepForm->CommitID = CommitID;
 	GitGrepForm->ShowModal();
@@ -1853,7 +1853,7 @@ void __fastcall TGitViewer::GrepActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//git-gui‚ğ‹N“®
+//git-guiã‚’èµ·å‹•
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::GuiActionExecute(TObject *Sender)
 {
@@ -1868,7 +1868,7 @@ void __fastcall TGitViewer::GuiActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//Console‚ğ‹N“®
+//Consoleã‚’èµ·å‹•
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::ConsoleActionExecute(TObject *Sender)
 {
@@ -1883,7 +1883,7 @@ void __fastcall TGitViewer::ConsoleActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒeƒLƒXƒgƒGƒfƒBƒ^‚ÅŠJ‚­
+//ãƒ†ã‚­ã‚¹ãƒˆã‚¨ãƒ‡ã‚£ã‚¿ã§é–‹ã
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::EditFileActionExecute(TObject *Sender)
 {
@@ -1894,7 +1894,7 @@ void __fastcall TGitViewer::EditFileActionExecute(TObject *Sender)
 		fnam = IncludeTrailingPathDelimiter(WorkDir) + slash_to_yen(fnam);
 	}
 	else {
-		MsgHint->ShowMsgHint("ƒtƒ@ƒCƒ‹’Šo’†...", this, col_bgHint);
+		MsgHint->ShowMsgHint("ãƒ•ã‚¡ã‚¤ãƒ«æŠ½å‡ºä¸­...", this, col_bgHint);
 		GitBusy  = true;
 		fnam = save_GitRevAsTemp(gp->is_index? EmptyStr : CommitID, fnam, WorkDir);
 		GitBusy  = false;
@@ -1906,35 +1906,35 @@ void __fastcall TGitViewer::EditFileActionExecute(TObject *Sender)
 void __fastcall TGitViewer::EditFileActionUpdate(TObject *Sender)
 {
 	TAction *ap = (TAction *)Sender;
-	UnicodeString s = "ƒeƒLƒXƒgƒGƒfƒBƒ^‚ÅŠJ‚­";
+	UnicodeString s = "ãƒ†ã‚­ã‚¹ãƒˆã‚¨ãƒ‡ã‚£ã‚¿ã§é–‹ã";
 	s += (CommitID.IsEmpty()? "(&E)" : " - Temp (&E)");
 	ap->Caption = s;
 	ap->Enabled = !GetDiffTextName().IsEmpty();
 }
 
 //---------------------------------------------------------------------------
-//GUIƒc[ƒ‹‚Ì‘I‘ğ
+//GUIãƒ„ãƒ¼ãƒ«ã®é¸æŠ
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::SelGuiItemClick(TObject *Sender)
 {
-	UserModule->PrepareOpenDlg(_T("GUIƒc[ƒ‹‚Ì‘I‘ğ"), F_FILTER_EXE2,
+	UserModule->PrepareOpenDlg(_T("GUIãƒ„ãƒ¼ãƒ«ã®é¸æŠ"), F_FILTER_EXE2,
 		ExtractFileName(GitGuiExe).c_str(), ExtractFileDir(GitGuiExe));
 	UnicodeString fnam;
 	if (UserModule->OpenDlgToStr(fnam)) GitGuiExe = fnam;
 }
 //---------------------------------------------------------------------------
-//Console ‚Ì‘I‘ğ
+//Console ã®é¸æŠ
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::SelConsoleItemClick(TObject *Sender)
 {
-	UserModule->PrepareOpenDlg(_T("Console ‚Ì‘I‘ğ"), F_FILTER_EXE2,
+	UserModule->PrepareOpenDlg(_T("Console ã®é¸æŠ"), F_FILTER_EXE2,
 		ExtractFileName(GitBashExe).c_str(), ExtractFileDir(GitBashExe));
 	UnicodeString fnam;
 	if (UserModule->OpenDlgToStr(fnam)) GitBashExe = fnam;
 }
 
 //---------------------------------------------------------------------------
-//’Ç‰Á
+//è¿½åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::AddActionExecute(TObject *Sender)
 {
@@ -1950,7 +1950,7 @@ void __fastcall TGitViewer::AddActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//‚·‚×‚Ä’Ç‰Á
+//ã™ã¹ã¦è¿½åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::AddAActionExecute(TObject *Sender)
 {
@@ -1971,19 +1971,19 @@ void __fastcall TGitViewer::AddAllActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//æ‚èÁ‚µ
+//å–ã‚Šæ¶ˆã—
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::ResetActionExecute(TObject *Sender)
 {
 	UnicodeString fnam = GetDiffFileName(true);
 	if (!fnam.IsEmpty()) {
-		//HEAD ‚Ì‘¶İŠm”F
+		//HEAD ã®å­˜åœ¨ç¢ºèª
 		UnicodeString prm = "rev-parse --verify --quiet HEAD";
 		GitBusy = true;
 		DWORD exit_code;
 		bool ok = (GitShellExe(prm, WorkDir, (TStringList *)NULL, &exit_code) && exit_code==0);
 		GitBusy = false;
-		//æ‚èÁ‚µ
+		//å–ã‚Šæ¶ˆã—
 		prm = (ok? "reset HEAD " : "rm --cached ") + add_quot_if_spc(fnam);
 		GitExeStr(prm);
 	}
@@ -1996,11 +1996,11 @@ void __fastcall TGitViewer::ResetActionUpdate(TObject *Sender)
 	ap->Enabled = (gp && gp->is_index && !GetDiffFileName(true).IsEmpty());
 }
 //---------------------------------------------------------------------------
-//‚·‚×‚Äæ‚èÁ‚µ
+//ã™ã¹ã¦å–ã‚Šæ¶ˆã—
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::ResetAllActionExecute(TObject *Sender)
 {
-	//HEAD ‚Ì‘¶İŠm”F
+	//HEAD ã®å­˜åœ¨ç¢ºèª
 	UnicodeString prm = "rev-parse --verify --quiet HEAD";
 	GitBusy = true;
 	DWORD exit_code;
@@ -2018,11 +2018,11 @@ void __fastcall TGitViewer::ResetAllActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒ~ƒbƒg
+//ã‚³ãƒŸãƒƒãƒˆ
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::CommitActionExecute(TObject *Sender)
 {
-	if (!SetGitTagDlg) SetGitTagDlg = new TSetGitTagDlg(this);	//‰‰ñ‚É“®“Iì¬
+	if (!SetGitTagDlg) SetGitTagDlg = new TSetGitTagDlg(this);	//åˆå›ã«å‹•çš„ä½œæˆ
 	SetGitTagDlg->IsCommit	 = true;
 	SetGitTagDlg->EditMsgFile = IncludeTrailingPathDelimiter(WorkDir) + ".git\\COMMIT_EDITMSG";
 	if (SetGitTagDlg->ShowModal() == mrOk) GitExeStr(SetGitTagDlg->GitParam);
@@ -2033,12 +2033,12 @@ void __fastcall TGitViewer::CommitActionUpdate(TObject *Sender)
 	((TAction *)Sender)->Enabled = Staged;
 }
 //---------------------------------------------------------------------------
-//‘Ò”ğ
+//å¾…é¿
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::StashActionExecute(TObject *Sender)
 {
 	UnicodeString msg;
-	if (input_query_ex(_T("‘Ò”ğ (stash)"), _T("ƒƒbƒZ[ƒW"), &msg)) {
+	if (input_query_ex(_T("å¾…é¿ (stash)"), _T("ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸"), &msg)) {
 		UnicodeString prm;
 		prm.sprintf(_T("stash save \"%s\""), msg.c_str());
 		GitExeStr(prm);
@@ -2051,35 +2051,35 @@ void __fastcall TGitViewer::StashActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//•œ‹A/íœ
+//å¾©å¸°/å‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::StashPopActionExecute(TObject *Sender)
 {
 	if (!StashName.IsEmpty()) {
 		UnicodeString msg;
-		msg.sprintf(_T("[%s] ‚ğ•œ‹A/íœ‚µ‚Ü‚·‚©?"), StashName.c_str());
+		msg.sprintf(_T("[%s] ã‚’å¾©å¸°/å‰Šé™¤ã—ã¾ã™ã‹?"), StashName.c_str());
 		if (msgbox_Sure(msg)) GitExeStr("stash pop " + StashName);
 	}
 }
 //---------------------------------------------------------------------------
-//•œ‹A
+//å¾©å¸°
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::StashApplyActionExecute(TObject *Sender)
 {
 	if (!StashName.IsEmpty()) {
 		UnicodeString msg;
-		msg.sprintf(_T("[%s] ‚ğ•œ‹A‚µ‚Ü‚·‚©?"), StashName.c_str());
+		msg.sprintf(_T("[%s] ã‚’å¾©å¸°ã—ã¾ã™ã‹?"), StashName.c_str());
 		if (msgbox_Sure(msg)) GitExeStr("stash apply " + StashName);
 	}
 }
 //---------------------------------------------------------------------------
-//íœ
+//å‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TGitViewer::StashDropActionExecute(TObject *Sender)
 {
 	if (!StashName.IsEmpty()) {
 		UnicodeString msg;
-		msg.sprintf(_T("[%s] ‚ğíœ‚µ‚Ü‚·‚©?"), StashName.c_str());
+		msg.sprintf(_T("[%s] ã‚’å‰Šé™¤ã—ã¾ã™ã‹?"), StashName.c_str());
 		if (msgbox_Sure(msg)) GitExeStr("stash drop " + StashName);
 	}
 }

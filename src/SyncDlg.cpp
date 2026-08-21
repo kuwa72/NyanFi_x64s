@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  “¯ŠúƒRƒs[‚Ìİ’è													//
+//  åŒæœŸã‚³ãƒ”ãƒ¼ã®è¨­å®š													//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -33,7 +33,7 @@ void __fastcall TRegSyncDlg::FormShow(TObject *Sender)
 	InitDir = CurPathName;
 }
 //---------------------------------------------------------------------------
-//ˆê——‚Ì•\¦
+//ä¸€è¦§ã®è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TRegSyncDlg::RegListBoxDrawItem(TWinControl *Control, int Index, TRect &Rect,
 	TOwnerDrawState State)
@@ -105,12 +105,12 @@ void __fastcall TRegSyncDlg::SyncListBoxKeyDown(TObject *Sender, WORD &Key, TShi
 }
 
 //---------------------------------------------------------------------------
-//“o˜^€–Ú•¶š—ñ‚ğì¬
+//ç™»éŒ²é …ç›®æ–‡å­—åˆ—ã‚’ä½œæˆ
 //---------------------------------------------------------------------------
 UnicodeString __fastcall TRegSyncDlg::MakeRegItem(int idx)
 {
 	UnicodeString ret_str = NameEdit->Text;
-	if (ret_str.IsEmpty()) ret_str.sprintf(_T("“o˜^%u"), RegListBox->Count + 1);
+	if (ret_str.IsEmpty()) ret_str.sprintf(_T("ç™»éŒ²%u"), RegListBox->Count + 1);
 	ret_str = make_csv_str(ret_str);
 	ret_str.cat_sprintf(_T("%s"), (idx!=-1 && RegListBox->Checked[idx])? _T(",\"1\"") : _T(",\"0\""));
 	UnicodeString opt;
@@ -137,7 +137,7 @@ void __fastcall TRegSyncDlg::RegListBoxClickCheck(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//“o˜^‚Ì’Ç‰Á
+//ç™»éŒ²ã®è¿½åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TRegSyncDlg::AddRegActionExecute(TObject *Sender)
 {
@@ -153,7 +153,7 @@ void __fastcall TRegSyncDlg::AddRegActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//“o˜^‚Ì•ÏX
+//ç™»éŒ²ã®å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TRegSyncDlg::ChgRegActionExecute(TObject *Sender)
 {
@@ -168,7 +168,7 @@ void __fastcall TRegSyncDlg::ChgRegActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//“o˜^‚Ìíœ
+//ç™»éŒ²ã®å‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TRegSyncDlg::DelRegActionExecute(TObject *Sender)
 {
@@ -177,11 +177,11 @@ void __fastcall TRegSyncDlg::DelRegActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠ‚Ì’Ç‰Á
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®è¿½åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TRegSyncDlg::AddDirActionExecute(TObject *Sender)
 {
-	if (UserModule->SelectDirEx(_T("“¯ŠúƒRƒs[æ‚Ì’Ç‰Á"), InitDir)) {
+	if (UserModule->SelectDirEx(_T("åŒæœŸã‚³ãƒ”ãƒ¼å…ˆã®è¿½åŠ "), InitDir)) {
 		InitDir = to_path_name(InitDir);
 		if (DirListBox->Items->IndexOf(InitDir)==-1)
 			DirListBox->ItemIndex = DirListBox->Items->Add(InitDir);
@@ -190,7 +190,7 @@ void __fastcall TRegSyncDlg::AddDirActionExecute(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠ‚Ìíœ
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TRegSyncDlg::DelDirActionExecute(TObject *Sender)
 {
@@ -202,7 +202,7 @@ void __fastcall TRegSyncDlg::DelDirActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = (DirListBox->ItemIndex!=-1);
 }
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠ‚ÌƒNƒŠƒA
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ã‚¯ãƒªã‚¢
 //---------------------------------------------------------------------------
 void __fastcall TRegSyncDlg::ClrDirActionExecute(TObject *Sender)
 {
@@ -212,7 +212,7 @@ void __fastcall TRegSyncDlg::ClrDirActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//Šm’è
+//ç¢ºå®š
 //---------------------------------------------------------------------------
 void __fastcall TRegSyncDlg::OkButtonClick(TObject *Sender)
 {
@@ -221,13 +221,13 @@ void __fastcall TRegSyncDlg::OkButtonClick(TObject *Sender)
 	int i = 0;
 	while (i<SyncDirList->Count) {
 		TStringDynArray syn_lst = get_csv_array(SyncDirList->Strings[i], 50);	//***
-		//•s³ƒf[ƒ^‚ğ‚Í‚Ë‚é
+		//ä¸æ­£ãƒ‡ãƒ¼ã‚¿ã‚’ã¯ã­ã‚‹
 		if (syn_lst.Length<5) {
 			SyncDirList->Delete(i);
 		}
-		//³‹K‰»
+		//æ­£è¦åŒ–
 		else {
-			//"ƒ^ƒCƒgƒ‹","—LŒø:1/–³Œø:0","ƒIƒvƒVƒ‡ƒ“","dir1","dir2",...
+			//"ã‚¿ã‚¤ãƒˆãƒ«","æœ‰åŠ¹:1/ç„¡åŠ¹:0","ã‚ªãƒ—ã‚·ãƒ§ãƒ³","dir1","dir2",...
 			UnicodeString lbuf;
 			for (int j=0; j<syn_lst.Length; j++) {
 				if (j>0)  lbuf += ",";

@@ -1,6 +1,6 @@
 /**
  * @file JsonView.h
- * @brief JSONƒrƒ…[ƒA
+ * @brief JSONãƒ“ãƒ¥ãƒ¼ã‚¢
  */
 //---------------------------------------------------------------------------
 #ifndef JsonViewH
@@ -25,11 +25,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief JSONƒrƒ…[ƒA
+ * @brief JSONãƒ“ãƒ¥ãƒ¼ã‚¢
  */
 class TJsonViewer : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *AutoAction;
 	TAction *CollapseAction;
 	TAction *CopyAction;
@@ -103,8 +103,8 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall FindEditKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 	void __fastcall FindEditKeyPress(TObject *Sender, System::WideChar &Key);
 
-private:	// ƒ†[ƒU[éŒ¾
-	//ViewBusy ƒvƒƒpƒeƒB  ƒcƒŠ[ƒrƒ…[ˆ—’†
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	//ViewBusy ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£  ãƒ„ãƒªãƒ¼ãƒ“ãƒ¥ãƒ¼å‡¦ç†ä¸­
 	bool FViewBusy;
 	void __fastcall SetViewBusy(bool Value);
 	__property bool ViewBusy = {read = FViewBusy,  write = SetViewBusy};
@@ -127,7 +127,7 @@ private:	// ƒ†[ƒU[éŒ¾
 	UnicodeString __fastcall GetJsonPath(TTreeNode *Node = NULL);
 	bool __fastcall MatchNode(TTreeNode *Node);
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	UnicodeString FileName;
 	bool isClip;
 

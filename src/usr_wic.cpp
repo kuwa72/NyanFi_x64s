@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------//
-// WIC ŠÖ˜A																//
+// WIC é–¢é€£																//
 //																		//
-// IƒXƒŒƒbƒh–ˆ‚É CoInitialize/CoUninitialize ‚ª•K—v					//
+// ï¼ã‚¹ãƒ¬ãƒƒãƒ‰æ¯ã« CoInitialize/CoUninitialize ãŒå¿…è¦					//
 //----------------------------------------------------------------------//
 #include "usr_file_ex.h"
 #include "usr_wic.h"
@@ -10,11 +10,11 @@
 #pragma package(smart_init)
 
 //---------------------------------------------------------------------------
-//WICŠg’£ƒR[ƒfƒbƒNˆê——‚Ìæ“¾
+//WICæ‹¡å¼µã‚³ãƒ¼ãƒ‡ãƒƒã‚¯ä¸€è¦§ã®å–å¾—
 //---------------------------------------------------------------------------
 int WIC_get_ex_list(
-	TStringList *lst,		//î•ñˆê——
-	UnicodeString *fxstr)	//Šg’£q	(default = NULL);
+	TStringList *lst,		//æƒ…å ±ä¸€è¦§
+	UnicodeString *fxstr)	//æ‹¡å¼µå­	(default = NULL);
 {
 	int cnt = 0;
 	std::unique_ptr<TRegistry> reg(new TRegistry());
@@ -33,7 +33,7 @@ int WIC_get_ex_list(
 			}
 		}
 
-		std::unique_ptr<TStringList> x_lst(new TStringList());	//Šg’£qƒŠƒXƒg
+		std::unique_ptr<TStringList> x_lst(new TStringList());	//æ‹¡å¼µå­ãƒªã‚¹ãƒˆ
 		for (int i=0; i<id_lst->Count; i++) {
 			if (reg->OpenKeyReadOnly(tmp.sprintf(_T("CLSID\\%s"), id_lst->Strings[i].c_str()))) {
 				UnicodeString xstr = reg->ReadString("FileExtensions").LowerCase();
@@ -57,14 +57,14 @@ int WIC_get_ex_list(
 			int i = 1;
 			while (i < x_lst->Count) {
 				if (SameStr(s, x_lst->Strings[i])) {
-					x_lst->Delete(i);	//d•¡‚ğíœ
+					x_lst->Delete(i);	//é‡è¤‡ã‚’å‰Šé™¤
 				}
 				else {
 					s = x_lst->Strings[i++];
 					*fxstr += s;
 				}
 			}
-			//PDF ‚ÍœŠO
+			//PDF ã¯é™¤å¤–
 			*fxstr = ReplaceStr(*fxstr, ".pdf", EmptyStr);
 		}
 	}
@@ -72,7 +72,7 @@ int WIC_get_ex_list(
 }
 
 //---------------------------------------------------------------------------
-//ƒƒ‚ƒŠ“à—e‚ğw’èŒ`®‚ÅƒfƒR[ƒh‚µ‚Äƒrƒbƒgƒ}ƒbƒv‚ğæ“¾
+//ãƒ¡ãƒ¢ãƒªå†…å®¹ã‚’æŒ‡å®šå½¢å¼ã§ãƒ‡ã‚³ãƒ¼ãƒ‰ã—ã¦ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã‚’å–å¾—
 //---------------------------------------------------------------------------
 bool WIC_get_from_memory(TMemoryStream *ms, Graphics::TBitmap *o_bmp, GUID fmt)
 {
@@ -101,14 +101,14 @@ bool WIC_get_from_memory(TMemoryStream *ms, Graphics::TBitmap *o_bmp, GUID fmt)
 			GUID_WICPixelFormat24bppBGR, WICBitmapDitherTypeNone, NULL, 0.0f, WICBitmapPaletteTypeCustom)))
 				Abort();
 
-		//ƒTƒCƒY‚ğæ“¾
+		//ã‚µã‚¤ã‚ºã‚’å–å¾—
 		UINT i_wd, i_hi;
 		if (FAILED(converter->GetSize(&i_wd, &i_hi))) Abort();
-		//ƒCƒ[ƒW‚ğƒƒ‚ƒŠ‚ÉƒRƒs[
+		//ã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’ãƒ¡ãƒ¢ãƒªã«ã‚³ãƒ”ãƒ¼
 		UINT stride = i_wd * 3;
 		std::unique_ptr<BYTE[]> ibuf(new BYTE[stride * i_hi]);
 		if (FAILED(converter->CopyPixels(NULL, stride, stride*i_hi, ibuf.get()))) Abort();
-		//ƒƒ‚ƒŠ‚©‚çƒrƒbƒgƒ}ƒbƒv‚ÉƒRƒs[
+		//ãƒ¡ãƒ¢ãƒªã‹ã‚‰ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã«ã‚³ãƒ”ãƒ¼
 		o_bmp->PixelFormat = pf24bit;
 		o_bmp->SetSize(i_wd, i_hi);
 		BYTE *bp = ibuf.get();
@@ -121,7 +121,7 @@ bool WIC_get_from_memory(TMemoryStream *ms, Graphics::TBitmap *o_bmp, GUID fmt)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚©‚çw’è‚µ‚½í—Ş‚Ìƒrƒbƒgƒ}ƒbƒv‚ğæ“¾
+//ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰æŒ‡å®šã—ãŸç¨®é¡ã®ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã‚’å–å¾—
 //---------------------------------------------------------------------------
 bool WIC_load_image(UnicodeString fnam, Graphics::TBitmap *o_bmp,
 	int img_type)	//default = WICIMG_PREVIEW
@@ -185,14 +185,14 @@ bool WIC_load_image(UnicodeString fnam, Graphics::TBitmap *o_bmp,
 			}
 		}
 
-		//ƒTƒCƒY‚ğæ“¾
+		//ã‚µã‚¤ã‚ºã‚’å–å¾—
 		UINT i_wd, i_hi;
 		if (FAILED(converter->GetSize(&i_wd, &i_hi))) Abort();
-		//ƒCƒ[ƒW‚ğƒƒ‚ƒŠ‚ÉƒRƒs[
+		//ã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’ãƒ¡ãƒ¢ãƒªã«ã‚³ãƒ”ãƒ¼
 		UINT stride = i_wd * 3;
 		std::unique_ptr<BYTE[]> ibuf(new BYTE[stride * i_hi]);
 		if (FAILED(converter->CopyPixels(NULL, stride, stride*i_hi, ibuf.get()))) Abort();
-		//ƒƒ‚ƒŠ‚©‚çƒrƒbƒgƒ}ƒbƒv‚ÉƒRƒs[
+		//ãƒ¡ãƒ¢ãƒªã‹ã‚‰ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã«ã‚³ãƒ”ãƒ¼
 		o_bmp->PixelFormat = pf24bit;
 		o_bmp->SetSize(i_wd, i_hi);
 		BYTE *bp = ibuf.get();
@@ -205,16 +205,16 @@ bool WIC_load_image(UnicodeString fnam, Graphics::TBitmap *o_bmp,
 }
 
 //---------------------------------------------------------------------------
-//ƒrƒbƒgƒ}ƒbƒv‚ğw’èŒ`®‚Åƒtƒ@ƒCƒ‹‚É•Û‘¶
+//ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã‚’æŒ‡å®šå½¢å¼ã§ãƒ•ã‚¡ã‚¤ãƒ«ã«ä¿å­˜
 //---------------------------------------------------------------------------
 bool WIC_save_image(
-	UnicodeString fnam,			//ƒtƒ@ƒCƒ‹–¼(Šg’£q‚©‚çŒ`®‚ğİ’è)
-	Graphics::TBitmap *i_bmp,	//ƒrƒbƒgƒ}ƒbƒv
-								//IƒOƒŒ[•Û‘¶‚·‚éê‡AWIC_grayscale_image ‚ÅƒOƒŒ[‰»‚µ‚Ä‚¨‚­
-	int  jpg_q,					//jpeg ‰æ¿				(0`100 default = 100)
-	int  jpg_ycrcb,				//jpeg ƒTƒuƒTƒ“ƒvƒŠƒ“ƒO	(0`3	default = 0)
-	bool grayscale,				//jpeg/PNG ƒOƒŒ[ƒXƒP[ƒ‹(8bit)‚Å•Û‘¶
-	int  tif_cmp)				//tiff ˆ³k				(0`7   default = 0)
+	UnicodeString fnam,			//ãƒ•ã‚¡ã‚¤ãƒ«å(æ‹¡å¼µå­ã‹ã‚‰å½¢å¼ã‚’è¨­å®š)
+	Graphics::TBitmap *i_bmp,	//ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—
+								//ï¼ã‚°ãƒ¬ãƒ¼ä¿å­˜ã™ã‚‹å ´åˆã€WIC_grayscale_image ã§ã‚°ãƒ¬ãƒ¼åŒ–ã—ã¦ãŠã
+	int  jpg_q,					//jpeg ç”»è³ª				(0ï½100 default = 100)
+	int  jpg_ycrcb,				//jpeg ã‚µãƒ–ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°	(0ï½3	default = 0)
+	bool grayscale,				//jpeg/PNG ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«(8bit)ã§ä¿å­˜
+	int  tif_cmp)				//tiff åœ§ç¸®				(0ï½7   default = 0)
 {
 	UnicodeString fext = ExtractFileExt(fnam) + ".";
 	GUID fmt;
@@ -244,10 +244,10 @@ bool WIC_save_image(
 		if (FAILED(encoder->Initialize(stream, WICBitmapEncoderNoCache)))	Abort();
 		if (FAILED(encoder->CreateNewFrame(&frame, &properties)))			Abort();
 
-		//ƒIƒvƒVƒ‡ƒ“İ’è
+		//ã‚ªãƒ—ã‚·ãƒ§ãƒ³è¨­å®š
 		PROPBAG2 option = { 0 };
 		VARIANT varValue;
-		//JpegAHDP: •i¿
+		//Jpegã€HDP: å“è³ª
 		if (fmt==GUID_ContainerFormatJpeg || fmt==GUID_ContainerFormatWmp) {
 			option.pstrName = UnicodeString("ImageQuality").c_str();
 			VariantInit(&varValue);
@@ -255,7 +255,7 @@ bool WIC_save_image(
 			varValue.fltVal = (float)((jpg_q<100)? jpg_q/100.0 : 1.0);
 			if (FAILED(properties->Write(1, &option, &varValue))) Abort();
 		}
-		//JpegP: YCrCb ƒTƒuƒTƒ“ƒvƒŠƒ“ƒO
+		//JpegP: YCrCb ã‚µãƒ–ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
 		if (fmt==GUID_ContainerFormatJpeg && jpg_ycrcb>=0 && jpg_ycrcb<=3) {
 			option.pstrName = UnicodeString("JpegYCrCbSubsampling").c_str();
 			VariantInit(&varValue);
@@ -263,7 +263,7 @@ bool WIC_save_image(
 			varValue.bVal	= jpg_ycrcb;
 			if (FAILED(properties->Write(1, &option, &varValue))) Abort();
 		}
-		//Tiff: ˆ³k•û–@
+		//Tiff: åœ§ç¸®æ–¹æ³•
 		if (fmt==GUID_ContainerFormatTiff && tif_cmp>=0 && tif_cmp<=7) {
 			option.pstrName = UnicodeString("TiffCompressionMethod").c_str();
 			VariantInit(&varValue);
@@ -274,7 +274,7 @@ bool WIC_save_image(
 
 		if (FAILED(frame->Initialize(properties)))	Abort();
 
-		//ƒ\[ƒX‚©‚çƒrƒbƒgƒ}ƒbƒv‚ğì¬
+		//ã‚½ãƒ¼ã‚¹ã‹ã‚‰ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã‚’ä½œæˆ
 		if (FAILED(factory->CreateBitmapFromHBITMAP(
 			i_bmp->Handle, NULL, WICBitmapIgnoreAlpha, &bitmap)))
 				Abort();
@@ -294,16 +294,16 @@ bool WIC_save_image(
 }
 
 //---------------------------------------------------------------------------
-//‰æ‘œ‚Ìk¬EŠg‘å
+//ç”»åƒã®ç¸®å°ãƒ»æ‹¡å¤§
 //---------------------------------------------------------------------------
 bool WIC_resize_image(
-	Graphics::TBitmap *i_bmp,	//“ü—Íƒrƒbƒgƒ}ƒbƒv
-	Graphics::TBitmap *o_bmp,	//o—Íƒrƒbƒgƒ}ƒbƒv
-	float ratio,				//”{—¦		0.0 : –³Œø
-	unsigned int s_wd,			//‰¡ƒTƒCƒY	  0 : –³Œø
-	unsigned int s_hi,			//cƒTƒCƒY
-								//  ”{—¦‚©ƒTƒCƒY‚Ì‚¢‚¸‚ê‚©‚ğw’è
-	int s_opt)					//ƒAƒ‹ƒSƒŠƒYƒ€
+	Graphics::TBitmap *i_bmp,	//å…¥åŠ›ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—
+	Graphics::TBitmap *o_bmp,	//å‡ºåŠ›ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—
+	float ratio,				//å€ç‡		0.0 : ç„¡åŠ¹
+	unsigned int s_wd,			//æ¨ªã‚µã‚¤ã‚º	  0 : ç„¡åŠ¹
+	unsigned int s_hi,			//ç¸¦ã‚µã‚¤ã‚º
+								//  å€ç‡ã‹ã‚µã‚¤ã‚ºã®ã„ãšã‚Œã‹ã‚’æŒ‡å®š
+	int s_opt)					//ã‚¢ãƒ«ã‚´ãƒªã‚ºãƒ 
 {
 	if (ratio<=0.0 && (s_wd==0 || s_hi==0)) return false;
 
@@ -316,7 +316,7 @@ bool WIC_resize_image(
 			CLSCTX_INPROC_SERVER, IID_IWICImagingFactory, (LPVOID*)&factory)))
 				Abort();
 
-		//ƒ\[ƒX‚©‚çƒrƒbƒgƒ}ƒbƒv‚ğì¬
+		//ã‚½ãƒ¼ã‚¹ã‹ã‚‰ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã‚’ä½œæˆ
 		i_bmp->PixelFormat = pf24bit;
 		if (FAILED(factory->CreateBitmapFromHBITMAP(
 			i_bmp->Handle, NULL, WICBitmapIgnoreAlpha, &bitmap)))
@@ -324,7 +324,7 @@ bool WIC_resize_image(
 
 		if (FAILED(factory->CreateBitmapScaler(&scaler))) Abort();
 
-		//ƒŠƒTƒCƒY
+		//ãƒªã‚µã‚¤ã‚º
 		UINT i_wd, i_hi;
 		if (ratio>0) {
 			i_wd = i_bmp->Width  * ratio;
@@ -337,20 +337,20 @@ bool WIC_resize_image(
 
 		WICBitmapInterpolationMode opt;
 		switch (s_opt) {
-		case 1:  opt = WICBitmapInterpolationModeLinear; break;				//ƒoƒCƒŠƒjƒA
-		case 2:  opt = WICBitmapInterpolationModeCubic;	 break;				//ƒoƒCƒLƒ…[ƒrƒbƒN
-		case 3:  opt = WICBitmapInterpolationModeFant;	 break;				//ƒtƒ@ƒ“ƒgƒŠƒTƒ“ƒvƒŠƒ“ƒO
-		case 4:  opt = WICBitmapInterpolationModeHighQualityCubic; break;	//‚•i¿ƒoƒCƒLƒ…[ƒrƒbƒN
-		default: opt = WICBitmapInterpolationModeNearestNeighbor;			//Å‹ß–T–@
+		case 1:  opt = WICBitmapInterpolationModeLinear; break;				//ãƒã‚¤ãƒªãƒ‹ã‚¢
+		case 2:  opt = WICBitmapInterpolationModeCubic;	 break;				//ãƒã‚¤ã‚­ãƒ¥ãƒ¼ãƒ“ãƒƒã‚¯
+		case 3:  opt = WICBitmapInterpolationModeFant;	 break;				//ãƒ•ã‚¡ãƒ³ãƒˆãƒªã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
+		case 4:  opt = WICBitmapInterpolationModeHighQualityCubic; break;	//é«˜å“è³ªãƒã‚¤ã‚­ãƒ¥ãƒ¼ãƒ“ãƒƒã‚¯
+		default: opt = WICBitmapInterpolationModeNearestNeighbor;			//æœ€è¿‘å‚æ³•
 		}
 
 		if (FAILED(scaler->Initialize(bitmap, i_wd, i_hi, opt))) Abort();
 
-		//ƒCƒ[ƒW‚ğƒƒ‚ƒŠ‚ÉƒRƒs[
+		//ã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’ãƒ¡ãƒ¢ãƒªã«ã‚³ãƒ”ãƒ¼
 		UINT stride = i_wd * 3;
 		std::unique_ptr<BYTE[]> ibuf(new BYTE[stride * i_hi]);
 		if (FAILED(scaler->CopyPixels(NULL, stride, stride*i_hi, ibuf.get()))) Abort();
-		//ƒƒ‚ƒŠ‚©‚çƒrƒbƒgƒ}ƒbƒv‚ÉƒRƒs[
+		//ãƒ¡ãƒ¢ãƒªã‹ã‚‰ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã«ã‚³ãƒ”ãƒ¼
 		o_bmp->PixelFormat = pf24bit;
 		o_bmp->SetSize(i_wd, i_hi);
 		BYTE *bp = ibuf.get();
@@ -363,12 +363,12 @@ bool WIC_resize_image(
 }
 
 //---------------------------------------------------------------------------
-//w’èƒTƒCƒY‚Éû‚Ü‚é‚æ‚¤‚Ék¬EŠg‘åAØ‚èo‚µ
+//æŒ‡å®šã‚µã‚¤ã‚ºã«åã¾ã‚‹ã‚ˆã†ã«ç¸®å°ãƒ»æ‹¡å¤§ã€åˆ‡ã‚Šå‡ºã—
 //---------------------------------------------------------------------------
 bool WIC_fit_trim_image(Graphics::TBitmap *i_bmp, Graphics::TBitmap *o_bmp,
-	unsigned int s_wd,		//‰¡ƒTƒCƒY
-	unsigned int s_hi,		//cƒTƒCƒY
-	int s_opt)				//ƒAƒ‹ƒSƒŠƒYƒ€
+	unsigned int s_wd,		//æ¨ªã‚µã‚¤ã‚º
+	unsigned int s_hi,		//ç¸¦ã‚µã‚¤ã‚º
+	int s_opt)				//ã‚¢ãƒ«ã‚´ãƒªã‚ºãƒ 
 {
 	if (i_bmp->Empty || s_hi==0) return false;
 
@@ -398,10 +398,10 @@ bool WIC_fit_trim_image(Graphics::TBitmap *i_bmp, Graphics::TBitmap *o_bmp,
 }
 
 //---------------------------------------------------------------------------
-//‰æ‘œ‚Ì‰ñ“]E”½“]
+//ç”»åƒã®å›è»¢ãƒ»åè»¢
 //---------------------------------------------------------------------------
 bool WIC_rotate_image(Graphics::TBitmap *i_bmp,
-	int rot_opt)	//1:90/ 2:180/ 3:270(¶‚É90)/ 4:¶‰E”½“]/ 5:ã‰º”½“]
+	int rot_opt)	//1:90/ 2:180/ 3:270(å·¦ã«90)/ 4:å·¦å³åè»¢/ 5:ä¸Šä¸‹åè»¢
 {
 	try {
 		TComInterface<IWICImagingFactory>		factory;
@@ -412,13 +412,13 @@ bool WIC_rotate_image(Graphics::TBitmap *i_bmp,
 			CLSCTX_INPROC_SERVER, IID_IWICImagingFactory, (LPVOID*)&factory)))
 				Abort();
 
-		//ƒ\[ƒX‚©‚çƒrƒbƒgƒ}ƒbƒv‚ğì¬
+		//ã‚½ãƒ¼ã‚¹ã‹ã‚‰ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã‚’ä½œæˆ
 		i_bmp->PixelFormat = pf24bit;
 		if (FAILED(factory->CreateBitmapFromHBITMAP(i_bmp->Handle, NULL,
 			WICBitmapIgnoreAlpha, &bitmap)))
 				Abort();
 
-		//‰ñ“]
+		//å›è»¢
 		if (FAILED(factory->CreateBitmapFlipRotator(&rotator))) Abort();
 		WICBitmapTransformOptions opt;
 		switch (rot_opt) {
@@ -431,14 +431,14 @@ bool WIC_rotate_image(Graphics::TBitmap *i_bmp,
 		}
 		if (FAILED(rotator->Initialize(bitmap, opt))) Abort();
 
-		//ƒTƒCƒY‚ğæ“¾
+		//ã‚µã‚¤ã‚ºã‚’å–å¾—
 		UINT i_wd, i_hi;
 		if (FAILED(rotator->GetSize(&i_wd, &i_hi))) Abort();
-		//ƒCƒ[ƒW‚ğƒƒ‚ƒŠ‚ÉƒRƒs[
+		//ã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’ãƒ¡ãƒ¢ãƒªã«ã‚³ãƒ”ãƒ¼
 		UINT stride = i_wd * 3;
 		std::unique_ptr<BYTE[]> ibuf(new BYTE[stride * i_hi]);
 		if (FAILED(rotator->CopyPixels(NULL, stride, stride*i_hi, ibuf.get()))) Abort();
-		//ƒƒ‚ƒŠ‚©‚çƒrƒbƒgƒ}ƒbƒv‚ÉƒRƒs[
+		//ãƒ¡ãƒ¢ãƒªã‹ã‚‰ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã«ã‚³ãƒ”ãƒ¼
 		i_bmp->PixelFormat = pf24bit;
 		i_bmp->SetSize(i_wd, i_hi);
 		BYTE *bp = ibuf.get();
@@ -451,7 +451,7 @@ bool WIC_rotate_image(Graphics::TBitmap *i_bmp,
 }
 
 //---------------------------------------------------------------------------
-//ƒOƒŒ[ƒXƒP[ƒ‹‰»
+//ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«åŒ–
 //---------------------------------------------------------------------------
 bool WIC_grayscale_image(Graphics::TBitmap *i_bmp)
 {
@@ -465,28 +465,28 @@ bool WIC_grayscale_image(Graphics::TBitmap *i_bmp)
 			CLSCTX_INPROC_SERVER, IID_IWICImagingFactory, (LPVOID*)&factory)))
 				Abort();
 
-		//ƒ\[ƒX‚©‚çƒrƒbƒgƒ}ƒbƒv‚ğì¬
+		//ã‚½ãƒ¼ã‚¹ã‹ã‚‰ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã‚’ä½œæˆ
 		if (FAILED(factory->CreateBitmapFromHBITMAP(i_bmp->Handle, NULL, WICBitmapIgnoreAlpha, &bitmap)))
 			Abort();
-		//ƒOƒŒ[ƒXƒP[ƒ‹‚É•ÏŠ·
+		//ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«ã«å¤‰æ›
 		if (FAILED(factory->CreateFormatConverter(&g_converter))) Abort();
 		if (FAILED(g_converter->Initialize(bitmap,
 			GUID_WICPixelFormat8bppGray, WICBitmapDitherTypeNone, NULL, 0.0f, WICBitmapPaletteTypeCustom)))
 				Abort();
-		//24bit BGR ‚É•ÏŠ·
+		//24bit BGR ã«å¤‰æ›
 		if (FAILED(factory->CreateFormatConverter(&o_converter))) Abort();
 		if (FAILED(o_converter->Initialize(g_converter,
 			GUID_WICPixelFormat24bppBGR, WICBitmapDitherTypeNone, NULL, 0.0f, WICBitmapPaletteTypeCustom)))
 				Abort();
 
-		//ƒTƒCƒY‚ğæ“¾
+		//ã‚µã‚¤ã‚ºã‚’å–å¾—
 		UINT i_wd, i_hi;
 		if (FAILED(o_converter->GetSize(&i_wd, &i_hi))) Abort();
-		//ƒCƒ[ƒW‚ğƒƒ‚ƒŠ‚ÉƒRƒs[
+		//ã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’ãƒ¡ãƒ¢ãƒªã«ã‚³ãƒ”ãƒ¼
 		UINT stride = i_wd * 3;
 		std::unique_ptr<BYTE[]> ibuf(new BYTE[stride * i_hi]);
 		if (FAILED(o_converter->CopyPixels(NULL, stride, stride*i_hi, ibuf.get()))) Abort();
-		//ƒƒ‚ƒŠ‚©‚çƒrƒbƒgƒ}ƒbƒv‚ÉƒRƒs[
+		//ãƒ¡ãƒ¢ãƒªã‹ã‚‰ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã«ã‚³ãƒ”ãƒ¼
 		i_bmp->PixelFormat = pf24bit;
 		i_bmp->SetSize(i_wd, i_hi);
 		BYTE *bp = ibuf.get();
@@ -499,7 +499,7 @@ bool WIC_grayscale_image(Graphics::TBitmap *i_bmp)
 }
 
 //---------------------------------------------------------------------------
-//‰æ‘œ‚ÌƒTƒCƒY‚ğæ“¾
+//ç”»åƒã®ã‚µã‚¤ã‚ºã‚’å–å¾—
 //---------------------------------------------------------------------------
 bool WIC_get_img_size(UnicodeString fnam, unsigned int *wd, unsigned int *hi)
 {

@@ -31,7 +31,7 @@ MigemoUnit::MigemoUnit(UnicodeString dnam)
 		Available = f_migemo_open && f_migemo_close && f_migemo_query && f_migemo_release;
 
 		if (Available) {
-			//«‘‚ğŒŸõ
+			//è¾æ›¸ã‚’æ¤œç´¢
 			TSearchOption opt = TSearchOption::soAllDirectories;
 			TStringDynArray f_list = TDirectory::GetFiles(PathName, "migemo-dict", opt);
 			UnicodeString dic_name;
@@ -41,7 +41,7 @@ MigemoUnit::MigemoUnit(UnicodeString dnam)
 					dic_name = fnam; break;
 				}
 			}
-			//«‘‚ğ“Ç‚İ‚Ş
+			//è¾æ›¸ã‚’èª­ã¿è¾¼ã‚€
 			if (!dic_name.IsEmpty()) {
 				MigemoObj = f_migemo_open(AnsiString(dic_name).c_str());
 				DictReady = (MigemoObj!=NULL);
@@ -58,7 +58,7 @@ MigemoUnit::~MigemoUnit()
 }
 
 //---------------------------------------------------------------------------
-//ƒT[ƒ`—p³‹K•\Œ»‚ğæ“¾
+//ã‚µãƒ¼ãƒç”¨æ­£è¦è¡¨ç¾ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString MigemoUnit::Query(UnicodeString qstr)
 {
@@ -68,7 +68,7 @@ UnicodeString MigemoUnit::Query(UnicodeString qstr)
 		if (qp) {
 			ret_str = UnicodeString((char*)qp);
 			f_migemo_release(MigemoObj, qp);
-			//¦ƒGƒXƒP[ƒv‚³‚ê‚Ä‚¢‚È‚¢ "+" ‚ªŠÜ‚Ü‚ê‚Ä‚¢‚éê‡‚É‘Î‚·‚é‘Îˆ
+			//â€»ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã•ã‚Œã¦ã„ãªã„ "+" ãŒå«ã¾ã‚Œã¦ã„ã‚‹å ´åˆã«å¯¾ã™ã‚‹å¯¾å‡¦
 			ret_str = TRegEx::Replace(ret_str, "([^\\\\])\\+", "\\1\\\\+");
 		}
 	}
@@ -76,12 +76,12 @@ UnicodeString MigemoUnit::Query(UnicodeString qstr)
 }
 
 //---------------------------------------------------------------------------
-//³‹K•\Œ»ƒpƒ^[ƒ“‚ğæ“¾
+//æ­£è¦è¡¨ç¾ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString MigemoUnit::GetRegExPtn(
-	bool sw,			//migemo ‚ğ—˜—p
-	UnicodeString w,	//ŒŸõŒê
-	int  minlen)		//ŒŸõŠJn•¶š”	(default = 0: MinLength ‚ğ“K—p)
+	bool sw,			//migemo ã‚’åˆ©ç”¨
+	UnicodeString w,	//æ¤œç´¢èª
+	int  minlen)		//æ¤œç´¢é–‹å§‹æ–‡å­—æ•°	(default = 0: MinLength ã‚’é©ç”¨)
 {
 	if (minlen==0) minlen = MinLength;
 	if (w.IsEmpty() || (sw && w.Length()<minlen)) return EmptyStr;

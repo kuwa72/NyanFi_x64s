@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------//
-//ƒRƒ}ƒ“ƒhˆê——															//
+//ã‚³ãƒãƒ³ãƒ‰ä¸€è¦§															//
 //																		//
 //----------------------------------------------------------------------//
 #include "usr_file_ex.h"
@@ -10,478 +10,478 @@
 UnicodeString ScrModeIdStr = "FSVIL";
 
 //---------------------------------------------------------------------------
-//ƒRƒ}ƒ“ƒhˆê——ƒŠƒXƒg‚ğİ’è
+//ã‚³ãƒãƒ³ãƒ‰ä¸€è¦§ãƒªã‚¹ãƒˆã‚’è¨­å®š
 //---------------------------------------------------------------------------
 void set_CmdList(
-	TStringList *c_list,	//[o] ƒRƒ}ƒ“ƒh–¼=à–¾
-	TStringList *s_list)	//[o] ¯•Ê•¶š:ƒRƒ}ƒ“ƒh–¼=à–¾
+	TStringList *c_list,	//[o] ã‚³ãƒãƒ³ãƒ‰å=èª¬æ˜
+	TStringList *s_list)	//[o] è­˜åˆ¥æ–‡å­—:ã‚³ãƒãƒ³ãƒ‰å=èª¬æ˜
 {
 	c_list->Text =
-		"F:AboutNyanFi=ƒo[ƒWƒ‡ƒ“î•ñ\n"
-		"F:AddTab=ƒ^ƒu‚ğ’Ç‰Á\n"
-		"F:BackDirHist=ƒfƒBƒŒƒNƒgƒŠ—š—ğ‚ğ–ß‚é\n"
-		"F:Backup=”½‘ÎƒpƒX‚ÉƒoƒbƒNƒAƒbƒv\n"
-		"F:BgImgMode=”wŒi‰æ‘œ‚Ì•\¦ƒ‚[ƒhİ’è\n"
-		"F:BorderCenter=ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚Ì‹«ŠE‚ğ’†‰›‚É\n"
-		"F:BorderLeft=ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚Ì‹«ŠE‚ğ¶‚ÉˆÚ“®\n"
-		"F:BorderRight=ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚Ì‹«ŠE‚ğ‰E‚ÉˆÚ“®\n"
-		"F:CalcDirSize=ƒfƒBƒŒƒNƒgƒŠ—e—Ê‚ğŒvZ\n"
-		"F:CalcDirSizeAll=‘SƒfƒBƒŒƒNƒgƒŠ‚Ì—e—Ê‚ğŒvZ\n"
-		"F:ChangeDir=ƒfƒBƒŒƒNƒgƒŠ‚ğ•ÏX\n"
-		"F:ChangeDrive=ƒhƒ‰ƒCƒu‚Ì•ÏX\n"
-		"F:ChangeOppDir=”½‘Î‘¤‚ÌƒfƒBƒŒƒNƒgƒŠ‚ğ•ÏX\n"
-		"F:ChangeOppRegDir=”½‘Î‘¤‚Å“o˜^ƒfƒBƒŒƒNƒgƒŠ‚ğŠJ‚­\n"
-		"F:ChangeRegDir=“o˜^ƒfƒBƒŒƒNƒgƒŠ‚ğŠJ‚­\n"
-		"F:CheckUpdate=XV‚ÌŠm”F\n"
-		"F:ClearMask=‘I‘ğƒ}ƒXƒN/ƒpƒXƒ}ƒXƒN‚ğ‰ğœ\n"
-		"F:Clone=”½‘ÎƒpƒX‚ÉƒNƒ[ƒ“ì¬\n"
-		"F:CloneToCurr=ƒJƒŒƒ“ƒg‚ÉƒNƒ[ƒ“ì¬\n"
-		"F:CommandPrompt=ƒRƒ}ƒ“ƒhƒvƒƒ“ƒvƒg\n"
-		"F:CompareDlg=“¯–¼ƒtƒ@ƒCƒ‹‚Ì”äŠrƒ_ƒCƒAƒƒO\n"
-		"F:CompareHash=ƒnƒbƒVƒ…’l‚Ì”äŠr\n"
-		"F:CompleteDelete=Š®‘Síœ\n"
-		"F:CompressDir=ƒfƒBƒŒƒNƒgƒŠ‚ÌNTFSˆ³k\n"
-		"F:ContextMenu=ƒRƒ“ƒeƒLƒXƒgƒƒjƒ…[‚ğ•\¦\n"
-		"F:ConvertDoc2Txt=ƒoƒCƒiƒŠ•¶‘¨ƒeƒLƒXƒg•ÏŠ·\n"
-		"F:ConvertHtm2Txt=HTML¨ƒeƒLƒXƒg•ÏŠ·\n"
-		"F:ConvertImage=‰æ‘œƒtƒ@ƒCƒ‹‚Ì•ÏŠ·\n"
-		"F:ConvertTextEnc=•¶šƒR[ƒh‚Ì•ÏŠ·\n"
-		"F:Copy=ƒRƒs[\n"
-		"F:CopyCmdName=ƒRƒ}ƒ“ƒh–¼‚ğƒNƒŠƒbƒvƒ{[ƒh‚ÉƒRƒs[\n"
-		"F:CopyDir=ƒfƒBƒŒƒNƒgƒŠ\‘¢‚ÌƒRƒs[\n"
-		"F:CopyFileName=ƒtƒ@ƒCƒ‹–¼‚ğƒNƒŠƒbƒvƒ{[ƒh‚ÉƒRƒs[\n"
-		"F:CopyTo=w’èƒfƒBƒŒƒNƒgƒŠ‚ÉƒRƒs[\n"
-		"F:CopyToClip=ƒNƒŠƒbƒvƒ{[ƒh‚ÉƒRƒs[\n"
-		"F:CountLines=ƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚Ìs”‚ğƒJƒEƒ“ƒg\n"
-		"F:CreateDir=ƒfƒBƒŒƒNƒgƒŠ‚Ìì¬\n"
-		"F:CreateDirsDlg=ƒfƒBƒŒƒNƒgƒŠˆêŠ‡ì¬ƒ_ƒCƒAƒƒO\n"
-		"F:CreateHardLink=ƒn[ƒhƒŠƒ“ƒN‚Ìì¬\n"
-		"F:CreateJunction=ƒWƒƒƒ“ƒNƒVƒ‡ƒ“‚Ìì¬\n"
-		"F:CreateShortcut=ƒVƒ‡[ƒgƒJƒbƒg‚Ìì¬\n"
-		"F:CreateSymLink=ƒVƒ“ƒ{ƒŠƒbƒNƒŠƒ“ƒN‚Ìì¬\n"
-		"F:CreateTestFile=ƒeƒXƒgƒtƒ@ƒCƒ‹‚Ìì¬\n"
-		"F:CsrDirToOpp=ƒJ[ƒ\ƒ‹ˆÊ’u‚ÌƒfƒBƒŒƒNƒgƒŠ‚ğ”½‘Î‘¤‚ÉŠJ‚­\n"
-		"F:CurrFromOpp=ƒJƒŒƒ“ƒgƒpƒX‚ğ”½‘ÎƒpƒX‚É\n"
-		"F:CurrToOpp=”½‘ÎƒpƒX‚ğƒJƒŒƒ“ƒgƒpƒX‚É\n"
-		"F:CursorEnd=ƒJ[ƒ\ƒ‹‚ğÅ‰ºs‚ÉˆÚ“®\n"
-		"F:CursorEndSel=‘I‘ğ‚µ‚È‚ª‚çƒJ[ƒ\ƒ‹‚ğÅ‰ºs‚ÉˆÚ“®\n"
-		"F:CursorTop=ƒJ[ƒ\ƒ‹‚ğÅãs‚ÉˆÚ“®\n"
-		"F:CursorTopSel=‘I‘ğ‚µ‚È‚ª‚çƒJ[ƒ\ƒ‹‚ğÅãs‚ÉˆÚ“®\n"
-		"F:CutToClip=ƒNƒŠƒbƒvƒ{[ƒh‚ÉØ‚èæ‚è\n"
-		"F:DateSelect=w’è‚µ‚½“ú•tğŒ‚É‡‚¤ƒtƒ@ƒCƒ‹‚ğ‘I‘ğ\n"
-		"F:DeleteADS=ƒtƒ@ƒCƒ‹‚Ì‘ã‘Öƒf[ƒ^ƒXƒgƒŠ[ƒ€‚ğíœ\n"
-		"F:DelJpgExif=Exifî•ñ‚Ìíœ\n"
-		"F:DelSelMask=‘I‘ğƒ}ƒXƒN‚©‚ç€–Ú‚ğíœ\n"
-		"F:DelTab=ƒ^ƒu‚ğíœ\n"
-		"F:DiffDir=ƒfƒBƒŒƒNƒgƒŠ‚Ì”äŠr\n"
-		"F:DirHistory=ƒfƒBƒŒƒNƒgƒŠ—š—ğ\n"
-		"F:DirStack=ƒfƒBƒŒƒNƒgƒŠEƒXƒ^ƒbƒN\n"
-		"F:DistributionDlg=U‚è•ª‚¯ƒ_ƒCƒAƒƒO\n"
-		"F:DotNyanDlg=.nyanfi ƒtƒ@ƒCƒ‹‚Ìİ’è\n"
-		"F:DriveList=ƒhƒ‰ƒCƒuˆê——\n"
-		"F:DriveGraph=ƒhƒ‰ƒCƒug—p—¦„ˆÚ\n"
-		"F:EditIniFile=INIƒtƒ@ƒCƒ‹‚Ì•ÒW\n"
-		"F:Eject=CD/DVDƒhƒ‰ƒCƒu‚ÌƒgƒŒƒC‚ğŠJ‚­\n"
-		"F:EjectDrive=ƒhƒ‰ƒCƒu‚Ìæ‚èŠO‚µ\n"
-		"F:EmptyTrash=‚²‚İ” ‚ğ‹ó‚É‚·‚é\n"
-		"F:EqualListWidth=¶‰E‚ÌƒŠƒXƒg•‚ğ‹Ï“™‚É\n"
-		"F:ExeCommandLine=ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“‚ÌÀs\n"
-		"F:ExeExtMenu=’Ç‰Áƒƒjƒ…[‚ÌÀs\n"
-		"F:ExeExtTool=ŠO•”ƒc[ƒ‹‚ÌÀs\n"
-		"F:Exit=NyanFi‚ÌI—¹\n"
-		"F:ExitDupl=“ñd‹N“®‚³‚ê‚½NyanFi‚ğI—¹\n"
-		"F:ExPopupMenu=Šg’£ƒ|ƒbƒvƒAƒbƒvƒƒjƒ…[\n"
-		"F:ExtractChmSrc=CHM‚©‚çƒ\[ƒX‚ğ’Šo\n"
-		"F:ExtractGifBmp=ƒAƒjƒGIF‚©‚çƒrƒbƒgƒ}ƒbƒv‚ğ’Šo\n"
-		"F:ExtractIcon=ƒAƒCƒRƒ“‚ğ’Šo\n"
-		"F:ExtractImage=–„‚ß‚İ‰æ‘œ‚ğ’Šo\n"
-		"F:ExtractMp3Img=MP3‚Ì–„‚ß‚İ‰æ‘œ‚ğ’Šo\n"
-		"F:FileExtList=Šg’£q•Êˆê——\n"
-		"F:FileListOnly=ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚Ì‚İ‚ğ•\¦\n"
-		"F:FileRun=ƒtƒ@ƒCƒ‹–¼‚ğw’è‚µ‚ÄÀs\n"
-		"F:Filter=ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚Ìi‚è‚İ\n"
-		"F:FindDuplDlg=d•¡ƒtƒ@ƒCƒ‹‚ÌŒŸõƒ_ƒCƒAƒƒO\n"
-		"F:FindDirDlg=ƒfƒBƒŒƒNƒgƒŠ–¼ŒŸõƒ_ƒCƒAƒƒO\n"
-		"F:FindFileDirDlg=ƒtƒ@ƒCƒ‹/ƒfƒBƒŒƒNƒgƒŠ–¼ŒŸõƒ_ƒCƒAƒƒO\n"
-		"F:FindFileDlg=ƒtƒ@ƒCƒ‹–¼ŒŸõƒ_ƒCƒAƒƒO\n"
-		"F:FindFolderIcon=ƒtƒHƒ‹ƒ_ƒAƒCƒRƒ“ŒŸõ\n"
-		"F:FindHardLink=ƒn[ƒhƒŠƒ“ƒN‚ğ—ñ‹“\n"
-		"F:FindMark=xƒ}[ƒN€–Ú‚ğŒŸõ\n"
-		"F:FindTag=ƒ^ƒOŒŸõ\n"
-		"F:FixTabPath=ƒ^ƒu•ÏX‚É‘Î‚µ‚ÄƒJƒŒƒ“ƒgƒpƒX‚ğˆêŒÅ’è/‰ğœ\n"
-		"F:FTPChmod=ƒp[ƒ~ƒbƒVƒ‡ƒ“‚Ìİ’è\n"
-		"F:FTPConnect=FTPƒzƒXƒg‚ÉÚ‘±\n"
-		"F:FTPDisconnect=FTPƒzƒXƒg‚©‚çØ’f\n"
-		"F:ForwardDirHist=ƒfƒBƒŒƒNƒgƒŠ—š—ğ‚ği‚Ş\n"
-		"F:GetHash=ƒtƒ@ƒCƒ‹‚ÌƒnƒbƒVƒ…’l‚ğæ“¾\n"
-		"F:GitDiff=ƒJ[ƒ\ƒ‹ˆÊ’uƒtƒ@ƒCƒ‹‚Ì·•ª‚ğ•\¦\n"
-		"F:GitGrep=Git GREP ‚ğŠJ‚­\n"
-		"F:GitViewer=Gitƒrƒ…[ƒA\n"
-		"F:HideSizeTime=ƒTƒCƒY‚ÆXV“ú‚ğ‰B‚·\n"
-		"F:ImageViewer=ƒCƒ[ƒWƒrƒ…[ƒA‚ÅŠJ‚­\n"
-		"F:InputDir=“ü—Í‚µ‚½ƒfƒBƒŒƒNƒgƒŠ‚É•ÏX\n"
-		"F:InputPathMask=ƒpƒXƒ}ƒXƒN‚ğ“ü—Í\n"
-		"F:InsSeparator=ƒ[ƒNƒŠƒXƒg‚ÉƒZƒpƒŒ[ƒ^‚ğ‘}“ü\n"
-		"F:ItemTmpDown=€–Ú‚ğˆê“I‚É1‚Â‰º‚ÉˆÚ“®\n"
-		"F:ItemTmpMove=‘I‘ğ€–Ú‚ğˆê“I‚ÉƒJ[ƒ\ƒ‹ˆÊ’u‚ÉˆÚ“®\n"
-		"F:ItemTmpUp=€–Ú‚ğˆê“I‚É1‚Âã‚ÉˆÚ“®\n"
-		"F:JoinText=ƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚ÌŒ‹‡\n"
-		"F:JsonViewer=JSONƒrƒ…[ƒA\n"
-		"F:JumpTo=w’è‚µ‚½ƒtƒ@ƒCƒ‹ˆÊ’u‚Ö\n"
-		"F:Library=ƒ‰ƒCƒuƒ‰ƒŠ‚Ö\n"
-		"F:LinkToOpp=ƒŠƒ“ƒNæ‚ğ”½‘Î‘¤‚ÉŠJ‚­\n"
-		"F:ListArchive=ƒA[ƒJƒCƒu‚Ì“à—eˆê——\n"
-		"F:ListClipboard=ƒNƒŠƒbƒvƒ{[ƒh‚ğˆê——‚Å•\¦\n"
-		"F:ListDuration=ƒtƒ@ƒCƒ‹Ä¶ŠÔ‚Ìˆê——\n"
-		"F:ListExpFunc=ƒGƒNƒXƒ|[ƒgŠÖ”ˆê——\n"
-		"F:ListFileName=ƒtƒ@ƒCƒ‹–¼‚ğˆê——‚Å•\¦\n"
-		"F:ListNyanFi=NyanFi ‚É‚Â‚¢‚Ä‚Ìî•ñ‚ğƒƒO‚É•\¦\n"
-		"F:ListText=ƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚ğˆê——‚Å•\¦\n"
-		"F:ListTail=ƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚Ì––”ö‚ğˆê——‚Å•\¦\n"
-		"F:ListTree=ƒfƒBƒŒƒNƒgƒŠ\‘¢‚ÌƒcƒŠ[•\¦\n"
-		"F:LoadResultList=Œ‹‰ÊƒŠƒXƒg‚ğƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚Ş\n"
-		"F:LoadFindSet=ŒŸõİ’è‚ğƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚Ş\n"
-		"F:LoadTabGroup=ƒ^ƒuƒOƒ‹[ƒv‚ğƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚Ş\n"
-		"F:LockComputer=ƒRƒ“ƒsƒ…[ƒ^‚ÌƒƒbƒN\n"
-		"F:LockKeyMouse=ƒL[ƒ{[ƒh/ƒ}ƒEƒX‚ÌƒƒbƒN\n"
-		"F:LockTextPreview=ƒeƒLƒXƒgƒvƒŒƒrƒ…[‚ÌƒƒbƒN/‰ğœ\n"
-		"F:LogFileInfo=ƒtƒ@ƒCƒ‹î•ñ‚ğƒƒO‚Éo—Í\n"
-		"F:MarkMask=xƒ}[ƒN€–Ú‚¾‚¯‚ğc‚µ‚Ä‘¼‚ğ‰B‚·\n"
-		"F:MaskFind=w’èƒ}ƒXƒN‚Éƒ}ƒbƒ`‚·‚é€–Ú‚ğŒŸõ\n"
-		"F:MatchSelect=w’è•¶š—ñ‚ğŠÜ‚Şƒtƒ@ƒCƒ‹‚ğ‘I‘ğ\n"
-		"F:MonitorOff=ƒfƒBƒXƒvƒŒƒC‚Ì“dŒ¹‚ğØ‚é\n"
-		"F:Move=ˆÚ“®\n"
-		"F:MoveTab=ƒ^ƒu‚ÌˆÊ’u‚ğˆÚ“®\n"
-		"F:MoveTo=w’èƒfƒBƒŒƒNƒgƒŠ‚ÖˆÚ“®\n"
-		"F:MuteVolume=‰¹—Êƒ~ƒ…[ƒg\n"
-		"F:NameFromClip=ƒtƒ@ƒCƒ‹–¼‚ğƒNƒŠƒbƒvƒ{[ƒh‚Ì“à—e‚É\n"
-		"F:NameToLower=ƒtƒ@ƒCƒ‹–¼‚Ì¬•¶š‰»\n"
-		"F:NameToUpper=ƒtƒ@ƒCƒ‹–¼‚Ì‘å•¶š‰»\n"
-		"F:NetConnect=ƒlƒbƒgƒ[ƒNƒhƒ‰ƒCƒu‚ÌŠ„‚è“–‚Ä\n"
-		"F:NetDisconnect=ƒlƒbƒgƒ[ƒNƒhƒ‰ƒCƒu‚ÌØ’f\n"
-		"F:NewFile=V‹Kƒtƒ@ƒCƒ‹‚Ìì¬\n"
-		"F:NewTextFile=V‹KƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚Ìì¬\n"
-		"F:NextDrive=Ÿ‚Ìƒhƒ‰ƒCƒu‚Ö\n"
-		"F:NextSelItem=Ÿ‚Ì‘I‘ğ€–Ú‚ÉƒJ[ƒ\ƒ‹ˆÚ“®\n"
-		"F:NextTab=Ÿ‚Ìƒ^ƒu‚Ö\n"
-		"F:OpenADS=‘ã‘Öƒf[ƒ^ƒXƒgƒŠ[ƒ€‚ğ‰¼‘zƒŠƒXƒg‚Æ‚µ‚ÄŠJ‚­\n"
-		"F:OpenByExp=ƒGƒNƒXƒvƒ[ƒ‰‚ÅŠJ‚­\n"
-		"F:OpenCtrlPanel=ƒRƒ“ƒgƒ[ƒ‹ƒpƒlƒ‹‚ğŠJ‚­\n"
-		"F:OpenGitURL=ƒŠƒ‚[ƒgƒŠƒ|ƒWƒgƒŠURL‚ğŠJ‚­\n"
-		"F:OpenStandard=•W€‚Ì Enter ƒL[“®ì\n"
-		"F:OpenTrash=‚²‚İ” ‚ğŠJ‚­\n"
-		"F:Pack=”½‘ÎƒpƒX‚ÉƒA[ƒJƒCƒuì¬\n"
-		"F:PackToCurr=ƒJƒŒƒ“ƒgƒpƒX‚ÉƒA[ƒJƒCƒuì¬\n"
-		"F:Paste=“\‚è•t‚¯\n"
-		"F:PathMaskDlg=ƒpƒXƒ}ƒXƒNƒ_ƒCƒAƒƒO\n"
-		"F:PlayList=ƒvƒŒƒCƒŠƒXƒg‚ğì‚Á‚ÄÄ¶\n"
-		"F:PopDir=ƒfƒBƒŒƒNƒgƒŠ‚ğƒ|ƒbƒv\n"
-		"F:PopupTab=ƒ^ƒu‘I‘ğƒƒjƒ…[‚ğ•\¦\n"
-		"F:PowerOff=Windows‚ğI—¹\n"
-		"F:PowerShell=PowerShell ‚ğ‹N“®\n"
-		"F:PrevDrive=‘O‚Ìƒhƒ‰ƒCƒu‚Ö\n"
-		"F:PrevSelItem=‘O‚Ì‘I‘ğ€–Ú‚ÉƒJ[ƒ\ƒ‹ˆÚ“®\n"
-		"F:PrevTab=‘O‚Ìƒ^ƒu‚Ö\n"
-		"F:PushDir=ƒfƒBƒŒƒNƒgƒŠ‚ğƒvƒbƒVƒ…\n"
-		"F:Reboot=Windows‚ğÄ‹N“®\n"
-		"F:RecentList=Å‹ßg‚Á‚½ƒtƒ@ƒCƒ‹ˆê——\n"
-		"F:RegDirDlg=“o˜^ƒfƒBƒŒƒNƒgƒŠƒ_ƒCƒAƒƒO\n"
-		"F:RegDirPopup=“o˜^ƒfƒBƒŒƒNƒgƒŠEƒ|ƒbƒvƒAƒbƒvƒƒjƒ…[\n"
-		"F:RegSyncDlg=“¯ŠúƒRƒs[‚Ìİ’è\n"
-		"F:ReloadList=ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚ğÅV‚Ìî•ñ‚ÉXV\n"
-		"F:RenameDlg=–¼‘O“™‚Ì•ÏX\n"
-		"F:RepositoryList=ƒŠƒ|ƒWƒgƒŠˆê——\n"
-		"F:Restart=NyanFi‚ÌÄ‹N“®\n"
-		"F:ReturnList=ƒtƒ@ƒCƒ‹ƒŠƒXƒg•\¦‚É–ß‚é\n"
-		"F:SaveAsResultList=Œ‹‰ÊƒŠƒXƒg‚É–¼‘O‚ğ•t‚¯‚Ä•Û‘¶\n"
-		"F:SaveAsFindSet=ŒŸõİ’è‚É–¼‘O‚ğ•t‚¯‚Ä•Û‘¶\n"
-		"F:SaveAsTabGroup=ƒ^ƒuƒOƒ‹[ƒv‚É–¼‘O‚ğ•t‚¯‚Ä•Û‘¶\n"
-		"F:SaveTabGroup=ƒ^ƒuƒOƒ‹[ƒv‚ğã‘‚«•Û‘¶\n"
-		"F:ScrollDownLog=ƒƒO‚ğ‰º‚ÉƒXƒNƒ[ƒ‹\n"
-		"F:ScrollDownText=ƒeƒLƒXƒgƒvƒŒƒrƒ…[‚ğ‰º‚ÉƒXƒNƒ[ƒ‹\n"
-		"F:ScrollUpLog=ƒƒO‚ğã‚ÉƒXƒNƒ[ƒ‹\n"
-		"F:ScrollUpText=ƒeƒLƒXƒgƒvƒŒƒrƒ…[‚ğã‚ÉƒXƒNƒ[ƒ‹\n"
-		"F:SelAllItem=‚·‚×‚Ä‚Ì€–Ú‚ğ‘I‘ğ/‰ğœ\n"
-		"F:SelByList=ƒŠƒXƒg‚É‚æ‚Á‚Ä€–Ú‚ğ‘I‘ğ\n"
-		"F:SelectUp=‘I‘ğ/‰ğœŒãAƒJ[ƒ\ƒ‹‚ğã‚ÉˆÚ“®\n"
-		"F:SelEmptyDir=‹ó‚ÌƒfƒBƒŒƒNƒgƒŠ‚¾‚¯‚ğ‘I‘ğ\n"
-		"F:SelGitChanged=Gitì‹ÆƒfƒBƒŒƒNƒgƒŠ‚Å•ÏXƒtƒ@ƒCƒ‹‚ğ‘I‘ğ\n"
-		"F:SelMask=‘I‘ğ’†‚Ì€–Ú‚¾‚¯‚ğc‚µ‚Ä‘¼‚ğ‰B‚·\n"
-		"F:SelOnlyCur=ƒJƒŒƒ“ƒg‘¤‚¾‚¯‚É‚ ‚éƒtƒ@ƒCƒ‹‚ğ‘I‘ğ\n"
-		"F:SelReverseAll=‚·‚×‚Ä‚Ì€–Ú‚Ì‘I‘ğó‘Ô‚ğ”½“]\n"
-		"F:SelSameDir=Œ‹‰ÊƒŠƒXƒg‚Å“¯‚¶ƒfƒBƒŒƒNƒgƒŠ‚Ì€–Ú‚ğ‘I‘ğ\n"
-		"F:SetAlias=ƒ[ƒNƒŠƒXƒg‚Ì€–Ú‚ÉƒGƒCƒŠƒAƒX‚ğİ’è\n"
-		"F:SetArcTime=ƒA[ƒJƒCƒu‚Ìƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚ğÅV‚É‡‚í‚¹‚é\n"
-		"F:SetDirTime=ƒfƒBƒŒƒNƒgƒŠ‚Ìƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚ğÅV‚É‡‚í‚¹‚é\n"
-		"F:SetExifTime=ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚ğExifB‰e“ú‚Éİ’è\n"
-		"F:SetFolderIcon=ƒtƒHƒ‹ƒ_ƒAƒCƒRƒ“‚Ìİ’è\n"
-		"F:SetPathMask=ƒpƒXƒ}ƒXƒN‚ğİ’è\n"
-		"F:SetSttBarFmt=ƒXƒe[ƒ^ƒXƒo[‘®‚ğİ’è\n"
-		"F:SetSubSize=ƒTƒuƒEƒBƒ“ƒhƒE‚ÌƒTƒCƒY‚ğİ’è\n"
-		"F:ShareList=‹¤—LƒtƒHƒ‹ƒ_ˆê——\n"
-		"F:ShowByteSize=ƒtƒ@ƒCƒ‹ƒTƒCƒY‚ğƒoƒCƒg’PˆÊ‚Å•\¦\n"
-		"F:ShowHideAtr=‰B‚µƒtƒ@ƒCƒ‹‚ğ•\¦\n"
-		"F:ShowIcon=ƒAƒCƒRƒ“‚Ì•\¦\n"
-		"F:ShowLogWin=ƒƒOƒEƒBƒ“ƒhƒE[‚Ì•\¦\n"
-		"F:ShowPreview=ƒCƒ[ƒWƒvƒŒƒrƒ…[‚Ì•\¦\n"
-		"F:ShowProperty=ƒtƒ@ƒCƒ‹î•ñ‚Ì•\¦\n"
-		"F:ShowSystemAtr=ƒVƒXƒeƒ€ƒtƒ@ƒCƒ‹‚ğ•\¦\n"
-		"F:ShowTabBar=ƒ^ƒuƒo[‚Ì•\¦\n"
-		"F:SimilarSort=–¼‘O‚Ì—Ş—«‚É‚æ‚éƒ\[ƒg\n"
-		"F:SoloTab=‘¼‚Ìƒ^ƒu‚ğ‚·‚×‚Äíœ\n"
-		"F:SpecialDirList=“ÁêƒtƒHƒ‹ƒ_ˆê——\n"
-		"F:SubDirList=ƒTƒuƒfƒBƒŒƒNƒgƒŠˆê——\n"
-		"F:SwapLR=¶‰E‚Ìƒtƒ@ƒCƒ‹ƒŠƒXƒg‚ğ“ü‚ê‘Ö‚¦‚é\n"
-		"F:SwapName=–¼‘O‚ğ“ü‚ê‘Ö‚¦‚é\n"
-		"F:SyncLR=¶‰EƒfƒBƒŒƒNƒgƒŠ‚Ì“¯Šú•ÏX‚ğ—LŒø/‰ğœ\n"
-		"F:TabDlg=ƒ^ƒu‚Ìİ’èƒ_ƒCƒAƒƒO\n"
-		"F:TabHome=ƒ^ƒu‚Ìƒz[ƒ€‚Ö\n"
-		"F:TestArchive=ƒA[ƒJƒCƒu‚Ì³“–«‚ğŒŸ¸\n"
-		"F:TextViewer=ƒeƒLƒXƒgƒrƒ…[ƒA‚ÅŠJ‚­\n"
-		"F:ToExViewer=•ÊƒEƒBƒ“ƒhƒE‚ÌƒeƒLƒXƒgƒrƒ…[ƒA‚Ö\n"
-		"F:ToLog=ƒƒOƒEƒBƒ“ƒhƒE‚Ö\n"
-		"F:ToNextOnRight=‰Eƒtƒ@ƒCƒ‹ƒŠƒXƒg‚ÅŸ‚ÌNyanFi‚Ö\n"
-		"F:ToOpposite=”½‘Î‘¤‚Ìƒtƒ@ƒCƒ‹ƒŠƒXƒg‚Ö\n"
-		"F:ToOppSameItem=ƒJ[ƒ\ƒ‹ˆÊ’u‚Æ“¯–¼‚Ì”½‘Î‘¤€–Ú‚Ö\n"
-		"F:ToOppSameHash=ƒJ[ƒ\ƒ‹ˆÊ’u‚Æ“¯ƒnƒbƒVƒ…’l‚Ì”½‘Î‘¤€–Ú‚Ö\n"
-		"F:ToParent=eƒfƒBƒŒƒNƒgƒŠ‚Ö\n"
-		"F:ToParentOnLeft=¶ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚ÅeƒfƒBƒŒƒNƒgƒŠ‚Ö\n"
-		"F:ToParentOnRight=‰Eƒtƒ@ƒCƒ‹ƒŠƒXƒg‚ÅeƒfƒBƒŒƒNƒgƒŠ‚Ö\n"
-		"F:ToPrevOnLeft=¶ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚Å‘O‚ÌNyanFi‚Ö\n"
-		"F:ToRoot=ƒ‹[ƒgƒfƒBƒŒƒNƒgƒŠ‚Ö\n"
-		"F:ToTab=w’è”Ô†/ƒLƒƒƒvƒVƒ‡ƒ“‚Ìƒ^ƒu‚Ö\n"
-		"F:ToText=ƒeƒLƒXƒgƒvƒŒƒrƒ…[‚Ö\n"
-		"F:TrimTagData=ƒ^ƒOƒf[ƒ^‚Ì®—\n"
-		"F:UndoRename=’¼‘O‚Ì‰ü–¼‚ğŒ³‚É–ß‚·\n"
-		"F:UnPack=”½‘ÎƒpƒX‚É‰ğ“€\n"
-		"F:UnPackToCurr=ƒJƒŒƒ“ƒgƒpƒX‚É‰ğ“€\n"
-		"F:UpdateFromArc=ƒA[ƒJƒCƒu‚©‚çXV\n"
-		"F:ViewIniFile=INIƒtƒ@ƒCƒ‹‚Ì‰{——\n"
-		"F:ViewTail=ƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚Ì––”ö‚ğ‰{——\n"
-		"F:WatchTail=ƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚Ì’Ç‰ÁXV‚ğŠÄ‹\n"
-		"F:WidenCurList=ƒJƒŒƒ“ƒg‘¤ƒŠƒXƒg‚Ì•‚ğL‚°‚é\n"
-		"F:WinMaximize=ƒEƒBƒ“ƒhƒE‚ÌÅ‘å‰»\n"
-		"F:WinMinimize=ƒEƒBƒ“ƒhƒE‚ÌÅ¬‰»\n"
-		"F:WinNormal=ƒEƒBƒ“ƒhƒE‚ğŒ³‚ÌƒTƒCƒY‚É–ß‚·\n"
-		"F:WinTerminal=Windows Terminal ‚ğ‹N“®\n"
-		"F:WorkItemDown=ƒ[ƒNƒŠƒXƒg‚Ì€–Ú‚ğ1‚Â‰º‚ÉˆÚ“®\n"
-		"F:WorkItemMove=‘I‘ğƒ[ƒNƒŠƒXƒg€–Ú‚ğƒJ[ƒ\ƒ‹ˆÊ’u‚ÉˆÚ“®\n"
-		"F:WorkItemUP=ƒ[ƒNƒŠƒXƒg‚Ì€–Ú‚ğ1‚Âã‚ÉˆÚ“®\n"
-		"F:XmlViewer=XMLƒrƒ…[ƒA\n"
-		"FI:AddTag=€–Ú‚Éƒ^ƒO‚ğ’Ç‰Á\n"
-		"FI:DelTag=€–Ú‚Ìƒ^ƒO‚ğíœ\n"
-		"FI:HomeWorkList=ƒz[ƒ€ƒ[ƒNƒŠƒXƒg‚ğŠJ‚­\n"
-		"FI:LoadBgImage=”wŒi‰æ‘œ‚ğ“Ç‚İ‚Ş\n"
-		"FI:LoadWorkList=ƒ[ƒNƒŠƒXƒg‚ğƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚Ş\n"
-		"FI:MaskSelect=w’èƒ}ƒXƒN‚Éƒ}ƒbƒ`‚·‚éƒtƒ@ƒCƒ‹‚ğ‘I‘ğ\n"
-		"FI:NewWorkList=V‹Kƒ[ƒNƒŠƒXƒg‚Ìì¬\n"
-		"FI:NextMark=Ÿ‚Ìxƒ}[ƒN€–Ú‚Ö\n"
-		"FI:PrevMark=‘O‚Ìxƒ}[ƒN€–Ú‚Ö\n"
-		"FI:NextSameName=ƒtƒ@ƒCƒ‹–¼å•”‚ª“¯‚¶Ÿƒtƒ@ƒCƒ‹‚Ö\n"
-		"FI:OpenByApp=“Æ©‚ÌŠÖ˜A•t‚¯‚ÅŠJ‚­\n"
-		"FI:OpenByWin=Windows‚ÌŠÖ˜A•t‚¯‚ÅŠJ‚­\n"
-		"FI:SaveAsWorkList=ƒ[ƒNƒŠƒXƒg‚É–¼‘O‚ğ•t‚¯‚Ä•Û‘¶\n"
-		"FI:SaveWorkList=ƒ[ƒNƒŠƒXƒg‚ğã‘‚«•Û‘¶\n"
-		"FI:SelAllFile=‚·‚×‚Ä‚Ìƒtƒ@ƒCƒ‹‚ğ‘I‘ğ/‰ğœ\n"
-		"FI:SelMark=xƒ}[ƒN€–Ú‚ğ‘I‘ğ\n"
-		"FI:SelReverse=ƒtƒ@ƒCƒ‹‚Ì‘I‘ğó‘Ô‚ğ”½“]\n"
-		"FI:SelSameExt=Šg’£q‚ª“¯‚¶ƒtƒ@ƒCƒ‹‚ğ‘I‘ğ\n"
-		"FI:SelSameName=ƒtƒ@ƒCƒ‹–¼å•”‚ª“¯‚¶ƒtƒ@ƒCƒ‹‚ğ‘I‘ğ\n"
-		"FI:SelWorkItem=ƒ[ƒNƒŠƒXƒg‚Ì“o˜^€–Ú‚ğ‘I‘ğ\n"
-		"FI:SetInterpolation=k¬EŠg‘åƒAƒ‹ƒSƒŠƒYƒ€‚ğİ’è\n"
-		"FI:SetTag=€–Ú‚Éƒ^ƒO‚ğİ’è\n"
-		"FI:SortDlg=ƒ\[ƒgƒ_ƒCƒAƒƒO\n"
-		"FI:SubViewer=ƒTƒuƒrƒ…[ƒA‚Ì•\¦\n"
-		"FI:TagSelect=w’èƒ^ƒO‚ğŠÜ‚Ş€–Ú‚ğ‘I‘ğ\n"
-		"FI:UseTrash=íœ‚É‚²‚İ” ‚ğg‚¤/g‚í‚È‚¢\n"
-		"FI:WorkList=ƒ[ƒNƒŠƒXƒg\n"
-		"FL:CancelAllTask=‚·‚×‚Ä‚Ìƒ^ƒXƒN‚ğ’†’f\n"
-		"FL:ClearLog=ƒƒO‚ğƒNƒŠƒA\n"
-		"FL:PauseAllTask=‚·‚×‚Ä‚Ìƒ^ƒXƒN‚ğˆê’U’â~/ÄŠJ\n"
-		"FL:Suspend=ƒ^ƒXƒN—\–ñ€–Ú‚ÌÀs‚ğ•Û—¯/‰ğœ\n"
-		"FL:TaskMan=ƒ^ƒXƒNƒ}ƒl[ƒWƒƒ\n"
-		"FL:ToLeft=¶ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚Ö\n"
-		"FL:ToRight=‰Eƒtƒ@ƒCƒ‹ƒŠƒXƒg‚Ö\n"
-		"FL:ViewLog=ƒƒO‚ğƒeƒLƒXƒgƒrƒ…[ƒA‚Å•\¦\n"
-		"FS:ClearAll=‚·‚×‚Ä‚Ì‘I‘ğó‘Ô‚ğ‰ğœ\n"
-		"FSI:Select=‘I‘ğ/‰ğœ\n"
-		"FSVIL:HelpContents=ƒwƒ‹ƒv‚Ì–ÚŸ/õˆø‚ğ•\¦\n"
-		"FSVIL:KeyList=ƒL[Š„‚è“–‚Äˆê——\n"
-		"FSVIL:OptionDlg=ƒIƒvƒVƒ‡ƒ“İ’è\n"
-		"FV:BinaryEdit=ƒtƒ@ƒCƒ‹‚ÌƒoƒCƒiƒŠ•ÒW\n"
-		"FV:CursorDownSel=‘I‘ğ‚µ‚È‚ª‚çƒJ[ƒ\ƒ‹‚ğ‰º‚ÉˆÚ“®\n"
-		"FV:CursorUpSel=‘I‘ğ‚µ‚È‚ª‚çƒJ[ƒ\ƒ‹‚ğã‚ÉˆÚ“®\n"
-		"FV:EditHighlight=\•¶‹­’²•\¦’è‹`ƒtƒ@ƒCƒ‹‚Ì•ÒW\n"
-		"FV:EditHistory=Å‹ß•ÒW‚µ‚½ƒtƒ@ƒCƒ‹ˆê——\n"
-		"FV:Grep=•¶š—ñŒŸõ(GREP)\n"
-		"FV:Grep2=•¶š—ñŒŸõ(grep ƒtƒƒ“ƒgƒGƒ“ƒh)\n"
-		"FV:HtmlToText=ƒeƒLƒXƒgƒrƒ…[ƒA‚ÅHTML¨ƒeƒLƒXƒg•ÏŠ·•\¦\n"
-		"FV:IncSearch=ƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`\n"
-		"FV:FindTagName=tags ‚©‚çƒ^ƒO–¼ŒŸõ\n"
-		"FV:FixedLen=ƒeƒLƒXƒgƒrƒ…[ƒA‚ÅCSV/TSV‚ğŒÅ’è’·•\¦\n"
-		"FV:PageDownSel=‘I‘ğ‚µ‚È‚ª‚ç1ƒy[ƒW‰º‚ÉˆÚ“®\n"
-		"FV:PageUpSel=‘I‘ğ‚µ‚È‚ª‚ç1ƒy[ƒWã‚ÉˆÚ“®\n"
-		"FV:RegExChecker=³‹K•\Œ»ƒ`ƒFƒbƒJ[\n"
-		"FV:SetColor=ƒeƒLƒXƒgƒrƒ…[ƒA‚Ì”zF\n"
-		"FV:SetFontSize=ƒtƒHƒ“ƒgƒTƒCƒY‚ğ•ÏX\n"
-		"FV:SetMargin=ƒeƒLƒXƒgƒrƒ…[ƒA‚Ì¶‘¤—]”’‚ğİ’è\n"
-		"FV:SetTab=ƒeƒLƒXƒgƒrƒ…[ƒA‚Ìƒ^ƒuƒXƒgƒbƒv•‚ğİ’è\n"
-		"FV:SetWidth=ƒeƒLƒXƒgƒrƒ…[ƒA‚ÌÜ‚è•Ô‚µ•‚ğİ’è\n"
-		"FV:ShowCR=ƒeƒLƒXƒgƒrƒ…[ƒA‚Å‰üs‚ğ•\¦\n"
-		"FV:ShowIndent=ƒeƒLƒXƒgƒrƒ…[ƒA‚ÌƒCƒ“ƒfƒ“ƒgƒKƒCƒh‚ğ•\¦\n"
-		"FV:ShowLineNo=ƒeƒLƒXƒgƒrƒ…[ƒA‚Ìs”Ô†‚ğ•\¦\n"
-		"FV:ShowRuby=ƒeƒLƒXƒgƒrƒ…[ƒA‚Åƒ‹ƒr‚ğ•\¦\n"
-		"FV:ShowRuler=ƒeƒLƒXƒgƒrƒ…[ƒA‚Ìƒ‹[ƒ‰‚ğ•\¦\n"
-		"FV:ShowTAB=ƒeƒLƒXƒgƒrƒ…[ƒA‚Åƒ^ƒu‚ğ•\¦\n"
-		"FV:ViewHistory=Å‹ß‰{——‚µ‚½ƒtƒ@ƒCƒ‹ˆê——\n"
-		"FV:WebSearch=Web‚ÅŒŸõ\n"
-		"FV:ZoomReset=ƒY[ƒ€‚ğ‰ğœ\n"
-		"FVL:CursorDown=ƒJ[ƒ\ƒ‹‚ğ‰º‚ÉˆÚ“®\n"
-		"FVL:CursorUp=ƒJ[ƒ\ƒ‹‚ğã‚ÉˆÚ“®\n"
-		"FVI:AlphaBlend=ƒƒCƒ“ƒEƒBƒ“ƒhƒE‚ğ“§‰ß•\¦\n"
-		"FVI:AppList=ƒAƒvƒŠƒP[ƒVƒ‡ƒ“ˆê——\n"
-		"FVI:Calculator=“d‘ì\n"
-		"FVI:ClearMark=‚·‚×‚Ä‚Ìxƒ}[ƒN‚ğ‰ğœ\n"
-		"FVI:Close=•Â‚¶‚é\n"
-		"FVI:CopyFileInfo=ƒtƒ@ƒCƒ‹î•ñ‚ğƒNƒŠƒbƒvƒ{[ƒh‚ÉƒRƒs[\n"
-		"FVI:CmdFileList=ƒRƒ}ƒ“ƒhƒtƒ@ƒCƒ‹ˆê——\n"
-		"FVI:CmdHistory=ƒRƒ}ƒ“ƒh—š—ğ\n"
-		"FVI:DebugCmdFile=ƒRƒ}ƒ“ƒhƒtƒ@ƒCƒ‹‚ÌƒfƒoƒbƒOÀs\n"
-		"FVI:Delete=íœ\n"
-		"FVI:Duplicate=NyanFi‚Ì“ñd‹N“®\n"
-		"FVI:ExeCommands=w’è‚µ‚½ƒRƒ}ƒ“ƒh‚ğÀs\n"
-		"FVI:ExeMenuFile=ƒƒjƒ…[ƒtƒ@ƒCƒ‹‚ÌÀs\n"
-		"FVI:ExeToolBtn=ƒc[ƒ‹ƒ{ƒ^ƒ“‚ÌÀs\n"
-		"FVI:FileEdit=ƒtƒ@ƒCƒ‹‚Ì•ÒW\n"
-		"FVI:InputCommands=“ü—Í‚µ‚½ƒRƒ}ƒ“ƒh‚ğÀs\n"
-		"FVI:ListFileInfo=ƒtƒ@ƒCƒ‹î•ñ‚ğƒ_ƒCƒAƒƒO•\¦\n"
-		"FVI:ListLog=ƒƒO‚ğˆê——‚Å•\¦\n"
-		"FVI:Mark=xƒ}[ƒN/‰ğœ\n"
-		"FVI:MarkList=xƒ}[ƒNˆê——\n"
-		"FVI:MenuBar=ƒƒjƒ…[ƒo[‚Ì•\¦\n"
-		"FVI:NextNyanFi=Ÿ‚ÌNyanFi‚ğƒAƒNƒeƒBƒu‚É\n"
-		"FVI:PopupMainMenu=ƒƒCƒ“ƒƒjƒ…[‚ğƒ|ƒbƒvƒAƒbƒv•\¦\n"
-		"FVI:PrevNyanFi=‘O‚ÌNyanFi‚ğƒAƒNƒeƒBƒu‚É\n"
-		"FVI:PropertyDlg=ƒvƒƒpƒeƒBƒ_ƒCƒAƒƒO‚ğ•\¦\n"
-		"FVI:ScrollDown=‰º‚ÉƒXƒNƒ[ƒ‹\n"
-		"FVI:ScrollUp=ã‚ÉƒXƒNƒ[ƒ‹\n"
-		"FVI:ShowFileInfo=ƒtƒ@ƒCƒ‹î•ñ‚ğ‹­§“I‚É•\¦\n"
-		"FVI:ShowFKeyBar=ƒtƒ@ƒ“ƒNƒVƒ‡ƒ“ƒL[ƒo[‚Ì•\¦\n"
-		"FVI:ShowStatusBar=ƒXƒe[ƒ^ƒXƒo[‚Ì•\¦\n"
-		"FVI:ShowToolBar=ƒc[ƒ‹ƒo[‚ğ•\¦\n"
-		"FVI:ToolBarDlg=ƒc[ƒ‹ƒo[‚Ìİ’è\n"
-		"FVI:WebMap=‰æ‘œ‚ÌGPSî•ñ‚âw’è’n“_‚Ì’n}‚ğŠJ‚­\n"
-		"FVI:WinPos=ƒEƒBƒ“ƒhƒE‚Ìl•Ó‚ğİ’è\n"
-		"FVIL:PageDown=1ƒy[ƒW‰º‚ÉˆÚ“®\n"
-		"FVIL:PageUp=1ƒy[ƒWã‚ÉˆÚ“®\n"
-		"FVI:ZoomIn=ƒY[ƒ€ƒCƒ“\n"
-		"FVI:ZoomOut=ƒY[ƒ€ƒAƒEƒg\n"
-		"I:ColorPicker=ƒJƒ‰[ƒsƒbƒJ[\n"
-		"I:DoublePage=Œ©ŠJ‚«•\¦\n"
-		"I:EndFile=ÅŒã‚Ìƒtƒ@ƒCƒ‹‚ÉˆÚ“®\n"
-		"I:EqualSize=“™”{•\¦\n"
-		"I:FittedSize=‰æ–ÊƒtƒBƒbƒg•\¦\n"
-		"I:FlipHorz=¶‰E”½“]\n"
-		"I:FlipVert=ã‰º”½“]\n"
-		"I:FullScreen=‘S‰æ–Ê•\¦\n"
-		"I:GrayScale=ƒOƒŒ[ƒXƒP[ƒ‹•\¦\n"
-		"I:Histogram=ƒqƒXƒgƒOƒ‰ƒ€‚Ì•\¦\n"
-		"I:JumpIndex=w’è‚µ‚½ƒCƒ“ƒfƒbƒNƒX‚ÉˆÚ“®\n"
-		"I:Loupe=ƒ‹[ƒy‚Ì•\¦\n"
-		"I:NextPage=ƒTƒ€ƒlƒCƒ‹‚ÌŸƒy[ƒW‚ÉˆÚ“®\n"
-		"I:PageBind=Œ©ŠJ‚«•\¦‚Ì’Ô‚¶•ûŒü‚ğİ’è\n"
-		"I:PrevPage=ƒTƒ€ƒlƒCƒ‹‚Ì‘Oƒy[ƒW‚ÉˆÚ“®\n"
-		"I:Print=‰æ‘œ‚Ìˆóü\n"
-		"I:RotateLeft=¶‚É90“x‰ñ“]\n"
-		"I:RotateRight=‰E‚É90“x‰ñ“]\n"
-		"I:ScrollLeft=¶‚ÉƒXƒNƒ[ƒ‹\n"
-		"I:ScrollRight=‰E‚ÉƒXƒNƒ[ƒ‹\n"
-		"I:SendToWorkList=ƒ[ƒNƒŠƒXƒg‚É‘—‚é\n"
-		"I:ShowGrid=‰æ‘œ•ªŠ„ƒOƒŠƒbƒh‚Ì•\¦\n"
-		"I:ShowSeekBar=ƒV[ƒNƒo[‚Ì•\¦\n"
-		"I:Sidebar=ƒTƒCƒhƒo[‚Ì•\¦\n"
-		"I:SimilarImage=‰æ‘œ‚Ì—Ş—«‚É‚æ‚éƒ\[ƒg\n"
-		"I:Thumbnail=ƒTƒ€ƒlƒCƒ‹‚Ì•\¦\n"
-		"I:ThumbnailEx=ƒTƒ€ƒlƒCƒ‹‚Ì‘S–Ê•\¦/’Êí•\¦\n"
-		"I:TopFile=æ“ªƒtƒ@ƒCƒ‹‚ÉˆÚ“®\n"
-		"I:WarnHighlight=”’”ò‚ÑŒx\n"
-		"S:ClearIncKeyword=ƒL[ƒ[ƒh‚ğƒNƒŠƒA\n"
-		"S:IncMatchSelect=ƒ}ƒbƒ`‚·‚é€–Ú‚ğ‚·‚×‚Ä‘I‘ğ\n"
-		"S:IncSearchDown=ƒ}ƒbƒ`‚·‚é€–Ú‚ğ‰º•ûŒüŒŸõ\n"
-		"S:IncSearchExit=ƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`‚©‚ç”²‚¯‚é\n"
-		"S:IncSearchTop=ƒ}ƒbƒ`‚·‚é€–Ú‚ğæ“ª‚©‚çÄŒŸõ\n"
-		"S:IncSearchUp=ƒ}ƒbƒ`‚·‚é€–Ú‚ğã•ûŒüŒŸõ\n"
-		"S:KeywordHistory=ƒL[ƒ[ƒh—š—ğ‚ğQÆ\n"
-		"S:MigemoMode=Migemoƒ‚[ƒh‚ÌØ‚èŠ·‚¦\n"
-		"S:NormalMode=’Êí‚ÌƒT[ƒ`ƒ‚[ƒh‚É–ß‚é\n"
-		"S:SelectDown=‘I‘ğ/‰ğœŒãA‰º•ûŒü‚ÉŒŸõ\n"
-		"V:BackViewHist=ƒeƒLƒXƒgƒrƒ…[ƒA‚Ì—š—ğ‚ğ–ß‚é\n"
-		"V:BitmapView=ƒrƒbƒgƒ}ƒbƒvƒrƒ…[‚Ì•\¦\n"
-		"V:BoxSelMode=” Œ`‘I‘ğƒ‚[ƒh‚ÌŠJn/‰ğœ\n"
-		"V:ChangeCodePage=•¶šƒR[ƒh•ÏX\n"
-		"V:ChangeViewMode=ƒeƒLƒXƒg/ƒoƒCƒiƒŠ•\¦‚ÌØ‚èŠ·‚¦\n"
-		"V:CharInfo=•¶šî•ñ‚Ì•\¦\n"
-		"V:CsvCalc=CSV/TSV€–Ú‚ÌWŒv\n"
-		"V:CsvGraph=CSV/TSV€–Ú‚ÌƒOƒ‰ƒt\n"
-		"V:CsvRecord=CSV/TSVƒŒƒR[ƒh‚Ì•\¦\n"
-		"V:CursorLeft=ƒJ[ƒ\ƒ‹‚ğ¶‚ÉˆÚ“®\n"
-		"V:CursorLeftSel=‘I‘ğ‚µ‚È‚ª‚çƒJ[ƒ\ƒ‹‚ğ¶‚ÉˆÚ“®\n"
-		"V:CursorRight=ƒJ[ƒ\ƒ‹‚ğ‰E‚ÉˆÚ“®\n"
-		"V:CursorRightSel=‘I‘ğ‚µ‚È‚ª‚çƒJ[ƒ\ƒ‹‚ğ‰E‚ÉˆÚ“®\n"
-		"V:ExportCsv=CSV/TSVƒGƒNƒXƒ|[ƒg\n"
-		"V:FindDown=‰º•ûŒü‚ÉÄŒŸõ\n"
-		"V:FindLinkDown=ƒŠƒ“ƒNæ‚ğ‰º•ûŒü‚ÉŒŸõ\n"
-		"V:FindLinkUp=ƒŠƒ“ƒNæ‚ğã•ûŒü‚ÉŒŸõ\n"
-		"V:FindMarkDown=ƒ}[ƒNs‚ğ‰º•ûŒü‚ÉŒŸõ\n"
-		"V:FindMarkUp=ƒ}[ƒNs‚ğã•ûŒü‚ÉŒŸõ\n"
-		"V:FindSelDown=‘I‘ğ•¶š—ñ‚ğ‰º•ûŒü‚ÉŒŸõ\n"
-		"V:FindSelUp=‘I‘ğ•¶š—ñ‚ğã•ûŒü‚ÉŒŸõ\n"
-		"V:FindText=•¶š—ñŒŸõ\n"
-		"V:FindUp=ã•ûŒü‚ÉÄŒŸõ\n"
-		"V:FunctionList=ŠÖ”ˆê——\n"
-		"V:HelpCurWord=ƒJ[ƒ\ƒ‹ˆÊ’u‚Ì’PŒê‚ğw’èƒwƒ‹ƒv‚ÅŒŸõ\n"
-		"V:Highlight=ƒ}ƒbƒ`Œê‚ğ‹­’²•\¦\n"
-		"V:Inspector=ƒCƒ“ƒXƒyƒNƒ^‚Ì•\¦\n"
-		"V:ImgPreview=ƒCƒ[ƒWƒvƒŒƒrƒ…[\n"
-		"V:JumpLine=w’ès”Ô†‚ÉˆÚ“®\n"
-		"V:LineEnd=s––‚ÉˆÚ“®\n"
-		"V:LineEndSel=‘I‘ğ‚µ‚È‚ª‚çs––‚ÉˆÚ“®\n"
-		"V:LineTop=s“ª‚ÉˆÚ“®\n"
-		"V:LineTopSel=‘I‘ğ‚µ‚È‚ª‚çs“ª‚ÉˆÚ“®\n"
-		"V:OpenURL=URL‚ğŠJ‚­\n"
-		"V:ReloadFile=ƒtƒ@ƒCƒ‹‚ÌÄ“Ç‚İ‚İ\n"
-		"V:SaveDump=ƒ_ƒ“ƒvƒŠƒXƒg‚ğƒtƒ@ƒCƒ‹‚É•Û‘¶\n"
-		"V:ScrollCursorDown=ƒXƒNƒ[ƒ‹‚µ‚È‚ª‚ç‰º‚ÉˆÚ“®\n"
-		"V:ScrollCursorUp=ƒXƒNƒ[ƒ‹‚µ‚È‚ª‚çã‚ÉˆÚ“®\n"
-		"V:SearchPair=‘Î‰‚·‚éŠ‡ŒÊ‚ğŒŸõ\n"
-		"V:SelCurWord=ƒJ[ƒ\ƒ‹ˆÊ’u‚Ì’PŒê‚ğ‘I‘ğ\n"
-		"V:SelLine=ƒJ[ƒ\ƒ‹s‚ğ‘I‘ğ\n"
-		"V:SelLineCR=ƒJ[ƒ\ƒ‹s‘S‘Ì‚ğ‰üs’PˆÊ‚Å‘I‘ğ\n"
-		"V:SelectAll=‚·‚×‚Ä‘I‘ğ\n"
-		"V:SelectFile=•\¦’†ƒtƒ@ƒCƒ‹‚ğ‘I‘ğ/‰ğœ\n"
-		"V:SelectMode=‘I‘ğƒ‚[ƒh‚ÌŠJn/‰ğœ\n"
-		"V:SetTopAddr=æ“ªƒAƒhƒŒƒX‚ğİ’è\n"
-		"V:SetUserDefStr=ƒ†[ƒU’è‹`•¶š—ñ‚ğİ’è\n"
-		"V:Sort=ƒeƒLƒXƒg‘S‘Ì‚ğ‰üs’PˆÊ‚Åƒ\[ƒg\n"
-		"V:SwitchSameName=ƒtƒ@ƒCƒ‹–¼å•”‚ª“¯‚¶Ÿ‚Ìƒtƒ@ƒCƒ‹‚ÉØ‚èŠ·‚¦\n"
-		"V:SwitchSrcHdr=ƒwƒbƒ_/ƒ\[ƒXƒtƒ@ƒCƒ‹‚ÌØ‚èŠ·‚¦\n"
-		"V:TagJump=ƒGƒfƒBƒ^‚Åƒ^ƒOƒWƒƒƒ“ƒv\n"
-		"V:TagJumpDirect=ƒGƒfƒBƒ^‚Åƒ_ƒCƒŒƒNƒgƒ^ƒOƒWƒƒƒ“ƒv\n"
-		"V:TagView=ƒrƒ…[ƒA‚Åƒ^ƒOƒWƒƒƒ“ƒv\n"
-		"V:TagViewDirect=ƒrƒ…[ƒA‚Åƒ_ƒCƒŒƒNƒgƒ^ƒOƒWƒƒƒ“ƒv\n"
-		"V:TextEnd=ÅŒã”ö‚ÉˆÚ“®\n"
-		"V:TextEndSel=‘I‘ğ‚µ‚È‚ª‚çÅŒã”ö‚ÉˆÚ“®\n"
-		"V:TextTop=æ“ª‚ÉˆÚ“®\n"
-		"V:TextTopSel=‘I‘ğ‚µ‚È‚ª‚çæ“ª‚ÉˆÚ“®\n"
-		"V:UserDefList=ƒ†[ƒU’è‹`•¶š—ñˆê——\n"
-		"V:WordLeft=‘O‚Ì’PŒê‚ÉˆÚ“®\n"
-		"V:WordRight=Ÿ‚Ì’PŒê‚ÉˆÚ“®\n"
-		"VIL:ClipCopy=ƒNƒŠƒbƒvƒ{[ƒh‚ÉƒRƒs[\n"
-		"VI:NextFile=Ÿ‚Ìƒtƒ@ƒCƒ‹‚ğ•\¦\n"
-		"VI:PrevFile=‘O‚Ìƒtƒ@ƒCƒ‹‚ğ•\¦\n"
-		"VL:NextErr=Ÿ‚ÌƒGƒ‰[ˆÊ’u‚Ö\n"
-		"VL:PrevErr=‘O‚ÌƒGƒ‰[ˆÊ’u‚Ö\n"
-		"InitialSearch=“ª•¶šƒT[ƒ`\n";
+		_T("F:AboutNyanFi=ãƒãƒ¼ã‚¸ãƒ§ãƒ³æƒ…å ±\n")
+		_T("F:AddTab=ã‚¿ãƒ–ã‚’è¿½åŠ \n")
+		_T("F:BackDirHist=ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå±¥æ­´ã‚’æˆ»ã‚‹\n")
+		_T("F:Backup=åå¯¾ãƒ‘ã‚¹ã«ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—\n")
+		_T("F:BgImgMode=èƒŒæ™¯ç”»åƒã®è¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰è¨­å®š\n")
+		_T("F:BorderCenter=ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã®å¢ƒç•Œã‚’ä¸­å¤®ã«\n")
+		_T("F:BorderLeft=ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã®å¢ƒç•Œã‚’å·¦ã«ç§»å‹•\n")
+		_T("F:BorderRight=ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã®å¢ƒç•Œã‚’å³ã«ç§»å‹•\n")
+		_T("F:CalcDirSize=ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå®¹é‡ã‚’è¨ˆç®—\n")
+		_T("F:CalcDirSizeAll=å…¨ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å®¹é‡ã‚’è¨ˆç®—\n")
+		_T("F:ChangeDir=ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’å¤‰æ›´\n")
+		_T("F:ChangeDrive=ãƒ‰ãƒ©ã‚¤ãƒ–ã®å¤‰æ›´\n")
+		_T("F:ChangeOppDir=åå¯¾å´ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’å¤‰æ›´\n")
+		_T("F:ChangeOppRegDir=åå¯¾å´ã§ç™»éŒ²ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’é–‹ã\n")
+		_T("F:ChangeRegDir=ç™»éŒ²ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’é–‹ã\n")
+		_T("F:CheckUpdate=æ›´æ–°ã®ç¢ºèª\n")
+		_T("F:ClearMask=é¸æŠãƒã‚¹ã‚¯/ãƒ‘ã‚¹ãƒã‚¹ã‚¯ã‚’è§£é™¤\n")
+		_T("F:Clone=åå¯¾ãƒ‘ã‚¹ã«ã‚¯ãƒ­ãƒ¼ãƒ³ä½œæˆ\n")
+		_T("F:CloneToCurr=ã‚«ãƒ¬ãƒ³ãƒˆã«ã‚¯ãƒ­ãƒ¼ãƒ³ä½œæˆ\n")
+		_T("F:CommandPrompt=ã‚³ãƒãƒ³ãƒ‰ãƒ—ãƒ­ãƒ³ãƒ—ãƒˆ\n")
+		_T("F:CompareDlg=åŒåãƒ•ã‚¡ã‚¤ãƒ«ã®æ¯”è¼ƒãƒ€ã‚¤ã‚¢ãƒ­ã‚°\n")
+		_T("F:CompareHash=ãƒãƒƒã‚·ãƒ¥å€¤ã®æ¯”è¼ƒ\n")
+		_T("F:CompleteDelete=å®Œå…¨å‰Šé™¤\n")
+		_T("F:CompressDir=ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®NTFSåœ§ç¸®\n")
+		_T("F:ContextMenu=ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’è¡¨ç¤º\n")
+		_T("F:ConvertDoc2Txt=ãƒã‚¤ãƒŠãƒªæ–‡æ›¸â†’ãƒ†ã‚­ã‚¹ãƒˆå¤‰æ›\n")
+		_T("F:ConvertHtm2Txt=HTMLâ†’ãƒ†ã‚­ã‚¹ãƒˆå¤‰æ›\n")
+		_T("F:ConvertImage=ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«ã®å¤‰æ›\n")
+		_T("F:ConvertTextEnc=æ–‡å­—ã‚³ãƒ¼ãƒ‰ã®å¤‰æ›\n")
+		_T("F:Copy=ã‚³ãƒ”ãƒ¼\n")
+		_T("F:CopyCmdName=ã‚³ãƒãƒ³ãƒ‰åã‚’ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã«ã‚³ãƒ”ãƒ¼\n")
+		_T("F:CopyDir=ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæ§‹é€ ã®ã‚³ãƒ”ãƒ¼\n")
+		_T("F:CopyFileName=ãƒ•ã‚¡ã‚¤ãƒ«åã‚’ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã«ã‚³ãƒ”ãƒ¼\n")
+		_T("F:CopyTo=æŒ‡å®šãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã«ã‚³ãƒ”ãƒ¼\n")
+		_T("F:CopyToClip=ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã«ã‚³ãƒ”ãƒ¼\n")
+		_T("F:CountLines=ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®è¡Œæ•°ã‚’ã‚«ã‚¦ãƒ³ãƒˆ\n")
+		_T("F:CreateDir=ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ä½œæˆ\n")
+		_T("F:CreateDirsDlg=ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä¸€æ‹¬ä½œæˆãƒ€ã‚¤ã‚¢ãƒ­ã‚°\n")
+		_T("F:CreateHardLink=ãƒãƒ¼ãƒ‰ãƒªãƒ³ã‚¯ã®ä½œæˆ\n")
+		_T("F:CreateJunction=ã‚¸ãƒ£ãƒ³ã‚¯ã‚·ãƒ§ãƒ³ã®ä½œæˆ\n")
+		_T("F:CreateShortcut=ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã®ä½œæˆ\n")
+		_T("F:CreateSymLink=ã‚·ãƒ³ãƒœãƒªãƒƒã‚¯ãƒªãƒ³ã‚¯ã®ä½œæˆ\n")
+		_T("F:CreateTestFile=ãƒ†ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆ\n")
+		_T("F:CsrDirToOpp=ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’åå¯¾å´ã«é–‹ã\n")
+		_T("F:CurrFromOpp=ã‚«ãƒ¬ãƒ³ãƒˆãƒ‘ã‚¹ã‚’åå¯¾ãƒ‘ã‚¹ã«\n")
+		_T("F:CurrToOpp=åå¯¾ãƒ‘ã‚¹ã‚’ã‚«ãƒ¬ãƒ³ãƒˆãƒ‘ã‚¹ã«\n")
+		_T("F:CursorEnd=ã‚«ãƒ¼ã‚½ãƒ«ã‚’æœ€ä¸‹è¡Œã«ç§»å‹•\n")
+		_T("F:CursorEndSel=é¸æŠã—ãªãŒã‚‰ã‚«ãƒ¼ã‚½ãƒ«ã‚’æœ€ä¸‹è¡Œã«ç§»å‹•\n")
+		_T("F:CursorTop=ã‚«ãƒ¼ã‚½ãƒ«ã‚’æœ€ä¸Šè¡Œã«ç§»å‹•\n")
+		_T("F:CursorTopSel=é¸æŠã—ãªãŒã‚‰ã‚«ãƒ¼ã‚½ãƒ«ã‚’æœ€ä¸Šè¡Œã«ç§»å‹•\n")
+		_T("F:CutToClip=ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã«åˆ‡ã‚Šå–ã‚Š\n")
+		_T("F:DateSelect=æŒ‡å®šã—ãŸæ—¥ä»˜æ¡ä»¶ã«åˆã†ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é¸æŠ\n")
+		_T("F:DeleteADS=ãƒ•ã‚¡ã‚¤ãƒ«ã®ä»£æ›¿ãƒ‡ãƒ¼ã‚¿ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚’å‰Šé™¤\n")
+		_T("F:DelJpgExif=Exifæƒ…å ±ã®å‰Šé™¤\n")
+		_T("F:DelSelMask=é¸æŠãƒã‚¹ã‚¯ã‹ã‚‰é …ç›®ã‚’å‰Šé™¤\n")
+		_T("F:DelTab=ã‚¿ãƒ–ã‚’å‰Šé™¤\n")
+		_T("F:DiffDir=ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®æ¯”è¼ƒ\n")
+		_T("F:DirHistory=ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå±¥æ­´\n")
+		_T("F:DirStack=ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãƒ»ã‚¹ã‚¿ãƒƒã‚¯\n")
+		_T("F:DistributionDlg=æŒ¯ã‚Šåˆ†ã‘ãƒ€ã‚¤ã‚¢ãƒ­ã‚°\n")
+		_T("F:DotNyanDlg=.nyanfi ãƒ•ã‚¡ã‚¤ãƒ«ã®è¨­å®š\n")
+		_T("F:DriveList=ãƒ‰ãƒ©ã‚¤ãƒ–ä¸€è¦§\n")
+		_T("F:DriveGraph=ãƒ‰ãƒ©ã‚¤ãƒ–ä½¿ç”¨ç‡æ¨ç§»\n")
+		_T("F:EditIniFile=INIãƒ•ã‚¡ã‚¤ãƒ«ã®ç·¨é›†\n")
+		_T("F:Eject=CD/DVDãƒ‰ãƒ©ã‚¤ãƒ–ã®ãƒˆãƒ¬ã‚¤ã‚’é–‹ã\n")
+		_T("F:EjectDrive=ãƒ‰ãƒ©ã‚¤ãƒ–ã®å–ã‚Šå¤–ã—\n")
+		_T("F:EmptyTrash=ã”ã¿ç®±ã‚’ç©ºã«ã™ã‚‹\n")
+		_T("F:EqualListWidth=å·¦å³ã®ãƒªã‚¹ãƒˆå¹…ã‚’å‡ç­‰ã«\n")
+		_T("F:ExeCommandLine=ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã®å®Ÿè¡Œ\n")
+		_T("F:ExeExtMenu=è¿½åŠ ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®å®Ÿè¡Œ\n")
+		_T("F:ExeExtTool=å¤–éƒ¨ãƒ„ãƒ¼ãƒ«ã®å®Ÿè¡Œ\n")
+		_T("F:Exit=NyanFiã®çµ‚äº†\n")
+		_T("F:ExitDupl=äºŒé‡èµ·å‹•ã•ã‚ŒãŸNyanFiã‚’çµ‚äº†\n")
+		_T("F:ExPopupMenu=æ‹¡å¼µãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼\n")
+		_T("F:ExtractChmSrc=CHMã‹ã‚‰ã‚½ãƒ¼ã‚¹ã‚’æŠ½å‡º\n")
+		_T("F:ExtractGifBmp=ã‚¢ãƒ‹ãƒ¡GIFã‹ã‚‰ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã‚’æŠ½å‡º\n")
+		_T("F:ExtractIcon=ã‚¢ã‚¤ã‚³ãƒ³ã‚’æŠ½å‡º\n")
+		_T("F:ExtractImage=åŸ‹ã‚è¾¼ã¿ç”»åƒã‚’æŠ½å‡º\n")
+		_T("F:ExtractMp3Img=MP3ã®åŸ‹ã‚è¾¼ã¿ç”»åƒã‚’æŠ½å‡º\n")
+		_T("F:FileExtList=æ‹¡å¼µå­åˆ¥ä¸€è¦§\n")
+		_T("F:FileListOnly=ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã®ã¿ã‚’è¡¨ç¤º\n")
+		_T("F:FileRun=ãƒ•ã‚¡ã‚¤ãƒ«åã‚’æŒ‡å®šã—ã¦å®Ÿè¡Œ\n")
+		_T("F:Filter=ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã®çµã‚Šè¾¼ã¿\n")
+		_T("F:FindDuplDlg=é‡è¤‡ãƒ•ã‚¡ã‚¤ãƒ«ã®æ¤œç´¢ãƒ€ã‚¤ã‚¢ãƒ­ã‚°\n")
+		_T("F:FindDirDlg=ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåæ¤œç´¢ãƒ€ã‚¤ã‚¢ãƒ­ã‚°\n")
+		_T("F:FindFileDirDlg=ãƒ•ã‚¡ã‚¤ãƒ«/ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåæ¤œç´¢ãƒ€ã‚¤ã‚¢ãƒ­ã‚°\n")
+		_T("F:FindFileDlg=ãƒ•ã‚¡ã‚¤ãƒ«åæ¤œç´¢ãƒ€ã‚¤ã‚¢ãƒ­ã‚°\n")
+		_T("F:FindFolderIcon=ãƒ•ã‚©ãƒ«ãƒ€ã‚¢ã‚¤ã‚³ãƒ³æ¤œç´¢\n")
+		_T("F:FindHardLink=ãƒãƒ¼ãƒ‰ãƒªãƒ³ã‚¯ã‚’åˆ—æŒ™\n")
+		_T("F:FindMark=æ ãƒãƒ¼ã‚¯é …ç›®ã‚’æ¤œç´¢\n")
+		_T("F:FindTag=ã‚¿ã‚°æ¤œç´¢\n")
+		_T("F:FixTabPath=ã‚¿ãƒ–å¤‰æ›´ã«å¯¾ã—ã¦ã‚«ãƒ¬ãƒ³ãƒˆãƒ‘ã‚¹ã‚’ä¸€æ™‚å›ºå®š/è§£é™¤\n")
+		_T("F:FTPChmod=ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã®è¨­å®š\n")
+		_T("F:FTPConnect=FTPãƒ›ã‚¹ãƒˆã«æ¥ç¶š\n")
+		_T("F:FTPDisconnect=FTPãƒ›ã‚¹ãƒˆã‹ã‚‰åˆ‡æ–­\n")
+		_T("F:ForwardDirHist=ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå±¥æ­´ã‚’é€²ã‚€\n")
+		_T("F:GetHash=ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒãƒƒã‚·ãƒ¥å€¤ã‚’å–å¾—\n")
+		_T("F:GitDiff=ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ãƒ•ã‚¡ã‚¤ãƒ«ã®å·®åˆ†ã‚’è¡¨ç¤º\n")
+		_T("F:GitGrep=Git GREP ã‚’é–‹ã\n")
+		_T("F:GitViewer=Gitãƒ“ãƒ¥ãƒ¼ã‚¢\n")
+		_T("F:HideSizeTime=ã‚µã‚¤ã‚ºã¨æ›´æ–°æ—¥æ™‚ã‚’éš ã™\n")
+		_T("F:ImageViewer=ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢ã§é–‹ã\n")
+		_T("F:InputDir=å…¥åŠ›ã—ãŸãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã«å¤‰æ›´\n")
+		_T("F:InputPathMask=ãƒ‘ã‚¹ãƒã‚¹ã‚¯ã‚’å…¥åŠ›\n")
+		_T("F:InsSeparator=ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã«ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿ã‚’æŒ¿å…¥\n")
+		_T("F:ItemTmpDown=é …ç›®ã‚’ä¸€æ™‚çš„ã«1ã¤ä¸‹ã«ç§»å‹•\n")
+		_T("F:ItemTmpMove=é¸æŠé …ç›®ã‚’ä¸€æ™‚çš„ã«ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã«ç§»å‹•\n")
+		_T("F:ItemTmpUp=é …ç›®ã‚’ä¸€æ™‚çš„ã«1ã¤ä¸Šã«ç§»å‹•\n")
+		_T("F:JoinText=ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®çµåˆ\n")
+		_T("F:JsonViewer=JSONãƒ“ãƒ¥ãƒ¼ã‚¢\n")
+		_T("F:JumpTo=æŒ‡å®šã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ä½ç½®ã¸\n")
+		_T("F:Library=ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã¸\n")
+		_T("F:LinkToOpp=ãƒªãƒ³ã‚¯å…ˆã‚’åå¯¾å´ã«é–‹ã\n")
+		_T("F:ListArchive=ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ã®å†…å®¹ä¸€è¦§\n")
+		_T("F:ListClipboard=ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã‚’ä¸€è¦§ã§è¡¨ç¤º\n")
+		_T("F:ListDuration=ãƒ•ã‚¡ã‚¤ãƒ«å†ç”Ÿæ™‚é–“ã®ä¸€è¦§\n")
+		_T("F:ListExpFunc=ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆé–¢æ•°ä¸€è¦§\n")
+		_T("F:ListFileName=ãƒ•ã‚¡ã‚¤ãƒ«åã‚’ä¸€è¦§ã§è¡¨ç¤º\n")
+		_T("F:ListNyanFi=NyanFi ã«ã¤ã„ã¦ã®æƒ…å ±ã‚’ãƒ­ã‚°ã«è¡¨ç¤º\n")
+		_T("F:ListText=ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä¸€è¦§ã§è¡¨ç¤º\n")
+		_T("F:ListTail=ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®æœ«å°¾ã‚’ä¸€è¦§ã§è¡¨ç¤º\n")
+		_T("F:ListTree=ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæ§‹é€ ã®ãƒ„ãƒªãƒ¼è¡¨ç¤º\n")
+		_T("F:LoadResultList=çµæœãƒªã‚¹ãƒˆã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã‚€\n")
+		_T("F:LoadFindSet=æ¤œç´¢è¨­å®šã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã‚€\n")
+		_T("F:LoadTabGroup=ã‚¿ãƒ–ã‚°ãƒ«ãƒ¼ãƒ—ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã‚€\n")
+		_T("F:LockComputer=ã‚³ãƒ³ãƒ”ãƒ¥ãƒ¼ã‚¿ã®ãƒ­ãƒƒã‚¯\n")
+		_T("F:LockKeyMouse=ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰/ãƒã‚¦ã‚¹ã®ãƒ­ãƒƒã‚¯\n")
+		_T("F:LockTextPreview=ãƒ†ã‚­ã‚¹ãƒˆãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®ãƒ­ãƒƒã‚¯/è§£é™¤\n")
+		_T("F:LogFileInfo=ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã‚’ãƒ­ã‚°ã«å‡ºåŠ›\n")
+		_T("F:MarkMask=æ ãƒãƒ¼ã‚¯é …ç›®ã ã‘ã‚’æ®‹ã—ã¦ä»–ã‚’éš ã™\n")
+		_T("F:MaskFind=æŒ‡å®šãƒã‚¹ã‚¯ã«ãƒãƒƒãƒã™ã‚‹é …ç›®ã‚’æ¤œç´¢\n")
+		_T("F:MatchSelect=æŒ‡å®šæ–‡å­—åˆ—ã‚’å«ã‚€ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é¸æŠ\n")
+		_T("F:MonitorOff=ãƒ‡ã‚£ã‚¹ãƒ—ãƒ¬ã‚¤ã®é›»æºã‚’åˆ‡ã‚‹\n")
+		_T("F:Move=ç§»å‹•\n")
+		_T("F:MoveTab=ã‚¿ãƒ–ã®ä½ç½®ã‚’ç§»å‹•\n")
+		_T("F:MoveTo=æŒ‡å®šãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¸ç§»å‹•\n")
+		_T("F:MuteVolume=éŸ³é‡ãƒŸãƒ¥ãƒ¼ãƒˆ\n")
+		_T("F:NameFromClip=ãƒ•ã‚¡ã‚¤ãƒ«åã‚’ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã®å†…å®¹ã«\n")
+		_T("F:NameToLower=ãƒ•ã‚¡ã‚¤ãƒ«åã®å°æ–‡å­—åŒ–\n")
+		_T("F:NameToUpper=ãƒ•ã‚¡ã‚¤ãƒ«åã®å¤§æ–‡å­—åŒ–\n")
+		_T("F:NetConnect=ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ãƒ‰ãƒ©ã‚¤ãƒ–ã®å‰²ã‚Šå½“ã¦\n")
+		_T("F:NetDisconnect=ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ãƒ‰ãƒ©ã‚¤ãƒ–ã®åˆ‡æ–­\n")
+		_T("F:NewFile=æ–°è¦ãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆ\n")
+		_T("F:NewTextFile=æ–°è¦ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆ\n")
+		_T("F:NextDrive=æ¬¡ã®ãƒ‰ãƒ©ã‚¤ãƒ–ã¸\n")
+		_T("F:NextSelItem=æ¬¡ã®é¸æŠé …ç›®ã«ã‚«ãƒ¼ã‚½ãƒ«ç§»å‹•\n")
+		_T("F:NextTab=æ¬¡ã®ã‚¿ãƒ–ã¸\n")
+		_T("F:OpenADS=ä»£æ›¿ãƒ‡ãƒ¼ã‚¿ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚’ä»®æƒ³ãƒªã‚¹ãƒˆã¨ã—ã¦é–‹ã\n")
+		_T("F:OpenByExp=ã‚¨ã‚¯ã‚¹ãƒ—ãƒ­ãƒ¼ãƒ©ã§é–‹ã\n")
+		_T("F:OpenCtrlPanel=ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ãƒ‘ãƒãƒ«ã‚’é–‹ã\n")
+		_T("F:OpenGitURL=ãƒªãƒ¢ãƒ¼ãƒˆãƒªãƒã‚¸ãƒˆãƒªURLã‚’é–‹ã\n")
+		_T("F:OpenStandard=æ¨™æº–ã® Enter ã‚­ãƒ¼å‹•ä½œ\n")
+		_T("F:OpenTrash=ã”ã¿ç®±ã‚’é–‹ã\n")
+		_T("F:Pack=åå¯¾ãƒ‘ã‚¹ã«ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ä½œæˆ\n")
+		_T("F:PackToCurr=ã‚«ãƒ¬ãƒ³ãƒˆãƒ‘ã‚¹ã«ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ä½œæˆ\n")
+		_T("F:Paste=è²¼ã‚Šä»˜ã‘\n")
+		_T("F:PathMaskDlg=ãƒ‘ã‚¹ãƒã‚¹ã‚¯ãƒ€ã‚¤ã‚¢ãƒ­ã‚°\n")
+		_T("F:PlayList=ãƒ—ãƒ¬ã‚¤ãƒªã‚¹ãƒˆã‚’ä½œã£ã¦å†ç”Ÿ\n")
+		_T("F:PopDir=ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’ãƒãƒƒãƒ—\n")
+		_T("F:PopupTab=ã‚¿ãƒ–é¸æŠãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’è¡¨ç¤º\n")
+		_T("F:PowerOff=Windowsã‚’çµ‚äº†\n")
+		_T("F:PowerShell=PowerShell ã‚’èµ·å‹•\n")
+		_T("F:PrevDrive=å‰ã®ãƒ‰ãƒ©ã‚¤ãƒ–ã¸\n")
+		_T("F:PrevSelItem=å‰ã®é¸æŠé …ç›®ã«ã‚«ãƒ¼ã‚½ãƒ«ç§»å‹•\n")
+		_T("F:PrevTab=å‰ã®ã‚¿ãƒ–ã¸\n")
+		_T("F:PushDir=ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’ãƒ—ãƒƒã‚·ãƒ¥\n")
+		_T("F:Reboot=Windowsã‚’å†èµ·å‹•\n")
+		_T("F:RecentList=æœ€è¿‘ä½¿ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§\n")
+		_T("F:RegDirDlg=ç™»éŒ²ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãƒ€ã‚¤ã‚¢ãƒ­ã‚°\n")
+		_T("F:RegDirPopup=ç™»éŒ²ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãƒ»ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼\n")
+		_T("F:RegSyncDlg=åŒæœŸã‚³ãƒ”ãƒ¼ã®è¨­å®š\n")
+		_T("F:ReloadList=ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã‚’æœ€æ–°ã®æƒ…å ±ã«æ›´æ–°\n")
+		_T("F:RenameDlg=åå‰ç­‰ã®å¤‰æ›´\n")
+		_T("F:RepositoryList=ãƒªãƒã‚¸ãƒˆãƒªä¸€è¦§\n")
+		_T("F:Restart=NyanFiã®å†èµ·å‹•\n")
+		_T("F:ReturnList=ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆè¡¨ç¤ºã«æˆ»ã‚‹\n")
+		_T("F:SaveAsResultList=çµæœãƒªã‚¹ãƒˆã«åå‰ã‚’ä»˜ã‘ã¦ä¿å­˜\n")
+		_T("F:SaveAsFindSet=æ¤œç´¢è¨­å®šã«åå‰ã‚’ä»˜ã‘ã¦ä¿å­˜\n")
+		_T("F:SaveAsTabGroup=ã‚¿ãƒ–ã‚°ãƒ«ãƒ¼ãƒ—ã«åå‰ã‚’ä»˜ã‘ã¦ä¿å­˜\n")
+		_T("F:SaveTabGroup=ã‚¿ãƒ–ã‚°ãƒ«ãƒ¼ãƒ—ã‚’ä¸Šæ›¸ãä¿å­˜\n")
+		_T("F:ScrollDownLog=ãƒ­ã‚°ã‚’ä¸‹ã«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«\n")
+		_T("F:ScrollDownText=ãƒ†ã‚­ã‚¹ãƒˆãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚’ä¸‹ã«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«\n")
+		_T("F:ScrollUpLog=ãƒ­ã‚°ã‚’ä¸Šã«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«\n")
+		_T("F:ScrollUpText=ãƒ†ã‚­ã‚¹ãƒˆãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚’ä¸Šã«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«\n")
+		_T("F:SelAllItem=ã™ã¹ã¦ã®é …ç›®ã‚’é¸æŠ/è§£é™¤\n")
+		_T("F:SelByList=ãƒªã‚¹ãƒˆã«ã‚ˆã£ã¦é …ç›®ã‚’é¸æŠ\n")
+		_T("F:SelectUp=é¸æŠ/è§£é™¤å¾Œã€ã‚«ãƒ¼ã‚½ãƒ«ã‚’ä¸Šã«ç§»å‹•\n")
+		_T("F:SelEmptyDir=ç©ºã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã ã‘ã‚’é¸æŠ\n")
+		_T("F:SelGitChanged=Gitä½œæ¥­ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã§å¤‰æ›´ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é¸æŠ\n")
+		_T("F:SelMask=é¸æŠä¸­ã®é …ç›®ã ã‘ã‚’æ®‹ã—ã¦ä»–ã‚’éš ã™\n")
+		_T("F:SelOnlyCur=ã‚«ãƒ¬ãƒ³ãƒˆå´ã ã‘ã«ã‚ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é¸æŠ\n")
+		_T("F:SelReverseAll=ã™ã¹ã¦ã®é …ç›®ã®é¸æŠçŠ¶æ…‹ã‚’åè»¢\n")
+		_T("F:SelSameDir=çµæœãƒªã‚¹ãƒˆã§åŒã˜ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®é …ç›®ã‚’é¸æŠ\n")
+		_T("F:SetAlias=ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã®é …ç›®ã«ã‚¨ã‚¤ãƒªã‚¢ã‚¹ã‚’è¨­å®š\n")
+		_T("F:SetArcTime=ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ã®ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã‚’æœ€æ–°ã«åˆã‚ã›ã‚‹\n")
+		_T("F:SetDirTime=ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã‚’æœ€æ–°ã«åˆã‚ã›ã‚‹\n")
+		_T("F:SetExifTime=ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã‚’Exifæ’®å½±æ—¥æ™‚ã«è¨­å®š\n")
+		_T("F:SetFolderIcon=ãƒ•ã‚©ãƒ«ãƒ€ã‚¢ã‚¤ã‚³ãƒ³ã®è¨­å®š\n")
+		_T("F:SetPathMask=ãƒ‘ã‚¹ãƒã‚¹ã‚¯ã‚’è¨­å®š\n")
+		_T("F:SetSttBarFmt=ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒãƒ¼æ›¸å¼ã‚’è¨­å®š\n")
+		_T("F:SetSubSize=ã‚µãƒ–ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ã‚µã‚¤ã‚ºã‚’è¨­å®š\n")
+		_T("F:ShareList=å…±æœ‰ãƒ•ã‚©ãƒ«ãƒ€ä¸€è¦§\n")
+		_T("F:ShowByteSize=ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚ºã‚’ãƒã‚¤ãƒˆå˜ä½ã§è¡¨ç¤º\n")
+		_T("F:ShowHideAtr=éš ã—ãƒ•ã‚¡ã‚¤ãƒ«ã‚’è¡¨ç¤º\n")
+		_T("F:ShowIcon=ã‚¢ã‚¤ã‚³ãƒ³ã®è¡¨ç¤º\n")
+		_T("F:ShowLogWin=ãƒ­ã‚°ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ¼ã®è¡¨ç¤º\n")
+		_T("F:ShowPreview=ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®è¡¨ç¤º\n")
+		_T("F:ShowProperty=ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã®è¡¨ç¤º\n")
+		_T("F:ShowSystemAtr=ã‚·ã‚¹ãƒ†ãƒ ãƒ•ã‚¡ã‚¤ãƒ«ã‚’è¡¨ç¤º\n")
+		_T("F:ShowTabBar=ã‚¿ãƒ–ãƒãƒ¼ã®è¡¨ç¤º\n")
+		_T("F:SimilarSort=åå‰ã®é¡ä¼¼æ€§ã«ã‚ˆã‚‹ã‚½ãƒ¼ãƒˆ\n")
+		_T("F:SoloTab=ä»–ã®ã‚¿ãƒ–ã‚’ã™ã¹ã¦å‰Šé™¤\n")
+		_T("F:SpecialDirList=ç‰¹æ®Šãƒ•ã‚©ãƒ«ãƒ€ä¸€è¦§\n")
+		_T("F:SubDirList=ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä¸€è¦§\n")
+		_T("F:SwapLR=å·¦å³ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã‚’å…¥ã‚Œæ›¿ãˆã‚‹\n")
+		_T("F:SwapName=åå‰ã‚’å…¥ã‚Œæ›¿ãˆã‚‹\n")
+		_T("F:SyncLR=å·¦å³ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®åŒæœŸå¤‰æ›´ã‚’æœ‰åŠ¹/è§£é™¤\n")
+		_T("F:TabDlg=ã‚¿ãƒ–ã®è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°\n")
+		_T("F:TabHome=ã‚¿ãƒ–ã®ãƒ›ãƒ¼ãƒ ã¸\n")
+		_T("F:TestArchive=ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ã®æ­£å½“æ€§ã‚’æ¤œæŸ»\n")
+		_T("F:TextViewer=ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã§é–‹ã\n")
+		_T("F:ToExViewer=åˆ¥ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã¸\n")
+		_T("F:ToLog=ãƒ­ã‚°ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã¸\n")
+		_T("F:ToNextOnRight=å³ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã§æ¬¡ã®NyanFiã¸\n")
+		_T("F:ToOpposite=åå¯¾å´ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã¸\n")
+		_T("F:ToOppSameItem=ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã¨åŒåã®åå¯¾å´é …ç›®ã¸\n")
+		_T("F:ToOppSameHash=ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã¨åŒãƒãƒƒã‚·ãƒ¥å€¤ã®åå¯¾å´é …ç›®ã¸\n")
+		_T("F:ToParent=è¦ªãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¸\n")
+		_T("F:ToParentOnLeft=å·¦ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã§è¦ªãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¸\n")
+		_T("F:ToParentOnRight=å³ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã§è¦ªãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¸\n")
+		_T("F:ToPrevOnLeft=å·¦ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã§å‰ã®NyanFiã¸\n")
+		_T("F:ToRoot=ãƒ«ãƒ¼ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¸\n")
+		_T("F:ToTab=æŒ‡å®šç•ªå·/ã‚­ãƒ£ãƒ—ã‚·ãƒ§ãƒ³ã®ã‚¿ãƒ–ã¸\n")
+		_T("F:ToText=ãƒ†ã‚­ã‚¹ãƒˆãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã¸\n")
+		_T("F:TrimTagData=ã‚¿ã‚°ãƒ‡ãƒ¼ã‚¿ã®æ•´ç†\n")
+		_T("F:UndoRename=ç›´å‰ã®æ”¹åã‚’å…ƒã«æˆ»ã™\n")
+		_T("F:UnPack=åå¯¾ãƒ‘ã‚¹ã«è§£å‡\n")
+		_T("F:UnPackToCurr=ã‚«ãƒ¬ãƒ³ãƒˆãƒ‘ã‚¹ã«è§£å‡\n")
+		_T("F:UpdateFromArc=ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ã‹ã‚‰æ›´æ–°\n")
+		_T("F:ViewIniFile=INIãƒ•ã‚¡ã‚¤ãƒ«ã®é–²è¦§\n")
+		_T("F:ViewTail=ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®æœ«å°¾ã‚’é–²è¦§\n")
+		_T("F:WatchTail=ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®è¿½åŠ æ›´æ–°ã‚’ç›£è¦–\n")
+		_T("F:WidenCurList=ã‚«ãƒ¬ãƒ³ãƒˆå´ãƒªã‚¹ãƒˆã®å¹…ã‚’åºƒã’ã‚‹\n")
+		_T("F:WinMaximize=ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®æœ€å¤§åŒ–\n")
+		_T("F:WinMinimize=ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®æœ€å°åŒ–\n")
+		_T("F:WinNormal=ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’å…ƒã®ã‚µã‚¤ã‚ºã«æˆ»ã™\n")
+		_T("F:WinTerminal=Windows Terminal ã‚’èµ·å‹•\n")
+		_T("F:WorkItemDown=ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã®é …ç›®ã‚’1ã¤ä¸‹ã«ç§»å‹•\n")
+		_T("F:WorkItemMove=é¸æŠãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆé …ç›®ã‚’ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã«ç§»å‹•\n")
+		_T("F:WorkItemUP=ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã®é …ç›®ã‚’1ã¤ä¸Šã«ç§»å‹•\n")
+		_T("F:XmlViewer=XMLãƒ“ãƒ¥ãƒ¼ã‚¢\n")
+		_T("FI:AddTag=é …ç›®ã«ã‚¿ã‚°ã‚’è¿½åŠ \n")
+		_T("FI:DelTag=é …ç›®ã®ã‚¿ã‚°ã‚’å‰Šé™¤\n")
+		_T("FI:HomeWorkList=ãƒ›ãƒ¼ãƒ ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã‚’é–‹ã\n")
+		_T("FI:LoadBgImage=èƒŒæ™¯ç”»åƒã‚’èª­ã¿è¾¼ã‚€\n")
+		_T("FI:LoadWorkList=ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã‚€\n")
+		_T("FI:MaskSelect=æŒ‡å®šãƒã‚¹ã‚¯ã«ãƒãƒƒãƒã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é¸æŠ\n")
+		_T("FI:NewWorkList=æ–°è¦ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã®ä½œæˆ\n")
+		_T("FI:NextMark=æ¬¡ã®æ ãƒãƒ¼ã‚¯é …ç›®ã¸\n")
+		_T("FI:PrevMark=å‰ã®æ ãƒãƒ¼ã‚¯é …ç›®ã¸\n")
+		_T("FI:NextSameName=ãƒ•ã‚¡ã‚¤ãƒ«åä¸»éƒ¨ãŒåŒã˜æ¬¡ãƒ•ã‚¡ã‚¤ãƒ«ã¸\n")
+		_T("FI:OpenByApp=ç‹¬è‡ªã®é–¢é€£ä»˜ã‘ã§é–‹ã\n")
+		_T("FI:OpenByWin=Windowsã®é–¢é€£ä»˜ã‘ã§é–‹ã\n")
+		_T("FI:SaveAsWorkList=ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã«åå‰ã‚’ä»˜ã‘ã¦ä¿å­˜\n")
+		_T("FI:SaveWorkList=ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã‚’ä¸Šæ›¸ãä¿å­˜\n")
+		_T("FI:SelAllFile=ã™ã¹ã¦ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é¸æŠ/è§£é™¤\n")
+		_T("FI:SelMark=æ ãƒãƒ¼ã‚¯é …ç›®ã‚’é¸æŠ\n")
+		_T("FI:SelReverse=ãƒ•ã‚¡ã‚¤ãƒ«ã®é¸æŠçŠ¶æ…‹ã‚’åè»¢\n")
+		_T("FI:SelSameExt=æ‹¡å¼µå­ãŒåŒã˜ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é¸æŠ\n")
+		_T("FI:SelSameName=ãƒ•ã‚¡ã‚¤ãƒ«åä¸»éƒ¨ãŒåŒã˜ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é¸æŠ\n")
+		_T("FI:SelWorkItem=ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã®ç™»éŒ²é …ç›®ã‚’é¸æŠ\n")
+		_T("FI:SetInterpolation=ç¸®å°ãƒ»æ‹¡å¤§ã‚¢ãƒ«ã‚´ãƒªã‚ºãƒ ã‚’è¨­å®š\n")
+		_T("FI:SetTag=é …ç›®ã«ã‚¿ã‚°ã‚’è¨­å®š\n")
+		_T("FI:SortDlg=ã‚½ãƒ¼ãƒˆãƒ€ã‚¤ã‚¢ãƒ­ã‚°\n")
+		_T("FI:SubViewer=ã‚µãƒ–ãƒ“ãƒ¥ãƒ¼ã‚¢ã®è¡¨ç¤º\n")
+		_T("FI:TagSelect=æŒ‡å®šã‚¿ã‚°ã‚’å«ã‚€é …ç›®ã‚’é¸æŠ\n")
+		_T("FI:UseTrash=å‰Šé™¤ã«ã”ã¿ç®±ã‚’ä½¿ã†/ä½¿ã‚ãªã„\n")
+		_T("FI:WorkList=ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆ\n")
+		_T("FL:CancelAllTask=ã™ã¹ã¦ã®ã‚¿ã‚¹ã‚¯ã‚’ä¸­æ–­\n")
+		_T("FL:ClearLog=ãƒ­ã‚°ã‚’ã‚¯ãƒªã‚¢\n")
+		_T("FL:PauseAllTask=ã™ã¹ã¦ã®ã‚¿ã‚¹ã‚¯ã‚’ä¸€æ—¦åœæ­¢/å†é–‹\n")
+		_T("FL:Suspend=ã‚¿ã‚¹ã‚¯äºˆç´„é …ç›®ã®å®Ÿè¡Œã‚’ä¿ç•™/è§£é™¤\n")
+		_T("FL:TaskMan=ã‚¿ã‚¹ã‚¯ãƒãƒãƒ¼ã‚¸ãƒ£\n")
+		_T("FL:ToLeft=å·¦ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã¸\n")
+		_T("FL:ToRight=å³ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã¸\n")
+		_T("FL:ViewLog=ãƒ­ã‚°ã‚’ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã§è¡¨ç¤º\n")
+		_T("FS:ClearAll=ã™ã¹ã¦ã®é¸æŠçŠ¶æ…‹ã‚’è§£é™¤\n")
+		_T("FSI:Select=é¸æŠ/è§£é™¤\n")
+		_T("FSVIL:HelpContents=ãƒ˜ãƒ«ãƒ—ã®ç›®æ¬¡/ç´¢å¼•ã‚’è¡¨ç¤º\n")
+		_T("FSVIL:KeyList=ã‚­ãƒ¼å‰²ã‚Šå½“ã¦ä¸€è¦§\n")
+		_T("FSVIL:OptionDlg=ã‚ªãƒ—ã‚·ãƒ§ãƒ³è¨­å®š\n")
+		_T("FV:BinaryEdit=ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒã‚¤ãƒŠãƒªç·¨é›†\n")
+		_T("FV:CursorDownSel=é¸æŠã—ãªãŒã‚‰ã‚«ãƒ¼ã‚½ãƒ«ã‚’ä¸‹ã«ç§»å‹•\n")
+		_T("FV:CursorUpSel=é¸æŠã—ãªãŒã‚‰ã‚«ãƒ¼ã‚½ãƒ«ã‚’ä¸Šã«ç§»å‹•\n")
+		_T("FV:EditHighlight=æ§‹æ–‡å¼·èª¿è¡¨ç¤ºå®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«ã®ç·¨é›†\n")
+		_T("FV:EditHistory=æœ€è¿‘ç·¨é›†ã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§\n")
+		_T("FV:Grep=æ–‡å­—åˆ—æ¤œç´¢(GREP)\n")
+		_T("FV:Grep2=æ–‡å­—åˆ—æ¤œç´¢(grep ãƒ•ãƒ­ãƒ³ãƒˆã‚¨ãƒ³ãƒ‰)\n")
+		_T("FV:HtmlToText=ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã§HTMLâ†’ãƒ†ã‚­ã‚¹ãƒˆå¤‰æ›è¡¨ç¤º\n")
+		_T("FV:IncSearch=ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ã‚¿ãƒ«ã‚µãƒ¼ãƒ\n")
+		_T("FV:FindTagName=tags ã‹ã‚‰ã‚¿ã‚°åæ¤œç´¢\n")
+		_T("FV:FixedLen=ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã§CSV/TSVã‚’å›ºå®šé•·è¡¨ç¤º\n")
+		_T("FV:PageDownSel=é¸æŠã—ãªãŒã‚‰1ãƒšãƒ¼ã‚¸ä¸‹ã«ç§»å‹•\n")
+		_T("FV:PageUpSel=é¸æŠã—ãªãŒã‚‰1ãƒšãƒ¼ã‚¸ä¸Šã«ç§»å‹•\n")
+		_T("FV:RegExChecker=æ­£è¦è¡¨ç¾ãƒã‚§ãƒƒã‚«ãƒ¼\n")
+		_T("FV:SetColor=ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã®é…è‰²\n")
+		_T("FV:SetFontSize=ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚ºã‚’å¤‰æ›´\n")
+		_T("FV:SetMargin=ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã®å·¦å´ä½™ç™½ã‚’è¨­å®š\n")
+		_T("FV:SetTab=ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã®ã‚¿ãƒ–ã‚¹ãƒˆãƒƒãƒ—å¹…ã‚’è¨­å®š\n")
+		_T("FV:SetWidth=ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã®æŠ˜ã‚Šè¿”ã—å¹…ã‚’è¨­å®š\n")
+		_T("FV:ShowCR=ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã§æ”¹è¡Œã‚’è¡¨ç¤º\n")
+		_T("FV:ShowIndent=ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã®ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã‚¬ã‚¤ãƒ‰ã‚’è¡¨ç¤º\n")
+		_T("FV:ShowLineNo=ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã®è¡Œç•ªå·ã‚’è¡¨ç¤º\n")
+		_T("FV:ShowRuby=ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã§ãƒ«ãƒ“ã‚’è¡¨ç¤º\n")
+		_T("FV:ShowRuler=ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã®ãƒ«ãƒ¼ãƒ©ã‚’è¡¨ç¤º\n")
+		_T("FV:ShowTAB=ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã§ã‚¿ãƒ–ã‚’è¡¨ç¤º\n")
+		_T("FV:ViewHistory=æœ€è¿‘é–²è¦§ã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§\n")
+		_T("FV:WebSearch=Webã§æ¤œç´¢\n")
+		_T("FV:ZoomReset=ã‚ºãƒ¼ãƒ ã‚’è§£é™¤\n")
+		_T("FVL:CursorDown=ã‚«ãƒ¼ã‚½ãƒ«ã‚’ä¸‹ã«ç§»å‹•\n")
+		_T("FVL:CursorUp=ã‚«ãƒ¼ã‚½ãƒ«ã‚’ä¸Šã«ç§»å‹•\n")
+		_T("FVI:AlphaBlend=ãƒ¡ã‚¤ãƒ³ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’é€éè¡¨ç¤º\n")
+		_T("FVI:AppList=ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ä¸€è¦§\n")
+		_T("FVI:Calculator=é›»å“\n")
+		_T("FVI:ClearMark=ã™ã¹ã¦ã®æ ãƒãƒ¼ã‚¯ã‚’è§£é™¤\n")
+		_T("FVI:Close=é–‰ã˜ã‚‹\n")
+		_T("FVI:CopyFileInfo=ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã‚’ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã«ã‚³ãƒ”ãƒ¼\n")
+		_T("FVI:CmdFileList=ã‚³ãƒãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§\n")
+		_T("FVI:CmdHistory=ã‚³ãƒãƒ³ãƒ‰å±¥æ­´\n")
+		_T("FVI:DebugCmdFile=ã‚³ãƒãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‡ãƒãƒƒã‚°å®Ÿè¡Œ\n")
+		_T("FVI:Delete=å‰Šé™¤\n")
+		_T("FVI:Duplicate=NyanFiã®äºŒé‡èµ·å‹•\n")
+		_T("FVI:ExeCommands=æŒ‡å®šã—ãŸã‚³ãƒãƒ³ãƒ‰ã‚’å®Ÿè¡Œ\n")
+		_T("FVI:ExeMenuFile=ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã®å®Ÿè¡Œ\n")
+		_T("FVI:ExeToolBtn=ãƒ„ãƒ¼ãƒ«ãƒœã‚¿ãƒ³ã®å®Ÿè¡Œ\n")
+		_T("FVI:FileEdit=ãƒ•ã‚¡ã‚¤ãƒ«ã®ç·¨é›†\n")
+		_T("FVI:InputCommands=å…¥åŠ›ã—ãŸã‚³ãƒãƒ³ãƒ‰ã‚’å®Ÿè¡Œ\n")
+		_T("FVI:ListFileInfo=ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã‚’ãƒ€ã‚¤ã‚¢ãƒ­ã‚°è¡¨ç¤º\n")
+		_T("FVI:ListLog=ãƒ­ã‚°ã‚’ä¸€è¦§ã§è¡¨ç¤º\n")
+		_T("FVI:Mark=æ ãƒãƒ¼ã‚¯/è§£é™¤\n")
+		_T("FVI:MarkList=æ ãƒãƒ¼ã‚¯ä¸€è¦§\n")
+		_T("FVI:MenuBar=ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ¼ã®è¡¨ç¤º\n")
+		_T("FVI:NextNyanFi=æ¬¡ã®NyanFiã‚’ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«\n")
+		_T("FVI:PopupMainMenu=ãƒ¡ã‚¤ãƒ³ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—è¡¨ç¤º\n")
+		_T("FVI:PrevNyanFi=å‰ã®NyanFiã‚’ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«\n")
+		_T("FVI:PropertyDlg=ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’è¡¨ç¤º\n")
+		_T("FVI:ScrollDown=ä¸‹ã«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«\n")
+		_T("FVI:ScrollUp=ä¸Šã«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«\n")
+		_T("FVI:ShowFileInfo=ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã‚’å¼·åˆ¶çš„ã«è¡¨ç¤º\n")
+		_T("FVI:ShowFKeyBar=ãƒ•ã‚¡ãƒ³ã‚¯ã‚·ãƒ§ãƒ³ã‚­ãƒ¼ãƒãƒ¼ã®è¡¨ç¤º\n")
+		_T("FVI:ShowStatusBar=ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒãƒ¼ã®è¡¨ç¤º\n")
+		_T("FVI:ShowToolBar=ãƒ„ãƒ¼ãƒ«ãƒãƒ¼ã‚’è¡¨ç¤º\n")
+		_T("FVI:ToolBarDlg=ãƒ„ãƒ¼ãƒ«ãƒãƒ¼ã®è¨­å®š\n")
+		_T("FVI:WebMap=ç”»åƒã®GPSæƒ…å ±ã‚„æŒ‡å®šåœ°ç‚¹ã®åœ°å›³ã‚’é–‹ã\n")
+		_T("FVI:WinPos=ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®å››è¾ºã‚’è¨­å®š\n")
+		_T("FVIL:PageDown=1ãƒšãƒ¼ã‚¸ä¸‹ã«ç§»å‹•\n")
+		_T("FVIL:PageUp=1ãƒšãƒ¼ã‚¸ä¸Šã«ç§»å‹•\n")
+		_T("FVI:ZoomIn=ã‚ºãƒ¼ãƒ ã‚¤ãƒ³\n")
+		_T("FVI:ZoomOut=ã‚ºãƒ¼ãƒ ã‚¢ã‚¦ãƒˆ\n")
+		_T("I:ColorPicker=ã‚«ãƒ©ãƒ¼ãƒ”ãƒƒã‚«ãƒ¼\n")
+		_T("I:DoublePage=è¦‹é–‹ãè¡¨ç¤º\n")
+		_T("I:EndFile=æœ€å¾Œã®ãƒ•ã‚¡ã‚¤ãƒ«ã«ç§»å‹•\n")
+		_T("I:EqualSize=ç­‰å€è¡¨ç¤º\n")
+		_T("I:FittedSize=ç”»é¢ãƒ•ã‚£ãƒƒãƒˆè¡¨ç¤º\n")
+		_T("I:FlipHorz=å·¦å³åè»¢\n")
+		_T("I:FlipVert=ä¸Šä¸‹åè»¢\n")
+		_T("I:FullScreen=å…¨ç”»é¢è¡¨ç¤º\n")
+		_T("I:GrayScale=ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«è¡¨ç¤º\n")
+		_T("I:Histogram=ãƒ’ã‚¹ãƒˆã‚°ãƒ©ãƒ ã®è¡¨ç¤º\n")
+		_T("I:JumpIndex=æŒ‡å®šã—ãŸã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã«ç§»å‹•\n")
+		_T("I:Loupe=ãƒ«ãƒ¼ãƒšã®è¡¨ç¤º\n")
+		_T("I:NextPage=ã‚µãƒ ãƒã‚¤ãƒ«ã®æ¬¡ãƒšãƒ¼ã‚¸ã«ç§»å‹•\n")
+		_T("I:PageBind=è¦‹é–‹ãè¡¨ç¤ºã®ç¶´ã˜æ–¹å‘ã‚’è¨­å®š\n")
+		_T("I:PrevPage=ã‚µãƒ ãƒã‚¤ãƒ«ã®å‰ãƒšãƒ¼ã‚¸ã«ç§»å‹•\n")
+		_T("I:Print=ç”»åƒã®å°åˆ·\n")
+		_T("I:RotateLeft=å·¦ã«90åº¦å›è»¢\n")
+		_T("I:RotateRight=å³ã«90åº¦å›è»¢\n")
+		_T("I:ScrollLeft=å·¦ã«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«\n")
+		_T("I:ScrollRight=å³ã«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«\n")
+		_T("I:SendToWorkList=ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã«é€ã‚‹\n")
+		_T("I:ShowGrid=ç”»åƒåˆ†å‰²ã‚°ãƒªãƒƒãƒ‰ã®è¡¨ç¤º\n")
+		_T("I:ShowSeekBar=ã‚·ãƒ¼ã‚¯ãƒãƒ¼ã®è¡¨ç¤º\n")
+		_T("I:Sidebar=ã‚µã‚¤ãƒ‰ãƒãƒ¼ã®è¡¨ç¤º\n")
+		_T("I:SimilarImage=ç”»åƒã®é¡ä¼¼æ€§ã«ã‚ˆã‚‹ã‚½ãƒ¼ãƒˆ\n")
+		_T("I:Thumbnail=ã‚µãƒ ãƒã‚¤ãƒ«ã®è¡¨ç¤º\n")
+		_T("I:ThumbnailEx=ã‚µãƒ ãƒã‚¤ãƒ«ã®å…¨é¢è¡¨ç¤º/é€šå¸¸è¡¨ç¤º\n")
+		_T("I:TopFile=å…ˆé ­ãƒ•ã‚¡ã‚¤ãƒ«ã«ç§»å‹•\n")
+		_T("I:WarnHighlight=ç™½é£›ã³è­¦å‘Š\n")
+		_T("S:ClearIncKeyword=ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ã‚’ã‚¯ãƒªã‚¢\n")
+		_T("S:IncMatchSelect=ãƒãƒƒãƒã™ã‚‹é …ç›®ã‚’ã™ã¹ã¦é¸æŠ\n")
+		_T("S:IncSearchDown=ãƒãƒƒãƒã™ã‚‹é …ç›®ã‚’ä¸‹æ–¹å‘æ¤œç´¢\n")
+		_T("S:IncSearchExit=ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ã‚¿ãƒ«ã‚µãƒ¼ãƒã‹ã‚‰æŠœã‘ã‚‹\n")
+		_T("S:IncSearchTop=ãƒãƒƒãƒã™ã‚‹é …ç›®ã‚’å…ˆé ­ã‹ã‚‰å†æ¤œç´¢\n")
+		_T("S:IncSearchUp=ãƒãƒƒãƒã™ã‚‹é …ç›®ã‚’ä¸Šæ–¹å‘æ¤œç´¢\n")
+		_T("S:KeywordHistory=ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰å±¥æ­´ã‚’å‚ç…§\n")
+		_T("S:MigemoMode=Migemoãƒ¢ãƒ¼ãƒ‰ã®åˆ‡ã‚Šæ›ãˆ\n")
+		_T("S:NormalMode=é€šå¸¸ã®ã‚µãƒ¼ãƒãƒ¢ãƒ¼ãƒ‰ã«æˆ»ã‚‹\n")
+		_T("S:SelectDown=é¸æŠ/è§£é™¤å¾Œã€ä¸‹æ–¹å‘ã«æ¤œç´¢\n")
+		_T("V:BackViewHist=ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã®å±¥æ­´ã‚’æˆ»ã‚‹\n")
+		_T("V:BitmapView=ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ãƒ“ãƒ¥ãƒ¼ã®è¡¨ç¤º\n")
+		_T("V:BoxSelMode=ç®±å½¢é¸æŠãƒ¢ãƒ¼ãƒ‰ã®é–‹å§‹/è§£é™¤\n")
+		_T("V:ChangeCodePage=æ–‡å­—ã‚³ãƒ¼ãƒ‰å¤‰æ›´\n")
+		_T("V:ChangeViewMode=ãƒ†ã‚­ã‚¹ãƒˆ/ãƒã‚¤ãƒŠãƒªè¡¨ç¤ºã®åˆ‡ã‚Šæ›ãˆ\n")
+		_T("V:CharInfo=æ–‡å­—æƒ…å ±ã®è¡¨ç¤º\n")
+		_T("V:CsvCalc=CSV/TSVé …ç›®ã®é›†è¨ˆ\n")
+		_T("V:CsvGraph=CSV/TSVé …ç›®ã®ã‚°ãƒ©ãƒ•\n")
+		_T("V:CsvRecord=CSV/TSVãƒ¬ã‚³ãƒ¼ãƒ‰ã®è¡¨ç¤º\n")
+		_T("V:CursorLeft=ã‚«ãƒ¼ã‚½ãƒ«ã‚’å·¦ã«ç§»å‹•\n")
+		_T("V:CursorLeftSel=é¸æŠã—ãªãŒã‚‰ã‚«ãƒ¼ã‚½ãƒ«ã‚’å·¦ã«ç§»å‹•\n")
+		_T("V:CursorRight=ã‚«ãƒ¼ã‚½ãƒ«ã‚’å³ã«ç§»å‹•\n")
+		_T("V:CursorRightSel=é¸æŠã—ãªãŒã‚‰ã‚«ãƒ¼ã‚½ãƒ«ã‚’å³ã«ç§»å‹•\n")
+		_T("V:ExportCsv=CSV/TSVã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ\n")
+		_T("V:FindDown=ä¸‹æ–¹å‘ã«å†æ¤œç´¢\n")
+		_T("V:FindLinkDown=ãƒªãƒ³ã‚¯å…ˆã‚’ä¸‹æ–¹å‘ã«æ¤œç´¢\n")
+		_T("V:FindLinkUp=ãƒªãƒ³ã‚¯å…ˆã‚’ä¸Šæ–¹å‘ã«æ¤œç´¢\n")
+		_T("V:FindMarkDown=ãƒãƒ¼ã‚¯è¡Œã‚’ä¸‹æ–¹å‘ã«æ¤œç´¢\n")
+		_T("V:FindMarkUp=ãƒãƒ¼ã‚¯è¡Œã‚’ä¸Šæ–¹å‘ã«æ¤œç´¢\n")
+		_T("V:FindSelDown=é¸æŠæ–‡å­—åˆ—ã‚’ä¸‹æ–¹å‘ã«æ¤œç´¢\n")
+		_T("V:FindSelUp=é¸æŠæ–‡å­—åˆ—ã‚’ä¸Šæ–¹å‘ã«æ¤œç´¢\n")
+		_T("V:FindText=æ–‡å­—åˆ—æ¤œç´¢\n")
+		_T("V:FindUp=ä¸Šæ–¹å‘ã«å†æ¤œç´¢\n")
+		_T("V:FunctionList=é–¢æ•°ä¸€è¦§\n")
+		_T("V:HelpCurWord=ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®å˜èªã‚’æŒ‡å®šãƒ˜ãƒ«ãƒ—ã§æ¤œç´¢\n")
+		_T("V:Highlight=ãƒãƒƒãƒèªã‚’å¼·èª¿è¡¨ç¤º\n")
+		_T("V:Inspector=ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ã®è¡¨ç¤º\n")
+		_T("V:ImgPreview=ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼\n")
+		_T("V:JumpLine=æŒ‡å®šè¡Œç•ªå·ã«ç§»å‹•\n")
+		_T("V:LineEnd=è¡Œæœ«ã«ç§»å‹•\n")
+		_T("V:LineEndSel=é¸æŠã—ãªãŒã‚‰è¡Œæœ«ã«ç§»å‹•\n")
+		_T("V:LineTop=è¡Œé ­ã«ç§»å‹•\n")
+		_T("V:LineTopSel=é¸æŠã—ãªãŒã‚‰è¡Œé ­ã«ç§»å‹•\n")
+		_T("V:OpenURL=URLã‚’é–‹ã\n")
+		_T("V:ReloadFile=ãƒ•ã‚¡ã‚¤ãƒ«ã®å†èª­ã¿è¾¼ã¿\n")
+		_T("V:SaveDump=ãƒ€ãƒ³ãƒ—ãƒªã‚¹ãƒˆã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã«ä¿å­˜\n")
+		_T("V:ScrollCursorDown=ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã—ãªãŒã‚‰ä¸‹ã«ç§»å‹•\n")
+		_T("V:ScrollCursorUp=ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã—ãªãŒã‚‰ä¸Šã«ç§»å‹•\n")
+		_T("V:SearchPair=å¯¾å¿œã™ã‚‹æ‹¬å¼§ã‚’æ¤œç´¢\n")
+		_T("V:SelCurWord=ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®å˜èªã‚’é¸æŠ\n")
+		_T("V:SelLine=ã‚«ãƒ¼ã‚½ãƒ«è¡Œã‚’é¸æŠ\n")
+		_T("V:SelLineCR=ã‚«ãƒ¼ã‚½ãƒ«è¡Œå…¨ä½“ã‚’æ”¹è¡Œå˜ä½ã§é¸æŠ\n")
+		_T("V:SelectAll=ã™ã¹ã¦é¸æŠ\n")
+		_T("V:SelectFile=è¡¨ç¤ºä¸­ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é¸æŠ/è§£é™¤\n")
+		_T("V:SelectMode=é¸æŠãƒ¢ãƒ¼ãƒ‰ã®é–‹å§‹/è§£é™¤\n")
+		_T("V:SetTopAddr=å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’è¨­å®š\n")
+		_T("V:SetUserDefStr=ãƒ¦ãƒ¼ã‚¶å®šç¾©æ–‡å­—åˆ—ã‚’è¨­å®š\n")
+		_T("V:Sort=ãƒ†ã‚­ã‚¹ãƒˆå…¨ä½“ã‚’æ”¹è¡Œå˜ä½ã§ã‚½ãƒ¼ãƒˆ\n")
+		_T("V:SwitchSameName=ãƒ•ã‚¡ã‚¤ãƒ«åä¸»éƒ¨ãŒåŒã˜æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«ã«åˆ‡ã‚Šæ›ãˆ\n")
+		_T("V:SwitchSrcHdr=ãƒ˜ãƒƒãƒ€/ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã®åˆ‡ã‚Šæ›ãˆ\n")
+		_T("V:TagJump=ã‚¨ãƒ‡ã‚£ã‚¿ã§ã‚¿ã‚°ã‚¸ãƒ£ãƒ³ãƒ—\n")
+		_T("V:TagJumpDirect=ã‚¨ãƒ‡ã‚£ã‚¿ã§ãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã‚¿ã‚°ã‚¸ãƒ£ãƒ³ãƒ—\n")
+		_T("V:TagView=ãƒ“ãƒ¥ãƒ¼ã‚¢ã§ã‚¿ã‚°ã‚¸ãƒ£ãƒ³ãƒ—\n")
+		_T("V:TagViewDirect=ãƒ“ãƒ¥ãƒ¼ã‚¢ã§ãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã‚¿ã‚°ã‚¸ãƒ£ãƒ³ãƒ—\n")
+		_T("V:TextEnd=æœ€å¾Œå°¾ã«ç§»å‹•\n")
+		_T("V:TextEndSel=é¸æŠã—ãªãŒã‚‰æœ€å¾Œå°¾ã«ç§»å‹•\n")
+		_T("V:TextTop=å…ˆé ­ã«ç§»å‹•\n")
+		_T("V:TextTopSel=é¸æŠã—ãªãŒã‚‰å…ˆé ­ã«ç§»å‹•\n")
+		_T("V:UserDefList=ãƒ¦ãƒ¼ã‚¶å®šç¾©æ–‡å­—åˆ—ä¸€è¦§\n")
+		_T("V:WordLeft=å‰ã®å˜èªã«ç§»å‹•\n")
+		_T("V:WordRight=æ¬¡ã®å˜èªã«ç§»å‹•\n")
+		_T("VIL:ClipCopy=ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã«ã‚³ãƒ”ãƒ¼\n")
+		_T("VI:NextFile=æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’è¡¨ç¤º\n")
+		_T("VI:PrevFile=å‰ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’è¡¨ç¤º\n")
+		_T("VL:NextErr=æ¬¡ã®ã‚¨ãƒ©ãƒ¼ä½ç½®ã¸\n")
+		_T("VL:PrevErr=å‰ã®ã‚¨ãƒ©ãƒ¼ä½ç½®ã¸\n")
+		_T("InitialSearch=é ­æ–‡å­—ã‚µãƒ¼ãƒ\n");
 
 	s_list->Clear();
 	UnicodeString cmd, tmp;
@@ -499,13 +499,13 @@ void set_CmdList(
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒ}ƒ“ƒh‚Ìƒpƒ‰ƒ[ƒ^ˆê——‚ğæ“¾
+//ã‚³ãƒãƒ³ãƒ‰ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ä¸€è¦§ã‚’å–å¾—
 //---------------------------------------------------------------------------
 void get_PrmList(
-	UnicodeString cmd,		//ƒRƒ}ƒ“ƒh
-	int id_idx,				//"FSVIL" ƒ‚[ƒh‚ÌƒCƒ“ƒfƒbƒNƒX(0ƒx[ƒX)
-	TStringList *p_list,	//[o] ƒpƒ‰ƒ[ƒ^ˆê——
-	TComboBox *cp)			//ƒRƒ“ƒ{ƒ{ƒbƒNƒX	(default = NULL)
+	UnicodeString cmd,		//ã‚³ãƒãƒ³ãƒ‰
+	int id_idx,				//"FSVIL" ãƒ¢ãƒ¼ãƒ‰ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹(0ãƒ™ãƒ¼ã‚¹)
+	TStringList *p_list,	//[o] ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ä¸€è¦§
+	TComboBox *cp)			//ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹	(default = NULL)
 {
 	if (cp) {
 		cp->Clear();
@@ -537,60 +537,60 @@ void get_PrmList(
 	UnicodeString params;
 
 	if (SameText(cmd, "AddTab")) {
-		params = "\nNX : Œ»ƒ^ƒu‚ÌŸ‚É‘}“ü\nPR : Œ»ƒ^ƒu‚Ì‘O‚É‘}“ü";
+		params = _T("\nNX : ç¾ã‚¿ãƒ–ã®æ¬¡ã«æŒ¿å…¥\nPR : ç¾ã‚¿ãƒ–ã®å‰ã«æŒ¿å…¥");
 	}
 	else if (SameText(cmd, "AlphaBlend")) {
 		if (cp) cp->Style = csDropDown;
-		params = "\r\nIN : “§–¾“x‚ğ“ü—Í\r\n";
+		params = _T("\r\nIN : é€æ˜åº¦ã‚’å…¥åŠ›\r\n");
 	}
 	else if (SameText(cmd, "AppList")) {
 		params.sprintf(_T("%s"),
 			_T("\n")
-			_T("FA : ˆê——‘¤‚ÉƒtƒH[ƒJƒX\n")
-			_T("FL : ƒ‰ƒ“ƒ`ƒƒ[‘¤‚ÉƒtƒH[ƒJƒX\n")
-			_T("FI : ƒ‰ƒ“ƒ`ƒƒ[‘¤‚ÉƒtƒH[ƒJƒX(INC.ƒT[ƒ`)\n")
-			_T("AO : ˆê——‚Ì‚İ•\¦\n")
-			_T("LO : ƒ‰ƒ“ƒ`ƒƒ[‚Ì‚İ•\¦\n")
-			_T("LI : ƒ‰ƒ“ƒ`ƒƒ[‚Ì‚İ•\¦(INC.ƒT[ƒ`)\n")
-			_T("FZ : ‚ ‚¢‚Ü‚¢ŒŸõ(INC.ƒT[ƒ`)\n")
-			_T("AS : ƒXƒ^[ƒgƒƒjƒ…[€–Ú‚ğ’Ç‰Á(INC.ƒT[ƒ`)\n"));
+			_T("FA : ä¸€è¦§å´ã«ãƒ•ã‚©ãƒ¼ã‚«ã‚¹\n")
+			_T("FL : ãƒ©ãƒ³ãƒãƒ£ãƒ¼å´ã«ãƒ•ã‚©ãƒ¼ã‚«ã‚¹\n")
+			_T("FI : ãƒ©ãƒ³ãƒãƒ£ãƒ¼å´ã«ãƒ•ã‚©ãƒ¼ã‚«ã‚¹(INC.ã‚µãƒ¼ãƒ)\n")
+			_T("AO : ä¸€è¦§ã®ã¿è¡¨ç¤º\n")
+			_T("LO : ãƒ©ãƒ³ãƒãƒ£ãƒ¼ã®ã¿è¡¨ç¤º\n")
+			_T("LI : ãƒ©ãƒ³ãƒãƒ£ãƒ¼ã®ã¿è¡¨ç¤º(INC.ã‚µãƒ¼ãƒ)\n")
+			_T("FZ : ã‚ã„ã¾ã„æ¤œç´¢(INC.ã‚µãƒ¼ãƒ)\n")
+			_T("AS : ã‚¹ã‚¿ãƒ¼ãƒˆãƒ¡ãƒ‹ãƒ¥ãƒ¼é …ç›®ã‚’è¿½åŠ (INC.ã‚µãƒ¼ãƒ)\n"));
 	}
 	else if (SameText(cmd, "BgImgMode")) {
 		params.sprintf(_T("%s"),
-			_T("OFF : ”ñ•\¦\n")
-			_T("1 : 2‰æ–Ê‚É‚í‚½‚Á‚Ä•\¦\n")
-			_T("2 : ‚»‚ê‚¼‚ê‚É•\¦\n")
-			_T("3 : ƒfƒXƒNƒgƒbƒv”wŒi‚ğ•\¦\n")
-			_T("^1 : 2‰æ–Ê‚É‚í‚½‚Á‚Ä•\¦/”ñ•\¦\n")
-			_T("^2 : ‚»‚ê‚¼‚ê‚É•\¦/”ñ•\¦\n")
-			_T("^3 : ƒfƒXƒNƒgƒbƒv”wŒi‚ğ•\¦/”ñ•\¦\n"));
+			_T("OFF : éè¡¨ç¤º\n")
+			_T("1 : 2ç”»é¢ã«ã‚ãŸã£ã¦è¡¨ç¤º\n")
+			_T("2 : ãã‚Œãã‚Œã«è¡¨ç¤º\n")
+			_T("3 : ãƒ‡ã‚¹ã‚¯ãƒˆãƒƒãƒ—èƒŒæ™¯ã‚’è¡¨ç¤º\n")
+			_T("^1 : 2ç”»é¢ã«ã‚ãŸã£ã¦è¡¨ç¤º/éè¡¨ç¤º\n")
+			_T("^2 : ãã‚Œãã‚Œã«è¡¨ç¤º/éè¡¨ç¤º\n")
+			_T("^3 : ãƒ‡ã‚¹ã‚¯ãƒˆãƒƒãƒ—èƒŒæ™¯ã‚’è¡¨ç¤º/éè¡¨ç¤º\n"));
 	}
 	else if (contained_wd_i(_T("CursorUp|CursorDown|ScrollCursorDown|ScrollCursorUp|ScrollDown|ScrollUp"), cmd)) {
 		if (id_idx!=4) {
-			params = "\nHP : ”¼ƒy[ƒW•ª\nFP : 1ƒy[ƒW•ª\n";
+			params = _T("\nHP : åŠãƒšãƒ¼ã‚¸åˆ†\nFP : 1ãƒšãƒ¼ã‚¸åˆ†\n");
 			if (id_idx==0 && contained_wd_i(_T("CursorUp|CursorDown"), cmd)) {
-				params += "SL : ‘I‘ğ€–Ú‚Ö\n";
+				params += _T("SL : é¸æŠé …ç›®ã¸\n");
 			}
 		}
 	}
 	else if (SameText(cmd, "CursorTop")) {
-		params = "\r\nTF : Å‰‚Ìƒtƒ@ƒCƒ‹‚ÉˆÚ“®\r\n";
+		params = _T("\r\nTF : æœ€åˆã®ãƒ•ã‚¡ã‚¤ãƒ«ã«ç§»å‹•\r\n");
 	}
 	else if (contained_wd_i(_T("CalcDirSize|CalcDirSizeAll"), cmd)) {
 		params.sprintf(_T("%s"),
 			_T("\n")
-			_T("FC : ƒtƒ@ƒCƒ‹”AƒTƒuƒfƒBƒŒƒNƒgƒŠ”‚ğ•\¦\n")
-			_T("LO : Œ‹‰Ê‚ğƒƒO‚Éo—Í\n")
-			_T("CC : Œ‹‰Ê‚ğƒNƒŠƒbƒvƒ{[ƒh‚ÉƒRƒs[\n")
-			_T("LS : Œ‹‰Ê‚ğˆê——•\¦\n")
-			_T("SA : Œ‹‰Ê‚ğƒTƒCƒY‚Ì¬‚³‚¢‡‚Éƒ\[ƒg\n")
-			_T("SD : Œ‹‰Ê‚ğƒTƒCƒY‚Ì‘å‚«‚¢‡‚Éƒ\[ƒg\n"));
+			_T("FC : ãƒ•ã‚¡ã‚¤ãƒ«æ•°ã€ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæ•°ã‚’è¡¨ç¤º\n")
+			_T("LO : çµæœã‚’ãƒ­ã‚°ã«å‡ºåŠ›\n")
+			_T("CC : çµæœã‚’ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã«ã‚³ãƒ”ãƒ¼\n")
+			_T("LS : çµæœã‚’ä¸€è¦§è¡¨ç¤º\n")
+			_T("SA : çµæœã‚’ã‚µã‚¤ã‚ºã®å°ã•ã„é †ã«ã‚½ãƒ¼ãƒˆ\n")
+			_T("SD : çµæœã‚’ã‚µã‚¤ã‚ºã®å¤§ãã„é †ã«ã‚½ãƒ¼ãƒˆ\n"));
 		if (SameText(cmd, "CalcDirSizeAll")) {
-			params += "SG : ƒOƒ‰ƒt•\¦(‘ÎƒJƒŒƒ“ƒg)\nDG : ƒOƒ‰ƒt•\¦(‘Îƒhƒ‰ƒCƒu)\n";
+			params += _T("SG : ã‚°ãƒ©ãƒ•è¡¨ç¤º(å¯¾ã‚«ãƒ¬ãƒ³ãƒˆ)\nDG : ã‚°ãƒ©ãƒ•è¡¨ç¤º(å¯¾ãƒ‰ãƒ©ã‚¤ãƒ–)\n");
 		}
 	}
 	else if (SameText(cmd, "Calculator")) {
-		params = "\nCB : ƒNƒŠƒbƒvƒ{[ƒh‚ğ‰î‚µ‚ÄŒvZ\n";
+		params = _T("\nCB : ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã‚’ä»‹ã—ã¦è¨ˆç®—\n");
 	}
 	else if (SameText(cmd, "ChangeCodePage")) {
 		params.sprintf(_T("%s"),
@@ -603,261 +603,261 @@ void get_PrmList(
 			_T("1200 :  UTF-16\n"));
 	}
 	else if (contained_wd_i(_T("ChangeDrive|DriveGraph|EjectDrive"), cmd)) {
-		for (int i=0; i<26; i++) params.cat_sprintf(_T("%c\n"), 'A'+i);	//‰pš
-		if (SameText(cmd, "EjectDrive")) params += ". : ƒJƒŒƒ“ƒgƒhƒ‰ƒCƒu\n";
+		for (int i=0; i<26; i++) params.cat_sprintf(_T("%c\n"), 'A'+i);	//è‹±å­—
+		if (SameText(cmd, "EjectDrive")) params += _T(". : ã‚«ãƒ¬ãƒ³ãƒˆãƒ‰ãƒ©ã‚¤ãƒ–\n");
 		if (SameText(cmd, "DriveGraph")) params = "\n" + params;
 	}
 	else if (SameText(cmd, "CheckUpdate")) {
-		params = ("\nNC : •Û‘¶êŠ‚Ì‘I‘ğAŠm”F‚È‚µ\n");
+		params = (_T("\nNC : ä¿å­˜å ´æ‰€ã®é¸æŠã€ç¢ºèªãªã—\n"));
 	}
 	else if (SameText(cmd, "ClearAll")) {
-		params = "\nAL : ¶‰E‚·‚×‚Ä‚Ì‘I‘ğó‘Ô‚ğ‰ğœ\n";
+		params = _T("\nAL : å·¦å³ã™ã¹ã¦ã®é¸æŠçŠ¶æ…‹ã‚’è§£é™¤\n");
 	}
 	else if (SameText(cmd, "ClearMark")) {
-		params = "\nAC : ‚·‚×‚Ä‚ÌêŠ‚Ì‚·‚×‚Ä‚Ìƒ}[ƒN‚ğ‰ğœ\n";
+		params = _T("\nAC : ã™ã¹ã¦ã®å ´æ‰€ã®ã™ã¹ã¦ã®ãƒãƒ¼ã‚¯ã‚’è§£é™¤\n");
 	}
 	else if (SameText(cmd, "ClipCopy")) {
 		if (id_idx==2) {
-			params = "\nAD : Œ»İ‚Ì“à—e‚É’Ç‰Á\n";
+			params = _T("\nAD : ç¾åœ¨ã®å†…å®¹ã«è¿½åŠ \n");
 		}
 		else if (id_idx==3) {
-			params = "\nVI : •\¦‚³‚ê‚Ä‚¢‚éó‘Ô‚ÅƒRƒs[\n";
+			params = _T("\nVI : è¡¨ç¤ºã•ã‚Œã¦ã„ã‚‹çŠ¶æ…‹ã§ã‚³ãƒ”ãƒ¼\n");
 		}
 	}
 	else if (SameText(cmd, "Close") && id_idx==2) {
-		params = "\nAL : ‚·‚×‚Ä‚Ì•ÊƒEƒBƒ“ƒhƒE‚ğ•Â‚¶‚é\n";
+		params = _T("\nAL : ã™ã¹ã¦ã®åˆ¥ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’é–‰ã˜ã‚‹\n");
 	}
 	else if (contained_wd_i(_T("CommandPrompt|PowerShell"), cmd)) {
-		params = "\nRA : ŠÇ—Ò‚Æ‚µ‚ÄÀs(ƒfƒtƒHƒ‹ƒg)\nRC : ŠÇ—Ò‚Æ‚µ‚ÄÀs(ƒJƒŒƒ“ƒg)\n";
+		params = _T("\nRA : ç®¡ç†è€…ã¨ã—ã¦å®Ÿè¡Œ(ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ)\nRC : ç®¡ç†è€…ã¨ã—ã¦å®Ÿè¡Œ(ã‚«ãƒ¬ãƒ³ãƒˆ)\n");
 	}
 	else if (SameText(cmd,"WinTerminal")) {
-		params = "\nRA : ŠÇ—Ò‚Æ‚µ‚ÄÀs\n";
+		params = _T("\nRA : ç®¡ç†è€…ã¨ã—ã¦å®Ÿè¡Œ\n");
 	}
 	else if (SameText(cmd, "CompareDlg")) {
-		params = "\nCS : ‘å•¶šE¬•¶š‚ğ‹æ•Ê\nNC : ƒ_ƒCƒAƒƒO‚ğo‚³‚¸A–¼‘O‚Ì‚İ”äŠr\n";
+		params = _T("\nCS : å¤§æ–‡å­—ãƒ»å°æ–‡å­—ã‚’åŒºåˆ¥\nNC : ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’å‡ºã•ãšã€åå‰ã®ã¿æ¯”è¼ƒ\n");
 	}
 	else if (contained_wd_i(_T("CompareHash|GetHash|ToOppSameHash"), cmd)) {
 		params.sprintf(_T("\n%s"), HASH_ALG_LIST);
-		if (SameText(cmd, "GetHash"))		params += "IN : “ü—Í•¶š—ñ‚ÌƒnƒbƒVƒ…’l‚ğæ“¾\n";
-		if (SameText(cmd, "ToOppSameHash")) params += "NO : ”½‘Î‘¤‚ÖˆÚ“®‚µ‚È‚¢\n";
-		if (SameText(cmd, "CompareHash"))   params += "OS : •sˆê’vƒtƒ@ƒCƒ‹‚ğ”½‘Î‘¤‚Å‘I‘ğ\n";
+		if (SameText(cmd, "GetHash"))		params += _T("IN : å…¥åŠ›æ–‡å­—åˆ—ã®ãƒãƒƒã‚·ãƒ¥å€¤ã‚’å–å¾—\n");
+		if (SameText(cmd, "ToOppSameHash")) params += _T("NO : åå¯¾å´ã¸ç§»å‹•ã—ãªã„\n");
+		if (SameText(cmd, "CompareHash"))   params += _T("OS : ä¸ä¸€è‡´ãƒ•ã‚¡ã‚¤ãƒ«ã‚’åå¯¾å´ã§é¸æŠ\n");
 	}
 	else if (SameText(cmd, "CompressDir")) {
 		params.sprintf(_T("%s"),
 			_T("\n")
-			_T("UN : ˆ³k‘®«‚ğ‰ğœ\n")
-			_T("AL : ‚·‚×‚Ä‚Ìí—Ş‚Ìƒtƒ@ƒCƒ‹‚ğˆ³k\n"));
+			_T("UN : åœ§ç¸®å±æ€§ã‚’è§£é™¤\n")
+			_T("AL : ã™ã¹ã¦ã®ç¨®é¡ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’åœ§ç¸®\n"));
 	}
 	else if (SameText(cmd, "ConvertDoc2Txt")) {
 		params.sprintf(_T("%s"),
 			_T("\n")
-			_T("SJ : Shift_JIS ‚Åo—Í(ƒfƒtƒHƒ‹ƒg)\n")
-			_T("IJ : ISO-2022-JP ‚Åo—Í\n")
-			_T("EJ : EUC-JP ‚Åo—Í\n")
-			_T("U8 : UTF-8 ‚Åo—Í\n")
-			_T("UL : UTF-16 ‚Åo—Í\n")
-			_T("UB : UTF-16BE ‚Åo—Í\n"));
+			_T("SJ : Shift_JIS ã§å‡ºåŠ›(ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ)\n")
+			_T("IJ : ISO-2022-JP ã§å‡ºåŠ›\n")
+			_T("EJ : EUC-JP ã§å‡ºåŠ›\n")
+			_T("U8 : UTF-8 ã§å‡ºåŠ›\n")
+			_T("UL : UTF-16 ã§å‡ºåŠ›\n")
+			_T("UB : UTF-16BE ã§å‡ºåŠ›\n"));
 	}
 	else if (SameText(cmd, "ConvertHtm2Txt")) {
 		params.sprintf(_T("%s"),
 			_T("\n")
-			_T("HD : ƒwƒbƒ_î•ñ‚ğ‘}“ü\n")
-			_T("MD : Markdown‹L–@‚É•ÏŠ·\n")
-			_T("TX : ’ÊíƒeƒLƒXƒg‚É•ÏŠ·\n"));
+			_T("HD : ãƒ˜ãƒƒãƒ€æƒ…å ±ã‚’æŒ¿å…¥\n")
+			_T("MD : Markdownè¨˜æ³•ã«å¤‰æ›\n")
+			_T("TX : é€šå¸¸ãƒ†ã‚­ã‚¹ãƒˆã«å¤‰æ›\n"));
 	}
 	else if (SameText(cmd, "ConvertImage")) {
-		params = "\nCB : ƒNƒŠƒbƒvƒ{[ƒh‚Ì“à—e‚ğ•ÏŠ·E•Û‘¶\n";
+		params = _T("\nCB : ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã®å†…å®¹ã‚’å¤‰æ›ãƒ»ä¿å­˜\n");
 	}
 	else if (SameText(cmd, "CopyDir")) {
 		params.sprintf(_T("%s"),
 			_T("\n")
-			_T("TO : ƒRƒs[æ‚ğ“ü—Í\n")
-			_T("KT : ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚ğˆÛ\n")
-			_T("NS : ƒTƒuƒfƒBƒŒƒNƒgƒŠ‚ğœŠO\n")
-			_T("CC : ƒfƒBƒŒƒNƒgƒŠ–¼‚ğƒNƒŠƒbƒvƒ{[ƒh‚ÉƒRƒs[\n")
-			_T("LS : ƒfƒBƒŒƒNƒgƒŠ–¼‚ğˆê——•\¦\n"));
+			_T("TO : ã‚³ãƒ”ãƒ¼å…ˆã‚’å…¥åŠ›\n")
+			_T("KT : ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã‚’ç¶­æŒ\n")
+			_T("NS : ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’é™¤å¤–\n")
+			_T("CC : ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåã‚’ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã«ã‚³ãƒ”ãƒ¼\n")
+			_T("LS : ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåã‚’ä¸€è¦§è¡¨ç¤º\n"));
 	}
 	else if (contained_wd_i(_T("CopyFileName|ListFileName"), cmd)) {
 		if (cp) cp->Style = csDropDown;
-		params = "\nFN : ƒtƒ@ƒCƒ‹–¼•”•ª‚Ì‚İ\n";
-		if (SameText(cmd, "ListFileName")) params += "CH : ƒNƒŠƒbƒvƒ{[ƒh‚Ö‚ÌƒRƒs[—š—ğ‚ğ•\¦\n";
+		params = _T("\nFN : ãƒ•ã‚¡ã‚¤ãƒ«åéƒ¨åˆ†ã®ã¿\n");
+		if (SameText(cmd, "ListFileName")) params += _T("CH : ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã¸ã®ã‚³ãƒ”ãƒ¼å±¥æ­´ã‚’è¡¨ç¤º\n");
 	}
 	else if (SameText(cmd, "CreateDir")) {
-		params = "\r\nIN : ƒfƒtƒHƒ‹ƒg–¼‚ğw’è‚µ‚Ä“ü—Í\r\n";
+		params = _T("\r\nIN : ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆåã‚’æŒ‡å®šã—ã¦å…¥åŠ›\r\n");
 	}
 	else if (contained_wd_i(_T("CsrDirToOpp|LinkToOpp|SwapLR"), cmd)) {
-		params = "\nTO : ”½‘Î‘¤‚ÖˆÚ“®\n";
-		if (SameText(cmd, "CsrDirToOpp")) params += "LK : ”½‘Î‘¤‚Ö‚Ì”½‰f“®ì‚ğˆÛ/‰ğœ\n";
+		params = _T("\nTO : åå¯¾å´ã¸ç§»å‹•\n");
+		if (SameText(cmd, "CsrDirToOpp")) params += _T("LK : åå¯¾å´ã¸ã®åæ˜ å‹•ä½œã‚’ç¶­æŒ/è§£é™¤\n");
 	}
 	else if (contained_wd_i(_T("CurrFromOpp|CurrToOpp"), cmd)) {
-		params = "\nSL : ‘I‘ğó‘Ô‚ğ”½‰f\n";
-		if (SameText(cmd, "CurrToOpp")) params += "TO : ”½‘Î‘¤‚ÖˆÚ“®\n";
+		params = _T("\nSL : é¸æŠçŠ¶æ…‹ã‚’åæ˜ \n");
+		if (SameText(cmd, "CurrToOpp")) params += _T("TO : åå¯¾å´ã¸ç§»å‹•\n");
 	}
 	else if (SameText(cmd, "CursorEnd")) {
-		params = "\nAO : —LŒø‚Èƒ[ƒNƒŠƒXƒg€–Ú‚ÉˆÚ“®\n";
+		params = _T("\nAO : æœ‰åŠ¹ãªãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆé …ç›®ã«ç§»å‹•\n");
 	}
 	else if (SameText(cmd, "DateSelect")) {
-		params = "\nTD : ¡“ú•t‚Ìƒtƒ@ƒCƒ‹\nCP : ƒJ[ƒ\ƒ‹ˆÊ’u‚Æ“¯‚¶“ú•t‚Ìƒtƒ@ƒCƒ‹\n";
+		params = _T("\nTD : ä»Šæ—¥ä»˜ã®ãƒ•ã‚¡ã‚¤ãƒ«\nCP : ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã¨åŒã˜æ—¥ä»˜ã®ãƒ•ã‚¡ã‚¤ãƒ«\n");
 	}
 	else if (SameText(cmd, "DeleteADS")) {
-		params = "\nZI : Zone.Identifier ‚Ì‚İíœ\nTC : ƒTƒ€ƒlƒCƒ‹ƒLƒƒƒbƒVƒ…‚Ì‚İíœ\n";
+		params = _T("\nZI : Zone.Identifier ã®ã¿å‰Šé™¤\nTC : ã‚µãƒ ãƒã‚¤ãƒ«ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã®ã¿å‰Šé™¤\n");
 	}
 	else if (SameText(cmd, "DelJpgExif")) {
-		params = "\nKT : ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚ğˆÛ\n";
+		params = _T("\nKT : ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã‚’ç¶­æŒ\n");
 	}
 	else if (SameText(cmd, "DiffDir")) {
 		params.sprintf(_T("%s"),
 			_T("\n")
-			_T("CS : ‘å•¶šE¬•¶š‚ğ‹æ•Ê\n")
-			_T("AL : ƒ}ƒXƒN *.*AƒTƒuƒfƒBƒŒƒNƒgƒŠ‚à‘ÎÛ‚Æ‚µ‚Ä’¼‚¿‚É”äŠrÀs\n")
-			_T("DL : ‘O‰ñ‚ÌğŒ‚Å’¼‚¿‚É”äŠrÀs\n"));
+			_T("CS : å¤§æ–‡å­—ãƒ»å°æ–‡å­—ã‚’åŒºåˆ¥\n")
+			_T("AL : ãƒã‚¹ã‚¯ *.*ã€ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚‚å¯¾è±¡ã¨ã—ã¦ç›´ã¡ã«æ¯”è¼ƒå®Ÿè¡Œ\n")
+			_T("DL : å‰å›ã®æ¡ä»¶ã§ç›´ã¡ã«æ¯”è¼ƒå®Ÿè¡Œ\n"));
 	}
 	else if (SameText(cmd, "DirHistory")) {
 		params.sprintf(_T("%s"),
 			_T("\n")
-			_T("GA : ‘S‘Ì—š—ğ‚ğ•\¦\n")
-			_T("GS : ‘S‘Ì—š—ğ‚ğ•\¦(ƒ\[ƒg/d•¡íœ)\n")
-			_T("FM : ‘S‘Ì—š—ğ‚ğƒtƒBƒ‹ƒ^ŒŸõ\n")
-			_T("AC : ƒJƒŒƒ“ƒg‘¤‚Ì—š—ğ‚ğ‚·‚×‚Äíœ\n")
-			_T("GC : ‘S‘Ì—š—ğ‚ğ‚·‚×‚Äíœ\n")
-			_T("RD : Å‹ßg‚Á‚½ƒfƒBƒŒƒNƒgƒŠ‚ğ•\¦\n"));
+			_T("GA : å…¨ä½“å±¥æ­´ã‚’è¡¨ç¤º\n")
+			_T("GS : å…¨ä½“å±¥æ­´ã‚’è¡¨ç¤º(ã‚½ãƒ¼ãƒˆ/é‡è¤‡å‰Šé™¤)\n")
+			_T("FM : å…¨ä½“å±¥æ­´ã‚’ãƒ•ã‚£ãƒ«ã‚¿æ¤œç´¢\n")
+			_T("AC : ã‚«ãƒ¬ãƒ³ãƒˆå´ã®å±¥æ­´ã‚’ã™ã¹ã¦å‰Šé™¤\n")
+			_T("GC : å…¨ä½“å±¥æ­´ã‚’ã™ã¹ã¦å‰Šé™¤\n")
+			_T("RD : æœ€è¿‘ä½¿ã£ãŸãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’è¡¨ç¤º\n"));
 	}
 	else if (SameText(cmd, "DistributionDlg")) {
 		params.sprintf(_T("%s"),
 			_T("\n")
-			_T("XC : Šm”F‚È‚µ‚Å’¼‚¿‚ÉƒRƒs[\n")
-			_T("XM : Šm”F‚È‚µ‚Å’¼‚¿‚ÉˆÚ“®\n")
-			_T("SN : ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚©‚çƒ}ƒXƒN‚ÆU•ªæ‚ğİ’è\n"));
+			_T("XC : ç¢ºèªãªã—ã§ç›´ã¡ã«ã‚³ãƒ”ãƒ¼\n")
+			_T("XM : ç¢ºèªãªã—ã§ç›´ã¡ã«ç§»å‹•\n")
+			_T("SN : ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã‹ã‚‰ãƒã‚¹ã‚¯ã¨æŒ¯åˆ†å…ˆã‚’è¨­å®š\n"));
 	}
 	else if (SameText(cmd, "DotNyanDlg")) {
-		params = "\nRS : ƒJƒŒƒ“ƒg‘¤‚É .nyanfi ‚ğÄ“K—p\n";
+		params = _T("\nRS : ã‚«ãƒ¬ãƒ³ãƒˆå´ã« .nyanfi ã‚’å†é©ç”¨\n");
 	}
 	else if (SameText(cmd, "Duplicate")) {
-		params = "\nRA : ŠÇ—Ò‚Æ‚µ‚Ä“ñd‹N“®\nDM : ˆê”Êƒ†[ƒU‚É~Ši‚µ‚Ä“ñd‹N“®\n";
+		params = _T("\nRA : ç®¡ç†è€…ã¨ã—ã¦äºŒé‡èµ·å‹•\nDM : ä¸€èˆ¬ãƒ¦ãƒ¼ã‚¶ã«é™æ ¼ã—ã¦äºŒé‡èµ·å‹•\n");
 	}
 	else if (contained_wd_i(_T("EditHistory|ViewHistory"), cmd)) {
-		params = "\nFF : ƒtƒBƒ‹ƒ^—“‚ÉƒtƒH[ƒJƒX\nAC : —š—ğ‚ğ‚·‚×‚ÄÁ‹\n";
+		params = _T("\nFF : ãƒ•ã‚£ãƒ«ã‚¿æ¬„ã«ãƒ•ã‚©ãƒ¼ã‚«ã‚¹\nAC : å±¥æ­´ã‚’ã™ã¹ã¦æ¶ˆå»\n");
 	}
 	else if (SameText(cmd, "ExeCommandLine")) {
-		params = "\nFN : ƒJ[ƒ\ƒ‹ˆÊ’u‚Ìƒtƒ@ƒCƒ‹–¼‚ğ“ü—Í\nLC : ‘O‰ñ‚ÌƒRƒ}ƒ“ƒh‚ğ‰Šú•\¦\n";
+		params = _T("\nFN : ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®ãƒ•ã‚¡ã‚¤ãƒ«åã‚’å…¥åŠ›\nLC : å‰å›ã®ã‚³ãƒãƒ³ãƒ‰ã‚’åˆæœŸè¡¨ç¤º\n");
 	}
 	else if (SameText(cmd, "ExtractIcon")) {
 		if (cp) cp->Style = csDropDown;
-		params = "\nSI : ƒXƒ‚[ƒ‹ƒAƒCƒRƒ“‚ğ’Šo\n";
+		params = _T("\nSI : ã‚¹ãƒ¢ãƒ¼ãƒ«ã‚¢ã‚¤ã‚³ãƒ³ã‚’æŠ½å‡º\n");
 	}
 	else if (SameText(cmd, "FileEdit") && id_idx==0) {
-		params = "\nOS : ”½‘Î‘¤‚Å‘I‘ğ’†‚Ìƒtƒ@ƒCƒ‹‚àŠJ‚­\n";
+		params = _T("\nOS : åå¯¾å´ã§é¸æŠä¸­ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚‚é–‹ã\n");
 	}
 	else if (SameText(cmd, "FileExtList")) {
-		params = "\nCP : ƒJ[ƒ\ƒ‹ˆÊ’u‚ÌƒfƒBƒŒƒNƒgƒŠ‚ª‘ÎÛ\n";
+		params = _T("\nCP : ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒå¯¾è±¡\n");
 	}
 	else if (SameText(cmd, "Filter")) {
-		params = "\nCS : ‘å¬•¶š‚ğ‹æ•Ê\nCA : Às‘O‚É‘I‘ğƒ}ƒXƒN‚ğ‰ğœ\nFZ : ‚ ‚¢‚Ü‚¢ŒŸõ\n";
+		params = _T("\nCS : å¤§å°æ–‡å­—ã‚’åŒºåˆ¥\nCA : å®Ÿè¡Œå‰ã«é¸æŠãƒã‚¹ã‚¯ã‚’è§£é™¤\nFZ : ã‚ã„ã¾ã„æ¤œç´¢\n");
 	}
 	else if (SameText(cmd, "FindDuplDlg")) {
-		params = "\nLR : ¶‰E‚ÅŒŸõ‚µ‚Äd•¡ƒtƒ@ƒCƒ‹‚ğ‘I‘ğ\n";
+		params = _T("\nLR : å·¦å³ã§æ¤œç´¢ã—ã¦é‡è¤‡ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é¸æŠ\n");
 	}
 	else if (contained_wd_i(_T("FindFileDlg|FindFileDirDlg"), cmd)) {
 		params.sprintf(_T("%s"),
 			_T("\n")
-			_T("NM : ƒ}ƒXƒN—“‚ğ”ñ•\¦\n")
-			_T("FK : ŒŸõŒê—“‚ÉƒtƒH[ƒJƒX\n")
-			_T("R0 : uƒTƒuƒfƒBƒŒƒNƒgƒŠ‚àŒŸõvƒIƒt\n")
-			_T("R1 : uƒTƒuƒfƒBƒŒƒNƒgƒŠ‚àŒŸõvƒIƒ“\n")
-			_T("NT : ‚²‚İ” “à‚ÍŒŸõ‚µ‚È‚¢\n"));
+			_T("NM : ãƒã‚¹ã‚¯æ¬„ã‚’éè¡¨ç¤º\n")
+			_T("FK : æ¤œç´¢èªæ¬„ã«ãƒ•ã‚©ãƒ¼ã‚«ã‚¹\n")
+			_T("R0 : ã€Œã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚‚æ¤œç´¢ã€ã‚ªãƒ•\n")
+			_T("R1 : ã€Œã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚‚æ¤œç´¢ã€ã‚ªãƒ³\n")
+			_T("NT : ã”ã¿ç®±å†…ã¯æ¤œç´¢ã—ãªã„\n"));
 		if (SameText(cmd, "FindFileDlg")) {
 			params.cat_sprintf(_T("%s"),
-				_T("X0 : uŠg’£ŒŸõvƒIƒt\n")
-				_T("X1 : uŠg’£ŒŸõvƒIƒ“\n")
-				_T("A0 : uƒA[ƒJƒCƒu“à‚àŒŸõvƒIƒt\n")
-				_T("A1 : uƒA[ƒJƒCƒu“à‚àŒŸõvƒIƒ“\n")
-				_T("* : ƒŠƒXƒgƒtƒ@ƒCƒ‹‚Ì‘I‘ğƒ_ƒCƒAƒƒO‚ğ•\¦\n")
-				_T("$STARTMENU : ƒXƒ^[ƒgƒƒjƒ…[‚ğŒŸõ\n")
-				_T("$STARTUP : ƒXƒ^[ƒgƒAƒbƒv‚ğŒŸõ\n")
-				_T("$DESKTOP : ƒfƒXƒNƒgƒbƒv‚ğŒŸõ\n")
-				_T("$DOCUMENT : ƒhƒLƒ…ƒƒ“ƒg‚ğŒŸõ\n")
-				_T("$PICTURE : ƒsƒNƒ`ƒƒ‚ğŒŸõ\n")
-				_T("$VIDEO : ƒrƒfƒI‚ğŒŸõ\n")
-				_T("$MUSIC : ƒ~ƒ…[ƒWƒbƒN‚ğŒŸõ\n"));
+				_T("X0 : ã€Œæ‹¡å¼µæ¤œç´¢ã€ã‚ªãƒ•\n")
+				_T("X1 : ã€Œæ‹¡å¼µæ¤œç´¢ã€ã‚ªãƒ³\n")
+				_T("A0 : ã€Œã‚¢ãƒ¼ã‚«ã‚¤ãƒ–å†…ã‚‚æ¤œç´¢ã€ã‚ªãƒ•\n")
+				_T("A1 : ã€Œã‚¢ãƒ¼ã‚«ã‚¤ãƒ–å†…ã‚‚æ¤œç´¢ã€ã‚ªãƒ³\n")
+				_T("* : ãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®é¸æŠãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’è¡¨ç¤º\n")
+				_T("$STARTMENU : ã‚¹ã‚¿ãƒ¼ãƒˆãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’æ¤œç´¢\n")
+				_T("$STARTUP : ã‚¹ã‚¿ãƒ¼ãƒˆã‚¢ãƒƒãƒ—ã‚’æ¤œç´¢\n")
+				_T("$DESKTOP : ãƒ‡ã‚¹ã‚¯ãƒˆãƒƒãƒ—ã‚’æ¤œç´¢\n")
+				_T("$DOCUMENT : ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’æ¤œç´¢\n")
+				_T("$PICTURE : ãƒ”ã‚¯ãƒãƒ£ã‚’æ¤œç´¢\n")
+				_T("$VIDEO : ãƒ“ãƒ‡ã‚ªã‚’æ¤œç´¢\n")
+				_T("$MUSIC : ãƒŸãƒ¥ãƒ¼ã‚¸ãƒƒã‚¯ã‚’æ¤œç´¢\n"));
 		}
 	}
 	else if (SameText(cmd, "FindHardLink")) {
-		params = "\nOP : Œ‹‰ÊƒŠƒXƒg‚©‚ç”½‘Î‘¤‚Ö”½‰f\n";
+		params = _T("\nOP : çµæœãƒªã‚¹ãƒˆã‹ã‚‰åå¯¾å´ã¸åæ˜ \n");
 	}
 	else if (SameText(cmd, "FindMark")) {
-		params = "\nAL : ‚·‚×‚Ä‚Ìƒ}[ƒN€–Ú‚ğŒŸõ\n";
+		params = _T("\nAL : ã™ã¹ã¦ã®ãƒãƒ¼ã‚¯é …ç›®ã‚’æ¤œç´¢\n");
 	}
 	else if (contained_wd_i(_T("FindTag|AddTag|SetTag|TagSelect"), cmd)) {
-		params = "\n; : “ü—Íƒ{ƒbƒNƒX‚Åƒ^ƒO‚ğw’è\n";
+		params = _T("\n; : å…¥åŠ›ãƒœãƒƒã‚¯ã‚¹ã§ã‚¿ã‚°ã‚’æŒ‡å®š\n");
 		params += usr_TAG->TagNameList->Text;
 	}
 	else if (SameText(cmd, "FindTagName")) {
-		params = "\nEJ : ƒeƒLƒXƒgƒGƒfƒBƒ^‚Åƒ_ƒCƒŒƒNƒgƒ^ƒOƒWƒƒƒ“ƒv\n";
-		if (id_idx==2) params += "CO : Œ»İ‚Ìƒtƒ@ƒCƒ‹‚Ì‚İ‚ğŒŸõ\n";
+		params = _T("\nEJ : ãƒ†ã‚­ã‚¹ãƒˆã‚¨ãƒ‡ã‚£ã‚¿ã§ãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã‚¿ã‚°ã‚¸ãƒ£ãƒ³ãƒ—\n");
+		if (id_idx==2) params += _T("CO : ç¾åœ¨ã®ãƒ•ã‚¡ã‚¤ãƒ«ã®ã¿ã‚’æ¤œç´¢\n");
 	}
 	else if (contained_wd_i(_T("FindSelDown|FindSelUp"), cmd)) {
-		params = "\nEM : ƒ}ƒbƒ`Œê‚ğ‹­’²•\¦\n";
+		params = _T("\nEM : ãƒãƒƒãƒèªã‚’å¼·èª¿è¡¨ç¤º\n");
 	}
 	else if (SameText(cmd, "FixTabPath")) {
-		params = "\nON : ƒJƒŒƒ“ƒg‘¤‚ğŒÅ’è\nOFF : ŒÅ’è‰ğœ\n";
+		params = _T("\nON : ã‚«ãƒ¬ãƒ³ãƒˆå´ã‚’å›ºå®š\nOFF : å›ºå®šè§£é™¤\n");
 	}
 	else if (SameText(cmd, "FunctionList")) {
-		params = "\nFF : ƒtƒBƒ‹ƒ^—“‚ÉƒtƒH[ƒJƒX\nFZ : ‚ ‚¢‚Ü‚¢ŒŸõ\n";
+		params = _T("\nFF : ãƒ•ã‚£ãƒ«ã‚¿æ¬„ã«ãƒ•ã‚©ãƒ¼ã‚«ã‚¹\nFZ : ã‚ã„ã¾ã„æ¤œç´¢\n");
 	}
 	else if (SameText(cmd, "GitDiff")) {
-		params = "\nHD : HEAD ‚©‚ç·•ª‚ğ•\¦\nXT : ŠO•”diffƒc[ƒ‹‚Å•\¦\n";
+		params = _T("\nHD : HEAD ã‹ã‚‰å·®åˆ†ã‚’è¡¨ç¤º\nXT : å¤–éƒ¨diffãƒ„ãƒ¼ãƒ«ã§è¡¨ç¤º\n");
 	}
 	else if (SameText(cmd, "GitViewer")) {
 		params.sprintf(_T("%s"),
 			_T("\n")
-			_T("N0 : ƒRƒ~ƒbƒg—š—ğ”‚Ì§ŒÀ‚ğŠO‚·\n")
-			_T("N30 : ƒRƒ~ƒbƒg—š—ğ”‚ğ§ŒÀ‚·‚é\n")
-			_T("CP : ƒJ[ƒ\ƒ‹ˆÊ’uƒtƒ@ƒCƒ‹‚ÌƒRƒ~ƒbƒg—š—ğ‚ğ•\¦\n"));
+			_T("N0 : ã‚³ãƒŸãƒƒãƒˆå±¥æ­´æ•°ã®åˆ¶é™ã‚’å¤–ã™\n")
+			_T("N30 : ã‚³ãƒŸãƒƒãƒˆå±¥æ­´æ•°ã‚’åˆ¶é™ã™ã‚‹\n")
+			_T("CP : ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚³ãƒŸãƒƒãƒˆå±¥æ­´ã‚’è¡¨ç¤º\n"));
 	}
 	else if (SameText(cmd, "HelpContents")) {
-		params = "\nCI : ƒRƒ}ƒ“ƒh‚Ìõˆø\nFI : ƒRƒ}ƒ“ƒh‚Ì‹@”\•Êõˆø\nCH : •ÏX—š—ğ\n";
+		params = _T("\nCI : ã‚³ãƒãƒ³ãƒ‰ã®ç´¢å¼•\nFI : ã‚³ãƒãƒ³ãƒ‰ã®æ©Ÿèƒ½åˆ¥ç´¢å¼•\nCH : å¤‰æ›´å±¥æ­´\n");
 	}
 	else if (SameText(cmd, "IncSearch")) {
-		params = "\nMM : Migemoƒ‚[ƒh\nNM : ’Êíƒ‚[ƒh\n";
-		if (id_idx==0) params += "FM : ƒtƒBƒ‹ƒ^ƒ}ƒXƒNEƒ‚[ƒh\nCA : Às‘O‚É‘I‘ğƒ}ƒXƒN‚ğ‰ğœ\n";
+		params = _T("\nMM : Migemoãƒ¢ãƒ¼ãƒ‰\nNM : é€šå¸¸ãƒ¢ãƒ¼ãƒ‰\n");
+		if (id_idx==0) params += _T("FM : ãƒ•ã‚£ãƒ«ã‚¿ãƒã‚¹ã‚¯ãƒ»ãƒ¢ãƒ¼ãƒ‰\nCA : å®Ÿè¡Œå‰ã«é¸æŠãƒã‚¹ã‚¯ã‚’è§£é™¤\n");
 	}
 	else if (SameText(cmd, "InputDir")) {
 		params.sprintf(_T("%s"),
 			_T("\n")
-			_T("ND : ƒ_ƒCƒAƒƒO‚ğ•\¦‚µ‚È‚¢‚Å“ü—Í\n")
-			_T("ND2 : ND ‚Åƒhƒƒbƒvƒ_ƒEƒ“‚ğŠJ‚¢‚Ä•\¦\n")
-			_T("SD : ƒtƒHƒ‹ƒ_QÆƒ_ƒCƒAƒƒO‚ğ•\¦\n")
-			_T("CB : ƒNƒŠƒbƒvƒ{[ƒh“à—e‚ÌƒfƒBƒŒƒNƒgƒŠ‚ÉˆÚ“®\n"));
+			_T("ND : ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’è¡¨ç¤ºã—ãªã„ã§å…¥åŠ›\n")
+			_T("ND2 : ND ã§ãƒ‰ãƒ­ãƒƒãƒ—ãƒ€ã‚¦ãƒ³ã‚’é–‹ã„ã¦è¡¨ç¤º\n")
+			_T("SD : ãƒ•ã‚©ãƒ«ãƒ€å‚ç…§ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’è¡¨ç¤º\n")
+			_T("CB : ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰å†…å®¹ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã«ç§»å‹•\n"));
 	}
 	else if (SameText(cmd, "JumpLine")) {
-		params = "\nST : ƒXƒeƒBƒbƒL[s‚ÉˆÚ“®\n";
+		params = _T("\nST : ã‚¹ãƒ†ã‚£ãƒƒã‚­ãƒ¼è¡Œã«ç§»å‹•\n");
 	}
 	else if (SameText(cmd, "JsonViewer")) {
-		params = "\nCB : ƒNƒŠƒbƒvƒ{[ƒh“à—e‚ğ•\¦\n";
+		params = _T("\nCB : ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰å†…å®¹ã‚’è¡¨ç¤º\n");
 	}
 	else if (SameText(cmd, "DriveList")) {
 		params.sprintf(_T("%s"),
 			_T("\n")
-			_T("ND : ƒ|ƒbƒvƒAƒbƒvƒƒjƒ…[‚Å‘I‘ğ\n")
-			_T("NS : ƒ|ƒbƒvƒAƒbƒvƒƒjƒ…[‚Å‘I‘ğ(‹ó‚«—e—Ê”ñ•\¦)\n"));
+			_T("ND : ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã§é¸æŠ\n")
+			_T("NS : ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã§é¸æŠ(ç©ºãå®¹é‡éè¡¨ç¤º)\n"));
 	}
 	else if (SameText(cmd, "InputCommands")) {
-		params = "\nFZ : ‚ ‚¢‚Ü‚¢ŒŸõ\nEL : ƒGƒR[AƒRƒ}ƒ“ƒhƒtƒ@ƒCƒ‹‚Ìs”Ô†•\¦\n";
+		params = _T("\nFZ : ã‚ã„ã¾ã„æ¤œç´¢\nEL : ã‚¨ã‚³ãƒ¼ã€ã‚³ãƒãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã®è¡Œç•ªå·è¡¨ç¤º\n");
 	}
 	else if (contained_wd_i(
 		_T("CmdFileList|CmdHistory|ListClipboard|MarkList|KeyList|RepositoryList|SpecialDirList|UserDefList"),
 		cmd))
 	{
-		params = "\nFF : ƒtƒBƒ‹ƒ^—“‚ÉƒtƒH[ƒJƒX\n";
+		params = _T("\nFF : ãƒ•ã‚£ãƒ«ã‚¿æ¬„ã«ãƒ•ã‚©ãƒ¼ã‚«ã‚¹\n");
 	}
 	else if (contained_wd_i(_T("Exit|Close"), cmd)) {
-		params = "\nNS : INIƒtƒ@ƒCƒ‹‚ğ•Û‘¶‚µ‚È‚¢\nNX : ‘¼‚ÌNyanFi‚ğI—¹‚³‚¹‚È‚¢\n";
+		params = _T("\nNS : INIãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä¿å­˜ã—ãªã„\nNX : ä»–ã®NyanFiã‚’çµ‚äº†ã•ã›ãªã„\n");
 	}
 	else if (SameText(cmd, "ExPopupMenu")) {
-		params = "\nMN : ’Ç‰Áƒƒjƒ…[‚Ì‚İ•\¦\nTL : ŠO•”ƒc[ƒ‹‚Ì‚İ•\¦\n";
+		params = _T("\nMN : è¿½åŠ ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®ã¿è¡¨ç¤º\nTL : å¤–éƒ¨ãƒ„ãƒ¼ãƒ«ã®ã¿è¡¨ç¤º\n");
 	}
 	else if (SameText(cmd, "Library")) {
-		params = "\nSD : ‘I‘ğƒ_ƒCƒAƒƒO‚ğ•\¦\n* : ‘I‘ğƒƒjƒ…[‚ğ•\¦\n";
+		params = _T("\nSD : é¸æŠãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’è¡¨ç¤º\n* : é¸æŠãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’è¡¨ç¤º\n");
 		UnicodeString pnam = cv_env_str("%APPDATA%\\Microsoft\\Windows\\Libraries\\");
 		std::unique_ptr<TStringList> lst(new TStringList());
 		get_files(pnam, "*.library-ms", lst.get());
@@ -865,322 +865,322 @@ void get_PrmList(
 			params.cat_sprintf(_T("%s\n"), get_base_name(lst->Strings[i]).c_str());
 	}
 	else if (contained_wd_i(_T("CountLines|ListArchive|ListDuration|ListExpFunc"), cmd)) {
-		params = "\nCC : Œ‹‰Ê‚ğƒNƒŠƒbƒvƒ{[ƒh‚ÉƒRƒs[\nLS : Œ‹‰Ê‚ğˆê——•\¦\n";
+		params = _T("\nCC : çµæœã‚’ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã«ã‚³ãƒ”ãƒ¼\nLS : çµæœã‚’ä¸€è¦§è¡¨ç¤º\n");
 		if (SameText(cmd, "ListExpFunc"))
-			params += "SN : –¼‘O‡‚Éƒ\[ƒg\nSI : ƒCƒ“ƒfƒbƒNƒX‡‚Éƒ\[ƒg\nSR : RVA‡‚Éƒ\[ƒg\n";
+			params += _T("SN : åå‰é †ã«ã‚½ãƒ¼ãƒˆ\nSI : ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹é †ã«ã‚½ãƒ¼ãƒˆ\nSR : RVAé †ã«ã‚½ãƒ¼ãƒˆ\n");
 	}
 	else if (SameText(cmd, "ListNyanFi")) {
 		params.sprintf(_T("%s"),
 			_T("\n")
-			_T("CC : Œ‹‰Ê‚ğƒNƒŠƒbƒvƒ{[ƒh‚ÉƒRƒs[\n")
-			_T("LS : Œ‹‰Ê‚ğˆê——•\¦\n")
-			_T("ED : ƒGƒfƒBƒ^î•ñ‚ğ’Ç‰Á\n")
-			_T("XT : ŠO•”ƒc[ƒ‹î•ñ‚ğ’Ç‰Á\n"));
+			_T("CC : çµæœã‚’ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã«ã‚³ãƒ”ãƒ¼\n")
+			_T("LS : çµæœã‚’ä¸€è¦§è¡¨ç¤º\n")
+			_T("ED : ã‚¨ãƒ‡ã‚£ã‚¿æƒ…å ±ã‚’è¿½åŠ \n")
+			_T("XT : å¤–éƒ¨ãƒ„ãƒ¼ãƒ«æƒ…å ±ã‚’è¿½åŠ \n"));
 	}
 	else if (contained_wd_i(_T("ListLog|ListText"), cmd)) {
-		params = "\nFF : ƒtƒBƒ‹ƒ^—“‚ÉƒtƒH[ƒJƒX\nEO : ƒGƒ‰[‰ÓŠ‚Ìi‚è‚İ•\¦\n";
+		params = _T("\nFF : ãƒ•ã‚£ãƒ«ã‚¿æ¬„ã«ãƒ•ã‚©ãƒ¼ã‚«ã‚¹\nEO : ã‚¨ãƒ©ãƒ¼ç®‡æ‰€ã®çµã‚Šè¾¼ã¿è¡¨ç¤º\n");
 	}
 	else if (SameText(cmd, "ListTail")) {
-		params = "\nTE : ÅŒã”ö‚ÉˆÚ“®r\nFF : ƒtƒBƒ‹ƒ^—“‚ÉƒtƒH[ƒJƒX\n";
+		params = _T("\nTE : æœ€å¾Œå°¾ã«ç§»å‹•r\nFF : ãƒ•ã‚£ãƒ«ã‚¿æ¬„ã«ãƒ•ã‚©ãƒ¼ã‚«ã‚¹\n");
 	}
 	else if (SameText(cmd, "LoadFindSet")) {
-		params = "\n* : ŒŸõİ’èƒtƒ@ƒCƒ‹‚ğƒ|ƒbƒvƒAƒbƒvƒƒjƒ…[‚Å‘I‘ğ\n";
+		params = _T("\n* : æ¤œç´¢è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã§é¸æŠ\n");
 	}
 	else if (SameText(cmd, "LockComputer")) {
-		params = "\nMO : ƒfƒBƒXƒvƒŒƒC‚Ì“dŒ¹‚ğØ‚é\n";
+		params = _T("\nMO : ãƒ‡ã‚£ã‚¹ãƒ—ãƒ¬ã‚¤ã®é›»æºã‚’åˆ‡ã‚‹\n");
 	}
 	else if (SameText(cmd, "Mark") && (id_idx==0 || id_idx==3)) {
-		params = "\nND : ƒJ[ƒ\ƒ‹‚ğˆÚ“®‚µ‚È‚¢\nIM : ƒƒ‚‚ğ“ü—Í\nSL : ‘I‘ğ€–Ú‚ÉˆêŠ‡“K—p\n";
+		params = _T("\nND : ã‚«ãƒ¼ã‚½ãƒ«ã‚’ç§»å‹•ã—ãªã„\nIM : ãƒ¡ãƒ¢ã‚’å…¥åŠ›\nSL : é¸æŠé …ç›®ã«ä¸€æ‹¬é©ç”¨\n");
 	}
 	else if (SameText(cmd, "MonitorOff")) {
-		params = "\nLK : ƒRƒ“ƒsƒ…[ƒ^‚ğƒƒbƒN‚·‚é\nKM : ƒL[ƒ{[ƒh/ƒ}ƒEƒX‚ğƒƒbƒN‚·‚é\n";
+		params = _T("\nLK : ã‚³ãƒ³ãƒ”ãƒ¥ãƒ¼ã‚¿ã‚’ãƒ­ãƒƒã‚¯ã™ã‚‹\nKM : ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰/ãƒã‚¦ã‚¹ã‚’ãƒ­ãƒƒã‚¯ã™ã‚‹\n");
 	}
 	else if (SameText(cmd, "MoveTab")) {
-		params = "\nTP : æ“ª‚Éæ“ª\nED : ÅŒã‚ÉˆÚ“®\nPR : ‚P‚Â‘O‚ÉˆÚ“®\n";
+		params = _T("\nTP : å…ˆé ­ã«å…ˆé ­\nED : æœ€å¾Œã«ç§»å‹•\nPR : ï¼‘ã¤å‰ã«ç§»å‹•\n");
 	}
 	else if (SameText(cmd, "NameFromClip")) {
-		params = "\nRC : ƒtƒ@ƒCƒ‹–¼å•”‚Ì•¶š’uŠ·‚ğ“K—p\n";
+		params = _T("\nRC : ãƒ•ã‚¡ã‚¤ãƒ«åä¸»éƒ¨ã®æ–‡å­—ç½®æ›ã‚’é©ç”¨\n");
 	}
 	else if (contained_wd_i(_T("NextFile|PrevFile"), cmd)) {
-		if (id_idx==3) params = "\nF1 : Œ©ŠJ‚«•\¦‚Å‚à1ƒtƒ@ƒCƒ‹‚¸‚ÂˆÚ“®\n";
+		if (id_idx==3) params = _T("\nF1 : è¦‹é–‹ãè¡¨ç¤ºã§ã‚‚1ãƒ•ã‚¡ã‚¤ãƒ«ãšã¤ç§»å‹•\n");
 	}
 	else if (SameText(cmd, "NextNyanFi")) {
-		params = "\nDN : ‚È‚¯‚ê‚Î“ñd‹N“®\n";
+		params = _T("\nDN : ãªã‘ã‚Œã°äºŒé‡èµ·å‹•\n");
 	}
 	else if (contained_wd_i(_T("OpenByApp|OpenByWin"), cmd)) {
-		params = "\nDM : ˆê”Êƒ†[ƒU‚É~Ši‚µ‚ÄŠJ‚­";
+		params = _T("\nDM : ä¸€èˆ¬ãƒ¦ãƒ¼ã‚¶ã«é™æ ¼ã—ã¦é–‹ã");
 	}
 	else if (SameText(cmd, "OpenCtrlPanel")) {
-		params = "\nGM : GodMode‚ÅŠJ‚­\n";
+		params = _T("\nGM : GodModeã§é–‹ã\n");
 	}
 	else if (SameText(cmd, "PageBind")) {
-		params = "\nR : ‰E’Ô‚¶\nL : ¶’Ô‚¶\n";
+		params = _T("\nR : å³ç¶´ã˜\nL : å·¦ç¶´ã˜\n");
 	}
 	else if (SameText(cmd, "Paste")) {
-		params = "\nCL : “¯–¼‚ÉƒNƒ[ƒ“‰»\nEX : ƒeƒLƒXƒg/‰æ‘œ‚È‚çV‹K•Û‘¶\n";
+		params = _T("\nCL : åŒåæ™‚ã«ã‚¯ãƒ­ãƒ¼ãƒ³åŒ–\nEX : ãƒ†ã‚­ã‚¹ãƒˆ/ç”»åƒãªã‚‰æ–°è¦ä¿å­˜\n");
 	}
 	else if (SameText(cmd, "PlayList")) {
 		params.sprintf(_T("%s"),
 			_T("\n")
-			_T("RP : ƒŠƒs[ƒgÄ¶\n")
-			_T("SF : ƒVƒƒƒbƒtƒ‹Ä¶\n")
-			_T("SR : ƒVƒƒƒbƒtƒ‹EƒŠƒs[ƒgÄ¶\n")
-			_T("NX : Ÿ‚Ì‹È‚Ö\n")
-			_T("PR : ‘O‚Ì‹È‚Ö\n")
-			_T("PS : ˆê’â~\n")
-			_T("RS : ÄŠJ\n")
-			_T("PP : Ä¶/ˆê’â~\n")
-			_T("FI : ƒtƒ@ƒCƒ‹î•ñ‚ğ•\¦\n")
-			_T("LS : ƒvƒŒƒCƒŠƒXƒg‚ğ•\¦\n")
-			_T("CA : ’â~‚µ‚ÄƒvƒŒƒCƒŠƒXƒg‚ğƒNƒŠƒA\n"));
+			_T("RP : ãƒªãƒ”ãƒ¼ãƒˆå†ç”Ÿ\n")
+			_T("SF : ã‚·ãƒ£ãƒƒãƒ•ãƒ«å†ç”Ÿ\n")
+			_T("SR : ã‚·ãƒ£ãƒƒãƒ•ãƒ«ãƒ»ãƒªãƒ”ãƒ¼ãƒˆå†ç”Ÿ\n")
+			_T("NX : æ¬¡ã®æ›²ã¸\n")
+			_T("PR : å‰ã®æ›²ã¸\n")
+			_T("PS : ä¸€æ™‚åœæ­¢\n")
+			_T("RS : å†é–‹\n")
+			_T("PP : å†ç”Ÿ/ä¸€æ™‚åœæ­¢\n")
+			_T("FI : ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã‚’è¡¨ç¤º\n")
+			_T("LS : ãƒ—ãƒ¬ã‚¤ãƒªã‚¹ãƒˆã‚’è¡¨ç¤º\n")
+			_T("CA : åœæ­¢ã—ã¦ãƒ—ãƒ¬ã‚¤ãƒªã‚¹ãƒˆã‚’ã‚¯ãƒªã‚¢\n"));
 	}
 	else if (SameText(cmd, "PopupMainMenu")) {
 		params.sprintf(_T("%s"),
 			_T("\n")
-			_T("F : ƒtƒ@ƒCƒ‹\n")
-			_T("E : •ÒW\n")
-			_T("S : ŒŸõ\n")
-			_T("V : •\¦\n")
-			_T("L : ˆê——\n")
-			_T("T : ƒc[ƒ‹\n")
-			_T("O : İ’è\n")
-			_T("H : ƒwƒ‹ƒv\n"));
+			_T("F : ãƒ•ã‚¡ã‚¤ãƒ«\n")
+			_T("E : ç·¨é›†\n")
+			_T("S : æ¤œç´¢\n")
+			_T("V : è¡¨ç¤º\n")
+			_T("L : ä¸€è¦§\n")
+			_T("T : ãƒ„ãƒ¼ãƒ«\n")
+			_T("O : è¨­å®š\n")
+			_T("H : ãƒ˜ãƒ«ãƒ—\n"));
 	}
 	else if (SameText(cmd, "RecentList")) {
-		params = "\nAC : Å‹ßg‚Á‚½‚·‚×‚Ä‚Ì€–Ú‚ğíœ\nBC : ƒŠƒ“ƒNØ‚ê€–Ú‚ğ®—\n";
+		params = _T("\nAC : æœ€è¿‘ä½¿ã£ãŸã™ã¹ã¦ã®é …ç›®ã‚’å‰Šé™¤\nBC : ãƒªãƒ³ã‚¯åˆ‡ã‚Œé …ç›®ã‚’æ•´ç†\n");
 	}
 	else if (contained_wd_i(_T("RegDirDlg|PathMaskDlg"), cmd)) {
-		params = "\nND : ƒ|ƒbƒvƒAƒbƒvƒƒjƒ…[‚Å‘I‘ğ\n";
-		if (SameText(cmd, "RegDirDlg")) params += "AD : ’Ç‰Áƒ‚[ƒh\n";
+		params = _T("\nND : ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã§é¸æŠ\n");
+		if (SameText(cmd, "RegDirDlg")) params += _T("AD : è¿½åŠ ãƒ¢ãƒ¼ãƒ‰\n");
 	}
 	else if (contained_wd_i(_T("RegDirPopup|PushDir|PopDir"), cmd)) {
-		params = "\nOP : ”½‘Î‘¤‚ÅÀs\n";
+		params = _T("\nOP : åå¯¾å´ã§å®Ÿè¡Œ\n");
 	}
 	else if (SameText(cmd, "ReloadList")) {
-		params = "\nCO : ƒJƒŒƒ“ƒg‚Ì‚İXV\nHL : ƒn[ƒhƒŠƒ“ƒN‚Ìƒ^ƒCƒ€ƒXƒ^ƒ“ƒvXV\nOFF : XV‹Ö~\n";
+		params = _T("\nCO : ã‚«ãƒ¬ãƒ³ãƒˆã®ã¿æ›´æ–°\nHL : ãƒãƒ¼ãƒ‰ãƒªãƒ³ã‚¯ã®ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—æ›´æ–°\nOFF : æ›´æ–°ç¦æ­¢\n");
 	}
 	else if (SameText(cmd, "RenameDlg")) {
-		params = "\nED : ƒŠƒXƒg‚Ì•ÒW‚É‚æ‚é‰ü–¼\n";
+		params = _T("\nED : ãƒªã‚¹ãƒˆã®ç·¨é›†ã«ã‚ˆã‚‹æ”¹å\n");
 	}
 	else if (SameText(cmd, "Restart")) {
-		params = "\nNS : INIƒtƒ@ƒCƒ‹‚ğ•Û‘¶‚µ‚È‚¢\nRA : ŠÇ—Ò‚Æ‚µ‚ÄÄ‹N“®\nDM : ŠÇ—Ò‚©‚ç~Ši‚µ‚ÄÄ‹N“®\n";
+		params = _T("\nNS : INIãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä¿å­˜ã—ãªã„\nRA : ç®¡ç†è€…ã¨ã—ã¦å†èµ·å‹•\nDM : ç®¡ç†è€…ã‹ã‚‰é™æ ¼ã—ã¦å†èµ·å‹•\n");
 	}
 	else if (SameText(cmd, "SaveAsWorkList")) {
-		params = "\nFL : ƒJƒŒƒ“ƒg‚Ì“à—e‚ğƒ[ƒNƒŠƒXƒg‚Æ‚µ‚Ä•Û‘¶\n";
+		params = _T("\nFL : ã‚«ãƒ¬ãƒ³ãƒˆã®å†…å®¹ã‚’ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã¨ã—ã¦ä¿å­˜\n");
 	}
 	else if (contained_wd_i(_T("ScrollUpLog|ScrollUpText|ScrollDownLog|ScrollDownText"), cmd)) {
-		params = "\nHP : ”¼ƒy[ƒW•ª\nFP : 1ƒy[ƒW•ª\n";
-		params.cat_sprintf(_T("%s\n"), ContainsText(cmd, "Down")? _T("ED : ÅŒã‚Ö") : _T("TP : æ“ª‚Ö"));
+		params = _T("\nHP : åŠãƒšãƒ¼ã‚¸åˆ†\nFP : 1ãƒšãƒ¼ã‚¸åˆ†\n");
+		params.cat_sprintf(_T("%s\n"), ContainsText(cmd, "Down")? _T("ED : æœ€å¾Œã¸") : _T("TP : å…ˆé ­ã¸"));
 	}
 	else if (SameText(cmd, "SelByList")) {
 		params.sprintf(_T("%s"),
 			_T("\n")
-			_T("LR : ƒJƒŒƒ“ƒg/”½‘Î‘¤‚Ì—¼•û‚Å‘I‘ğ\n")
-			_T("SM : ‘I‘ğ‚³‚ê‚½€–Ú‚¾‚¯‚ğc‚·(‘I‘ğƒ}ƒXƒN)\n")
-			_T("CP : ƒJ[ƒ\ƒ‹ˆÊ’u‚ÌƒŠƒXƒgƒtƒ@ƒCƒ‹‚ÅƒJƒŒƒ“ƒg‘¤‚ğ‘I‘ğ\n")
-			_T("OP : ƒJ[ƒ\ƒ‹ˆÊ’u‚ÌƒŠƒXƒgƒtƒ@ƒCƒ‹‚Å”½‘Î‘¤‚ğ‘I‘ğ\n"));
+			_T("LR : ã‚«ãƒ¬ãƒ³ãƒˆ/åå¯¾å´ã®ä¸¡æ–¹ã§é¸æŠ\n")
+			_T("SM : é¸æŠã•ã‚ŒãŸé …ç›®ã ã‘ã‚’æ®‹ã™(é¸æŠãƒã‚¹ã‚¯)\n")
+			_T("CP : ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®ãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã§ã‚«ãƒ¬ãƒ³ãƒˆå´ã‚’é¸æŠ\n")
+			_T("OP : ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®ãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã§åå¯¾å´ã‚’é¸æŠ\n"));
 	}
 	else if (SameText(cmd, "SelCurWord")) {
-		params = "\nEX : ‘I‘ğ”ÍˆÍ‚ğŠg’£\n";
+		params = _T("\nEX : é¸æŠç¯„å›²ã‚’æ‹¡å¼µ\n");
 	}
 	else if (SameText(cmd, "Select") && (id_idx==0 || id_idx==3)) {
 		if (cp) cp->Style = csDropDown;
 		params = "\n";
-		if (id_idx==0) params += "IN : ŒJ‚è•Ô‚µ‰ñ”‚ğ“ü—Í\nRG : ‘O/Œã‚Ì‘I‘ğ€–Ú‚Ü‚Å”ÍˆÍ‘I‘ğ\n";
-		params += "ND : ƒJ[ƒ\ƒ‹‚ğˆÚ“®‚µ‚È‚¢\n";
+		if (id_idx==0) params += _T("IN : ç¹°ã‚Šè¿”ã—å›æ•°ã‚’å…¥åŠ›\nRG : å‰/å¾Œã®é¸æŠé …ç›®ã¾ã§ç¯„å›²é¸æŠ\n");
+		params += _T("ND : ã‚«ãƒ¼ã‚½ãƒ«ã‚’ç§»å‹•ã—ãªã„\n");
 	}
 	else if (SameText(cmd, "SelectFile")) {
-		params = "\nNX : Ÿ‚Ìƒtƒ@ƒCƒ‹‚ğ•\¦\n";
+		params = _T("\nNX : æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’è¡¨ç¤º\n");
 	}
 	else if (SameText(cmd, "SelEmptyDir")) {
-		params = "\nNF : ƒtƒ@ƒCƒ‹‚ªŠÜ‚Ü‚ê‚Ä‚¢‚È‚¯‚ê‚Î‘I‘ğ\n";
+		params = _T("\nNF : ãƒ•ã‚¡ã‚¤ãƒ«ãŒå«ã¾ã‚Œã¦ã„ãªã‘ã‚Œã°é¸æŠ\n");
 	}
 	else if (SameText(cmd, "SelOnlyCur")) {
-		params = "\nOD : ƒfƒBƒŒƒNƒgƒŠ‚¾‚¯‚ğ‘I‘ğ\nFD : ƒtƒ@ƒCƒ‹‚ÆƒfƒBƒŒƒNƒgƒŠ‚Ì—¼•û‚ğ‘I‘ğ\n";
+		params = _T("\nOD : ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã ã‘ã‚’é¸æŠ\nFD : ãƒ•ã‚¡ã‚¤ãƒ«ã¨ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ä¸¡æ–¹ã‚’é¸æŠ\n");
 	}
 	else if (contained_wd_i(_T("MarkMask|SelMask"), cmd)) {
-		params = "\nCA : ƒ}ƒXƒN‚ğ‰ğœ\n";
+		params = _T("\nCA : ãƒã‚¹ã‚¯ã‚’è§£é™¤\n");
 	}
 	else if (SameText(cmd, "SetColor")) {
-		params = "\nRS : ”zF‚ğƒŠƒZƒbƒg\n";
+		params = _T("\nRS : é…è‰²ã‚’ãƒªã‚»ãƒƒãƒˆ\n");
 	}
 	else if (SameText(cmd, "SetFolderIcon")) {
 		params.sprintf(_T("%s"),
 			_T("\n")
-			_T("ND : ƒ|ƒbƒvƒAƒbƒvƒƒjƒ…[‚Å‘I‘ğ\n")
-			_T("RS : ƒfƒtƒHƒ‹ƒgƒAƒCƒRƒ“‚É–ß‚·\n"));
+			_T("ND : ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã§é¸æŠ\n")
+			_T("RS : ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚¢ã‚¤ã‚³ãƒ³ã«æˆ»ã™\n"));
 	}
 	else if (SameText(cmd, "SetInterpolation")) {
 		params.sprintf(_T("%s"),
-			_T("N : ƒjƒAƒŒƒXƒgƒlƒCƒo[\n")
-			_T("L : ƒoƒCƒŠƒjƒA\n")
-			_T("C : ƒoƒCƒLƒ…[ƒrƒbƒN\n")
-			_T("F : ƒtƒ@ƒ“ƒgƒŠƒTƒ“ƒvƒŠƒ“ƒO\n")
-			_T("H : ‚•i¿ƒoƒCƒLƒ…[ƒrƒbƒN\n")
-			_T("X : •âŠÔ‚µ‚È‚¢\n"));
+			_T("N : ãƒ‹ã‚¢ãƒ¬ã‚¹ãƒˆãƒã‚¤ãƒãƒ¼\n")
+			_T("L : ãƒã‚¤ãƒªãƒ‹ã‚¢\n")
+			_T("C : ãƒã‚¤ã‚­ãƒ¥ãƒ¼ãƒ“ãƒƒã‚¯\n")
+			_T("F : ãƒ•ã‚¡ãƒ³ãƒˆãƒªã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°\n")
+			_T("H : é«˜å“è³ªãƒã‚¤ã‚­ãƒ¥ãƒ¼ãƒ“ãƒƒã‚¯\n")
+			_T("X : è£œé–“ã—ãªã„\n"));
 	}
 	else if (SameText(cmd, "SetPathMask")) {
-		params = "\nEX : ƒJ[ƒ\ƒ‹ˆÊ’u‚ÌŠg’£q‚Åƒ}ƒXƒN\n";
+		params = _T("\nEX : ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®æ‹¡å¼µå­ã§ãƒã‚¹ã‚¯\n");
 	}
 	else if (SameText(cmd, "SetTopAddr")) {
 		params.sprintf(_T("%s"),
 			_T("\n")
-			_T("TP : æ“ªƒAƒhƒŒƒX‚ğæ“ª‚É\n")
-			_T("NX : æ“ªƒAƒhƒŒƒX‚ğŒã‘±•”‚É\n")
-			_T("PR : æ“ªƒAƒhƒŒƒX‚ğæs•”‚É\n")
-			_T("ED : I’[ƒAƒhƒŒƒX‚ğÅŒã‚É\n"));
+			_T("TP : å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å…ˆé ­ã«\n")
+			_T("NX : å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å¾Œç¶šéƒ¨ã«\n")
+			_T("PR : å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å…ˆè¡Œéƒ¨ã«\n")
+			_T("ED : çµ‚ç«¯ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’æœ€å¾Œã«\n"));
 	}
 	else if (SameText(cmd, "ShowFileInfo") && id_idx!=2) {
-		params = "\nSD : ƒ_ƒCƒAƒƒO‚Å•\¦\n";
+		params = _T("\nSD : ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã§è¡¨ç¤º\n");
 	}
 	else if (SameText(cmd, "SimilarImage")) {
 		params.sprintf(_T("%s"),
 			_T("\n")
-			_T("DH : dHash ‚Åƒ\[ƒg\n")
-			_T("AH : aHash ‚Åƒ\[ƒg\n")
-			_T("PH : pHash ‚Åƒ\[ƒg\n")
-			_T("HG : ƒJƒ‰[ƒqƒXƒgƒOƒ‰ƒ€‚Åƒ\[ƒg(DH|AH|PH ‚Æ•¹—p‰Â)\n")
-			_T("CC : ’†‰›•”‚ğƒNƒƒbƒv‚µ‚Ä”äŠr\n")
-			_T("CB : ƒNƒŠƒbƒvƒ{[ƒh“à—e‚Æ‚Ì—Ş—«‚Åƒ\[ƒg\n"));
+			_T("DH : dHash ã§ã‚½ãƒ¼ãƒˆ\n")
+			_T("AH : aHash ã§ã‚½ãƒ¼ãƒˆ\n")
+			_T("PH : pHash ã§ã‚½ãƒ¼ãƒˆ\n")
+			_T("HG : ã‚«ãƒ©ãƒ¼ãƒ’ã‚¹ãƒˆã‚°ãƒ©ãƒ ã§ã‚½ãƒ¼ãƒˆ(DH|AH|PH ã¨ä½µç”¨å¯)\n")
+			_T("CC : ä¸­å¤®éƒ¨ã‚’ã‚¯ãƒ­ãƒƒãƒ—ã—ã¦æ¯”è¼ƒ\n")
+			_T("CB : ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰å†…å®¹ã¨ã®é¡ä¼¼æ€§ã§ã‚½ãƒ¼ãƒˆ\n"));
 	}
 	else if (SameText(cmd, "SimilarSort")) {
 		params.sprintf(_T("%s"),
 			_T("\n")
-			_T("IX : Šg’£q‚ğ–³‹\n")
-			_T("IC : ‘å¬•¶š‚ğ–³‹\n")
-			_T("IN : ”š•”•ª‚ğ–³‹\n")
-			_T("IF : ‘SŠp/”¼Šp‚ğ–³‹\n")
-			_T("IA : IXAICAINAIF‚ğ‚·‚×‚Ä“K—p\n"));
+			_T("IX : æ‹¡å¼µå­ã‚’ç„¡è¦–\n")
+			_T("IC : å¤§å°æ–‡å­—ã‚’ç„¡è¦–\n")
+			_T("IN : æ•°å­—éƒ¨åˆ†ã‚’ç„¡è¦–\n")
+			_T("IF : å…¨è§’/åŠè§’ã‚’ç„¡è¦–\n")
+			_T("IA : IXã€ICã€INã€IFã‚’ã™ã¹ã¦é©ç”¨\n"));
 	}
 	else if (SameText(cmd, "Sort")) {
-		params = "\nAO : ¸‡\nDO : ~‡\n";
+		params = _T("\nAO : æ˜‡é †\nDO : é™é †\n");
 	}
 	else if (SameText(cmd, "SortDlg")) {
 		params.sprintf(_T("%s"),
 		 	_T("\n")
-			_T("F : –¼‘O‡\n")
-			_T("E : Šg’£q‡\n")
-			_T("D : XV“ú‡\n")
-			_T("S : ƒTƒCƒY‡\n")
-			_T("A : ‘®«‡\n")
-			_T("U : ‚È‚µ\n")
-			_T("L : êŠ‡(Œ‹‰ÊƒŠƒXƒg)\n")
-			_T("FE : –¼‘O/Šg’£q‡ ƒgƒOƒ‹Ø‚è‘Ö‚¦\n")
-			_T("FD : –¼‘O/XV“ú‡ ƒgƒOƒ‹Ø‚è‘Ö‚¦\n")
-			_T("FS : –¼‘O/ƒTƒCƒY‡ ƒgƒOƒ‹Ø‚è‘Ö‚¦\n")
-			_T("ED : Šg’£q/XV“ú‡ ƒgƒOƒ‹Ø‚è‘Ö‚¦\n")
-			_T("ES : Šg’£q/ƒTƒCƒY‡ ƒgƒOƒ‹Ø‚è‘Ö‚¦\n")
-			_T("DS : XV“ú‡/ƒTƒCƒY‡ ƒgƒOƒ‹Ø‚è‘Ö‚¦\n")
-			_T("IV : Œ»İ‚Ìƒ\[ƒg•û–@‚ğ‹t‡‚É\n")
-			_T("IA : ‚·‚×‚Ä‚Ìƒ\[ƒg•û–@‚ğ‹t‡‚É\n")
-			_T("XN : ƒfƒBƒŒƒNƒgƒŠ - ƒtƒ@ƒCƒ‹‚Æ“¯‚¶\n")
-			_T("XF : ƒfƒBƒŒƒNƒgƒŠ - –¼‘O\n")
-			_T("XD : ƒfƒBƒŒƒNƒgƒŠ - XV“ú\n")
-			_T("XS : ƒfƒBƒŒƒNƒgƒŠ - ƒTƒCƒY\n")
-			_T("XA : ƒfƒBƒŒƒNƒgƒŠ - ‘®«\n")
-			_T("XX : ƒfƒBƒŒƒNƒgƒŠ‚ğ‹æ•Ê‚µ‚È‚¢\n")
-			_T("XI : ƒAƒCƒRƒ“(ƒtƒ@ƒCƒ‹‚ª–¼‘O/Šg’£q‚Ìê‡)\n")
-			_T("XNX : ƒtƒ@ƒCƒ‹‚Æ“¯‚¶/ƒfƒBƒŒƒNƒgƒŠ‚ğ‹æ•Ê‚µ‚È‚¢ ƒgƒOƒ‹Ø‚è‘Ö‚¦\n")
-			_T("XNI : ƒtƒ@ƒCƒ‹‚Æ“¯‚¶/ƒAƒCƒRƒ“ ƒgƒOƒ‹Ø‚è‘Ö‚¦\n"));
+			_T("F : åå‰é †\n")
+			_T("E : æ‹¡å¼µå­é †\n")
+			_T("D : æ›´æ–°æ—¥æ™‚é †\n")
+			_T("S : ã‚µã‚¤ã‚ºé †\n")
+			_T("A : å±æ€§é †\n")
+			_T("U : ãªã—\n")
+			_T("L : å ´æ‰€é †(çµæœãƒªã‚¹ãƒˆ)\n")
+			_T("FE : åå‰/æ‹¡å¼µå­é † ãƒˆã‚°ãƒ«åˆ‡ã‚Šæ›¿ãˆ\n")
+			_T("FD : åå‰/æ›´æ–°æ—¥æ™‚é † ãƒˆã‚°ãƒ«åˆ‡ã‚Šæ›¿ãˆ\n")
+			_T("FS : åå‰/ã‚µã‚¤ã‚ºé † ãƒˆã‚°ãƒ«åˆ‡ã‚Šæ›¿ãˆ\n")
+			_T("ED : æ‹¡å¼µå­/æ›´æ–°æ—¥æ™‚é † ãƒˆã‚°ãƒ«åˆ‡ã‚Šæ›¿ãˆ\n")
+			_T("ES : æ‹¡å¼µå­/ã‚µã‚¤ã‚ºé † ãƒˆã‚°ãƒ«åˆ‡ã‚Šæ›¿ãˆ\n")
+			_T("DS : æ›´æ–°æ—¥æ™‚é †/ã‚µã‚¤ã‚ºé † ãƒˆã‚°ãƒ«åˆ‡ã‚Šæ›¿ãˆ\n")
+			_T("IV : ç¾åœ¨ã®ã‚½ãƒ¼ãƒˆæ–¹æ³•ã‚’é€†é †ã«\n")
+			_T("IA : ã™ã¹ã¦ã®ã‚½ãƒ¼ãƒˆæ–¹æ³•ã‚’é€†é †ã«\n")
+			_T("XN : ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª - ãƒ•ã‚¡ã‚¤ãƒ«ã¨åŒã˜\n")
+			_T("XF : ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª - åå‰\n")
+			_T("XD : ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª - æ›´æ–°æ—¥æ™‚\n")
+			_T("XS : ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª - ã‚µã‚¤ã‚º\n")
+			_T("XA : ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª - å±æ€§\n")
+			_T("XX : ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’åŒºåˆ¥ã—ãªã„\n")
+			_T("XI : ã‚¢ã‚¤ã‚³ãƒ³(ãƒ•ã‚¡ã‚¤ãƒ«ãŒåå‰/æ‹¡å¼µå­ã®å ´åˆ)\n")
+			_T("XNX : ãƒ•ã‚¡ã‚¤ãƒ«ã¨åŒã˜/ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’åŒºåˆ¥ã—ãªã„ ãƒˆã‚°ãƒ«åˆ‡ã‚Šæ›¿ãˆ\n")
+			_T("XNI : ãƒ•ã‚¡ã‚¤ãƒ«ã¨åŒã˜/ã‚¢ã‚¤ã‚³ãƒ³ ãƒˆã‚°ãƒ«åˆ‡ã‚Šæ›¿ãˆ\n"));
 	}
 	else if (SameText(cmd, "SubDirList")) {
-		params = "\nND : ƒ|ƒbƒvƒAƒbƒvƒƒjƒ…[‚Å‘I‘ğ\n";
+		params = _T("\nND : ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã§é¸æŠ\n");
 	}
 	else if (SameText(cmd, "SwapName")) {
-		params = "\nLR : ¶‰E‚Å“ü‚ê‘Ö‚¦\n";
+		params = _T("\nLR : å·¦å³ã§å…¥ã‚Œæ›¿ãˆ\n");
 	}
 	else if (SameText(cmd, "TabHome")) {
-		params = "\nAL : ‚·‚×‚Ä‚Ìƒ^ƒu‚É“K—p\nCO : ƒJƒŒƒ“ƒg‚Ì‚İ‚É“K—p\n";
+		params = _T("\nAL : ã™ã¹ã¦ã®ã‚¿ãƒ–ã«é©ç”¨\nCO : ã‚«ãƒ¬ãƒ³ãƒˆã®ã¿ã«é©ç”¨\n");
 	}
 	else if (contained_wd_i("TagJump|TagView", cmd)) {
-		params = "\nDJ : Œ©‚Â‚©‚ç‚È‚¯‚ê‚Îƒ_ƒCƒŒƒNƒgƒ^ƒOƒWƒƒƒ“ƒv\n";
+		params = _T("\nDJ : è¦‹ã¤ã‹ã‚‰ãªã‘ã‚Œã°ãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã‚¿ã‚°ã‚¸ãƒ£ãƒ³ãƒ—\n");
 	}
 	else if (contained_wd_i(_T("TextViewer|ImageViewer"), cmd)) {
-		params = "\nCB : ƒNƒŠƒbƒvƒ{[ƒh‚Ì“à—e‚ğ•\¦\nNN : Ÿ‚ÌNyanFi‚Å•\¦\n";
-		if (SameText(cmd, "TextViewer")) params += "XW : •ÊƒEƒBƒ“ƒhƒE‚Å•\¦\n";
+		params = _T("\nCB : ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã®å†…å®¹ã‚’è¡¨ç¤º\nNN : æ¬¡ã®NyanFiã§è¡¨ç¤º\n");
+		if (SameText(cmd, "TextViewer")) params += _T("XW : åˆ¥ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã§è¡¨ç¤º\n");
 	}
 	else if (SameText(cmd, "ToLeft")) {
 		params.sprintf(_T("%s"),
 			_T("\n")
-			_T("RP : ¶‘¤‚È‚çeƒfƒBƒŒƒNƒgƒŠ‚Ö\n")
-			_T("DL : ƒ‹[ƒg‚È‚çƒhƒ‰ƒCƒu/‹¤—LƒtƒHƒ‹ƒ_ˆê——‚ğ•\¦\n")
-			_T("DP : ƒ‹[ƒg‚È‚çƒhƒ‰ƒCƒu‘I‘ğƒƒjƒ…[‚ğ•\¦\n"));
+			_T("RP : å·¦å´ãªã‚‰è¦ªãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¸\n")
+			_T("DL : ãƒ«ãƒ¼ãƒˆãªã‚‰ãƒ‰ãƒ©ã‚¤ãƒ–/å…±æœ‰ãƒ•ã‚©ãƒ«ãƒ€ä¸€è¦§ã‚’è¡¨ç¤º\n")
+			_T("DP : ãƒ«ãƒ¼ãƒˆãªã‚‰ãƒ‰ãƒ©ã‚¤ãƒ–é¸æŠãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’è¡¨ç¤º\n"));
 	}
 	else if (SameText(cmd, "ToRight")) {
 		params.sprintf(_T("%s"),
 			_T("\n")
-			_T("RP : ¶‘¤‚È‚çeƒfƒBƒŒƒNƒgƒŠ‚Ö\n")
-			_T("DL : ƒ‹[ƒg‚È‚çƒhƒ‰ƒCƒu/‹¤—LƒtƒHƒ‹ƒ_ˆê——‚ğ•\¦\n")
-			_T("DP : ƒ‹[ƒg‚È‚çƒhƒ‰ƒCƒu‘I‘ğƒƒjƒ…[‚ğ•\¦\n"));
+			_T("RP : å·¦å´ãªã‚‰è¦ªãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¸\n")
+			_T("DL : ãƒ«ãƒ¼ãƒˆãªã‚‰ãƒ‰ãƒ©ã‚¤ãƒ–/å…±æœ‰ãƒ•ã‚©ãƒ«ãƒ€ä¸€è¦§ã‚’è¡¨ç¤º\n")
+			_T("DP : ãƒ«ãƒ¼ãƒˆãªã‚‰ãƒ‰ãƒ©ã‚¤ãƒ–é¸æŠãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’è¡¨ç¤º\n"));
 	}
 	else if (SameText(cmd, "ToOppSameItem")) {
-		params = "\nNO : ”½‘Î‘¤‚ÖˆÚ“®‚µ‚È‚¢\n";
+		params = _T("\nNO : åå¯¾å´ã¸ç§»å‹•ã—ãªã„\n");
 	}
 	else if (contained_wd_i(_T("ToParent|ToParentOnLeft|ToParentOnRight"), cmd)) {
 		params.sprintf(_T("%s"),
 			_T("\n")
-			_T("DL : ƒ‹[ƒg‚È‚çƒhƒ‰ƒCƒu/‹¤—LƒtƒHƒ‹ƒ_ˆê——‚ğ•\¦\n")
-			_T("DP : ƒ‹[ƒg‚È‚çƒhƒ‰ƒCƒu‘I‘ğƒƒjƒ…[‚ğ•\¦\n"));
+			_T("DL : ãƒ«ãƒ¼ãƒˆãªã‚‰ãƒ‰ãƒ©ã‚¤ãƒ–/å…±æœ‰ãƒ•ã‚©ãƒ«ãƒ€ä¸€è¦§ã‚’è¡¨ç¤º\n")
+			_T("DP : ãƒ«ãƒ¼ãƒˆãªã‚‰ãƒ‰ãƒ©ã‚¤ãƒ–é¸æŠãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’è¡¨ç¤º\n"));
 	}
 	else if (contained_wd_i(_T("UnPack|UnPackToCurr"), cmd)) {
 		params.sprintf(_T("%s"),
 			_T("\n")
-			_T("CD : ƒfƒBƒŒƒNƒgƒŠ‚ğì¬‚µ‚Ä‚»‚Ì’†‚É\n")
-			_T("CD2 : ƒ‹[ƒg‚É•¡”‚Ì‘ÎÛ‚ª‚ ‚Á‚½‚çƒfƒBƒŒƒNƒgƒŠì¬\n")
-			_T("OW : Šm”F–³‚µ‚Åã‘‚«\n"));
+			_T("CD : ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’ä½œæˆã—ã¦ãã®ä¸­ã«\n")
+			_T("CD2 : ãƒ«ãƒ¼ãƒˆã«è¤‡æ•°ã®å¯¾è±¡ãŒã‚ã£ãŸã‚‰ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä½œæˆ\n")
+			_T("OW : ç¢ºèªç„¡ã—ã§ä¸Šæ›¸ã\n"));
 	}
 	else if (SameText(cmd, "UpdateFromArc")) {
-		params = "\nUN : V‚µ‚¢ƒA[ƒJƒCƒu‚ğ’T‚µ‚ÄXV\n";
+		params = _T("\nUN : æ–°ã—ã„ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ã‚’æ¢ã—ã¦æ›´æ–°\n");
 	}
 	else if (contained_wd_i("ViewIniFile|ViewLog", cmd)) {
-		params = "\nXW : •ÊƒEƒBƒ“ƒhƒE‚Å•\¦\n";
+		params = _T("\nXW : åˆ¥ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã§è¡¨ç¤º\n");
 	}
 	else if (SameText(cmd, "WatchTail")) {
 		params.sprintf(_T("%s"),
 			_T("\n")
-			_T("ST : ŠÄ‹“à—e‚ğ•\¦\n")
-			_T("CC : ƒJ[ƒ\ƒ‹ˆÊ’uƒtƒ@ƒCƒ‹‚ÌŠÄ‹‚ğ’†~\n")
-			_T("AC : ‚·‚×‚Ä‚ÌŠÄ‹‚ğ’†~\n"));
+			_T("ST : ç›£è¦–å†…å®¹ã‚’è¡¨ç¤º\n")
+			_T("CC : ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ãƒ•ã‚¡ã‚¤ãƒ«ã®ç›£è¦–ã‚’ä¸­æ­¢\n")
+			_T("AC : ã™ã¹ã¦ã®ç›£è¦–ã‚’ä¸­æ­¢\n"));
 	}
 	if (SameText(cmd, "WebMap")) {
-		params = "\nIN : ˆÜ“x,Œo“x‚ğ“ü—Í\nM1 : ’n}‚Ì‘I‘ğ(1`4)\nZ16 : ƒY[ƒ€ƒŒƒxƒ‹(1`18)\n";
+		params = _T("\nIN : ç·¯åº¦,çµŒåº¦ã‚’å…¥åŠ›\nM1 : åœ°å›³ã®é¸æŠ(1ï½4)\nZ16 : ã‚ºãƒ¼ãƒ ãƒ¬ãƒ™ãƒ«(1ï½18)\n");
 	}
 	else if (SameText(cmd, "WebSearch")) {
-		params = "\nCB : ƒNƒŠƒbƒvƒ{[ƒh‚Ì“à—e‚ğŒŸõ\n";
-		if (id_idx==0) params += "FN : ƒJ[ƒ\ƒ‹ˆÊ’u‚Ìƒtƒ@ƒCƒ‹–¼‚ğŒŸõ\n";
+		params = _T("\nCB : ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã®å†…å®¹ã‚’æ¤œç´¢\n");
+		if (id_idx==0) params += _T("FN : ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®ãƒ•ã‚¡ã‚¤ãƒ«åã‚’æ¤œç´¢\n");
 	}
 	else if (SameText(cmd, "WinMaximize")) {
-		params = "\nTN : Å‘å‰»/Œ³‚É–ß‚·‚ÌƒgƒOƒ‹Ø‚è‘Ö‚¦\n";
+		params = _T("\nTN : æœ€å¤§åŒ–/å…ƒã«æˆ»ã™ã®ãƒˆã‚°ãƒ«åˆ‡ã‚Šæ›¿ãˆ\n");
 	}
 	else if (SameText(cmd, "WinPos")) {
-		params = "\nL : ¶ˆÊ’u\nT : ãˆÊ’u\nR : ‰EˆÊ’u\nB : ‰ºˆÊ’u\n";
+		params = _T("\nL : å·¦ä½ç½®\nT : ä¸Šä½ç½®\nR : å³ä½ç½®\nB : ä¸‹ä½ç½®\n");
 	}
 	else if (SameText(cmd, "WorkList") && id_idx==0) {
-		params = "\nOP : ”½‘Î‘¤‚ÅÀs\nRL : •ÏX“à—e‚ğ”jŠü‚µ‚Ä“Ç‚İ‚İ’¼‚·\nDI : –³Œø‚È€–Ú‚ğˆêŠ‡íœ\n";
+		params = _T("\nOP : åå¯¾å´ã§å®Ÿè¡Œ\nRL : å¤‰æ›´å†…å®¹ã‚’ç ´æ£„ã—ã¦èª­ã¿è¾¼ã¿ç›´ã™\nDI : ç„¡åŠ¹ãªé …ç›®ã‚’ä¸€æ‹¬å‰Šé™¤\n");
 	}
 	else if (contained_wd_i(_T("ZoomIn|ZoomOut"), cmd)) {
 		params = "\n";
 		for (int i=2; i<=12; i++) params.cat_sprintf(_T("%u\n"), i);
 	}
 	else if (contained_wd_i(_T("Copy|Move|Delete|CompleteDelete"), cmd)) {
-		params = "\nSO : ‘I‘ğ€–Ú‚Ì‚İˆ—\n";
+		params = _T("\nSO : é¸æŠé …ç›®ã®ã¿å‡¦ç†\n");
 		if (SameText(cmd, "Copy")) {
 			params.cat_sprintf(_T("%s"),
-				_T("OP : ”½‘Î‘¤ƒRƒs[æ‚ÌƒJ[ƒ\ƒ‹ˆÊ’u‚ğİ’è\nOP2 : ƒRƒs[æ‚ÌƒJ[ƒ\ƒ‹ˆÊ’u‚ğ’€Ÿİ’è\n")
-			 	_T("TO : ƒRƒs[æ‚ğ“ü—Í\nSD : ƒRƒs[æ‚ğQÆ\n")
-				_T("SS : ƒJƒŒƒ“ƒg‚ÌƒTƒuƒfƒBƒŒƒNƒgƒŠ‚ğ‘I‘ğ\nSX : ”CˆÓ‚ÌƒfƒBƒŒƒNƒgƒŠ‚ğ‘I‘ğ\n"));
+				_T("OP : åå¯¾å´ã‚³ãƒ”ãƒ¼å…ˆã®ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã‚’è¨­å®š\nOP2 : ã‚³ãƒ”ãƒ¼å…ˆã®ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã‚’é€æ¬¡è¨­å®š\n")
+			 	_T("TO : ã‚³ãƒ”ãƒ¼å…ˆã‚’å…¥åŠ›\nSD : ã‚³ãƒ”ãƒ¼å…ˆã‚’å‚ç…§\n")
+				_T("SS : ã‚«ãƒ¬ãƒ³ãƒˆã®ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’é¸æŠ\nSX : ä»»æ„ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’é¸æŠ\n"));
 		}
 		if (SameText(cmd, "Move")) {
 			params.cat_sprintf(_T("%s"),
-				_T("OP : ”½‘Î‘¤ˆÚ“®æ‚ÌƒJ[ƒ\ƒ‹ˆÊ’u‚ğİ’è\nOP2 : ˆÚ“®æ‚ÌƒJ[ƒ\ƒ‹ˆÊ’u‚ğ’€Ÿİ’è\n")
-			 	_T("TO : ˆÚ“®æ‚ğ“ü—Í\nSD : ˆÚ“®æ‚ğQÆ\n")
-				_T("SS : ƒJƒŒƒ“ƒg‚ÌƒTƒuƒfƒBƒŒƒNƒgƒŠ‚ğ‘I‘ğ\nSX : ”CˆÓ‚ÌƒfƒBƒŒƒNƒgƒŠ‚ğ‘I‘ğ\n"));
+				_T("OP : åå¯¾å´ç§»å‹•å…ˆã®ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã‚’è¨­å®š\nOP2 : ç§»å‹•å…ˆã®ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã‚’é€æ¬¡è¨­å®š\n")
+			 	_T("TO : ç§»å‹•å…ˆã‚’å…¥åŠ›\nSD : ç§»å‹•å…ˆã‚’å‚ç…§\n")
+				_T("SS : ã‚«ãƒ¬ãƒ³ãƒˆã®ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’é¸æŠ\nSX : ä»»æ„ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’é¸æŠ\n"));
 		}
 		if (contained_wd_i(_T("Copy|Move"), cmd)) {
-			params += "PR : “¯–¼ˆ—‚ğ–‘O‚Éw’è\nKT : ƒfƒBƒŒƒNƒgƒŠ‚Ìƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚ğˆÛ\n";
+			params += _T("PR : åŒåæ™‚å‡¦ç†ã‚’äº‹å‰ã«æŒ‡å®š\nKT : ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã‚’ç¶­æŒ\n");
 		}
 	}
-	//ƒgƒOƒ‹“®ìƒRƒ}ƒ“ƒh
+	//ãƒˆã‚°ãƒ«å‹•ä½œã‚³ãƒãƒ³ãƒ‰
 	else if (contained_wd_i(
 		_T("FileListOnly|HideSizeTime|LockTextPreview|MenuBar|MuteVolume|")
 		_T("ShowByteSize|ShowFKeyBar|ShowHideAtr|ShowIcon|ShowPreview|ShowProperty|ShowStatusBar|ShowSystemAtr|ShowTabBar|")
@@ -1190,39 +1190,39 @@ void get_PrmList(
 		_T("Thumbnail|ThumbnailEx|WarnHighlight"),
 		cmd))
 	{
-		params = "\nON : •\¦/—LŒø\nOFF : ”ñ•\¦/–³Œø/‰ğœ\n";
+		params = _T("\nON : è¡¨ç¤º/æœ‰åŠ¹\nOFF : éè¡¨ç¤º/ç„¡åŠ¹/è§£é™¤\n");
 		if (SameText(cmd, "ShowIcon")) {
-			params += "FD : ‘S•\¦/ƒtƒHƒ‹ƒ_ƒAƒCƒRƒ“‚Ì‚İ•\¦\nAC : ƒLƒƒƒbƒVƒ…‚ğ‚·‚×‚Äíœ\n";
+			params += _T("FD : å…¨è¡¨ç¤º/ãƒ•ã‚©ãƒ«ãƒ€ã‚¢ã‚¤ã‚³ãƒ³ã®ã¿è¡¨ç¤º\nAC : ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’ã™ã¹ã¦å‰Šé™¤\n");
 		}
 		else if (SameText(cmd, "SubViewer")) {
-			params += "CB : ƒNƒŠƒbƒvƒ{[ƒh‚Ì“à—e‚ğ•\¦\n";
-			params += "LK : ƒƒbƒN/‰ğœ\nRL : ¶‚É90“x‰ñ“]\nRR : ‰E‚É90“x‰ñ“]\nFH : ¶‰E”½“]\nFV : ã‰º”½“]\n";
+			params += _T("CB : ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã®å†…å®¹ã‚’è¡¨ç¤º\n");
+			params += _T("LK : ãƒ­ãƒƒã‚¯/è§£é™¤\nRL : å·¦ã«90åº¦å›è»¢\nRR : å³ã«90åº¦å›è»¢\nFH : å·¦å³åè»¢\nFV : ä¸Šä¸‹åè»¢\n");
 		}
 		else if (SameText(cmd, "HtmlToText")) {
-			params += "MD : Markdown‹L–@‚É•ÏŠ·\nTX : ’ÊíƒeƒLƒXƒg‚É•ÏŠ·\n";
+			params += _T("MD : Markdownè¨˜æ³•ã«å¤‰æ›\nTX : é€šå¸¸ãƒ†ã‚­ã‚¹ãƒˆã«å¤‰æ›\n");
 		}
 	}
-	//ƒIƒvƒVƒ‡ƒ“İ’è
+	//ã‚ªãƒ—ã‚·ãƒ§ãƒ³è¨­å®š
 	else if (SameText(cmd, "OptionDlg")) {
 		params.sprintf(_T("%s"),
 			_T("\n")
-			_T("GN : ˆê”Ê\n")
-			_T("G2 : ˆê”Ê2\n")
-			_T("MO : ƒ}ƒEƒX‘€ì\n")
-			_T("DS : ƒfƒUƒCƒ“\n")
-			_T("FC : ƒtƒHƒ“ƒgE”zF\n")
-			_T("TV : ƒeƒLƒXƒgƒrƒ…[ƒA\n")
-			_T("IV : ƒCƒ[ƒWƒrƒ…[ƒA\n")
-			_T("ED : ƒGƒfƒBƒ^\n")
-			_T("KY : ƒL[İ’è\n")
-			_T("KYO : ƒL[İ’è(’P“Æ•\¦)\n")
-			_T("AC : ŠÖ˜A•t‚¯\n")
-			_T("XM : ’Ç‰Áƒƒjƒ…[\n")
-			_T("XT : ŠO•”ƒc[ƒ‹\n")
-			_T("ST : ‹N“®\n")
-			_T("NT : ’Ê’mEŠm”FEƒqƒ“ƒg\n")
-			_T("CM : ƒRƒ}ƒ“ƒh\n")
-			_T("EV : ƒCƒxƒ“ƒg\n"));
+			_T("GN : ä¸€èˆ¬\n")
+			_T("G2 : ä¸€èˆ¬2\n")
+			_T("MO : ãƒã‚¦ã‚¹æ“ä½œ\n")
+			_T("DS : ãƒ‡ã‚¶ã‚¤ãƒ³\n")
+			_T("FC : ãƒ•ã‚©ãƒ³ãƒˆãƒ»é…è‰²\n")
+			_T("TV : ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢\n")
+			_T("IV : ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢\n")
+			_T("ED : ã‚¨ãƒ‡ã‚£ã‚¿\n")
+			_T("KY : ã‚­ãƒ¼è¨­å®š\n")
+			_T("KYO : ã‚­ãƒ¼è¨­å®š(å˜ç‹¬è¡¨ç¤º)\n")
+			_T("AC : é–¢é€£ä»˜ã‘\n")
+			_T("XM : è¿½åŠ ãƒ¡ãƒ‹ãƒ¥ãƒ¼\n")
+			_T("XT : å¤–éƒ¨ãƒ„ãƒ¼ãƒ«\n")
+			_T("ST : èµ·å‹•æ™‚\n")
+			_T("NT : é€šçŸ¥ãƒ»ç¢ºèªãƒ»ãƒ’ãƒ³ãƒˆ\n")
+			_T("CM : ã‚³ãƒãƒ³ãƒ‰\n")
+			_T("EV : ã‚¤ãƒ™ãƒ³ãƒˆ\n"));
 	}
 
 	p_list->Text = params;
@@ -1232,7 +1232,7 @@ void get_PrmList(
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹/ƒfƒBƒŒƒNƒgƒŠQÆ‚ª•K—v‚©?
+//ãƒ•ã‚¡ã‚¤ãƒ«/ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå‚ç…§ãŒå¿…è¦ã‹?
 //---------------------------------------------------------------------------
 bool need_RefDirFile(UnicodeString cmd)
 {
@@ -1246,7 +1246,7 @@ bool need_RefDirFile(UnicodeString cmd)
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒ}ƒ“ƒhƒpƒ‰ƒ[ƒ^‚©‚çà–¾•¶š—ñ‚ğíœ
+//ã‚³ãƒãƒ³ãƒ‰ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‹ã‚‰èª¬æ˜æ–‡å­—åˆ—ã‚’å‰Šé™¤
 //---------------------------------------------------------------------------
 UnicodeString del_CmdDesc(UnicodeString cmd)
 {
@@ -1258,7 +1258,7 @@ UnicodeString del_CmdDesc(UnicodeString cmd)
 }
 
 //---------------------------------------------------------------------------
-//ƒJ[ƒ\ƒ‹ƒL[‚ğƒRƒ}ƒ“ƒh‚É•ÏŠ·
+//ã‚«ãƒ¼ã‚½ãƒ«ã‚­ãƒ¼ã‚’ã‚³ãƒãƒ³ãƒ‰ã«å¤‰æ›
 //---------------------------------------------------------------------------
 UnicodeString get_CsrKeyCmd(UnicodeString key_str)
 {

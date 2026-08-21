@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------//
-// MP3 ID3ƒ^ƒOî•ñ‚Ìˆ—												//
+// MP3 ID3ã‚¿ã‚°æƒ…å ±ã®å‡¦ç†												//
 //																		//
 //----------------------------------------------------------------------//
 #include "usr_str.h"
@@ -39,8 +39,8 @@ UnicodeString get_str_from_buf(char *c, int size)
 }
 
 //---------------------------------------------------------------------------
-//ƒo[ƒWƒ‡ƒ“‚ğæ“¾‚µAæ“ªƒtƒŒ[ƒ€ƒwƒbƒ_‚Ö
-//  –ß‚è’l: 1=v1?  3=v2.3  4=v2.4
+//ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã‚’å–å¾—ã—ã€å…ˆé ­ãƒ•ãƒ¬ãƒ¼ãƒ ãƒ˜ãƒƒãƒ€ã¸
+//  æˆ»ã‚Šå€¤: 1=v1?  3=v2.3  4=v2.4
 //---------------------------------------------------------------------------
 bool ID3_getVer_toFrame(TFileStream *fs, unsigned int *last, unsigned int *majv)
 {
@@ -53,7 +53,7 @@ bool ID3_getVer_toFrame(TFileStream *fs, unsigned int *last, unsigned int *majv)
 		*majv = idhdr.maj_ver;
 		if (idhdr.maj_ver!=2 && idhdr.maj_ver!=3 && idhdr.maj_ver!=4) Abort();
 		if (idhdr.maj_ver>=3 && (idhdr.flag & 0x40)) {
-			//Šg’£ƒwƒbƒ_‚ª‚ ‚ê‚Î“Ç‚İ”ò‚Î‚·
+			//æ‹¡å¼µãƒ˜ãƒƒãƒ€ãŒã‚ã‚Œã°èª­ã¿é£›ã°ã™
 			BYTE exsz[4];
 			id3_ex_hdr exhdr;
 			fs->ReadBuffer(&exsz[0], 4);
@@ -69,12 +69,12 @@ bool ID3_getVer_toFrame(TFileStream *fs, unsigned int *last, unsigned int *majv)
 }
 
 //---------------------------------------------------------------------------
-//MP3ƒtƒ@ƒCƒ‹‚Ì ID3 Tag v2/v1 î•ñ‚ğæ“¾
+//MP3ãƒ•ã‚¡ã‚¤ãƒ«ã® ID3 Tag v2/v1 æƒ…å ±ã‚’å–å¾—
 //---------------------------------------------------------------------------
 bool ID3_GetInf(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	TStringList *lst,		//Œ‹‰ÊƒŠƒXƒg(€–Ú=“à—e ‚ÌŒ`®‚ÅŠi”[)
-	bool id_min)			//Å¬ŒÀ‚Ìî•ñ‚ğ T??=‚ÌŒ`®‚Åæ“¾
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	TStringList *lst,		//çµæœãƒªã‚¹ãƒˆ(é …ç›®=å†…å®¹ ã®å½¢å¼ã§æ ¼ç´)
+	bool id_min)			//æœ€å°é™ã®æƒ…å ±ã‚’ T??=ã®å½¢å¼ã§å–å¾—
 {
 	bool ret = false;
 	try {
@@ -84,9 +84,9 @@ bool ID3_GetInf(
 		unsigned int maj_ver = 0, last_p = 0;
 		if (ID3_getVer_toFrame(fs.get(), &last_p, &maj_ver)) {
 			//ID3v2
-			lst->Add(get_PropTitle(_T("ID3ƒo[ƒWƒ‡ƒ“")).cat_sprintf(_T("2.%u"), maj_ver));
+			lst->Add(get_PropTitle(_T("ID3ãƒãƒ¼ã‚¸ãƒ§ãƒ³")).cat_sprintf(_T("2.%u"), maj_ver));
 
-			//ƒtƒŒ[ƒ€ƒwƒbƒ_
+			//ãƒ•ãƒ¬ãƒ¼ãƒ ãƒ˜ãƒƒãƒ€
 			for (;;) {
 				id3_frm_hdr   frmhdr;
 				id3_frm_hdr_2 frmhdr2;
@@ -109,10 +109,10 @@ bool ID3_GetInf(
 				}
 
 				if (id_str[1]=='T')  {
-					//ƒeƒLƒXƒgƒGƒ“ƒR[ƒfƒBƒ“ƒO
+					//ãƒ†ã‚­ã‚¹ãƒˆã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°
 					BYTE code = fsRead_byte(fs.get());
 					size--;
-					//•\¦–¼‚É•ÏŠ·
+					//è¡¨ç¤ºåã«å¤‰æ›
 					UnicodeString lbuf = id_str;
 					if (id_min) {
 						if		(contained_wd_i(_T("TPE1|TP1"), id_str)) lbuf = "TP1=";
@@ -123,32 +123,32 @@ bool ID3_GetInf(
 						else										     lbuf = EmptyStr;
 					}
 					else {
-						if		(contained_wd_i(_T("TALB|TAL"), id_str)) lbuf = "ƒAƒ‹ƒoƒ€–¼";
-						else if (contained_wd_i(_T("TCOM|TCM"), id_str)) lbuf = "ì‹ÈÒ";
-						else if (contained_wd_i(_T("TCON|TCO"), id_str)) lbuf = "ƒWƒƒƒ“ƒ‹";
-						else if (contained_wd_i(_T("TCOP|TCR"), id_str)) lbuf = "’˜ìŒ î•ñ";
-						else if (contained_wd_i(_T("TDAT|TDA"), id_str)) lbuf = "“ú•t";
-						else if (contained_wd_i(_T("TENC|TEN"), id_str)) lbuf = "ƒGƒ“ƒR[ƒh";
-						else if (contained_wd_i(_T("TIT1|TT1"), id_str)) lbuf = "ƒOƒ‹[ƒv";
-						else if (contained_wd_i(_T("TIT2|TT2"), id_str)) lbuf = "ƒ^ƒCƒgƒ‹";
-						else if (contained_wd_i(_T("TIT3|TT3"), id_str)) lbuf = "ƒTƒuƒ^ƒCƒgƒ‹";
-						else if (contained_wd_i(_T("TLEN|TLE"), id_str)) lbuf = "‹È‚Ì’·‚³";
+						if		(contained_wd_i(_T("TALB|TAL"), id_str)) lbuf = _T("ã‚¢ãƒ«ãƒãƒ å");
+						else if (contained_wd_i(_T("TCOM|TCM"), id_str)) lbuf = _T("ä½œæ›²è€…");
+						else if (contained_wd_i(_T("TCON|TCO"), id_str)) lbuf = _T("ã‚¸ãƒ£ãƒ³ãƒ«");
+						else if (contained_wd_i(_T("TCOP|TCR"), id_str)) lbuf = _T("è‘—ä½œæ¨©æƒ…å ±");
+						else if (contained_wd_i(_T("TDAT|TDA"), id_str)) lbuf = _T("æ—¥ä»˜");
+						else if (contained_wd_i(_T("TENC|TEN"), id_str)) lbuf = _T("ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰");
+						else if (contained_wd_i(_T("TIT1|TT1"), id_str)) lbuf = _T("ã‚°ãƒ«ãƒ¼ãƒ—");
+						else if (contained_wd_i(_T("TIT2|TT2"), id_str)) lbuf = _T("ã‚¿ã‚¤ãƒˆãƒ«");
+						else if (contained_wd_i(_T("TIT3|TT3"), id_str)) lbuf = _T("ã‚µãƒ–ã‚¿ã‚¤ãƒˆãƒ«");
+						else if (contained_wd_i(_T("TLEN|TLE"), id_str)) lbuf = _T("æ›²ã®é•·ã•");
 						else if (contained_wd_i(_T("TORY|TOR|TDOR"), id_str))
-														 	 	   		 lbuf = "Œ´‹ÈƒŠƒŠ[ƒX”N";
-						else if (contained_wd_i(_T("TPE1|TP1"), id_str)) lbuf = "ƒA[ƒeƒBƒXƒg";
-						else if (contained_wd_i(_T("TPE2|TP2"), id_str)) lbuf = "ƒoƒ“ƒh/”º‘t";
-						else if (contained_wd_i(_T("TPE3|TP3"), id_str)) lbuf = "wŠöÒ";
-						else if (contained_wd_i(_T("TPOS|TPA"), id_str)) lbuf = "ƒfƒBƒXƒN”";
-						else if (contained_wd_i(_T("TPUB|TPB"), id_str)) lbuf = "o”ÅĞ";
-						else if (contained_wd_i(_T("TRCK|TRK"), id_str)) lbuf = "ƒgƒ‰ƒbƒN”";
+														 	 	   		 lbuf = _T("åŸæ›²ãƒªãƒªãƒ¼ã‚¹å¹´");
+						else if (contained_wd_i(_T("TPE1|TP1"), id_str)) lbuf = _T("ã‚¢ãƒ¼ãƒ†ã‚£ã‚¹ãƒˆ");
+						else if (contained_wd_i(_T("TPE2|TP2"), id_str)) lbuf = _T("ãƒãƒ³ãƒ‰/ä¼´å¥");
+						else if (contained_wd_i(_T("TPE3|TP3"), id_str)) lbuf = _T("æŒ‡æ®è€…");
+						else if (contained_wd_i(_T("TPOS|TPA"), id_str)) lbuf = _T("ãƒ‡ã‚£ã‚¹ã‚¯ï¼ƒ");
+						else if (contained_wd_i(_T("TPUB|TPB"), id_str)) lbuf = _T("å‡ºç‰ˆç¤¾");
+						else if (contained_wd_i(_T("TRCK|TRK"), id_str)) lbuf = _T("ãƒˆãƒ©ãƒƒã‚¯ï¼ƒ");
 						else if (contained_wd_i(_T("TRDA|TRD|TDRC"), id_str))
-															 			 lbuf = "˜^‰¹“ú";
-						else if (contained_wd_i(_T("TYER|TYE"), id_str)) lbuf = "ƒŠƒŠ[ƒX”N";
+															 			 lbuf = _T("éŒ²éŸ³æ—¥æ™‚");
+						else if (contained_wd_i(_T("TYER|TYE"), id_str)) lbuf = _T("ãƒªãƒªãƒ¼ã‚¹å¹´");
 						else											 lbuf = id_str;
 						lbuf = get_PropTitle(lbuf);
 					}
 
-					//•¶š—ñ
+					//æ–‡å­—åˆ—
 					std::unique_ptr<TMemoryStream> ms(new TMemoryStream());
 					if (ms->CopyFrom(fs.get(), size)<size) Abort();
 					ms->Seek(0, soFromBeginning);
@@ -177,17 +177,17 @@ bool ID3_GetInf(
 			UnicodeString tmp;
 			char *s = &fbuf[0]; memcpy(sp, s, 3); sp[ 3] = '\0'; tmp = sp;
 			if (SameText(tmp, "TAG")) {
-				add_PropLine(_T("ID3ƒo[ƒWƒ‡ƒ“"), "1", lst);
+				add_PropLine(_T("ID3ãƒãƒ¼ã‚¸ãƒ§ãƒ³"), "1", lst);
 				s = &fbuf[ 3]; memcpy(sp, s, 30); sp[30] = '\0'; tmp = sp;
-				lst->Add((id_min? UnicodeString("TT2=") : get_PropTitle(_T("ƒgƒ‰ƒbƒN–¼"))) + tmp);
+				lst->Add((id_min? UnicodeString("TT2=") : get_PropTitle(_T("ãƒˆãƒ©ãƒƒã‚¯å"))) + tmp);
 				s = &fbuf[33]; memcpy(sp, s, 30); sp[30] = '\0'; tmp = sp;
-				lst->Add((id_min? UnicodeString("TP1=") : get_PropTitle(_T("ƒA[ƒeƒBƒXƒg–¼"))) + tmp);
+				lst->Add((id_min? UnicodeString("TP1=") : get_PropTitle(_T("ã‚¢ãƒ¼ãƒ†ã‚£ã‚¹ãƒˆå"))) + tmp);
 				s = &fbuf[63]; memcpy(sp, s, 30); sp[30] = '\0'; tmp = sp;
-				lst->Add((id_min? UnicodeString("TAL=") : get_PropTitle(_T("ƒAƒ‹ƒoƒ€–¼"))) + tmp);
+				lst->Add((id_min? UnicodeString("TAL=") : get_PropTitle(_T("ã‚¢ãƒ«ãƒãƒ å"))) + tmp);
 				s = &fbuf[93]; memcpy(sp, s,  4); sp[ 4] = '\0'; tmp = sp;
-				lst->Add((id_min? UnicodeString("TYE=") : get_PropTitle(_T("ƒŠƒŠ[ƒX”N"))) + tmp);
+				lst->Add((id_min? UnicodeString("TYE=") : get_PropTitle(_T("ãƒªãƒªãƒ¼ã‚¹å¹´"))) + tmp);
 				s = &fbuf[97]; memcpy(sp, s, 30); sp[30] = '\0'; tmp = sp;
-				if (!id_min) add_PropLine(_T("ƒRƒƒ“ƒg"), tmp, lst);
+				if (!id_min) add_PropLine(_T("ã‚³ãƒ¡ãƒ³ãƒˆ"), tmp, lst);
 				ret = true;
 			}
 		}
@@ -199,23 +199,23 @@ bool ID3_GetInf(
 }
 
 //---------------------------------------------------------------------------
-//MP3ƒtƒ@ƒCƒ‹‚©‚ç–„‚ß‚İ‰æ‘œ‚ğƒrƒbƒgƒ}ƒbƒv‚Åæ“¾ or ƒtƒ@ƒCƒ‹‚Éo—Í
+//MP3ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰åŸ‹ã‚è¾¼ã¿ç”»åƒã‚’ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã§å–å¾— or ãƒ•ã‚¡ã‚¤ãƒ«ã«å‡ºåŠ›
 //---------------------------------------------------------------------------
 bool ID3_GetImage(
-	UnicodeString fnam,			//ƒtƒ@ƒCƒ‹–¼
-	Graphics::TBitmap *bmpimg,	//o—Íƒrƒbƒgƒ}ƒbƒv (default = NULL)
-	UnicodeString o_fnam)		//o—Íƒtƒ@ƒCƒ‹–¼	 (default = EmptyStr)
+	UnicodeString fnam,			//ãƒ•ã‚¡ã‚¤ãƒ«å
+	Graphics::TBitmap *bmpimg,	//å‡ºåŠ›ãƒ“ãƒƒãƒˆãƒãƒƒãƒ— (default = NULL)
+	UnicodeString o_fnam)		//å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«å	 (default = EmptyStr)
 {
 	bool ok = false;
 	try {
 		if (!file_exists(fnam)) Abort();
 		std::unique_ptr<TFileStream> fs(new TFileStream(fnam, fmOpenRead | fmShareDenyNone));
 
-		//ID3v2ƒ^ƒOƒwƒbƒ_
+		//ID3v2ã‚¿ã‚°ãƒ˜ãƒƒãƒ€
 		unsigned int maj_ver = 0, last_p = 0;
 		if (!ID3_getVer_toFrame(fs.get(), &last_p, &maj_ver)) Abort();
 
-		//ƒtƒŒ[ƒ€ƒwƒbƒ_
+		//ãƒ•ãƒ¬ãƒ¼ãƒ ãƒ˜ãƒƒãƒ€
 		for (;;) {
 			id3_frm_hdr   frmhdr;
 			id3_frm_hdr_2 frmhdr2;
@@ -238,19 +238,19 @@ bool ID3_GetImage(
 			}
 
 			if (contained_wd_i(_T("APIC|PIC"), id_str)) {
-				//ƒeƒLƒXƒgƒGƒ“ƒR[ƒfƒBƒ“ƒO
+				//ãƒ†ã‚­ã‚¹ãƒˆã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°
 				BYTE code = fsRead_byte(fs.get());
 				size--;
 				bool is_16 = (code==1 || code==2);
 
 				std::unique_ptr<char[]> tbuf(new char[32]);
-				//‰æ‘œŒ`®
+				//ç”»åƒå½¢å¼
 				if (maj_ver==2) {
 					fs->ReadBuffer(tbuf.get(), 3);
 					tbuf[3] = '\0';
 					size -= 3;
 				}
-				//MIMIƒ^ƒCƒv
+				//MIMIã‚¿ã‚¤ãƒ—
 				else {
 					char *pb = tbuf.get();
 					for (int i=0; i<32; i++,pb++) {
@@ -261,11 +261,11 @@ bool ID3_GetImage(
 				}
 				UnicodeString img_typ = tbuf.get();
 
-				//‰æ‘œƒ^ƒCƒv
+				//ç”»åƒã‚¿ã‚¤ãƒ—
 				BYTE pic_typ;
 				fs->ReadBuffer(&pic_typ, 1);
 				size--;
-				//Description ‚Í“Ç‚İ”ò‚Î‚·
+				//Description ã¯èª­ã¿é£›ã°ã™
 				int nul_cnt = 0;
 				for (;;) {
 					char d = fsRead_byte(fs.get());
@@ -275,7 +275,7 @@ bool ID3_GetImage(
 					if (!is_16 && nul_cnt==1) break;
 					if ( is_16 && nul_cnt==2) break;
 				}
-				//ƒCƒ[ƒW
+				//ã‚¤ãƒ¡ãƒ¼ã‚¸
 				std::unique_ptr<TMemoryStream> ms(new TMemoryStream());
 				if (ms->CopyFrom(fs.get(), size)<size) Abort();
 				ms->Seek(0, soFromBeginning);

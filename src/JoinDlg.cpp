@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚ÌŒ‹‡ƒ_ƒCƒAƒƒO									//
+//  ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®çµåˆãƒ€ã‚¤ã‚¢ãƒ­ã‚°									//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -24,7 +24,7 @@ void __fastcall TJoinTextDlg::FormCreate(TObject *Sender)
 	UserModule->SetUsrPopupMenu(this);
 
 	set_ComboBoxText(OutCodeComboBox,
-		_T("©“®(æ“ª‚ÌƒR[ƒh‚É“ˆê)\n")
+		_T("è‡ªå‹•(å…ˆé ­ã®ã‚³ãƒ¼ãƒ‰ã«çµ±ä¸€)\n")
 		_T("Shift_JIS\n")
 		_T("ISO-2022-JP\n")
 		_T("EUC-JP\n")
@@ -78,7 +78,7 @@ void __fastcall TJoinTextDlg::SrcFileListBoxDrawItem(TWinControl *Control, int I
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚Å‚ÌƒL[‘€ì
+//ä¸€è¦§ã§ã®ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TJoinTextDlg::SrcFileListBoxKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -86,16 +86,16 @@ void __fastcall TJoinTextDlg::SrcFileListBoxKeyDown(TObject *Sender, WORD &Key, 
 }
 
 //---------------------------------------------------------------------------
-//ƒeƒ“ƒvƒŒ[ƒg‚ÌQÆ
+//ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TJoinTextDlg::RefTpltBtnClick(TObject *Sender)
 {
 	UnicodeString inidir = def_if_empty(ExtractFileDir(to_absolute_name(TemplateEdit->Text)), ExePath);
-	UserModule->PrepareOpenDlg(_T("o—Íƒeƒ“ƒvƒŒ[ƒg‚Ì‘I‘ğ"), F_FILTER_TXT, NULL, inidir);
+	UserModule->PrepareOpenDlg(_T("å‡ºåŠ›ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã®é¸æŠ"), F_FILTER_TXT, NULL, inidir);
 	UserModule->OpenDlgToEdit(TemplateEdit, true);
 }
 //---------------------------------------------------------------------------
-//ƒeƒ“ƒvƒŒ[ƒg‚Ì•ÒW
+//ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã®ç·¨é›†
 //---------------------------------------------------------------------------
 void __fastcall TJoinTextDlg::EditTmpltActionExecute(TObject *Sender)
 {
@@ -108,7 +108,7 @@ void __fastcall TJoinTextDlg::EditTmpltActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ŠJn
+//é–‹å§‹
 //---------------------------------------------------------------------------
 void __fastcall TJoinTextDlg::JoinActionUpdate(TObject *Sender)
 {

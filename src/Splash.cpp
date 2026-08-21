@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------//
-// ÉXÉvÉâÉbÉVÉÖÅEÉtÉHÅ[ÉÄ												//
+// „Çπ„Éó„É©„ÉÉ„Ç∑„É•„Éª„Éï„Ç©„Éº„É†												//
 //	Scaled = false														//
-//	ÅIÉvÉçÉWÉFÉNÉgÉIÉvÉVÉáÉìÇ≈ÅAé©ìÆê∂ê¨ÉtÉHÅ[ÉÄÇ©ÇÁäOÇµÇƒÇ®Ç≠Ç±Ç∆		//
+//	ÔºÅ„Éó„É≠„Ç∏„Çß„ÇØ„Éà„Ç™„Éó„Ç∑„Éß„É≥„Åß„ÄÅËá™ÂãïÁîüÊàê„Éï„Ç©„Éº„É†„Åã„ÇâÂ§ñ„Åó„Å¶„Åä„Åè„Åì„Å®		//
 //----------------------------------------------------------------------//
 #include "Splash.h"
 
@@ -27,7 +27,7 @@ void __fastcall TSplashForm::FormDestroy(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//îwåiÇÃï`âÊ
+//ËÉåÊôØ„ÅÆÊèèÁîª
 //---------------------------------------------------------------------------
 void __fastcall TSplashForm::FormPaint(TObject *Sender)
 {
@@ -56,7 +56,7 @@ void __fastcall TSplashForm::FormPaint(TObject *Sender)
 		Canvas->LineTo(w, y);
 	}
 
-	//ÉAÉCÉRÉì
+	//„Ç¢„Ç§„Ç≥„É≥
 	std::unique_ptr<Graphics::TIcon> ico(new Graphics::TIcon());
 	ico->Handle = (HICON)::LoadImage(HInstance, _T("NYANFI_ICO"), IMAGE_ICON, 48, 48, LR_SHARED);
 	Canvas->Draw((w - 48)/2, (h - 48)/2, ico.get());

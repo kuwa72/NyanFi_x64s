@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  “o˜^ƒfƒBƒŒƒNƒgƒŠ/“ÁêƒtƒHƒ‹ƒ_ˆê——/QÆ								//
+//  ç™»éŒ²ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª/ç‰¹æ®Šãƒ•ã‚©ãƒ«ãƒ€ä¸€è¦§/å‚ç…§								//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -15,8 +15,8 @@
 TRegDirDlg *RegDirDlg = NULL;
 
 //---------------------------------------------------------------------------
-#define SPITM_EXE  100	//€–Ú‚ÍÀsƒtƒ@ƒCƒ‹
-#define SPITM_PATH 200	//€–Ú‚ÍPATH
+#define SPITM_EXE  100	//é …ç›®ã¯å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«
+#define SPITM_PATH 200	//é …ç›®ã¯PATH
 
 //---------------------------------------------------------------------------
 __fastcall TRegDirDlg::TRegDirDlg(TComponent* Owner)
@@ -40,7 +40,7 @@ void __fastcall TRegDirDlg::FormCreate(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TRegDirDlg::FormShow(TObject *Sender)
 {
-	Caption = IsSpecial? "“ÁêƒtƒHƒ‹ƒ_ˆê——" : "“o˜^ƒfƒBƒŒƒNƒgƒŠ";
+	Caption = IsSpecial? "ç‰¹æ®Šãƒ•ã‚©ãƒ«ãƒ€ä¸€è¦§" : "ç™»éŒ²ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª";
 	CmdStr	= EmptyStr;
 
 	OpeToolBar->Visible      = IsSpecial;
@@ -59,8 +59,8 @@ void __fastcall TRegDirDlg::FormShow(TObject *Sender)
 
 	IniFile->LoadPosInfo(this, DialogCenter, (IsSpecial? (IsSelect? "SelSpecialDir" : "SpecialDirList") : ""));
 
-	//ƒwƒbƒ_
-	InitializeListHeader(RegDirHeader, _T("ƒL[|–¼‘O|êŠ"));
+	//ãƒ˜ãƒƒãƒ€
+	InitializeListHeader(RegDirHeader, _T("ã‚­ãƒ¼|åå‰|å ´æ‰€"));
 	THeaderSections *sp = RegDirHeader->Sections;
 	sp->Items[0]->MaxWidth	 = IsSpecial? 0 : 1000;
 	sp->Items[1]->FixedWidth = IsSpecial;
@@ -70,7 +70,7 @@ void __fastcall TRegDirDlg::FormShow(TObject *Sender)
 	set_StdListBox(lp, LBTAG_OPT_FOCS);
 	set_UsrScrPanel(ListScrPanel);
 
-	//“ÁêƒtƒHƒ‹ƒ_
+	//ç‰¹æ®Šãƒ•ã‚©ãƒ«ãƒ€
 	if (IsSpecial) {
 		UseEnvVarAction->Visible = true;
 		UseEnvVarAction->Checked = IniFile->ReadBoolGen(_T("SpecialDirUseEnv"));
@@ -78,7 +78,7 @@ void __fastcall TRegDirDlg::FormShow(TObject *Sender)
 		AddNyanFiAction->Checked = IniFile->ReadBoolGen(_T("SpecialDirAddNyanFi"));
 		AddPathAction->Checked   = IniFile->ReadBoolGen(_T("SpecialDirAddPath"));
 
-		//ŠÂ‹«•Ï”•ÏŠ·ƒŠƒXƒg‚ğì¬
+		//ç’°å¢ƒå¤‰æ•°å¤‰æ›ãƒªã‚¹ãƒˆã‚’ä½œæˆ
 		EnvVarList->Clear();
 		EnvVarList->Add(cv_env_var("%APPDATA%")		 	  + "\t%APPDATA%");
 		EnvVarList->Add(cv_env_var("%LOCALAPPDATA%")	  + "\t%LOCALAPPDATA%");
@@ -97,7 +97,7 @@ void __fastcall TRegDirDlg::FormShow(TObject *Sender)
 
 		(ToFilter? (TWinControl*)FilterEdit : (TWinControl*)lp)->SetFocus();
 	}
-	//“o˜^ƒfƒBƒŒƒNƒgƒŠ
+	//ç™»éŒ²ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 	else {
 		UseEnvVarAction->Visible = false;
 
@@ -117,7 +117,7 @@ void __fastcall TRegDirDlg::FormShow(TObject *Sender)
 
 		lp->Items->Assign(RegDirList);
 
-		//ƒ^ƒOŒŸõ‚ÌŒ‹‰ÊƒŠƒXƒg
+		//ã‚¿ã‚°æ¤œç´¢ã®çµæœãƒªã‚¹ãƒˆ
 		if (CurStt->is_Find && CurStt->find_TAG) {
 			lp->Items->Add(EmptyStr);
 			lp->ItemIndex = lp->Count - 1;
@@ -127,7 +127,7 @@ void __fastcall TRegDirDlg::FormShow(TObject *Sender)
 			if (!CurStt->find_And) tags = ReplaceStr(tags, ";", "|");
 			DirEdit->Text = "#:" + tags;
 		}
-		//‚»‚Ì‘¼
+		//ãã®ä»–
 		else {
 			if (CursorTopCheckBox->Checked) {
 				if (lp->Count==0) lp->Items->Add(EmptyStr);
@@ -201,7 +201,7 @@ void __fastcall TRegDirDlg::FormClose(TObject *Sender, TCloseAction &Action)
 		}
 		RegDirList->Assign(lp->Items);
 
-		//g—p€–Ú‚ğƒZƒpƒŒ[ƒ^‚ğl—¶‚µ‚Äæ“ª‚ÖˆÚ“®
+		//ä½¿ç”¨é …ç›®ã‚’ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿ã‚’è€ƒæ…®ã—ã¦å…ˆé ­ã¸ç§»å‹•
 		if (MoveTopCheckBox->Checked) move_top_RegDirItem(SelIndex);
 
 		IniFile->WriteBoolGen(_T("RegDirDlgMoveTop"),	MoveTopCheckBox);
@@ -250,17 +250,17 @@ void __fastcall TRegDirDlg::FormKeyDown(TObject *Sender, WORD &Key, TShiftState 
 	}
 }
 //---------------------------------------------------------------------------
-//“ÁêƒtƒHƒ‹ƒ_ˆê——‚ÌXV
+//ç‰¹æ®Šãƒ•ã‚©ãƒ«ãƒ€ä¸€è¦§ã®æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TRegDirDlg::UpdateSpDirList(bool reload)
 {
 	if (!IsSpecial) return;
 
-	//ˆê——‚ğæ“¾(ƒ[ƒNƒŠƒXƒgŒ`®)
+	//ä¸€è¦§ã‚’å–å¾—(ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆå½¢å¼)
 	if (reload) {
 		SpDirList->Clear();
 		usr_SH->get_SpecialFolderList(SpDirList);
-		//SpDirList->Objects ‚ÅƒZƒpƒŒ[ƒ^‚ğ¯•Ê(1`)
+		//SpDirList->Objects ã§ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿ã‚’è­˜åˆ¥(1ï½)
 		int s_idx = 1;
 		for (int i=0; i<SpDirList->Count; i++) {
 			if (SameStr(SpDirList->Strings[i], "\t-")) {
@@ -269,22 +269,22 @@ void __fastcall TRegDirDlg::UpdateSpDirList(bool reload)
 			}
 		}
 
-		//NyanFi ŒÅ—L
+		//NyanFi å›ºæœ‰
 		if (AddNyanFiAction->Checked) {
-			SpDirList->AddObject("\t-", (TObject*)5);		//ƒZƒpƒŒ[ƒ^
-			SpDirList->Add(ExePath   + "\tÀsƒpƒX");
-			SpDirList->Add(TempPathA + "\tˆêƒfƒBƒŒƒNƒgƒŠ");
-			if (!DownloadPath.IsEmpty())	SpDirList->Add(DownloadPath + "\tƒ_ƒEƒ“ƒ[ƒh");
+			SpDirList->AddObject("\t-", (TObject*)5);		//ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿
+			SpDirList->Add(ExePath   + "\tå®Ÿè¡Œãƒ‘ã‚¹");
+			SpDirList->Add(TempPathA + "\tä¸€æ™‚ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª");
+			if (!DownloadPath.IsEmpty())	SpDirList->Add(DownloadPath + "\tãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰");
 			if (usr_Migemo->Available)		SpDirList->Add(to_absolute_name(MigemoPath) + "\tMigemo");
 			if (!CmdGitExe.IsEmpty())		SpDirList->AddObject(CmdGitExe + "\tgit.exe", (TObject*)SPITM_EXE);
 			if (!CmdGrepExe.IsEmpty())		SpDirList->AddObject(CmdGrepExe + "\tgrep.exe", (TObject*)SPITM_EXE);
 
-			//ƒGƒfƒBƒ^
+			//ã‚¨ãƒ‡ã‚£ã‚¿
 			SpDirList->AddObject("\t-", (TObject*)6);
-			if (!TextEditor.IsEmpty())		SpDirList->AddObject(TextEditor + "\tƒeƒLƒXƒgƒGƒfƒBƒ^", (TObject*)SPITM_EXE);
-			if (!ImageEditor.IsEmpty())		SpDirList->AddObject(ImageEditor + "\tƒCƒ[ƒWƒGƒfƒBƒ^", (TObject*)SPITM_EXE);
-			if (!BinaryEditor.IsEmpty())	SpDirList->AddObject(BinaryEditor + "\tƒoƒCƒiƒŠƒGƒfƒBƒ^", (TObject*)SPITM_EXE);
-			//‚»‚Ì‘¼‚ÌƒGƒfƒBƒ^
+			if (!TextEditor.IsEmpty())		SpDirList->AddObject(TextEditor + "\tãƒ†ã‚­ã‚¹ãƒˆã‚¨ãƒ‡ã‚£ã‚¿", (TObject*)SPITM_EXE);
+			if (!ImageEditor.IsEmpty())		SpDirList->AddObject(ImageEditor + "\tã‚¤ãƒ¡ãƒ¼ã‚¸ã‚¨ãƒ‡ã‚£ã‚¿", (TObject*)SPITM_EXE);
+			if (!BinaryEditor.IsEmpty())	SpDirList->AddObject(BinaryEditor + "\tãƒã‚¤ãƒŠãƒªã‚¨ãƒ‡ã‚£ã‚¿", (TObject*)SPITM_EXE);
+			//ãã®ä»–ã®ã‚¨ãƒ‡ã‚£ã‚¿
 			std::unique_ptr<TStringList> x_lst(new TStringList());
 			if (get_EtcEditorFiles(x_lst.get())>0) {
 				for (int i=0; i<x_lst->Count; i++) {
@@ -292,7 +292,7 @@ void __fastcall TRegDirDlg::UpdateSpDirList(bool reload)
 					SpDirList->AddObject(xnam + ((i==0)? "\t|" : "\t") + get_base_name(xnam), (TObject*)SPITM_EXE);
 				}
 			}
-			//ŠO•”ƒc[ƒ‹
+			//å¤–éƒ¨ãƒ„ãƒ¼ãƒ«
 			if (get_ExtToolFiles(x_lst.get())>0) {
 				SpDirList->AddObject("\t-", (TObject*)7);
 				for (int i=0; i<x_lst->Count; i++) {
@@ -308,7 +308,7 @@ void __fastcall TRegDirDlg::UpdateSpDirList(bool reload)
 			TStringDynArray elst = split_strings_semicolon(GetEnvironmentVariable("PATH"));
 			for (int i=0; i<elst.Length; i++) if (!elst[i].IsEmpty()) plst->Add(elst[i]);
 			plst->Sort();
-			SpDirList->AddObject("\t-", (TObject*)8);	//ƒZƒpƒŒ[ƒ^
+			SpDirList->AddObject("\t-", (TObject*)8);	//ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿
 			for (int i=0; i<plst->Count; i++) SpDirList->AddObject(plst->Strings[i] + "\t", (TObject*)SPITM_PATH);
 		}
 	}
@@ -326,7 +326,7 @@ void __fastcall TRegDirDlg::UpdateSpDirList(bool reload)
 		SpDirBuff->Assign(SpDirList);
 	}
 
-	//–¼‘O‚ÌÅ‘å•‚ğæ“¾
+	//åå‰ã®æœ€å¤§å¹…ã‚’å–å¾—
 	TListBox *lp = RegDirListBox;
 	int n_wd = 0;
 	int i_wd = ShowIconAction->Checked? SCALED_THIS(20) : 0;
@@ -381,7 +381,7 @@ int __fastcall TRegDirDlg::IndexOfDir(UnicodeString dnam)
 			if ((int)lp->Items->Objects[i]==1) pnam = ExtractFilePath(pnam);
 			if (SameText(pnam, dnam)) idx = i;
 		}
-		//ˆê’v‚·‚é‚à‚Ì‚ª‚È‚¯‚ê‚ÎAˆê”Ô‹ß‚¢e‚ğ’T‚·
+		//ä¸€è‡´ã™ã‚‹ã‚‚ã®ãŒãªã‘ã‚Œã°ã€ä¸€ç•ªè¿‘ã„è¦ªã‚’æ¢ã™
 		if (idx==-1) {
 			UnicodeString max_nam;
 			for (int i=0; i<lp->Count; i++) {
@@ -406,12 +406,12 @@ int __fastcall TRegDirDlg::IndexOfDir(UnicodeString dnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒJ[ƒ\ƒ‹ˆÊ’u€–Ú‚ÌƒpƒX‚ğæ“¾
+//ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®é …ç›®ã®ãƒ‘ã‚¹ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString __fastcall TRegDirDlg::GetCurDirItem(
-	bool dsp_sw,	//true = “ÁêƒtƒHƒ‹ƒ_‚Ì•\¦–¼‚ğæ“¾	(default = false)
-	bool nam_sw,	//true = “ÁêƒtƒHƒ‹ƒ_–¼‚ğ•t‰Á		(default = false)
-	bool exe_sw)	//true = Àsƒtƒ@ƒCƒ‹–¼‚Æ‚µ‚Äæ“¾	(default = false)
+	bool dsp_sw,	//true = ç‰¹æ®Šãƒ•ã‚©ãƒ«ãƒ€ã®è¡¨ç¤ºåã‚’å–å¾—	(default = false)
+	bool nam_sw,	//true = ç‰¹æ®Šãƒ•ã‚©ãƒ«ãƒ€åã‚’ä»˜åŠ 		(default = false)
+	bool exe_sw)	//true = å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«åã¨ã—ã¦å–å¾—	(default = false)
 {
 	UnicodeString dnam;
 	TListBox *lp = RegDirListBox;
@@ -444,7 +444,7 @@ UnicodeString __fastcall TRegDirDlg::GetCurDirItem(
 }
 
 //---------------------------------------------------------------------------
-//€–Ú‚Ì•`‰æ
+//é …ç›®ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TRegDirDlg::RegDirListBoxDrawItem(TWinControl *Control, int Index,
 	TRect &Rect, TOwnerDrawState State)
@@ -469,23 +469,23 @@ void __fastcall TRegDirDlg::RegDirListBoxDrawItem(TWinControl *Control, int Inde
 	UnicodeString lbuf = lp->Items->Strings[Index];
 	int flag = (int)lp->Items->Objects[Index];
 	if (!lbuf.IsEmpty()) {
-		//“ÁêƒtƒHƒ‹ƒ_
+		//ç‰¹æ®Šãƒ•ã‚©ãƒ«ãƒ€
 		if (IsSpecial) {
 			TStringDynArray itm_buf = split_strings_tab(lbuf);
 			if (itm_buf.Length==2) {
 				int xp = rc.Left + SCALED_THIS(4);
 				int yp = rc.Top  + get_TopMargin2(cv);
-				//ƒZƒpƒŒ[ƒ^
+				//ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿
 				if (itm_buf[0].IsEmpty()) {
 					draw_Separator(cv, rc);
 					cv->Font->Color = col_Folder;
 					UnicodeString snam;
 					switch (flag) {
 					case  1: snam = lp->Focused()? "<All Users (&U)> " : "<All Users> "; break;
-					case  2: snam = lp->Focused()? "<‰¼‘zƒtƒHƒ‹ƒ_ (&V)> " : "<‰¼‘zƒtƒHƒ‹ƒ_> "; break;
+					case  2: snam = lp->Focused()? "<ä»®æƒ³ãƒ•ã‚©ãƒ«ãƒ€ (&V)> " : "<ä»®æƒ³ãƒ•ã‚©ãƒ«ãƒ€> "; break;
 					case  5: snam = lp->Focused()? "<NyanFi (&N)> " : "<NyanFi> "; break;
-					case  6: snam = lp->Focused()? "<ƒGƒfƒBƒ^ (&E)> " : "<ƒGƒfƒBƒ^> "; break;
-					case  7: snam = lp->Focused()? "<ŠO•”ƒc[ƒ‹ (&X)> " : "<ŠO•”ƒc[ƒ‹> "; break;
+					case  6: snam = lp->Focused()? "<ã‚¨ãƒ‡ã‚£ã‚¿ (&E)> " : "<ã‚¨ãƒ‡ã‚£ã‚¿> "; break;
+					case  7: snam = lp->Focused()? "<å¤–éƒ¨ãƒ„ãƒ¼ãƒ« (&X)> " : "<å¤–éƒ¨ãƒ„ãƒ¼ãƒ«> "; break;
 					case  8: snam = lp->Focused()? "<&PATH> " : "<PATH> "; break;
 					default: snam = "";
 					}
@@ -494,23 +494,23 @@ void __fastcall TRegDirDlg::RegDirListBoxDrawItem(TWinControl *Control, int Inde
 						::DrawText(cv->Handle, snam.c_str(), -1, &tmp_rc, DT_LEFT);
 					}
 				}
-				//€–Ú
+				//é …ç›®
 				else {
 					UnicodeString dnam = itm_buf[0];
-					//ƒAƒCƒRƒ“
+					//ã‚¢ã‚¤ã‚³ãƒ³
 					if (ShowIconAction->Checked && flag==SPITM_EXE) {
 						draw_SmallIconF(dnam, cv, xp, std::max(yp + (cv->TextHeight("Q") - SCALED_THIS(16))/2, 0), this);
 						xp += SCALED_THIS(20);
 					}
-					//–¼‘O
+					//åå‰
 					cv->Font->Color = get_ListFgCol();
 					UnicodeString inam = itm_buf[1];
 					bool brk = remove_top_s(inam, '|');
 					cv->TextOut(xp, yp, inam);
 					xp = sp->Items[1]->Width + 1;
-					//êŠ
+					//å ´æ‰€
 					lp->Tag &= 0x7fff0000;
-					lp->Tag |= xp;			//•\¦ˆÊ’u‚ğ Tag ‚Éİ’è
+					lp->Tag |= xp;			//è¡¨ç¤ºä½ç½®ã‚’ Tag ã«è¨­å®š
 					if (flag==SPITM_EXE) dnam = ExtractFilePath(dnam);
 					bool err = (!StartsStr("\\\\", dnam) && !StartsStr("shell:", dnam) && !dir_exists(dnam));
 					if (UseEnvVarAction->Checked) {
@@ -527,37 +527,37 @@ void __fastcall TRegDirDlg::RegDirListBoxDrawItem(TWinControl *Control, int Inde
 					}
 					cv->Font->Color = (StartsStr("shell:", dnam))? adj_col : err? col_Error : col_Folder;
 					PathNameOut(dnam, cv, xp, yp, rc.Right - xp - SCALED_THIS(4));
-					//‹æØ‚èü
+					//åŒºåˆ‡ã‚Šç·š
 					if (brk) draw_separateLine(cv, rc);
 				}
 			}
 		}
-		//“o˜^ƒfƒBƒŒƒNƒgƒŠ
+		//ç™»éŒ²ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 		else {
 			TStringDynArray itm_buf = get_csv_array(lbuf, REGDIR_CSVITMCNT, true);
-			//ƒZƒpƒŒ[ƒ^
+			//ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿
 			if (is_separator(itm_buf[1])) {
 				draw_Separator(cv, rc);
 			}
-			//€–Ú
+			//é …ç›®
 			else {
-				//ƒL[
+				//ã‚­ãƒ¼
 				cv->Font->Color = get_ListFgCol();
 				cv->Font->Style = cv->Font->Style << fsBold;
 				int s_wd = cv->TextWidth(itm_buf[0]);
 				int c_wd = sp->Items[0]->Width - SCALED_THIS(4);
 				int xp = rc.Left + SCALED_THIS(2);
 				int yp = rc.Top  + get_TopMargin2(cv);
-				if (s_wd<c_wd) xp += (c_wd - s_wd)/2;	//ƒZƒ“ƒ^ƒŠƒ“ƒO
+				if (s_wd<c_wd) xp += (c_wd - s_wd)/2;	//ã‚»ãƒ³ã‚¿ãƒªãƒ³ã‚°
 				cv->TextOut(xp, yp, itm_buf[0]);
-				//–¼‘O
+				//åå‰
 				xp = sp->Items[0]->Width + 1;
 				cv->Font->Style = cv->Font->Style >> fsBold;
 				cv->TextOut(xp, yp, itm_buf[1]);
 				xp += sp->Items[1]->Width + 1;
-				//êŠ
+				//å ´æ‰€
 				lp->Tag &= 0x7fff0000;
-				lp->Tag |= xp;			//•\¦ˆÊ’u‚ğ Tag ‚Éİ’è
+				lp->Tag |= xp;			//è¡¨ç¤ºä½ç½®ã‚’ Tag ã«è¨­å®š
 				UnicodeString dnam = itm_buf[2];
 				if (StartsStr("#:", dnam)) {
 					cv->Font->Color = adj_col;
@@ -582,11 +582,11 @@ void __fastcall TRegDirDlg::RegDirListBoxDrawItem(TWinControl *Control, int Inde
 		}
 	}
 
-	//ƒJ[ƒ\ƒ‹
+	//ã‚«ãƒ¼ã‚½ãƒ«
 	draw_ListCursor2(lp, rc, Index, State);
 }
 //---------------------------------------------------------------------------
-//ƒL[‘€ì
+//ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TRegDirDlg::RegDirListBoxKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -595,7 +595,7 @@ void __fastcall TRegDirDlg::RegDirListBoxKeyDown(TObject *Sender, WORD &Key, TSh
 
 	TListBox *lp = RegDirListBox;
 
-	//ŒÄ‚Ño‚µƒL[‚©H
+	//å‘¼ã³å‡ºã—ã‚­ãƒ¼ã‹ï¼Ÿ
 	bool to_call = false;
 	if (!IsSpecial) {
 		for (int i=0; i<lp->Count && !to_call; i++) {
@@ -628,7 +628,7 @@ void __fastcall TRegDirDlg::RegDirListBoxKeyDown(TObject *Sender, WORD &Key, TSh
 	else if (IsSpecial && StartsText("IncSearch", cmd_F)) {
 		FilterEdit->SetFocus();
 	}
-	//ƒvƒƒpƒeƒB
+	//ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	else if (SameText(cmd_F, "PropertyDlg")) {
 		UnicodeString dnam = GetCurDirItem();
 		if (!dnam.IsEmpty() && !StartsText("shell:", dnam) && !StartsText("#:", dnam)) {
@@ -636,12 +636,12 @@ void __fastcall TRegDirDlg::RegDirListBoxKeyDown(TObject *Sender, WORD &Key, TSh
 			ShowPropertyDialog(dnam);
 		}
 	}
-	//ƒGƒNƒXƒvƒ[ƒ‰‚ÅŠJ‚­
+	//ã‚¨ã‚¯ã‚¹ãƒ—ãƒ­ãƒ¼ãƒ©ã§é–‹ã
 	else if (SameText(cmd_F, "OpenByExp")) {
-		ClearKeyBuff(true);		//OnKeyPress ‚ğ—}~
+		ClearKeyBuff(true);		//OnKeyPress ã‚’æŠ‘æ­¢
 		OpenByExpAction->Execute();
 	}
-	//ƒAƒNƒZƒ‰ƒŒ[ƒ^‚ÅˆÚ“®
+	//ã‚¢ã‚¯ã‚»ãƒ©ãƒ¬ãƒ¼ã‚¿ã§ç§»å‹•
 	else if (IsSpecial) {
 		int s_idx = SameText(KeyStr, "Alt+U")? 1 :
 					SameText(KeyStr, "Alt+V")? 2 :
@@ -686,7 +686,7 @@ void __fastcall TRegDirDlg::RegDirListBoxKeyPress(TObject *Sender, System::WideC
 		}
 	}
 	else if (!IsSpecial && !is_KeyDown(VK_CONTROL)) {
-		//ŠY“–ƒL[‚Ì“o˜^”‚ğƒJƒEƒ“ƒg
+		//è©²å½“ã‚­ãƒ¼ã®ç™»éŒ²æ•°ã‚’ã‚«ã‚¦ãƒ³ãƒˆ
 		int f_cnt = 0;
 		UnicodeString k = Key;
 		for (int i=0; i<lp->Count; i++) {
@@ -708,35 +708,35 @@ void __fastcall TRegDirDlg::RegDirListBoxKeyPress(TObject *Sender, System::WideC
 		}
 	}
 
-	//Šm’è
+	//ç¢ºå®š
 	if (found) {
 		if (IsSelect) {
 			CmdStr = jdir;
 			ModalResult = mrOk;
 		}
 		else {
-			//Àsƒtƒ@ƒCƒ‹
+			//å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«
 			if (SelIndex!=-1 && (int)lp->Items->Objects[SelIndex]==SPITM_EXE) {
 				CmdStr.sprintf(_T("JumpTo_\"%s\""), jdir.c_str());
 				ModalResult = mrOk;
 			}
-			//“ÁêƒtƒHƒ‹ƒ_
+			//ç‰¹æ®Šãƒ•ã‚©ãƒ«ãƒ€
 			else if (StartsStr("shell:", jdir)) {
 				CmdStr.sprintf(_T("OpenByExp_\"%s\""), jdir.c_str());
 				ModalResult = mrOk;
 			}
-			//ƒ^ƒOŒŸõ
+			//ã‚¿ã‚°æ¤œç´¢
 			else if (remove_top_s(jdir, "#:")) {
 				NyanFiForm->RecoverFileList2();
 				CmdStr.sprintf(_T("FindTag_%s"), jdir.c_str());
 				ModalResult = mrOk;
 			}
-			//ƒRƒ“ƒsƒ…[ƒ^–¼
+			//ã‚³ãƒ³ãƒ”ãƒ¥ãƒ¼ã‚¿å
 			else if (is_computer_name(jdir)) {
 				CmdStr.sprintf(_T("ShareList_\"%s\""), jdir.c_str());
 				ModalResult = mrOk;
 			}
-			//’ÊíƒfƒBƒŒƒNƒgƒŠ
+			//é€šå¸¸ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 			else {
 				UnicodeString dnam = get_actual_path(jdir);
 				if (!StartsStr("\\\\", dnam) && !is_dir_accessible(dnam)) {
@@ -750,7 +750,7 @@ void __fastcall TRegDirDlg::RegDirListBoxKeyPress(TObject *Sender, System::WideC
 		}
 	}
 
-	//“ÁêƒtƒHƒ‹ƒ_ˆê——‚Å‚ÌƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`‚ğ‰ñ”ğ
+	//ç‰¹æ®Šãƒ•ã‚©ãƒ«ãƒ€ä¸€è¦§ã§ã®ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ã‚¿ãƒ«ã‚µãƒ¼ãƒã‚’å›é¿
 	if (IsSpecial && (_istalnum(Key) || Key==VK_SPACE || Key==VK_RETURN || is_KeyDown(VK_CONTROL))) Key = 0;
 }
 //---------------------------------------------------------------------------
@@ -777,10 +777,10 @@ void __fastcall TRegDirDlg::RegDirListBoxDblClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//€–Ú‚Ì’Ç‰ÁE•ÏX
+//é …ç›®ã®è¿½åŠ ãƒ»å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TRegDirDlg::ChangeItemActionExecute(
-	int chg_mod)	//•ÏXƒ‚[ƒh 0:’Ç‰Á/ 1:•ÏX/ 2:‘}“ü
+	int chg_mod)	//å¤‰æ›´ãƒ¢ãƒ¼ãƒ‰ 0:è¿½åŠ / 1:å¤‰æ›´/ 2:æŒ¿å…¥
 {
 	UnicodeString dnam = DirEdit->Text;
 	UnicodeString unam = split_user_name(dnam);
@@ -809,18 +809,18 @@ void __fastcall TRegDirDlg::ChangeItemActionExecute(
 
 		TListBox *lp = RegDirListBox;
 		switch (chg_mod) {
-		case 0:	//’Ç‰Á
+		case 0:	//è¿½åŠ 
 			if (lp->Items->Strings[lp->Count - 1].IsEmpty())
 				lp->Items->Strings[lp->Count - 1] = lbuf;
 			else
 				lp->Items->Add(lbuf);
 			lp->ItemIndex = lp->Count - 1;
 			break;
-		case 1:	//•ÏX
+		case 1:	//å¤‰æ›´
 			if (lp->ItemIndex==-1) return;
 			lp->Items->Strings[lp->ItemIndex] = lbuf;
 			break;
-		case 2:	//‘}“ü
+		case 2:	//æŒ¿å…¥
 			if (lp->ItemIndex==-1) return;
 			lp->Items->Insert(lp->ItemIndex, lbuf);
 			break;
@@ -839,7 +839,7 @@ void __fastcall TRegDirDlg::ChangeItemActionExecute(
 }
 
 //---------------------------------------------------------------------------
-//’Ç‰Á
+//è¿½åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TRegDirDlg::AddItemActionExecute(TObject *Sender)
 {
@@ -849,10 +849,10 @@ void __fastcall TRegDirDlg::AddItemActionExecute(TObject *Sender)
 void __fastcall TRegDirDlg::AddItemActionUpdate(TObject *Sender)
 {
 	((TAction*)Sender)->Enabled = (!IsSpecial && !DescEdit->Text.IsEmpty());
-	if (!IsSpecial) Caption = IsAddMode? "“o˜^ƒfƒBƒŒƒNƒgƒŠ(’Ç‰Á)" : "“o˜^ƒfƒBƒŒƒNƒgƒŠ";
+	if (!IsSpecial) Caption = IsAddMode? "ç™»éŒ²ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª(è¿½åŠ )" : "ç™»éŒ²ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª";
 }
 //---------------------------------------------------------------------------
-//•ÏX/‘}“ü
+//å¤‰æ›´/æŒ¿å…¥
 //---------------------------------------------------------------------------
 void __fastcall TRegDirDlg::EditItemActionExecute(TObject *Sender)
 {
@@ -863,16 +863,16 @@ void __fastcall TRegDirDlg::EditItemActionUpdate(TObject *Sender)
 {
 	TAction *ap = (TAction *)Sender;
 	if (IsAddMode) {
-		ap->Caption = "‘}“ü";
+		ap->Caption = "æŒ¿å…¥";
 		ap->Enabled = (!IsSpecial && RegDirListBox->ItemIndex!=-1 && !DescEdit->Text.IsEmpty());
 	}
 	else {
-		ap->Caption = "•ÏX";
+		ap->Caption = "å¤‰æ›´";
 		ap->Enabled = (!IsSpecial && !ListBoxGetStr(RegDirListBox).IsEmpty());
 	}
 }
 //---------------------------------------------------------------------------
-//íœ
+//å‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TRegDirDlg::DelItemActionExecute(TObject *Sender)
 {
@@ -888,22 +888,22 @@ void __fastcall TRegDirDlg::DelItemActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠ‚ÌQÆ
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TRegDirDlg::RefDirBtnClick(TObject *Sender)
 {
 	UnicodeString dnam = DirEdit->Text;
 	UnicodeString unam = split_user_name(dnam);
-	if (UserModule->SelectDirEx(_T("“o˜^ƒfƒBƒŒƒNƒgƒŠ"), dnam)) {
+	if (UserModule->SelectDirEx(_T("ç™»éŒ²ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª"), dnam)) {
 		DirEdit->Text = to_path_name(dnam) + (!unam.IsEmpty()? ":" + unam : EmptyStr);
 	}
 }
 //---------------------------------------------------------------------------
-//“ÁêƒtƒHƒ‹ƒ_‚ÌQÆ
+//ç‰¹æ®Šãƒ•ã‚©ãƒ«ãƒ€ã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TRegDirDlg::RefSpBtnClick(TObject *Sender)
 {
-	TRegDirDlg *SelSpDirDlg = new TRegDirDlg(this);		//•Â‚¶‚½‚Æ‚«‚É”jŠü
+	TRegDirDlg *SelSpDirDlg = new TRegDirDlg(this);		//é–‰ã˜ãŸã¨ãã«ç ´æ£„
 	SelSpDirDlg->IsSpecial	= true;
 	SelSpDirDlg->IsSelect	= true;
 	if (SelSpDirDlg->ShowModal()==mrOk) {
@@ -914,7 +914,7 @@ void __fastcall TRegDirDlg::RefSpBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒpƒX–¼‚ğƒRƒs[
+//ãƒ‘ã‚¹åã‚’ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TRegDirDlg::CopyPathActionExecute(TObject *Sender)
 {
@@ -927,7 +927,7 @@ void __fastcall TRegDirDlg::CopyPathActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ŠÂ‹«•Ï”‚ğ—p‚¢‚ÄƒpƒX–¼‚ğ•\¦
+//ç’°å¢ƒå¤‰æ•°ã‚’ç”¨ã„ã¦ãƒ‘ã‚¹åã‚’è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TRegDirDlg::UseEnvVarActionExecute(TObject *Sender)
 {
@@ -964,7 +964,7 @@ void __fastcall TRegDirDlg::AddPathActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒGƒNƒXƒvƒ[ƒ‰‚ÅŠJ‚­
+//ã‚¨ã‚¯ã‚¹ãƒ—ãƒ­ãƒ¼ãƒ©ã§é–‹ã
 //---------------------------------------------------------------------------
 void __fastcall TRegDirDlg::OpenByExpActionExecute(TObject *Sender)
 {
@@ -982,7 +982,7 @@ void __fastcall TRegDirDlg::OpenByExpActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠ‚ÌƒvƒƒpƒeƒB
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 //---------------------------------------------------------------------------
 void __fastcall TRegDirDlg::PropertyActionExecute(TObject *Sender)
 {
@@ -997,7 +997,7 @@ void __fastcall TRegDirDlg::PropertyActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒAƒvƒŠƒP[ƒVƒ‡ƒ“î•ñ
+//ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±
 //---------------------------------------------------------------------------
 void __fastcall TRegDirDlg::AppInfoActionExecute(TObject *Sender)
 {
@@ -1013,11 +1013,11 @@ void __fastcall TRegDirDlg::AppInfoActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚ğƒ[ƒNƒŠƒXƒg‚Æ‚µ‚Ä•Û‘¶
+//ä¸€è¦§ã‚’ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã¨ã—ã¦ä¿å­˜
 //---------------------------------------------------------------------------
 void __fastcall TRegDirDlg::SaveAsWorkActionExecute(TObject *Sender)
 {
-	UserModule->PrepareSaveDlg(LoadUsrMsg(USTR_SaveAs, _T("ƒ[ƒNƒŠƒXƒg")).c_str(),
+	UserModule->PrepareSaveDlg(LoadUsrMsg(USTR_SaveAs, _T("ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆ")).c_str(),
 		F_FILTER_NWL, _T("SpecialDir.nwl"), WorkListPath);
 
 	UnicodeString fnam = UserModule->SaveDlgExecute();
@@ -1043,7 +1043,7 @@ void __fastcall TRegDirDlg::SaveAsWorkActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//İ’èƒpƒlƒ‹‚ÌŠJ•Â
+//è¨­å®šãƒ‘ãƒãƒ«ã®é–‹é–‰
 //---------------------------------------------------------------------------
 void __fastcall TRegDirDlg::SetOptBtn()
 {
@@ -1063,7 +1063,7 @@ void __fastcall TRegDirDlg::ChgOptBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒBƒ‹ƒ^
+//ãƒ•ã‚£ãƒ«ã‚¿
 //---------------------------------------------------------------------------
 void __fastcall TRegDirDlg::FilterBtnClick(TObject *Sender)
 {

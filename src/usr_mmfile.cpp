@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------//
-// ƒƒ‚ƒŠƒ}ƒbƒvƒhƒtƒ@ƒCƒ‹ƒNƒ‰ƒX											//
+// ãƒ¡ãƒ¢ãƒªãƒãƒƒãƒ—ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã‚¯ãƒ©ã‚¹											//
 //																		//
 //----------------------------------------------------------------------//
 #include "usr_file_ex.h"
@@ -17,8 +17,8 @@ MemMapFile::~MemMapFile()
 }
 
 //---------------------------------------------------------------------------
-//“Ç‚İæ‚èê—p‚Ì(MapEnabled=true‚È‚ç)ƒƒ‚ƒŠƒ}ƒbƒvƒhƒtƒ@ƒCƒ‹‚Æ‚µ‚ÄŠJ‚­
-//ŠJ‚¯‚È‚¢ê‡‚Íƒƒ‚ƒŠ‚É’Êí“Ç‚İ‚İ
+//èª­ã¿å–ã‚Šå°‚ç”¨ã®(MapEnabled=trueãªã‚‰)ãƒ¡ãƒ¢ãƒªãƒãƒƒãƒ—ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã¨ã—ã¦é–‹ã
+//é–‹ã‘ãªã„å ´åˆã¯ãƒ¡ãƒ¢ãƒªã«é€šå¸¸èª­ã¿è¾¼ã¿
 //---------------------------------------------------------------------------
 bool MemMapFile::OpenRO(UnicodeString fnam, __int64 top_adr, unsigned int max_size)
 {
@@ -51,7 +51,7 @@ bool MemMapFile::OpenRO(UnicodeString fnam, __int64 top_adr, unsigned int max_si
 			Abort();
 		}
 
-		//ƒ|ƒCƒ“ƒ^‚ğæ“¾
+		//ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—
 		DWORD offset = top_adr%si.dwAllocationGranularity;
 		top_adr -= offset;
 		DWORD top_adr_hi = (top_adr >> 32) & 0xffffffffLL;
@@ -72,9 +72,9 @@ bool MemMapFile::OpenRO(UnicodeString fnam, __int64 top_adr, unsigned int max_si
 	}
 	catch (...) {
 		isMaped = false;
-		//MapEnabled=false ‚Ü‚½‚Íƒƒ‚ƒŠƒ}ƒbƒvƒhƒtƒ@ƒCƒ‹‚ÌƒI[ƒvƒ“‚É¸”s‚µ‚½ê‡‚Íƒƒ‚ƒŠ‚É’Êí“Ç
+		//MapEnabled=false ã¾ãŸã¯ãƒ¡ãƒ¢ãƒªãƒãƒƒãƒ—ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚ªãƒ¼ãƒ—ãƒ³ã«å¤±æ•—ã—ãŸå ´åˆã¯ãƒ¡ãƒ¢ãƒªã«é€šå¸¸èª­è¾¼
 		try {
-			if (MapEnabled && BuffSize>FAILED_BUF_SIZE) BuffSize = FAILED_BUF_SIZE;	//¸”s‚µ‚½‚ç8MBˆÈ‰º‚Å“Ç
+			if (MapEnabled && BuffSize>FAILED_BUF_SIZE) BuffSize = FAILED_BUF_SIZE;	//å¤±æ•—ã—ãŸã‚‰8MBä»¥ä¸‹ã§èª­è¾¼
 			std::unique_ptr<TFileStream> fs(
 				new TFileStream(fnam, fmOpenRead | fmShareDenyNone));
 			ByteBuff.Length = BuffSize;
@@ -91,7 +91,7 @@ bool MemMapFile::OpenRO(UnicodeString fnam, __int64 top_adr, unsigned int max_si
 }
 
 //---------------------------------------------------------------------------
-//‰Šú‰»
+//åˆæœŸåŒ–
 //---------------------------------------------------------------------------
 void MemMapFile::Initialize()
 {
@@ -106,7 +106,7 @@ void MemMapFile::Initialize()
 }
 
 //---------------------------------------------------------------------------
-//•Â‚¶‚Ä‰Šú‰»
+//é–‰ã˜ã¦åˆæœŸåŒ–
 //---------------------------------------------------------------------------
 void MemMapFile::Close()
 {

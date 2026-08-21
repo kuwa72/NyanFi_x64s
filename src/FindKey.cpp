@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒL[ŒŸõ															//
+//  ã‚­ãƒ¼æ¤œç´¢															//
 //----------------------------------------------------------------------//
 #include "usr_key.h"
 #include "Global.h"
@@ -25,7 +25,7 @@ void __fastcall TFindKeyDlg::FormCreate(TObject *Sender)
 void __fastcall TFindKeyDlg::FormShow(TObject *Sender)
 {
 	CanInPanel->Color = get_PanelColor();
-	set_BtnTextStyle(CancelBtn, "ƒLƒƒƒ“ƒZƒ‹");
+	set_BtnTextStyle(CancelBtn, "ã‚­ãƒ£ãƒ³ã‚»ãƒ«");
 
 	KeyStr = EmptyStr;
 	KeyLabel->Caption = EmptyStr;
@@ -53,7 +53,7 @@ void __fastcall TFindKeyDlg::ApplicationEvents1Message(TMsg &Msg, bool &Handled)
 	}	
 }
 //---------------------------------------------------------------------------
-//2ƒXƒgƒ[ƒNŠJnƒL[‚©?
+//2ã‚¹ãƒˆãƒ­ãƒ¼ã‚¯é–‹å§‹ã‚­ãƒ¼ã‹?
 //---------------------------------------------------------------------------
 bool __fastcall TFindKeyDlg::IsFirstCmdKey(UnicodeString keystr)
 {
@@ -66,11 +66,11 @@ bool __fastcall TFindKeyDlg::IsFirstCmdKey(UnicodeString keystr)
 		}
 	}
 
-	if (res) KeyLabel->Caption = "2ƒXƒgƒ[ƒNƒL[: " + KeyStr + "~";
+	if (res) KeyLabel->Caption = "2ã‚¹ãƒˆãƒ­ãƒ¼ã‚¯ã‚­ãƒ¼: " + KeyStr + "~";
 	return res;
 }
 //---------------------------------------------------------------------------
-//ENTERˆÈŠO‚ÌƒL[ˆ—
+//ENTERä»¥å¤–ã®ã‚­ãƒ¼å‡¦ç†
 //---------------------------------------------------------------------------
 void __fastcall TFindKeyDlg::FormKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -90,7 +90,7 @@ void __fastcall TFindKeyDlg::FormKeyDown(TObject *Sender, WORD &Key, TShiftState
 }
 
 //---------------------------------------------------------------------------
-//ENTERƒL[‚Ìˆ— (DummyBtn ‚Åó‚¯æ‚é)
+//ENTERã‚­ãƒ¼ã®å‡¦ç† (DummyBtn ã§å—ã‘å–ã‚‹)
 //---------------------------------------------------------------------------
 void __fastcall TFindKeyDlg::DummyBtnClick(TObject *Sender)
 {

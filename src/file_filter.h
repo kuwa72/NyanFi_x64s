@@ -1,6 +1,6 @@
 /**
  * @file file_filter.h
- * @brief ƒtƒ@ƒCƒ‹ƒtƒBƒ‹ƒ^ˆ—
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«ãƒ•ã‚£ãƒ«ã‚¿å‡¦ç†
  */
 //---------------------------------------------------------------------------
 #ifndef FileFilterH
@@ -16,7 +16,7 @@ typedef Set <FilterOpt, foIsGrep, foExcludeTag> FilterOption;
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒtƒ@ƒCƒ‹ƒtƒBƒ‹ƒ^ˆ—
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«ãƒ•ã‚£ãƒ«ã‚¿å‡¦ç†
  */
 class FileFilter
 {
@@ -38,43 +38,43 @@ public:
 	UnicodeString objType;
 	UnicodeString propName;
 
-	/** @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
+	/** @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 	FileFilter();
 
 	~FileFilter();
 
 	/**
-	 * @brief ‰Šú‰»
-	 * @param fnam ƒtƒ@ƒCƒ‹–¼
-	 * @param fbuf ƒtƒ@ƒCƒ‹ƒoƒbƒtƒ@
-	 * @param filter ƒtƒBƒ‹ƒ^
-	 * @param opt ƒIƒvƒVƒ‡ƒ“
+	 * @brief åˆæœŸåŒ–
+	 * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+	 * @param fbuf ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒƒãƒ•ã‚¡
+	 * @param filter ãƒ•ã‚£ãƒ«ã‚¿
+	 * @param opt ã‚ªãƒ—ã‚·ãƒ§ãƒ³
 	 * @return true 
 	 * @return false 
 	 */
 	bool Initialize(UnicodeString fnam, TStringList *fbuf, UnicodeString filter, FilterOption opt);
 
 	/**
-	 * @brief s“à—e‚Ìæ“¾
-	 * @param idx ƒCƒ“ƒfƒbƒNƒX
-	 * @param[out] r_idx ŠJnˆÊ’u
-	 * @param[out] r_len ’·‚³
-	 * @param[out] lbuf •\¦—ps“à—e
-	 * @return UnicodeString ŒŸõ‘ÎÛ‚Æ‚È‚é•¶š—ñ
+	 * @brief è¡Œå†…å®¹ã®å–å¾—
+	 * @param idx ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
+	 * @param[out] r_idx é–‹å§‹ä½ç½®
+	 * @param[out] r_len é•·ã•
+	 * @param[out] lbuf è¡¨ç¤ºç”¨è¡Œå†…å®¹
+	 * @return UnicodeString æ¤œç´¢å¯¾è±¡ã¨ãªã‚‹æ–‡å­—åˆ—
 	 */
 	UnicodeString GetLinePart(int idx, int &r_idx, int &r_len, UnicodeString &lbuf);
 
 	/**
-	 * @brief •\¦—ps“à—e‚ğæ“¾
-	 * @param idx ƒCƒ“ƒfƒbƒNƒX
-	 * @return UnicodeString •\¦—ps“à—e
+	 * @brief è¡¨ç¤ºç”¨è¡Œå†…å®¹ã‚’å–å¾—
+	 * @param idx ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
+	 * @return UnicodeString è¡¨ç¤ºç”¨è¡Œå†…å®¹
 	 */
 	UnicodeString GetDispLine(int idx);
 
 	/**
-	 * @brief ŒŸõ‘ÎÛs‚©H
-	 * @param idx ƒCƒ“ƒfƒbƒNƒX
-	 * @return true ŒŸõ‘ÎÛs
+	 * @brief æ¤œç´¢å¯¾è±¡è¡Œã‹ï¼Ÿ
+	 * @param idx ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
+	 * @return true æ¤œç´¢å¯¾è±¡è¡Œ
 	 */
 	bool IsValidLine(int idx);
 };

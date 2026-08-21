@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ÉhÉâÉCÉuégópó¶êÑà⁄													//
+//  „Éâ„É©„Ç§„Éñ‰ΩøÁî®ÁéáÊé®Áßª													//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "Global.h"
@@ -100,12 +100,12 @@ void __fastcall TDriveGraph::FormKeyDown(TObject *Sender, WORD &Key, TShiftState
 }
 
 //---------------------------------------------------------------------------
-//ÉzÉCÅ[ÉãëÄçÏ
+//„Éõ„Ç§„Éº„É´Êìç‰Ωú
 //---------------------------------------------------------------------------
 void __fastcall TDriveGraph::FormMouseWheel(TObject *Sender, TShiftState Shift, int WheelDelta,
 	TPoint &MousePos, bool &Handled)
 {
-	//ÉYÅ[ÉÄ
+	//„Ç∫„Éº„É†
 	if (SameText(get_ShiftStr(Shift), KeyStr_Ctrl)) {
 		int last_sz = BarSize;
 		if (WheelDelta<0 && BarSize>1)  --BarSize;
@@ -115,7 +115,7 @@ void __fastcall TDriveGraph::FormMouseWheel(TObject *Sender, TShiftState Shift, 
 			SizeComboBoxChange(NULL);
 		}
 	}
-	//ÉXÉNÉçÅ[Éã
+	//„Çπ„ÇØ„É≠„Éº„É´
 	else {
 		GraphScrollBox->VertScrollBar->Position -= Sign(WheelDelta) * (std::max(BarSize*4, 8));
 	}
@@ -124,7 +124,7 @@ void __fastcall TDriveGraph::FormMouseWheel(TObject *Sender, TShiftState Shift, 
 }
 
 //---------------------------------------------------------------------------
-//ï`âÊ
+//ÊèèÁîª
 //---------------------------------------------------------------------------
 void __fastcall TDriveGraph::PaintBox1Paint(TObject *Sender)
 {
@@ -159,38 +159,38 @@ void __fastcall TDriveGraph::PaintBox1Paint(TObject *Sender)
 		int idx = OldOdrAction->Checked? 0 : DataList->Count - 1;
 		for (int i=0,yp=0; i<DataList->Count; i++,yp+=BarSize) {
 			UnicodeString lbuf = DataList->Strings[idx];
-			//ì˙ït
+			//Êó•‰ªò
 			if (yp>=yt) {
 				cv->Font->Color = get_ListFgCol();
 				cv->TextOut(SCALED_THIS(4), yp, get_csv_item(lbuf, 0));
 				yt = yp + ym;
 			}
-			//ÉOÉâÉt
+			//„Ç∞„É©„Éï
 			__int64 used_sz = StrToInt64Def(get_csv_item(lbuf, 2), -1);
 			__int64 free_sz = StrToInt64Def(get_csv_item(lbuf, 3), -1);
 			if (used_sz>=0 && free_sz>=0 && (used_sz + free_sz)>0) {
 				double r = 1.0 * used_sz / (used_sz + free_sz);
 				draw_BarGraph(cv, Rect(GraphTopX, yp, GraphTopX + xw, yp + BarSize), r);
 			}
-			//ÉOÉäÉbÉh
+			//„Ç∞„É™„ÉÉ„Éâ
 			cv->Pen->Color = col_grid;
 			cv->MoveTo(x25, yp);  cv->LineTo(x25, yp + BarSize);
 			cv->MoveTo(x50, yp);  cv->LineTo(x50, yp + BarSize);
 			cv->MoveTo(x75, yp);  cv->LineTo(x75, yp + BarSize);
-			//Min/Max ÉâÉCÉì
+			//Min/Max „É©„Ç§„É≥
 			if (MinMaxAction->Checked) {
 				cv->Pen->Color = clBlue;
 				cv->MoveTo(x_min, yp);  cv->LineTo(x_min, yp + BarSize);
 				cv->Pen->Color = clRed;
 				cv->MoveTo(x_max, yp);  cv->LineTo(x_max, yp + BarSize);
 			}
-			//Cur ÉâÉCÉì
+			//Cur „É©„Ç§„É≥
 			if (CursorAction->Checked && x_cur!=-1) {
 				cv->Pen->Color = col_Cursor;
 				cv->MoveTo(x_cur, yp);  cv->LineTo(x_cur, yp + BarSize);
 			}
 
-			//ÉâÉCÉìÉJÅ[É\Éã
+			//„É©„Ç§„É≥„Ç´„Éº„ÇΩ„É´
 			if (HiddenEdit->Focused() && idx==SttIndex) {
 				alpha_blend_Rect(cv, Rect(0, yp, GraphScrollBox->ClientWidth, yp + BarSize), col_Cursor, 64);
 			}
@@ -213,7 +213,7 @@ void __fastcall TDriveGraph::PaintBox1MouseDown(TObject *Sender, TMouseButton Bu
 }
 
 //---------------------------------------------------------------------------
-//ÉXÉeÅ[É^ÉXÉoÅ[èÓïÒÇÃê›íË
+//„Çπ„ÉÜ„Éº„Çø„Çπ„Éê„ÉºÊÉÖÂ†±„ÅÆË®≠ÂÆö
 //---------------------------------------------------------------------------
 void __fastcall TDriveGraph::SetStatus(int idx)
 {
@@ -226,10 +226,10 @@ void __fastcall TDriveGraph::SetStatus(int idx)
 		__int64 used_sz = StrToInt64Def(get_csv_item(lbuf, 2), -1);
 		__int64 free_sz = StrToInt64Def(get_csv_item(lbuf, 3), -1);
 		if (used_sz>=0 && free_sz>=0) {
-			//égóp
+			//‰ΩøÁî®
 			msg.cat_sprintf(_T("  %4.1f%% %s Used"),
 					100.0 * used_sz / (used_sz + free_sz), get_size_str_T(used_sz, 1).c_str());
-			//ç∑ï™
+			//Â∑ÆÂàÜ
 			if (idx>0) {
 				__int64 used_yd = StrToInt64Def(get_csv_item(DataList->Strings[idx - 1], 2), -1);
 				if (used_sz>=used_yd)
@@ -237,11 +237,11 @@ void __fastcall TDriveGraph::SetStatus(int idx)
 				else
 					msg.cat_sprintf(_T("(-%s)"), get_size_str_T(used_yd - used_sz, 1).c_str());
 			}
-			//ãÛÇ´
+			//Á©∫„Åç
 			msg.cat_sprintf(_T("/ %s Free"), get_size_str_T(free_sz, 1).c_str());
 		}
 
-		//ÉXÉNÉçÅ[Éãà íuÇÃí≤êÆ
+		//„Çπ„ÇØ„É≠„Éº„É´‰ΩçÁΩÆ„ÅÆË™øÊï¥
 		int yp = BarSize * (OldOdrAction->Checked? idx : DataList->Count - 1 - idx);
 		if (yp < GraphScrollBox->VertScrollBar->Position)
 			GraphScrollBox->VertScrollBar->Position = std::max(yp - BarSize, 0);
@@ -252,7 +252,7 @@ void __fastcall TDriveGraph::SetStatus(int idx)
 	StatusBar1->Panels->Items[0]->Text = msg;
 }
 //---------------------------------------------------------------------------
-//ÉhÉâÉCÉuÇÃïœçX
+//„Éâ„É©„Ç§„Éñ„ÅÆÂ§âÊõ¥
 //---------------------------------------------------------------------------
 void __fastcall TDriveGraph::DriveComboBoxChange(TObject *Sender)
 {
@@ -275,7 +275,7 @@ void __fastcall TDriveGraph::OptComboBoxKeyDown(TObject *Sender, WORD &Key,
 }
 
 //---------------------------------------------------------------------------
-//ñ_ïù
+//Ê£íÂπÖ
 //---------------------------------------------------------------------------
 void __fastcall TDriveGraph::SizeComboBoxChange(TObject *Sender)
 {
@@ -301,7 +301,7 @@ void __fastcall TDriveGraph::ToggleActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ÉLÅ[ëÄçÏ
+//„Ç≠„ÉºÊìç‰Ωú
 //---------------------------------------------------------------------------
 void __fastcall TDriveGraph::HiddenEditKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {

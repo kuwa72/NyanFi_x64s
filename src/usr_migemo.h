@@ -1,6 +1,6 @@
 /**
  * @file usr_migemo.h
- * @brief Migemo ˆ—
+ * @brief Migemo å‡¦ç†
  */
 //---------------------------------------------------------------------------
 #ifndef UsrMigemoH
@@ -15,7 +15,7 @@ typedef void 			(WINAPI *FUNC_migemo_release)(migemo*, unsigned char*);
 
 //---------------------------------------------------------------------------
 /**
- * @brief Migemo ˆ—
+ * @brief Migemo å‡¦ç†
  */
 class MigemoUnit
 {
@@ -36,8 +36,8 @@ public:
 	int  MinLength;
 
 	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param dnam MigemoƒfƒBƒŒƒNƒgƒŠ
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param dnam Migemoãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 	 */
 	MigemoUnit(UnicodeString dnam);
 
@@ -46,12 +46,12 @@ public:
 	UnicodeString Query(UnicodeString qstr);
 
 	/**
-	 * @brief ³‹K•\Œ»ƒpƒ^[ƒ“‚ğæ“¾
+	 * @brief æ­£è¦è¡¨ç¾ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’å–å¾—
 	 * 
-	 * @param sw Migemo‚ğ—˜—p
-	 * @param w ŒŸõŒê
-	 * @param minlen ŒŸõŠJn•¶š”
-	 * @return UnicodeString ³‹K•\Œ»ƒpƒ^[ƒ“
+	 * @param sw Migemoã‚’åˆ©ç”¨
+	 * @param w æ¤œç´¢èª
+	 * @param minlen æ¤œç´¢é–‹å§‹æ–‡å­—æ•°
+	 * @return UnicodeString æ­£è¦è¡¨ç¾ãƒ‘ã‚¿ãƒ¼ãƒ³
 	 */
 	UnicodeString GetRegExPtn(bool sw, UnicodeString w, int minlen = 0);
 };

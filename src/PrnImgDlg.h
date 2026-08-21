@@ -1,6 +1,6 @@
 /**
  * @file PrnImgDlg.h
- * @brief ˆóüİ’èƒ_ƒCƒAƒƒO
+ * @brief å°åˆ·è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 //---------------------------------------------------------------------------
 #ifndef PrnImgDlgH
@@ -23,11 +23,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ˆóüİ’èƒ_ƒCƒAƒƒO
+ * @brief å°åˆ·è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TPrintImgDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *PrintAction;
 	TActionList *ActionList1;
 	TButton *EndBtn;
@@ -86,12 +86,12 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall TopBtnClick(TObject *Sender);
 	void __fastcall EndBtnClick(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	bool DlgInitialized;
 	TFont *StrFont;
 	UnicodeString FormatStr;
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	file_rec *FileRec;
 
 	__fastcall TPrintImgDlg(TComponent* Owner);

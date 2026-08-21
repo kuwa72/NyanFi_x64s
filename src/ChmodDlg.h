@@ -1,6 +1,6 @@
 /**
  * @file ChmodDlg.h
- * @brief ƒp[ƒ~ƒbƒVƒ‡ƒ“İ’è
+ * @brief ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³è¨­å®š
  */
 //---------------------------------------------------------------------------
 #ifndef ChmodDlgH
@@ -16,11 +16,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒp[ƒ~ƒbƒVƒ‡ƒ“İ’èƒ_ƒCƒAƒƒO
+ * @brief ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TFtpChmodDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TButton *CanButton;
 	TButton *OkButton;
 	TCheckBox *R1CheckBox;
@@ -44,10 +44,10 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall PrmCheckBoxClick(TObject *Sender);
 	void __fastcall OctalEditChange(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	bool InhChange;
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	__fastcall TFtpChmodDlg(TComponent* Owner);
 	bool __fastcall SetPermission(UnicodeString prm);
 };

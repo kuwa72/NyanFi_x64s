@@ -1,6 +1,6 @@
 /**
  * @file MainFrm.h
- * @brief 2‰æ–Êƒtƒ@ƒCƒ‰[ NyanFi x64 VCL Style
+ * @brief 2ç”»é¢ãƒ•ã‚¡ã‚¤ãƒ©ãƒ¼ NyanFi x64 VCL Style
  */
 //---------------------------------------------------------------------------
 #ifndef MainFrmH
@@ -65,12 +65,12 @@
 #define OTHERS_BASE		5000
 
 //---------------------------------------------------------------------------
-#define IS_FullScr()			(BorderStyle==bsNone)		//!< ‘S‰æ–Ê•\¦‚©H
+#define IS_FullScr()			(BorderStyle==bsNone)		//!< å…¨ç”»é¢è¡¨ç¤ºã‹ï¼Ÿ
 
 //---------------------------------------------------------------------------
 class TNyanFiForm : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *AboutNyanFiAction;
 	TAction *AddTabAction;
 	TAction *AddTagAction;
@@ -1168,15 +1168,15 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall GrepStatusBarDrawPanel(TStatusBar *StatusBar, TStatusPanel *Panel, const TRect &Rect);
 	void __fastcall RepT1PanelResize(TObject *Sender);
 	void __fastcall GrepT11PanelResize(TObject *Sender);
-	void __fastcall TaskSttTimerTimer(TObject *Sender);			//!< ƒ^ƒXƒN‚ÌŠÄ‹E•\¦/ŒŸõó‘Ô‚Ì•\¦/Œvƒpƒlƒ‹/Œx/
-																//!< ƒRƒ}ƒ“ƒh—v‹‚Ìˆ—/ƒ^ƒCƒ}[ƒCƒxƒ“ƒgˆ—/FTP‚ÌÚ‘±ŠÄ‹
-	void __fastcall WaitTimerTimer(TObject *Sender);			//!< ƒtƒ@ƒCƒ‹î•ñ•\¦‚Ì’x‰„
-	void __fastcall UpdLogTimerTimer(TObject *Sender);			//!< ƒƒO•\¦XV
-	void __fastcall WatchDirTimerTimer(TObject *Sender);		//!< ƒfƒBƒŒƒNƒgƒŠŠÄ‹
-	void __fastcall WatchTailTimerTimer(TObject *Sender);		//!< ƒtƒ@ƒCƒ‹’Ç‰ÁXV‚ÌŠÄ‹
-	void __fastcall MsgHintTimerTimer(TObject *Sender);			//!< ƒƒbƒZ[ƒWƒqƒ“ƒg•\¦
-	void __fastcall KeyHintTimerTimer(TObject *Sender);			//!< 2ƒXƒgƒ[ƒNƒL[‚Ìƒqƒ“ƒg•\¦
-	void __fastcall BlinkTimerTimer(TObject *Sender);			//!< ”’”ò‚ÑŒx
+	void __fastcall TaskSttTimerTimer(TObject *Sender);			//!< ã‚¿ã‚¹ã‚¯ã®ç›£è¦–ãƒ»è¡¨ç¤º/æ¤œç´¢çŠ¶æ…‹ã®è¡¨ç¤º/æ™‚è¨ˆãƒ‘ãƒãƒ«/è­¦å‘Š/
+																//!< ã‚³ãƒãƒ³ãƒ‰è¦æ±‚ã®å‡¦ç†/ã‚¿ã‚¤ãƒãƒ¼ã‚¤ãƒ™ãƒ³ãƒˆå‡¦ç†/FTPã®æ¥ç¶šç›£è¦–
+	void __fastcall WaitTimerTimer(TObject *Sender);			//!< ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±è¡¨ç¤ºã®é…å»¶
+	void __fastcall UpdLogTimerTimer(TObject *Sender);			//!< ãƒ­ã‚°è¡¨ç¤ºæ›´æ–°
+	void __fastcall WatchDirTimerTimer(TObject *Sender);		//!< ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªç›£è¦–
+	void __fastcall WatchTailTimerTimer(TObject *Sender);		//!< ãƒ•ã‚¡ã‚¤ãƒ«è¿½åŠ æ›´æ–°ã®ç›£è¦–
+	void __fastcall MsgHintTimerTimer(TObject *Sender);			//!< ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ’ãƒ³ãƒˆè¡¨ç¤º
+	void __fastcall KeyHintTimerTimer(TObject *Sender);			//!< 2ã‚¹ãƒˆãƒ­ãƒ¼ã‚¯ã‚­ãƒ¼ã®ãƒ’ãƒ³ãƒˆè¡¨ç¤º
+	void __fastcall BlinkTimerTimer(TObject *Sender);			//!< ç™½é£›ã³è­¦å‘Š
 	void __fastcall ToolBtnClick(TObject *Sender);
 	void __fastcall FKeyBtnClick(TObject *Sender);
 	void __fastcall FKeyBtnMouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
@@ -1976,82 +1976,82 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall IS_Match1ActionUpdate(TObject *Sender);
 	void __fastcall ResultListBoxEnter(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	TIdFTP *IdFTP1;
 	TIdAntiFreeze *IdAntiFreeze1;
 	TIdSSLIOHandlerSocketOpenSSL *IdSSLIOHandlerSocketOpenSSL1;
 	__int64 FTPMaxCount;
-	bool InhFTPCheck;					//FTPÚ‘±ƒ`ƒFƒbƒN‚ğ—}~
-	bool FTPhasCHMOD;					//CHMOD ƒRƒ}ƒ“ƒh‚É‘Î‰‚µ‚Ä‚¢‚é
+	bool InhFTPCheck;					//FTPæ¥ç¶šãƒã‚§ãƒƒã‚¯ã‚’æŠ‘æ­¢
+	bool FTPhasCHMOD;					//CHMOD ã‚³ãƒãƒ³ãƒ‰ã«å¯¾å¿œã—ã¦ã„ã‚‹
 
-	bool ReqClose;						//I—¹—v‹
-	bool ReqPowerOff;					//ƒVƒƒƒbƒgƒ_ƒEƒ“—v‹
-	bool ReqReboot;						//Ä‹N“®—v‹
-	bool ReqKeepDupl;					//“ñd‹N“®‚µ‚½ NyanFi ‚ğI—¹‚³‚¹‚È‚¢
-	bool NotSaveINI;					//INIƒtƒ@ƒCƒ‹‚ğ•Û‘¶‚¹‚¸‚ÉI—¹
+	bool ReqClose;						//çµ‚äº†è¦æ±‚
+	bool ReqPowerOff;					//ã‚·ãƒ£ãƒƒãƒˆãƒ€ã‚¦ãƒ³è¦æ±‚
+	bool ReqReboot;						//å†èµ·å‹•è¦æ±‚
+	bool ReqKeepDupl;					//äºŒé‡èµ·å‹•ã—ãŸ NyanFi ã‚’çµ‚äº†ã•ã›ãªã„
+	bool NotSaveINI;					//INIãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä¿å­˜ã›ãšã«çµ‚äº†
 
-	bool Activating;					//ApplicationEvents1Activate ˆ—’†
-	TToolButton *WaitingToolBtn;		//‘Ò‹@ƒc[ƒ‹ƒ{ƒ^ƒ“
-	TToolButton *WaitingFKeyBtn;		//‘Ò‹@FƒL[
+	bool Activating;					//ApplicationEvents1Activate å‡¦ç†ä¸­
+	TToolButton *WaitingToolBtn;		//å¾…æ©Ÿãƒ„ãƒ¼ãƒ«ãƒœã‚¿ãƒ³
+	TToolButton *WaitingFKeyBtn;		//å¾…æ©ŸFã‚­ãƒ¼
 
 	bool WndSizing;
-	int  ViewInfCnt;					//ƒtƒ@ƒCƒ‹î•ñ‚Ì•\¦ˆ—’†
-	int  InhDrawImg;					//‰æ‘œ•`‰æ‚Ì—}~
-	bool NextDenied;					//Ÿ‚Ì‰æ‘œ‚ÉˆÚ‚ê‚È‚©‚Á‚½
-	int  InhDirHist;					//ƒfƒBƒŒƒNƒgƒŠ—š—ğ’Ç‰Á‚Ì—}~
-	int  InhUpdBgImg;					//”wŒi‰æ‘œXV‚Ì—}~
+	int  ViewInfCnt;					//ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã®è¡¨ç¤ºå‡¦ç†ä¸­
+	int  InhDrawImg;					//ç”»åƒæç”»ã®æŠ‘æ­¢
+	bool NextDenied;					//æ¬¡ã®ç”»åƒã«ç§»ã‚Œãªã‹ã£ãŸ
+	int  InhDirHist;					//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå±¥æ­´è¿½åŠ ã®æŠ‘æ­¢
+	int  InhUpdBgImg;					//èƒŒæ™¯ç”»åƒæ›´æ–°ã®æŠ‘æ­¢
 	bool HideBgImg[MAX_FILELIST];
-	int  DrawOppCsr;					//”½‘Î‘¤ƒJ[ƒ\ƒ‹‚Ì•`‰æ
-	int  KeepCurCsr;					//ƒJƒŒƒ“ƒg‘¤ƒJ[ƒ\ƒ‹•\¦‚ğˆÛ
-	bool KeepModalScr;					//ƒ‚[ƒ_ƒ‹•\¦Œø‰Ê‚ğˆÛ
-	bool InhModalScr;					//ƒ‚[ƒ_ƒ‹•\¦Œø‰Ê‚ğ—}~
-	bool ApplyDotNyan;					//.nyanfi ‚ğ“K—p
-	bool ChkHardLink;					//ReloadList ‚Åƒn[ƒhƒŠƒ“ƒNXV
+	int  DrawOppCsr;					//åå¯¾å´ã‚«ãƒ¼ã‚½ãƒ«ã®æç”»
+	int  KeepCurCsr;					//ã‚«ãƒ¬ãƒ³ãƒˆå´ã‚«ãƒ¼ã‚½ãƒ«è¡¨ç¤ºã‚’ç¶­æŒ
+	bool KeepModalScr;					//ãƒ¢ãƒ¼ãƒ€ãƒ«è¡¨ç¤ºåŠ¹æœã‚’ç¶­æŒ
+	bool InhModalScr;					//ãƒ¢ãƒ¼ãƒ€ãƒ«è¡¨ç¤ºåŠ¹æœã‚’æŠ‘æ­¢
+	bool ApplyDotNyan;					//.nyanfi ã‚’é©ç”¨
+	bool ChkHardLink;					//ReloadList ã§ãƒãƒ¼ãƒ‰ãƒªãƒ³ã‚¯æ›´æ–°
 
-	UnicodeString StartMsg;				//‹N“®ƒƒbƒZ[ƒW
-	int  StartTag;						//‹N“®‚ÌƒJƒŒƒ“ƒgƒ^ƒO
-	UnicodeString StartFile;			//‹N“®‚ÌƒJƒŒƒ“ƒgƒtƒ@ƒCƒ‹
-	UnicodeString StartCmds;			//‹N“®‚ÌÀsƒRƒ}ƒ“ƒh
-	UnicodeString InitialLog;			//‹N“®‚Ì’Ç‰ÁƒƒO
-	UnicodeString UpdateMsg;			//XVƒƒbƒZ[ƒW
+	UnicodeString StartMsg;				//èµ·å‹•æ™‚ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
+	int  StartTag;						//èµ·å‹•æ™‚ã®ã‚«ãƒ¬ãƒ³ãƒˆã‚¿ã‚°
+	UnicodeString StartFile;			//èµ·å‹•æ™‚ã®ã‚«ãƒ¬ãƒ³ãƒˆãƒ•ã‚¡ã‚¤ãƒ«
+	UnicodeString StartCmds;			//èµ·å‹•æ™‚ã®å®Ÿè¡Œã‚³ãƒãƒ³ãƒ‰
+	UnicodeString InitialLog;			//èµ·å‹•æ™‚ã®è¿½åŠ ãƒ­ã‚°
+	UnicodeString UpdateMsg;			//æ›´æ–°æ™‚ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
 
 	HANDLE hWatchDir[MAX_FILELIST];
-	UnicodeString WatchPath[MAX_FILELIST];	//ŠÄ‹ƒfƒBƒŒƒNƒgƒŠ
+	UnicodeString WatchPath[MAX_FILELIST];	//ç›£è¦–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 
-	UnicodeString DirRelStr;			//ƒfƒBƒŒƒNƒgƒŠŠÖŒW
+	UnicodeString DirRelStr;			//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªé–¢ä¿‚
 
-	bool isViewText;					//ƒeƒLƒXƒg•\¦
-	bool isRichText;					//ƒŠƒbƒ`ƒeƒLƒXƒg•\¦
-	bool isXDoc2Txt;					//xdoc2txt ‚ğ—˜—p‚µ‚Ä•\¦
-	bool fromGrep;						//GREP‚©‚çŠJ‚¢‚Ä‚¢‚é
-	bool isViewWork;					//ƒCƒ[ƒWƒrƒ…[ƒA‚Åƒ[ƒNƒŠƒXƒg‚ğ•\¦’†
-	bool VListMaking;					//ViewFileList ì¬’†
-	bool ImgMoving;						//ƒrƒ…[ƒAƒCƒ[ƒWˆÚ“®’†
-	bool TmpEqualSize;					//ˆê“I‚È“™”{•\¦
-	bool ThumbExtended;					//ƒTƒ€ƒlƒCƒ‹‚ÌŠg’£•\¦
-	bool ThumbClicked;					//’¼‘O‚ÉƒTƒ€ƒlƒCƒ‹‚ªƒNƒŠƒbƒN‚³‚ê‚Ä‚¢‚é
-	int  InhThumbGrid;					//ƒTƒ€ƒlƒCƒ‹EƒOƒŠƒbƒhˆ—‚Ì—}~
-	bool FinfSkipped;					//ƒtƒ@ƒCƒ‹î•ñæ“¾‚ªƒXƒLƒbƒv‚³‚ê‚½
+	bool isViewText;					//ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¤º
+	bool isRichText;					//ãƒªãƒƒãƒãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¤º
+	bool isXDoc2Txt;					//xdoc2txt ã‚’åˆ©ç”¨ã—ã¦è¡¨ç¤º
+	bool fromGrep;						//GREPã‹ã‚‰é–‹ã„ã¦ã„ã‚‹
+	bool isViewWork;					//ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢ã§ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã‚’è¡¨ç¤ºä¸­
+	bool VListMaking;					//ViewFileList ä½œæˆä¸­
+	bool ImgMoving;						//ãƒ“ãƒ¥ãƒ¼ã‚¢ã‚¤ãƒ¡ãƒ¼ã‚¸ç§»å‹•ä¸­
+	bool TmpEqualSize;					//ä¸€æ™‚çš„ãªç­‰å€è¡¨ç¤º
+	bool ThumbExtended;					//ã‚µãƒ ãƒã‚¤ãƒ«ã®æ‹¡å¼µè¡¨ç¤º
+	bool ThumbClicked;					//ç›´å‰ã«ã‚µãƒ ãƒã‚¤ãƒ«ãŒã‚¯ãƒªãƒƒã‚¯ã•ã‚Œã¦ã„ã‚‹
+	int  InhThumbGrid;					//ã‚µãƒ ãƒã‚¤ãƒ«ãƒ»ã‚°ãƒªãƒƒãƒ‰å‡¦ç†ã®æŠ‘æ­¢
+	bool FinfSkipped;					//ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±å–å¾—ãŒã‚¹ã‚­ãƒƒãƒ—ã•ã‚ŒãŸ
 	bool isLoopHint;
-	TPoint LastP;						//ƒCƒ[ƒWˆÚ“®’†‚Ì‘O‰ñ‚Ìƒ}ƒEƒXˆÊ’u
-	TPoint ButtonPos;					//ƒƒjƒ…[•\¦—pƒ{ƒ^ƒ“ˆÊ’u
-	bool IsEvenPage;					//Œ©ŠJ‚«•\¦‚Í‹ô”ƒy[ƒW‚©‚ç
-	int  InhSeekBar;					//ƒV[ƒNƒo[ˆ—‚Ì—}~
+	TPoint LastP;						//ã‚¤ãƒ¡ãƒ¼ã‚¸ç§»å‹•ä¸­ã®å‰å›ã®ãƒã‚¦ã‚¹ä½ç½®
+	TPoint ButtonPos;					//ãƒ¡ãƒ‹ãƒ¥ãƒ¼è¡¨ç¤ºç”¨ãƒœã‚¿ãƒ³ä½ç½®
+	bool IsEvenPage;					//è¦‹é–‹ãè¡¨ç¤ºã¯å¶æ•°ãƒšãƒ¼ã‚¸ã‹ã‚‰
+	int  InhSeekBar;					//ã‚·ãƒ¼ã‚¯ãƒãƒ¼å‡¦ç†ã®æŠ‘æ­¢
 	double WorkBarRatio;
 
-	UnicodeString ActionParam;			//ƒRƒ}ƒ“ƒhƒAƒNƒVƒ‡ƒ“‚Ìƒpƒ‰ƒ[ƒ^
-	UnicodeString ActionDesc;			//ƒRƒ}ƒ“ƒhƒAƒNƒVƒ‡ƒ“‚Ìà–¾
-	bool ActionOk;						//ƒRƒ}ƒ“ƒhƒAƒNƒVƒ‡ƒ“‚ÌÀsŒ‹‰Ê
-	UnicodeString ActionErrMsg;			//ƒRƒ}ƒ“ƒhƒAƒNƒVƒ‡ƒ“‚ÌƒGƒ‰[ƒƒbƒZ[ƒW
-	UnicodeString ActionOptStr;			//ƒRƒ}ƒ“ƒhƒAƒNƒVƒ‡ƒ“‚ÌƒIƒvƒVƒ‡ƒ“
+	UnicodeString ActionParam;			//ã‚³ãƒãƒ³ãƒ‰ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
+	UnicodeString ActionDesc;			//ã‚³ãƒãƒ³ãƒ‰ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®èª¬æ˜
+	bool ActionOk;						//ã‚³ãƒãƒ³ãƒ‰ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®å®Ÿè¡Œçµæœ
+	UnicodeString ActionErrMsg;			//ã‚³ãƒãƒ³ãƒ‰ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
+	UnicodeString ActionOptStr;			//ã‚³ãƒãƒ³ãƒ‰ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³
 	UnicodeString ActionDstDir;
 
-	UnicodeString FirstKey;				//2ƒXƒgƒ[ƒNŠJnƒL[
-	bool Wait2ndKey;					//2ƒXƒgƒ[ƒN–Ú‘Ò‚¿ó‘Ô
-	bool KeyHandled;					//“ÁêƒVƒ‡[ƒgƒJƒbƒgˆ—Ï‚İ(ƒr[ƒv‰¹‰ñ”ğ—p)
-	bool DblClicked;					//ƒ_ƒuƒ‹ƒNƒŠƒbƒN‚³‚ê‚½
+	UnicodeString FirstKey;				//2ã‚¹ãƒˆãƒ­ãƒ¼ã‚¯é–‹å§‹ã‚­ãƒ¼
+	bool Wait2ndKey;					//2ã‚¹ãƒˆãƒ­ãƒ¼ã‚¯ç›®å¾…ã¡çŠ¶æ…‹
+	bool KeyHandled;					//ç‰¹æ®Šã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆå‡¦ç†æ¸ˆã¿(ãƒ“ãƒ¼ãƒ—éŸ³å›é¿ç”¨)
+	bool DblClicked;					//ãƒ€ãƒ–ãƒ«ã‚¯ãƒªãƒƒã‚¯ã•ã‚ŒãŸ
 	bool R_Clicked;
-	bool RClickAtCur;					//ƒJ[ƒ\ƒ‹ˆÊ’u€–Ú‚ª‰EƒNƒŠƒbƒN‚³‚ê‚½
+	bool RClickAtCur;					//ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®é …ç›®ãŒå³ã‚¯ãƒªãƒƒã‚¯ã•ã‚ŒãŸ
 
 	TShiftState LastShift;
 
@@ -2064,49 +2064,49 @@ private:	// ƒ†[ƒU[éŒ¾
 	bool DragCancel;
 	int  LastIndex[MAX_FILELIST];
 
-	int  DragTabIndex;					//ƒhƒ‰ƒbƒO‘ÎÛ‚Ìƒ^ƒu
-	int  HotTabIndex;					//ƒhƒ‰ƒbƒO’†‚ÌƒJ[ƒ\ƒ‹ˆÊ’u‚Ìƒ^ƒu
-	bool TabMouseCliped;				//ƒhƒ‰ƒbƒO‚Åƒ}ƒEƒXƒNƒŠƒbƒv’†
+	int  DragTabIndex;					//ãƒ‰ãƒ©ãƒƒã‚°å¯¾è±¡ã®ã‚¿ãƒ–
+	int  HotTabIndex;					//ãƒ‰ãƒ©ãƒƒã‚°ä¸­ã®ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®ã‚¿ãƒ–
+	bool TabMouseCliped;				//ãƒ‰ãƒ©ãƒƒã‚°ã§ãƒã‚¦ã‚¹ã‚¯ãƒªãƒƒãƒ—ä¸­
 
-	bool fromOpenStd;					//OpenStandard ‚©‚çŒÄ‚Î‚ê‚Ä‚¢‚é
-	bool fromFileList;					//ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚©‚çÀs‚³‚ê‚½
-	bool fromMenuFile;					//ƒƒjƒ…[ƒtƒ@ƒCƒ‹‚©‚çÀs‚³‚ê‚½
-	bool fromFlToWork;					//ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚©‚çƒ[ƒNƒŠƒXƒg‚ğŠJ‚¢‚½
+	bool fromOpenStd;					//OpenStandard ã‹ã‚‰å‘¼ã°ã‚Œã¦ã„ã‚‹
+	bool fromFileList;					//ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã‹ã‚‰å®Ÿè¡Œã•ã‚ŒãŸ
+	bool fromMenuFile;					//ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰å®Ÿè¡Œã•ã‚ŒãŸ
+	bool fromFlToWork;					//ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã‹ã‚‰ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã‚’é–‹ã„ãŸ
 
-	TGrepThread *GrepThread[MAX_GREP_THREAD];	//GREPƒXƒŒƒbƒh
+	TGrepThread *GrepThread[MAX_GREP_THREAD];	//GREPã‚¹ãƒ¬ãƒƒãƒ‰
 
-	UnicodeString GrepPath;				//GREP ‘ÎÛƒpƒX
-	UnicodeString GrepParameter;		//ƒpƒ‰ƒ[ƒ^ ([>ƒtƒBƒ‹ƒ^> ]ŒŸõŒê)
-	UnicodeString GrepKeyword;			//  ŒŸõŒê
-	UnicodeString GrepFilter;			//	ƒtƒBƒ‹ƒ^
-	UnicodeString GrepResultMsg;		//  ŒŸõŒ‹‰ÊƒƒbƒZ[ƒW
-	UnicodeString GrepResultMsgBuf;		//    ‘Ò”ğ—pƒoƒbƒtƒ@
-	UnicodeString GrepResultPath;		//  ŒŸõŒ‹‰ÊƒpƒX
-	UnicodeString GrepResultPathBuf;	//    ‘Ò”ğ—pƒoƒbƒtƒ@
+	UnicodeString GrepPath;				//GREP å¯¾è±¡ãƒ‘ã‚¹
+	UnicodeString GrepParameter;		//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ ([>ãƒ•ã‚£ãƒ«ã‚¿> ]æ¤œç´¢èª)
+	UnicodeString GrepKeyword;			//  æ¤œç´¢èª
+	UnicodeString GrepFilter;			//	ãƒ•ã‚£ãƒ«ã‚¿
+	UnicodeString GrepResultMsg;		//  æ¤œç´¢çµæœãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
+	UnicodeString GrepResultMsgBuf;		//    å¾…é¿ç”¨ãƒãƒƒãƒ•ã‚¡
+	UnicodeString GrepResultPath;		//  æ¤œç´¢çµæœãƒ‘ã‚¹
+	UnicodeString GrepResultPathBuf;	//    å¾…é¿ç”¨ãƒãƒƒãƒ•ã‚¡
 
-	bool UseDfmFilter;					//DfmObj ƒtƒBƒ‹ƒ^‚ğ“K—p’†
-	bool GrepCaseSenstive;				//‘å¬•¶š‚ğ‹æ•Ê
-	bool GrepFiltered;					//Œ‹‰Êi‚è‚İ’†
-	bool GrepLnSorted;					//s“à—e‚Åƒ\[ƒg’†
-	bool GrepWorkList;					//‘ÎÛ‚ªƒ[ƒNƒŠƒXƒg
-	bool GrepUseExe;					//grep.exe ‚ğ—˜—p
+	bool UseDfmFilter;					//DfmObj ãƒ•ã‚£ãƒ«ã‚¿ã‚’é©ç”¨ä¸­
+	bool GrepCaseSenstive;				//å¤§å°æ–‡å­—ã‚’åŒºåˆ¥
+	bool GrepFiltered;					//çµæœçµã‚Šè¾¼ã¿ä¸­
+	bool GrepLnSorted;					//è¡Œå†…å®¹ã§ã‚½ãƒ¼ãƒˆä¸­
+	bool GrepWorkList;					//å¯¾è±¡ãŒãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆ
+	bool GrepUseExe;					//grep.exe ã‚’åˆ©ç”¨
 
-	bool GrepSelFileOnly;				//ƒtƒ@ƒCƒ‹‚Ì‚İ‘I‘ğ
-	bool fromViewer;					//ƒeƒLƒXƒgƒrƒ…[ƒA‚©‚ç
-	bool InhGrepFilter;					//ƒtƒBƒ‹ƒ^‚Ì—}~
+	bool GrepSelFileOnly;				//ãƒ•ã‚¡ã‚¤ãƒ«ã®ã¿é¸æŠ
+	bool fromViewer;					//ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã‹ã‚‰
+	bool InhGrepFilter;					//ãƒ•ã‚£ãƒ«ã‚¿ã®æŠ‘æ­¢
 
-	int GrepMatchFileCnt;				//ƒ}ƒbƒ`‚µ‚½ƒtƒ@ƒCƒ‹”
-	int GrepMatchLineCnt;				//ƒ}ƒbƒ`‚µ‚½s”
-	int GrepMaxFileWd;					//ƒ}ƒbƒ`ƒtƒ@ƒCƒ‹–¼‚ÌÅ‘å•
+	int GrepMatchFileCnt;				//ãƒãƒƒãƒã—ãŸãƒ•ã‚¡ã‚¤ãƒ«æ•°
+	int GrepMatchLineCnt;				//ãƒãƒƒãƒã—ãŸè¡Œæ•°
+	int GrepMaxFileWd;					//ãƒãƒƒãƒãƒ•ã‚¡ã‚¤ãƒ«åã®æœ€å¤§å¹…
 
-	SttProgressBar *SttPrgBar;			//Grep—pƒvƒƒOƒŒƒXƒo[
-	UsrHintWindow *MsgHint;				//ƒƒbƒZ[ƒWAŒx‚Ìƒqƒ“ƒg•\¦ƒEƒBƒ“ƒhƒE
-	UsrHintWindow *KeyHint;				//2ƒXƒgƒ[ƒN‘€ì‚Ìƒqƒ“ƒg•\¦ƒEƒBƒ“ƒhƒE
+	SttProgressBar *SttPrgBar;			//Grepç”¨ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹ãƒãƒ¼
+	UsrHintWindow *MsgHint;				//ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã€è­¦å‘Šã®ãƒ’ãƒ³ãƒˆè¡¨ç¤ºã‚¦ã‚£ãƒ³ãƒ‰ã‚¦
+	UsrHintWindow *KeyHint;				//2ã‚¹ãƒˆãƒ­ãƒ¼ã‚¯æ“ä½œã®ãƒ’ãƒ³ãƒˆè¡¨ç¤ºã‚¦ã‚£ãƒ³ãƒ‰ã‚¦
 
-	UnicodeString RepParameter;			//’uŠ·ƒpƒ‰ƒ[ƒ^ ([>ƒtƒBƒ‹ƒ^> ]ŒŸõŒê)
-	UnicodeString RepKeyword;			//  ŒŸõ•¶š—ñ
-	UnicodeString ReplaceWord;			//  ’uŠ·•¶š—ñ
-	UnicodeString RepFilter;			//	ƒtƒBƒ‹ƒ^
+	UnicodeString RepParameter;			//ç½®æ›ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ ([>ãƒ•ã‚£ãƒ«ã‚¿> ]æ¤œç´¢èª)
+	UnicodeString RepKeyword;			//  æ¤œç´¢æ–‡å­—åˆ—
+	UnicodeString ReplaceWord;			//  ç½®æ›æ–‡å­—åˆ—
+	UnicodeString RepFilter;			//	ãƒ•ã‚£ãƒ«ã‚¿
 
 	int TabPinWidth;
 	int PopMenuIndex;
@@ -2121,27 +2121,27 @@ private:	// ƒ†[ƒU[éŒ¾
 	UnicodeString LastBatteryStt;
 	int LastBatteryLife;
 
-	TStringList *TxtPrvBuff;			//ƒeƒLƒXƒgƒvƒŒƒrƒ…[—pƒoƒbƒtƒ@
-	TStringList *TxtTailBuff;			//ƒeƒLƒXƒgƒvƒŒƒrƒ…[—pƒoƒbƒtƒ@
-	UnicodeString TxtPrvFile;			//ƒeƒLƒXƒgƒvƒŒƒrƒ…[’†‚Ìƒtƒ@ƒCƒ‹–¼
-	bool TxtPrvShowLineNo;				//ƒeƒLƒXƒgƒvƒŒƒrƒ…[‚Ås”Ô†•\¦
-	bool TxtPrvKeepIndex;				//ƒeƒLƒXƒgƒvƒŒƒrƒ…[‚ÅƒJ[ƒ\ƒ‹s‚ğˆÛ
-	bool LockTxtPrv;					//ƒeƒLƒXƒgƒvƒŒƒrƒ…[‚ğƒƒbƒN
+	TStringList *TxtPrvBuff;			//ãƒ†ã‚­ã‚¹ãƒˆãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ç”¨ãƒãƒƒãƒ•ã‚¡
+	TStringList *TxtTailBuff;			//ãƒ†ã‚­ã‚¹ãƒˆãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ç”¨ãƒãƒƒãƒ•ã‚¡
+	UnicodeString TxtPrvFile;			//ãƒ†ã‚­ã‚¹ãƒˆãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ä¸­ã®ãƒ•ã‚¡ã‚¤ãƒ«å
+	bool TxtPrvShowLineNo;				//ãƒ†ã‚­ã‚¹ãƒˆãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã§è¡Œç•ªå·è¡¨ç¤º
+	bool TxtPrvKeepIndex;				//ãƒ†ã‚­ã‚¹ãƒˆãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã§ã‚«ãƒ¼ã‚½ãƒ«è¡Œã‚’ç¶­æŒ
+	bool LockTxtPrv;					//ãƒ†ã‚­ã‚¹ãƒˆãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚’ãƒ­ãƒƒã‚¯
 
-	UnicodeString UnlockWord;			//LockKeyMouse ‚Ì‰ğœƒ[ƒh
+	UnicodeString UnlockWord;			//LockKeyMouse ã®è§£é™¤ãƒ¯ãƒ¼ãƒ‰
 	UnicodeString InputWord;
 
-	UnicodeString FTPHostItem;			//ƒzƒXƒgİ’è€–Ú
+	UnicodeString FTPHostItem;			//ãƒ›ã‚¹ãƒˆè¨­å®šé …ç›®
 	int FTPHostIndex;
-	UnicodeString TopFTPPath;			//FTPŠJnƒfƒBƒŒƒNƒgƒŠ
-	UnicodeString CurFTPPath;			//FTPÚ‘±’†‚ÌƒJƒŒƒ“ƒgƒpƒX
+	UnicodeString TopFTPPath;			//FTPé–‹å§‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+	UnicodeString CurFTPPath;			//FTPæ¥ç¶šä¸­ã®ã‚«ãƒ¬ãƒ³ãƒˆãƒ‘ã‚¹
 	UnicodeString FTPRstMask;
 	UnicodeString FTPRstCmd;
-	bool FTPTryModTime;					//SetModTime‚ğ‚·
+	bool FTPTryModTime;					//SetModTimeã‚’è©¦ã™
 	int  FTPLastWorkCnt;
 	int  FTPLastNoopCnt;
 
-	TPanel *GrepStickyPanel;			//GREPƒXƒeƒBƒbƒL[
+	TPanel *GrepStickyPanel;			//GREPã‚¹ãƒ†ã‚£ãƒƒã‚­ãƒ¼
 	TPaintBox *GrepStickyBox;
 	int LastTopIndex;
 
@@ -2200,7 +2200,7 @@ private:	// ƒ†[ƒU[éŒ¾
 	void __fastcall ActivateMainForm();
 	void __fastcall ActiveFormChange(TObject *Sender);
 
-	//ƒ^ƒu
+	//ã‚¿ãƒ–
 	TWndMethod org_TabCtrlWindowProc;
 	void __fastcall TabCtrlWindowProc(TMessage &msg);
 
@@ -2226,7 +2226,7 @@ private:	// ƒ†[ƒU[éŒ¾
 	int __fastcall get_TopTabIndex();
 	int __fastcall get_EndTabIndex();
 
-	//ƒfƒBƒŒƒNƒgƒŠî•ñ
+	//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæƒ…å ±
 	void __fastcall DrawDirPanel(TPanel *pp);
 	TWndMethod org_L_DirPanelWndProc;
 	void __fastcall L_DirPanelWndProc(TMessage &msg)
@@ -2257,7 +2257,7 @@ private:	// ƒ†[ƒU[éŒ¾
 		if (msg.Msg==WM_PAINT) DrawDirPanel(R_DirPanel2);
 	}
 
-	//ƒhƒ‰ƒCƒuî•ñ
+	//ãƒ‰ãƒ©ã‚¤ãƒ–æƒ…å ±
 	void __fastcall DrawDrivePanel(TPanel *pp);
 	TWndMethod org_L_StatPanelWndProc;
 	void __fastcall L_StatPanelWndProc(TMessage &msg)
@@ -2597,7 +2597,7 @@ private:	// ƒ†[ƒU[éŒ¾
 		if (sm==SCMD_IVIEW) return "IV";
 		return "FL";
 /*
-		¦F1001 ƒR[ƒh ƒWƒFƒlƒŒ[ƒ^‚Ì“à•”ƒGƒ‰[‚É‚È‚é
+		â€»F1001 ã‚³ãƒ¼ãƒ‰ ã‚¸ã‚§ãƒãƒ¬ãƒ¼ã‚¿ã®å†…éƒ¨ã‚¨ãƒ©ãƒ¼ã«ãªã‚‹
 		return ((sm==SCMD_GREP)? "GR" : (sm==SCMD_TVIEW)? "TV" : (sm==SCMD_IVIEW)? "IV" : "FL");
 */
 	}
@@ -2612,55 +2612,55 @@ private:	// ƒ†[ƒU[éŒ¾
 	int  __fastcall ExeGrepCore(UnicodeString dnam, int &idx_tag);
 	int  __fastcall MakeMatchRepList();
 
-public:		// ƒ†[ƒU[éŒ¾
-	//CurPath ƒvƒƒpƒeƒB
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	//CurPath ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	UnicodeString FCurPath[MAX_FILELIST];
 	UnicodeString __fastcall GetCurPath(int Index) { return FCurPath[Index]; }
 	void __fastcall SetCurPath(int Index, UnicodeString Value);
-	/** @brief ƒJƒŒƒ“ƒgƒpƒX */
+	/** @brief ã‚«ãƒ¬ãƒ³ãƒˆãƒ‘ã‚¹ */
 	__property UnicodeString CurPath[int Index] = {read = GetCurPath, write = SetCurPath};
 
-	//FindBusy ƒvƒƒpƒeƒB
+	//FindBusy ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	bool FFindBusy;
 	void __fastcall SetFindBusy(bool Value);
-	/** @brief ŒŸõ’†(ƒtƒ@ƒCƒ‹–¼AƒfƒBƒŒƒNƒgƒŠ–¼AGREP) */
+	/** @brief æ¤œç´¢ä¸­(ãƒ•ã‚¡ã‚¤ãƒ«åã€ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåã€GREP) */
 	__property bool FindBusy = {read = FFindBusy, write = SetFindBusy};
 
-	//CalcBusy ƒvƒƒpƒeƒB
+	//CalcBusy ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	bool FCalcBusy;
 	void __fastcall SetCalcBusy(bool Value);
-	/** @brief ŒvZ’†(ƒfƒBƒŒƒNƒgƒŠ—e—ÊAƒtƒ@ƒCƒ‹Ä¶ŠÔ) */
+	/** @brief è¨ˆç®—ä¸­(ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå®¹é‡ã€ãƒ•ã‚¡ã‚¤ãƒ«å†ç”Ÿæ™‚é–“) */
 	__property bool CalcBusy = {read = FCalcBusy, write = SetCalcBusy};
 
-	//CurWorking ƒvƒƒpƒeƒB
+	//CurWorking ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	bool FCurWorking;
 	void __fastcall SetCurWorking(bool Value);
-	/** ƒJƒŒƒ“ƒg‚Åˆ—’† */
+	/** ã‚«ãƒ¬ãƒ³ãƒˆã§å‡¦ç†ä¸­ */
 	__property bool CurWorking = {read = FCurWorking, write = SetCurWorking};
 
-	//ExeCmdsBusy ƒvƒƒpƒeƒB
+	//ExeCmdsBusy ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	bool FExeCmdsBusy;
 	void __fastcall SetExeCmdsBusy(bool Value);
-	/** ExeCommands Às’† */
+	/** ExeCommands å®Ÿè¡Œä¸­ */
 	__property bool ExeCmdsBusy = {read = FExeCmdsBusy, write = SetExeCmdsBusy};
 
-	Graphics::TBitmap *ImgBuff;					//!< ƒCƒ[ƒWƒoƒbƒtƒ@(Œ³ƒTƒCƒY)
-	Graphics::TBitmap *BgBuff[MAX_FILELIST];	//!< ”wŒi•\¦ƒoƒbƒtƒ@
+	Graphics::TBitmap *ImgBuff;					//!< ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒãƒƒãƒ•ã‚¡(å…ƒã‚µã‚¤ã‚º)
+	Graphics::TBitmap *BgBuff[MAX_FILELIST];	//!< èƒŒæ™¯è¡¨ç¤ºãƒãƒƒãƒ•ã‚¡
 
-	UsrScrollPanel *FlScrPanel[MAX_FILELIST];	//!< “Æ©ƒXƒNƒ[ƒ‹ƒo[(ƒtƒ@ƒCƒ‹ƒŠƒXƒg)
-	UsrScrollPanel *TxtPrvScrPanel;				//!< “Æ©ƒXƒNƒ[ƒ‹ƒo[(ƒeƒLƒXƒgƒvƒŒƒrƒ…[)
-	UsrScrollPanel *TxtTailScrPanel;			//!< “Æ©ƒXƒNƒ[ƒ‹ƒo[(ƒeƒLƒXƒgƒvƒŒƒrƒ…[(––”ö))
-	UsrScrollPanel *InfScrPanel;				//!< “Æ©ƒXƒNƒ[ƒ‹ƒo[(ƒtƒ@ƒCƒ‹î•ñ)
-	UsrScrollPanel *LogScrPanel;				//!< “Æ©ƒXƒNƒ[ƒ‹ƒo[(ƒƒO)
-	UsrScrollPanel *ImgInfScrPanel;				//!< “Æ©ƒXƒNƒ[ƒ‹ƒo[(ƒtƒ@ƒCƒ‹î•ñ)
-	UsrScrollPanel *TxtViewScrPanel;			//!< “Æ©ƒXƒNƒ[ƒ‹ƒo[(ƒeƒLƒXƒgƒrƒ…[ƒA)
-	UsrScrollPanel *ResultScrPanel;				//!< “Æ©ƒXƒNƒ[ƒ‹ƒo[(GrepŒ‹‰Ê)
+	UsrScrollPanel *FlScrPanel[MAX_FILELIST];	//!< ç‹¬è‡ªã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼(ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆ)
+	UsrScrollPanel *TxtPrvScrPanel;				//!< ç‹¬è‡ªã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼(ãƒ†ã‚­ã‚¹ãƒˆãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼)
+	UsrScrollPanel *TxtTailScrPanel;			//!< ç‹¬è‡ªã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼(ãƒ†ã‚­ã‚¹ãƒˆãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼(æœ«å°¾))
+	UsrScrollPanel *InfScrPanel;				//!< ç‹¬è‡ªã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼(ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±)
+	UsrScrollPanel *LogScrPanel;				//!< ç‹¬è‡ªã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼(ãƒ­ã‚°)
+	UsrScrollPanel *ImgInfScrPanel;				//!< ç‹¬è‡ªã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼(ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±)
+	UsrScrollPanel *TxtViewScrPanel;			//!< ç‹¬è‡ªã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼(ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢)
+	UsrScrollPanel *ResultScrPanel;				//!< ç‹¬è‡ªã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼(Grepçµæœ)
 
 	int CurListWidth, CurListHeight;
 	int PreviewWidth, PreviewHeight;
 	int InfPanelWidth, InfPanelHeight;
 
-	int useFontSize;							//!< ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚Ì’ÊíƒtƒHƒ“ƒgƒTƒCƒY
+	int useFontSize;							//!< ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã®é€šå¸¸ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚º
 
 	__fastcall TNyanFiForm(TComponent* Owner);
 
@@ -2711,32 +2711,32 @@ public:		// ƒ†[ƒU[éŒ¾
 	void __fastcall SetPrvImgCursor(bool sw);
 
 	BEGIN_MESSAGE_MAP
-		VCL_MESSAGE_HANDLER(WM_FORM_SHOWED, 	TMessage,			WmFormShowed)		//!< ƒtƒH[ƒ€‚ª•\¦‚³‚ê‚½
-		VCL_MESSAGE_HANDLER(WM_DPICHANGED,		TMessage,			WmDpiChanged)		//!< DPI‚ª•Ï‰»
-		VCL_MESSAGE_HANDLER(WM_ACTIVATE,		TMessage,			WmActivate)			//!< ƒAƒNƒeƒBƒu/”ñƒAƒNƒeƒBƒu‰»
-		VCL_MESSAGE_HANDLER(WM_QUERYENDSESSION, TMessage,			WmQueryEndSession)	//!< WindowsI—¹
+		VCL_MESSAGE_HANDLER(WM_FORM_SHOWED, 	TMessage,			WmFormShowed)		//!< ãƒ•ã‚©ãƒ¼ãƒ ãŒè¡¨ç¤ºã•ã‚ŒãŸ
+		VCL_MESSAGE_HANDLER(WM_DPICHANGED,		TMessage,			WmDpiChanged)		//!< DPIãŒå¤‰åŒ–
+		VCL_MESSAGE_HANDLER(WM_ACTIVATE,		TMessage,			WmActivate)			//!< ã‚¢ã‚¯ãƒ†ã‚£ãƒ–/éã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–
+		VCL_MESSAGE_HANDLER(WM_QUERYENDSESSION, TMessage,			WmQueryEndSession)	//!< Windowsçµ‚äº†æ™‚
 		VCL_MESSAGE_HANDLER(WM_SYSCOMMAND, 		TWMSysCommand, 		WmSysCommand)
 		VCL_MESSAGE_HANDLER(WM_FORM_DROPPED,	TMessage,			WmDropped)
 		VCL_MESSAGE_HANDLER(WM_SETTINGCHANGE,	TMessage,			WmSettingChange)
-		VCL_MESSAGE_HANDLER(WM_DEVICECHANGE, 	TMessage,			WmDeviceChange)		//!< ƒhƒ‰ƒCƒu‚ª•ÏX‚³‚ê‚½
+		VCL_MESSAGE_HANDLER(WM_DEVICECHANGE, 	TMessage,			WmDeviceChange)		//!< ãƒ‰ãƒ©ã‚¤ãƒ–ãŒå¤‰æ›´ã•ã‚ŒãŸ
 		VCL_MESSAGE_HANDLER(WM_MOVING,			TMessage,			WmFormMoving)
 		VCL_MESSAGE_HANDLER(WM_SIZING,			TMessage,			WmFormMoving)
 		VCL_MESSAGE_HANDLER(WM_ENTERSIZEMOVE,	TMessage,			WmEnterSizeMove)
-		VCL_MESSAGE_HANDLER(WM_EXITSIZEMOVE,	TMessage,			WmExitSizeMove)		//!< ƒTƒCƒY•ÏX/ˆÚ“®I—¹
+		VCL_MESSAGE_HANDLER(WM_EXITSIZEMOVE,	TMessage,			WmExitSizeMove)		//!< ã‚µã‚¤ã‚ºå¤‰æ›´/ç§»å‹•çµ‚äº†
 		VCL_MESSAGE_HANDLER(WM_GETMINMAXINFO,	TWMGetMinMaxInfo,	WmGetMinMaxInfo)
 		VCL_MESSAGE_HANDLER(WM_COPYDATA,		TMessage,			WmCopyData)
-		VCL_MESSAGE_HANDLER(WM_HOTKEY,	 		TMessage,			WmHotKey)			//!< ŒÄ‚Ño‚µƒzƒbƒgƒL[
+		VCL_MESSAGE_HANDLER(WM_HOTKEY,	 		TMessage,			WmHotKey)			//!< å‘¼ã³å‡ºã—ãƒ›ãƒƒãƒˆã‚­ãƒ¼
 		VCL_MESSAGE_HANDLER(WM_MENUCHAR,		TMessage,			WmMenuChar)
 		VCL_MESSAGE_HANDLER(WM_INITMENUPOPUP,	TMessage,			WmContextMnueProc)
 		VCL_MESSAGE_HANDLER(WM_DRAWITEM,		TMessage,			WmContextMnueProc)
 		VCL_MESSAGE_HANDLER(WM_MEASUREITEM,		TMessage,			WmContextMnueProc)
 		VCL_MESSAGE_HANDLER(MM_MCINOTIFY,		TMessage,			MmMciNotify)
-		VCL_MESSAGE_HANDLER(WM_NYANFI_APPEAR,	TMessage,			WmNyanFiAppearance)	//!< ƒfƒUƒCƒ“‚È‚Æ‚Ì•ÏX
-		VCL_MESSAGE_HANDLER(WM_NYANFI_FLICON,	TMessage,			WmNyanFiFlIcon)		//!< ƒAƒCƒRƒ“‚ğæ“¾
-		VCL_MESSAGE_HANDLER(WM_NYANFI_THUMBNAIL,TMessage,			WmNyanFiThumbnail)	//!< ƒTƒ€ƒlƒCƒ‹‚ğæ“¾
-		VCL_MESSAGE_HANDLER(WM_NYANFI_CLPCOPIED,TMessage,			WmNyanFiClpCopied)	//!< ƒNƒŠƒbƒvƒ{[ƒh‚ÉƒRƒs[
-		VCL_MESSAGE_HANDLER(WM_NYANFI_LOCKKEY,	TMessage,			WmNyanFiLockKey)	//!< LockKeyMouse ‚Å‚ÌƒL[ˆ—
-		VCL_MESSAGE_HANDLER(WM_NYANFI_GREP_END,	TMessage,			WmNyanFiGrepEnd)	//!< GREPƒXƒŒƒbƒhŠ®—¹
+		VCL_MESSAGE_HANDLER(WM_NYANFI_APPEAR,	TMessage,			WmNyanFiAppearance)	//!< ãƒ‡ã‚¶ã‚¤ãƒ³ãªã¨ã®å¤‰æ›´
+		VCL_MESSAGE_HANDLER(WM_NYANFI_FLICON,	TMessage,			WmNyanFiFlIcon)		//!< ã‚¢ã‚¤ã‚³ãƒ³ã‚’å–å¾—
+		VCL_MESSAGE_HANDLER(WM_NYANFI_THUMBNAIL,TMessage,			WmNyanFiThumbnail)	//!< ã‚µãƒ ãƒã‚¤ãƒ«ã‚’å–å¾—
+		VCL_MESSAGE_HANDLER(WM_NYANFI_CLPCOPIED,TMessage,			WmNyanFiClpCopied)	//!< ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã«ã‚³ãƒ”ãƒ¼
+		VCL_MESSAGE_HANDLER(WM_NYANFI_LOCKKEY,	TMessage,			WmNyanFiLockKey)	//!< LockKeyMouse ã§ã®ã‚­ãƒ¼å‡¦ç†
+		VCL_MESSAGE_HANDLER(WM_NYANFI_GREP_END,	TMessage,			WmNyanFiGrepEnd)	//!< GREPã‚¹ãƒ¬ãƒƒãƒ‰å®Œäº†
 	END_MESSAGE_MAP(TForm)
 };
 //---------------------------------------------------------------------------

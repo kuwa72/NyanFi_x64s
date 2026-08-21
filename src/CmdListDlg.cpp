@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒRƒ}ƒ“ƒhƒtƒ@ƒCƒ‹ˆê——												//
+//  ã‚³ãƒãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§												//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -51,14 +51,14 @@ void __fastcall TCmdFileListDlg::FormShow(TObject *Sender)
 
 	TStringGrid *gp = CmdFileGrid;
 	InitializeListGrid(gp);
-	InitializeListHeader(CmdFileHeader, _T("ƒtƒ@ƒCƒ‹–¼|à–¾|ƒTƒCƒY|ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv|ƒfƒBƒŒƒNƒgƒŠ|QÆŒ³|Às‰ñ”"));
+	InitializeListHeader(CmdFileHeader, _T("ãƒ•ã‚¡ã‚¤ãƒ«å|èª¬æ˜|ã‚µã‚¤ã‚º|ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—|ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª|å‚ç…§å…ƒ|å®Ÿè¡Œå›æ•°"));
 	IniFile->LoadGridColWidth(gp, 7, 200,200,70,120,100,70,70);
 	set_HeaderFromGrid(gp, CmdFileHeader);
 	set_UsrScrPanel(GridScrPanel);
 
-	set_FormTitle(this, ToSelect? _T("ƒRƒ}ƒ“ƒhƒtƒ@ƒCƒ‹‚Ì‘I‘ğ") : _T("ƒRƒ}ƒ“ƒhƒtƒ@ƒCƒ‹ˆê——"));
+	set_FormTitle(this, ToSelect? _T("ã‚³ãƒãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã®é¸æŠ") : _T("ã‚³ãƒãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§"));
 
-	//ƒvƒŒƒrƒ…[‚Ì‰Šú‰»
+	//ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®åˆæœŸåŒ–
 	PreviewPanel->Visible	 = false;
 	PreviewSplitter->Visible = false;
 	PreviewSplitter->Color	 = get_SplitterCol();
@@ -96,7 +96,7 @@ void __fastcall TCmdFileListDlg::WmFormShowed(TMessage &msg)
 
 	if (!UnInitializing) UpdateList();
 
-	//w’èƒtƒ@ƒCƒ‹ˆÊ’u‚ÉˆÚ“®
+	//æŒ‡å®šãƒ•ã‚¡ã‚¤ãƒ«ä½ç½®ã«ç§»å‹•
 	TStringGrid *gp = CmdFileGrid;
 	gp->TopRow = 0;
 	gp->Row    = 0;
@@ -168,7 +168,7 @@ void __fastcall TCmdFileListDlg::CmdFileHeaderSectionResize(THeaderControl *Head
 }
 
 //---------------------------------------------------------------------------
-//ƒwƒbƒ_‚Ì•`‰æ
+//ãƒ˜ãƒƒãƒ€ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TCmdFileListDlg::CmdFileHeaderDrawSection(THeaderControl *HeaderControl,
 	THeaderSection *Section, const TRect &Rect, bool Pressed)
@@ -176,7 +176,7 @@ void __fastcall TCmdFileListDlg::CmdFileHeaderDrawSection(THeaderControl *Header
 	draw_SortHeader(HeaderControl, Section, Rect);
 }
 //---------------------------------------------------------------------------
-//‘I‘ğ—p‚É•\¦
+//é¸æŠç”¨ã«è¡¨ç¤º
 //---------------------------------------------------------------------------
 int __fastcall TCmdFileListDlg::ShowToSelect(UnicodeString fnam)
 {
@@ -187,13 +187,13 @@ int __fastcall TCmdFileListDlg::ShowToSelect(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚ÌXV
+//ä¸€è¦§ã®æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TCmdFileListDlg::UpdateList()
 {
 	cursor_HourGlass();
 
-	//ƒRƒ}ƒ“ƒhƒtƒ@ƒCƒ‹‚Ìˆê——‚ğæ“¾
+	//ã‚³ãƒãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã®ä¸€è¦§ã‚’å–å¾—
 	clear_FileList(cmdfile_List);
 	std::unique_ptr<TStringList> f_lst(new TStringList());
 	get_files(ExePath, "*.nbt", f_lst.get(), true);
@@ -203,7 +203,7 @@ void __fastcall TCmdFileListDlg::UpdateList()
 		file_rec *fp = cre_new_file_rec(fnam);	if (!fp) continue;
 		UnicodeString lbuf = Trim(get_top_line(fnam));
 		if (!remove_top_s(lbuf, ';')) lbuf = EmptyStr;
-		fp->alias = lbuf;	//à–¾
+		fp->alias = lbuf;	//èª¬æ˜
 		cmdfile_List->AddObject(fnam, (TObject*)fp);
 	}
 
@@ -211,20 +211,20 @@ void __fastcall TCmdFileListDlg::UpdateList()
 	DscPathOrder = false;
 	cmdfile_List->CustomSort(SortComp_PathName);
 
-	//ƒOƒŠƒbƒh‚ÌXV
+	//ã‚°ãƒªãƒƒãƒ‰ã®æ›´æ–°
 	UpdateGrid();
 
 	cursor_Default();
 }
 //---------------------------------------------------------------------------
-//•\¦ƒOƒŠƒbƒh‚ÌXV
+//è¡¨ç¤ºã‚°ãƒªãƒƒãƒ‰ã®æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TCmdFileListDlg::UpdateGrid()
 {
 	std::unique_ptr<TStringList> cmd_lst(new TStringList());
 	TStringGrid *gp = CmdFileGrid;
 
-	//ƒtƒBƒ‹ƒ^‚É‚æ‚Á‚Ä’Šo
+	//ãƒ•ã‚£ãƒ«ã‚¿ã«ã‚ˆã£ã¦æŠ½å‡º
 	UnicodeString ptn = usr_Migemo->GetRegExPtn(MigemoAction->Checked, FilterEdit->Text);
 	if (!ptn.IsEmpty()) {
 		GridItemList->Clear();
@@ -261,7 +261,7 @@ int __fastcall TCmdFileListDlg::GetGridIndex()
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚Ì•`‰æ
+//ä¸€è¦§ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TCmdFileListDlg::CmdFileGridDrawCell(TObject *Sender, System::LongInt ACol, System::LongInt ARow,
 	TRect &Rect, TGridDrawState State)
@@ -285,28 +285,28 @@ void __fastcall TCmdFileListDlg::CmdFileGridDrawCell(TObject *Sender, System::Lo
 		TColor col_f = get_ExtColor(".nbt");
 
 		switch (ACol) {
-		case 0:	//ƒtƒ@ƒCƒ‹–¼
+		case 0:	//ãƒ•ã‚¡ã‚¤ãƒ«å
 			cellstr.sprintf(_T("%s%s%s"), fp->b_name.c_str(), (NoSpaceFExt? null_TCHAR : _T("\t")), fp->f_ext.c_str());
 			cv->Font->Color = col_f;
 			break;
-		case 1:	//à–¾
+		case 1:	//èª¬æ˜
 			cellstr = fp->alias;
 			cv->Font->Color = get_ListFgCol();
 			break;
-		case 2:	//ƒTƒCƒY
+		case 2:	//ã‚µã‚¤ã‚º
 			cellstr = Trim(get_size_str_G(fp->f_size, 8, SizeDecDigits));
 			cv->Font->Color = get_SizeColor(fp->f_size, col_f);
 			break;
-		case 3:	//ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv
+		case 3:	//ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—
 			cellstr = get_TimeStampStr(fp->f_time);
 			cv->Font->Color = get_TimeColor(fp->f_time, col_f);
 			break;
-		case 4:	//ƒfƒBƒŒƒNƒgƒŠ
+		case 4:	//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 			if (remove_top_text(pnam, ExePath) && pnam.IsEmpty()) pnam = ".";
 			cellstr = get_MiniPathName(pnam, gp->ColWidths[4] - SCALED_THIS(8), cv->Font);
 			cv->Font->Color = col_Folder;
 			break;
-		case 5:	//QÆŒ³
+		case 5:	//å‚ç…§å…ƒ
 			if (fp->l_name.IsEmpty()) {
 				fp->l_name = get_ref_CmdFile(fp->f_name);
 				if (fp->l_name.IsEmpty()) fp->l_name = " ";
@@ -314,7 +314,7 @@ void __fastcall TCmdFileListDlg::CmdFileGridDrawCell(TObject *Sender, System::Lo
 			cellstr = fp->l_name;
 			cv->Font->Color = get_ListFgCol();
 			break;
-		case 6:	//Às‰ñ”
+		case 6:	//å®Ÿè¡Œå›æ•°
 			{
 				int idx = CmdFileList->IndexOf(fp->f_name);
 				if (idx!=-1) {
@@ -331,34 +331,34 @@ void __fastcall TCmdFileListDlg::CmdFileGridDrawCell(TObject *Sender, System::Lo
 	int yp = Rect.Top  + get_TopMargin2(cv);
 	int r_mgn = get_CharWidth(cv, 1);
 
-	//ƒtƒ@ƒCƒ‹–¼
+	//ãƒ•ã‚¡ã‚¤ãƒ«å
 	if (ACol==0) {
 		UnicodeString fnam = split_pre_tab(cellstr);
 		cv->TextRect(Rect, xp, yp, fnam);
-		//Šg’£q‚ğ•ª—£•\¦
+		//æ‹¡å¼µå­ã‚’åˆ†é›¢è¡¨ç¤º
 		if (!cellstr.IsEmpty()) {
 			xp += cv->TextWidth(fnam);
 			xp = std::max<int>(xp, (Rect.Right - cv->TextWidth(cellstr) - r_mgn));
 			cv->TextOut(xp, yp, cellstr);
 		}
 	}
-	//ƒfƒBƒŒƒNƒgƒŠ
+	//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 	else if (ACol==4) {
 		PathNameOut(cellstr, cv, xp, yp);
 	}
-	//‚»‚Ì‘¼
+	//ãã®ä»–
 	else {
 		if (ACol==2 || ACol==6) xp = Rect.Right - cv->TextWidth(cellstr) - r_mgn;
 		cv->TextRect(Rect, xp, yp, cellstr);
 	}
 
-	//ƒJ[ƒ\ƒ‹
+	//ã‚«ãƒ¼ã‚½ãƒ«
 	draw_GridCursor(gp, Rect, ARow, State);
 
-	//•ÊƒfƒBƒŒƒNƒgƒŠŠÔ‚ÌƒZƒpƒŒ[ƒ^
+	//åˆ¥ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªé–“ã®ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿
 	if (row_break) draw_separateLine(cv, Rect);
 
-	//Œó•âŠm’è
+	//å€™è£œç¢ºå®š
 	if (gp->RowCount==1 && ARow==0 && ACol==0 && !cellstr.IsEmpty()) {
 		cv->Brush->Color = col_Cursor;
 		cv->FrameRect(Rect);
@@ -366,7 +366,7 @@ void __fastcall TCmdFileListDlg::CmdFileGridDrawCell(TObject *Sender, System::Lo
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒBƒ‹ƒ^
+//ãƒ•ã‚£ãƒ«ã‚¿
 //---------------------------------------------------------------------------
 void __fastcall TCmdFileListDlg::FilterBtnClick(TObject *Sender)
 {
@@ -388,7 +388,7 @@ void __fastcall TCmdFileListDlg::FilterEditChange(TObject *Sender)
 {
 	UpdateGrid();
 
-	//Šm’è‘¦Às
+	//ç¢ºå®šå³å®Ÿè¡Œ
 	int idx = GetGridIndex();
 	if (idx!=-1) {
 		TStringGrid *gp = CmdFileGrid;
@@ -454,7 +454,7 @@ void __fastcall TCmdFileListDlg::CnfExeActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚Å‚ÌƒL[‘€ì
+//ä¸€è¦§ã§ã®ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TCmdFileListDlg::CmdFileGridKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -467,20 +467,20 @@ void __fastcall TCmdFileListDlg::CmdFileGridKeyDown(TObject *Sender, WORD &Key, 
 	file_rec *cfp = (idx!=-1)? (file_rec*)GridItemList->Objects[idx] : NULL;
 
 	try {
-		//•Â‚¶‚é
+		//é–‰ã˜ã‚‹
 		if (cmd_id==0) {
 			ModalResult = mrCancel;
 		}
-		//ƒtƒBƒ‹ƒ^‚Ö
+		//ãƒ•ã‚£ãƒ«ã‚¿ã¸
 		else if (cmd_id==1) {
 			FilterEdit->SetFocus();
 		}
-		//ƒJ[ƒ\ƒ‹ˆÚ“®
+		//ã‚«ãƒ¼ã‚½ãƒ«ç§»å‹•
 		else if (GridCursorMove(CmdStr, gp)) {
 			;
 		}
-		//“ª•¶šƒT[ƒ`
-		else if (is_IniSeaKey(KeyStr)) {	//KeyStr ‚É³‹K•\Œ»ƒpƒ^[ƒ“‚ª•Ô‚é
+		//é ­æ–‡å­—ã‚µãƒ¼ãƒ
+		else if (is_IniSeaKey(KeyStr)) {	//KeyStr ã«æ­£è¦è¡¨ç¾ãƒ‘ã‚¿ãƒ¼ãƒ³ãŒè¿”ã‚‹
 			TRegExOptions opt; opt << roIgnoreCase;
 			int idx0=-1, idx1=-1;
 			for (int i=0; i<GridItemList->Count && idx1==-1; i++) {
@@ -495,15 +495,15 @@ void __fastcall TCmdFileListDlg::CmdFileGridKeyDown(TObject *Sender, WORD &Key, 
 			if (!cfp) Abort();
 			CmdFileName = cfp->f_name;
 			UnicodeString tmp;
-			//Šm’è
+			//ç¢ºå®š
 			if (equal_ENTER(KeyStr)) {
 				if (!ToSelect) CmdRequestList->Add(tmp.sprintf(_T("ExeCommands_\"@%s\""), CmdFileName.c_str()));
 				ModalResult = mrOk;
 			}
-			//‰ü–¼
+			//æ”¹å
 			else if (cmd_id==2) {
 				UnicodeString org_name = cfp->b_name;
-				UnicodeString new_name = inputbox_ex(LoadUsrMsg(USTR_Rename).c_str(), _T("ƒtƒ@ƒCƒ‹–¼å•”"), org_name);
+				UnicodeString new_name = inputbox_ex(LoadUsrMsg(USTR_Rename).c_str(), _T("ãƒ•ã‚¡ã‚¤ãƒ«åä¸»éƒ¨"), org_name);
 				if (!new_name.IsEmpty() && !SameStr(org_name, new_name)) {
 					new_name = cfp->p_name + new_name + cfp->f_ext;
 					if (move_FileT(cfp->f_name, new_name)) {
@@ -513,11 +513,11 @@ void __fastcall TCmdFileListDlg::CmdFileGridKeyDown(TObject *Sender, WORD &Key, 
 						UpdateList();
 					}
 					else {
-						throw EAbort(tmp.sprintf(_T("‰ü–¼‚É¸”s‚µ‚Ü‚µ‚½\r\n%s"), get_LogErrMsg(EmptyStr, false).c_str()));
+						throw EAbort(tmp.sprintf(_T("æ”¹åã«å¤±æ•—ã—ã¾ã—ãŸ\r\n%s"), get_LogErrMsg(EmptyStr, false).c_str()));
 					}
 				}
 			}
-			//íœ
+			//å‰Šé™¤
 			else if (cmd_id==3) {
 				UnicodeString msg;
 				if (msgbox_Sure(LoadUsrMsg(USTR_DeleteQ, cfp->n_name), SureDelete)) {
@@ -528,7 +528,7 @@ void __fastcall TCmdFileListDlg::CmdFileGridKeyDown(TObject *Sender, WORD &Key, 
 						if (ForceDel && !set_FileWritable(del_nam))	Abort();
 						if (!delete_File(del_nam, DelUseTrash))		Abort();
 						AddLog(msg);
-						EndLog(_T("íœ"));
+						EndLog(_T("å‰Šé™¤"));
 						UpdateList();
 					}
 					catch (EAbort &e) {
@@ -539,7 +539,7 @@ void __fastcall TCmdFileListDlg::CmdFileGridKeyDown(TObject *Sender, WORD &Key, 
 				}
 			}
 			else if (!ToSelect) {
-				//•ÒWE‰{——
+				//ç·¨é›†ãƒ»é–²è¦§
 				if (cmd_id==4 || cmd_id==5) {
 					CmdRequestList->Add(tmp.sprintf(_T("%s_\"%s\""), CmdStr.c_str(), cfp->f_name.c_str()));
 					ModalResult = mrOk;
@@ -569,7 +569,7 @@ void __fastcall TCmdFileListDlg::WaitTimerTimer(TObject *Sender)
 	int idx = GetGridIndex();
 	if (idx!=-1) {
 		file_rec *fp = (file_rec*)GridItemList->Objects[idx];
-		//ƒvƒŒƒrƒ…[
+		//ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼
 		try {
 			if (fp->prv_text.IsEmpty()) {
 				std::unique_ptr<TStringList> fbuf(new TStringList());
@@ -582,7 +582,7 @@ void __fastcall TCmdFileListDlg::WaitTimerTimer(TObject *Sender)
 		catch (...) {
 			;
 		}
-		//ƒtƒ@ƒCƒ‹î•ñ
+		//ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±
 		std::unique_ptr<TStringList> inf_lst(new TStringList());
 		get_FileInfList(fp, inf_lst.get());
 		assign_InfListBox(ReferListBox, inf_lst.get(), ReferScrPanel);
@@ -599,7 +599,7 @@ void __fastcall TCmdFileListDlg::CmdFileGridClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒvƒŒƒrƒ…[‚Ì•`‰æ
+//ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TCmdFileListDlg::PreviewListBoxDrawItem(TWinControl *Control, int Index,
 		TRect &Rect, TOwnerDrawState State)
@@ -614,7 +614,7 @@ void __fastcall TCmdFileListDlg::PreviewListBoxDrawItem(TWinControl *Control, in
 		4, NULL, false, "*.nbt");
 }
 //---------------------------------------------------------------------------
-//ƒvƒŒƒrƒ…[/QÆî•ñ‚Å‚ÌƒL[‘€ì
+//ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼/å‚ç…§æƒ…å ±ã§ã®ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TCmdFileListDlg::PreviewListBoxKeyDown(TObject *Sender, WORD &Key,
 	TShiftState Shift)
@@ -647,7 +647,7 @@ void __fastcall TCmdFileListDlg::PreviewActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//QÆî•ñ‚Ì•`‰æ
+//å‚ç…§æƒ…å ±ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TCmdFileListDlg::ReferListBoxDrawItem(TWinControl *Control, int Index,
 	TRect &Rect, TOwnerDrawState State)
@@ -656,7 +656,7 @@ void __fastcall TCmdFileListDlg::ReferListBoxDrawItem(TWinControl *Control, int 
 }
 
 //---------------------------------------------------------------------------
-//‘I‘ğ‚ÌŠm’è
+//é¸æŠã®ç¢ºå®š
 //---------------------------------------------------------------------------
 void __fastcall TCmdFileListDlg::OkBtnClick(TObject *Sender)
 {
@@ -668,7 +668,7 @@ void __fastcall TCmdFileListDlg::OkBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒs[
+//ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TCmdFileListDlg::EditCopyActionExecute(TObject *Sender)
 {
@@ -677,7 +677,7 @@ void __fastcall TCmdFileListDlg::EditCopyActionExecute(TObject *Sender)
 	ExeCmdListBox(lp, "ClipCopy");
 }
 //---------------------------------------------------------------------------
-//‚·‚×‚Ä‘I‘ğ
+//ã™ã¹ã¦é¸æŠ
 //---------------------------------------------------------------------------
 void __fastcall TCmdFileListDlg::EditSelectAllActionExecute(TObject *Sender)
 {
@@ -693,7 +693,7 @@ void __fastcall TCmdFileListDlg::EditCopyActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//•ÒW
+//ç·¨é›†
 //---------------------------------------------------------------------------
 void __fastcall TCmdFileListDlg::ReqEditActionExecute(TObject *Sender)
 {

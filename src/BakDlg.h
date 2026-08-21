@@ -1,6 +1,6 @@
 /**
  * @file BakDlg.h
- * @brief ƒoƒbƒNƒAƒbƒvƒ_ƒCƒAƒƒO
+ * @brief ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 //---------------------------------------------------------------------------
 #ifndef BakDlgH
@@ -19,11 +19,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒoƒbƒNƒAƒbƒvƒ_ƒCƒAƒƒO
+ * @brief ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TBackupDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *DelSetupAction;
 	TAction *MakeNbtAction;
 	TAction *SaveSetupAction;
@@ -63,9 +63,9 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall MakeNbtActionUpdate(TObject *Sender);
 	void __fastcall OkButtonClick(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	__fastcall TBackupDlg(TComponent* Owner);
 };
 //---------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------//
-// INIƒtƒ@ƒCƒ‹ˆ—ƒNƒ‰ƒX												//
+// INIãƒ•ã‚¡ã‚¤ãƒ«å‡¦ç†ã‚¯ãƒ©ã‚¹												//
 //																		//
 //----------------------------------------------------------------------//
 #include "usr_scale.h"
@@ -16,7 +16,7 @@ UnicodeString SCT_Option;
 UsrIniFile *IniFile = NULL;
 
 //---------------------------------------------------------------------------
-//ƒZƒNƒVƒ‡ƒ“‚Ìƒ\[ƒg—p”äŠrŠÖ”
+//ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã®ã‚½ãƒ¼ãƒˆç”¨æ¯”è¼ƒé–¢æ•°
 //---------------------------------------------------------------------------
 int __fastcall SortComp_Sct(TStringList *List, int Index1, int Index2)
 {
@@ -71,7 +71,7 @@ void UsrIniFile::Clear()
 }
 
 //---------------------------------------------------------------------------
-// ‘Sî•ñ‚ğˆêŠ‡‚Å“Ç‚İ‚Ş
+// å…¨æƒ…å ±ã‚’ä¸€æ‹¬ã§èª­ã¿è¾¼ã‚€
 //---------------------------------------------------------------------------
 void UsrIniFile::LoadValues()
 {
@@ -83,14 +83,14 @@ void UsrIniFile::LoadValues()
 		for (int i=0; i<fbuf->Count; i++) {
 			UnicodeString s  = fbuf->Strings[i];
 			UnicodeString s2 = Trim(s);
-			if (s2.IsEmpty() || s2[1]==';') continue;	//‹ós‚âƒRƒƒ“ƒgs‚Í–³‹
+			if (s2.IsEmpty() || s2[1]==';') continue;	//ç©ºè¡Œã‚„ã‚³ãƒ¡ãƒ³ãƒˆè¡Œã¯ç„¡è¦–
 			if (StartsStr('[', s) && EndsStr(']', s))
 				klist = AddSection(exclude_top_end(s));
 			else
 				if (klist) klist->Add(s);
 		}
 
-		//ƒ}[ƒNî•ñ‚Ìƒ`ƒFƒbƒN
+		//ãƒãƒ¼ã‚¯æƒ…å ±ã®ãƒã‚§ãƒƒã‚¯
 		UpdateMarkIdxList();
 		CheckMarkItems();
 	}
@@ -102,7 +102,7 @@ void UsrIniFile::LoadValues()
 }
 
 //---------------------------------------------------------------------------
-//Ä“Ç‚İ‚İ
+//å†èª­ã¿è¾¼ã¿
 //---------------------------------------------------------------------------
 void UsrIniFile::Reload()
 {
@@ -111,7 +111,7 @@ void UsrIniFile::Reload()
 }
 
 //---------------------------------------------------------------------------
-//ƒZƒNƒVƒ‡ƒ“‚ğíœ
+//ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã‚’å‰Šé™¤
 //---------------------------------------------------------------------------
 void UsrIniFile::EraseSection(UnicodeString sct)
 {
@@ -124,7 +124,7 @@ void UsrIniFile::EraseSection(UnicodeString sct)
 }
 
 //---------------------------------------------------------------------------
-//ƒL[‚ğíœ
+//ã‚­ãƒ¼ã‚’å‰Šé™¤
 //---------------------------------------------------------------------------
 bool UsrIniFile::DeleteKey(UnicodeString sct, UnicodeString key)
 {
@@ -142,7 +142,7 @@ bool UsrIniFile::DeleteKey(UnicodeString sct, UnicodeString key)
 }
 
 //---------------------------------------------------------------------------
-//ƒL[‚ª‘¶İ‚·‚é‚©H
+//ã‚­ãƒ¼ãŒå­˜åœ¨ã™ã‚‹ã‹ï¼Ÿ
 //---------------------------------------------------------------------------
 bool UsrIniFile::KeyExists(UnicodeString sct, UnicodeString key)
 {
@@ -155,7 +155,7 @@ bool UsrIniFile::KeyExists(UnicodeString sct, UnicodeString key)
 	return ret;
 }
 //---------------------------------------------------------------------------
-//ƒL[–¼‚Ì•ÏX
+//ã‚­ãƒ¼åã®å¤‰æ›´
 //---------------------------------------------------------------------------
 void UsrIniFile::RenameKey(UnicodeString sct, UnicodeString old_key, UnicodeString new_key)
 {
@@ -167,7 +167,7 @@ void UsrIniFile::RenameKey(UnicodeString sct, UnicodeString old_key, UnicodeStri
 	}
 }
 //---------------------------------------------------------------------------
-//ƒL[–¼‚Ì’uŠ·
+//ã‚­ãƒ¼åã®ç½®æ›
 //---------------------------------------------------------------------------
 void UsrIniFile::ReplaceKey(UnicodeString sct, UnicodeString s0, UnicodeString s1)
 {
@@ -195,14 +195,14 @@ void UsrIniFile::ReplaceKey(UnicodeString sct, UnicodeString s0, UnicodeString s
 }
 
 //---------------------------------------------------------------------------
-//ƒZƒNƒVƒ‡ƒ“‚ª‘¶İ‚·‚é‚©H
+//ã‚»ã‚¯ã‚·ãƒ§ãƒ³ãŒå­˜åœ¨ã™ã‚‹ã‹ï¼Ÿ
 //---------------------------------------------------------------------------
 bool UsrIniFile::SectionExists(UnicodeString sct)
 {
 	return (SectionList->IndexOf(sct)!=-1);
 }
 //---------------------------------------------------------------------------
-//ƒZƒNƒVƒ‡ƒ“‚ğ“Ç‚İ‚Ş
+//ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã‚’èª­ã¿è¾¼ã‚€
 //---------------------------------------------------------------------------
 void UsrIniFile::ReadSection(UnicodeString sct, TStringList *lst)
 {
@@ -211,7 +211,7 @@ void UsrIniFile::ReadSection(UnicodeString sct, TStringList *lst)
 	if (idx!=-1) lst->Assign((TStringList*)SectionList->Objects[idx]);
 }
 //---------------------------------------------------------------------------
-//ƒZƒNƒVƒ‡ƒ“‚Ö•¡Ê
+//ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã¸è¤‡å†™
 //---------------------------------------------------------------------------
 void UsrIniFile::AssignSection(UnicodeString sct, TStringList *lst)
 {
@@ -225,8 +225,8 @@ void UsrIniFile::AssignSection(UnicodeString sct, TStringList *lst)
 
 //---------------------------------------------------------------------------
 UnicodeString UsrIniFile::ReadString(UnicodeString sct, UnicodeString key,
-	UnicodeString def,	//ƒfƒtƒHƒ‹ƒg’l	(default = EmptyStr)
-	bool del_quot)		//ˆø—p•„‚ğŠO‚·	(default = true)
+	UnicodeString def,	//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤	(default = EmptyStr)
+	bool del_quot)		//å¼•ç”¨ç¬¦ã‚’å¤–ã™	(default = true)
 {
 	UnicodeString ret;
 	int idx = SectionList->IndexOf(sct);
@@ -248,7 +248,7 @@ UnicodeString UsrIniFile::ReadStrGen(const _TCHAR *key, UnicodeString def, bool 
 
 //---------------------------------------------------------------------------
 int UsrIniFile::ReadInteger(UnicodeString sct, UnicodeString key,
-	int def)	//ƒfƒtƒHƒ‹ƒg’l	(default = 0)
+	int def)	//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤	(default = 0)
 {
 	return StrToIntDef(ReadString(sct, key, EmptyStr), def);
 }
@@ -259,7 +259,7 @@ int UsrIniFile::ReadInt64(UnicodeString sct, UnicodeString key, __int64 def)
 }
 //---------------------------------------------------------------------------
 int UsrIniFile::ReadScaledInteger(UnicodeString sct, UnicodeString key,
-	int def,		//ƒfƒtƒHƒ‹ƒg’l	(default = 0)
+	int def,		//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤	(default = 0)
 	TControl *cp)	//	(default = NULL : Application->MainForm) 
 {
 	if (!cp) cp = Application->MainForm;
@@ -288,20 +288,20 @@ int UsrIniFile::ReadScaledIntGen(const _TCHAR *key, int def,
 
 //---------------------------------------------------------------------------
 bool UsrIniFile::ReadBool(UnicodeString sct, UnicodeString key,
-	bool def)	//ƒfƒtƒHƒ‹ƒg’l	(default = false)
+	bool def)	//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤	(default = false)
 {
 	return (ReadInteger(sct, key, (int)def) != 0);
 }
 //---------------------------------------------------------------------------
 bool UsrIniFile::ReadBoolGen(const _TCHAR *key,
-	bool def)	//ƒfƒtƒHƒ‹ƒg’l	(default = false)
+	bool def)	//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤	(default = false)
 {
 	return (ReadInteger(SCT_General, key, (int)def) != 0);
 }
 
 //---------------------------------------------------------------------------
 TColor UsrIniFile::ReadColor(UnicodeString sct, UnicodeString key,
-	TColor def)	//ƒfƒtƒHƒ‹ƒg’l	(default = clBlack)
+	TColor def)	//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤	(default = clBlack)
 {
 	return (TColor)StrToIntDef(ReadString(sct, key, EmptyStr), (int)def);
 }
@@ -312,15 +312,15 @@ TColor UsrIniFile::ReadColGen(const _TCHAR *key, TColor def)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒHƒ“ƒg‚ğì¬‚µAî•ñ‚ğ“Ç‚İ‚ñ‚Åİ’è
-//  ì¬‚³‚ê‚½ƒtƒHƒ“ƒg‚ÍAÅŒã‚É”jŠü‚·‚é‚±‚Æ
-//  ƒZƒNƒVƒ‡ƒ“–¼=à–¾/ƒtƒHƒ“ƒgEƒIƒuƒWƒFƒNƒg‚ğƒŠƒXƒg‚É“o˜^
+//ãƒ•ã‚©ãƒ³ãƒˆã‚’ä½œæˆã—ã€æƒ…å ±ã‚’èª­ã¿è¾¼ã‚“ã§è¨­å®š
+//  ä½œæˆã•ã‚ŒãŸãƒ•ã‚©ãƒ³ãƒˆã¯ã€æœ€å¾Œã«ç ´æ£„ã™ã‚‹ã“ã¨
+//  ã‚»ã‚¯ã‚·ãƒ§ãƒ³å=èª¬æ˜/ãƒ•ã‚©ãƒ³ãƒˆãƒ»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒªã‚¹ãƒˆã«ç™»éŒ²
 //---------------------------------------------------------------------------
 TFont* UsrIniFile::ReadFontInf(
-	const _TCHAR *sct,	//ƒZƒNƒVƒ‡ƒ“–¼
-	TFont *def,			//ƒfƒtƒHƒ‹ƒg	(default = NULL)
-	TStringList *lst,	//ƒŠƒXƒg		(default = NULL)
-	const _TCHAR *dsc)	//à–¾ 			(default = nULL)
+	const _TCHAR *sct,	//ã‚»ã‚¯ã‚·ãƒ§ãƒ³å
+	TFont *def,			//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ	(default = NULL)
+	TStringList *lst,	//ãƒªã‚¹ãƒˆ		(default = NULL)
+	const _TCHAR *dsc)	//èª¬æ˜ 			(default = nULL)
 {
 	TFont *f = new TFont();
 	f->Name    = ReadString( sct, "FontName",	(def? def->Name : EmptyStr));
@@ -478,22 +478,22 @@ void UsrIniFile::WriteFontInf(UnicodeString sct, TFont *f)
 }
 
 //---------------------------------------------------------------------------
-//ƒƒCƒ“ƒtƒH[ƒ€‚ÌˆÊ’uEƒTƒCƒY‚ğ•œŒ³
+//ãƒ¡ã‚¤ãƒ³ãƒ•ã‚©ãƒ¼ãƒ ã®ä½ç½®ãƒ»ã‚µã‚¤ã‚ºã‚’å¾©å…ƒ
 //---------------------------------------------------------------------------
 void UsrIniFile::LoadFormPos(
 	TForm *frm, int w, int h,
-	UnicodeString prfx)	//ƒL[–¼‚ÌƒvƒŠƒtƒBƒbƒNƒX
+	UnicodeString prfx)	//ã‚­ãƒ¼åã®ãƒ—ãƒªãƒ•ã‚£ãƒƒã‚¯ã‚¹
 {
 	if (prfx.IsEmpty()) prfx = "Win";
 
 	frm->Left = ReadInteger(SCT_General, prfx + "Left", (Screen->Width  - ScaledInt(w, frm))/2);
 	frm->Top  = ReadInteger(SCT_General, prfx + "Top",  (Screen->Height - ScaledInt(h, frm))/2);
-	//Left, Top ‚æ‚Á‚Ä CurrentPPI ‚ª•Ï‰»
+	//Left, Top ã‚ˆã£ã¦ CurrentPPI ãŒå¤‰åŒ–
 
 	frm->Width	= ScaledInt(ReadInteger(SCT_General, prfx + "Width",  w), frm);
 	frm->Height = ScaledInt(ReadInteger(SCT_General, prfx + "Height", h), frm);
 
-	//1‰æ–Ê‚Ìê‡A‰æ–ÊŠO‚Éo‚È‚¢‚æ‚¤‚É
+	//1ç”»é¢ã®å ´åˆã€ç”»é¢å¤–ã«å‡ºãªã„ã‚ˆã†ã«
 	if (Screen->MonitorCount==1) {
 		int mgn = 8;
 		if (frm->Left<-mgn) frm->Left = 0;
@@ -505,7 +505,7 @@ void UsrIniFile::LoadFormPos(
 	frm->WindowState = (TWindowState)ReadInteger(SCT_General, prfx + "State", (int)wsNormal);
 }
 //---------------------------------------------------------------------------
-//ƒƒCƒ“ƒtƒH[ƒ€‚ÌˆÊ’uEƒTƒCƒY‚ğ•Û‘¶
+//ãƒ¡ã‚¤ãƒ³ãƒ•ã‚©ãƒ¼ãƒ ã®ä½ç½®ãƒ»ã‚µã‚¤ã‚ºã‚’ä¿å­˜
 //---------------------------------------------------------------------------
 void UsrIniFile::SaveFormPos(TForm *frm)
 {
@@ -521,7 +521,7 @@ void UsrIniFile::SaveFormPos(TForm *frm)
 }
 
 //---------------------------------------------------------------------------
-//ˆÊ’uî•ñ‚ğ“Ç
+//ä½ç½®æƒ…å ±ã‚’èª­è¾¼
 //---------------------------------------------------------------------------
 void UsrIniFile::LoadPosInfo(TForm *frm, int x, int y, int w, int h, UnicodeString key)
 {
@@ -535,7 +535,7 @@ void UsrIniFile::LoadPosInfo(TForm *frm, int x, int y, int w, int h, UnicodeStri
 		frm->Height = ScaledInt(ReadInteger(SCT_General, key + "Height", h), frm);
 	}
 
-	//1‰æ–Ê‚Ìê‡A”¼•ªˆÈã‚ª‰æ–ÊŠO‚¾‚Á‚½‚ç’†‰›‚É–ß‚·
+	//1ç”»é¢ã®å ´åˆã€åŠåˆ†ä»¥ä¸ŠãŒç”»é¢å¤–ã ã£ãŸã‚‰ä¸­å¤®ã«æˆ»ã™
 	if (Screen->MonitorCount==1) {
 		TRect rc = TRect::Intersect(Rect(0,0,Screen->Width,Screen->Height), frm->BoundsRect);
 		if (rc.Width()  < frm->Width/2)  frm->Left = (Screen->Width - frm->Width) / 2;
@@ -555,7 +555,7 @@ void UsrIniFile::LoadPosInfo(TForm *frm, bool dlg_center, UnicodeString key)
 		frm->Top  = Application->MainForm->Top + (Application->MainForm->Height - frm->Height)/2;
 	}
 	else {
-		//ƒIƒtƒZƒbƒg‚ğ“K—p
+		//ã‚ªãƒ•ã‚»ãƒƒãƒˆã‚’é©ç”¨
 		frm->Left = frm->Left + PosOffsetLeft;
 		frm->Top  = frm->Top  + PosOffsetTop;
 		if (OfsDlgList->IndexOf(frm->Name)==-1) OfsDlgList->Add(frm->Name);
@@ -565,7 +565,7 @@ void UsrIniFile::LoadPosInfo(TForm *frm, bool dlg_center, UnicodeString key)
 }
 
 //---------------------------------------------------------------------------
-//ˆÊ’uî•ñ•Û‘¶
+//ä½ç½®æƒ…å ±ä¿å­˜
 //---------------------------------------------------------------------------
 void UsrIniFile::SavePosInfo(TForm *frm, UnicodeString key)
 {
@@ -582,7 +582,7 @@ void UsrIniFile::SavePosInfo(TForm *frm, UnicodeString key)
 }
 
 //---------------------------------------------------------------------------
-//ƒOƒŠƒbƒh‚ÌƒJƒ‰ƒ€•İ’è (ƒXƒP[ƒŠƒ“ƒO‚ğl—¶)
+//ã‚°ãƒªãƒƒãƒ‰ã®ã‚«ãƒ©ãƒ å¹…è¨­å®š (ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°ã‚’è€ƒæ…®)
 //---------------------------------------------------------------------------
 void UsrIniFile::LoadGridColWidth(TStringGrid *gp, int cnt, ...)
 {
@@ -607,7 +607,7 @@ void UsrIniFile::LoadGridColWidth(TStringGrid *gp, int cnt, ...)
 	va_end(ap);
 }
 //---------------------------------------------------------------------------
-//ƒOƒŠƒbƒh‚ÌƒJƒ‰ƒ€••Û‘¶ (ƒXƒP[ƒŠƒ“ƒO‚ğl—¶)
+//ã‚°ãƒªãƒƒãƒ‰ã®ã‚«ãƒ©ãƒ å¹…ä¿å­˜ (ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°ã‚’è€ƒæ…®)
 //---------------------------------------------------------------------------
 void UsrIniFile::SaveGridColWidth(TStringGrid *gp)
 {
@@ -620,13 +620,13 @@ void UsrIniFile::SaveGridColWidth(TStringGrid *gp)
 }
 
 //---------------------------------------------------------------------------
-//ComboBox ‚Ì€–Ú‚ğ“Ç
+//ComboBox ã®é …ç›®ã‚’èª­è¾¼
 //---------------------------------------------------------------------------
 void UsrIniFile::LoadComboBoxItems(
 	TComboBox *cp,
-	const _TCHAR *sct,	//ƒZƒNƒVƒ‡ƒ“–¼
-	int max_items,		//Å‘å€–Ú”	(default = 20)
-	bool del_quot)		//ˆø—p•„‚ğŠO‚·	(default = false)
+	const _TCHAR *sct,	//ã‚»ã‚¯ã‚·ãƒ§ãƒ³å
+	int max_items,		//æœ€å¤§é …ç›®æ•°	(default = 20)
+	bool del_quot)		//å¼•ç”¨ç¬¦ã‚’å¤–ã™	(default = false)
 {
 	UnicodeString sct_u = def_if_empty(sct, cp->Name);
 	UnicodeString key;
@@ -639,12 +639,12 @@ void UsrIniFile::LoadComboBoxItems(
 	}
 }
 //---------------------------------------------------------------------------
-//ComboBox ‚Ì€–Ú‚ğ•Û‘¶
+//ComboBox ã®é …ç›®ã‚’ä¿å­˜
 //---------------------------------------------------------------------------
 void UsrIniFile::SaveComboBoxItems(
 	TComboBox *cp,
-	const _TCHAR *sct,	//ƒZƒNƒVƒ‡ƒ“–¼
-	int max_items)		//Å‘å€–Ú”	(default = 20)
+	const _TCHAR *sct,	//ã‚»ã‚¯ã‚·ãƒ§ãƒ³å
+	int max_items)		//æœ€å¤§é …ç›®æ•°	(default = 20)
 {
 	UnicodeString sct_u = def_if_empty(sct, cp->Name);
 	UnicodeString key;
@@ -659,11 +659,11 @@ void UsrIniFile::SaveComboBoxItems(
 }
 
 //---------------------------------------------------------------------------
-//ƒŠƒXƒg€–Ú‚Ì“Ç
+//ãƒªã‚¹ãƒˆé …ç›®ã®èª­è¾¼
 //---------------------------------------------------------------------------
 void UsrIniFile::LoadListItems(UnicodeString sct, TStringList *lst,
-	int max_items,		//Å‘å€–Ú”	(default = 20)	  0 ‚Ìê‡–³§ŒÀ
-	bool del_quot)		//ˆø—p•„‚ğŠO‚·	(default = true)  ICSV€–Ú‚Ìê‡‚Í false ‚É
+	int max_items,		//æœ€å¤§é …ç›®æ•°	(default = 20)	  0 ã®å ´åˆç„¡åˆ¶é™
+	bool del_quot)		//å¼•ç”¨ç¬¦ã‚’å¤–ã™	(default = true)  ï¼CSVé …ç›®ã®å ´åˆã¯ false ã«
 {
 	lst->Clear();
 	for (int i=0; (max_items==0 || i<max_items); i++) {
@@ -673,10 +673,10 @@ void UsrIniFile::LoadListItems(UnicodeString sct, TStringList *lst,
 	}
 }
 //---------------------------------------------------------------------------
-//ƒŠƒXƒg€–Ú‚Ì•Û‘¶
+//ãƒªã‚¹ãƒˆé …ç›®ã®ä¿å­˜
 //---------------------------------------------------------------------------
 void UsrIniFile::SaveListItems(UnicodeString sct, TStringList *lst,
-	int max_items)		//Å‘å€–Ú”	(default = 20)	  0 ‚Ìê‡–³§ŒÀ
+	int max_items)		//æœ€å¤§é …ç›®æ•°	(default = 20)	  0 ã®å ´åˆç„¡åˆ¶é™
 {
 	EraseSection(sct);
 	for (int i=0; i<lst->Count && (max_items==0 || i<max_items); i++)
@@ -684,14 +684,14 @@ void UsrIniFile::SaveListItems(UnicodeString sct, TStringList *lst,
 }
 
 //---------------------------------------------------------------------------
-//ƒ}[ƒNƒCƒ“ƒfƒbƒNƒX‚ÌXV
+//ãƒãƒ¼ã‚¯ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®æ›´æ–°
 //---------------------------------------------------------------------------
 void UsrIniFile::UpdateMarkIdxList()
 {
 	for (int i=0; i<MarkIdxList->Count; i++) delete (TStringList*)MarkIdxList->Objects[i];
 	MarkIdxList->Clear();
 
-	//ƒ}[ƒNƒZƒNƒVƒ‡ƒ“‚ÌƒRƒs[‚ğì¬
+	//ãƒãƒ¼ã‚¯ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã®ã‚³ãƒ”ãƒ¼ã‚’ä½œæˆ
 	for (int i=0; i<SectionList->Count; i++) {
 		UnicodeString sct = SectionList->Strings[i];
 		if (contains_PathDlmtr(sct)) {
@@ -703,14 +703,14 @@ void UsrIniFile::UpdateMarkIdxList()
 }
 
 //---------------------------------------------------------------------------
-//ƒ}[ƒN€–Ú‚Ì‘¶İƒ`ƒFƒbƒN
+//ãƒãƒ¼ã‚¯é …ç›®ã®å­˜åœ¨ãƒã‚§ãƒƒã‚¯
 //---------------------------------------------------------------------------
 void UsrIniFile::CheckMarkItems()
 {
 	for (int i=0; i<MarkIdxList->Count; i++) {
 		UnicodeString dnam = MarkIdxList->Strings[i];
 		if (is_drive_accessible(dnam)) {
-			//ƒfƒBƒŒƒNƒgƒŠ
+			//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 			if (ends_PathDlmtr(dnam)) {
 				if (dir_exists(dnam)) {
 					int idx = SectionList->IndexOf(dnam);
@@ -728,12 +728,12 @@ void UsrIniFile::CheckMarkItems()
 					EraseSection(dnam);
 				}
 			}
-			//ƒA[ƒJƒCƒu(“à•”‚Íƒ`ƒFƒbƒN‚µ‚È‚¢)
+			//ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–(å†…éƒ¨ã¯ãƒã‚§ãƒƒã‚¯ã—ãªã„)
 			else if (!file_exists(dnam)) {
 				EraseSection(dnam);
 			}
 		}
-		//ƒAƒNƒZƒX‚Å‚«‚È‚¢UNCƒpƒX‚ÌƒZƒNƒVƒ‡ƒ“‚Ííœ
+		//ã‚¢ã‚¯ã‚»ã‚¹ã§ããªã„UNCãƒ‘ã‚¹ã®ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã¯å‰Šé™¤
 		else if (StartsStr("\\\\", dnam)) {
 			EraseSection(dnam);
 		}
@@ -743,7 +743,7 @@ void UsrIniFile::CheckMarkItems()
 }
 
 //---------------------------------------------------------------------------
-//‚·‚×‚Ä‚Ìƒ}[ƒN‚ğ‰ğœ
+//ã™ã¹ã¦ã®ãƒãƒ¼ã‚¯ã‚’è§£é™¤
 //---------------------------------------------------------------------------
 void UsrIniFile::ClearAllMark()
 {
@@ -764,23 +764,23 @@ void UsrIniFile::ClearAllMark()
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹ƒ}[ƒN/‰ğœ
+//ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒ¼ã‚¯/è§£é™¤
 //---------------------------------------------------------------------------
 bool UsrIniFile::FileMark(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	int flag,				//-1 = ”½“]/ 0 = ‰ğœ/ 1 = ƒ}[ƒN	(default = -1)
-	UnicodeString memo)		//ƒƒ‚								(default = EmptyStr)
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	int flag,				//-1 = åè»¢/ 0 = è§£é™¤/ 1 = ãƒãƒ¼ã‚¯	(default = -1)
+	UnicodeString memo)		//ãƒ¡ãƒ¢								(default = EmptyStr)
 {
 	bool res	 = false;
 	bool deleted = false;
 
 	UnicodeString sct, itm;
-	//ƒA[ƒJƒCƒu
+	//ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–
 	if (contains_Slash(fnam)) {
 		sct = split_tkn(fnam, '/');
 		itm = fnam;
 	}
-	//’Êí
+	//é€šå¸¸
 	else {
 		sct = ExtractFilePath(fnam);
 		itm = ExtractFileName(fnam);
@@ -795,7 +795,7 @@ bool UsrIniFile::FileMark(
 			if (SameText(itm, get_pre_tab(klist->Strings[i]))) k_idx = i;
 
 		if (k_idx>=0 && flag!=1) {
-			//‰ğœ
+			//è§£é™¤
 			klist->Delete(k_idx);
 			if (klist->Count==0) EraseSection(sct);
 			deleted = true;
@@ -807,7 +807,7 @@ bool UsrIniFile::FileMark(
 		res = false;
 	}
 	else if (!deleted) {
-		//ƒ}[ƒN
+		//ãƒãƒ¼ã‚¯
 		if (!klist) klist = AddSection(sct);
 
 		int k_idx = -1;
@@ -825,26 +825,26 @@ bool UsrIniFile::FileMark(
 		res = true;
 	}
 
-	//ƒ}[ƒNƒCƒ“ƒfƒbƒNƒX‚ÌXV
+	//ãƒãƒ¼ã‚¯ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®æ›´æ–°
 	UpdateMarkIdxList();
 
 	return res;
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚ªƒ}[ƒN‚³‚ê‚Ä‚¢‚é‚©H
+//ãƒ•ã‚¡ã‚¤ãƒ«ãŒãƒãƒ¼ã‚¯ã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
 //---------------------------------------------------------------------------
 bool UsrIniFile::IsMarked(UnicodeString fnam)
 {
 	bool ret = false;
 
 	UnicodeString sct, itm;
-	//ƒA[ƒJƒCƒu
+	//ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–
 	if (contains_Slash(fnam)) {
 		sct = split_tkn(fnam, '/');
 		itm = fnam;
 	}
-	//’Êí
+	//é€šå¸¸
 	else {
 		sct = ExtractFilePath(fnam);
 		itm = ExtractFileName(fnam);
@@ -861,11 +861,11 @@ bool UsrIniFile::IsMarked(UnicodeString fnam)
 	return ret;
 }
 //---------------------------------------------------------------------------
-//ƒA[ƒJƒCƒu“à‚Ìƒ}[ƒNƒtƒ@ƒCƒ‹‚ğæ“¾
+//ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–å†…ã®ãƒãƒ¼ã‚¯ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString UsrIniFile::MarkedInArc(
-	UnicodeString arc_file,	//ƒA[ƒJƒCƒuƒtƒ@ƒCƒ‹–¼
-	UnicodeString xlist)	//‘Î‰Šg’£q	(default = EmptyStr : ‚·‚×‚Äƒ}ƒbƒ`)
+	UnicodeString arc_file,	//ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«å
+	UnicodeString xlist)	//å¯¾å¿œæ‹¡å¼µå­	(default = EmptyStr : ã™ã¹ã¦ãƒãƒƒãƒ)
 {
 	int idx = MarkIdxList->IndexOf(arc_file);
 	if (idx==-1) return EmptyStr;
@@ -882,19 +882,19 @@ UnicodeString UsrIniFile::MarkedInArc(
 	return ret_nam;
 }
 //---------------------------------------------------------------------------
-//ƒ}[ƒNƒtƒ@ƒCƒ‹‚Ìƒƒ‚‚ğæ“¾
+//ãƒãƒ¼ã‚¯ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ¡ãƒ¢ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString UsrIniFile::GetMarkMemo(UnicodeString fnam)
 {
 	if (fnam.IsEmpty()) return EmptyStr;
 
 	UnicodeString sct, itm;
-	//ƒA[ƒJƒCƒu
+	//ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–
 	if (contains_Slash(fnam)) {
 		sct = split_tkn(fnam, '/');
 		itm = fnam;
 	}
-	//’Êí
+	//é€šå¸¸
 	else {
 		sct = ExtractFilePath(fnam);
 		itm = ExtractFileName(fnam);
@@ -905,7 +905,7 @@ UnicodeString UsrIniFile::GetMarkMemo(UnicodeString fnam)
 	if (idx!=-1) {
 		TStringList *klist = (TStringList*)MarkIdxList->Objects[idx];
 		for (int i=0; i<klist->Count; i++) {
-			UnicodeString lbuf = klist->Strings[i];	//ƒtƒ@ƒCƒ‹–¼ \t ƒƒ‚ \t İ’è“ú
+			UnicodeString lbuf = klist->Strings[i];	//ãƒ•ã‚¡ã‚¤ãƒ«å \t ãƒ¡ãƒ¢ \t è¨­å®šæ—¥æ™‚
 			if (SameText(itm, split_pre_tab(lbuf))) {
 				memo = get_pre_tab(lbuf);  break;
 			}
@@ -916,10 +916,10 @@ UnicodeString UsrIniFile::GetMarkMemo(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//INIƒtƒ@ƒCƒ‹‚ÌXV
+//INIãƒ•ã‚¡ã‚¤ãƒ«ã®æ›´æ–°
 //---------------------------------------------------------------------------
 bool UsrIniFile::UpdateFile(
-	bool force)		//true = •ÏX‚ª‚È‚­‚Ä‚à‹­§“I‚É•Û‘¶/ false = •ÏX‚ª‚ ‚ê‚Î•Û‘¶
+	bool force)		//true = å¤‰æ›´ãŒãªãã¦ã‚‚å¼·åˆ¶çš„ã«ä¿å­˜/ false = å¤‰æ›´ãŒã‚ã‚Œã°ä¿å­˜
 {
 	try {
 		if (Modified || force) {

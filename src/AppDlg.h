@@ -1,6 +1,6 @@
 /**
  * @file AppDlg.h
- * @brief ƒAƒvƒŠƒP[ƒVƒ‡ƒ“ˆê——
+ * @brief ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ä¸€è¦§
  */
 //---------------------------------------------------------------------------
 #ifndef AppDlgH
@@ -53,7 +53,7 @@ struct PEB_INTERNAL {
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒAƒvƒŠƒP[ƒVƒ‡ƒ“î•ñ
+ * @brief ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±
  */
 class AppWinInf
 {
@@ -80,8 +80,8 @@ public:
 	bool isUWP;
 	bool topMost;
 	bool Exist;
-	bool toClose;			//!< I—¹—v‹
-	bool isNoRes;			//!< –³‰“š‚©‚à
+	bool toClose;			//!< çµ‚äº†è¦æ±‚
+	bool isNoRes;			//!< ç„¡å¿œç­”ã‹ã‚‚
 
 	SIZE_T mem_WS;
 	SIZE_T mem_pWS;
@@ -124,11 +124,11 @@ public:
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒAƒvƒŠƒP[ƒVƒ‡ƒ“ˆê——
+ * @brief ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ä¸€è¦§
  */
 class TAppListDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *AppInfoAction;
 	TAction *FitToFileListAction;
 	TAction *JumpLinkedAction;
@@ -253,9 +253,9 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall PropertyItemClick(TObject *Sender);
 	void __fastcall InpPaintBoxPaint(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	TAppWinList *AppInfoList;
-	int MaxWd_f;		//–¼‘O‚ÌÅ‘å•
+	int MaxWd_f;		//åå‰ã®æœ€å¤§å¹…
 	TRect ThumbRect;
 	TRect LiveRect;
 
@@ -293,9 +293,9 @@ private:	// ƒ†[ƒU[éŒ¾
 	void __fastcall UpdateLaunchList(UnicodeString lnam = EmptyStr);
 	void __fastcall UpdateLaunchSttBar();
 
-public:		// ƒ†[ƒU[éŒ¾
-	UsrScrollPanel *AppScrPanel;	//!< ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[
-	UsrScrollPanel *LaunchScrPanel;	//!< ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	UsrScrollPanel *AppScrPanel;	//!< ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
+	UsrScrollPanel *LaunchScrPanel;	//!< ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 
 	UnicodeString LaunchPath;
 	UnicodeString CurLaunchPath;

@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------//
-// ƒA[ƒJƒCƒuˆ—														//
+// ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–å‡¦ç†														//
 //																		//
 //----------------------------------------------------------------------//
 #include "usr_str.h"
@@ -38,7 +38,7 @@ UserArcUnit::UserArcUnit(HWND hWnd)
 		fp->dll7zName = EmptyStr;
 
 		fp->DllName = get_word_i_idx("7-zip64.dll|unlha64.dll|cab64.dll|tar64.dll|unrar64j.dll|uniso64.dll", i);
-		//unlha64.dll cab64.dll uniso64.dll ‚ÍŒ»‘¶‚µ‚È‚¢
+		//unlha64.dll cab64.dll uniso64.dll ã¯ç¾å­˜ã—ãªã„
 
 		fp->hDll = ::LoadLibrary(fp->DllName.c_str());
 		if (fp->hDll) {
@@ -68,7 +68,7 @@ UserArcUnit::UserArcUnit(HWND hWnd)
 			fp->Available = fp->Command && fp->GetVersion && fp->GetRunning && fp->CheckArchive
 					&& fp->OpenArchive && fp->CloseArchive && fp->FindFirst && fp->FindNext;
 
-			//“Æ©API
+			//ç‹¬è‡ªAPI
 			switch (i) {
 			case 0: case 5: //ZIP, ISO
 				fp->GetAttribute = (FUNC_ArcGetAttribute)GetProcAdr(fp, "GetAttribute");
@@ -82,9 +82,9 @@ UserArcUnit::UserArcUnit(HWND hWnd)
 						Use7zDll	 = fp->Exists7zdll();
 						fp->err7zdll = !Use7zDll;
 						if (fp->Available && fp->use7zdll && Use7zDll) {
-							//7z.dll ‚Ìƒtƒ‹ƒpƒX–¼‚ğæ“¾
+							//7z.dll ã®ãƒ•ãƒ«ãƒ‘ã‚¹åã‚’å–å¾—
 							if (::GetModuleFileName(::GetModuleHandle(NULL), szFname, MAX_PATH)>0) {
-								fp->CheckArchive(UTF8String(szFname).c_str(), 0);	//¦ƒ[ƒh‚·‚é‚½‚ß‚ÉÀsƒtƒ@ƒCƒ‹‚ğƒ`ƒFƒbƒN
+								fp->CheckArchive(UTF8String(szFname).c_str(), 0);	//â€»ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãŸã‚ã«å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒã‚§ãƒƒã‚¯
 								HINSTANCE h7z = ::GetModuleHandle(_T("7z.dll"));
 								if (h7z && ::GetModuleFileName(h7z, szFname, MAX_PATH)>0) fp->dll7zName = szFname;
 							}
@@ -109,7 +109,7 @@ UserArcUnit::UserArcUnit(HWND hWnd)
 				fp->SetBackGroundMode = (FUNC_ArcSetBackGroundMode)GetProcAdr(fp, "SetBackGroundMode");
 				fp->Available = fp->Available && fp->GetFileCount && fp->SetBackGroundMode;
 				if (fp->Available && fp->SetUnicodeMode) fp->Available = fp->SetUnicodeMode(TRUE);
-				if (fp->Available) fp->SetBackGroundMode(FALSE);	//”ñƒoƒbƒNƒOƒ‰ƒEƒ“ƒhƒ‚[ƒh‚Éİ’è
+				if (fp->Available) fp->SetBackGroundMode(FALSE);	//éãƒãƒƒã‚¯ã‚°ãƒ©ã‚¦ãƒ³ãƒ‰ãƒ¢ãƒ¼ãƒ‰ã«è¨­å®š
 				break;
 			}
 
@@ -117,9 +117,9 @@ UserArcUnit::UserArcUnit(HWND hWnd)
 				int v = fp->GetVersion();
 				fp->VerStr.sprintf(_T("v%u.%02u"), v/100, v%100);
 
-				//7-zipXX.dll „‰Æ”Åƒ`ƒFƒbƒN
+				//7-zipXX.dll ç§å®¶ç‰ˆãƒã‚§ãƒƒã‚¯
 				if (i==0) {
-					fp->hasRename = v>=1500;	//Rename ‘Î‰ - •¶š‰»‚¯‘Îô”Å(V15.`)
+					fp->hasRename = v>=1500;	//Rename å¯¾å¿œ - æ–‡å­—åŒ–ã‘å¯¾ç­–ç‰ˆ(V15.ï½)
 				}
 			}
 		}
@@ -132,7 +132,7 @@ UserArcUnit::~UserArcUnit()
 }
 
 //---------------------------------------------------------------------------
-//DLL‚ÌŠÖ”‚ÌƒAƒhƒŒƒX‚ğæ“¾B
+//DLLã®é–¢æ•°ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å–å¾—ã€‚
 //---------------------------------------------------------------------------
 FARPROC UserArcUnit::GetProcAdr(arc_func *fp, UnicodeString pnam)
 {
@@ -140,27 +140,27 @@ FARPROC UserArcUnit::GetProcAdr(arc_func *fp, UnicodeString pnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹–¼‚©‚çí•Ê‚ğ”»’è
-//IAPI‚É‚æ‚é”»’è‚ÍŠÔ‚ª‚©‚©‚éê‡‚ª‚ ‚é‚Ì‚Å—v’ˆÓ
+//ãƒ•ã‚¡ã‚¤ãƒ«åã‹ã‚‰ç¨®åˆ¥ã‚’åˆ¤å®š
+//ï¼APIã«ã‚ˆã‚‹åˆ¤å®šã¯æ™‚é–“ãŒã‹ã‹ã‚‹å ´åˆãŒã‚ã‚‹ã®ã§è¦æ³¨æ„
 //---------------------------------------------------------------------------
 int UserArcUnit::GetArcType(UnicodeString arc_file,
-	bool ex_sw)		//7z.dll‘Î‰‚Ì‚à‚Ì‚ğŠÜ‚Ş	(default = false)
+	bool ex_sw)		//7z.dllå¯¾å¿œã®ã‚‚ã®ã‚’å«ã‚€	(default = false)
 {
 	int arc_t = 0;
 	UnicodeString fext = get_extension(arc_file);
 
-	//Šg’£q‚É‚æ‚é”»’è
+	//æ‹¡å¼µå­ã«ã‚ˆã‚‹åˆ¤å®š
 	if		(test_FileExt(fext, FEXT_ZIP))	arc_t = UARCTYP_ZIP;
 	else if (test_FileExt(fext, FEXT_7Z) || (Use7zDll && test_FileExt(fext, FExt7zDll)))
 											arc_t = UARCTYP_7Z;
 	else if (test_FileExt(fext, FEXT_TAR))	arc_t = UARCTYP_TAR;
 	else if (test_FileExt(fext, FEXT_RAR))	arc_t = UARCTYP_RAR;
-	//ˆÈ‰º‚ÍŒ»‘¶‚µ‚È‚¢
+	//ä»¥ä¸‹ã¯ç¾å­˜ã—ãªã„
 	else if (test_FileExt(fext, FEXT_LHA))	arc_t = UARCTYP_LHA;
 	else if (test_FileExt(fext, FEXT_CAB))	arc_t = UARCTYP_CAB;
 	else if (test_FileExt(fext, FEXT_ISO))	arc_t = UARCTYP_ISO;
 
-	//API‚É‚æ‚é”»’è
+	//APIã«ã‚ˆã‚‹åˆ¤å®š
 	if (arc_t==0) {
 		arc_func *fp = GetArcFunc(UARCTYP_ZIP);
 		if (fp && fp->Available && fp->GetArchiveType) {
@@ -169,7 +169,7 @@ int UserArcUnit::GetArcType(UnicodeString arc_file,
 						fp->GetArchiveType(AnsiString(arc_file).c_str());
 			if		(sub_t==1)			arc_t = UARCTYP_ZIP;
 			else if (sub_t==2)			arc_t = UARCTYP_7Z;
-			else if (ex_sw && sub_t>0)	arc_t = UARCTYP_ZIP;	//7z.dll‘Î‰
+			else if (ex_sw && sub_t>0)	arc_t = UARCTYP_ZIP;	//7z.dllå¯¾å¿œ
 		}
 	}
 	if (arc_t==0) {
@@ -185,7 +185,7 @@ int UserArcUnit::GetArcType(UnicodeString arc_file,
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹–¼‚©‚çŒ`®‚ğæ“¾ (ZIP,7Z,TAR ‚Ì‚İ)
+//ãƒ•ã‚¡ã‚¤ãƒ«åã‹ã‚‰å½¢å¼ã‚’å–å¾— (ZIP,7Z,TAR ã®ã¿)
 //---------------------------------------------------------------------------
 UnicodeString UserArcUnit::GetSubTypeStr(UnicodeString arc_file)
 {
@@ -239,7 +239,7 @@ arc_func * UserArcUnit::GetArcFunc(int typ)
 }
 
 //---------------------------------------------------------------------------
-//“®ì’†‚©H
+//å‹•ä½œä¸­ã‹ï¼Ÿ
 //---------------------------------------------------------------------------
 bool UserArcUnit::IsRunning(UnicodeString arc_file)
 {
@@ -255,31 +255,31 @@ bool UserArcUnit::IsUnicode(int typ)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚ğˆ—‰Â”\‚©H
+//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å‡¦ç†å¯èƒ½ã‹ï¼Ÿ
 //---------------------------------------------------------------------------
 bool UserArcUnit::IsAvailable(int typ)
 {
 	ErrMsg = EmptyStr;
 	arc_func *fp = GetArcFunc(typ);
 	if (fp) {
-		if (!fp->Available) ErrMsg.sprintf(_T("%s ‚ª—˜—p‚Å‚«‚Ü‚¹‚ñ"), fp->DllName.c_str());
+		if (!fp->Available) ErrMsg.sprintf(_T("%s ãŒåˆ©ç”¨ã§ãã¾ã›ã‚“"), fp->DllName.c_str());
 		return fp->Available;
 	}
 	else {
-		ErrMsg = "‘Î‰‚µ‚Ä‚¢‚È‚¢Œ`®‚Å‚·";
+		ErrMsg = _T("å¯¾å¿œã—ã¦ã„ãªã„å½¢å¼ã§ã™");
 		return false;
 	}
 }
 
 //---------------------------------------------------------------------------
 bool UserArcUnit::IsAvailable(UnicodeString arc_file,
-	bool ex_sw)		//7z.dll‘Î‰‚Ì‚à‚Ì‚ğŠÜ‚Ş	(default = false)
+	bool ex_sw)		//7z.dllå¯¾å¿œã®ã‚‚ã®ã‚’å«ã‚€	(default = false)
 {
 	return IsAvailable(GetArcType(arc_file, ex_sw));
 }
 
 //---------------------------------------------------------------------------
-//Raneme ‹@”\‚ğ‚Â‚©?
+//Raneme æ©Ÿèƒ½ã‚’æŒã¤ã‹?
 //---------------------------------------------------------------------------
 bool UserArcUnit::HasRename(UnicodeString arc_file)
 {
@@ -292,15 +292,15 @@ bool UserArcUnit::HasRename(UnicodeString arc_file)
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒ}ƒ“ƒh‚ÌÀs
-//–ß‚è’l : 0 = ¬Œ÷
-// ResMsgAErrMsg ‚ğİ’è
+//ã‚³ãƒãƒ³ãƒ‰ã®å®Ÿè¡Œ
+//æˆ»ã‚Šå€¤ : 0 = æˆåŠŸ
+// ResMsgã€ErrMsg ã‚’è¨­å®š
 //---------------------------------------------------------------------------
 int UserArcUnit::ExeCommand(
 	int arc_t,
 	arc_func *fp,
-	UnicodeString cmd,	//ƒRƒ}ƒ“ƒh
-	bool large_buf)		//ƒoƒbƒtƒ@ƒTƒCƒY‚ğ‘å‚«‚­‚Æ‚é (default = false)
+	UnicodeString cmd,	//ã‚³ãƒãƒ³ãƒ‰
+	bool large_buf)		//ãƒãƒƒãƒ•ã‚¡ã‚µã‚¤ã‚ºã‚’å¤§ããã¨ã‚‹ (default = false)
 {
 	if (fpAddDebugLog) fpAddDebugLog(fp->Prefix, cmd, EmptyStr);
 
@@ -319,7 +319,7 @@ int UserArcUnit::ExeCommand(
 
 	if (res!=0) {
 		if (res==ERROR_USER_CANCEL)
-			ErrMsg = "ˆ—‚ğ’†’f‚µ‚Ü‚µ‚½";
+			ErrMsg = _T("å‡¦ç†ã‚’ä¸­æ–­ã—ã¾ã—ãŸ");
 		else
 			ErrMsg = ResMsg;
 	}
@@ -329,16 +329,16 @@ int UserArcUnit::ExeCommand(
 }
 
 //---------------------------------------------------------------------------
-//ˆ³k
+//åœ§ç¸®
 //---------------------------------------------------------------------------
 bool UserArcUnit::Pack(
-	int arc_t,					//ƒA[ƒJƒCƒuí•Ê
+	int arc_t,					//ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ç¨®åˆ¥
 	UnicodeString arc_file,
 	UnicodeString src_dir,
-	UnicodeString src_files,	//‘ÎÛƒtƒ@ƒCƒ‹–¼‚Ì•À‚Ñ
-								//  –¼‘O‚ª‹ó”’‚ğŠÜ‚Şê‡‚ÍA‚»‚ê‚¼‚êˆø—p•„‚ÅˆÍ‚ñ‚Å‚¨‚­‚±‚Æ
-								//  @‚Ån‚Ü‚éê‡‚ÍAƒŒƒXƒ|ƒ“ƒXƒtƒ@ƒCƒ‹‚Æ‚İ‚È‚·
-	UnicodeString password)		//ƒpƒXƒ[ƒh
+	UnicodeString src_files,	//å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«åã®ä¸¦ã³
+								//  åå‰ãŒç©ºç™½ã‚’å«ã‚€å ´åˆã¯ã€ãã‚Œãã‚Œå¼•ç”¨ç¬¦ã§å›²ã‚“ã§ãŠãã“ã¨
+								//  @ã§å§‹ã¾ã‚‹å ´åˆã¯ã€ãƒ¬ã‚¹ãƒãƒ³ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã¨ã¿ãªã™
+	UnicodeString password)		//ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰
 {
 	ErrMsg = EmptyStr;
 
@@ -347,7 +347,7 @@ bool UserArcUnit::Pack(
 	if (!fp || !fp->Available || fp->GetRunning()) return false;
 
 	if		(arc_file.Length()>=MAX_PATH)				ErrMsg = SysErrorMessage(ERROR_BUFFER_OVERFLOW);
-	else if (arc_t==UARCTYP_RAR || arc_t==UARCTYP_ISO)	ErrMsg = "ˆ³k‚É‚Í‘Î‰‚µ‚Ä‚¢‚Ü‚¹‚ñ";
+	else if (arc_t==UARCTYP_RAR || arc_t==UARCTYP_ISO)	ErrMsg = _T("åœ§ç¸®ã«ã¯å¯¾å¿œã—ã¦ã„ã¾ã›ã‚“");
 	if (!ErrMsg.IsEmpty()) return false;
 
 	if (!src_dir.IsEmpty()) src_dir = IncludeTrailingPathDelimiter(src_dir);
@@ -365,11 +365,11 @@ bool UserArcUnit::Pack(
 	else if (arc_t==UARCTYP_CAB) cmd = "-a";
 	else if (arc_t==UARCTYP_TAR) cmd = "-c";
 
-	//ƒpƒXƒ[ƒh
+	//ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰
 	if ((arc_t==UARCTYP_ZIP || arc_t==UARCTYP_7Z) && !password.IsEmpty())
 		cmd.cat_sprintf(_T(" -p%s"), password.c_str());
 
-	//ˆ³kƒŒƒxƒ‹
+	//åœ§ç¸®ãƒ¬ãƒ™ãƒ«
 	if (arc_t==UARCTYP_ZIP && ZipPrm_x!=5) {
 		cmd.cat_sprintf(_T(" -mx=%u"), ZipPrm_x);
 	}
@@ -386,20 +386,20 @@ bool UserArcUnit::Pack(
 		cmd.cat_sprintf(_T(" -z%u"), TarPrm_z);
 	}
 
-	//7z.dll‘Î‰”Å‚Ö‚Ì‘Î‰
+	//7z.dllå¯¾å¿œç‰ˆã¸ã®å¯¾å¿œ
 	if (fp->use7zdll && starts_AT(exclude_quot(src_files))) {
 		cmd.cat_sprintf(_T(" -i%s"), src_files.c_str());
 		src_files = EmptyStr;
 	}
 
-	//’Ç‰ÁƒIƒvƒVƒ‡ƒ“
+	//è¿½åŠ ã‚ªãƒ—ã‚·ãƒ§ãƒ³
 	if		(arc_t==UARCTYP_ZIP && !ExSw_Zip.IsEmpty())	cmd.cat_sprintf(_T(" %s"), ExSw_Zip.c_str());
 	else if (arc_t==UARCTYP_7Z  && !ExSw_7z.IsEmpty())	cmd.cat_sprintf(_T(" %s"), ExSw_7z.c_str());
 	else if (arc_t==UARCTYP_LHA && !ExSw_Lha.IsEmpty())	cmd.cat_sprintf(_T(" %s"), ExSw_Lha.c_str());
 	else if (arc_t==UARCTYP_CAB && !ExSw_Cab.IsEmpty())	cmd.cat_sprintf(_T(" %s"), ExSw_Cab.c_str());
 	else if (arc_t==UARCTYP_TAR && !ExSw_Tar.IsEmpty())	cmd.cat_sprintf(_T(" %s"), ExSw_Tar.c_str());
 
-	//‚±‚êˆÈ~A\•¶‰ğÍ’â~
+	//ã“ã‚Œä»¥é™ã€æ§‹æ–‡è§£æåœæ­¢
 	if		(arc_t==UARCTYP_LHA) cmd += " --3";
 	else if (arc_t!=UARCTYP_CAB) cmd += " --";
 	cmd.cat_sprintf(_T(" %s"), add_quot_if_spc(arc_file).c_str());
@@ -410,23 +410,23 @@ bool UserArcUnit::Pack(
 }
 
 //---------------------------------------------------------------------------
-//‰ğ“€
+//è§£å‡
 //---------------------------------------------------------------------------
 bool UserArcUnit::UnPack(
-	UnicodeString arc_file,		//ƒA[ƒJƒCƒuƒtƒ@ƒCƒ‹–¼
-	UnicodeString dst_dir,		//‰ğ“€æƒfƒBƒŒƒNƒgƒŠ–¼
-	UnicodeString fnam,			//‘ÎÛƒtƒ@ƒCƒ‹–¼ (default = EmptyStr)
-								//  –¼‘O‚É‹ó”’‚ªŠÜ‚Ü‚ê‚éê‡‚Íˆø—p•„‚ÅˆÍ‚Ş
-								//  •¡”‚Ìê‡‚Í‹ó”’‚Å‹æØ‚Á‚Äw’è
-								//  @‚Ån‚Ü‚éê‡‚ÍƒŒƒXƒ|ƒ“ƒXƒtƒ@ƒCƒ‹‚Æ‚İ‚È‚·
-	bool dir_sw,				//ƒfƒBƒŒƒNƒgƒŠ•t‚«‚Å‰ğ“€	(default = true)
-	bool hide_sw,				//ˆ—ó‹µƒ_ƒCƒAƒƒO”ñ•\¦	(default = false)
-	bool ow_sw)					//Šm”F–³‚µ‚Åã‘‚«			(default = false)
+	UnicodeString arc_file,		//ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«å
+	UnicodeString dst_dir,		//è§£å‡å…ˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå
+	UnicodeString fnam,			//å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«å (default = EmptyStr)
+								//  åå‰ã«ç©ºç™½ãŒå«ã¾ã‚Œã‚‹å ´åˆã¯å¼•ç”¨ç¬¦ã§å›²ã‚€
+								//  è¤‡æ•°ã®å ´åˆã¯ç©ºç™½ã§åŒºåˆ‡ã£ã¦æŒ‡å®š
+								//  @ã§å§‹ã¾ã‚‹å ´åˆã¯ãƒ¬ã‚¹ãƒãƒ³ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã¨ã¿ãªã™
+	bool dir_sw,				//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä»˜ãã§è§£å‡	(default = true)
+	bool hide_sw,				//å‡¦ç†çŠ¶æ³ãƒ€ã‚¤ã‚¢ãƒ­ã‚°éè¡¨ç¤º	(default = false)
+	bool ow_sw)					//ç¢ºèªç„¡ã—ã§ä¸Šæ›¸ã			(default = false)
 {
 	ErrMsg = EmptyStr;
 
 	if		(arc_file.Length()>=MAX_PATH)	ErrMsg = SysErrorMessage(ERROR_BUFFER_OVERFLOW);
-	else if (dst_dir.Length()>=MAX_PATH)	ErrMsg = "‰ğ“€æ‚ÌƒpƒX–¼‚ª’·‚·‚¬‚Ü‚·";
+	else if (dst_dir.Length()>=MAX_PATH)	ErrMsg = _T("è§£å‡å…ˆã®ãƒ‘ã‚¹åãŒé•·ã™ãã¾ã™");
 	else if (!FileExists(arc_file))			ErrMsg = SysErrorMessage(ERROR_FILE_NOT_FOUND);
 	if (!ErrMsg.IsEmpty()) return false;
 
@@ -438,7 +438,7 @@ bool UserArcUnit::UnPack(
 
 	if (!DirectoryExists(dst_dir))	return false;
 
-	//7-zipXX.dll ‚ª‰ğ“€æƒfƒBƒŒƒNƒgƒŠ–¼“à‚Ì˜A‘±‹ó”’‚ğˆµ‚¦‚È‚¢–â‘è‚É‘Îˆ
+	//7-zipXX.dll ãŒè§£å‡å…ˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåå†…ã®é€£ç¶šç©ºç™½ã‚’æ‰±ãˆãªã„å•é¡Œã«å¯¾å‡¦
 	UnicodeString org_dir = dst_dir;
 	if ((arc_t==UARCTYP_ZIP || arc_t==UARCTYP_7Z) && ContainsStr(dst_dir, "  ")) {
 		TStringDynArray o_plst = split_path(org_dir);
@@ -457,11 +457,11 @@ bool UserArcUnit::UnPack(
 		}
 
 		if (!rename_Path(org_dir, dst_dir)) {
-			ErrMsg = "‰ğ“€æ‚Ìˆê‰ü–¼‚É¸”s";
+			ErrMsg = _T("è§£å‡å…ˆã®ä¸€æ™‚æ”¹åã«å¤±æ•—");
 			return false;
 		}
 
-		//•K—v‚È‚çƒA[ƒJƒCƒu‚ÌƒfƒBƒŒƒNƒgƒŠ–¼‚àˆê•ÏX
+		//å¿…è¦ãªã‚‰ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåã‚‚ä¸€æ™‚å¤‰æ›´
 		TStringDynArray a_plst = split_path(ExtractFileDir(arc_file));
 		for (int i=0; i<a_plst.Length && i<o_plst.Length; i++) {
 			if (!SameText(a_plst[i], o_plst[i])) break;
@@ -487,7 +487,7 @@ bool UserArcUnit::UnPack(
 		cmd.sprintf(_T("%s"), dir_sw? _T("x") : _T("e"));
 	}
 
-	//ˆ—ó‹µƒ_ƒCƒAƒƒO”ñ•\¦
+	//å‡¦ç†çŠ¶æ³ãƒ€ã‚¤ã‚¢ãƒ­ã‚°éè¡¨ç¤º
 	if (hide_sw) {
 		if		(arc_t==UARCTYP_ZIP || arc_t==UARCTYP_7Z || arc_t==UARCTYP_ISO)
 									 cmd += " -hide";
@@ -498,12 +498,12 @@ bool UserArcUnit::UnPack(
 	}
 
 	if (!fnam.IsEmpty()) {
-		//ƒtƒ@ƒCƒ‹–¼‚ğƒtƒ‹ƒpƒX‚Å”äŠr
+		//ãƒ•ã‚¡ã‚¤ãƒ«åã‚’ãƒ•ãƒ«ãƒ‘ã‚¹ã§æ¯”è¼ƒ
 		if		(arc_t==UARCTYP_RAR) cmd += " -s";
 		else if (arc_t==UARCTYP_LHA) cmd += " -p";
 	}
 
-	//Šm”F–³‚µ‚Åã‘‚«
+	//ç¢ºèªç„¡ã—ã§ä¸Šæ›¸ã
 	if (ow_sw) {
 		if		(arc_t==UARCTYP_ZIP || arc_t==UARCTYP_7Z || arc_t==UARCTYP_ISO)
 									 cmd += " -aoa";
@@ -512,10 +512,10 @@ bool UserArcUnit::UnPack(
 									 cmd += " -o";
 	}
 
-	//ƒA[ƒJƒCƒu
+	//ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–
 	cmd.cat_sprintf(_T(" %s"), add_quot_if_spc(arc_file).c_str());
 
-	//o—ÍæƒfƒBƒŒƒNƒgƒŠ
+	//å‡ºåŠ›å…ˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 	if (!dst_dir.IsEmpty()) {
 		if (arc_t==UARCTYP_ZIP || arc_t==UARCTYP_7Z || arc_t==UARCTYP_ISO)
 			cmd.cat_sprintf(_T(" -o%s"), add_quot_if_spc(dst_dir).c_str());
@@ -523,16 +523,16 @@ bool UserArcUnit::UnPack(
 			cmd.cat_sprintf(_T(" %s"), add_quot_if_spc(dst_dir).c_str());
 	}
 
-	//ƒŠƒXƒgƒtƒ@ƒCƒ‹‚Ì•¶šƒR[ƒh
+	//ãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®æ–‡å­—ã‚³ãƒ¼ãƒ‰
 	if (fp->IsUnicode) {
 		if (arc_t==UARCTYP_ZIP || arc_t==UARCTYP_7Z || arc_t==UARCTYP_ISO)
 			cmd += " -scsUTF-8";
 	}
 
-	//ƒtƒ@ƒCƒ‹–¼
+	//ãƒ•ã‚¡ã‚¤ãƒ«å
 	if (!fnam.IsEmpty()) {
 		if (!starts_AT(exclude_quot(fnam))) {
-			//ƒŒƒXƒ|ƒ“ƒXƒtƒ@ƒCƒ‹‚Å‚È‚¢ê‡A‚±‚êˆÈ~A\•¶‰ğÍ’â~
+			//ãƒ¬ã‚¹ãƒãƒ³ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ãªã„å ´åˆã€ã“ã‚Œä»¥é™ã€æ§‹æ–‡è§£æåœæ­¢
 			if		(arc_t==UARCTYP_LHA) cmd += " --3";
 			else if (arc_t!=UARCTYP_CAB) cmd += " --";
 		}
@@ -543,24 +543,24 @@ bool UserArcUnit::UnPack(
 	HWND hLastFocus = ::GetFocus();
 	ExeCommand(arc_t, fp, cmd);
 
-	//¦ RAR ÀsŒã‚ÉƒAƒNƒeƒBƒu‰»‚³‚ê‚È‚¢Œ»Û‚Ì‘Îô
+	//â€» RAR å®Ÿè¡Œå¾Œã«ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã•ã‚Œãªã„ç¾è±¡ã®å¯¾ç­–
 	if (hLastFocus) ::SetFocus(hLastFocus);
 	RarUnpacking = false;
 
-	//‰ğ“€æ‚ğ‰ü–¼‚µ‚Ä‚¢‚½‚çŒ³‚É–ß‚·
+	//è§£å‡å…ˆã‚’æ”¹åã—ã¦ã„ãŸã‚‰å…ƒã«æˆ»ã™
 	if (!SameText(dst_dir, org_dir) && !rename_Path(dst_dir, org_dir))
-		ErrMsg += "\r\n‰ğ“€æƒfƒBƒŒƒNƒgƒŠ–¼‚Ì•œ‹A‚É¸”s";
+		ErrMsg += _T("\r\nè§£å‡å…ˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåã®å¾©å¸°ã«å¤±æ•—");
 
 	return ErrMsg.IsEmpty();
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚Ì’Ç‰Á
+//ãƒ•ã‚¡ã‚¤ãƒ«ã®è¿½åŠ 
 //---------------------------------------------------------------------------
 bool UserArcUnit::AddFile(
-	UnicodeString arc_file,		//ƒA[ƒJƒCƒuƒtƒ@ƒCƒ‹–¼
-	UnicodeString fnam)			//‘ÎÛƒtƒ@ƒCƒ‹–¼ (‹ó”’‚ğŠÜ‚ñ‚Å‚¢‚Ä‚àˆø—p•„‚ÅˆÍ‚Ü‚È‚¢‚±‚Æ)
-								// @‚Ån‚Ü‚éê‡‚ÍAƒŒƒXƒ|ƒ“ƒXƒtƒ@ƒCƒ‹‚Æ‚İ‚È‚·
+	UnicodeString arc_file,		//ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«å
+	UnicodeString fnam)			//å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«å (ç©ºç™½ã‚’å«ã‚“ã§ã„ã¦ã‚‚å¼•ç”¨ç¬¦ã§å›²ã¾ãªã„ã“ã¨)
+								// @ã§å§‹ã¾ã‚‹å ´åˆã¯ã€ãƒ¬ã‚¹ãƒãƒ³ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã¨ã¿ãªã™
 {
 	ErrMsg = EmptyStr;
 
@@ -570,25 +570,25 @@ bool UserArcUnit::AddFile(
 	if		(arc_file.Length()>=MAX_PATH)	ErrMsg = SysErrorMessage(ERROR_BUFFER_OVERFLOW);
 	else if (!FileExists(arc_file))			ErrMsg = SysErrorMessage(ERROR_FILE_NOT_FOUND);
 	else if (arc_t==UARCTYP_CAB || arc_t==UARCTYP_TAR || arc_t==UARCTYP_RAR || arc_t==UARCTYP_ISO)
-											ErrMsg = "’Ç‰Á‚É‚Í‘Î‰‚µ‚Ä‚¢‚Ü‚¹‚ñ";
+											ErrMsg = _T("è¿½åŠ ã«ã¯å¯¾å¿œã—ã¦ã„ã¾ã›ã‚“");
 	if (!ErrMsg.IsEmpty()) return false;
 
 	arc_func *fp = GetArcFunc(arc_t);
 	if (!fp || !fp->Available || fp->GetRunning()) return false;
 
-	//ƒRƒ}ƒ“ƒh
+	//ã‚³ãƒãƒ³ãƒ‰
 	UnicodeString cmd = "a";
 	if		(arc_t==UARCTYP_ZIP) cmd += " -tzip";
 	else if (arc_t==UARCTYP_7Z)  cmd += " -t7z";
 	if		(arc_t==UARCTYP_7Z)  cmd += " -ms=off";
 
-	//7z.dll‘Î‰”Å‚Ö‚Ì‘Î‰
+	//7z.dllå¯¾å¿œç‰ˆã¸ã®å¯¾å¿œ
 	if (fp->use7zdll && starts_AT(fnam)) {
 		cmd.cat_sprintf(_T(" -i%s"), add_quot_if_spc(fnam).c_str());
 		fnam = EmptyStr;
 	}
 
-	//‚±‚êˆÈ~A\•¶‰ğÍ’â~
+	//ã“ã‚Œä»¥é™ã€æ§‹æ–‡è§£æåœæ­¢
 	if		(arc_t==UARCTYP_LHA) cmd += " --3";
 	else if (arc_t!=UARCTYP_CAB) cmd += " --";
 
@@ -598,13 +598,13 @@ bool UserArcUnit::AddFile(
 	return (ExeCommand(arc_t, fp, cmd, true)==0);
 }
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚Ìíœ
+//ãƒ•ã‚¡ã‚¤ãƒ«ã®å‰Šé™¤
 //---------------------------------------------------------------------------
 bool UserArcUnit::DelFile(
-	UnicodeString arc_file,		//ƒA[ƒJƒCƒuƒtƒ@ƒCƒ‹–¼
-	UnicodeString fnam, 		//‘ÎÛƒtƒ@ƒCƒ‹–¼ (‹ó”’‚ğŠÜ‚ñ‚Å‚¢‚Ä‚àˆø—p•„‚ÅˆÍ‚Ü‚È‚¢‚±‚Æ)
-								//  @‚Ån‚Ü‚éê‡‚ÍAƒŒƒXƒ|ƒ“ƒXƒtƒ@ƒCƒ‹‚Æ‚İ‚È‚·
-	bool hide_sw)				//ˆ—ó‹µƒ_ƒCƒAƒƒO•\¦‚Ì—}~
+	UnicodeString arc_file,		//ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«å
+	UnicodeString fnam, 		//å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«å (ç©ºç™½ã‚’å«ã‚“ã§ã„ã¦ã‚‚å¼•ç”¨ç¬¦ã§å›²ã¾ãªã„ã“ã¨)
+								//  @ã§å§‹ã¾ã‚‹å ´åˆã¯ã€ãƒ¬ã‚¹ãƒãƒ³ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã¨ã¿ãªã™
+	bool hide_sw)				//å‡¦ç†çŠ¶æ³ãƒ€ã‚¤ã‚¢ãƒ­ã‚°è¡¨ç¤ºã®æŠ‘æ­¢
 {
 	ErrMsg = EmptyStr;
 
@@ -617,10 +617,10 @@ bool UserArcUnit::DelFile(
 	if 		(arc_file.Length()>=MAX_PATH)	ErrMsg = SysErrorMessage(ERROR_BUFFER_OVERFLOW);
 	else if (!FileExists(arc_file))			ErrMsg = SysErrorMessage(ERROR_FILE_NOT_FOUND);
 	else if (arc_t==UARCTYP_CAB || arc_t==UARCTYP_TAR || arc_t==UARCTYP_RAR || arc_t==UARCTYP_ISO)
-											ErrMsg = "íœ‚É‚Í‘Î‰‚µ‚Ä‚¢‚Ü‚¹‚ñ";
+											ErrMsg = _T("å‰Šé™¤ã«ã¯å¯¾å¿œã—ã¦ã„ã¾ã›ã‚“");
 	if (!ErrMsg.IsEmpty()) return false;
 
-	//ƒRƒ}ƒ“ƒh
+	//ã‚³ãƒãƒ³ãƒ‰
 	UnicodeString cmd = "d";
 	if (arc_t==UARCTYP_7Z) cmd += " -ms=off";
 
@@ -632,13 +632,13 @@ bool UserArcUnit::DelFile(
 		else if (arc_t==UARCTYP_TAR) cmd += " --display-dialog=0";
 	}
 
-	//7z.dll‘Î‰”Å‚Ö‚Ì‘Î‰
+	//7z.dllå¯¾å¿œç‰ˆã¸ã®å¯¾å¿œ
 	if (fp->use7zdll && starts_AT(fnam)) {
 		cmd.cat_sprintf(_T(" -i%s"), add_quot_if_spc(fnam).c_str());
 		fnam = EmptyStr;
 	}
 
-	//‚±‚êˆÈ~A\•¶‰ğÍ’â~
+	//ã“ã‚Œä»¥é™ã€æ§‹æ–‡è§£æåœæ­¢
 	if		(arc_t==UARCTYP_LHA) cmd += " --3";
 	else if (arc_t!=UARCTYP_CAB) cmd += " --";
 
@@ -649,7 +649,7 @@ bool UserArcUnit::DelFile(
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹–¼‚Ì•ÏX
+//ãƒ•ã‚¡ã‚¤ãƒ«åã®å¤‰æ›´
 //---------------------------------------------------------------------------
 bool UserArcUnit::RenFile(UnicodeString arc_file, UnicodeString onam, UnicodeString nnam)
 {
@@ -658,7 +658,7 @@ bool UserArcUnit::RenFile(UnicodeString arc_file, UnicodeString onam, UnicodeStr
 	arc_func *fp = GetArcFunc(arc_t);
 	if (!fp || !fp->Available || !fp->hasRename || fp->GetRunning()) return false;
 
-	//ƒRƒ}ƒ“ƒh
+	//ã‚³ãƒãƒ³ãƒ‰
 	UnicodeString cmd = "rn";
 	cmd.cat_sprintf(_T(" %s"), add_quot_if_spc(arc_file).c_str());
 	cmd.cat_sprintf(_T(" -- %s %s"), add_quot_if_spc(onam).c_str(), add_quot_if_spc(nnam).c_str());
@@ -666,7 +666,7 @@ bool UserArcUnit::RenFile(UnicodeString arc_file, UnicodeString onam, UnicodeStr
 }
 
 //---------------------------------------------------------------------------
-//ƒA[ƒJƒCƒu‚ğŠJ‚­
+//ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ã‚’é–‹ã
 //---------------------------------------------------------------------------
 bool UserArcUnit::OpenArc(UnicodeString arc_file)
 {
@@ -682,13 +682,13 @@ bool UserArcUnit::OpenArc(UnicodeString arc_file)
 		arc_func *fp = GetArcFunc(CurType);	if (!fp) Abort();
 
 		if (fp->Available) {
-			//‘ŒÉ‚Ìƒ`ƒFƒbƒN
+			//æ›¸åº«ã®ãƒã‚§ãƒƒã‚¯
 			bool res = fp->IsUnicode?
 				fp->CheckArchive(UTF8String(arc_file).c_str(), 0) :
 				fp->CheckArchive(AnsiString(arc_file).c_str(), 0);
 			if (!res) Abort();
 
-			//RAR:uƒ{ƒŠƒ…[ƒ€‚ÌŒğŠ·vƒ_ƒCƒAƒƒO‚ÌƒLƒƒƒ“ƒZƒ‹‚É‘Î‰
+			//RAR:ã€Œãƒœãƒªãƒ¥ãƒ¼ãƒ ã®äº¤æ›ã€ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã«å¯¾å¿œ
 			if (CurType==UARCTYP_RAR) {
 				Busy = true;
 				int cnt = fp->IsUnicode?
@@ -698,7 +698,7 @@ bool UserArcUnit::OpenArc(UnicodeString arc_file)
 				if (cnt==-1) Abort();
 			}
 
-			//ƒI[ƒvƒ“
+			//ã‚ªãƒ¼ãƒ—ãƒ³
 			if (fp->IsUnicode)
 				hCurArc = fp->OpenArchive(MainHandle, UTF8String(arc_file).c_str(), M_ERROR_MESSAGE_OFF);
 			else
@@ -715,7 +715,7 @@ bool UserArcUnit::OpenArc(UnicodeString arc_file)
 }
 
 //---------------------------------------------------------------------------
-//ƒA[ƒJƒCƒu‚ğ•Â‚¶‚é
+//ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ã‚’é–‰ã˜ã‚‹
 //---------------------------------------------------------------------------
 void UserArcUnit::CloseArc()
 {
@@ -730,26 +730,26 @@ void UserArcUnit::CloseArc()
 }
 
 //---------------------------------------------------------------------------
-//ŒŸõî•ñ‚ğİ’è (FindFirstEx, FindNextEx ‚Åg—p)
+//æ¤œç´¢æƒ…å ±ã‚’è¨­å®š (FindFirstEx, FindNextEx ã§ä½¿ç”¨)
 //---------------------------------------------------------------------------
 void UserArcUnit::SetFindInf(arc_find_inf *inf,
-	bool sub_dir)		//ƒTƒuƒfƒBƒŒƒNƒgƒŠ‚àŠÜ‚Ş (default = false);
+	bool sub_dir)		//ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚‚å«ã‚€ (default = false);
 {
 	if (!inf) return;
 	arc_func *fp = GetArcFunc(CurType);  if (!fp) return;
 
-	//‰Šú‰»
+	//åˆæœŸåŒ–
 	inf->f_name = EmptyStr;
 	inf->is_dir = false;
 	inf->f_size = -1;
 	inf->f_attr = 0;
 	inf->f_time = 0;
 
-	//–¼‘O
+	//åå‰
 	UnicodeString pnam = GetDispStr(FindInf.szFileName);
 	pnam = slash_to_yen(pnam);
 	UnicodeString atrstr = UnicodeString(FindInf.szAttribute).UpperCase();
-	if (ContainsText(atrstr, "D")) pnam = IncludeTrailingPathDelimiter(pnam);	//(dll ‚É‚æ‚éˆá‚¢‚ğ‹zû)
+	if (ContainsText(atrstr, "D")) pnam = IncludeTrailingPathDelimiter(pnam);	//(dll ã«ã‚ˆã‚‹é•ã„ã‚’å¸å)
 	if (!FindDir.IsEmpty() && !StartsText(FindDir, pnam)) return;
 
 	UnicodeString fnam = pnam;
@@ -765,7 +765,7 @@ void UserArcUnit::SetFindInf(arc_find_inf *inf,
 	}
 	inf->f_name = ExcludeTrailingPathDelimiter(fnam);
 
-	//ƒTƒCƒY‚ÌŒvZ(4GB’´‚É‘Î‰)
+	//ã‚µã‚¤ã‚ºã®è¨ˆç®—(4GBè¶…ã«å¯¾å¿œ)
 	if (!inf->is_dir) {
 		__int64 org_size = -1;
 
@@ -774,7 +774,7 @@ void UserArcUnit::SetFindInf(arc_find_inf *inf,
 		}
 		else if (CurType==UARCTYP_RAR) {
 			if (FindInf.dwOriginalSize==0xffffffff) {
-				//4GB’´‚Ìê‡ -l ƒRƒ}ƒ“ƒh‚Åæ“¾
+				//4GBè¶…ã®å ´åˆ -l ã‚³ãƒãƒ³ãƒ‰ã§å–å¾—
 				UnicodeString cmd = "-l " + add_quot_if_spc(CurArcFile) + " " + add_quot_if_spc(pnam);
 				if (ExeCommand(CurType, fp, cmd)==0) {
 					std::unique_ptr<TStringList> r_lst(new TStringList());
@@ -798,23 +798,23 @@ void UserArcUnit::SetFindInf(arc_find_inf *inf,
 			org_size = FindInf.dwOriginalSize;
 		}
 
-		//ƒTƒCƒY
+		//ã‚µã‚¤ã‚º
 		inf->f_size = org_size;
 	}
 
-	//ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv
+	//ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—
 	FILETIME f_tm;
 	SYSTEMTIME s_tm;
 	if (::DosDateTimeToFileTime(FindInf.wDate, FindInf.wTime, &f_tm)) {
 		if (::FileTimeToSystemTime(&f_tm, &s_tm)) inf->f_time = SystemTimeToDateTime(s_tm);
 	}
-	//‘®«
+	//å±æ€§
 	inf->f_attr = 0;
 	if (inf->is_dir) {
 		inf->f_attr |= faDirectory;
 	}
 	else {
-		//‘®«
+		//å±æ€§
 		if (ContainsText(atrstr, "A")) inf->f_attr |= faArchive;
 		if (ContainsText(atrstr, "S")) inf->f_attr |= faSysFile;
 		if (ContainsText(atrstr, "H")) inf->f_attr |= faHidden;
@@ -823,7 +823,7 @@ void UserArcUnit::SetFindInf(arc_find_inf *inf,
 }
 
 //---------------------------------------------------------------------------
-//Å‰‚ÌŠi”[ƒtƒ@ƒCƒ‹î•ñ‚ğæ“¾
+//æœ€åˆã®æ ¼ç´ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã‚’å–å¾—
 //---------------------------------------------------------------------------
 bool UserArcUnit::FindFirst(UnicodeString mask, INDIVIDUALINFO *inf)
 {
@@ -834,14 +834,14 @@ bool UserArcUnit::FindFirst(UnicodeString mask, INDIVIDUALINFO *inf)
 		return (fp->FindFirst(hCurArc, UTF8String(mask).c_str(), inf) == 0);
 	else
 		return (fp->FindFirst(hCurArc, AnsiString(mask).c_str(), inf) == 0);
-	//¦unisoXX.dll ‚¾‚ÆUnicodeƒ‚[ƒh‚É‚µ‚Ä‚àUTF-8‚Ìƒ}ƒXƒN‚ğó‚¯•t‚¯‚Ä‚­‚ê‚È‚¢?
+	//â€»unisoXX.dll ã ã¨Unicodeãƒ¢ãƒ¼ãƒ‰ã«ã—ã¦ã‚‚UTF-8ã®ãƒã‚¹ã‚¯ã‚’å—ã‘ä»˜ã‘ã¦ãã‚Œãªã„?
 }
 
 //---------------------------------------------------------------------------
 bool UserArcUnit::FindFirstEx(
-	UnicodeString dnam,	//Šî€ƒfƒBƒŒƒNƒgƒŠ
+	UnicodeString dnam,	//åŸºæº–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªï¿¥
 	arc_find_inf *inf,
-	bool sub_dir)		//ƒTƒuƒfƒBƒŒƒNƒgƒŠ‚àŠÜ‚Ş (default = false);
+	bool sub_dir)		//ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚‚å«ã‚€ (default = false);
 {
 	FindDir = dnam;
 	if (!FindFirst(add_quot_if_spc(dnam + "*"), &FindInf)) return false;
@@ -850,7 +850,7 @@ bool UserArcUnit::FindFirstEx(
 }
 
 //---------------------------------------------------------------------------
-//Ÿ‚ÌŠi”[ƒtƒ@ƒCƒ‹î•ñ‚ğæ“¾
+//æ¬¡ã®æ ¼ç´ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã‚’å–å¾—
 //---------------------------------------------------------------------------
 bool UserArcUnit::FindNext(INDIVIDUALINFO *inf)
 {
@@ -860,7 +860,7 @@ bool UserArcUnit::FindNext(INDIVIDUALINFO *inf)
 }
 //---------------------------------------------------------------------------
 bool UserArcUnit::FindNextEx(arc_find_inf *inf,
-	bool sub_dir)	//ƒTƒuƒfƒBƒŒƒNƒgƒŠ‚àŠÜ‚Ş (default = false);
+	bool sub_dir)	//ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚‚å«ã‚€ (default = false);
 {
 	if (!FindNext(&FindInf)) return false;
 	SetFindInf(inf, sub_dir);
@@ -868,8 +868,8 @@ bool UserArcUnit::FindNextEx(arc_find_inf *inf,
 }
 
 //---------------------------------------------------------------------------
-//•\¦—p‚Ì•¶š—ñ‚ğæ“¾
-// (dll ‚É‚æ‚éˆá‚¢‚ğ‹zû)
+//è¡¨ç¤ºç”¨ã®æ–‡å­—åˆ—ã‚’å–å¾—
+// (dll ã«ã‚ˆã‚‹é•ã„ã‚’å¸å)
 //---------------------------------------------------------------------------
 UnicodeString UserArcUnit::GetDispStr(
 	char *s,
@@ -886,7 +886,7 @@ UnicodeString UserArcUnit::GetDispStr(
 }
 
 //---------------------------------------------------------------------------
-//ƒA[ƒJƒCƒu‚Ìƒ‹[ƒg€–Ú”‚ğæ“¾
+//ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ã®ãƒ«ãƒ¼ãƒˆé …ç›®æ•°ã‚’å–å¾—
 //---------------------------------------------------------------------------
 int UserArcUnit::GetRootCount(UnicodeString arc_file)
 {
@@ -909,12 +909,12 @@ int UserArcUnit::GetRootCount(UnicodeString arc_file)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹î•ñ‚Ìæ“¾
+//ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã®å–å¾—
 //---------------------------------------------------------------------------
 bool UserArcUnit::GetFileInf(
-	UnicodeString arc_file,		//ƒA[ƒJƒCƒuƒtƒ@ƒCƒ‹–¼
-	UnicodeString fnam,			//‘ÎÛ€–Ú–¼
-	arc_find_inf *inf)			//[0] ƒtƒ@ƒCƒ‹î•ñ
+	UnicodeString arc_file,		//ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«å
+	UnicodeString fnam,			//å¯¾è±¡é …ç›®å
+	arc_find_inf *inf)			//[0] ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±
 {
 	bool res = false;
 	if (OpenArc(arc_file)) {
@@ -934,11 +934,11 @@ bool UserArcUnit::GetFileInf(
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹ˆê——‚Ìæ“¾
+//ãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§ã®å–å¾—
 //---------------------------------------------------------------------------
 bool UserArcUnit::GetFileList(UnicodeString arc_file, TStringList *lst)
 {
-	if (arc_file.Length()>=MAX_PATH) return false;		//MAX_PATH’´‚ÌƒA[ƒJƒCƒu‚Íƒ_ƒ
+	if (arc_file.Length()>=MAX_PATH) return false;		//MAX_PATHè¶…ã®ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ã¯ãƒ€ãƒ¡
 
 	bool ret = true;
 	if (OpenArc(arc_file)) {
@@ -965,8 +965,8 @@ bool UserArcUnit::GetFileList(UnicodeString arc_file, TStringList *lst)
 }
 
 //---------------------------------------------------------------------------
-//w’èŠg’£q‚Éƒ}ƒbƒ`‚·‚éÅ‰‚Ìƒtƒ@ƒCƒ‹–¼‚ğæ“¾
-//–ß‚è’l : ƒA[ƒJƒCƒu–¼/ƒtƒ@ƒCƒ‹–¼
+//æŒ‡å®šæ‹¡å¼µå­ã«ãƒãƒƒãƒã™ã‚‹æœ€åˆã®ãƒ•ã‚¡ã‚¤ãƒ«åã‚’å–å¾—
+//æˆ»ã‚Šå€¤ : ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–å/ãƒ•ã‚¡ã‚¤ãƒ«å
 //---------------------------------------------------------------------------
 UnicodeString UserArcUnit::GetFirstFile(UnicodeString arc_file, UnicodeString xlist)
 {
@@ -992,11 +992,11 @@ UnicodeString UserArcUnit::GetFirstFile(UnicodeString arc_file, UnicodeString xl
 }
 
 //---------------------------------------------------------------------------
-//ƒA[ƒJƒCƒu“à‚Ì‘SƒfƒBƒŒƒNƒgƒŠ‚ÌƒŠƒXƒg‚ğæ“¾
+//ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–å†…ã®å…¨ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ãƒªã‚¹ãƒˆã‚’å–å¾—
 //---------------------------------------------------------------------------
 void UserArcUnit::GetDirList(
-	UnicodeString arc_file,		//ƒA[ƒJƒCƒu‚Ìƒtƒ@ƒCƒ‹–¼
-	TStrings *d_lst)		//[o] (‹ó)ƒfƒBƒŒƒNƒgƒŠ–¼ƒŠƒXƒg
+	UnicodeString arc_file,		//ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ã®ãƒ•ã‚¡ã‚¤ãƒ«å
+	TStrings *d_lst)		//[o] (ç©º)ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåãƒªã‚¹ãƒˆ
 {
 	if (OpenArc(arc_file)) {
 		arc_find_inf inf;
@@ -1010,13 +1010,13 @@ void UserArcUnit::GetDirList(
 	}
 }
 //---------------------------------------------------------------------------
-//ƒA[ƒJƒCƒu‚©‚çw’èƒfƒBƒŒƒNƒgƒŠˆÈ‰º‚Ì‘S€–Ú‚ÌƒŠƒXƒg‚ğæ“¾
+//ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ã‹ã‚‰æŒ‡å®šãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä»¥ä¸‹ã®å…¨é …ç›®ã®ãƒªã‚¹ãƒˆã‚’å–å¾—
 //---------------------------------------------------------------------------
 void UserArcUnit::GetItemList(
-	UnicodeString arc_file,	//ƒA[ƒJƒCƒuƒtƒ@ƒCƒ‹–¼
-	UnicodeString dnam,		//‘ÎÛƒfƒBƒŒƒNƒgƒŠ–¼
-	TStrings *f_lst,		//[o] ƒtƒ@ƒCƒ‹–¼ƒŠƒXƒg
-	TStrings *d_lst)		//[o] (‹ó)ƒfƒBƒŒƒNƒgƒŠ–¼ƒŠƒXƒg
+	UnicodeString arc_file,	//ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«å
+	UnicodeString dnam,		//å¯¾è±¡ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå
+	TStrings *f_lst,		//[o] ãƒ•ã‚¡ã‚¤ãƒ«åãƒªã‚¹ãƒˆ
+	TStrings *d_lst)		//[o] (ç©º)ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåãƒªã‚¹ãƒˆ
 {
 	if (OpenArc(arc_file)) {
 		dnam = !dnam.IsEmpty()? IncludeTrailingPathDelimiter(dnam) : EmptyStr;
@@ -1028,11 +1028,11 @@ void UserArcUnit::GetItemList(
 					if (!StartsText(dnam, fnam)) continue;
 					fnam.Delete(1, dnam.Length());
 				}
-				//ƒfƒBƒŒƒNƒgƒŠ
+				//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 				if (inf.is_dir || fnam.IsEmpty()) {
 					if (d_lst && d_lst->IndexOf(inf.f_name)==-1) d_lst->Add(inf.f_name);
 				}
-				//ƒtƒ@ƒCƒ‹
+				//ãƒ•ã‚¡ã‚¤ãƒ«
 				else if (f_lst) {
 					f_lst->Add(inf.f_name);
 				}
@@ -1043,12 +1043,12 @@ void UserArcUnit::GetItemList(
 }
 
 //---------------------------------------------------------------------------
-//ZIP ƒA[ƒJƒCƒu“à‚É‰æ‘œ‚ª‚ ‚é‚©?
-//  Àsƒtƒ@ƒCƒ‹‚È‚Ç‚ªŠÜ‚Ü‚ê‚Ä‚¢‚éê‡‚Í–³Œø
+//ZIP ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–å†…ã«ç”»åƒãŒã‚ã‚‹ã‹?
+//  å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«ãªã©ãŒå«ã¾ã‚Œã¦ã„ã‚‹å ´åˆã¯ç„¡åŠ¹
 //---------------------------------------------------------------------------
 bool UserArcUnit::HasZipImg(
-	UnicodeString arc_file,	//ƒA[ƒJƒCƒuƒtƒ@ƒCƒ‹–¼
-	UnicodeString xlist)	//‘Î‰‰æ‘œŠg’£q
+	UnicodeString arc_file,	//ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«å
+	UnicodeString xlist)	//å¯¾å¿œç”»åƒæ‹¡å¼µå­
 {
 	if (!test_FileExt(get_extension(arc_file), FEXT_ZIPIMG)) return false;
 
@@ -1077,15 +1077,15 @@ bool UserArcUnit::HasZipImg(
 }
 
 //---------------------------------------------------------------------------
-//ƒA[ƒJƒCƒuî•ñ‚Ìæ“¾
+//ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–æƒ…å ±ã®å–å¾—
 //---------------------------------------------------------------------------
 bool UserArcUnit::GetArcInfo(
 	UnicodeString arc_file,
-	int *f_cnt,			//ƒtƒ@ƒCƒ‹”
-	__int64 *org_size,	//Œ³ƒTƒCƒY
-	float *ratio,		//ˆ³k—¦			(default = NULL)
-	bool *is_enc,		//ƒpƒXƒ[ƒh•ÛŒì	(default = NULL)
-	TStringList *lst)	//ƒtƒ@ƒCƒ‹–¼ƒŠƒXƒg	(default = NULL)
+	int *f_cnt,			//ãƒ•ã‚¡ã‚¤ãƒ«æ•°
+	__int64 *org_size,	//å…ƒã‚µã‚¤ã‚º
+	float *ratio,		//åœ§ç¸®ç‡			(default = NULL)
+	bool *is_enc,		//ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ä¿è­·	(default = NULL)
+	TStringList *lst)	//ãƒ•ã‚¡ã‚¤ãƒ«åãƒªã‚¹ãƒˆ	(default = NULL)
 {
 	*f_cnt	  = 0;
 	*org_size = 0;
@@ -1126,7 +1126,7 @@ bool UserArcUnit::GetArcInfo(
 	}
 	CloseArc();
 
-	//ˆ³k—¦‚ÌŒvZ
+	//åœ§ç¸®ç‡ã®è¨ˆç®—
 	if (ret) {
 		__int64 a_size = get_file_size(arc_file);
 		*org_size = o_size;
@@ -1137,11 +1137,11 @@ bool UserArcUnit::GetArcInfo(
 }
 
 //---------------------------------------------------------------------------
-//ƒŠƒXƒg‚ğæ“¾
+//ãƒªã‚¹ãƒˆã‚’å–å¾—
 //---------------------------------------------------------------------------
 bool UserArcUnit::GetArcList(
-	UnicodeString arc_file,		//ƒA[ƒJƒCƒuƒtƒ@ƒCƒ‹–¼
-	UnicodeString cmd,	 		//ƒRƒ}ƒ“ƒh (l ‚Ü‚½‚Í t)
+	UnicodeString arc_file,		//ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«å
+	UnicodeString cmd,	 		//ã‚³ãƒãƒ³ãƒ‰ (l ã¾ãŸã¯ t)
 	TStringList *lst)
 {
 	if (cmd.IsEmpty()) return false;
@@ -1159,7 +1159,7 @@ bool UserArcUnit::GetArcList(
 
 	ExeCommand(arc_t, fp, cmd, true);
 
-	//¦ RAR ÀsŒã‚ÉƒAƒNƒeƒBƒu‰»‚³‚ê‚È‚¢Œ»Û‚Ì‘Îô
+	//â€» RAR å®Ÿè¡Œå¾Œã«ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã•ã‚Œãªã„ç¾è±¡ã®å¯¾ç­–
 	if (hLastFocus) ::SetFocus(hLastFocus);
 
 	lst->Text = ResMsg;
@@ -1168,7 +1168,7 @@ bool UserArcUnit::GetArcList(
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚ğÅVƒtƒ@ƒCƒ‹‚Ì‚à‚Ì‚Éİ’è
+//ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã‚’æœ€æ–°ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚‚ã®ã«è¨­å®š
 //---------------------------------------------------------------------------
 bool UserArcUnit::SetArcTime(UnicodeString arc_file, bool force)
 {
@@ -1184,11 +1184,11 @@ bool UserArcUnit::SetArcTime(UnicodeString arc_file, bool force)
 		}
 		CloseArc();
 
-		//ƒ^ƒCƒ€ƒXƒ^ƒ“ƒvİ’è
+		//ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—è¨­å®š
 		if (set_file_age(arc_file, dt, force)) ret = true;
 	}
 
-	ErrMsg = !ret? "ƒ^ƒCƒ€ƒXƒ^ƒ“ƒvİ’è‚É¸”s‚µ‚Ü‚µ‚½" : "";
+	ErrMsg = !ret? _T("ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—è¨­å®šã«å¤±æ•—ã—ã¾ã—ãŸ") : "";
 	return ret;
 }
 //---------------------------------------------------------------------------

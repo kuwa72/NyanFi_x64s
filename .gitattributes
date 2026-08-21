@@ -2,5 +2,6 @@ help/* linguist-documentation
 *.h linguist-language=C++
 *.dfm linguist-language=C++
 
-*.cpp diff=cp932
-*.h diff=cp932
+# 取り込んだ外部ライブラリ (レビュー対象外)
+third_party/** linguist-vendored
+third_party/** -diff

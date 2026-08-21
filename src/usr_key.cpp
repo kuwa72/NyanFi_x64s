@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------//
-//ƒL[ƒ{[ƒh															//
+//ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰															//
 //																		//
 //----------------------------------------------------------------------//
 #include "usr_key.h"
@@ -9,32 +9,32 @@ UnicodeString	KeyStr_Shift = "Shift+";
 UnicodeString	KeyStr_Ctrl  = "Ctrl+";
 UnicodeString	KeyStr_Alt	 = "Alt+";
 
-int KeyboardMode = 0;	//0=©“®”F¯/ 1=JP/ 2=US
+int KeyboardMode = 0;	//0=è‡ªå‹•èªè­˜/ 1=JP/ 2=US
 
 //---------------------------------------------------------------------------
-//ƒL[ƒŠƒXƒg‚Ìì¬
+//ã‚­ãƒ¼ãƒªã‚¹ãƒˆã®ä½œæˆ
 //---------------------------------------------------------------------------
 void make_KeyList(TStringList *lst)
 {
 	UnicodeString itmbuf;
-	for (int i=0; i<26; i++) lst->Add(itmbuf.sprintf(_T("%c"), 'A' + i));	//‰pš
-	for (int i=0; i<10; i++) lst->Add(itmbuf.sprintf(_T("%c"), '0' + i));	//”š
+	for (int i=0; i<26; i++) lst->Add(itmbuf.sprintf(_T("%c"), 'A' + i));	//è‹±å­—
+	for (int i=0; i<10; i++) lst->Add(itmbuf.sprintf(_T("%c"), '0' + i));	//æ•°å­—
 
-	for (int i=0; i<12; i++) lst->Add(itmbuf.sprintf(_T("F%u"), i + 1));	//FƒL[
+	for (int i=0; i<12; i++) lst->Add(itmbuf.sprintf(_T("F%u"), i + 1));	//Fã‚­ãƒ¼
 	lst->Text += "Del\nIns\nBkSp\nLeft\nRight\nUp\nDown\nPgUp\nPgDn\nHome\nEnd\nPause\nTab\nEsc\nEnter\nSpace\nApp\n";
 
 	if (is_JpKeybd())
-		lst->Text += "-\n^\n\\\n@\n[\n;\n:\n]\n,\n.\n/\n_\n";	//JP
+		lst->Text += _T("-\n^\n\\\n@\n[\n;\n:\n]\n,\n.\n/\nï¼¼\n");	//JP
 	else
-		lst->Text += "`\n-\n\n[\n]\n\\\n;\n'\n,\n.\n/\n";		//US
+		lst->Text += _T("`\n-\nï¼\n[\n]\n\\\n;\n'\n,\n.\n/\n");		//US
 
-	for (int i=0; i<10; i++) lst->Add(itmbuf.sprintf(_T("10Key_%u"), i));	//10ƒL[
+	for (int i=0; i<10; i++) lst->Add(itmbuf.sprintf(_T("10Key_%u"), i));	//10ã‚­ãƒ¼
 	lst->Text += "10Key_*\n10Key_+\n10Key_-\n10Key_/\n10Key_.\n";
 }
 //---------------------------------------------------------------------------
 void assign_KeyList(TComboBox *cp, 
-	bool ins_empty,		//³“–‚É‹ó€–Ú‚ğ‘}“ü	(default = false)
-	bool keep_item)		//Œ»İ‚Ì‘I‘ğ€–Ú‚ğˆÛ	(default = false)
+	bool ins_empty,		//æ­£å½“ã«ç©ºé …ç›®ã‚’æŒ¿å…¥	(default = false)
+	bool keep_item)		//ç¾åœ¨ã®é¸æŠé …ç›®ã‚’ç¶­æŒ	(default = false)
 {
 	UnicodeString k = cp->Text;
 	std::unique_ptr<TStringList> klst(new TStringList());
@@ -47,7 +47,7 @@ void assign_KeyList(TComboBox *cp,
 }
 
 //---------------------------------------------------------------------------
-//ƒL[‚ª‰Ÿ‚³‚ê‚Ä‚¢‚é‚©?
+//ã‚­ãƒ¼ãŒæŠ¼ã•ã‚Œã¦ã„ã‚‹ã‹?
 //---------------------------------------------------------------------------
 bool is_KeyDown(WORD key)
 {
@@ -55,7 +55,7 @@ bool is_KeyDown(WORD key)
 	return (HIBYTE(::GetAsyncKeyState(key)) != 0);
 }
 //---------------------------------------------------------------------------
-//ƒ_ƒCƒAƒƒOƒL[‚©H
+//ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚­ãƒ¼ã‹ï¼Ÿ
 //---------------------------------------------------------------------------
 bool is_DialogKey(WORD Key)
 {
@@ -63,7 +63,7 @@ bool is_DialogKey(WORD Key)
 			Key==VK_PRIOR || Key==VK_NEXT || Key==VK_HOME || Key==VK_END || Key==VK_TAB);
 }
 //---------------------------------------------------------------------------
-//0`9ƒL[‚©?
+//0ï½9ã‚­ãƒ¼ã‹?
 //---------------------------------------------------------------------------
 bool is_Num0to9(UnicodeString keystr)
 {
@@ -71,7 +71,7 @@ bool is_Num0to9(UnicodeString keystr)
 }
 
 //---------------------------------------------------------------------------
-//WPARAM ‚©‚çƒVƒtƒgó‘Ô‚ğæ“¾
+//WPARAM ã‹ã‚‰ã‚·ãƒ•ãƒˆçŠ¶æ…‹ã‚’å–å¾—
 //---------------------------------------------------------------------------
 int get_shift_from_wparam(WPARAM prm)
 {
@@ -83,7 +83,7 @@ int get_shift_from_wparam(WPARAM prm)
 }
 
 //---------------------------------------------------------------------------
-//“ú–{ŒêƒL[ƒ{[ƒh‚©?
+//æ—¥æœ¬èªã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã‹?
 //---------------------------------------------------------------------------
 bool is_JpKeybd()
 {
@@ -91,10 +91,10 @@ bool is_JpKeybd()
 }
 
 //---------------------------------------------------------------------------
-//ƒL[Eƒ}ƒEƒXƒoƒbƒtƒ@‚ğƒNƒŠƒA
+//ã‚­ãƒ¼ãƒ»ãƒã‚¦ã‚¹ãƒãƒƒãƒ•ã‚¡ã‚’ã‚¯ãƒªã‚¢
 //---------------------------------------------------------------------------
 void ClearKeyBuff(
-	bool key_only)	//true = ƒL[ƒoƒbƒtƒ@‚Ì‚İƒNƒŠƒA (default = false)
+	bool key_only)	//true = ã‚­ãƒ¼ãƒãƒƒãƒ•ã‚¡ã®ã¿ã‚¯ãƒªã‚¢ (default = false)
 {
 	MSG msg;
 	if (key_only) {
@@ -113,7 +113,7 @@ void ClearKeyBuff(
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒ“ƒgƒ[ƒ‹‚ÅƒL[‚ğ‰Ÿ‚·
+//ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã§ã‚­ãƒ¼ã‚’æŠ¼ã™
 //---------------------------------------------------------------------------
 void perform_Key(TControl *cp, int key)
 {
@@ -127,7 +127,7 @@ void perform_Key_RETURN(TControl *cp)
 }
 
 //---------------------------------------------------------------------------
-//ƒVƒtƒgó‘Ô‚ğæ“¾
+//ã‚·ãƒ•ãƒˆçŠ¶æ…‹ã‚’å–å¾—
 //---------------------------------------------------------------------------
 TShiftState get_Shift()
 {
@@ -141,7 +141,7 @@ TShiftState get_Shift()
 }
 
 //---------------------------------------------------------------------------
-//ƒVƒtƒgó‘Ô‚ğ•¶š—ñ‚É
+//ã‚·ãƒ•ãƒˆçŠ¶æ…‹ã‚’æ–‡å­—åˆ—ã«
 //---------------------------------------------------------------------------
 UnicodeString get_ShiftStr(TShiftState Shift)
 {
@@ -153,8 +153,8 @@ UnicodeString get_ShiftStr(TShiftState Shift)
 }
 
 //---------------------------------------------------------------------------
-//ƒL[‚ğ•¶š—ñ‚É•ÏŠ·
-//  JP/USƒL[ƒ{[ƒh‘Î‰
+//ã‚­ãƒ¼ã‚’æ–‡å­—åˆ—ã«å¤‰æ›
+//  JP/USã‚­ãƒ¼ãƒœãƒ¼ãƒ‰å¯¾å¿œ
 //---------------------------------------------------------------------------
 UnicodeString get_KeyStr(WORD Key)
 {
@@ -197,10 +197,10 @@ UnicodeString get_KeyStr(WORD Key)
 	case VK_OEM_5:		keystr = "\\";		break;
 	case VK_OEM_6:		keystr = "]";		break;
 	case VK_OEM_MINUS:  keystr = "-";		break;
-	case VK_OEM_PLUS:   keystr = is_JpKeybd()? ";" : ""; break;
+	case VK_OEM_PLUS:   keystr = is_JpKeybd()? ";" : _T("ï¼"); break;
 	case VK_OEM_COMMA:  keystr = ",";		break;
 	case VK_OEM_PERIOD: keystr = ".";		break;
-	case VK_OEM_102:    keystr = "_";		break;
+	case VK_OEM_102:    keystr = _T("ï¼¼");		break;
 
 	case VK_NUMPAD0:	keystr = "10Key_0";	break;
 	case VK_NUMPAD1:	keystr = "10Key_1";	break;
@@ -226,7 +226,7 @@ UnicodeString get_KeyStr(WORD Key)
 	return  keystr;
 }
 //---------------------------------------------------------------------------
-//ƒL[‚ÆƒVƒtƒgó‘Ô‚ğ•¶š—ñ‚É
+//ã‚­ãƒ¼ã¨ã‚·ãƒ•ãƒˆçŠ¶æ…‹ã‚’æ–‡å­—åˆ—ã«
 //---------------------------------------------------------------------------
 UnicodeString get_KeyStr(WORD Key, TShiftState Shift)
 {
@@ -235,8 +235,8 @@ UnicodeString get_KeyStr(WORD Key, TShiftState Shift)
 }
 
 //---------------------------------------------------------------------------
-//ƒL[‚ğ‰p”•¶š—ñ‚É•ÏŠ· (ƒeƒ“ƒL[‘Î‰)
-//  –ß‚è’l: ‰p”•¶š‚Å‚È‚¢ê‡‚Í EmptyStr
+//ã‚­ãƒ¼ã‚’è‹±æ•°æ–‡å­—åˆ—ã«å¤‰æ› (ãƒ†ãƒ³ã‚­ãƒ¼å¯¾å¿œ)
+//  æˆ»ã‚Šå€¤: è‹±æ•°æ–‡å­—ã§ãªã„å ´åˆã¯ EmptyStr
 //---------------------------------------------------------------------------
 UnicodeString get_AlNumChar(WORD Key)
 {
@@ -261,7 +261,7 @@ UnicodeString get_AlNumChar(WORD Key)
 }
 
 //---------------------------------------------------------------------------
-//ƒL[“ü—Í‘Ò‚¿
+//ã‚­ãƒ¼å…¥åŠ›å¾…ã¡
 //---------------------------------------------------------------------------
 UnicodeString WaitForKey()
 {

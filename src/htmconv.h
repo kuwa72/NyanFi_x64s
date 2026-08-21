@@ -1,6 +1,6 @@
 /**
  * @file htmconv.h
- * @brief HTML¨ƒeƒLƒXƒg•ÏŠ·ˆ—
+ * @brief HTMLâ†’ãƒ†ã‚­ã‚¹ãƒˆå¤‰æ›å‡¦ç†
  */
 //---------------------------------------------------------------------------
 #ifndef htmconvH
@@ -8,14 +8,14 @@
 
 //---------------------------------------------------------------------------
 #define DEF_LINE_WIDTH		80
-#define DEF_BLANK_LN_LIMIT	3				//!< ˜A‘±‹ós§ŒÀ
+#define DEF_BLANK_LN_LIMIT	3				//!< é€£ç¶šç©ºè¡Œåˆ¶é™
 
 //---------------------------------------------------------------------------
 #define NO_CRSPC_PTN	"^(#{1,6}|\\s*[\\*\\+\\-]|\\s*\\d+\\.)\\s.+|^```"
 
 //---------------------------------------------------------------------------
 /**
- * @brief HTML¨ƒeƒLƒXƒg•ÏŠ·ˆ—
+ * @brief HTMLâ†’ãƒ†ã‚­ã‚¹ãƒˆå¤‰æ›å‡¦ç†
  */
 class HtmConv
 {
@@ -50,57 +50,57 @@ public:
 	HtmConv();
 	~HtmConv();
 
-	UnicodeString FileName;		//!< ƒtƒ@ƒCƒ‹–¼
+	UnicodeString FileName;		//!< ãƒ•ã‚¡ã‚¤ãƒ«å
 	UnicodeString UrlStr;		//!< URL
-	UnicodeString TopLevel;		//!< ƒgƒbƒvƒŒƒxƒ‹
-	UnicodeString Scheme;		//!< ƒXƒL[ƒ€
+	UnicodeString TopLevel;		//!< ãƒˆãƒƒãƒ—ãƒ¬ãƒ™ãƒ«
+	UnicodeString Scheme;		//!< ã‚¹ã‚­ãƒ¼ãƒ 
 	UnicodeString BaseUrl;
 
-	TStringList *HtmBuf;		//!< HTML•¶‘“ü—Íƒoƒbƒtƒ@
-	TStringList *TxtBuf;		//!< ƒeƒLƒXƒgo—Íƒoƒbƒtƒ@
+	TStringList *HtmBuf;		//!< HTMLæ–‡æ›¸å…¥åŠ›ãƒãƒƒãƒ•ã‚¡
+	TStringList *TxtBuf;		//!< ãƒ†ã‚­ã‚¹ãƒˆå‡ºåŠ›ãƒãƒƒãƒ•ã‚¡
 
-	int  CodePage;				//!< o—ÍƒR[ƒhƒy[ƒW
+	int  CodePage;				//!< å‡ºåŠ›ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸
 
-	bool ToMarkdown;			//!< Markdown ‚É•ÏŠ·
+	bool ToMarkdown;			//!< Markdown ã«å¤‰æ›
 
-	int  LineWidth;				//!< Œ…”
-	UnicodeString HeaderStr;	//!< Œ©o‚µ•¶š(;‹æØ‚è)
-	UnicodeString UlMarkStr;	//!< ULƒ}[ƒN
-	UnicodeString InsHrClass;	//!< w’èƒNƒ‰ƒX‚ÌDIV‚Ì‘O‚ÉŒrü‘}“ü
+	int  LineWidth;				//!< æ¡æ•°
+	UnicodeString HeaderStr;	//!< è¦‹å‡ºã—æ–‡å­—(;åŒºåˆ‡ã‚Š)
+	UnicodeString UlMarkStr;	//!< ULãƒãƒ¼ã‚¯
+	UnicodeString InsHrClass;	//!< æŒ‡å®šã‚¯ãƒ©ã‚¹ã®DIVã®å‰ã«ç½«ç·šæŒ¿å…¥
 
-	bool InsHdrInf;				//!< ƒwƒbƒ_î•ñ‚ğ‘}“ü
-	bool InsHrSection;			//!< <section>‚Ì‘O‚ÉŒrü‘}“ü
-	bool InsHrArticle;			//!< <article>‚Ì‘O‚ÉŒrü‘}“ü
-	bool InsHrNav;				//!< <nav>‚Ì‘O‚ÉŒrü‘}“ü
+	bool InsHdrInf;				//!< ãƒ˜ãƒƒãƒ€æƒ…å ±ã‚’æŒ¿å…¥
+	bool InsHrSection;			//!< <section>ã®å‰ã«ç½«ç·šæŒ¿å…¥
+	bool InsHrArticle;			//!< <article>ã®å‰ã«ç½«ç·šæŒ¿å…¥
+	bool InsHrNav;				//!< <nav>ã®å‰ã«ç½«ç·šæŒ¿å…¥
 
-	UnicodeString DelBlkCls;	//!< íœ•”•ª‚Ì class ƒŠƒXƒg
-	UnicodeString DelBlkId;		//!< íœ•”•ª‚Ì id ƒŠƒXƒg
+	UnicodeString DelBlkCls;	//!< å‰Šé™¤éƒ¨åˆ†ã® class ãƒªã‚¹ãƒˆ
+	UnicodeString DelBlkId;		//!< å‰Šé™¤éƒ¨åˆ†ã® id ãƒªã‚¹ãƒˆ
 
 	UnicodeString Title;
 	UnicodeString Description;
 	UnicodeString Keywords;
 
 	/**
-	 * @brief w’è‘®«‚ÌƒuƒƒbƒN‚ğíœ
-	 * @param[in,out] lst ƒoƒbƒtƒ@ 
-	 * @param anam ‘®«–¼
-	 * @param aval ‘®«’l
+	 * @brief æŒ‡å®šå±æ€§ã®ãƒ–ãƒ­ãƒƒã‚¯ã‚’å‰Šé™¤
+	 * @param[in,out] lst ãƒãƒƒãƒ•ã‚¡ 
+	 * @param anam å±æ€§å
+	 * @param aval å±æ€§å€¤
 	 */
 	void DelAtrBlock(TStringList *lst, UnicodeString anam, UnicodeString aval);
 
 	/**
-	 * @brief —v‘f‚©‚çw’è‚µ‚½‘®«‚Ì’l‚ğæ“¾
-	 * @param s ‘ÎÛ•¶š—ñ
-	 * @param t ƒ^ƒO–¼
-	 * @param a ‘®«–¼
+	 * @brief è¦ç´ ã‹ã‚‰æŒ‡å®šã—ãŸå±æ€§ã®å€¤ã‚’å–å¾—
+	 * @param s å¯¾è±¡æ–‡å­—åˆ—
+	 * @param t ã‚¿ã‚°å
+	 * @param a å±æ€§å
 	 * @return UnicodeString 
 	 */
 	UnicodeString GetTagAtr(UnicodeString s, UnicodeString t, const _TCHAR *a);
 
-	/** @brief À‘ÌQÆ‚Ì‰ğŒˆ */
+	/** @brief å®Ÿä½“å‚ç…§ã®è§£æ±º */
 	UnicodeString RefEntity(UnicodeString s);
 
-	/** @brief •ÏŠ·ˆ— */
+	/** @brief å¤‰æ›å‡¦ç† */
 	void Convert();
 };
 //---------------------------------------------------------------------------

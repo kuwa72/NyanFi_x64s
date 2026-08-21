@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ”Ä—pˆê——ƒ_ƒCƒAƒƒO													//
+//  æ±ç”¨ä¸€è¦§ãƒ€ã‚¤ã‚¢ãƒ­ã‚°													//
 //----------------------------------------------------------------------//
 #include "usr_id3.h"
 #include "UserFunc.h"
@@ -66,7 +66,7 @@ void __fastcall TGeneralInfoDlg::FormShow(TObject *Sender)
 	SortMode  = 0;
 	ListWidth = 0;
 
-	//Œ©o‚µƒpƒ^[ƒ“‚Ìİ’è
+	//è¦‹å‡ºã—ãƒ‘ã‚¿ãƒ¼ãƒ³ã®è¨­å®š
 	if (UserHighlight->Recycle()) AddErr_Highlight();
 	if (HdrLnStr.IsEmpty()) {
 		HdrLnStr = UserHighlight->GetHeadlinePtn(FileName, HeadlineList);
@@ -81,17 +81,17 @@ void __fastcall TGeneralInfoDlg::FormShow(TObject *Sender)
 	if (Caption.IsEmpty()) {
 		UnicodeString cap_str = def_if_empty(yen_to_delimiter(FileName), LoadUsrMsg(USTR_List));
 		if (isTail) {
-			cap_str.cat_sprintf(_T(" (––”ö %us"), GenInfoList->Count);
-			if (isReverse) cap_str += ":‹t‡";
+			cap_str.cat_sprintf(_T(" (æœ«å°¾ %uè¡Œ"), GenInfoList->Count);
+			if (isReverse) cap_str += ":é€†é †";
 			cap_str += ")";
 		}
 		else if (isTree) {
-			cap_str += " (ƒcƒŠ[•\¦)";
+			cap_str += " (ãƒ„ãƒªãƒ¼è¡¨ç¤º)";
 		}
 		Caption = cap_str;
 	}
 
-	isDirs = SameText(Caption, "ƒfƒBƒŒƒNƒgƒŠ–¼ˆê——");
+	isDirs = SameText(Caption, "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåä¸€è¦§");
 
 	IniFile->LoadPosInfo(this, DialogCenter);
 
@@ -110,13 +110,13 @@ void __fastcall TGeneralInfoDlg::FormShow(TObject *Sender)
 		NotifyAction->Checked = IniFile->ReadBoolGen(_T("GenInfoTailNotify"),	false);
 	}
 
-	//ƒƒOƒtƒ@ƒCƒ‹‚©?
+	//ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã‹?
 	if (!FileName.IsEmpty()) isLog = str_match(ExePath + "tasklog*.txt", cv_VirToOrgName(FileName));
 
 	//Git?
 	isGit = (GenInfoList->Count>0 && StartsStr("$ git ", GenInfoList->Strings[0]));
 
-	//u–¼‘O=’lvŒ`®‚©?
+	//ã€Œåå‰=å€¤ã€å½¢å¼ã‹?
 	if (!isVarList && !isLog) {
 		bool all_n_v = (GenInfoList->Count>0);
 		for (int i=0; i<GenInfoList->Count && all_n_v; i++) {
@@ -129,21 +129,21 @@ void __fastcall TGeneralInfoDlg::FormShow(TObject *Sender)
 		isVarList = all_n_v;
 	}
 
-	//ƒŠƒXƒgƒ{ƒbƒNƒX‚Ì‰Šú‰»(‰¼‘z)
+	//ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®åˆæœŸåŒ–(ä»®æƒ³)
 	TListBox *lp = GenListBox;
 	lp->Tag = LBTAG_GEN_LIST | LBTAG_OPT_ZOOM
 				| (ShowLineNoAction->Checked? LBTAG_OPT_LNNO : 0)
-				| ((isFileList || isTree)? LBTAG_TAB_FNAM : 0)	//ƒ^ƒuˆÈ~‚ÉÀƒtƒ@ƒCƒ‹–¼‚ª‚ ‚é
+				| ((isFileList || isTree)? LBTAG_TAB_FNAM : 0)	//ã‚¿ãƒ–ä»¥é™ã«å®Ÿãƒ•ã‚¡ã‚¤ãƒ«åãŒã‚ã‚‹
 				| (isVarList? LBTAG_VAR_LIST : 0)
 				| (isTree? LBTAG_OPT_TREE : 0);
 
 	set_ListBoxItemHi(lp, GenListFont);
 	lp->Color = isLog? get_LogBgCol() : get_ListBgCol();
 	ListPanel->Color = lp->Color;
-	lp->TabWidth = get_ViewTabWidth(get_extension(FileName));	//ƒ^ƒu•(•`‰æ‚Ì‚½‚ß‚É—¬—p)
+	lp->TabWidth = get_ViewTabWidth(get_extension(FileName));	//ã‚¿ãƒ–å¹…(æç”»ã®ãŸã‚ã«æµç”¨)
 	set_UsrScrPanel(ListScrPanel);
 
-	//ƒtƒ@ƒCƒ‹–¼/•Ï”–¼‚ÌÅ‘å•‚ğæ“¾
+	//ãƒ•ã‚¡ã‚¤ãƒ«å/å¤‰æ•°åã®æœ€å¤§å¹…ã‚’å–å¾—
 	MaxNameWidth = 0;
 	TCanvas *cv = lp->Canvas;
 	cv->Font->Assign(lp->Font);
@@ -161,7 +161,7 @@ void __fastcall TGeneralInfoDlg::FormShow(TObject *Sender)
 		MaxNameWidth += cv->TextWidth(" = ");
 	}
 
-	//ƒpƒX‚Ì‹¤’Ê•”•ª‚ğæ“¾
+	//ãƒ‘ã‚¹ã®å…±é€šéƒ¨åˆ†ã‚’å–å¾—
 	ComPathName = EmptyStr;
 	if (isPlayList && GenInfoList->Count>1) {
 		ComPathName = ExtractFilePath(GenInfoList->Strings[0]);
@@ -182,7 +182,7 @@ void __fastcall TGeneralInfoDlg::FormShow(TObject *Sender)
 	FileSize = -1;
 	UpdateList();
 
-	//ƒJ[ƒ\ƒ‹ˆÊ’u‚ğİ’è
+	//ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã‚’è¨­å®š
 	int idx = -1;
 	int top = -1;
 	if (lp->Count>0) {
@@ -211,11 +211,11 @@ void __fastcall TGeneralInfoDlg::FormShow(TObject *Sender)
 
 	(ToFilter? (TWinControl*)FilterEdit : (TWinControl*)lp)->SetFocus();
 
-	//ƒXƒe[ƒ^ƒXƒo[
+	//ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒãƒ¼
 	AssignScaledFont(StatusBar1, SttBarFont);
 	set_SttBarPanelWidth(StatusBar1, 0, 21 + IntToStr(GenInfoList->Count).Length() * 3);
-												//"€–Ú: nnn  -  nnn    ‘I‘ğ: nnn"
-	set_SttBarPanelWidth(StatusBar1, 1, "UTF-16(BE) BOM•t");
+												//"é …ç›®: nnn  -  nnn    é¸æŠ: nnn"
+	set_SttBarPanelWidth(StatusBar1, 1, "UTF-16(BE) BOMä»˜");
 	set_SttBarPanelWidth(StatusBar1, 2, "CR/LF");
 	SetStatusBar();
 
@@ -311,7 +311,7 @@ void __fastcall TGeneralInfoDlg::WmFormShowed(TMessage &msg)
 }
 
 //---------------------------------------------------------------------------
-//ƒvƒŒƒCƒŠƒXƒg‚ÌXV
+//ãƒ—ãƒ¬ã‚¤ãƒªã‚¹ãƒˆã®æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::WmNyanFiPlayList(TMessage &msg)
 {
@@ -327,7 +327,7 @@ void __fastcall TGeneralInfoDlg::WmNyanFiPlayList(TMessage &msg)
 }
 
 //---------------------------------------------------------------------------
-//ListTail ‚ÌŠÄ‹ˆ—
+//ListTail ã®ç›£è¦–å‡¦ç†
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::Timer1Timer(TObject *Sender)
 {
@@ -338,7 +338,7 @@ void __fastcall TGeneralInfoDlg::Timer1Timer(TObject *Sender)
 			if (FileSize>0) {
 				if (UpdateList(true) && NotifyAction->Checked) {
 					play_sound(SoundWatch);
-					NotifyPrimNyan("ŠÄ‹’†‚Ìƒtƒ@ƒCƒ‹‚ª•Ï‰»‚µ‚Ü‚µ‚½");
+					NotifyPrimNyan("ç›£è¦–ä¸­ã®ãƒ•ã‚¡ã‚¤ãƒ«ãŒå¤‰åŒ–ã—ã¾ã—ãŸ");
 				}
 			}
 			FileSize = fsz;
@@ -347,8 +347,8 @@ void __fastcall TGeneralInfoDlg::Timer1Timer(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//ˆê——‚ÌXV
-// GenInfoBuff->Objects ‚ğsƒCƒ“ƒfƒbƒNƒX•t‚¯‚É—˜—p
+//ä¸€è¦§ã®æ›´æ–°
+// GenInfoBuff->Objects ã‚’è¡Œã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ä»˜ã‘ã«åˆ©ç”¨
 //---------------------------------------------------------------------------
 bool __fastcall TGeneralInfoDlg::UpdateList(bool reload)
 {
@@ -373,7 +373,7 @@ bool __fastcall TGeneralInfoDlg::UpdateList(bool reload)
 
 	cursor_HourGlass();
 	GenInfoBuff->Clear();
-	//ƒƒO‚ÌƒGƒ‰[‰ÓŠ‚Ì‚İi‚è‚İ
+	//ãƒ­ã‚°ã®ã‚¨ãƒ©ãƒ¼ç®‡æ‰€ã®ã¿çµã‚Šè¾¼ã¿
 	if (isLog && ErrOnly) {
 		bool er_flag = false;
 		for (int i=0; i<GenInfoList->Count; i++) {
@@ -393,7 +393,7 @@ bool __fastcall TGeneralInfoDlg::UpdateList(bool reload)
 		idx = 0;
 		isFiltered = true;
 	}
-	//ƒtƒBƒ‹ƒ^
+	//ãƒ•ã‚£ãƒ«ã‚¿
 	else if (!FilterEdit->Text.IsEmpty()
 		&& (!MigemoAction->Checked || (MigemoAction->Checked && FilterEdit->Text.Length()>=IncSeaMigemoMin)))
 	{
@@ -415,7 +415,7 @@ bool __fastcall TGeneralInfoDlg::UpdateList(bool reload)
 		if (idx!=-1) idx = GenInfoBuff->IndexOfObject((TObject*)(NativeInt)idx);
 		isFiltered = true;
 	}
-	//Git(ƒtƒ@ƒCƒ‹·•ª)
+	//Git(ãƒ•ã‚¡ã‚¤ãƒ«å·®åˆ†)
 	else if (isGit && (!FileName.IsEmpty() || fromGitView)) {
 		int lno = 0;
 		for (int i=0; i<GenInfoList->Count; i++) {
@@ -430,14 +430,14 @@ bool __fastcall TGeneralInfoDlg::UpdateList(bool reload)
 		}
 		isFiltered = false;
 	}
-	//’Êí•\¦
+	//é€šå¸¸è¡¨ç¤º
 	else {
 		for (int i=0; i<GenInfoList->Count; i++) GenInfoBuff->AddObject(GenInfoList->Strings[i], (TObject*)(NativeInt)i);
 		isFiltered = false;
 	}
 	cursor_Default();
 
-	//ƒŠƒXƒgƒ{ƒbƒNƒX‚ÉŠ„‚è“–‚Ä(‰¼‘z)
+	//ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã«å‰²ã‚Šå½“ã¦(ä»®æƒ³)
 	assign_FileListBox(lp, GenInfoBuff, 0);
 	if (lp->Count>0) lp->ItemIndex = (idx!=-1)? idx : 0;
 	ListScrPanel->UpdateKnob();
@@ -462,10 +462,10 @@ UnicodeString __fastcall TGeneralInfoDlg::GetBuffText()
 }
 
 //---------------------------------------------------------------------------
-//•¶š—ñŒŸõ
+//æ–‡å­—åˆ—æ¤œç´¢
 //---------------------------------------------------------------------------
 bool __fastcall TGeneralInfoDlg::FindText(
-	bool down)		//true = ‰º•ûŒü/ false = ã•ûŒü
+	bool down)		//true = ä¸‹æ–¹å‘/ false = ä¸Šæ–¹å‘
 {
 	if (FindWord.IsEmpty() && RegExPtn.IsEmpty()) {
 		ListScrPanel->ClearHitLine();
@@ -481,7 +481,7 @@ bool __fastcall TGeneralInfoDlg::FindText(
 	bool case_sw = FindTextDlg->CaseCheckBox->Checked;
 	bool word_sw = FindTextDlg->WordCheckBox->Checked;
 
-	//³‹K•\Œ»
+	//æ­£è¦è¡¨ç¾
 	if ((FindTextDlg->MigemoCheckBox->Enabled && FindTextDlg->MigemoCheckBox->Checked)
 		|| FindTextDlg->RegExCheckBox->Checked)
 	{
@@ -511,7 +511,7 @@ bool __fastcall TGeneralInfoDlg::FindText(
 			ListScrPanel->KeyWordChanged(EmptyStr, 0);
 		}
 	}
-	//’Êí
+	//é€šå¸¸
 	else if (!FindWord.IsEmpty()) {
 		for (int i = (down? idx0 + 1 : idx0 - 1); i>=0 && i<lp->Count; i += (down? 1 : -1)) {
 			UnicodeString lbuf = lp->Items->Strings[i];
@@ -536,16 +536,16 @@ bool __fastcall TGeneralInfoDlg::FindText(
 
 	Found = (idx1!=-1);
 
-	//Œ‹‰Ê•\¦
+	//çµæœè¡¨ç¤º
 	UnicodeString msg; msg.sprintf(_T("[%s] "), FindWord.c_str());
 	if (Found) {
 		lp->ItemIndex = idx1;
 		lp->Repaint();
-		msg += "”­Œ©";
+		msg += "ç™ºè¦‹";
 	}
 	else {
 		beep_Warn();
-		msg += "Œ©‚Â‚©‚è‚Ü‚¹‚ñ";
+		msg += "è¦‹ã¤ã‹ã‚Šã¾ã›ã‚“";
 	}
 	SetStatusBar(msg);
 	cursor_Default();
@@ -554,17 +554,17 @@ bool __fastcall TGeneralInfoDlg::FindText(
 }
 
 //---------------------------------------------------------------------------
-//ƒXƒe[ƒ^ƒXƒo[‚Ìİ’è
+//ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒãƒ¼ã®è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::SetStatusBar(UnicodeString msg)
 {
 	UnicodeString stt_str;
 	TListBox *lp = GenListBox;
-	stt_str.sprintf(_T("%s: %u"), (ErrOnly? _T("ERR") : _T("€–Ú")), lp->Count);
+	stt_str.sprintf(_T("%s: %u"), (ErrOnly? _T("ERR") : _T("é …ç›®")), lp->Count);
 
 	if (isFiltered) 		stt_str.cat_sprintf(_T("/%u"),	GenInfoList->Count);
 	if (lp->ItemIndex!=-1)	stt_str.cat_sprintf(_T("  -  %u"),lp->ItemIndex + 1);
-	if (lp->SelCount>0)		stt_str.cat_sprintf(_T("    ‘I‘ğ: %u"), lp->SelCount);
+	if (lp->SelCount>0)		stt_str.cat_sprintf(_T("    é¸æŠ: %u"), lp->SelCount);
 	StatusBar1->Panels->Items[0]->Text = stt_str;
 
 	if (isPlayList) {
@@ -595,7 +595,7 @@ void __fastcall TGeneralInfoDlg::SetStatusBar(UnicodeString msg)
 
 	StatusBar1->Panels->Items[3]->Text =
 			 !msg.IsEmpty()? msg :
-		!FirstKey.IsEmpty()? "2ƒXƒgƒ[ƒNƒL[: " + FirstKey :
+		!FirstKey.IsEmpty()? "2ã‚¹ãƒˆãƒ­ãƒ¼ã‚¯ã‚­ãƒ¼: " + FirstKey :
 			!fnam.IsEmpty()? get_MiniPathName(fnam, w3, StatusBar1->Font) :
 		 !id3_str.IsEmpty()? id3_str :
 		!FileName.IsEmpty()? get_FileInfStr(FileName, false) : EmptyStr;
@@ -603,7 +603,7 @@ void __fastcall TGeneralInfoDlg::SetStatusBar(UnicodeString msg)
 	StatusBar1->Repaint();
 }
 //---------------------------------------------------------------------------
-//ƒXƒe[ƒ^ƒXƒo[‚Ì•`‰æ
+//ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒãƒ¼ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::StatusBar1DrawPanel(TStatusBar *StatusBar, TStatusPanel *Panel,
 	const TRect &Rect)
@@ -621,7 +621,7 @@ void __fastcall TGeneralInfoDlg::StatusBar1DrawPanel(TStatusBar *StatusBar, TSta
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒBƒ‹ƒ^
+//ãƒ•ã‚£ãƒ«ã‚¿
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::FilterEditChange(TObject *Sender)
 {
@@ -670,7 +670,7 @@ void __fastcall TGeneralInfoDlg::FilterBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚Ì•`‰æ (‰¼‘z)
+//ä¸€è¦§ã®æç”» (ä»®æƒ³)
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::GenListBoxDrawItem(TWinControl *Control, int Index,
 	TRect &Rect, TOwnerDrawState State)
@@ -685,20 +685,20 @@ void __fastcall TGeneralInfoDlg::GenListBoxDrawItem(TWinControl *Control, int In
 	int lw = 0;
 	UnicodeString lbuf = lp->Items->Strings[Index];
 
-	//•¶š”§ŒÀ
-	if (lbuf.Length()>1024) lbuf = lbuf.SubString(1, 1024) + "c";	//***
+	//æ–‡å­—æ•°åˆ¶é™
+	if (lbuf.Length()>1024) lbuf = lbuf.SubString(1, 1024) + "â€¦";	//***
 
-	//ƒ}ƒbƒ`Œê
+	//ãƒãƒƒãƒèª
 	SearchOption opt;
 	std::unique_ptr<TStringList> wlist(new TStringList());
 	if (HighlightAction->Checked) {
-		//•¶š—ñŒŸõ
+		//æ–‡å­—åˆ—æ¤œç´¢
 		if (Found && Index==lp->ItemIndex) {
 			opt << soRegEx;
 			if (FindTextDlg->CaseCheckBox->Checked) opt << soCaseSens;
 			get_MatchWordList(lbuf, RegExPtn, opt, wlist.get());
 		}
-		//ƒtƒBƒ‹ƒ^
+		//ãƒ•ã‚£ãƒ«ã‚¿
 		else if (!FilterEdit->Text.IsEmpty()) {
 			if (MigemoAction->Checked) opt << soMigemo;
 			if (AndOrAction->Checked)  opt << soAndOr;
@@ -707,7 +707,7 @@ void __fastcall TGeneralInfoDlg::GenListBoxDrawItem(TWinControl *Control, int In
 		}
 	}
 
-	//s”Ô†
+	//è¡Œç•ªå·
 	if (ShowLineNoAction->Checked) {
 		if (isGit) {
 			int n  = (int)lp->Items->Objects[Index];
@@ -719,7 +719,7 @@ void __fastcall TGeneralInfoDlg::GenListBoxDrawItem(TWinControl *Control, int In
 		}
 	}
 
-	//”wŒiF
+	//èƒŒæ™¯è‰²
 	cv->Brush->Color = State.Contains(odSelected)? (lp->Focused()? col_selItem : col_oppItem) :
 											isLog? get_LogBgCol() :
 									   isPlayList? get_AltBgCol(Index) : get_ListBgCol();
@@ -733,12 +733,12 @@ void __fastcall TGeneralInfoDlg::GenListBoxDrawItem(TWinControl *Control, int In
 	bool use_fgsel = is_SelFgCol(State);
 	bool case_sns  = opt.Contains(soCaseSens);
 
-	//ƒƒO
+	//ãƒ­ã‚°
 	if (isLog) {
 		RuledLnTextOut(yen_to_delimiter(lbuf), cv, rc,
 			(use_fgsel? col_fgSelItem : get_LogColor(lbuf)), tw, wlist.get(), case_sns);
 	}
-	//•Ï”ˆê——
+	//å¤‰æ•°ä¸€è¦§
 	else if (isVarList) {
 		if (lbuf.Pos('=')) {
 			UnicodeString namstr = split_tkn(lbuf, '=') + " = ";
@@ -752,7 +752,7 @@ void __fastcall TGeneralInfoDlg::GenListBoxDrawItem(TWinControl *Control, int In
 			RuledLnTextOut(lbuf, cv, rc, use_fgsel? col_fgSelItem : col_Headline, tw, wlist.get(), case_sns);
 		}
 	}
-	//ƒRƒ}ƒ“ƒh—š—ğ
+	//ã‚³ãƒãƒ³ãƒ‰å±¥æ­´
 	else if (isCmdHistory) {
 		UnicodeString cmd_inf = split_pre_tab(lbuf);
 		int x0  = rc.Left;
@@ -781,14 +781,14 @@ void __fastcall TGeneralInfoDlg::GenListBoxDrawItem(TWinControl *Control, int In
 			out_TextEx(cv, xp, yp, s[i], fg, col_None, 0);
 		}
 		xp += (mgn * 2);
-		//ScrMode •ÏX
+		//ScrMode å¤‰æ›´
 		if ((id=='-')) {
 			fg = use_fgsel? col_fgSelItem : col_Comment;
 			out_TextEx(cv, xp, yp, cmd_inf, fg, col_None, mgn);
 			rc.Left = xp;
 			draw_Separator(cv, rc);
 		}
-		//ƒRƒ}ƒ“ƒh
+		//ã‚³ãƒãƒ³ãƒ‰
 		else {
 			//command
 			UnicodeString cmd = get_CmdStr(cmd_inf);
@@ -804,7 +804,7 @@ void __fastcall TGeneralInfoDlg::GenListBoxDrawItem(TWinControl *Control, int In
 				RuledLnTextOut(prm, cv, rc, use_fgsel? col_fgSelItem : get_ListFgCol(), tw, wlist.get(), case_sns);
 				xp = rc.Left + mgn * 2;
 			}
-			//ƒJƒŒƒ“ƒgƒpƒX/ƒtƒ@ƒCƒ‹–¼
+			//ã‚«ãƒ¬ãƒ³ãƒˆãƒ‘ã‚¹/ãƒ•ã‚¡ã‚¤ãƒ«å
 			if (!lbuf.IsEmpty()) {
 				int cmd_w = x0 + get_CharWidth(cv, 40);
 				int tab_w = get_CharWidth(cv, 8);
@@ -822,11 +822,11 @@ void __fastcall TGeneralInfoDlg::GenListBoxDrawItem(TWinControl *Control, int In
 					FileNameOut(cv, rc, lbuf, use_fgsel, true, wlist.get(), case_sns);
 				}
 			}
-			//30•bˆÈã‹ó‚¢‚½‚ç•ªŠ„ü
+			//30ç§’ä»¥ä¸Šç©ºã„ãŸã‚‰åˆ†å‰²ç·š
 			if (is_brk) draw_separateLine(cv, Rect);
 		}
 	}
-	//ƒtƒ@ƒCƒ‹ƒŠƒXƒg
+	//ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆ
 	else if (isFileList) {
 		UnicodeString fnam = get_post_tab(lbuf);
 		bool is_dir = ends_PathDlmtr(fnam);
@@ -863,12 +863,12 @@ void __fastcall TGeneralInfoDlg::GenListBoxDrawItem(TWinControl *Control, int In
 			}
 		}
 	}
-	//ƒfƒBƒŒƒNƒgƒŠ–¼ˆê——
+	//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåä¸€è¦§
 	else if (isDirs) {
 		cv->Font->Color = use_fgsel? col_fgSelItem : col_Folder;
 		PathNameOut(lbuf, wlist.get(), case_sns, cv, xp, yp);
 	}
-	//ƒfƒBƒŒƒNƒgƒŠƒcƒŠ[•\¦
+	//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãƒ„ãƒªãƒ¼è¡¨ç¤º
 	else if (isTree) {
 		lbuf = get_pre_tab(lbuf);
 		TColor fg = use_fgsel? col_fgSelItem : col_Folder;
@@ -880,14 +880,14 @@ void __fastcall TGeneralInfoDlg::GenListBoxDrawItem(TWinControl *Control, int In
 			RuledLnTextOut(lbuf, cv, rc, fg, tw, wlist.get(), case_sns);
 		}
 	}
-	//ƒvƒŒƒCƒŠƒXƒg
+	//ãƒ—ãƒ¬ã‚¤ãƒªã‚¹ãƒˆ
 	else if (isPlayList) {
-		//Ä¶’†ƒ}[ƒN
+		//å†ç”Ÿä¸­ãƒãƒ¼ã‚¯
 		if (SameText(PlayFile, lbuf))
 			out_Text(cv, rc.Left + SCALED_THIS(2), yp, PLAY_Mark.c_str(), is_ListPlaying()? col_Cursor : col_InvItem);
 		rc.Left += cv->TextWidth(PLAY_Mark) + SCALED_THIS(4);
 
-		if (OmitComPathAction->Checked) remove_top_text(lbuf, ComPathName);	//ƒpƒX‚Ì‹¤’Ê•”•ª‚ğÈ—ª
+		if (OmitComPathAction->Checked) remove_top_text(lbuf, ComPathName);	//ãƒ‘ã‚¹ã®å…±é€šéƒ¨åˆ†ã‚’çœç•¥
 		if (FileName1stAction->Checked) {
 			xp = rc.Left;
 			RuledLnTextOut(ExtractFileName(lbuf),
@@ -899,12 +899,12 @@ void __fastcall TGeneralInfoDlg::GenListBoxDrawItem(TWinControl *Control, int In
 			FileNameOut(cv, rc, lbuf, use_fgsel, true, wlist.get(), case_sns);
 		}
 	}
-	//NyanFi î•ñ
-	else if (SameStr(Caption, "NyanFi î•ñ")) {
+	//NyanFi æƒ…å ±
+	else if (SameStr(Caption, "NyanFi æƒ…å ±")) {
 		TColor fg =
 			use_fgsel? col_fgSelItem :
 			TRegEx::IsMatch(lbuf, "^([^ :.]{2,}\\.(exe|dll|spi)|\\.|WIC)")? col_Headline :
-			StartsStr("         ƒGƒ‰[:", lbuf)? col_Error :
+			StartsStr("         ã‚¨ãƒ©ãƒ¼:", lbuf)? col_Error :
 			StartsStr('[', lbuf)? col_Comment : get_ListFgCol();
 
 		if (EndsStr('\\', lbuf) && lbuf.Pos(':')>1) {
@@ -928,24 +928,24 @@ void __fastcall TGeneralInfoDlg::GenListBoxDrawItem(TWinControl *Control, int In
 		}
 		if (!lbuf.IsEmpty()) RuledLnTextOut(lbuf, cv, rc, fg, tw, wlist.get(), case_sns);
 	}
-	//Œ©o‚µs
+	//è¦‹å‡ºã—è¡Œ
 	else if (!ptn_match_str(HdrLnStr, lbuf).IsEmpty()) {
 		TColor fg = use_fgsel? col_fgSelItem : col_Headline;
 		PrvTextOut(lp, Index, cv, rc, fg, tw, wlist.get(), case_sns);
 	}
-	//ƒRƒƒ“ƒg or ’Êís
+	//ã‚³ãƒ¡ãƒ³ãƒˆ or é€šå¸¸è¡Œ
 	else {
 		TColor fg = use_fgsel? col_fgSelItem : get_ListFgCol();
 		PrvTextOut(lp, Index, cv, rc, fg, tw, wlist.get(), case_sns, FileName, (SortMode==0 && !isFiltered));
 	}
 
-	//ƒXƒNƒ[ƒ‹•‚ğİ’è
+	//ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«å¹…ã‚’è¨­å®š
 	int lst_scr_wd = lp->ScrollWidth;
 	ListWidth = std::max(ListWidth, ((lw>0)? lw : get_TabTextWidth(lbuf, cv, tw)) + get_CharWidth(cv, 4));
 	lp->ScrollWidth = w0 + ListWidth;
 	if (lst_scr_wd!=lp->ScrollWidth) ListScrPanel->UpdateKnob();
 
-	//ƒJ[ƒ\ƒ‹
+	//ã‚«ãƒ¼ã‚½ãƒ«
 	draw_ListCursor2(lp, Rect, Index, State);
 }
 //---------------------------------------------------------------------------
@@ -966,21 +966,21 @@ void __fastcall TGeneralInfoDlg::GenListBoxClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//2ƒXƒgƒ[ƒN‘€ì‚Ìˆ—
+//2ã‚¹ãƒˆãƒ­ãƒ¼ã‚¯æ“ä½œã®å‡¦ç†
 //---------------------------------------------------------------------------
 UnicodeString __fastcall TGeneralInfoDlg::TwoStrokeSeq(WORD &Key, TShiftState Shift)
 {
 	UnicodeString key_str = get_KeyStr(Key);	if (key_str.IsEmpty()) return EmptyStr;
 	key_str = get_ShiftStr(Shift) + key_str;
 
-	//2ƒXƒgƒ[ƒN–Ú
+	//2ã‚¹ãƒˆãƒ­ãƒ¼ã‚¯ç›®
 	if (Wait2ndKey) {
 		Wait2ndKey = false;
 		key_str.sprintf(_T("%s~%s"), FirstKey.c_str(), get_KeyStr(Key).c_str());
 		CancelKeySeq();
 		if (Key_to_CmdV(key_str).IsEmpty()) Key = 0;
 	}
-	//1ƒXƒgƒ[ƒN–Ú
+	//1ã‚¹ãƒˆãƒ­ãƒ¼ã‚¯ç›®
 	else if (is_FirstKey("V", key_str)) {
 		FirstKey   = key_str;
 		Wait2ndKey = true;
@@ -991,7 +991,7 @@ UnicodeString __fastcall TGeneralInfoDlg::TwoStrokeSeq(WORD &Key, TShiftState Sh
 	return key_str;
 }
 //---------------------------------------------------------------------------
-//2ƒXƒgƒ[ƒN‘€ì‚ğ’†’f
+//2ã‚¹ãƒˆãƒ­ãƒ¼ã‚¯æ“ä½œã‚’ä¸­æ–­
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::CancelKeySeq()
 {
@@ -1001,7 +1001,7 @@ void __fastcall TGeneralInfoDlg::CancelKeySeq()
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚ÌƒL[‘€ì
+//ä¸€è¦§ã®ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::GenListBoxKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -1011,15 +1011,15 @@ void __fastcall TGeneralInfoDlg::GenListBoxKeyDown(TObject *Sender, WORD &Key, T
 
 	TListBox *lp = (TListBox*)Sender;
 
-	//ƒRƒ}ƒ“ƒh
+	//ã‚³ãƒãƒ³ãƒ‰
 	if (ExeCmdListBox(lp, cmd_F) || ExeCmdListBox(lp, cmd_V)) {
 		if (StartsText("Zoom", cmd_F) || StartsText("Zoom", cmd_V)) ResetListWidth();
 	}
-	//ƒtƒBƒ‹ƒ^—“‚Ö
+	//ãƒ•ã‚£ãƒ«ã‚¿æ¬„ã¸
 	else if (StartsText("IncSearch", cmd_F)) {
 		FilterEdit->SetFocus();
 	}
-	//ƒ\[ƒg
+	//ã‚½ãƒ¼ãƒˆ
 	else if (SameText(cmd_V, "Sort_AO")) {
 		SortAscAction->Execute();
 	}
@@ -1029,14 +1029,14 @@ void __fastcall TGeneralInfoDlg::GenListBoxKeyDown(TObject *Sender, WORD &Key, T
 	else if (SameText(cmd_V, "Sort")) {
 		OrgOrderAction->Execute();
 	}
-	//ŒŸõ
+	//æ¤œç´¢
 	else if (SameText(cmd_V, "FindText")) {
 		FindTextDlg->ShowModal();
 	}
 	else if (contained_wd_i("FindDown|FindUp", cmd_V)) {
 		FindText(SameText(cmd_V, "FindDown"));
 	}
-	//ƒGƒ‰[ŒŸõ
+	//ã‚¨ãƒ©ãƒ¼æ¤œç´¢
 	else if (contained_wd_i("NextErr|PrevErr", cmd_V)) {
 		if (isLog) {
 			bool down = SameText(cmd_V, "NextErr");
@@ -1055,37 +1055,37 @@ void __fastcall TGeneralInfoDlg::GenListBoxKeyDown(TObject *Sender, WORD &Key, T
 			cursor_Default();
 		}
 	}
-	//‘OŒã‚Ìƒtƒ@ƒCƒ‹‚ÖØ‚è‘Ö‚¦
+	//å‰å¾Œã®ãƒ•ã‚¡ã‚¤ãƒ«ã¸åˆ‡ã‚Šæ›¿ãˆ
 	else if (!isPlayList && !isFTP && !FileName.IsEmpty()
 		&& contained_wd_i("PrevFile|NextFile", cmd_V))
 	{
 		RetStr = cmd_V;
-		this->Perform(WM_SETREDRAW, 0, (NativeInt)0);	//‰æ–Ê‚ğÁ‚³‚¸‚Éc‚·
+		this->Perform(WM_SETREDRAW, 0, (NativeInt)0);	//ç”»é¢ã‚’æ¶ˆã•ãšã«æ®‹ã™
 		ModalResult = mrRetry;
 	}
-	//‰{——
+	//é–²è¦§
 	else if (SameText(cmd_F, "TextViewer")) {
 		if (ViewFileAction->Enabled) ViewFileAction->Execute(); else ViewListAction->Execute();
 	}
-	//•ÒW
+	//ç·¨é›†
 	else if (SameText(cmd_F, "FileEdit")) {
 		EditFileAction->Execute();
 	}
-	//ƒtƒ@ƒCƒ‹î•ñ
+	//ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±
 	else if (SameText(cmd_F, "ListFileInfo") || StartsText("ShowFileInfo", cmd_F)) {
 		ShowFileInfoAction->Execute();
 	}
-	//ƒvƒƒpƒeƒB
+	//ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	else if (SameText(cmd_F, "PropertyDlg")) {
 		PropertyAction->Execute();
 	}
-	//ƒL[
+	//ã‚­ãƒ¼
 	else if (equal_ENTER(KeyStr) && (isFileList || isDirs || isTree || isPlayList)) {
 		UnicodeString fnam = ListBoxGetStr(GenListBox);
 		if (!fnam.IsEmpty()) {
 			TListBox *lp = GenListBox;
 			UnicodeString cmd;
-			//ƒJ[ƒ\ƒ‹ˆÊ’u‚ÉˆÚ“®
+			//ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã«ç§»å‹•
 			if (isFileList) {
 				if (lp->SelCount>0) {
 					for (int i=0; i<lp->Count; i++) {
@@ -1110,7 +1110,7 @@ void __fastcall TGeneralInfoDlg::GenListBoxKeyDown(TObject *Sender, WORD &Key, T
 				}
 				ModalResult = mrOk;
 			}
-			//ƒJ[ƒ\ƒ‹ˆÊ’u‚ğÄ¶
+			//ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã‚’å†ç”Ÿ
 			else if (isPlayList) {
 				int idx = PlayList->IndexOf(fnam);
 				if (idx!=-1) {
@@ -1124,7 +1124,7 @@ void __fastcall TGeneralInfoDlg::GenListBoxKeyDown(TObject *Sender, WORD &Key, T
 					else {
 						cursor_HourGlass();
 						PlayStbIdx = idx;
-						play_PlayList(false, true);	//ƒVƒƒƒbƒtƒ‹—}~
+						play_PlayList(false, true);	//ã‚·ãƒ£ãƒƒãƒ•ãƒ«æŠ‘æ­¢
 						lp->Repaint();
 						cursor_Default();
 					}
@@ -1138,7 +1138,7 @@ void __fastcall TGeneralInfoDlg::GenListBoxKeyDown(TObject *Sender, WORD &Key, T
 	else if (contained_wd_i(KeysStr_Popup, KeyStr)) {
 		show_PopupMenu(lp);
 	}
-	//•Â‚¶‚é
+	//é–‰ã˜ã‚‹
 	else if (SameText(cmd_V, "Close") || equal_ESC(KeyStr)) {
 		ModalResult = mrCancel;
 	}
@@ -1152,7 +1152,7 @@ void __fastcall TGeneralInfoDlg::GenListBoxKeyDown(TObject *Sender, WORD &Key, T
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::GenListBoxKeyPress(TObject *Sender, System::WideChar &Key)
 {
-	//ƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`‚ğ‰ñ”ğ
+	//ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ã‚¿ãƒ«ã‚µãƒ¼ãƒã‚’å›é¿
 	if (_istalnum(Key) || Key==VK_SPACE || Key==VK_RETURN) Key = 0;
 }
 //---------------------------------------------------------------------------
@@ -1169,7 +1169,7 @@ void __fastcall TGeneralInfoDlg::GenListBoxExit(TObject *Sender)
 	((TListBox*)Sender)->Repaint();
 }
 //---------------------------------------------------------------------------
-//ƒRƒs[
+//ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::CopyActionExecute(TObject *Sender)
 {
@@ -1183,7 +1183,7 @@ void __fastcall TGeneralInfoDlg::CopyActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//’l‚ğƒRƒs[
+//å€¤ã‚’ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::CopyValActionExecute(TObject *Sender)
 {
@@ -1198,7 +1198,7 @@ void __fastcall TGeneralInfoDlg::CopyValActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒ}ƒ“ƒh—š—ğ‚Å‘I‘ğs‚ÌƒRƒ}ƒ“ƒh“à—e‚ğæ“¾
+//ã‚³ãƒãƒ³ãƒ‰å±¥æ­´ã§é¸æŠè¡Œã®ã‚³ãƒãƒ³ãƒ‰å†…å®¹ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString __fastcall TGeneralInfoDlg::GetSelcetedCmd(TStringList *lst)
 {
@@ -1221,7 +1221,7 @@ UnicodeString __fastcall TGeneralInfoDlg::GetSelcetedCmd(TStringList *lst)
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒ}ƒ“ƒh‚ğƒRƒs[
+//ã‚³ãƒãƒ³ãƒ‰ã‚’ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::CopyCmdActionExecute(TObject *Sender)
 {
@@ -1236,13 +1236,13 @@ void __fastcall TGeneralInfoDlg::CopyCmdActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//‘I‘ğs‚ğƒRƒ}ƒ“ƒhƒtƒ@ƒCƒ‹‚Æ‚µ‚Ä•Û‘¶
+//é¸æŠè¡Œã‚’ã‚³ãƒãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã¨ã—ã¦ä¿å­˜
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::SaveAsNbtActionExecute(TObject *Sender)
 {
 	std::unique_ptr<TStringList> cb_buf(new TStringList());
 	if (!GetSelcetedCmd(cb_buf.get()).IsEmpty()) {
-		UserModule->PrepareSaveDlg(_T("ƒRƒ}ƒ“ƒhƒtƒ@ƒCƒ‹‚Æ‚µ‚Ä•Û‘¶"), F_FILTER_NBT, NULL, CmdFilePath);
+		UserModule->PrepareSaveDlg(_T("ã‚³ãƒãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã¨ã—ã¦ä¿å­˜"), F_FILTER_NBT, NULL, CmdFilePath);
 		UnicodeString fnam = UserModule->SaveDlgExecute();
 		if (!fnam.IsEmpty()) {
 			CmdFilePath = ExtractFilePath(fnam);
@@ -1252,11 +1252,11 @@ void __fastcall TGeneralInfoDlg::SaveAsNbtActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒ}ƒ“ƒh—š—ğ‚ğƒNƒŠƒA
+//ã‚³ãƒãƒ³ãƒ‰å±¥æ­´ã‚’ã‚¯ãƒªã‚¢
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::ClrCmdHistoryActionExecute(TObject *Sender)
 {
-	if (msgbox_Sure(LoadUsrMsg(USTR_DelHistoryQ, _T("ƒRƒ}ƒ“ƒh")))) {
+	if (msgbox_Sure(LoadUsrMsg(USTR_DelHistoryQ, _T("ã‚³ãƒãƒ³ãƒ‰")))) {
 		CommandHistory->Clear();
 		GenInfoList->Assign(CommandHistory);
 		UpdateList();
@@ -1271,7 +1271,7 @@ void __fastcall TGeneralInfoDlg::ClrCmdHistoryActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//‚·‚×‚Ä‘I‘ğ
+//ã™ã¹ã¦é¸æŠ
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::SelAllActionExecute(TObject *Sender)
 {
@@ -1279,7 +1279,7 @@ void __fastcall TGeneralInfoDlg::SelAllActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ŒŸõ
+//æ¤œç´¢
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::FindTextItemClick(TObject *Sender)
 {
@@ -1287,7 +1287,7 @@ void __fastcall TGeneralInfoDlg::FindTextItemClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚ğƒtƒ@ƒCƒ‹‚É•Û‘¶
+//ä¸€è¦§ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã«ä¿å­˜
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::SaveAsActionExecute(TObject *Sender)
 {
@@ -1305,7 +1305,7 @@ void __fastcall TGeneralInfoDlg::SaveAsActionExecute(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//ˆê——‚ğƒeƒLƒXƒgƒrƒ…[ƒA‚ÅŠJ‚­
+//ä¸€è¦§ã‚’ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã§é–‹ã
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::ViewListActionExecute(TObject *Sender)
 {
@@ -1321,7 +1321,7 @@ void __fastcall TGeneralInfoDlg::ViewListActionUpdate(TObject *Sender)
 	ap->Enabled = (GenListBox->Count>0) && !fromPopWnd;
 }
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚ğƒeƒLƒXƒgƒrƒ…[ƒA‚ÅŠJ‚­
+//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã§é–‹ã
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::ViewFileActionExecute(TObject *Sender)
 {
@@ -1340,7 +1340,7 @@ void __fastcall TGeneralInfoDlg::ViewFileActionUpdate(TObject *Sender)
 	ap->Enabled = Active && ap->Visible;
 }
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚ğƒeƒLƒXƒgƒGƒfƒBƒ^‚ÅŠJ‚­
+//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒ†ã‚­ã‚¹ãƒˆã‚¨ãƒ‡ã‚£ã‚¿ã§é–‹ã
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::EditFileActionExecute(TObject *Sender)
 {
@@ -1360,7 +1360,7 @@ void __fastcall TGeneralInfoDlg::EditFileActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹î•ñ‚ğ•\¦
+//ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã‚’è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::ShowFileInfoActionExecute(TObject *Sender)
 {
@@ -1372,7 +1372,7 @@ void __fastcall TGeneralInfoDlg::ShowFileInfoActionExecute(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//ƒvƒƒpƒeƒB
+//ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::PropertyActionExecute(TObject *Sender)
 {
@@ -1394,7 +1394,7 @@ void __fastcall TGeneralInfoDlg::PropertyActionUpdate(TObject *Sender)
 	ap->Enabled = ap->Visible;
 }
 //---------------------------------------------------------------------------
-//URL‚ğŠJ‚­
+//URLã‚’é–‹ã
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::OpenUrlActionExecute(TObject *Sender)
 {
@@ -1408,7 +1408,7 @@ void __fastcall TGeneralInfoDlg::OpenUrlActionUpdate(TObject *Sender)
 	ap->Enabled = ap->Visible;
 }
 //---------------------------------------------------------------------------
-//s”Ô†‚ğ•\¦
+//è¡Œç•ªå·ã‚’è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::ShowLineNoActionExecute(TObject *Sender)
 {
@@ -1416,7 +1416,7 @@ void __fastcall TGeneralInfoDlg::ShowLineNoActionExecute(TObject *Sender)
 	GenListBox->Repaint();
 }
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹–¼‚ğæ‚É•\¦
+//ãƒ•ã‚¡ã‚¤ãƒ«åã‚’å…ˆã«è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::FileName1stActionExecute(TObject *Sender)
 {
@@ -1430,7 +1430,7 @@ void __fastcall TGeneralInfoDlg::FileName1stActionUpdate(TObject *Sender)
 	ap->Visible = isPlayList;
 }
 //---------------------------------------------------------------------------
-//ƒpƒX‚Ì‹¤’Ê•”•ª‚ğÈ—ª
+//ãƒ‘ã‚¹ã®å…±é€šéƒ¨åˆ†ã‚’çœç•¥
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::OmitComPathActionExecute(TObject *Sender)
 {
@@ -1445,7 +1445,7 @@ void __fastcall TGeneralInfoDlg::OmitComPathActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒJ[ƒ\ƒ‹ˆÊ’u‚ğˆÛ
+//ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã‚’ç¶­æŒ
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::KeepIndexActionExecute(TObject *Sender)
 {
@@ -1455,11 +1455,11 @@ void __fastcall TGeneralInfoDlg::KeepIndexActionExecute(TObject *Sender)
 void __fastcall TGeneralInfoDlg::KeepIndexActionUpdate(TObject *Sender)
 {
 	TAction *ap = (TAction*)Sender;
-	ap->Visible = !FileName.IsEmpty() && !isFTP;	//‘OŒãØ‚è‘Ö‚¦‰Â”\
+	ap->Visible = !FileName.IsEmpty() && !isFTP;	//å‰å¾Œåˆ‡ã‚Šæ›¿ãˆå¯èƒ½æ™‚
 }
 
 //---------------------------------------------------------------------------
-//ƒGƒ‰[‰ÓŠ‚ği‚è‚İ•\¦
+//ã‚¨ãƒ©ãƒ¼ç®‡æ‰€ã‚’çµã‚Šè¾¼ã¿è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::ErrOnlyActionExecute(TObject *Sender)
 {
@@ -1485,7 +1485,7 @@ void __fastcall TGeneralInfoDlg::InfPopupMenuPopup(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚Ìƒ\[ƒg
+//ä¸€è¦§ã®ã‚½ãƒ¼ãƒˆ
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::SortGenList(int mode)
 {
@@ -1522,14 +1522,14 @@ void __fastcall TGeneralInfoDlg::OrgOrderActionExecute(TObject *Sender)
 	SortGenList(SortMode);
 }
 //---------------------------------------------------------------------------
-//ˆê——‚Ìd•¡s‚ğíœ
+//ä¸€è¦§ã®é‡è¤‡è¡Œã‚’å‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::DelDuplActionExecute(TObject *Sender)
 {
 	cursor_HourGlass();
-	//ˆê’U¸‡‚É
+	//ä¸€æ—¦æ˜‡é †ã«
 	GenInfoBuff->CustomSort(comp_AscendOrder);
-	//d•¡síœ
+	//é‡è¤‡è¡Œå‰Šé™¤
 	UnicodeString laststr = GenInfoBuff->Strings[0];
 	int i = 1;
 	int cnt = 0;
@@ -1547,21 +1547,21 @@ void __fastcall TGeneralInfoDlg::DelDuplActionExecute(TObject *Sender)
 	assign_FileListBox(GenListBox, GenInfoBuff);
 	cursor_Default();
 
-	//Œ³‚Ì•À‚Ñ‚É’¼‚·
+	//å…ƒã®ä¸¦ã³ã«ç›´ã™
 	SortGenList(SortMode);
 	GenListBox->ItemIndex = 0;
 
-	//Œ‹‰Ê•\¦
+	//çµæœè¡¨ç¤º
 	UnicodeString msg;
 	if (cnt>0)
-		msg.sprintf(_T("%us‚Ìd•¡s‚ğíœ"), cnt);
+		msg.sprintf(_T("%uè¡Œã®é‡è¤‡è¡Œã‚’å‰Šé™¤"), cnt);
 	else
-		msg += "d•¡s‚Í‚ ‚è‚Ü‚¹‚ñ";
+		msg += "é‡è¤‡è¡Œã¯ã‚ã‚Šã¾ã›ã‚“";
 	SetStatusBar(msg);
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚ğŒ³‚Ì“à—e‚É–ß‚·
+//ä¸€è¦§ã‚’å…ƒã®å†…å®¹ã«æˆ»ã™
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::RestoreListActionExecute(TObject *Sender)
 {
@@ -1596,7 +1596,7 @@ void __fastcall TGeneralInfoDlg::TailActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//Ä¶/ˆê’â~
+//å†ç”Ÿ/ä¸€æ™‚åœæ­¢
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::PlayPauseActionExecute(TObject *Sender)
 {
@@ -1615,11 +1615,11 @@ void __fastcall TGeneralInfoDlg::PlayPauseActionUpdate(TObject *Sender)
 
 	if (isPlayList) {
 		ap->Checked = is_ListPlaying();
-		ap->Hint	= is_ListPlaying()? "ˆê’â~" : "Ä¶";
+		ap->Hint	= is_ListPlaying()? "ä¸€æ™‚åœæ­¢" : "å†ç”Ÿ";
 	}
 }
 //---------------------------------------------------------------------------
-//Ÿ‚Ì‹È‚ğÄ¶
+//æ¬¡ã®æ›²ã‚’å†ç”Ÿ
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::PlayNextActionExecute(TObject *Sender)
 {
@@ -1627,7 +1627,7 @@ void __fastcall TGeneralInfoDlg::PlayNextActionExecute(TObject *Sender)
 	GenListBox->Invalidate();
 }
 //---------------------------------------------------------------------------
-//‘O‚Ì‹È‚ğÄ¶
+//å‰ã®æ›²ã‚’å†ç”Ÿ
 //---------------------------------------------------------------------------
 void __fastcall TGeneralInfoDlg::PlayPrevActionExecute(TObject *Sender)
 {

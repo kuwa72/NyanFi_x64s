@@ -1,6 +1,6 @@
 /**
  * @file usr_tag.h
- * @brief ƒ^ƒOŠÇ—ƒ†ƒjƒbƒg
+ * @brief ã‚¿ã‚°ç®¡ç†ãƒ¦ãƒ‹ãƒƒãƒˆ
  */
 //---------------------------------------------------------------------------
 #ifndef UsrTagManagerH
@@ -12,15 +12,15 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒ^ƒOŠÇ—ƒ†ƒjƒbƒg
+ * @brief ã‚¿ã‚°ç®¡ç†ãƒ¦ãƒ‹ãƒƒãƒˆ
  */
 class TagManager
 {
 private:
-	TDateTime TagDataTime;		//Œ»İ‚Ìƒ^ƒCƒ€ƒXƒ^ƒ“ƒv
+	TDateTime TagDataTime;		//ç¾åœ¨ã®ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—
 	bool Modified;
 
-	TColor DefColor;			//ƒfƒtƒHƒ‹ƒg‚Ìƒ^ƒOF
+	TColor DefColor;			//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã‚¿ã‚°è‰²
 
 	int  GetIndex(UnicodeString fnam);
 	void MakeTagNameList();
@@ -47,81 +47,81 @@ public:
 	TStringList *TagDataList;
 	TStringList *TagColList;
 
-	TMultiReadExclusiveWriteSynchronizer *TagRWLock;	//!< TagDataList ‚Ì•ÛŒì—p
+	TMultiReadExclusiveWriteSynchronizer *TagRWLock;	//!< TagDataList ã®ä¿è­·ç”¨
 
 	TagManager(UnicodeString fnam);
 	~TagManager();
 
-	bool UpdateFile();		//!< ƒtƒ@ƒCƒ‹‚ğXV
-	bool Recycle();			//!< ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚ª•Ï‰»‚µ‚Ä‚¢‚½‚çÄ“Ç‚İ‚İ
-	int  TrimData();		//!< ‘¶İ‚µ‚È‚¢€–Ú‚Ìƒ^ƒOƒf[ƒ^‚ğ®—
+	bool UpdateFile();		//!< ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ›´æ–°
+	bool Recycle();			//!< ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ãŒå¤‰åŒ–ã—ã¦ã„ãŸã‚‰å†èª­ã¿è¾¼ã¿
+	int  TrimData();		//!< å­˜åœ¨ã—ãªã„é …ç›®ã®ã‚¿ã‚°ãƒ‡ãƒ¼ã‚¿ã‚’æ•´ç†
 
-	UnicodeString GetTags(UnicodeString fnam);							//!< w’èƒtƒ@ƒCƒ‹‚Ìƒ^ƒO‚ğæ“¾
+	UnicodeString GetTags(UnicodeString fnam);							//!< æŒ‡å®šãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¿ã‚°ã‚’å–å¾—
 	UnicodeString NormTags(UnicodeString tags, bool sw_add = true);
-	void DelItem(UnicodeString fnam);									//!< w’èƒtƒ@ƒCƒ‹‚Ìƒ^ƒOî•ñ‚ğíœ
-	void SetTags(UnicodeString fnam, UnicodeString tags);				//!< w’èƒtƒ@ƒCƒ‹‚Éƒ^ƒO‚ğİ’è
-	void AddTags(UnicodeString fnam, UnicodeString tags);				//!< w’èƒtƒ@ƒCƒ‹‚Éƒ^ƒO‚ğ’Ç‰Á
-	void Rename(UnicodeString old_nam, UnicodeString new_nam);			//!< ƒtƒ@ƒCƒ‹/ƒfƒBƒŒƒNƒgƒŠ–¼‚Ì•ÏX
-	void Copy(UnicodeString from_nam, UnicodeString to_nam);			//!< ƒ^ƒO‚ÌƒRƒs[
-	int  RenTag(UnicodeString old_tag, UnicodeString new_tag);			//!< ƒ^ƒO‚Ì‰ü–¼
-	int  DelTagData(UnicodeString tag);									//!< ƒ^ƒOƒf[ƒ^‚Ìíœ
+	void DelItem(UnicodeString fnam);									//!< æŒ‡å®šãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¿ã‚°æƒ…å ±ã‚’å‰Šé™¤
+	void SetTags(UnicodeString fnam, UnicodeString tags);				//!< æŒ‡å®šãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚¿ã‚°ã‚’è¨­å®š
+	void AddTags(UnicodeString fnam, UnicodeString tags);				//!< æŒ‡å®šãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚¿ã‚°ã‚’è¿½åŠ 
+	void Rename(UnicodeString old_nam, UnicodeString new_nam);			//!< ãƒ•ã‚¡ã‚¤ãƒ«/ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåã®å¤‰æ›´
+	void Copy(UnicodeString from_nam, UnicodeString to_nam);			//!< ã‚¿ã‚°ã®ã‚³ãƒ”ãƒ¼
+	int  RenTag(UnicodeString old_tag, UnicodeString new_tag);			//!< ã‚¿ã‚°ã®æ”¹å
+	int  DelTagData(UnicodeString tag);									//!< ã‚¿ã‚°ãƒ‡ãƒ¼ã‚¿ã®å‰Šé™¤
 
 	int IniCheckList(TCheckListBox *lp, UnicodeString tnam = EmptyStr, bool count_sw = false);
 	UnicodeString CheckToTags(TCheckListBox *lp, UnicodeString tags);
 	void CountTags(TCheckListBox *lp, bool clr_sw = false);
 
 	/**
-	 * @brief w’èƒ^ƒO‚Éƒ}ƒbƒ`‚·‚éƒŠƒXƒg‚ğæ“¾
-	 * @param tags ƒ^ƒO
-	 * @param and_sw ANDŒŸõ
-	 * @param[out] lst ƒŠƒXƒg
-	 * @return int ƒ}ƒbƒ`”
+	 * @brief æŒ‡å®šã‚¿ã‚°ã«ãƒãƒƒãƒã™ã‚‹ãƒªã‚¹ãƒˆã‚’å–å¾—
+	 * @param tags ã‚¿ã‚°
+	 * @param and_sw ANDæ¤œç´¢
+	 * @param[out] lst ãƒªã‚¹ãƒˆ
+	 * @return int ãƒãƒƒãƒæ•°
 	 */
 	int  GetMatchList(UnicodeString tags, bool and_sw, TStringList *lst);
 
 	/**
-	 * @brief ‚·‚×‚Ä‚Ìƒ^ƒO€–Ú‚ÌƒŠƒXƒg‚ğæ“¾
-	 * @param[out] lst ƒŠƒXƒg
+	 * @brief ã™ã¹ã¦ã®ã‚¿ã‚°é …ç›®ã®ãƒªã‚¹ãƒˆã‚’å–å¾—
+	 * @param[out] lst ãƒªã‚¹ãƒˆ
 	 * @return int
 	 */
 	int  GetAllList(TStringList *lst);
 
-	/** @brief ƒtƒ@ƒCƒ‹‚Éƒ^ƒO‚ª•t‚¯‚ç‚ê‚Ä‚¢‚é‚©H */
+	/** @brief ãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚¿ã‚°ãŒä»˜ã‘ã‚‰ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ */
 	bool HasTag(UnicodeString fnam);
 
 	/**
-	 * @brief ƒtƒ@ƒCƒ‹‚ªw’èƒ^ƒO‚Éƒ}ƒbƒ`‚·‚é‚©H
-	 * @param fnam ƒtƒ@ƒCƒ‹–¼
-	 * @param ktags ƒ^ƒO
-	 * @param and_sw ANDŒŸõ
+	 * @brief ãƒ•ã‚¡ã‚¤ãƒ«ãŒæŒ‡å®šã‚¿ã‚°ã«ãƒãƒƒãƒã™ã‚‹ã‹ï¼Ÿ
+	 * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+	 * @param ktags ã‚¿ã‚°
+	 * @param and_sw ANDæ¤œç´¢
 	 * @return true
 	 * @return false
 	 */
 	bool Match(UnicodeString fnam, UnicodeString ktags, bool and_sw);
 
 	/**
-	 * @brief ƒ^ƒOF‚ğæ“¾
-	 * @param tag ƒ^ƒO
-	 * @param col_def ƒfƒtƒHƒ‹ƒgF
+	 * @brief ã‚¿ã‚°è‰²ã‚’å–å¾—
+	 * @param tag ã‚¿ã‚°
+	 * @param col_def ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆè‰²
 	 * @return TColor
 	 */
 	TColor GetColor(UnicodeString tag, TColor col_def);
 
 	/**
-	 * @brief ƒ^ƒOF‚ğİ’è
-	 * @param tag ƒ^ƒO
-	 * @param col F
+	 * @brief ã‚¿ã‚°è‰²ã‚’è¨­å®š
+	 * @param tag ã‚¿ã‚°
+	 * @param col è‰²
 	 */
 	void SetColor(UnicodeString tag, TColor col);
 
 	/**
-	 * @brief ƒ^ƒO‚Ì•`‰æ
-	 * @param tags ƒ^ƒO
-	 * @param cv ƒLƒƒƒ“ƒoƒX
-	 * @param x XˆÊ’u
-	 * @param y YˆÊ’u
-	 * @param col_rev w’è”wŒiF‚Å”½“]•\¦
-	 * @param blk_sw ƒuƒƒbƒN‹L†‚ğ•\¦
+	 * @brief ã‚¿ã‚°ã®æç”»
+	 * @param tags ã‚¿ã‚°
+	 * @param cv ã‚­ãƒ£ãƒ³ãƒã‚¹
+	 * @param x Xä½ç½®
+	 * @param y Yä½ç½®
+	 * @param col_rev æŒ‡å®šèƒŒæ™¯è‰²ã§åè»¢è¡¨ç¤º
+	 * @param blk_sw ãƒ–ãƒ­ãƒƒã‚¯è¨˜å·ã‚’è¡¨ç¤º
 	 */
 	void DrawTags(UnicodeString tags, TCanvas *cv, int x, int y, TColor col_rev = Graphics::clNone, bool blk_sw = false);
 };

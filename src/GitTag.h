@@ -1,6 +1,6 @@
 /**
  * @file GitTag.h
- * @brief Gitƒ^ƒOİ’è
+ * @brief Gitã‚¿ã‚°è¨­å®š
  */
 //---------------------------------------------------------------------------
 #ifndef GitTagH
@@ -19,7 +19,7 @@
 //---------------------------------------------------------------------------
 class TSetGitTagDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *OkAction;
 	TActionList *ActionList1;
 	TButton *CancelBtn;
@@ -38,13 +38,13 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall OkActionUpdate(TObject *Sender);
 	void __fastcall FormKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 
-public:		// ƒ†[ƒU[éŒ¾
-	bool IsCommit;				//!< true:ƒRƒ~ƒbƒg/ false:ƒ^ƒO
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	bool IsCommit;				//!< true:ã‚³ãƒŸãƒƒãƒˆ/ false:ã‚¿ã‚°
 	UnicodeString CommitID;
-	UnicodeString EditMsgFile;	//!< ƒƒbƒZ[ƒW•ÒW—pƒtƒ@ƒCƒ‹
-	UnicodeString GitParam;		//!< [o] gitÀs—pƒpƒ‰ƒ[ƒ^
+	UnicodeString EditMsgFile;	//!< ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ç·¨é›†ç”¨ãƒ•ã‚¡ã‚¤ãƒ«
+	UnicodeString GitParam;		//!< [o] gitå®Ÿè¡Œç”¨ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 
 	__fastcall TSetGitTagDlg(TComponent* Owner);
 };

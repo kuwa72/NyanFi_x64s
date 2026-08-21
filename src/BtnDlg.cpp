@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ÉcÅ[ÉãÉoÅ[ÇÃê›íË													//
+//  „ÉÑ„Éº„É´„Éê„Éº„ÅÆË®≠ÂÆö													//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -24,7 +24,7 @@ void __fastcall TToolBtnDlg::FormCreate(TObject *Sender)
 {
 	UserModule->SetUsrPopupMenu(this);
 
-	//ÉhÉçÉbÉvÉ^Å[ÉQÉbÉgÇê›íË
+	//„Éâ„É≠„ÉÉ„Éó„Çø„Éº„Ç≤„ÉÉ„Éà„ÇíË®≠ÂÆö
 	usr_SH->AddTargetList(this, BtnCmdsComboBox);
 
 	IniIndex = -1;
@@ -40,7 +40,7 @@ void __fastcall TToolBtnDlg::FormShow(TObject *Sender)
 						_T("ChangeDir\nOpenByExp\nPlayList\nSubDirList\n");
 	}
 
-	//ÉGÉCÉäÉAÉX
+	//„Ç®„Ç§„É™„Ç¢„Çπ
 	for (int i=0; i<ExtMenuList->Count; i++) {
 		UnicodeString itm = get_csv_item(ExtMenuList->Strings[i], 3);
 	 	if (!itm.IsEmpty()) cmd_lst->Add("$" + itm);
@@ -59,11 +59,11 @@ void __fastcall TToolBtnDlg::FormShow(TObject *Sender)
 	UserModule->InitializeListBox(BtnListBox);
 
 	BtnListBox->Items->Assign(ButtonList);
-	CmdLabel->Caption = "é¿çsÇ∑ÇÈÉRÉ}ÉìÉh (ExeCommands ÇÃÉpÉâÉÅÅ[É^)";
+	CmdLabel->Caption = "ÂÆüË°å„Åô„Çã„Ç≥„Éû„É≥„Éâ (ExeCommands „ÅÆ„Éë„É©„É°„Éº„Çø)";
 	CaptionEdit->Text = EmptyStr;
 	IconEdit->Text	  = EmptyStr;
 
-	//èâä˙çÄñ⁄à íuÇê›íË
+	//ÂàùÊúüÈ†ÖÁõÆ‰ΩçÁΩÆ„ÇíË®≠ÂÆö
 	if (IniIndex!=-1) {
 		BtnListBox->ItemIndex = IniIndex;
 		BtnListBoxClick(BtnListBox);
@@ -79,7 +79,7 @@ void __fastcall TToolBtnDlg::FormClose(TObject *Sender, TCloseAction &Action)
 }
 
 //---------------------------------------------------------------------------
-//ÉçÉbÉvéÛÇØì¸ÇÍ
+//„É≠„ÉÉ„ÉóÂèó„ÅëÂÖ•„Çå
 //---------------------------------------------------------------------------
 void __fastcall TToolBtnDlg::WmDropped(TMessage &msg)
 {
@@ -130,7 +130,7 @@ bool __fastcall TToolBtnDlg::FormHelp(WORD Command, THelpEventData Data, bool &C
 }
 
 //---------------------------------------------------------------------------
-//ämíË
+//Á¢∫ÂÆö
 //---------------------------------------------------------------------------
 void __fastcall TToolBtnDlg::OkButtonClick(TObject *Sender)
 {
@@ -142,14 +142,14 @@ void __fastcall TToolBtnDlg::BtnCmdsComboBoxChange(TObject *Sender)
 {
 	UnicodeString s = BtnCmdsComboBox->Text;
 	if (remove_top_Dollar(s)) {
-		//ÉAÉCÉRÉìéÊìæ
+		//„Ç¢„Ç§„Ç≥„É≥ÂèñÂæó
 		UnicodeString inam;
-		//äOïîÉcÅ[Éã
+		//Â§ñÈÉ®„ÉÑ„Éº„É´
 		TStringDynArray itm_buf = record_of_csv_list(ExtToolList, s, 4, EXTTOOL_CSVITMCNT);
 		if (itm_buf.Length==EXTTOOL_CSVITMCNT) {
 			inam = itm_buf[1];
 		}
-		//í«â¡ÉÅÉjÉÖÅ[
+		//ËøΩÂä†„É°„Éã„É•„Éº
 		else {
 			itm_buf = record_of_csv_list(ExtMenuList, s, 3, EXTMENU_CSVITMCNT);
 			if (itm_buf.Length==EXTMENU_CSVITMCNT) inam = itm_buf[5];
@@ -174,22 +174,22 @@ void __fastcall TToolBtnDlg::BtnCmdsComboBoxKeyDown(TObject *Sender, WORD &Key, 
 }
 
 //---------------------------------------------------------------------------
-//ÉtÉ@ÉCÉã/ÉfÉBÉåÉNÉgÉäÇÃéQè∆
+//„Éï„Ç°„Ç§„É´/„Éá„Ç£„É¨„ÇØ„Éà„É™„ÅÆÂèÇÁÖß
 //---------------------------------------------------------------------------
 void __fastcall TToolBtnDlg::RefCmdsBtnClick(TObject *Sender)
 {
 	UnicodeString cmd = get_CmdStr(BtnCmdsComboBox->Text);
 
-	//ÉfÉBÉåÉNÉgÉä
+	//„Éá„Ç£„É¨„ÇØ„Éà„É™
 	if (contained_wd_i("ChangeDir|ChangeOppDir|CopyTo|MoveTo|OpenByExp|PlayList|SubDirList", cmd)) {
 		UnicodeString dnam;
-		if (UserModule->SelectDirEx(_T("ÉRÉ}ÉìÉhÉpÉâÉÅÅ[É^ÇÃéwíË"), dnam)) {
+		if (UserModule->SelectDirEx(_T("„Ç≥„Éû„É≥„Éâ„Éë„É©„É°„Éº„Çø„ÅÆÊåáÂÆö"), dnam)) {
 			BtnCmdsComboBox->Text = UnicodeString().sprintf(_T("%s_\"%s\""), cmd.c_str(), dnam.c_str());
 		}
 	}
-	//ÉtÉ@ÉCÉã
+	//„Éï„Ç°„Ç§„É´
 	else if (contained_wd_i("ExeMenuFile|FileEdit|FileRun|LoadTabGroup|LoadWorkList|OpenByApp|OpenByWin|TextViewer", cmd)) {
-		UserModule->PrepareOpenDlg(_T("ÉRÉ}ÉìÉhÉpÉâÉÅÅ[É^ÇÃéwíË"), F_FILTER_ALL, NULL, RefParamPath);
+		UserModule->PrepareOpenDlg(_T("„Ç≥„Éû„É≥„Éâ„Éë„É©„É°„Éº„Çø„ÅÆÊåáÂÆö"), F_FILTER_ALL, NULL, RefParamPath);
 
 		UnicodeString fnam;
 		if (UserModule->OpenDlgToStr(fnam)) {
@@ -211,11 +211,11 @@ void __fastcall TToolBtnDlg::RefCmdsBtnClick(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//ÉAÉCÉRÉìéQè∆
+//„Ç¢„Ç§„Ç≥„É≥ÂèÇÁÖß
 //---------------------------------------------------------------------------
 void __fastcall TToolBtnDlg::RefIconBtnClick(TObject *Sender)
 {
-	UserModule->PrepareOpenDlg(_T("ÉAÉCÉRÉìÇÃéwíË"), F_FILTER_ICO);
+	UserModule->PrepareOpenDlg(_T("„Ç¢„Ç§„Ç≥„É≥„ÅÆÊåáÂÆö"), F_FILTER_ICO);
 	UserModule->OpenDlgToEdit(IconEdit, true);
 }
 //---------------------------------------------------------------------------
@@ -229,7 +229,7 @@ void __fastcall TToolBtnDlg::IconEditChange(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ÉtÉ@ÉCÉãï“èW
+//„Éï„Ç°„Ç§„É´Á∑®ÈõÜ
 //---------------------------------------------------------------------------
 void __fastcall TToolBtnDlg::EditFileActionExecute(TObject *Sender)
 {
@@ -242,7 +242,7 @@ void __fastcall TToolBtnDlg::EditFileActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//àÍóóÇÃï`âÊ
+//‰∏ÄË¶ß„ÅÆÊèèÁîª
 //---------------------------------------------------------------------------
 void __fastcall TToolBtnDlg::BtnListBoxDrawItem(TWinControl *Control, int Index, TRect &Rect,
 	TOwnerDrawState State)
@@ -258,13 +258,13 @@ void __fastcall TToolBtnDlg::BtnListBoxDrawItem(TWinControl *Control, int Index,
 	int y = Rect.Top + get_TopMargin(cv) + SCALED_THIS(1);
 
 	TStringDynArray itm_buf = get_csv_array(lp->Items->Strings[Index], 3, true);
-	//ÉZÉpÉåÅ[É^
+	//„Çª„Éë„É¨„Éº„Çø
 	if (is_separator(itm_buf[0])) {
 		draw_Separator(cv, Rect);
 		int w = extract_int_def(itm_buf[1], -1);
 		if (w>=0) cv->TextOut(BtnCmdsComboBox->Left, y, UnicodeString().sprintf(_T("< %u >"), w));
 	}
-	//É{É^Éì
+	//„Éú„Çø„É≥
 	else {
 		TRect rc = Rect;
 		rc.Left  = x;
@@ -308,11 +308,11 @@ void __fastcall TToolBtnDlg::BtnListBoxClick(TObject *Sender)
 	BtnCmdsComboBox->Text = itm_buf[1];
 	IconEdit->Text		  = itm_buf[2];
 
-	CmdLabel->Caption = is_separator(itm_buf[0])? "ÉZÉpÉåÅ[É^ÇÃïù (è»ó™éûÇÕ4)" : "é¿çsÇ∑ÇÈÉRÉ}ÉìÉh (ExeCommands ÇÃÉpÉâÉÅÅ[É^)";
+	CmdLabel->Caption = is_separator(itm_buf[0])? "„Çª„Éë„É¨„Éº„Çø„ÅÆÂπÖ (ÁúÅÁï•ÊôÇ„ÅØ4)" : "ÂÆüË°å„Åô„Çã„Ç≥„Éû„É≥„Éâ (ExeCommands „ÅÆ„Éë„É©„É°„Éº„Çø)";
 }
 
 //---------------------------------------------------------------------------
-//CSVçÄñ⁄ÇçÏê¨
+//CSVÈ†ÖÁõÆ„Çí‰ΩúÊàê
 //---------------------------------------------------------------------------
 UnicodeString __fastcall TToolBtnDlg::MakeCsvItem()
 {
@@ -320,7 +320,7 @@ UnicodeString __fastcall TToolBtnDlg::MakeCsvItem()
 }
 
 //---------------------------------------------------------------------------
-//í«â¡
+//ËøΩÂä†
 //---------------------------------------------------------------------------
 void __fastcall TToolBtnDlg::AddBtnActionExecute(TObject *Sender)
 {
@@ -332,7 +332,7 @@ void __fastcall TToolBtnDlg::AddBtnActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = !CaptionEdit->Text.IsEmpty() || !IconEdit->Text.IsEmpty();
 }
 //---------------------------------------------------------------------------
-//ë}ì¸
+//ÊåøÂÖ•
 //---------------------------------------------------------------------------
 void __fastcall TToolBtnDlg::InsBtnActionExecute(TObject *Sender)
 {
@@ -340,7 +340,7 @@ void __fastcall TToolBtnDlg::InsBtnActionExecute(TObject *Sender)
 	BtnListBox->ItemIndex = BtnListBox->ItemIndex - 1;
 }
 //---------------------------------------------------------------------------
-//ïœçX
+//Â§âÊõ¥
 //---------------------------------------------------------------------------
 void __fastcall TToolBtnDlg::ChgBtnActionExecute(TObject *Sender)
 {

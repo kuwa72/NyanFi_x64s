@@ -1,6 +1,6 @@
 /**
  * @file InpExDlg.h
- * @brief Šg’£“ü—Íƒ{ƒbƒNƒX
+ * @brief æ‹¡å¼µå…¥åŠ›ãƒœãƒƒã‚¯ã‚¹
  */
 //---------------------------------------------------------------------------
 #ifndef InpExDlgH
@@ -16,7 +16,7 @@
 #include "Global.h"
 
 //---------------------------------------------------------------------------
-//Šg’£ƒ‚[ƒh
+//æ‹¡å¼µãƒ¢ãƒ¼ãƒ‰
 #define INPEX_CRE_DIR		1
 #define INPEX_NEW_TEXTFILE	2
 #define INPEX_CLONE			3
@@ -33,12 +33,12 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief Šg’£“ü—Íƒ{ƒbƒNƒX
+ * @brief æ‹¡å¼µå…¥åŠ›ãƒœãƒƒã‚¯ã‚¹
  * 
  */
 class TInputExDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TButton *CancelBtn;
 	TButton *OkBtn;
 	TCheckBox *ClipCheckBox;
@@ -77,7 +77,7 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall InputEditKeyPress(TObject *Sender, System::WideChar &Key);
 	void __fastcall InputComboBoxChange(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	UnicodeString HelpTopic;
 	bool KeyHandled;
 
@@ -88,9 +88,9 @@ private:	// ƒ†[ƒU[éŒ¾
 
 	void __fastcall WmFormShowed(TMessage &msg);
 
-public:		// ƒ†[ƒU[éŒ¾
-	int  IpuntExMode;		//!< Šg’£ƒ‚[ƒh (0 ‚Ìê‡‚Í’Pƒ‚È“ü—Íƒ{ƒbƒNƒX)
-	int  CustomWidth;		//!< ƒJƒXƒ^ƒ€•\¦•
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	int  IpuntExMode;		//!< æ‹¡å¼µãƒ¢ãƒ¼ãƒ‰ (0 ã®å ´åˆã¯å˜ç´”ãªå…¥åŠ›ãƒœãƒƒã‚¯ã‚¹)
+	int  CustomWidth;		//!< ã‚«ã‚¹ã‚¿ãƒ è¡¨ç¤ºå¹…
 
 	UnicodeString PathName;
 

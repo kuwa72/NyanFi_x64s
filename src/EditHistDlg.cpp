@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  Å‹ß•ÒW/‰{——‚µ‚½/g‚Á‚½ƒtƒ@ƒCƒ‹ˆê——								//
-//  xƒ}[ƒNˆê——/ ƒŠƒ|ƒWƒgƒŠˆê——/ ƒ_ƒCƒŒƒNƒgƒ^ƒOƒWƒƒƒ“ƒv				//
+//  æœ€è¿‘ç·¨é›†/é–²è¦§ã—ãŸ/ä½¿ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§								//
+//  æ ãƒãƒ¼ã‚¯ä¸€è¦§/ ãƒªãƒã‚¸ãƒˆãƒªä¸€è¦§/ ãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã‚¿ã‚°ã‚¸ãƒ£ãƒ³ãƒ—				//
 //----------------------------------------------------------------------//
 #include "usr_excmd.h"
 #include "UserFunc.h"
@@ -137,41 +137,41 @@ void __fastcall TEditHistoryDlg::FormShow(TObject *Sender)
 	UnicodeString tit;
 	EditHistHeader->Sections->Clear();
 	if (isRecent) {
-		tit = "Å‹ßg‚Á‚½ƒtƒ@ƒCƒ‹ˆê——";
+		tit = "æœ€è¿‘ä½¿ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§";
 		for (int i=0; i<gp->ColCount+1; i++) EditHistHeader->Sections->Add();
-		InitializeListHeader(EditHistHeader, _T(" |–¼‘O|í—Ş|XV“ú|êŠ"));
+		InitializeListHeader(EditHistHeader, _T(" |åå‰|ç¨®é¡|æ›´æ–°æ—¥æ™‚|å ´æ‰€"));
 		EditHistGrid->PopupMenu = RecentPopupMenu;
 	}
 	else if (isMark) {
-		tit = "xƒ}[ƒNˆê——";
+		tit = "æ ãƒãƒ¼ã‚¯ä¸€è¦§";
 		for (int i=0; i<gp->ColCount+1; i++) EditHistHeader->Sections->Add();
-		InitializeListHeader(EditHistHeader, _T(" |–¼‘O|í—Ş|XV“ú|êŠ|ƒƒ‚|İ’è“ú"));
+		InitializeListHeader(EditHistHeader, _T(" |åå‰|ç¨®é¡|æ›´æ–°æ—¥æ™‚|å ´æ‰€|ãƒ¡ãƒ¢|è¨­å®šæ—¥æ™‚"));
 		EditHistGrid->PopupMenu = MarkPopupMenu;
 	}
 	else if (isRepo) {
-		tit = "ƒŠƒ|ƒWƒgƒŠˆê——";
+		tit = "ãƒªãƒã‚¸ãƒˆãƒªä¸€è¦§";
 		for (int i=0; i<gp->ColCount+1; i++) EditHistHeader->Sections->Add();
-		InitializeListHeader(EditHistHeader, _T(" |–¼‘O|.git/index “ú|êŠ|ƒRƒ~ƒbƒg|ó‘Ô"));
+		InitializeListHeader(EditHistHeader, _T(" |åå‰|.git/index æ—¥æ™‚|å ´æ‰€|ã‚³ãƒŸãƒƒãƒˆ|çŠ¶æ…‹"));
 		EditHistGrid->PopupMenu = RepoPopupMenu;
 	}
 	else if (isTags) {
-		tit.sprintf(_T("ƒ_ƒCƒŒƒNƒgƒ^ƒOƒWƒƒƒ“ƒv [%s] - %s"), TagName.c_str(), (isView? _T("‰{——") : _T("•ÒW")));
+		tit.sprintf(_T("ãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã‚¿ã‚°ã‚¸ãƒ£ãƒ³ãƒ— [%s] - %s"), TagName.c_str(), (isView? _T("é–²è¦§") : _T("ç·¨é›†")));
 		for (int i=0; i<gp->ColCount+1; i++) EditHistHeader->Sections->Add();
 		UnicodeString inam;
 		if (TagJumpList->Count>0) {
 			UnicodeString nptn = get_post_tab(get_post_tab(TagJumpList->Strings[0]));
 			isTagPtn = (StartsStr('/', nptn) || StartsStr('?', nptn));
-			inam = isTagPtn? "ƒpƒ^[ƒ“" : "s”Ô†";
+			inam = isTagPtn? "ãƒ‘ã‚¿ãƒ¼ãƒ³" : "è¡Œç•ªå·";
 		}
 		UnicodeString hdr;
-		hdr.sprintf(_T(" |–¼‘O|XV“ú|êŠ|%s|”õl"), inam.c_str());
+		hdr.sprintf(_T(" |åå‰|æ›´æ–°æ—¥æ™‚|å ´æ‰€|%s|å‚™è€ƒ"), inam.c_str());
 		InitializeListHeader(EditHistHeader, hdr.c_str());
 		EditHistGrid->PopupMenu = NULL;
 	}
 	else {
-		tit.sprintf(_T("Å‹ß%s‚µ‚½ƒtƒ@ƒCƒ‹ˆê——"), isView? _T("‰{——") : _T("•ÒW"));
+		tit.sprintf(_T("æœ€è¿‘%sã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§"), isView? _T("é–²è¦§") : _T("ç·¨é›†"));
 		for (int i=0; i<gp->ColCount+1; i++) EditHistHeader->Sections->Add();
-		InitializeListHeader(EditHistHeader, _T(" |–¼‘O|XV“ú|êŠ"));
+		InitializeListHeader(EditHistHeader, _T(" |åå‰|æ›´æ–°æ—¥æ™‚|å ´æ‰€"));
 		EditHistGrid->PopupMenu = HistPopupMenu;
 	}
 
@@ -186,13 +186,13 @@ void __fastcall TEditHistoryDlg::FormShow(TObject *Sender)
 	set_MigemoAction(MigemoAction, _T("EditHistMigemo"));
 
 	HistoryList = (isRecent || isMark || isRepo || isTags)? NULL : isView? TextViewHistory : TextEditHistory;
-	//‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚Ì—š—ğ‚ğíœ
+	//å­˜åœ¨ã—ãªã„ãƒ•ã‚¡ã‚¤ãƒ«ã®å±¥æ­´ã‚’å‰Šé™¤
 	if (HistoryList) {
 		int i = 0;
 		while (i<HistoryList->Count)
 			if (!file_exists(get_csv_item(HistoryList->Strings[i], 0))) HistoryList->Delete(i); else i++;
 	}
-	//‘¶İ‚µ‚È‚¢xƒ}[ƒN€–Ú‚ğíœ
+	//å­˜åœ¨ã—ãªã„æ ãƒãƒ¼ã‚¯é …ç›®ã‚’å‰Šé™¤
 	else if (isMark) {
 		IniFile->CheckMarkItems();
 	}
@@ -297,7 +297,7 @@ void __fastcall TEditHistoryDlg::FormKeyDown(TObject *Sender, WORD &Key, TShiftS
 	SpecialKeyProc(this, Key, Shift);
 }
 //---------------------------------------------------------------------------
-//ƒwƒbƒ_‚Ì•`‰æ
+//ãƒ˜ãƒƒãƒ€ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TEditHistoryDlg::EditHistHeaderDrawSection(THeaderControl *HeaderControl,
 	THeaderSection *Section, const TRect &Rect, bool Pressed)
@@ -324,7 +324,7 @@ void __fastcall TEditHistoryDlg::EditHistHeaderSectionResize(THeaderControl *Hea
 }
 
 //---------------------------------------------------------------------------
-//ƒXƒe[ƒ^ƒXƒo[‚Ì•`‰æ
+//ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒãƒ¼ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TEditHistoryDlg::StatusBar1DrawPanel(TStatusBar *StatusBar, TStatusPanel *Panel, const TRect &Rect)
 {
@@ -383,7 +383,7 @@ file_rec * __fastcall TEditHistoryDlg::get_CurFileRec()
 }
 
 //---------------------------------------------------------------------------
-//ˆê——“à—e‚ÌXV
+//ä¸€è¦§å†…å®¹ã®æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TEditHistoryDlg::UpdateList()
 {
@@ -399,9 +399,9 @@ void __fastcall TEditHistoryDlg::UpdateList()
 										    : EmptyStr;
 	TRegExOptions opt; opt << roIgnoreCase;
 
-	//Å‹ßg‚Á‚½ƒtƒ@ƒCƒ‹
+	//æœ€è¿‘ä½¿ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«
 	if (isRecent) {
-		EditHistHeader->Sections->Items[3]->Text = ShowUsedTimeAction->Checked? "g—p“ú" : "XV“ú";
+		EditHistHeader->Sections->Items[3]->Text = ShowUsedTimeAction->Checked? "ä½¿ç”¨æ—¥æ™‚" : "æ›´æ–°æ—¥æ™‚";
 
 		UnicodeString dnam = usr_SH->KnownGuidToPath(FOLDERID_Recent);
 		if (!dnam.IsEmpty()) {
@@ -449,23 +449,23 @@ void __fastcall TEditHistoryDlg::UpdateList()
 
 		SortItemList();
 	}
-	//xƒ}[ƒN
+	//æ ãƒãƒ¼ã‚¯
 	else if (isMark) {
-		std::unique_ptr<TStringList> del_lst(new TStringList());	//•sİ€–ÚƒŠƒXƒg
+		std::unique_ptr<TStringList> del_lst(new TStringList());	//ä¸åœ¨é …ç›®ãƒªã‚¹ãƒˆ
 
 		for (int i=0; i<IniFile->MarkIdxList->Count; i++) {
 			UnicodeString dnam = IniFile->MarkIdxList->Strings[i];
 			if (!is_drive_accessible(dnam)) continue;
-			bool is_arc = !ends_PathDlmtr(dnam);	//ƒA[ƒJƒCƒu
+			bool is_arc = !ends_PathDlmtr(dnam);	//ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–
 			TStringList *klist = (TStringList*)(IniFile->MarkIdxList->Objects[i]);
 			for (int k=0; k<klist->Count; k++) {
 				TStringDynArray sbuf = split_strings_tab(klist->Strings[k]);
 				if (sbuf.Length==0) continue;
 				UnicodeString fnam = sbuf[0];
-				UnicodeString memo = get_array_item(sbuf, 1);	//ƒƒ‚
-				UnicodeString stim = get_array_item(sbuf, 2);	//İ’è“ú
+				UnicodeString memo = get_array_item(sbuf, 1);	//ãƒ¡ãƒ¢
+				UnicodeString stim = get_array_item(sbuf, 2);	//è¨­å®šæ—¥æ™‚
 
-				//i‚è‚İ
+				//çµã‚Šè¾¼ã¿
 				if (!ptn.IsEmpty()) {
 					UnicodeString s = fnam;
 					if (!memo.IsEmpty()) s.cat_sprintf(_T("\t%s"), memo.c_str());
@@ -473,7 +473,7 @@ void __fastcall TEditHistoryDlg::UpdateList()
 				}
 
 				file_rec *fp = NULL;
-				//ƒA[ƒJƒCƒu
+				//ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–
 				if (is_arc) {
 					arc_find_inf inf;
 					if (usr_ARC->GetFileInf(dnam, fnam, &inf)) {
@@ -496,7 +496,7 @@ void __fastcall TEditHistoryDlg::UpdateList()
 						del_lst->Add(dnam + "/" + fnam);
 					}
 				}
-				//’Êí
+				//é€šå¸¸
 				else {
 					UnicodeString pnam = dnam + fnam;
 					if (dir_exists(pnam)) pnam = IncludeTrailingPathDelimiter(pnam);
@@ -504,18 +504,18 @@ void __fastcall TEditHistoryDlg::UpdateList()
 				}
 
 				if (fp) {
-					fp->memo = memo.cat_sprintf(_T("\t%s"), stim.c_str());	//ƒƒ‚ \t İ’è“ú
+					fp->memo = memo.cat_sprintf(_T("\t%s"), stim.c_str());	//ãƒ¡ãƒ¢ \t è¨­å®šæ—¥æ™‚
 					HistBufList->AddObject(fp->f_name, (TObject*)fp);
 				}
 			}
 		}
 
-		//•sİ€–Ú‚ğíœ
+		//ä¸åœ¨é …ç›®ã‚’å‰Šé™¤
 		for (int i=0; i<del_lst->Count; i++) IniFile->FileMark(del_lst->Strings[i], 0);
 
 		SortItemList();
 	}
-	//ƒŠƒ|ƒWƒgƒŠˆê——
+	//ãƒªãƒã‚¸ãƒˆãƒªä¸€è¦§
 	else if (isRepo) {
 		int i = 0;
 		while (i<GitInfList->Count) {
@@ -559,7 +559,7 @@ void __fastcall TEditHistoryDlg::UpdateList()
 		}
 		SortItemList();
 	}
-	//ƒ_ƒCƒŒƒNƒgƒ^ƒOƒWƒƒƒ“ƒv
+	//ãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã‚¿ã‚°ã‚¸ãƒ£ãƒ³ãƒ—
 	else if (isTags) {
 		for (int i=0; i<TagJumpList->Count; i++) {
 			UnicodeString lbuf = TagJumpList->Strings[i];
@@ -574,7 +574,7 @@ void __fastcall TEditHistoryDlg::UpdateList()
 			}
 		}
 	}
-	//—š—ğ
+	//å±¥æ­´
 	else if (HistoryList) {
 		for (int i=0; i<HistoryList->Count; i++) {
 			UnicodeString fnam = get_csv_item(HistoryList->Strings[i], 0);
@@ -592,7 +592,7 @@ void __fastcall TEditHistoryDlg::UpdateList()
 	UpdateGrid();
 	SetSttBar();
 
-	//ƒJ[ƒ\ƒ‹ˆÊ’u‚ğ•œŒ³
+	//ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã‚’å¾©å…ƒ
 	TStringGrid *gp = EditHistGrid;
 	int idx = std::max(HistBufList->IndexOf(cur_fnam), 0);
 	if (idx<gp->RowCount) gp->Row = idx;
@@ -610,7 +610,7 @@ void __fastcall TEditHistoryDlg::UpdateGrid()
 	cv->Font->Assign(gp->Font);
 
 	if (HistBufList->Count>0) {
-		//Šg’£q‚ÌÅ‘å•‚ğæ“¾
+		//æ‹¡å¼µå­ã®æœ€å¤§å¹…ã‚’å–å¾—
 		MaxFextWd = 0;
 		if (!isRecent && !isMark) {
 			for (int i=0; i<HistBufList->Count; i++) {
@@ -626,7 +626,7 @@ void __fastcall TEditHistoryDlg::UpdateGrid()
 			file_rec *fp = (file_rec*)HistBufList->Objects[i];
 			int col = 0;
 			gp->Cells[col++][i] = (i<10)? UnicodeString().sprintf(_T("%u"), (i + 1)%10) : EmptyStr;
-			//–¼‘O
+			//åå‰
 			if (isRecent || isMark) {
 				gp->Cells[col++][i] = fp->b_name;
 				gp->Cells[col++][i] = fp->f_ext;
@@ -637,10 +637,10 @@ void __fastcall TEditHistoryDlg::UpdateGrid()
 			else {
 				gp->Cells[col++][i] = fp->b_name + fp->f_ext;
 			}
-			//XV“ú
+			//æ›´æ–°æ—¥æ™‚
 			gp->Cells[col++][i] = (isRecent && NoCheckRecentUnc && StartsStr("\\\\", fp->p_name))?
 									EmptyStr : get_TimeStampStr(fp->f_time);
-			//êŠ
+			//å ´æ‰€
 			UnicodeString lbuf = fp->p_name;
 			if (isTags) {
 				remove_top_text(lbuf, TagPath);
@@ -652,19 +652,19 @@ void __fastcall TEditHistoryDlg::UpdateGrid()
 			}
 			gp->Cells[col++][i] = lbuf;
 
-			//ƒƒ‚,İ’è“ú
+			//ãƒ¡ãƒ¢,è¨­å®šæ—¥æ™‚
 			if (isMark) {
 				gp->Cells[col++][i] = get_pre_tab(fp->memo);
 				TDateTime dt;
 				if (!ToDateTime(get_post_tab(fp->memo), &dt)) dt = fp->f_time;
 				gp->Cells[col][i] = get_TimeStampStr(dt);
 			}
-			//ƒRƒ~ƒbƒg,ó‘Ô
+			//ã‚³ãƒŸãƒƒãƒˆ,çŠ¶æ…‹
 			else if (isRepo) {
 				gp->Cells[col++][i] = get_pre_tab(fp->memo);
 				gp->Cells[col][i]	= get_post_tab(fp->memo);
 			}
-			//s”Ô†/ƒpƒ^[ƒ“, ”õl
+			//è¡Œç•ªå·/ãƒ‘ã‚¿ãƒ¼ãƒ³, å‚™è€ƒ
 			else if (isTags) {
 				lbuf = get_post_tab(get_post_tab(fp->alias));
 				gp->Cells[col++][i] = ReplaceStr(lbuf, "\t", " ");
@@ -680,7 +680,7 @@ void __fastcall TEditHistoryDlg::UpdateGrid()
 }
 
 //---------------------------------------------------------------------------
-//w’èƒCƒ“ƒfƒbƒNƒX‚Ì—š—ğ€–Ú‚ğíœ/ƒ}[ƒN‰ğœ
+//æŒ‡å®šã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®å±¥æ­´é …ç›®ã‚’å‰Šé™¤/ãƒãƒ¼ã‚¯è§£é™¤
 //---------------------------------------------------------------------------
 bool __fastcall TEditHistoryDlg::del_HistItem()
 {
@@ -731,7 +731,7 @@ bool __fastcall TEditHistoryDlg::set_FileName(int idx)
 }
 
 //---------------------------------------------------------------------------
-//ƒZƒ‹‚Ì•`‰æ
+//ã‚»ãƒ«ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TEditHistoryDlg::EditHistGridDrawCell(TObject *Sender, System::LongInt ACol, System::LongInt ARow,
 	TRect &Rect, TGridDrawState State)
@@ -744,7 +744,7 @@ void __fastcall TEditHistoryDlg::EditHistGridDrawCell(TObject *Sender, System::L
 	if (idx<HistBufList->Count) {
 		file_rec *fp = (file_rec*)HistBufList->Objects[ARow];
 
-		//”wŒi
+		//èƒŒæ™¯
 		cv->Brush->Color = fp->is_virtual? col_bgArc :
 				(!isMark && (ACol==1 ||(isRecent && ACol==2)) && IniFile->IsMarked(fp->f_name))? col_bgMark
 																							   : get_AltBgCol(ARow);
@@ -753,7 +753,7 @@ void __fastcall TEditHistoryDlg::EditHistGridDrawCell(TObject *Sender, System::L
 		UnicodeString lbuf = gp->Cells[ACol][ARow];
 		TColor col_fg = get_ListFgCol();
 
-		//Å‹ßg‚Á‚½ƒtƒ@ƒCƒ‹ˆê——/xƒ}[ƒNˆê——
+		//æœ€è¿‘ä½¿ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§/æ ãƒãƒ¼ã‚¯ä¸€è¦§
 		if (isRecent || isMark) {
 			switch (ACol) {
 			case 0: cv->Font->Style = cv->Font->Style << fsUnderline;		break;
@@ -767,7 +767,7 @@ void __fastcall TEditHistoryDlg::EditHistGridDrawCell(TObject *Sender, System::L
 				break;
 			}
 		}
-		//‚»‚Ì‘¼‚Ìˆê——
+		//ãã®ä»–ã®ä¸€è¦§
 		else {
 			switch (ACol) {
 			case 0: cv->Font->Style = cv->Font->Style << fsUnderline;		break;
@@ -784,40 +784,40 @@ void __fastcall TEditHistoryDlg::EditHistGridDrawCell(TObject *Sender, System::L
 		TColor col_x = get_ExtColor(fp->f_ext);
 		TColor col_f = (fp->is_sym && SymColorToName)? col_SymLink : get_FileColor(fp, col_x);
 
-		//ƒtƒ@ƒCƒ‹–¼‚Ì‹¤’Êˆ—
+		//ãƒ•ã‚¡ã‚¤ãƒ«åã®å…±é€šå‡¦ç†
 		if (ACol==1) {
-			//ƒAƒCƒRƒ“
+			//ã‚¢ã‚¤ã‚³ãƒ³
 			if (IconMode==1 || (isRepo && IconMode>0)) {
 				draw_SmallIcon(fp, cv, xp, std::max(yp + (cv->TextHeight("Q") - SCALED_THIS(16))/2, 0), false, this);
 				xp += SCALED_THIS(20);
 			}
 		}
 
-		//Å‹ßg‚Á‚½ƒtƒ@ƒCƒ‹ˆê——/xƒ}[ƒNˆê——
+		//æœ€è¿‘ä½¿ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§/æ ãƒãƒ¼ã‚¯ä¸€è¦§
 		if (isRecent || isMark) {
 			int mgn = SCALED_THIS(4);
-			//ƒtƒ@ƒCƒ‹–¼
+			//ãƒ•ã‚¡ã‚¤ãƒ«å
 			if (ACol==1) {
 				cv->Font->Color = col_f;
-				//ƒfƒBƒŒƒNƒgƒŠ
+				//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 				UnicodeString bnam;
 				if (fp->is_dir) {
 					bnam = (fp->is_dir && IconMode==0)? (DirBraStr + fp->b_name + DirKetStr) : fp->b_name;
 					bnam = minimize_str(bnam, cv, Rect.Right - xp - mgn, OmitEndOfName);
 					cv->TextOut(xp, yp, bnam);
 				}
-				//ƒtƒ@ƒCƒ‹
+				//ãƒ•ã‚¡ã‚¤ãƒ«
 				else {
 					bnam = minimize_str(fp->b_name, cv, Rect.Right - xp - mgn, OmitEndOfName);
 					cv->TextOut(xp, yp, bnam);
 				}
 			}
-			//Šg’£q
+			//æ‹¡å¼µå­
 			else if (ACol==2) {
 				cv->Font->Color = col_x;
 				if (!fp->is_dir) cv->TextOut(xp, yp, minimize_str(lbuf, cv, Rect.Width() - mgn, true));
 			}
-			//êŠ
+			//å ´æ‰€
 			else if (ACol==4) {
 				PathNameOut(lbuf, cv, xp, yp, gp->ColWidths[ACol] - SCALED_THIS(8));
 			}
@@ -825,18 +825,18 @@ void __fastcall TEditHistoryDlg::EditHistGridDrawCell(TObject *Sender, System::L
 				cv->TextRect(Rect, xp, yp, lbuf);
 			}
 		}
-		//ƒŠƒ|ƒWƒgƒŠˆê——
+		//ãƒªãƒã‚¸ãƒˆãƒªä¸€è¦§
 		else if	(isRepo) {
 			if (ACol==1) {
 				cv->Font->Color = col_f;
 				UnicodeString bnam = minimize_str(fp->b_name, cv, Rect.Right - xp - SCALED_THIS(4), OmitEndOfName);
 				cv->TextOut(xp, yp, bnam);
 			}
-			//êŠ
+			//å ´æ‰€
 			else if (ACol==3) {
 				PathNameOut(lbuf, cv, xp, yp, gp->ColWidths[ACol] - SCALED_THIS(8));
 			}
-			//ƒRƒ~ƒbƒg
+			//ã‚³ãƒŸãƒƒãƒˆ
 			else if (ACol==4) {
 				UnicodeString s = get_in_paren(lbuf);
 				if (!s.IsEmpty()) {
@@ -860,12 +860,12 @@ void __fastcall TEditHistoryDlg::EditHistGridDrawCell(TObject *Sender, System::L
 				cv->TextRect(Rect, xp, yp, lbuf);
 			}
 		}
-		//‚»‚Ì‘¼‚Ìˆê——
+		//ãã®ä»–ã®ä¸€è¦§
 		else {
 			int mgn = get_CharWidth(cv, 1);
-			//ƒtƒ@ƒCƒ‹–¼
+			//ãƒ•ã‚¡ã‚¤ãƒ«å
 			if (ACol==1) {
-				//ƒfƒBƒŒƒNƒgƒŠ or Šg’£q”ñ•ª—£
+				//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª or æ‹¡å¼µå­éåˆ†é›¢
 				cv->Font->Color = col_f;
 				UnicodeString bnam;
 				if (NoSpaceFExt || fp->is_dir) {
@@ -874,7 +874,7 @@ void __fastcall TEditHistoryDlg::EditHistGridDrawCell(TObject *Sender, System::L
 					cv->TextOut(xp, yp, bnam);
 					xp += cv->TextWidth(bnam);
 				}
-				//Šg’£q•ª—£
+				//æ‹¡å¼µå­åˆ†é›¢
 				else {
 					int x_fx = Rect.Right - MaxFextWd - mgn;
 					bnam = minimize_str(fp->b_name, cv, x_fx - xp, OmitEndOfName);
@@ -882,13 +882,13 @@ void __fastcall TEditHistoryDlg::EditHistGridDrawCell(TObject *Sender, System::L
 					xp = x_fx;
 				}
 
-				//Šg’£q
+				//æ‹¡å¼µå­
 				if (!fp->is_dir) {
 					if (PriorFExtCol) cv->Font->Color = col_x;
 					cv->TextOut(xp, yp, minimize_str(fp->f_ext, cv, Rect.Right - xp - mgn, true));
 				}
 			}
-			//êŠ
+			//å ´æ‰€
 			else if (ACol==3) {
 				PathNameOut(lbuf, cv, xp, yp, Rect.Width() - mgn);
 			}
@@ -903,11 +903,11 @@ void __fastcall TEditHistoryDlg::EditHistGridDrawCell(TObject *Sender, System::L
 		cv->FillRect(Rect);
 	}
 
-	//ƒJ[ƒ\ƒ‹
+	//ã‚«ãƒ¼ã‚½ãƒ«
 	draw_GridCursor(gp, Rect, ARow, State);
 }
 //---------------------------------------------------------------------------
-//ƒL[‘€ì
+//ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TEditHistoryDlg::EditHistGridKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -917,12 +917,12 @@ void __fastcall TEditHistoryDlg::EditHistGridKeyDown(TObject *Sender, WORD &Key,
 	CmdStr = Key_to_CmdF(KeyStr);
 
 	try {
-		//”šƒL[‚É‚æ‚éƒAƒNƒZƒX
+		//æ•°å­—ã‚­ãƒ¼ã«ã‚ˆã‚‹ã‚¢ã‚¯ã‚»ã‚¹
 		if (is_Num0to9(KeyStr)) {
 			if (!set_FileName((KeyStr.ToIntDef(0) + 9)%10)) Abort();
 			if (isRecent || isRepo) {
 				CmdStr = EmptyStr;
-				ModalResult = mrClose;	//ˆÚ“®
+				ModalResult = mrClose;	//ç§»å‹•
 			}
 			else {
 				if (isMark)
@@ -935,29 +935,29 @@ void __fastcall TEditHistoryDlg::EditHistGridKeyDown(TObject *Sender, WORD &Key,
 		else if (equal_ENTER(KeyStr)) {
 			if (!set_FileName(gp->Row)) Abort();
 			CmdStr.sprintf(_T("%s"), (isMark && OpenAction->Checked)? _T("OpenStandard") : null_TCHAR);
-			ModalResult = mrClose;	//ˆÚ“®
+			ModalResult = mrClose;	//ç§»å‹•
 		}
-		//ƒtƒBƒ‹ƒ^‚Ö
+		//ãƒ•ã‚£ãƒ«ã‚¿ã¸
 		else if (StartsText("IncSearch", CmdStr) && OpeToolBar->Visible) {
 			FilterEdit->SetFocus();
 		}
-		//•Â‚¶‚é
+		//é–‰ã˜ã‚‹
 		else if (SameText(CmdStr, "ReturnList")) {
 			ModalResult = mrCancel;
 		}
-		//ƒJ[ƒ\ƒ‹ˆÚ“®
+		//ã‚«ãƒ¼ã‚½ãƒ«ç§»å‹•
 		else if (GridCursorMove(CmdStr, gp)) {
 			;
 		}
-		//€–Úíœ/ƒ}[ƒN‰ğœ
+		//é …ç›®å‰Šé™¤/ãƒãƒ¼ã‚¯è§£é™¤
 		else if (equal_DEL(KeyStr) || SameText(CmdStr, "Delete")) {
 			if (!del_HistItem()) Abort();
 		}
-		//ƒƒ‚“ü—Í
+		//ãƒ¡ãƒ¢å…¥åŠ›
 		else if (isMark && SameText(CmdStr, "Mark_IM")) {
 			MemoAction->Execute();
 		}
-		//ƒRƒ}ƒ“ƒh
+		//ã‚³ãƒãƒ³ãƒ‰
 		else if (isRepo && contained_wd_i("GitViewer|TextViewer", CmdStr)) {
 			if (!set_FileName(gp->Row)) Abort();
 			CmdStr = "GitViewer";
@@ -969,24 +969,24 @@ void __fastcall TEditHistoryDlg::EditHistGridKeyDown(TObject *Sender, WORD &Key,
 			if (!set_FileName(gp->Row)) Abort();
 			ModalResult = mrOk;
 		}
-		//ƒtƒ@ƒCƒ‹î•ñ
+		//ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±
 		else if (!isTags && StartsText("ShowFileInfo", CmdStr)) {
 			ShowFileInfoAction->Execute();
 		}
-		//ƒvƒƒpƒeƒB
+		//ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 		else if (!isTags && SameText(CmdStr, "PropertyDlg")) {
 			ShowPropertyAction->Execute();
 		}
-		//ƒXƒe[ƒ^ƒXƒo[
+		//ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒãƒ¼
 		else if (!isTags && SameText(CmdStr, "ShowStatusBar")) {
 			ShowStatusBarAction->Execute();
 		}
-		//‰EƒNƒŠƒbƒNƒƒjƒ…[
+		//å³ã‚¯ãƒªãƒƒã‚¯ãƒ¡ãƒ‹ãƒ¥ãƒ¼
 		else if (StartsText("ContextMenu", CmdStr)) {
 			show_PopupMenu(gp);
 		}
-		//“ª•¶šƒT[ƒ`
-		else if (is_IniSeaKey(KeyStr)) {	//KeyStr ‚É³‹K•\Œ»ƒpƒ^[ƒ“‚ª•Ô‚é
+		//é ­æ–‡å­—ã‚µãƒ¼ãƒ
+		else if (is_IniSeaKey(KeyStr)) {	//KeyStr ã«æ­£è¦è¡¨ç¾ãƒ‘ã‚¿ãƒ¼ãƒ³ãŒè¿”ã‚‹
 			TRegExOptions opt; opt << roIgnoreCase;
 			int idx0 = -1, idx1 = -1;
 			for (int i=0; i<HistBufList->Count && idx1==-1; i++) {
@@ -1024,7 +1024,7 @@ void __fastcall TEditHistoryDlg::EditHistGridDblClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒ\[ƒg
+//ã‚½ãƒ¼ãƒˆ
 //---------------------------------------------------------------------------
 void __fastcall TEditHistoryDlg::SortItemList()
 {
@@ -1096,7 +1096,7 @@ void __fastcall TEditHistoryDlg::EditHistHeaderSectionClick(THeaderControl *Head
 }
 
 //---------------------------------------------------------------------------
-//ƒƒ‚‚Ìíœ
+//ãƒ¡ãƒ¢ã®å‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TEditHistoryDlg::ClrMemoItemClick(TObject *Sender)
 {
@@ -1110,14 +1110,14 @@ void __fastcall TEditHistoryDlg::ClrMemoItemClick(TObject *Sender)
 	UpdateList();
 }
 //---------------------------------------------------------------------------
-//xƒ}[ƒN‰ğœ
+//æ ãƒãƒ¼ã‚¯è§£é™¤
 //---------------------------------------------------------------------------
 void __fastcall TEditHistoryDlg::DelMarkItemClick(TObject *Sender)
 {
 	if (!del_HistItem()) beep_Warn();
 }
 //---------------------------------------------------------------------------
-//‚·‚×‚Ä‚Ìxƒ}[ƒN‚ğ‰ğœ
+//ã™ã¹ã¦ã®æ ãƒãƒ¼ã‚¯ã‚’è§£é™¤
 //---------------------------------------------------------------------------
 void __fastcall TEditHistoryDlg::ClrAllMarkItemClick(TObject *Sender)
 {
@@ -1128,7 +1128,7 @@ void __fastcall TEditHistoryDlg::ClrAllMarkItemClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒBƒ‹ƒ^‚É‚æ‚éˆê——‚ÌXV
+//ãƒ•ã‚£ãƒ«ã‚¿ã«ã‚ˆã‚‹ä¸€è¦§ã®æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TEditHistoryDlg::FilterEditChange(TObject *Sender)
 {
@@ -1147,7 +1147,7 @@ void __fastcall TEditHistoryDlg::FilterEditExit(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒBƒ‹ƒ^—“‚Å‚ÌƒL[‘€ì
+//ãƒ•ã‚£ãƒ«ã‚¿æ¬„ã§ã®ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TEditHistoryDlg::FilterEditKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -1171,7 +1171,7 @@ void __fastcall TEditHistoryDlg::FilterEditKeyPress(TObject *Sender, System::Wid
 	else if (Key==VK_RETURN) {
 		if (set_FileName(EditHistGrid->Row)) {
 			CmdStr.sprintf(_T("%s"), (isMark && OpenAction->Checked)? _T("OpenStandard") : null_TCHAR);
-			ModalResult = mrClose;	//ˆÚ“®
+			ModalResult = mrClose;	//ç§»å‹•
 		}
 		Key = 0;
 	}
@@ -1183,7 +1183,7 @@ void __fastcall TEditHistoryDlg::FilterBtnClick(TObject *Sender)
 	FilterEdit->SetFocus();
 }
 //---------------------------------------------------------------------------
-//—š—ğ‚ğ‚·‚×‚Äíœ
+//å±¥æ­´ã‚’ã™ã¹ã¦å‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TEditHistoryDlg::ClearAllItemClick(TObject *Sender)
 {
@@ -1193,13 +1193,13 @@ void __fastcall TEditHistoryDlg::ClearAllItemClick(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//—š—ğ‚É“ü‚ê‚È‚¢ƒpƒX‚Ìİ’è
+//å±¥æ­´ã«å…¥ã‚Œãªã„ãƒ‘ã‚¹ã®è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall TEditHistoryDlg::NoHistItemClick(TObject *Sender)
 {
 	UnicodeString *p = isView? &NoViewHistPath : &NoEditHistPath;
 
-	if (input_query_ex(_T("•\¦‚µ‚È‚¢ƒpƒX‚Ìİ’è (•”•ªˆê’v)"),
+	if (input_query_ex(_T("è¡¨ç¤ºã—ãªã„ãƒ‘ã‚¹ã®è¨­å®š (éƒ¨åˆ†ä¸€è‡´)"),
 			null_TCHAR, p, 0, false, LoadUsrMsg(USTR_HintMltSepSC)))
 	{
 		if (!(*p).IsEmpty()) {
@@ -1220,11 +1220,11 @@ void __fastcall TEditHistoryDlg::NoHistItemClick(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//Å‹ßg‚Á‚½‚·‚×‚Ä‚Ì€–Ú‚ğíœ
+//æœ€è¿‘ä½¿ã£ãŸã™ã¹ã¦ã®é …ç›®ã‚’å‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TEditHistoryDlg::ClrAllRecentActionExecute(TObject *Sender)
 {
-	if (msgbox_Sure(LoadUsrMsg(USTR_DeleteQ, _T("‚·‚×‚Ä‚Ì€–Ú")))) {
+	if (msgbox_Sure(LoadUsrMsg(USTR_DeleteQ, _T("ã™ã¹ã¦ã®é …ç›®")))) {
 		SHAddToRecentDocs(SHARD_PATHA, NULL);
 		UpdateList();
 	}
@@ -1235,7 +1235,7 @@ void __fastcall TEditHistoryDlg::ClrAllRecentActionUpdate(TObject *Sender)
 	((TAction *)Sender)->Enabled = (HistBufList->Count>0);
 }
 //---------------------------------------------------------------------------
-//ƒŠƒ“ƒNØ‚ê€–Ú‚ğ®—
+//ãƒªãƒ³ã‚¯åˆ‡ã‚Œé …ç›®ã‚’æ•´ç†
 //---------------------------------------------------------------------------
 void __fastcall TEditHistoryDlg::ClrBrkRecentActionExecute(TObject *Sender)
 {
@@ -1257,7 +1257,7 @@ void __fastcall TEditHistoryDlg::ClrBrkRecentActionExecute(TObject *Sender)
 
 		if (brk_lst->Count>0) {
 			UnicodeString msg;
-			if (msgbox_Sure(msg.sprintf(_T("%uŒÂ‚ÌƒŠƒ“ƒNØ‚ê€–Ú‚ğíœ‚µ‚Ü‚·‚©?"), brk_lst->Count),
+			if (msgbox_Sure(msg.sprintf(_T("%uå€‹ã®ãƒªãƒ³ã‚¯åˆ‡ã‚Œé …ç›®ã‚’å‰Šé™¤ã—ã¾ã™ã‹?"), brk_lst->Count),
 				!(NyanFiForm->ExeCmdsBusy && XCMD_MsgOff)))
 			{
 				cursor_HourGlass();
@@ -1272,12 +1272,12 @@ void __fastcall TEditHistoryDlg::ClrBrkRecentActionExecute(TObject *Sender)
 			}
 		}
 		else if (!(NyanFiForm->ExeCmdsBusy && XCMD_MsgOff)) {
-			msgbox_OK("ƒŠƒ“ƒNØ‚ê‚Í‚ ‚è‚Ü‚¹‚ñB");
+			msgbox_OK("ãƒªãƒ³ã‚¯åˆ‡ã‚Œã¯ã‚ã‚Šã¾ã›ã‚“ã€‚");
 		}
 	}
 }
 //---------------------------------------------------------------------------
-//g—p“ú‚ğ•\¦
+//ä½¿ç”¨æ—¥æ™‚ã‚’è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TEditHistoryDlg::ShowUsedTimeActionExecute(TObject *Sender)
 {
@@ -1286,7 +1286,7 @@ void __fastcall TEditHistoryDlg::ShowUsedTimeActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹î•ñ
+//ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±
 //---------------------------------------------------------------------------
 void __fastcall TEditHistoryDlg::ShowFileInfoActionExecute(TObject *Sender)
 {
@@ -1298,7 +1298,7 @@ void __fastcall TEditHistoryDlg::ShowFileInfoActionUpdate(TObject *Sender)
 	((TAction *)Sender)->Enabled = !get_CurFileName().IsEmpty();
 }
 //---------------------------------------------------------------------------
-//ƒvƒƒpƒeƒB
+//ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 //---------------------------------------------------------------------------
 void __fastcall TEditHistoryDlg::ShowPropertyActionExecute(TObject *Sender)
 {
@@ -1310,7 +1310,7 @@ void __fastcall TEditHistoryDlg::ShowPropertyActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒƒ‚
+//ãƒ¡ãƒ¢
 //---------------------------------------------------------------------------
 void __fastcall TEditHistoryDlg::MemoActionExecute(TObject *Sender)
 {
@@ -1320,7 +1320,7 @@ void __fastcall TEditHistoryDlg::MemoActionExecute(TObject *Sender)
 	file_rec *cfp = (file_rec*)HistBufList->Objects[idx];
 	UnicodeString mstr = get_pre_tab(cfp->memo);
 	UnicodeString fnam = HistBufList->Strings[idx];
-	if (input_query_ex(ExtractFileName(fnam).c_str(), _T("ƒƒ‚"), &mstr, 480)) {
+	if (input_query_ex(ExtractFileName(fnam).c_str(), _T("ãƒ¡ãƒ¢"), &mstr, 480)) {
 		IniFile->FileMark(fnam, 1, mstr);
 		cfp->memo = IniFile->GetMarkMemo(fnam);
 		UpdateList();
@@ -1349,11 +1349,11 @@ void __fastcall TEditHistoryDlg::ToggleActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ÅV‚Ìî•ñ‚ÉXV
+//æœ€æ–°ã®æƒ…å ±ã«æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TEditHistoryDlg::UpdateGitInfActionExecute(TObject *Sender)
 {
-	StatusBar1->Panels->Items[0]->Text = "ÅV‚Ìî•ñ‚ÉXV’†...";
+	StatusBar1->Panels->Items[0]->Text = "æœ€æ–°ã®æƒ…å ±ã«æ›´æ–°ä¸­...";
 	TStringGrid *gp = EditHistGrid;
 	gp->Row = 0;
 	Enabled = false;
@@ -1371,18 +1371,18 @@ void __fastcall TEditHistoryDlg::UpdateGitInfActionUpdate(TObject *Sender)
 	((TAction *)Sender)->Enabled = (HistBufList->Count>0);
 }
 //---------------------------------------------------------------------------
-//ˆê——‚É•\¦‚µ‚È‚¢ƒpƒX‚Ìİ’è
+//ä¸€è¦§ã«è¡¨ç¤ºã—ãªã„ãƒ‘ã‚¹ã®è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall TEditHistoryDlg::NoRepoItemClick(TObject *Sender)
 {
-	if (input_query_ex(_T("ˆê——‚É•\¦‚µ‚È‚¢ƒpƒX‚Ìİ’è (•”•ªˆê’v)"),
+	if (input_query_ex(_T("ä¸€è¦§ã«è¡¨ç¤ºã—ãªã„ãƒ‘ã‚¹ã®è¨­å®š (éƒ¨åˆ†ä¸€è‡´)"),
 		null_TCHAR, &NoRepoListPath, 0, false, LoadUsrMsg(USTR_HintMltSepSC)))
 	{
 		UpdateList();
 	}
 }
 //---------------------------------------------------------------------------
-//Gitƒrƒ…[ƒA‚ğŠJ‚­
+//Gitãƒ“ãƒ¥ãƒ¼ã‚¢ã‚’é–‹ã
 //---------------------------------------------------------------------------
 void __fastcall TEditHistoryDlg::GitViewerActionExecute(TObject *Sender)
 {

@@ -1,6 +1,6 @@
 /**
  * @file ColDlg.h
- * @brief ƒeƒLƒXƒgƒrƒ…[ƒA‚Ì”zF
+ * @brief ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã®é…è‰²
  */
 //---------------------------------------------------------------------------
 #ifndef ColDlgH
@@ -22,11 +22,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒeƒLƒXƒgƒrƒ…[ƒA‚Ì”zFƒ_ƒCƒAƒƒO
+ * @brief ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢ã®é…è‰²ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TColorDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *DisableColAction;
 	TAction *OkAction;
 	TActionList *ActionList1;
@@ -61,11 +61,11 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall DisableColActionExecute(TObject *Sender);
 	void __fastcall DisableColActionUpdate(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	TStringList *ColBufList;
 	UsrSwatchPanel *SwatchPanel;
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	TTxtViewer *ObjViewer;
 	UnicodeString FileName;
 

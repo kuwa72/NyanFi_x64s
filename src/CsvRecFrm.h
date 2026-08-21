@@ -1,6 +1,6 @@
 /**
  * @file CsvRecFrm.h
- * @brief CSV/TSVƒŒƒR[ƒh
+ * @brief CSV/TSVãƒ¬ã‚³ãƒ¼ãƒ‰
  */
 //---------------------------------------------------------------------------
 #ifndef CsvRecFrmH
@@ -22,11 +22,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief CSV/TSVƒŒƒR[ƒh
+ * @brief CSV/TSVãƒ¬ã‚³ãƒ¼ãƒ‰
  */
 class TCsvRecForm : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *OpenUrlAction;
 	TActionList *ActionList1;
 	TButton *CalcBtn;
@@ -63,7 +63,7 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall CalcBtnClick(TObject *Sender);
 	void __fastcall GraphBtnClick(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	UnicodeString HeaderStr;
 	UnicodeString RecordStr;
 	TStringList  *DataList;
@@ -76,8 +76,8 @@ private:	// ƒ†[ƒU[éŒ¾
 	void __fastcall WmFormShowed(TMessage &msg);
 	int __fastcall UpdateItemName();
 
-public:		// ƒ†[ƒU[éŒ¾
-	UsrScrollPanel *GridScrPanel;	//!< ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	UsrScrollPanel *GridScrPanel;	//!< ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 
 	__fastcall TCsvRecForm(TComponent* Owner);
 	void __fastcall UpdateRecord(TStringList *lst = NULL, int r_idx = -1, int i_idx = -1);

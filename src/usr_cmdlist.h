@@ -1,6 +1,6 @@
 /**
  * @file usr_cmdlist.h
- * @brief ƒRƒ}ƒ“ƒhˆê——
+ * @brief ã‚³ãƒãƒ³ãƒ‰ä¸€è¦§
  */
 //---------------------------------------------------------------------------
 #ifndef UsrCmdListH
@@ -17,53 +17,53 @@ extern UnicodeString ScrModeIdStr;
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒRƒ}ƒ“ƒhˆê——ƒŠƒXƒg‚ğİ’è
+ * @brief ã‚³ãƒãƒ³ãƒ‰ä¸€è¦§ãƒªã‚¹ãƒˆã‚’è¨­å®š
  * 
- * @param[out] c_list ƒŠƒXƒg(ƒRƒ}ƒ“ƒh–¼=à–¾)
- * @param[out] s_list ƒŠƒXƒg(¯•Ê•¶š:ƒRƒ}ƒ“ƒh–¼=à–¾)
+ * @param[out] c_list ãƒªã‚¹ãƒˆ(ã‚³ãƒãƒ³ãƒ‰å=èª¬æ˜)
+ * @param[out] s_list ãƒªã‚¹ãƒˆ(è­˜åˆ¥æ–‡å­—:ã‚³ãƒãƒ³ãƒ‰å=èª¬æ˜)
  */
 void set_CmdList(TStringList *c_list, TStringList *s_list);
 
 /**
- * @brief ƒRƒ}ƒ“ƒh‚Ìƒpƒ‰ƒ[ƒ^ˆê——‚ğæ“¾
+ * @brief ã‚³ãƒãƒ³ãƒ‰ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ä¸€è¦§ã‚’å–å¾—
  * 
- * @param cmd ƒRƒ}ƒ“ƒh
- * @param id_idx "FSVIL"ƒ‚[ƒh‚ÌƒCƒ“ƒfƒbƒNƒX(0ƒx[ƒX)
- * @param[out] p_list ƒpƒ‰ƒ[ƒ^ˆê——
- * @param cp ƒRƒ“ƒ{ƒ{ƒbƒNƒX
+ * @param cmd ã‚³ãƒãƒ³ãƒ‰
+ * @param id_idx "FSVIL"ãƒ¢ãƒ¼ãƒ‰ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹(0ãƒ™ãƒ¼ã‚¹)
+ * @param[out] p_list ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ä¸€è¦§
+ * @param cp ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹
  */
 void get_PrmList(UnicodeString cmd, int id_idx, TStringList *p_list, TComboBox *cp = NULL);
 
 /**
- * @brief ƒtƒ@ƒCƒ‹/ƒfƒBƒŒƒNƒgƒŠQÆ‚ª•K—v‚©H
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«/ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå‚ç…§ãŒå¿…è¦ã‹ï¼Ÿ
  * 
- * @param cmd ƒRƒ}ƒ“ƒh
- * @return true •K—v
+ * @param cmd ã‚³ãƒãƒ³ãƒ‰
+ * @return true å¿…è¦
  */
 bool need_RefDirFile(UnicodeString cmd);
 
 /**
- * @brief ƒRƒ}ƒ“ƒhƒpƒ‰ƒ[ƒ^‚©‚çà–¾•¶š—ñ‚ğíœ
- * @param cmd ƒRƒ}ƒ“ƒh
+ * @brief ã‚³ãƒãƒ³ãƒ‰ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‹ã‚‰èª¬æ˜æ–‡å­—åˆ—ã‚’å‰Šé™¤
+ * @param cmd ã‚³ãƒãƒ³ãƒ‰
  * @return UnicodeString 
  */
 UnicodeString del_CmdDesc(UnicodeString cmd);
 
 /**
- * @brief ƒJ[ƒ\ƒ‹ƒL[‚ğƒRƒ}ƒ“ƒh‚É•ÏŠ·
- * @param key_str ƒL[•¶š—ñ
- * @return UnicodeString ƒRƒ}ƒ“ƒh
+ * @brief ã‚«ãƒ¼ã‚½ãƒ«ã‚­ãƒ¼ã‚’ã‚³ãƒãƒ³ãƒ‰ã«å¤‰æ›
+ * @param key_str ã‚­ãƒ¼æ–‡å­—åˆ—
+ * @return UnicodeString ã‚³ãƒãƒ³ãƒ‰
  */
 UnicodeString get_CsrKeyCmd(UnicodeString key_str);
 
 //---------------------------------------------------------------------------
-/** @brief ƒRƒ}ƒ“ƒh•”•ª‚ğæ“¾ */
+/** @brief ã‚³ãƒãƒ³ãƒ‰éƒ¨åˆ†ã‚’å–å¾— */
 inline UnicodeString get_CmdStr(UnicodeString s)
 {
 	return starts_AT(s)? s : get_tkn(s, '_');
 }
 
-/** @brief ƒpƒ‰ƒ[ƒ^•”•ª‚ğæ“¾ */
+/** @brief ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿éƒ¨åˆ†ã‚’å–å¾— */
 inline UnicodeString get_PrmStr(UnicodeString s)
 {
 	return get_tkn_r(s, '_');

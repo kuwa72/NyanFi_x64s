@@ -1,6 +1,6 @@
 /**
  * @file GitGrep.h
- * @brief Git GREP ƒ_ƒCƒAƒƒO
+ * @brief Git GREP ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 //---------------------------------------------------------------------------
 #ifndef GitGrepH
@@ -22,11 +22,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief Git GREP ƒ_ƒCƒAƒƒO
+ * @brief Git GREP ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TGitGrepForm : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *ClipCopyAction;
 	TAction *EditFileAction;
 	TAction *GrepStartAction;
@@ -84,7 +84,7 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall FormKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 	void __fastcall FormKeyPress(TObject *Sender, System::WideChar &Key);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	bool DlgInitialized;
 
 	UsrScrollPanel *ResultScrPanel;
@@ -95,9 +95,9 @@ private:	// ƒ†[ƒU[éŒ¾
 	UnicodeString Keyword;
 	TStringList *ResultBuff;
 
-	int MaxFileWd;				//ƒ}ƒbƒ`ƒtƒ@ƒCƒ‹–¼‚ÌÅ‘å•
+	int MaxFileWd;				//ãƒãƒƒãƒãƒ•ã‚¡ã‚¤ãƒ«åã®æœ€å¤§å¹…
 
-	TPanel *StickyPanel;			//GREPƒXƒeƒBƒbƒL[
+	TPanel *StickyPanel;			//GREPã‚¹ãƒ†ã‚£ãƒƒã‚­ãƒ¼
 	TPaintBox *StickyBox;
 	int LastTopIndex;
 
@@ -110,8 +110,8 @@ private:	// ƒ†[ƒU[éŒ¾
 		if (msg.WParamHi==MF_POPUP) TForm::Dispatch(&msg); else msg.Result = MAKELONG(0, MNC_CLOSE);
 	}
 
-public:		// ƒ†[ƒU[éŒ¾
-	UnicodeString WorkDir;		//!< GitƒgƒbƒvƒfƒBƒŒƒNƒgƒŠ
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	UnicodeString WorkDir;		//!< Gitãƒˆãƒƒãƒ—ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 	UnicodeString CommitID;
 
 	bool FGitBusy;
@@ -127,7 +127,7 @@ public:		// ƒ†[ƒU[éŒ¾
 			cursor_Default();
 		}
 	}
-	/** @brief git grep ŒŸõ’† */
+	/** @brief git grep æ¤œç´¢ä¸­ */
 	__property bool GitBusy = {read = FGitBusy,  write = SetGitBusy};
 
 	__fastcall TGitGrepForm(TComponent* Owner);

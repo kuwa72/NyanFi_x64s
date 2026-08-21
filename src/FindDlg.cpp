@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ÉtÉ@ÉCÉãñºåüçı														//
+//  „Éï„Ç°„Ç§„É´ÂêçÊ§úÁ¥¢														//
 //----------------------------------------------------------------------//
 #include "usr_wic.h"
 #include "usr_xd2tx.h"
@@ -57,7 +57,7 @@ void __fastcall TFindFileDlg::FormCreate(TObject *Sender)
 		_T("65000: UTF-7\n")
 		_T("65001: UTF-8\n"));
 
-	set_ComboBoxText(LineBrkComboBox, _T("\nCR/LF\nLF\nCR\nç¨ç›\n"));
+	set_ComboBoxText(LineBrkComboBox, _T("\nCR/LF\nLF\nCR\nÊ∑∑Âú®\n"));
 }
 //---------------------------------------------------------------------------
 void __fastcall TFindFileDlg::FormShow(TObject *Sender)
@@ -66,11 +66,11 @@ void __fastcall TFindFileDlg::FormShow(TObject *Sender)
 
 	DlgInitialized = false;
 
-	Caption = ( FindDir? _T("ÉfÉBÉåÉNÉgÉäñºåüçı") :
-			   FindBoth? _T("ÉtÉ@ÉCÉã/ÉfÉBÉåÉNÉgÉäñºåüçı") : _T("ÉtÉ@ÉCÉãñºåüçı")) + SubTitle;
+	Caption = ( FindDir? _T("„Éá„Ç£„É¨„ÇØ„Éà„É™ÂêçÊ§úÁ¥¢") :
+			   FindBoth? _T("„Éï„Ç°„Ç§„É´/„Éá„Ç£„É¨„ÇØ„Éà„É™ÂêçÊ§úÁ¥¢") : _T("„Éï„Ç°„Ç§„É´ÂêçÊ§úÁ¥¢")) + SubTitle;
 	HelpContext = FindDir? 53 : 52;
 
-	ClientHeight = 500;	//*** çÇÇ≥ñ¢íËÇ≈ Top à íuÇ™ïœÇÌÇ¡ÇƒÇµÇ‹Ç§ÇÃÇñhÇÆ
+	ClientHeight = 500;	//*** È´ò„ÅïÊú™ÂÆö„Åß Top ‰ΩçÁΩÆ„ÅåÂ§â„Çè„Å£„Å¶„Åó„Åæ„ÅÜ„ÅÆ„ÇíÈò≤„Åê
 	IniFile->LoadPosInfo(this, DialogCenter);
 
 	IniFile->LoadComboBoxItems(MaskComboBox, FindDir? _T("FindDirHistory") : _T("FindHistory"));
@@ -95,7 +95,7 @@ void __fastcall TFindFileDlg::FormShow(TObject *Sender)
 	TagsComboBox->Items->Assign(usr_TAG->TagNameList);
 	TagsComboBox->Text = EmptyStr;
 
-	//ÉfÉBÉåÉNÉgÉä
+	//„Éá„Ç£„É¨„ÇØ„Éà„É™
 	if (FindDir) {
 		MaskPanel->Visible		  = true;		MaskPanel->Align = alTop;
 		KeywordPanel->Visible	  = false;
@@ -111,7 +111,7 @@ void __fastcall TFindFileDlg::FormShow(TObject *Sender)
 		ExtraCheckBox->Visible	  = false;
 		ExtraCheckBox->Checked	  = false;
 	}
-	//ÉtÉ@ÉCÉã
+	//„Éï„Ç°„Ç§„É´
 	else {
 		MaskPanel->Visible		  = !NoMask;	MaskPanel->Align	= alTop;
 		KeywordPanel->Visible	  = true;		KeywordPanel->Align = alTop;
@@ -277,11 +277,11 @@ void __fastcall TFindFileDlg::FormClose(TObject *Sender, TCloseAction &Action)
 	IniFile->WriteBoolGen(_T("FindResLink"),	ResLinkCheckBox);
 	IniFile->WriteBoolGen(_T("FindDirLink"),	DirLinkCheckBox);
 
-	//ÉfÉBÉåÉNÉgÉä
+	//„Éá„Ç£„É¨„ÇØ„Éà„É™
 	if (FindDir) {
 		IniFile->WriteIntGen(_T("FindContMode"),	ContRadioGroup);
 	}
-	//ÉtÉ@ÉCÉã
+	//„Éï„Ç°„Ç§„É´
 	else {
 		IniFile->WriteBoolGen(_T("FindOptCase"),	CaseCheckBox);
 		IniFile->WriteBoolGen(_T("FindOptAnd"),		AndCheckBox);
@@ -358,7 +358,7 @@ void __fastcall TFindFileDlg::FormClose(TObject *Sender, TCloseAction &Action)
 }
 
 //---------------------------------------------------------------------------
-//É_ÉCÉAÉçÉOÇÃçÇÇ≥Çê›íË
+//„ÉÄ„Ç§„Ç¢„É≠„Ç∞„ÅÆÈ´ò„Åï„ÇíË®≠ÂÆö
 //---------------------------------------------------------------------------
 void __fastcall TFindFileDlg::SetDlgHeight()
 {	
@@ -381,7 +381,7 @@ void __fastcall TFindFileDlg::FormKeyDown(TObject *Sender, WORD &Key, TShiftStat
 	SpecialKeyProc(this, Key, Shift);
 }
 //---------------------------------------------------------------------------
-//ägí£åüçıÇÉNÉäÉA
+//Êã°ÂºµÊ§úÁ¥¢„Çí„ÇØ„É™„Ç¢
 //---------------------------------------------------------------------------
 void __fastcall TFindFileDlg::ClearExtraCond()
 {
@@ -390,7 +390,7 @@ void __fastcall TFindFileDlg::ClearExtraCond()
 }
 
 //---------------------------------------------------------------------------
-//åüçıóöóÇÃì¸ÇÍä∑Ç¶
+//Ê§úÁ¥¢Â±•Ê≠¥„ÅÆÂÖ•„ÇåÊèõ„Åà
 //---------------------------------------------------------------------------
 void __fastcall TFindFileDlg::RegExCheckBoxClick(TObject *Sender)
 {
@@ -430,7 +430,7 @@ void __fastcall TFindFileDlg::ArcCheckBoxClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//É}ÉXÉNÇÃïœçX
+//„Éû„Çπ„ÇØ„ÅÆÂ§âÊõ¥
 //---------------------------------------------------------------------------
 void __fastcall TFindFileDlg::MaskComboBoxChange(TObject *Sender)
 {
@@ -493,7 +493,7 @@ void __fastcall TFindFileDlg::MaskComboBoxChange(TObject *Sender)
 		CodePanel->Visible	 = hasCode;		CodePanel->Align  = alTop;
 		IconPanel->Visible	 = hasIcon;		IconPanel->Align  = alTop;
 
-		//ÉXÉyÅ[ÉT
+		//„Çπ„Éö„Éº„Çµ
 		for (int i=0; i<ExtPanel->ControlCount; i++) {
 			if (ExtPanel->Controls[i]->Visible) {
 				PanelSpacer->Visible = true;	PanelSpacer->Align = alTop;	break;
@@ -510,18 +510,18 @@ void __fastcall TFindFileDlg::MaskComboBoxChange(TObject *Sender)
 		BomRadioGroup->ItemIndex	= 0;
 
 		PropGroupBox->Caption =
-			test_AppInfExt(fext)?	"ÉAÉvÉäÉPÅ[ÉVÉáÉìèÓïÒ(&I)" :
-			test_HtmlExt(fext)?		"ÉwÉbÉ_èÓïÒ(&I)" :
-			hasExif?				"ExifèÓïÒ(&I)" :
-			test_Mp3Ext(fext)?		"ID3É^ÉOèÓïÒ(&I)" :
+			test_AppInfExt(fext)?	"„Ç¢„Éó„É™„Ç±„Éº„Ç∑„Éß„É≥ÊÉÖÂ†±(&I)" :
+			test_HtmlExt(fext)?		"„Éò„ÉÉ„ÉÄÊÉÖÂ†±(&I)" :
+			hasExif?				"ExifÊÉÖÂ†±(&I)" :
+			test_Mp3Ext(fext)?		"ID3„Çø„Ç∞ÊÉÖÂ†±(&I)" :
 			(test_FlacExt(fext) || SameText(fext, ".opus"))?
-									"ÉRÉÅÉìÉgèÓïÒ(&I)" :
-			test_LnkExt(fext)?		"ÉVÉáÅ[ÉgÉJÉbÉgèÓïÒ(&I)" :
-			test_IcoExt(fext)?		"ÉAÉCÉRÉìèÓïÒ(&I)" :
+									"„Ç≥„É°„É≥„ÉàÊÉÖÂ†±(&I)" :
+			test_LnkExt(fext)?		"„Ç∑„Éß„Éº„Éà„Ç´„ÉÉ„ÉàÊÉÖÂ†±(&I)" :
+			test_IcoExt(fext)?		"„Ç¢„Ç§„Ç≥„É≥ÊÉÖÂ†±(&I)" :
 			(test_CurExt(fext) || test_AniExt(fext))?
-									"ÉJÅ[É\ÉãèÓïÒ(&I)" : "ÉtÉ@ÉCÉãèÓïÒ(&I)";
+									"„Ç´„Éº„ÇΩ„É´ÊÉÖÂ†±(&I)" : "„Éï„Ç°„Ç§„É´ÊÉÖÂ†±(&I)";
 
-		IconGroupBox->Caption = test_CurExt(fext)? "âÊëúêî(&N)" : "ÉAÉCÉRÉìêî(&N)";
+		IconGroupBox->Caption = test_CurExt(fext)? "ÁîªÂÉèÊï∞(&N)" : "„Ç¢„Ç§„Ç≥„É≥Êï∞(&N)";
 
 		ExtPanel->Caption = EmptyStr;
 
@@ -536,7 +536,7 @@ void __fastcall TFindFileDlg::DateMaskEditChange(TObject *Sender)
 		try {
 			TDateTime dt = str_to_DateTime(DateMaskEdit->Text);
 			int r_day = RelDateCheckBox->Checked? DaysBetween(Today(), FindDate) : 0;
-			DateMaskEdit->Hint = (r_day==0)? UnicodeString("ñ{ì˙") : UnicodeString().sprintf(_T("%uì˙ëO"), r_day);
+			DateMaskEdit->Hint = (r_day==0)? UnicodeString("Êú¨Êó•") : UnicodeString().sprintf(_T("%uÊó•Ââç"), r_day);
 		}
 		catch (EConvertError &e) {
 			DateMaskEdit->Hint = EmptyStr;
@@ -544,13 +544,13 @@ void __fastcall TFindFileDlg::DateMaskEditChange(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//É{É^ÉìÇ…ÇÊÇÈì˙ïtÇÃïœçX
+//„Éú„Çø„É≥„Å´„Çà„ÇãÊó•‰ªò„ÅÆÂ§âÊõ¥
 //---------------------------------------------------------------------------
 void __fastcall TFindFileDlg::DateBtnClick(TObject *Sender)
 {
 	TButton *bp = (TButton*)Sender;
 
-	if (SameStr(bp->Caption, "ñ{ì˙")) {
+	if (SameStr(bp->Caption, "Êú¨Êó•")) {
 		FindDate = Date();
 	}
 	else {
@@ -620,7 +620,7 @@ void __fastcall TFindFileDlg::CondChangeUpdate(TObject *Sender)
 	if (!BomRadioGroup->Enabled) BomRadioGroup->ItemIndex = 0;
 
 	UnicodeString tit = get_tkn(PropGroupBox->Caption, "I)") + "I)";
-	if (UseProcCheckBox->Checked) tit += " /ÉvÉçÉZÉXèÓïÒ";
+	if (UseProcCheckBox->Checked) tit += " /„Éó„É≠„Çª„ÇπÊÉÖÂ†±";
 	PropGroupBox->Caption = tit;
 }
 
@@ -657,7 +657,7 @@ void __fastcall TFindFileDlg::FindOkActionUpdate(TObject *Sender)
 {
 	TAction *ap = (TAction*)Sender;
 
-	//ê≥ãKï\åªÉpÉ^Å[ÉìÇÃÉ`ÉFÉbÉN
+	//Ê≠£Ë¶èË°®Áèæ„Éë„Çø„Éº„É≥„ÅÆ„ÉÅ„Çß„ÉÉ„ÇØ
 	bool k_reg_ng = !FindDir && RegExCheckBox->Checked && !KeywordComboBox->Text.IsEmpty() && !chk_RegExPtn(KeywordComboBox->Text);
 	ErrMarkList->SetErrFrame(this, KeywordComboBox, k_reg_ng);
 
@@ -667,7 +667,7 @@ void __fastcall TFindFileDlg::FindOkActionUpdate(TObject *Sender)
 	bool t_reg_ng = hasText && TxtRegExCheckBox->Checked && !TxtKwdComboBox->Text.IsEmpty() && !chk_RegExPtn(TxtKwdComboBox->Text);
 	ErrMarkList->SetErrFrame(this, TxtKwdComboBox, t_reg_ng);
 
-	//ì˙ïtÇÃÉ`ÉFÉbÉN
+	//Êó•‰ªò„ÅÆ„ÉÅ„Çß„ÉÉ„ÇØ
 	UnicodeString dtstr = DateMaskEdit->Text;
 	bool date_ng = false;
 	bool use_wc  = (DateRadioGroup->ItemIndex==1 && ContainsStr(dtstr, "?"));
@@ -696,7 +696,7 @@ void __fastcall TFindFileDlg::FindOkActionUpdate(TObject *Sender)
 	DateBtn4->Enabled = !use_wc;
 	DateBtn5->Enabled = !use_wc;
 
-	//É^ÉCÉÄÇÃÉ`ÉFÉbÉN
+	//„Çø„Ç§„É†„ÅÆ„ÉÅ„Çß„ÉÉ„ÇØ
 	bool time_ng = false;
 	if (TimePanel->Visible) {
 		try {
@@ -710,8 +710,8 @@ void __fastcall TFindFileDlg::FindOkActionUpdate(TObject *Sender)
 
 	ap->Enabled = (!k_reg_ng && !p_reg_ng && !t_reg_ng && !date_ng && !time_ng);
 
-	ImgWdEdit->EditLabel->Caption = ImgMaxCheckBox->Checked? "í∑" : "ïù";
-	ImgHiEdit->EditLabel->Caption = ImgMaxCheckBox->Checked? "íZ" : "çÇ";
+	ImgWdEdit->EditLabel->Caption = ImgMaxCheckBox->Checked? "Èï∑" : "ÂπÖ";
+	ImgHiEdit->EditLabel->Caption = ImgMaxCheckBox->Checked? "Áü≠" : "È´ò";
 
 	AndCheckBox->Enabled	 = !RegExCheckBox->Checked;
 	PrpAndCheckBox->Enabled  = !PrpRegExCheckBox->Checked;

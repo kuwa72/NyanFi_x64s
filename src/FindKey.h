@@ -1,6 +1,6 @@
 /**
  * @file FindKey.h
- * @brief ƒL[ŒŸõ
+ * @brief ã‚­ãƒ¼æ¤œç´¢
  */
 //---------------------------------------------------------------------------
 #ifndef FindKeyH
@@ -17,14 +17,14 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒL[ŒŸõ
+ * @brief ã‚­ãƒ¼æ¤œç´¢
  * 
- * ƒIƒvƒVƒ‡ƒ“İ’è - ƒL[İ’è ‚Åˆê——‚©‚çƒL[‚ğŒŸõ‚·‚éÛ‚É—p‚¢‚Ü‚·B
+ * ã‚ªãƒ—ã‚·ãƒ§ãƒ³è¨­å®š - ã‚­ãƒ¼è¨­å®š ã§ä¸€è¦§ã‹ã‚‰ã‚­ãƒ¼ã‚’æ¤œç´¢ã™ã‚‹éš›ã«ç”¨ã„ã¾ã™ã€‚
  *  
  */
 class TFindKeyDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TButton *DummyBtn;
 	TLabel *KeyLabel;
 	TLabel *Label1;
@@ -42,7 +42,7 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall DummyBtnClick(TObject *Sender);
 	void __fastcall CancelBtnClick(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	void __fastcall WmMenuChar(TMessage &msg)
 	{
 		if (msg.WParamHi==MF_POPUP) TForm::Dispatch(&msg); else msg.Result = MAKELONG(0, MNC_CLOSE);
@@ -50,7 +50,7 @@ private:	// ƒ†[ƒU[éŒ¾
 
 	bool __fastcall IsFirstCmdKey(UnicodeString keystr);
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	TStringList *KeyList;
 	UnicodeString KeyStr;
 

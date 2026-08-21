@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒqƒXƒgƒOƒ‰ƒ€•\Ž¦													//
+//  ãƒ’ã‚¹ãƒˆã‚°ãƒ©ãƒ è¡¨ç¤º													//
 //----------------------------------------------------------------------//
 #include "Global.h"
 #include "MainFrm.h"
@@ -48,7 +48,7 @@ void __fastcall THistForm::FormHide(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒqƒXƒgƒOƒ‰ƒ€‚Ì•`‰æ
+//ãƒ’ã‚¹ãƒˆã‚°ãƒ©ãƒ ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall THistForm::DrawHistogram(Graphics::TBitmap *i_bmp)
 {
@@ -107,7 +107,7 @@ void __fastcall THistForm::DrawHistogram(Graphics::TBitmap *i_bmp)
 		cv->MoveTo(x, y0);	cv->LineTo(x, y0 - MulDiv(h_hi, b_buf[i], v_max));
 	}
 
-	//ƒOƒŠƒbƒh
+	//ã‚°ãƒªãƒƒãƒ‰
 	cv->Pen->Mode  = pmCopy;
 	cv->Pen->Color = clDkGray;
 	cv->Pen->Width = 1;
@@ -123,7 +123,7 @@ void __fastcall THistForm::DrawHistogram(Graphics::TBitmap *i_bmp)
 		cv->LineTo(H_LR_MARGIN + 255, y);
 	}
 
-	//‹«ŠEü
+	//å¢ƒç•Œç·š
 	if (Floating && col_TlBorder!=col_None) {
 		cv->Pen->Width = TlWinBorderWidth;
 		cv->Pen->Color = col_TlBorder;

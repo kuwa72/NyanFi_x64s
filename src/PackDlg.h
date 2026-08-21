@@ -1,6 +1,6 @@
 /**
  * @file PackDlg.h
- * @brief ƒA[ƒJƒCƒuì¬ƒ_ƒCƒAƒƒO
+ * @brief ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ä½œæˆãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 //---------------------------------------------------------------------------
 #ifndef PackDlgH
@@ -16,11 +16,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒA[ƒJƒCƒuì¬ƒ_ƒCƒAƒƒO
+ * @brief ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ä½œæˆãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TPackArcDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TButton *CanButton;
 	TButton *OkButton;
 	TCheckBox *IncDirCheckBox;
@@ -44,13 +44,13 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall FormatRadioGroupClick(TObject *Sender);
 	void __fastcall SfxCheckBoxClick(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	void __fastcall WmMenuChar(TMessage &msg)
 	{
 		if (msg.WParamHi==MF_POPUP) TForm::Dispatch(&msg); else msg.Result = MAKELONG(0, MNC_CLOSE);
 	}
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	__fastcall TPackArcDlg(TComponent* Owner);
 
 	BEGIN_MESSAGE_MAP

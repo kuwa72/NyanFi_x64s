@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒ^ƒXƒNƒ}ƒl[ƒWƒƒ													//
+//  ã‚¿ã‚¹ã‚¯ãƒãƒãƒ¼ã‚¸ãƒ£													//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "Global.h"
@@ -31,7 +31,7 @@ void __fastcall TTaskManDlg::FormShow(TObject *Sender)
 
 	TStringGrid *gp = TaskGrid;
 	InitializeListGrid(gp);
-	InitializeListHeader(TaskHeader, _T("#|ƒ^ƒXƒN|Ú×|c|ó‘Ô|Œo‰ßŠÔ"));
+	InitializeListHeader(TaskHeader, _T("#|ã‚¿ã‚¹ã‚¯|è©³ç´°|æ®‹|çŠ¶æ…‹|çµŒéæ™‚é–“"));
 	IniFile->LoadGridColWidth(gp, 6, 30,80,200,60,100,100);
 	set_HeaderFromGrid(gp, TaskHeader);
 	set_UsrScrPanel(GridScrPanel);
@@ -85,7 +85,7 @@ void __fastcall TTaskManDlg::TaskHeaderSectionResize(THeaderControl *HeaderContr
 	GridScrPanel->UpdateKnob();
 }
 //---------------------------------------------------------------------------
-//ƒwƒbƒ_‚Ì•`‰æ
+//ãƒ˜ãƒƒãƒ€ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TTaskManDlg::TaskHeaderDrawSection(THeaderControl *HeaderControl,
 	THeaderSection *Section, const TRect &Rect, bool Pressed)
@@ -94,7 +94,7 @@ void __fastcall TTaskManDlg::TaskHeaderDrawSection(THeaderControl *HeaderControl
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒCƒ}[ˆ—
+//ã‚¿ã‚¤ãƒãƒ¼å‡¦ç†
 //---------------------------------------------------------------------------
 void __fastcall TTaskManDlg::Timer1Timer(TObject *Sender)
 {
@@ -105,7 +105,7 @@ void __fastcall TTaskManDlg::Timer1Timer(TObject *Sender)
 	int total_speed = 0;
 	int maxn = get_MaxTaskCount();
 
-	//‚‚³’²®
+	//é«˜ã•èª¿æ•´
 	bool changeed = false;
 	for (int i=0; i<gp->RowCount; i++) {
 		int r_hi = (i<maxn)? gp->DefaultRowHeight : RsrCellHi;
@@ -121,9 +121,9 @@ void __fastcall TTaskManDlg::Timer1Timer(TObject *Sender)
 		if (idx<maxn) {
 			TTaskThread *tp = TaskThread[idx];
 			if (tp) {
-				//ƒRƒ}ƒ“ƒh
+				//ã‚³ãƒãƒ³ãƒ‰
 				gp->Cells[1][i] = TaskCmdList->Values[tp->CmdName];
-				//Ú×
+				//è©³ç´°
 				UnicodeString sdir = ContainsStr(tp->Config->InfStr, "\\ ---> ")? get_tkn(tp->Config->InfStr, " ---> ") :
 							  SameText(tp->Config->InfStr, tp->Config->DistPath)? tp->Config->DistPath : EmptyStr;
 				UnicodeString finf = tp->CurFileName;
@@ -138,32 +138,32 @@ void __fastcall TTaskManDlg::Timer1Timer(TObject *Sender)
 				UnicodeString cell_str;
 				cell_str.sprintf(_T("%s\t%s"), yen_to_delimiter(tp->Config->InfStr).c_str(), finf.c_str());
 				gp->Cells[2][i] = cell_str;
-				//c
+				//æ®‹
 				cell_str = tp->Config->TaskList->Count;
 				if (tp->SubCount>0) cell_str.cat_sprintf(_T("\t%u"), tp->SubCount);
 				gp->Cells[3][i] = cell_str;
-				//ó‘Ô
-				cell_str = tp->TaskPause? "ˆê’U’â~’†" :
-						   tp->TaskCancel? "’†’f—v‹’†" :
-						   (tp->PreCount>0)? "€”õ’†" :
-						   tp->TaskIsFast?  "‚‘¬Às’†" : "Às’†";
+				//çŠ¶æ…‹
+				cell_str = tp->TaskPause? "ä¸€æ—¦åœæ­¢ä¸­" :
+						   tp->TaskCancel? "ä¸­æ–­è¦æ±‚ä¸­" :
+						   (tp->PreCount>0)? "æº–å‚™ä¸­" :
+						   tp->TaskIsFast?  "é«˜é€Ÿå®Ÿè¡Œä¸­" : "å®Ÿè¡Œä¸­";
 				if (tp->PreCount>0) {
 					cell_str.cat_sprintf(_T("\t%u"), tp->PreCount);
 				}
 				else if (!tp->CurFileName.IsEmpty() && tp->CurProgress>=0) {
 					cell_str.cat_sprintf(_T("\t%3u%%"), (int)(tp->CurProgress*100));
 					if (tp->Speed>0) {
-						cell_str.cat_sprintf(_T("  (%s/•b)"), get_size_str_T(tp->Speed*1000, 1).c_str());
+						cell_str.cat_sprintf(_T("  (%s/ç§’)"), get_size_str_T(tp->Speed*1000, 1).c_str());
 						total_speed += tp->Speed;
 					}
 				}
 				gp->Cells[4][i] = cell_str;
-				//Œo‰ßŠÔ
+				//çµŒéæ™‚é–“
 				cell_str = mSecToTStr(::GetTickCount() - tp->StartCount, false);
 				if (tp->RemCount>0) {
 					UnicodeString rt_str = mSecToTStr(tp->RemCount, false);
 					remove_top_text(rt_str, "00:");
-					cell_str.cat_sprintf(_T("\t(c‚è %s)"), rt_str.c_str());
+					cell_str.cat_sprintf(_T("\t(æ®‹ã‚Š %s)"), rt_str.c_str());
 				}
 				gp->Cells[5][i] = cell_str;
 			}
@@ -172,14 +172,14 @@ void __fastcall TTaskManDlg::Timer1Timer(TObject *Sender)
 			}
 		}
 		else {
-			//—\–ñ
+			//äºˆç´„
 			idx -= (get_MaxTaskCount());
 			if (idx<TaskReserveList->Count) {
 				TaskConfig *cp = TaskReserveList->Items[idx];
 				gp->Cells[1][i] = TaskCmdList->Values[get_pre_tab(cp->TaskList->Strings[0])];
 				gp->Cells[2][i] = cp->InfStr;
 				gp->Cells[3][i] = EmptyStr;
-				gp->Cells[4][i] = RsvSuspended? "•Û—¯’†" : "‘Ò‹@’†";
+				gp->Cells[4][i] = RsvSuspended? "ä¿ç•™ä¸­" : "å¾…æ©Ÿä¸­";
 				gp->Cells[5][i] = EmptyStr;
 			}
 			else {
@@ -188,8 +188,8 @@ void __fastcall TTaskManDlg::Timer1Timer(TObject *Sender)
 		}
 	}
 
-	UnicodeString hstr = "ó‘Ô";
-	if (total_speed>0) hstr.cat_sprintf(_T("    (%s/•b)"), get_size_str_T(total_speed*1000, 1).c_str());
+	UnicodeString hstr = "çŠ¶æ…‹";
+	if (total_speed>0) hstr.cat_sprintf(_T("    (%s/ç§’)"), get_size_str_T(total_speed*1000, 1).c_str());
 	TaskHeader->Sections->Items[4]->Text = hstr;
 }
 
@@ -203,7 +203,7 @@ TTaskThread * __fastcall TTaskManDlg::get_CurTask()
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚Ì•`‰æ
+//ä¸€è¦§ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TTaskManDlg::TaskGridDrawCell(TObject *Sender, System::LongInt ACol, System::LongInt ARow,
 		TRect &Rect, TGridDrawState State)
@@ -249,7 +249,7 @@ void __fastcall TTaskManDlg::TaskGridDrawCell(TObject *Sender, System::LongInt A
 		if (ACol==3) xp = Rect.Right - cv->TextWidth(l_lst[i]) - SCALED_THIS(4);
 		cv->TextRect(rc, xp, yp, l_lst[i]);
 		if (ACol==4 && i==1 && ContainsStr(l_lst[i], "%")) {
-			//i’»ƒo[
+			//é€²æ—ãƒãƒ¼
 			int prg = get_tkn(l_lst[i], '%').ToIntDef(-1);
 			if (prg>=0) {
 				TRect rc_f	 = Rect;
@@ -263,12 +263,12 @@ void __fastcall TTaskManDlg::TaskGridDrawCell(TObject *Sender, System::LongInt A
 		rc.Top += l_hi;
 		yp	   += l_hi;
 	}
-	//ƒJ[ƒ\ƒ‹
+	//ã‚«ãƒ¼ã‚½ãƒ«
 	draw_GridCursor(gp, Rect, ARow, State);
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚Å‚ÌƒL[‘€ì
+//ä¸€è¦§ã§ã®ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TTaskManDlg::TaskGridKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -276,18 +276,18 @@ void __fastcall TTaskManDlg::TaskGridKeyDown(TObject *Sender, WORD &Key, TShiftS
 	UnicodeString KeyStr = get_KeyStr(Key, Shift);
 	UnicodeString CmdStr = Key_to_CmdF(KeyStr);
 
-	//ƒJ[ƒ\ƒ‹ˆÚ“®
+	//ã‚«ãƒ¼ã‚½ãƒ«ç§»å‹•
 	if (GridCursorMove(CmdStr, gp))	;
-	//•Â‚¶‚é
+	//é–‰ã˜ã‚‹
 	else if (SameText(CmdStr, "ReturnList")) ModalResult = mrCancel;
-	//’†~
+	//ä¸­æ­¢
 	else if (equal_DEL(KeyStr) || SameText(CmdStr, "Delete")) CancelTaskAction->Execute();
 
 	if (!is_DialogKey(Key)) Key = 0;
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒXƒN‚Ì’†~
+//ã‚¿ã‚¹ã‚¯ã®ä¸­æ­¢
 //---------------------------------------------------------------------------
 void __fastcall TTaskManDlg::CancelTaskActionExecute(TObject *Sender)
 {
@@ -316,11 +316,11 @@ void __fastcall TTaskManDlg::CancelTaskActionUpdate(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//‘Sƒ^ƒXƒN‚Ì’†~
+//å…¨ã‚¿ã‚¹ã‚¯ã®ä¸­æ­¢
 //---------------------------------------------------------------------------
 void __fastcall TTaskManDlg::CanTaskAllActionExecute(TObject *Sender)
 {
-	if (msgbox_Sure(_T("‚·‚×‚Ä‚Ìƒ^ƒXƒN‚ğ’†~‚µ‚Ü‚·‚©?")))
+	if (msgbox_Sure(_T("ã™ã¹ã¦ã®ã‚¿ã‚¹ã‚¯ã‚’ä¸­æ­¢ã—ã¾ã™ã‹?")))
 		NyanFiForm->CancelAllTaskAction->Execute();
 }
 //---------------------------------------------------------------------------
@@ -330,7 +330,7 @@ void __fastcall TTaskManDlg::CanTaskAllActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ˆê’U’â~
+//ä¸€æ—¦åœæ­¢
 //---------------------------------------------------------------------------
 void __fastcall TTaskManDlg::PauseActionExecute(TObject *Sender)
 {
@@ -344,7 +344,7 @@ void __fastcall TTaskManDlg::PauseActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = tp? !tp->TaskPause : false;
 }
 //---------------------------------------------------------------------------
-//ÄŠJ
+//å†é–‹
 //---------------------------------------------------------------------------
 void __fastcall TTaskManDlg::RestartActionExecute(TObject *Sender)
 {
@@ -359,7 +359,7 @@ void __fastcall TTaskManDlg::RestartActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//—\–ñ€–Ú‚Ì•Û—¯
+//äºˆç´„é …ç›®ã®ä¿ç•™
 //---------------------------------------------------------------------------
 void __fastcall TTaskManDlg::SuspendActionExecute(TObject *Sender)
 {
@@ -368,11 +368,11 @@ void __fastcall TTaskManDlg::SuspendActionExecute(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TTaskManDlg::SuspendActionUpdate(TObject *Sender)
 {
-	((TAction*)Sender)->Caption = RsvSuspended? "‰ğœ(&U)" : "•Û—¯(&U)";
+	((TAction*)Sender)->Caption = RsvSuspended? "è§£é™¤(&U)" : "ä¿ç•™(&U)";
 }
 
 //---------------------------------------------------------------------------
-//•Û—¯—\–ñ€–Ú‚ÌŠJn
+//ä¿ç•™äºˆç´„é …ç›®ã®é–‹å§‹
 //---------------------------------------------------------------------------
 void __fastcall TTaskManDlg::StartActionExecute(TObject *Sender)
 {
@@ -387,7 +387,7 @@ void __fastcall TTaskManDlg::StartActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = RsvSuspended && has_EmptyTask() && idx>=0 && idx<TaskReserveList->Count;
 }
 //---------------------------------------------------------------------------
-//•Û—¯—\–ñ€–Ú‚ÌŠ„‚è‚İÀs
+//ä¿ç•™äºˆç´„é …ç›®ã®å‰²ã‚Šè¾¼ã¿å®Ÿè¡Œ
 //---------------------------------------------------------------------------
 void __fastcall TTaskManDlg::ExtStartActionExecute(TObject *Sender)
 {

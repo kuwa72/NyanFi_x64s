@@ -1,6 +1,6 @@
 /**
  * @file CvImgDlg.h
- * @brief ‰æ‘œ•ÏŠ·ƒ_ƒCƒAƒƒO
+ * @brief ç”»åƒå¤‰æ›ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 //---------------------------------------------------------------------------
 #ifndef CvImgDlgH
@@ -18,11 +18,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ‰æ‘œ•ÏŠ·ƒ_ƒCƒAƒƒO
+ * @brief ç”»åƒå¤‰æ›ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TCvImageDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TButton *CanButton;
 	TButton *OkButton;
 	TButton *RefMgnColBtn;
@@ -68,13 +68,13 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall ScaleModeComboBoxChange(TObject *Sender);
 	void __fastcall ClipNameComboBoxChange(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	void __fastcall WmMenuChar(TMessage &msg)
 	{
 		if (msg.WParamHi==MF_POPUP) TForm::Dispatch(&msg); else msg.Result = MAKELONG(0, MNC_CLOSE);
 	}
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	bool fromClip;
 	UnicodeString DistPath;
 	UnicodeString TitleInf;

@@ -1,6 +1,6 @@
 /**
  * @file Splash.h
- * @brief ƒXƒvƒ‰ƒbƒVƒ…EƒtƒH[ƒ€
+ * @brief ã‚¹ãƒ—ãƒ©ãƒƒã‚·ãƒ¥ãƒ»ãƒ•ã‚©ãƒ¼ãƒ 
  */
 //---------------------------------------------------------------------------
 #ifndef SplashH
@@ -16,11 +16,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒXƒvƒ‰ƒbƒVƒ…EƒtƒH[ƒ€
+ * @brief ã‚¹ãƒ—ãƒ©ãƒƒã‚·ãƒ¥ãƒ»ãƒ•ã‚©ãƒ¼ãƒ 
  */
 class TSplashForm : public TForm
 {
-__published:	// IDE ŠÇ—‚ÌƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ç®¡ç†ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TLabel *MsgLabel;
 	TLabel *TitleLabel;
 	TLabel *VerLabel;
@@ -28,9 +28,9 @@ __published:	// IDE ŠÇ—‚ÌƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall FormPaint(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	void __fastcall SetMsgLabel(const _TCHAR *msg);
 
 	__fastcall TSplashForm(TComponent* Owner);

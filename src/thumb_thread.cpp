@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒTƒ€ƒlƒCƒ‹æ“¾ƒXƒŒƒbƒh												//
+//  ã‚µãƒ ãƒã‚¤ãƒ«å–å¾—ã‚¹ãƒ¬ãƒƒãƒ‰												//
 //----------------------------------------------------------------------//
 #include "usr_wic.h"
 #include "usr_shell.h"
@@ -11,7 +11,7 @@
 #pragma package(smart_init)
 
 //---------------------------------------------------------------------------
-//ƒXƒŒƒbƒh‚Ì‰Šú‰»
+//ã‚¹ãƒ¬ãƒƒãƒ‰ã®åˆæœŸåŒ–
 //---------------------------------------------------------------------------
 __fastcall TThumbnailThread::TThumbnailThread(bool CreateSuspended) : TThread(CreateSuspended)
 {
@@ -73,13 +73,13 @@ Graphics::TBitmap* __fastcall TThumbnailThread::GetListBitmap(UnicodeString fnam
 bool __fastcall TThumbnailThread::FitSize(int *wd, int *hi)
 {
 	if (*wd>ThumbnailSize || *hi>ThumbnailSize) {
-		//‰¡‚Ì•û‚ª’·‚¢
+		//æ¨ªã®æ–¹ãŒé•·ã„
 		if (*wd>*hi) {
 			float r = 1.0 * *hi / *wd;
 			*wd = ThumbnailSize;
 			*hi = *wd * r;
 		}
-		//c‚Ì•û‚ª’·‚¢
+		//ç¸¦ã®æ–¹ãŒé•·ã„
 		else {
 			float r = 1.0 * *wd / *hi;
 			*hi = ThumbnailSize;
@@ -109,7 +109,7 @@ void __fastcall TThumbnailThread::MakeThumbnail(int idx)
 
 			while (!ImgViewThread->IsReady()) Sleep(50);
 
-			//ƒTƒ€ƒlƒCƒ‹ƒLƒƒƒbƒVƒ…
+			//ã‚µãƒ ãƒã‚¤ãƒ«ã‚­ãƒ£ãƒƒã‚·ãƒ¥
 			UnicodeString ibuf = load_ImageThumbCache(fnam, bp);
 			if (!ibuf.IsEmpty()) {
 				SetListItem(idx, ibuf);
@@ -118,7 +118,7 @@ void __fastcall TThumbnailThread::MakeThumbnail(int idx)
 				std::unique_ptr<Graphics::TBitmap> i_bp(new Graphics::TBitmap());
 				bool to_resize;
 
-				//ƒƒ^ƒtƒ@ƒCƒ‹
+				//ãƒ¡ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«
 				if (test_MetaExt(fext)) {
 					std::unique_ptr<TMetafile> mf(new TMetafile());
 					mf->LoadFromFile(fnam);
@@ -136,10 +136,10 @@ void __fastcall TThumbnailThread::MakeThumbnail(int idx)
 					i_bp->Canvas->Unlock();
 					SetListItem(idx, tmp.sprintf(_T("%s\t%s"), fnam.c_str(), get_wd_x_hi_str(mf->Width, mf->Height).c_str()));
 				}
-				//ƒrƒbƒgƒ}ƒbƒv
+				//ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—
 				else {
 					int img_ori = 0;
-					//ƒAƒCƒRƒ“
+					//ã‚¢ã‚¤ã‚³ãƒ³
 					if (test_FileExt(fext, FEXT_ICONVIEW)) {
 						int size = 256;
 						for (int i=0; i<3; i++) {
@@ -162,21 +162,21 @@ void __fastcall TThumbnailThread::MakeThumbnail(int idx)
 						int ixn = (int)::ExtractIcon(HInstance, fnam.c_str(), -1);
 						if (ixn>0) SetListItem(idx, tmp.sprintf(_T("%s\t%u Icons"), fnam.c_str(), ixn));
 					}
-					//‰æ‘œ
+					//ç”»åƒ
 					else {
 						int res = load_ImageFile(fnam, i_bp.get(), WICIMG_THUMBNAIL, col_bgImage);
 						if (res==0) throw Exception(EmptyStr);
-						//Exifî•ñ‚Ìæ“¾
+						//Exifæƒ…å ±ã®å–å¾—
 						UnicodeString exif_inf;
-						//Exif‚ğæ“¾‚Å‚«‚éê‡‚Í‚»‚ê‚ğİ’è
+						//Exifã‚’å–å¾—ã§ãã‚‹å ´åˆã¯ãã‚Œã‚’è¨­å®š
 						if (test_ExifExt(fext)) exif_inf = get_ExifInfThumb(fnam, &img_ori);
-						//æ“¾‚Å‚«‚È‚¢ê‡‚ÍƒTƒCƒYî•ñ‚ğİ’è
+						//å–å¾—ã§ããªã„å ´åˆã¯ã‚µã‚¤ã‚ºæƒ…å ±ã‚’è¨­å®š
 						if (exif_inf.IsEmpty() && !i_bp->Empty) exif_inf = get_wd_x_hi_str(i_bp->Width, i_bp->Height);
 						if (!exif_inf.IsEmpty()) SetListItem(idx, tmp.sprintf(_T("%s\t%s"), fnam.c_str(), exif_inf.c_str()));
 						if (res==LOADED_BY_WIC) img_ori = 0;
 					}
 
-					//ƒŠƒTƒCƒY
+					//ãƒªã‚µã‚¤ã‚º
 					int i_wd = i_bp->Width;
 					int i_hi = i_bp->Height;
 					to_resize = FitSize(&i_wd, &i_hi);
@@ -186,7 +186,7 @@ void __fastcall TThumbnailThread::MakeThumbnail(int idx)
 						i_bp->Handle = r_bp->ReleaseHandle();
 					}
 
-					//‰ñ“]
+					//å›è»¢
 					if (RotViewImg && img_ori>0) {
 						if		(img_ori==6) WIC_rotate_image(i_bp.get(), 1);
 						else if (img_ori==3) WIC_rotate_image(i_bp.get(), 2);
@@ -196,7 +196,7 @@ void __fastcall TThumbnailThread::MakeThumbnail(int idx)
 
 				bp->Handle = i_bp->ReleaseHandle();
 
-				//ADS‚ÉƒLƒƒƒbƒVƒ…
+				//ADSã«ã‚­ãƒ£ãƒƒã‚·ãƒ¥
 				UnicodeString pnam = ExtractFilePath(fnam);
 				if (CacheThumbADS && to_resize && is_NTFS_Drive(pnam)
 					&& !is_drive_protected(pnam) && !is_NoInfPath(pnam, NoCachePath))
@@ -207,7 +207,7 @@ void __fastcall TThumbnailThread::MakeThumbnail(int idx)
 						UnicodeString fnam_t = fnam + THUMB_JPG_ADS;
 						UnicodeString fnam_x = fnam + THUMB_TXT_ADS;
 						if (WIC_save_image(fnam_t, bp, 80, 0)) {
-							//•\¦î•ñ [TAB] ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv [TAB] ƒTƒ€ƒlƒCƒ‹ƒTƒCƒY [TAB] ƒAƒ‹ƒSƒŠƒYƒ€
+							//è¡¨ç¤ºæƒ…å ± [TAB] ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ— [TAB] ã‚µãƒ ãƒã‚¤ãƒ«ã‚µã‚¤ã‚º [TAB] ã‚¢ãƒ«ã‚´ãƒªã‚ºãƒ 
 							UnicodeString lbuf = get_post_tab(GetListItem(idx));
 							lbuf.cat_sprintf(_T("\t%s\t%u\t%u"),
 									FormatDateTime("yyyymmddhhnnss", ft).c_str(), ThumbnailSize, ThumbScaleOpt);
@@ -236,10 +236,10 @@ void __fastcall TThumbnailThread::Execute()
 	::CoInitialize(NULL);
 
 	while (!Terminated) {
-		//ƒTƒ€ƒlƒCƒ‹ƒŠƒXƒg‚Ìì¬
+		//ã‚µãƒ ãƒã‚¤ãƒ«ãƒªã‚¹ãƒˆã®ä½œæˆ
 		if (ReqStart) {
 			IsEmpty  = true;
-			//Œ»İˆÊ’u‚©‚ç‘OŒãŒğŒİ‚É‡Ÿæ“¾
+			//ç¾åœ¨ä½ç½®ã‹ã‚‰å‰å¾Œäº¤äº’ã«é †æ¬¡å–å¾—
 			int idx = ThumbnailThread->StartIndex;
 			int cnt = Count;
 			int tag = 0, n = idx, p = idx;
@@ -269,13 +269,13 @@ void __fastcall TThumbnailThread::Execute()
 			ReqStart = false;
 			IsEmpty  = !ReqClear;
 		}
-		//ŒÂ•Êì¬
+		//å€‹åˆ¥ä½œæˆ
 		else if (ReqMake) {
 			MakeThumbnail(MakeIndex);
 			ReqMake = false;
 		}
 
-		//ƒŠƒXƒg‚ğƒNƒŠƒA
+		//ãƒªã‚¹ãƒˆã‚’ã‚¯ãƒªã‚¢
 		if (ReqClear) {
 			TaskRWLock->BeginWrite();
 			for (int i=0; i<ThumbnailList->Count; i++) delete (Graphics::TBitmap*)ThumbnailList->Objects[i];

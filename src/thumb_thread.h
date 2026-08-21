@@ -1,6 +1,6 @@
 /**
  * @file thumb_thread.h
- * @brief ƒTƒ€ƒlƒCƒ‹æ“¾ƒXƒŒƒbƒh
+ * @brief ã‚µãƒ ãƒã‚¤ãƒ«å–å¾—ã‚¹ãƒ¬ãƒƒãƒ‰
  */
 //---------------------------------------------------------------------------
 #ifndef ThumbnailThreadH
@@ -11,14 +11,14 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒTƒ€ƒlƒCƒ‹æ“¾ƒXƒŒƒbƒh
+ * @brief ã‚µãƒ ãƒã‚¤ãƒ«å–å¾—ã‚¹ãƒ¬ãƒƒãƒ‰
  */
 class TThumbnailThread : public TThread
 {
 private:
 	TMultiReadExclusiveWriteSynchronizer *TaskRWLock;
 
-	//ƒXƒŒƒbƒhƒZ[ƒt‚ğl—¶‚µ‚½ƒvƒƒpƒeƒB
+	//ã‚¹ãƒ¬ãƒƒãƒ‰ã‚»ãƒ¼ãƒ•ã‚’è€ƒæ…®ã—ãŸãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	bool FReqClear;
 	bool __fastcall GetReqClear()
 	{
@@ -90,26 +90,34 @@ private:
 
 	void __fastcall Execute();
 
+	// ä¸‹ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãƒ»ãƒ—ãƒ­ã‚­ã‚·ã‹ã‚‰ private ã®ã‚¢ã‚¯ã‚»ã‚µã‚’å‘¼ã¶ãŸã‚
+	template <class O, class T, T (O::*G)(), void (O::*S)(T)>
+	friend class compat::RWMutableProperty;
+	template <class O, class T, T (O::*G)()>
+	friend class compat::ROMutableProperty;
+
 public:
 	HWND CallbackWnd;
 
-	__property bool ReqClear = {read = GetReqClear, write = SetReqClear};	//!< ƒŠƒXƒg‚ÌƒNƒŠƒA—v‹
-	__property bool ReqStart = {read = GetReqStart, write = SetReqStart};	//!< æ“¾ƒXƒ^[ƒg—v‹
-	__property bool ReqMake  = {read = GetReqMake,  write = SetReqMake};	//!< ŒÂ•Êì¬—v‹
-	__property bool IsEmpty  = {read = GetIsEmpty,  write = SetIsEmpty};	//!< ƒTƒ€ƒlƒCƒ‹–¢æ“¾
-	__property int  Count    = {read = GetCount};							//!< ƒŠƒXƒg€–Ú”
+	// __property ã‚’èª­ã¿æ›¸ããƒ—ãƒ­ã‚­ã‚·ã«ç½®ãæ›ãˆãŸã‚‚ã®ã€‚getter ãŒé constãƒ»setter ãŒ
+	// å€¤æ¸¡ã—ãªã®ã¯æ’ä»–ãƒ­ãƒƒã‚¯ (TaskRWLock) ã‚’å–ã‚‹ãŸã‚ã§ã€src å´ã®å®£è¨€ã¯å¤‰ãˆã¦ã„ãªã„
+	compat::RWMutableProperty<TThumbnailThread, bool, &TThumbnailThread::GetReqClear, &TThumbnailThread::SetReqClear> ReqClear{this};	//!< ãƒªã‚¹ãƒˆã®ã‚¯ãƒªã‚¢è¦æ±‚
+	compat::RWMutableProperty<TThumbnailThread, bool, &TThumbnailThread::GetReqStart, &TThumbnailThread::SetReqStart> ReqStart{this};	//!< å–å¾—ã‚¹ã‚¿ãƒ¼ãƒˆè¦æ±‚
+	compat::RWMutableProperty<TThumbnailThread, bool, &TThumbnailThread::GetReqMake,  &TThumbnailThread::SetReqMake>  ReqMake{this};		//!< å€‹åˆ¥ä½œæˆè¦æ±‚
+	compat::RWMutableProperty<TThumbnailThread, bool, &TThumbnailThread::GetIsEmpty,  &TThumbnailThread::SetIsEmpty>  IsEmpty{this};		//!< ã‚µãƒ ãƒã‚¤ãƒ«æœªå–å¾—
+	compat::ROMutableProperty<TThumbnailThread, int,  &TThumbnailThread::GetCount>                                    Count{this};		//!< ãƒªã‚¹ãƒˆé …ç›®æ•°
 
 	int MakeIndex;
 	int StartIndex;
 
-	TStringList *ThumbnailList;	//!< ƒTƒ€ƒlƒCƒ‹ƒŠƒXƒg
+	TStringList *ThumbnailList;	//!< ã‚µãƒ ãƒã‚¤ãƒ«ãƒªã‚¹ãƒˆ
 	UnicodeString __fastcall GetListItem(int idx);
 	void __fastcall SetListItem(int idx, UnicodeString s);
 	Graphics::TBitmap* __fastcall GetListBitmap(int idx);
 	Graphics::TBitmap* __fastcall GetListBitmap(UnicodeString fnam);
 
 	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	 * @param CreateSuspended 
 	 */
 	__fastcall TThumbnailThread(bool CreateSuspended);

@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ’uŠ·Šm”Fƒ_ƒCƒAƒƒO													//
+//  ç½®æ›ç¢ºèªãƒ€ã‚¤ã‚¢ãƒ­ã‚°													//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "Global.h"
@@ -34,7 +34,7 @@ void __fastcall TAskRepDlg::FormShow(TObject *Sender)
 
 	AssignScaledFont(StatusBar1, ViewHdrFont);
 	StatusBar1->Height = get_FontHeightMgnS(StatusBar1->Font, 4, 4);
-	StatusBar1->Panels->Items[0]->Text = yen_to_delimiter(FileName).cat_sprintf(_T(" - %us %uŒ…"), FoundLine, FoundPos);
+	StatusBar1->Panels->Items[0]->Text = yen_to_delimiter(FileName).cat_sprintf(_T(" - %uè¡Œ %uæ¡"), FoundLine, FoundPos);
 	StatusBar1->Panels->Items[1]->Text = UnicodeString().sprintf(_T(" File %u/%u"), FileIndex + 1, FileCount);
 
 	OKBtn->SetFocus();
@@ -90,18 +90,18 @@ void __fastcall TAskRepDlg::RepListBoxDrawItem(TWinControl *Control,
 	int xp = Rect.Left + SCALED_THIS(2);
 	int yp = Rect.Top  + get_TopMargin(cv);
 
-	//s”Ô†
+	//è¡Œç•ªå·
 	TRect rc = Rect;
 	int f_idx = FoundLine - CurIndex + Index - 1;
 	LineNoOut(cv, rc, f_idx + 1);
 	cv->Brush->Color = get_ListBgCol();
 	xp = rc.Left + SCALED_THIS(4);
 
-	//ƒ}ƒbƒ`s
+	//ãƒžãƒƒãƒè¡Œ
 	if (Index==CurIndex) {
 		cv->Font->Color = get_ListFgCol();
 		if (FoundPos>0) {
-			//ƒ}ƒbƒ`Œê‘O
+			//ãƒžãƒƒãƒèªžå‰
 			UnicodeString s0 = itmstr.SubString(1, FoundPos - 1);
 			int wd = Rect.Width() - xp;
 			if (cv->TextWidth(s0 + KeyWord) > wd) {
@@ -109,19 +109,19 @@ void __fastcall TAskRepDlg::RepListBoxDrawItem(TWinControl *Control,
 				wd /= 2;
 				int w_r = cv->TextWidth(itmstr.SubString(p1, itmstr.Length() - p1 + 1));
 				if (w_r<wd) wd += (wd - w_r);
-				wd -= cv->TextWidth("c ");
+				wd -= cv->TextWidth("â€¦ ");
 				int w = 0;
 				for (int i=p1; i>4; i--) {
 					w += cv->TextWidth(itmstr.SubString(i, 1));
 					if (w<wd) continue;
 					s0.Delete(1, i);
-					s0.Insert("c", 1);
+					s0.Insert("â€¦", 1);
 					break;
 				}
 			}
 			TabCrTextOut(s0, cv, xp, yp, get_ListFgCol(), Rect.Right);
 			itmstr.Delete(1, FoundPos - 1);
-			//ƒ}ƒbƒ`Œê‹­’²•\Ž¦
+			//ãƒžãƒƒãƒèªžå¼·èª¿è¡¨ç¤º
 			TxtOutOption opt;  opt << toOnlyTop;
 			EmphasisTextOutEx(itmstr, KeyWord, cv, xp, yp, opt, col_fgEmp, col_bgEmp);
 		}
@@ -129,12 +129,12 @@ void __fastcall TAskRepDlg::RepListBoxDrawItem(TWinControl *Control,
 			TabCrTextOut(itmstr, cv, xp, yp, get_ListFgCol(), Rect.Right);
 		}
 
-		//ƒJ[ƒ\ƒ‹ü
+		//ã‚«ãƒ¼ã‚½ãƒ«ç·š
 		int lw = std::max(CursorWidth, 1);
 		int yp = Rect.Bottom - lw;
 		draw_Line(cv, Rect.Left, yp, Rect.Right, yp, lw, col_Cursor);
 	}
-	//‘OŒãs
+	//å‰å¾Œè¡Œ
 	else {
 		TabCrTextOut(itmstr, cv, xp, yp, (f_idx>=TopIndex && f_idx<=EndIndex)? get_ListFgCol() : col_InvItem, Rect.Right);
 	}

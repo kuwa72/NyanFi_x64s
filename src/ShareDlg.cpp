@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ‹¤—LƒtƒHƒ‹ƒ_/ƒ‰ƒCƒuƒ‰ƒŠ/ŒŸõİ’è/ƒfƒBƒŒƒNƒgƒŠ‘I‘ğ					//
+//  å…±æœ‰ãƒ•ã‚©ãƒ«ãƒ€/ãƒ©ã‚¤ãƒ–ãƒ©ãƒª/æ¤œç´¢è¨­å®š/ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªé¸æŠ					//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -57,13 +57,13 @@ void __fastcall TNetShareDlg::FormShow(TObject *Sender)
 	else
 		IniFile->LoadPosInfo(this, DialogCenter, isOnlySub? "SelSub" : "SelDir");
 
-	//’†‰›‘µ‚¦
+	//ä¸­å¤®æƒãˆ
 	TControl *cp = (TControl *)((CurListTag==0)? NyanFiForm->L_Panel : NyanFiForm->R_Panel);
 	TPoint p = cp->ClientToScreen(cp->ClientRect.CenteredRect(BoundsRect).Location);
 	Left = p.x;
 	Top  = p.y;
 
-	//‚Í‚İo‚µC³
+	//ã¯ã¿å‡ºã—ä¿®æ­£
 	cp = (TControl *)NyanFiForm->ListPanel;
 	TPoint p0 = cp->ClientToScreen(Point(0, 0));
 	TPoint p1 = cp->ClientToScreen(Point(0, cp->Height));
@@ -82,24 +82,24 @@ void __fastcall TNetShareDlg::WmFormShowed(TMessage &msg)
 {
 	PathTabControl->Repaint();
 
-	//‹¤—LƒtƒHƒ‹ƒ_
+	//å…±æœ‰ãƒ•ã‚©ãƒ«ãƒ€
 	if (isShare) {
 		if (!ComputerName.IsEmpty() && !StartsStr("\\\\", ComputerName)) ComputerName.Insert("\\\\", 1);
 		ComputerName = ExcludeTrailingPathDelimiter(ComputerName);
 		PathName     = ComputerName;
 		UpdateShareList(ComputerName);
 	}
-	//ƒ‰ƒCƒuƒ‰ƒŠ
+	//ãƒ©ã‚¤ãƒ–ãƒ©ãƒª
 	else if (isLibrary) {
-		Caption = "ƒ‰ƒCƒuƒ‰ƒŠ";
+		Caption = "ãƒ©ã‚¤ãƒ–ãƒ©ãƒª";
 		std::unique_ptr<TStringList> l_lst(new TStringList());
 		get_files(LibraryPath, "*.library-ms", l_lst.get());
 		ShareListBox->Items->Assign(l_lst.get());
 		ListBoxSetIndex(ShareListBox, 0);
 	}
-	//ŒŸõİ’è
+	//æ¤œç´¢è¨­å®š
 	else if (isFindSet) {
-		Caption = "ŒŸõİ’è";
+		Caption = "æ¤œç´¢è¨­å®š";
 		std::unique_ptr<TStringList> l_lst(new TStringList());
 		std::unique_ptr<TStringList> s_lst(new TStringList());
 		get_files(ExePath, "*.ini", l_lst.get(), true);
@@ -108,7 +108,7 @@ void __fastcall TNetShareDlg::WmFormShowed(TMessage &msg)
 			std::unique_ptr<UsrIniFile> set_file(new UsrIniFile(fnam));
 			UnicodeString sct = "FindSettings";
 			if (set_file->SectionExists(sct)) {
-				//ƒtƒ@ƒCƒ‹–¼ [TAB] •\¦F [TAB] ƒŠƒXƒgƒtƒ@ƒCƒ‹–¼
+				//ãƒ•ã‚¡ã‚¤ãƒ«å [TAB] è¡¨ç¤ºè‰² [TAB] ãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«å
 				s_lst->Add(fnam + "\t" + set_file->ReadString(sct, "Color") + "\t" + set_file->ReadString(sct, "DirList"));
 			}
 		}
@@ -117,7 +117,7 @@ void __fastcall TNetShareDlg::WmFormShowed(TMessage &msg)
 		ListBoxSetIndex(ShareListBox, 0);
 		FileName = EmptyStr;
 	}
-	//ƒfƒBƒŒƒNƒgƒŠ‚Ì‘I‘ğ
+	//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®é¸æŠ
 	else {
 		PathName = IncludeTrailingPathDelimiter(PathName);
 		UpdatePathList(PathName);
@@ -167,10 +167,10 @@ void __fastcall TNetShareDlg::FormKeyDown(TObject *Sender, WORD &Key, TShiftStat
 }
 
 //---------------------------------------------------------------------------
-//‹¤—LƒtƒHƒ‹ƒ_ˆê——‚Ìæ“¾
+//å…±æœ‰ãƒ•ã‚©ãƒ«ãƒ€ä¸€è¦§ã®å–å¾—
 //---------------------------------------------------------------------------
 NET_API_STATUS __fastcall TNetShareDlg::GetShareList(
-	UnicodeString cnam,		//\\ƒRƒ“ƒsƒ…[ƒ^–¼
+	UnicodeString cnam,		//\\ã‚³ãƒ³ãƒ”ãƒ¥ãƒ¼ã‚¿å
 	TListBox *lp)
 {
 	lp->Clear();
@@ -191,18 +191,18 @@ NET_API_STATUS __fastcall TNetShareDlg::GetShareList(
 	return res;
 }
 //---------------------------------------------------------------------------
-//‹¤—LƒtƒHƒ‹ƒ_ˆê——‚ÌXV
+//å…±æœ‰ãƒ•ã‚©ãƒ«ãƒ€ä¸€è¦§ã®æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TNetShareDlg::UpdateShareList(
-	UnicodeString cnam)	//\\ƒRƒ“ƒsƒ…[ƒ^–¼
+	UnicodeString cnam)	//\\ã‚³ãƒ³ãƒ”ãƒ¥ãƒ¼ã‚¿å
 {
 	cnam = ExcludeTrailingPathDelimiter(cnam);
-	Caption = yen_to_delimiter(cnam) + " - ‹¤—LƒtƒHƒ‹ƒ_ˆê——";
+	Caption = yen_to_delimiter(cnam) + " - å…±æœ‰ãƒ•ã‚©ãƒ«ãƒ€ä¸€è¦§";
 
 	TListBox *lp = ShareListBox;
 	NET_API_STATUS res = GetShareList(cnam, lp);
 	if (res!=NERR_Success) {
-		//ƒRƒ“ƒsƒ…[ƒ^‚ÉÚ‘±
+		//ã‚³ãƒ³ãƒ”ãƒ¥ãƒ¼ã‚¿ã«æ¥ç¶š
 		NETRESOURCEW nr = {};
 		nr.dwType		= RESOURCETYPE_ANY;
 		nr.lpRemoteName = (LPWSTR)cnam.c_str();
@@ -225,10 +225,10 @@ void __fastcall TNetShareDlg::UpdateShareList(
 }
 
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠˆê——‚ÌXV
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä¸€è¦§ã®æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TNetShareDlg::UpdatePathList(
-	UnicodeString pnam)	//Šî€ƒfƒBƒŒƒNƒgƒŠ (EmptyStr ‚È‚çƒhƒ‰ƒCƒu‘I‘ğ)
+	UnicodeString pnam)	//åŸºæº–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª (EmptyStr ãªã‚‰ãƒ‰ãƒ©ã‚¤ãƒ–é¸æŠ)
 {
 	Caption = (!Title.IsEmpty()? (Title + " - ") : EmptyStr) +
 				(pnam.IsEmpty()? UnicodeString("PC") : yen_to_delimiter(ExcludeTrailingPathDelimiter(pnam))) ;
@@ -236,7 +236,7 @@ void __fastcall TNetShareDlg::UpdatePathList(
 	cursor_HourGlass();
 	LibIdxBase = -1;
 	std::unique_ptr<TStringList> d_lst(new TStringList());
-	//ƒhƒ‰ƒCƒu
+	//ãƒ‰ãƒ©ã‚¤ãƒ–
 	if (pnam.IsEmpty()) {
 		isPC = true;
 		for (int i=0; i<DriveInfoList->Count; i++) {
@@ -244,7 +244,7 @@ void __fastcall TNetShareDlg::UpdatePathList(
 			if (!dp->accessible) continue;
 			d_lst->Add(UnicodeString().sprintf(_T("%s %s"), get_tkn(dp->drive_str, '\\').c_str(), dp->volume.c_str()));
 		}
-		//ƒ‰ƒCƒuƒ‰ƒŠ
+		//ãƒ©ã‚¤ãƒ–ãƒ©ãƒª
 		std::unique_ptr<TStringList> l_lst(new TStringList());
 		get_files(LibraryPath, "*.library-ms", l_lst.get());
 		if (l_lst->Count>0) {
@@ -256,7 +256,7 @@ void __fastcall TNetShareDlg::UpdatePathList(
 			LibIdxBase = d_lst->Count;
 		}
 	}
-	//ƒfƒBƒŒƒNƒgƒŠ
+	//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 	else {
 		isPC = false;
 		pnam = IncludeTrailingPathDelimiter(pnam);
@@ -288,7 +288,7 @@ void __fastcall TNetShareDlg::UpdatePathList(
 	cursor_Default();
 }
 //---------------------------------------------------------------------------
-//ƒpƒ“‚­‚¸ƒŠƒXƒg‚ÌXV
+//ãƒ‘ãƒ³ããšãƒªã‚¹ãƒˆã®æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TNetShareDlg::UpdateBreadcrumb(UnicodeString pnam)
 {
@@ -307,7 +307,7 @@ void __fastcall TNetShareDlg::UpdateBreadcrumb(UnicodeString pnam)
 	}
 }
 //---------------------------------------------------------------------------
-//ƒpƒ“‚­‚¸ƒŠƒXƒg‚Ìˆ—
+//ãƒ‘ãƒ³ããšãƒªã‚¹ãƒˆã®å‡¦ç†
 //---------------------------------------------------------------------------
 void __fastcall TNetShareDlg::PathTabControlDrawTab(TCustomTabControl *Control, int TabIndex,
 	const TRect &Rect, bool Active)
@@ -354,7 +354,7 @@ void __fastcall TNetShareDlg::ListPanelResize(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒŠƒXƒg€–Ú‚Ì•`‰æ
+//ãƒªã‚¹ãƒˆé …ç›®ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TNetShareDlg::ShareListBoxDrawItem(TWinControl *Control, int Index,
 	TRect &Rect, TOwnerDrawState State)
@@ -373,7 +373,7 @@ void __fastcall TNetShareDlg::ShareListBoxDrawItem(TWinControl *Control, int Ind
 		int xp = Rect.Left + SCALED_THIS(2);
 		int yp = Rect.Top  + get_TopMargin2(cv);
 
-		//ƒAƒNƒZƒXƒL[
+		//ã‚¢ã‚¯ã‚»ã‚¹ã‚­ãƒ¼
 		cv->Font->Color = get_ListFgCol();
 		cv->Font->Style = cv->Font->Style << fsUnderline;
 		if (isPC) {
@@ -392,20 +392,20 @@ void __fastcall TNetShareDlg::ShareListBoxDrawItem(TWinControl *Control, int Ind
 		cv->Font->Style = cv->Font->Style >> fsUnderline;
 		xp += get_CharWidth(cv, 2);
 
-		//ƒ‰ƒCƒuƒ‰ƒŠ
+		//ãƒ©ã‚¤ãƒ–ãƒ©ãƒª
 		if (isLibrary || (isPC && Index>=LibIdxBase)) {
 			draw_SmallIcon2(lbuf, cv, xp, std::max(yp + (cv->TextHeight("Q") - SCALED_THIS(16))/2, 0), this);
 			xp += SCALED_THIS(20);
 			cv->Font->Color = col_Folder;
 			cv->TextOut(xp, yp, get_base_name(lbuf));
 		}
-		//ŒŸõİ’è
+		//æ¤œç´¢è¨­å®š
 		else if (isFindSet) {
 			TStringDynArray itm_buf = split_strings_tab(lbuf);
 			cv->Font->Color = TColor(get_array_item(itm_buf, 1).ToIntDef((int)col_Folder));
 			cv->TextOut(xp, yp, get_base_name(get_array_item(itm_buf, 0)));
 		}
-		//ƒhƒ‰ƒCƒu
+		//ãƒ‰ãƒ©ã‚¤ãƒ–
 		else if (isPC) {
 			drive_info *dp = get_DriveInfo(lbuf);
 			if (dp) {
@@ -419,7 +419,7 @@ void __fastcall TNetShareDlg::ShareListBoxDrawItem(TWinControl *Control, int Ind
 			cv->Font->Color = get_ListFgCol();
 			cv->TextOut(xp, yp, get_tkn_r(lbuf, ' '));
 		}
-		//ƒfƒBƒŒƒNƒgƒŠA‚»‚Ì‘¼
+		//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã€ãã®ä»–
 		else {
 			if (IconMode==1 || IconMode==2) {
 				HICON hIcon = get_folder_icon(lbuf);
@@ -439,7 +439,7 @@ void __fastcall TNetShareDlg::ShareListBoxDrawItem(TWinControl *Control, int Ind
 			xp += cv->TextWidth(ExtractFileName(lbuf));
 		}
 
-		//ƒfƒBƒŒƒNƒgƒŠ‚Ìƒ^ƒCƒ€ƒXƒ^ƒ“ƒv
+		//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—
 		if (!isPC && !isLibrary && !isFindSet) {
 			TDateTime dt = get_file_age(lbuf);
 			if (dt!=(TDateTime)0) {
@@ -454,7 +454,7 @@ void __fastcall TNetShareDlg::ShareListBoxDrawItem(TWinControl *Control, int Ind
 		}
 	}
 
-	//ƒJ[ƒ\ƒ‹
+	//ã‚«ãƒ¼ã‚½ãƒ«
 	draw_ListCursor(lp, Rect, Index, State);
 }
 
@@ -465,7 +465,7 @@ void __fastcall TNetShareDlg::ShareListBoxKeyDown(TObject *Sender, WORD &Key, TS
 	UnicodeString KeyStr = get_KeyStr(Key, Shift);
 	UnicodeString cmd_F  = Key_to_CmdF(KeyStr);
 
-	//ƒhƒ‰ƒCƒuŠm’è
+	//ãƒ‰ãƒ©ã‚¤ãƒ–ç¢ºå®š
 	UnicodeString dstr;
 	if (isPC && (equal_ENTER(KeyStr) || (!KeyStr.IsEmpty() && isalpha(KeyStr[1])))) {
 		if (equal_ENTER(KeyStr)) {
@@ -494,7 +494,7 @@ void __fastcall TNetShareDlg::ShareListBoxKeyDown(TObject *Sender, WORD &Key, TS
 		return;
 	}
 
-	//Šm’è
+	//ç¢ºå®š
 	bool handled = true;
 	if (is_Num0to9(KeyStr) || equal_ENTER(KeyStr)) {
 		int idx;
@@ -509,15 +509,15 @@ void __fastcall TNetShareDlg::ShareListBoxKeyDown(TObject *Sender, WORD &Key, TS
 		if (idx!=-1) {
 			UnicodeString lbuf = lp->Items->Strings[idx];
 			if (!SameStr(lbuf, "-")) {
-				//ƒ‰ƒCƒuƒ‰ƒŠ
+				//ãƒ©ã‚¤ãƒ–ãƒ©ãƒª
 				if (isLibrary || (isPC && idx>=LibIdxBase)) {
 					NyanFiForm->PopSelLibrary(lbuf, CurListTag, lp);
 				}
-				//ŒŸõİ’è
+				//æ¤œç´¢è¨­å®š
 				else if (isFindSet) {
 					FileName = get_pre_tab(lp->Items->Strings[idx]);
 				}
-				//ƒfƒBƒŒƒNƒgƒŠA‹¤—L
+				//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã€å…±æœ‰
 				else {
 					UnicodeString pnam = GetListPathName(idx);
 					if (rqRetPath) {
@@ -533,7 +533,7 @@ void __fastcall TNetShareDlg::ShareListBoxKeyDown(TObject *Sender, WORD &Key, TS
 			}
 		}
 	}
-	//ƒpƒ“‚­‚¸ƒŠƒXƒg‚ği‚Ş
+	//ãƒ‘ãƒ³ããšãƒªã‚¹ãƒˆã‚’é€²ã‚€
 	else if (PathTabControl->Visible && is_ToRightOpe(KeyStr, cmd_F)) {
 		int p_idx = PathTabControl->TabIndex;
 		int idx = lp->ItemIndex;
@@ -554,7 +554,7 @@ void __fastcall TNetShareDlg::ShareListBoxKeyDown(TObject *Sender, WORD &Key, TS
 			}
 		}
 	}
-	//ƒpƒ“‚­‚¸ƒŠƒXƒg‚ğ–ß‚é
+	//ãƒ‘ãƒ³ããšãƒªã‚¹ãƒˆã‚’æˆ»ã‚‹
 	else if (PathTabControl->Visible && (is_ToLeftOpe(KeyStr, cmd_F) || SameText(get_CmdStr(cmd_F), "ToParent"))) {
 		int p_idx = PathTabControl->TabIndex;
 		if (p_idx>0) {
@@ -575,22 +575,22 @@ void __fastcall TNetShareDlg::ShareListBoxKeyDown(TObject *Sender, WORD &Key, TS
 			}
 		}
 	}
-	//ƒ|ƒbƒvƒAƒbƒvƒƒjƒ…[
+	//ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼
 	else if (contained_wd_i(KeysStr_Popup, KeyStr)) {
 		show_PopupMenu(lp);
 	}
-	//ƒJ[ƒ\ƒ‹ˆÚ“®
+	//ã‚«ãƒ¼ã‚½ãƒ«ç§»å‹•
 	else if	(ExeCmdListBox(lp, cmd_F)) {
 		if (PathTabControl->TabIndex<PathTabControl->Tabs->Count-1) {
 			int n = PathTabControl->Tabs->Count - PathTabControl->TabIndex - 1;
 			for (int i=0; i<n; i++) PathTabControl->Tabs->Delete(PathTabControl->Tabs->Count - 1);
 		}
 	}
-	//“ª•¶šƒT[ƒ`
+	//é ­æ–‡å­—ã‚µãƒ¼ãƒ
 	else if ((isOnlySub || PathTabControl->Visible) && is_IniSeaKey(KeyStr)) {
 		ListBoxInitialSearch(lp, KeyStr, true);
 	}
-	//ƒRƒs[
+	//ã‚³ãƒ”ãƒ¼
 	else if (SameText(KeyStr, KeyStr_Copy) || SameText(cmd_F, "CopyFileName")) {
 		UnicodeString lbuf = ListBoxGetStr(lp);
 		if (!lbuf.IsEmpty()) {
@@ -598,11 +598,11 @@ void __fastcall TNetShareDlg::ShareListBoxKeyDown(TObject *Sender, WORD &Key, TS
 			copy_to_Clipboard(lbuf);
 		}
 	}
-	//ƒvƒƒpƒeƒB
+	//ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	else if (SameText(cmd_F, "PropertyDlg")) {
 		PropertyAction->Execute();
 	}
-	//•Â‚¶‚é
+	//é–‰ã˜ã‚‹
 	else if (SameText(cmd_F, "ReturnList")) {
 		ModalResult = mrCancel;
 	}
@@ -615,7 +615,7 @@ void __fastcall TNetShareDlg::ShareListBoxKeyDown(TObject *Sender, WORD &Key, TS
 //---------------------------------------------------------------------------
 void __fastcall TNetShareDlg::ShareListBoxKeyPress(TObject *Sender, System::WideChar &Key)
 {
-	//ƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`‚ğ‰ñ”ğ
+	//ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ã‚¿ãƒ«ã‚µãƒ¼ãƒã‚’å›é¿
 	if (_istalnum(Key)) Key = 0;
 }
 //---------------------------------------------------------------------------
@@ -633,7 +633,7 @@ void __fastcall TNetShareDlg::ShareListBoxDblClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//UNCƒpƒX‚ğƒRƒs[
+//UNCãƒ‘ã‚¹ã‚’ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TNetShareDlg::CopyUncActionExecute(TObject *Sender)
 {
@@ -647,7 +647,7 @@ void __fastcall TNetShareDlg::CopyUncActionUpdate(TObject *Sender)
 	ap->Enabled = ap->Visible && (ShareListBox->ItemIndex!=-1);
 }
 //---------------------------------------------------------------------------
-//‚·‚×‚Ä‚ÌUNCƒpƒX‚ğƒRƒs[
+//ã™ã¹ã¦ã®UNCãƒ‘ã‚¹ã‚’ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TNetShareDlg::CopyUncAllActionExecute(TObject *Sender)
 {
@@ -666,7 +666,7 @@ void __fastcall TNetShareDlg::CopyUncAllActionUpdate(TObject *Sender)
 	ap->Enabled = ap->Visible && (ShareListBox->Count>0);
 }
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠEƒpƒX‚ğƒRƒs[
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãƒ»ãƒ‘ã‚¹ã‚’ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TNetShareDlg::CopyPathActionExecute(TObject *Sender)
 {
@@ -684,7 +684,7 @@ void __fastcall TNetShareDlg::CopyPathActionUpdate(TObject *Sender)
 	ap->Enabled = ap->Visible && (ShareListBox->ItemIndex!=-1);
 }
 //---------------------------------------------------------------------------
-//‚·‚×‚Ä‚ÌƒfƒBƒŒƒNƒgƒŠEƒpƒX‚ğƒRƒs[
+//ã™ã¹ã¦ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãƒ»ãƒ‘ã‚¹ã‚’ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TNetShareDlg::CopyPathAllActionExecute(TObject *Sender)
 {
@@ -707,7 +707,7 @@ void __fastcall TNetShareDlg::CopyPathAllActionUpdate(TObject *Sender)
 	ap->Enabled = ap->Visible && (ShareListBox->Count>0);
 }
 //---------------------------------------------------------------------------
-//•\¦F‚Ìİ’è
+//è¡¨ç¤ºè‰²ã®è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall TNetShareDlg::SetColorActionExecute(TObject *Sender)
 {
@@ -737,7 +737,7 @@ void __fastcall TNetShareDlg::SetColorActionUpdate(TObject *Sender)
 	ap->Enabled = ap->Visible && (ShareListBox->ItemIndex!=-1);
 }
 //---------------------------------------------------------------------------
-//ƒŠƒXƒgƒtƒ@ƒCƒ‹‚Ì•ÒW
+//ãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®ç·¨é›†
 //---------------------------------------------------------------------------
 void __fastcall TNetShareDlg::EditListActionExecute(TObject *Sender)
 {
@@ -754,7 +754,7 @@ void __fastcall TNetShareDlg::EditListActionUpdate(TObject *Sender)
 	ap->Enabled = (ap->Visible && !get_tsv_item(ListBoxGetStr(ShareListBox), 2).IsEmpty());
 }
 //---------------------------------------------------------------------------
-//œŠOƒfƒBƒŒƒNƒgƒŠ‚Ìİ’è
+//é™¤å¤–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall TNetShareDlg::SetSkipDirActionExecute(TObject *Sender)
 {
@@ -763,8 +763,8 @@ void __fastcall TNetShareDlg::SetSkipDirActionExecute(TObject *Sender)
 	if (idx!=-1) {
 		std::unique_ptr<UsrIniFile> set_file(new UsrIniFile(get_tsv_item(lp->Items->Strings[idx], 0)));
 		UnicodeString sct = "FindSettings";
-		if (!EditItemDlg) EditItemDlg = new TEditItemDlg(this);	//‰‰ñ‚É“®“Iì¬
-		EditItemDlg->AssignText("œŠOƒfƒBƒŒƒNƒgƒŠ", set_file->ReadString(sct, "SkipDir"));
+		if (!EditItemDlg) EditItemDlg = new TEditItemDlg(this);	//åˆå›ã«å‹•çš„ä½œæˆ
+		EditItemDlg->AssignText("é™¤å¤–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª", set_file->ReadString(sct, "SkipDir"));
 		if (show_ModalDlg(EditItemDlg)==mrOk) {
 			set_file->WriteString(sct, "SkipDir", EditItemDlg->RetStr);
 			set_file->UpdateFile(true);
@@ -780,7 +780,7 @@ void __fastcall TNetShareDlg::SetSkipDirActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒvƒƒpƒeƒB
+//ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 //---------------------------------------------------------------------------
 void __fastcall TNetShareDlg::PropertyActionExecute(TObject *Sender)
 {

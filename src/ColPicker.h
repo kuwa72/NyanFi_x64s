@@ -1,6 +1,6 @@
 /**
  * @file ColPicker.h
- * @brief ƒJƒ‰[ƒsƒbƒJ[
+ * @brief ã‚«ãƒ©ãƒ¼ãƒ”ãƒƒã‚«ãƒ¼
  */
 //---------------------------------------------------------------------------
 #ifndef ColPickerH
@@ -19,11 +19,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒJƒ‰[ƒsƒbƒJ[
+ * @brief ã‚«ãƒ©ãƒ¼ãƒ”ãƒƒã‚«ãƒ¼
  */
 class TColorPicker : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *StartRepAction;
 	TActionList *ActionList1;
 	TApplicationEvents *ApplicationEvents1;
@@ -51,12 +51,12 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall StartRepActionUpdate(TObject *Sender);
 
 private:
-	bool Repeating;		//˜A‘±æ“¾’†
+	bool Repeating;		//é€£ç¶šå–å¾—ä¸­
 	int  RepCount;
 	UnicodeString RepCopyBuff;
 	UnicodeString DefColCaption;
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	TImage *ViewImage;
 
 	__fastcall TColorPicker(TComponent* Owner);

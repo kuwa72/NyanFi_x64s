@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------//
-// ���b�Z�[�W															//
+// メッセージ															//
 //																		//
 //----------------------------------------------------------------------//
 #include "usr_str.h"
@@ -9,93 +9,93 @@
 #pragma package(smart_init)
 
 //---------------------------------------------------------------------------
-//���b�Z�[�W������̎擾
+//メッセージ文字列の取得
 //---------------------------------------------------------------------------
 UnicodeString LoadUsrMsg(int id, UnicodeString s)
 {
 	std::unique_ptr<TStringList> msg_lst(new TStringList());
 	msg_lst->Text =
-		"1001=%s��������܂���B\n"							//USTR_NotFound
-		"1002=%s���̑���ɂ͑Ή����Ă��܂���B\n"				//USTR_OpeNotSuported
-		"1003=���̑���͂ł��܂���B\n"							//USTR_CantOperate
-		"1004=�Ή����Ă��Ȃ��`���ł��B\n"						//USTR_FmtNotSuported
-		"1005=�ꎞ�𓀂Ɏ��s���܂����B\n"						//USTR_FaildTmpUnpack
-		"1006=�ړ��悪�����ł��B\n"								//USTR_SameMoveDest
-		"1007=�R�s�[�悪�����ł��B\n"							//USTR_SameCopyDest
-		"1008=�f�B���N�g�����܂܂�Ă��܂��B\n"					//USTR_IncludeDir
-		"1009=�f�B���N�g���ɃA�N�Z�X�ł��܂���B\n"				//USTR_CantAccessDir
-		"1010=�s���ȓ��t�܂��͎����ł��B\n"						//USTR_IllegalDate
-		"1011=�s���Ȏw��ł��B\n"								//USTR_IllegalParam
-		"1012=�s���Ȍ`���ł��B\n"								//USTR_IllegalFormat
-		"1013=�s���ȃA�h���X�ł�\n"								//USTR_IllegalAddress
-		"1014=�N���Ɏ��s���܂����B\n"							//USTR_FaildExec
-		"1015=�����Ɏ��s���܂����B\n"							//USTR_FaildProc
-		"1016=�ǂݍ��݂Ɏ��s���܂����B\n"						//USTR_FaildLoad
-		"1017=%s�̕ۑ��Ɏ��s���܂����B\n"						//USTR_FaildSave
-		"1018=�폜�Ɏ��s���܂����B\n"							//USTR_FaildDelete
-		"1019=�R�s�[�Ɏ��s���܂����B\n"							//USTR_FaildCopy
-		"1020=���j���[�����s�ł��܂���B\n"						//USTR_FaildMenu
-		"1021=���f���܂����B\n"									//USTR_Canceled
-		"1022=���[�N���X�g���J���܂���B\n"						//USTR_WlistCantOpen
-		"1023=�������ɂ��̑���͂ł��܂���B\n"					//USTR_ProcBusy
-		"1024=�Ώۂ�����܂���B\n"								//USTR_NoObject
-		"1025=���K�\���Ɍ�肪����܂��B\n"						//USTR_IllegalRegEx
-		"1026=����������̓���\n"								//USTR_InputFmtStr
-		"1027=���łɓo�^����Ă��܂��B\n"						//USTR_Registered
-		"1028=�@������...�^�@ESC�L�[�Œ��f���܂��B\n"			//USTR_SearchingESC
-		"1029=�@�v�Z��...�^�@ESC�L�[�Œ��f���܂��B\n"			//USTR_CalculatingESC
-		"1030=�@������...�^�@ESC�L�[�Œ��f���܂��B\n"			//USTR_ProcessingESC
-		"1031=�@������...�^�@���΂炭���������������B\n"		//USTR_WaitForReady
-		"1032=���X�|���X�t�@�C���̍쐬�Ɏ��s���܂����B\n"		//USTR_FaildListFile
-		"1033=�ꎞ�f�B���N�g�����쐬�ł��܂���B\n"				//USTR_CantMakeTmpDir
-		"1034=�s���ȍ\���ł��B\n"								//USTR_SyntaxError
-		"1035=�Ή����鐧�䕶��������܂���B\n"				//USTR_BadStatmet
-		"1036=�p�����[�^���w�肳��Ă��܂���B\n"				//USTR_NoParameter
-		"1037=�A�v���P�[�V������������܂���B\n"				//USTR_AppNotFound
-		"1038=�摜�̏������ł��Ă��܂���B\n"					//USTR_ImgNotReady
-		"1039=�t�@�C�����J���܂���B\n"							//USTR_FileNotOpen
-		"1040=�f�B���N�g����������܂���B\n"					//USTR_DirNotFound
-		"1041=�����ȃR�}���h�ł��B\n"							//USTR_InvalidCmd
-		"1042=. �ŋ�؂��ĕ����w��\\n"						//USTR_HintMltFExt
-		"1043=; �ŋ�؂��ĕ����w��\\n"						//USTR_HintMltSepSC
-		"1044=�Ή�����G�f�B�^������܂���\n"					//USTR_NoEditor
-		"1045=�Đ��ł��܂���B\n"								//USTR_CantPlay
-		"1046=%s�ɖ��O��t���ĕۑ�\n"							//USTR_SaveAs
-		"1047=�f�B���N�g��[%s]���쐬�ł��܂���B\n"				//USTR_CantCreDir
-		"1048=%s���R�s�[���܂���?\n"							//USTR_CopyQ
-		"1049=%s���폜���܂���?\n"								//USTR_DeleteQ
-		"1050=%s�����S�폜���܂���?\n"							//USTR_CompDeleteQ
-		"1051=%s�̗��������ׂč폜���܂���?\n"					//USTR_DelHistoryQ
-		"1052=���ׂĂ̏ꏊ�̂��ׂẴ}�[�N���������܂���?\n"	//USTR_ClrAllMarkQ
-		"1053=�R�}���h�𒆒f���܂���?\n"						//USTR_CancelCmdQ
-		"1054=�A�[�J�C�u���J���܂���B\n"						//USTR_ArcNotOpen
-		"1055=�e�L�X�g�t�@�C���ł͂���܂���B\n"				//USTR_NotText
-		"1056=%s�𒊏o���܂���?\n"								//USTR_Extract
-		"1057=%s��񂪎擾�ł��܂���B\n"						//USTR_CantGetInfo
-		"1058=���O���d�����Ă��܂��B\n"							//USTR_DuplicateName
-		"1059=�㏑�����Ă��悢�ł���?\n"						//USTR_OverwriteQ
-		"1060=%s���A�b�v���[�h���܂���?\n"						//USTR_UploadQ
-		"1061=%s���_�E�����[�h���܂���?\n"						//USTR_DownloadQ
-		"1062=�폜�J�n  %s\n"									//USTR_BeginDelete
-		"1063=�����t�@�C���̏��� <%s>\n"						//USTR_SameName
-		"1064=���O�̕ύX\n"										//USTR_Rename
-		"1065=�f�B���N�g�������̈قȂ铯���Ώۂ����݂��܂��B\n"	//USTR_NgSameName
-		"1066=�s���ȓ��t�����ł��B\n"							//USTR_IllegalDtCond
-		"1067=�I���}�X�N���̃��[�N���X�g�͕ύX�ł��܂���B\n"	//USTR_WorkFiltered
-		"1068=���E������f�B���N�g���ł��B\n"					//USTR_SameDirLR
-		"1069=Git�̍�ƃf�B���N�g���ł͂���܂���B\n"			//USTR_NotRepository
-		"1070=�ݒ�p�l�����B��\n"								//USTR_HideOptPanel
-		"1071=�ݒ�p�l����\��\n"								//USTR_ShowOptPanel
-		"1072=%s �R�}���h�ŕύX�\\n"							//USTR_HintOptCmd
-		"1073=�T�E���h���ʎq�ł���\n"							//USTR_HintSndID
+		_T("1001=%sが見つかりません。\n")							//USTR_NotFound
+		_T("1002=%sこの操作には対応していません。\n")				//USTR_OpeNotSuported
+		_T("1003=この操作はできません。\n")							//USTR_CantOperate
+		_T("1004=対応していない形式です。\n")						//USTR_FmtNotSuported
+		_T("1005=一時解凍に失敗しました。\n")						//USTR_FaildTmpUnpack
+		_T("1006=移動先が同じです。\n")								//USTR_SameMoveDest
+		_T("1007=コピー先が同じです。\n")							//USTR_SameCopyDest
+		_T("1008=ディレクトリが含まれています。\n")					//USTR_IncludeDir
+		_T("1009=ディレクトリにアクセスできません。\n")				//USTR_CantAccessDir
+		_T("1010=不正な日付または時刻です。\n")						//USTR_IllegalDate
+		_T("1011=不正な指定です。\n")								//USTR_IllegalParam
+		_T("1012=不正な形式です。\n")								//USTR_IllegalFormat
+		_T("1013=不正なアドレスです\n")								//USTR_IllegalAddress
+		_T("1014=起動に失敗しました。\n")							//USTR_FaildExec
+		_T("1015=処理に失敗しました。\n")							//USTR_FaildProc
+		_T("1016=読み込みに失敗しました。\n")						//USTR_FaildLoad
+		_T("1017=%sの保存に失敗しました。\n")						//USTR_FaildSave
+		_T("1018=削除に失敗しました。\n")							//USTR_FaildDelete
+		_T("1019=コピーに失敗しました。\n")							//USTR_FaildCopy
+		_T("1020=メニューが実行できません。\n")						//USTR_FaildMenu
+		_T("1021=中断しました。\n")									//USTR_Canceled
+		_T("1022=ワークリストを開けません。\n")						//USTR_WlistCantOpen
+		_T("1023=処理中にこの操作はできません。\n")					//USTR_ProcBusy
+		_T("1024=対象がありません。\n")								//USTR_NoObject
+		_T("1025=正規表現に誤りがあります。\n")						//USTR_IllegalRegEx
+		_T("1026=書式文字列の入力\n")								//USTR_InputFmtStr
+		_T("1027=すでに登録されています。\n")						//USTR_Registered
+		_T("1028=　検索中...／　ESCキーで中断します。\n")			//USTR_SearchingESC
+		_T("1029=　計算中...／　ESCキーで中断します。\n")			//USTR_CalculatingESC
+		_T("1030=　処理中...／　ESCキーで中断します。\n")			//USTR_ProcessingESC
+		_T("1031=　処理中...／　しばらくお持ちください。\n")		//USTR_WaitForReady
+		_T("1032=レスポンスファイルの作成に失敗しました。\n")		//USTR_FaildListFile
+		_T("1033=一時ディレクトリが作成できません。\n")				//USTR_CantMakeTmpDir
+		_T("1034=不正な構文です。\n")								//USTR_SyntaxError
+		_T("1035=対応する制御文が見つかりません。\n")				//USTR_BadStatmet
+		_T("1036=パラメータが指定されていません。\n")				//USTR_NoParameter
+		_T("1037=アプリケーションが見つかりません。\n")				//USTR_AppNotFound
+		_T("1038=画像の準備ができていません。\n")					//USTR_ImgNotReady
+		_T("1039=ファイルを開けません。\n")							//USTR_FileNotOpen
+		_T("1040=ディレクトリが見つかりません。\n")					//USTR_DirNotFound
+		_T("1041=無効なコマンドです。\n")							//USTR_InvalidCmd
+		_T("1042=. で区切って複数指定可能\n")						//USTR_HintMltFExt
+		_T("1043=; で区切って複数指定可能\n")						//USTR_HintMltSepSC
+		_T("1044=対応するエディタがありません\n")					//USTR_NoEditor
+		_T("1045=再生できません。\n")								//USTR_CantPlay
+		_T("1046=%sに名前を付けて保存\n")							//USTR_SaveAs
+		_T("1047=ディレクトリ[%s]が作成できません。\n")				//USTR_CantCreDir
+		_T("1048=%sをコピーしますか?\n")							//USTR_CopyQ
+		_T("1049=%sを削除しますか?\n")								//USTR_DeleteQ
+		_T("1050=%sを完全削除しますか?\n")							//USTR_CompDeleteQ
+		_T("1051=%sの履歴をすべて削除しますか?\n")					//USTR_DelHistoryQ
+		_T("1052=すべての場所のすべてのマークを解除しますか?\n")	//USTR_ClrAllMarkQ
+		_T("1053=コマンドを中断しますか?\n")						//USTR_CancelCmdQ
+		_T("1054=アーカイブを開けません。\n")						//USTR_ArcNotOpen
+		_T("1055=テキストファイルではありません。\n")				//USTR_NotText
+		_T("1056=%sを抽出しますか?\n")								//USTR_Extract
+		_T("1057=%s情報が取得できません。\n")						//USTR_CantGetInfo
+		_T("1058=名前が重複しています。\n")							//USTR_DuplicateName
+		_T("1059=上書きしてもよいですか?\n")						//USTR_OverwriteQ
+		_T("1060=%sをアップロードしますか?\n")						//USTR_UploadQ
+		_T("1061=%sをダウンロードしますか?\n")						//USTR_DownloadQ
+		_T("1062=削除開始  %s\n")									//USTR_BeginDelete
+		_T("1063=同名ファイルの処理 <%s>\n")						//USTR_SameName
+		_T("1064=名前の変更\n")										//USTR_Rename
+		_T("1065=ディレクトリ属性の異なる同名対象が存在します。\n")	//USTR_NgSameName
+		_T("1066=不正な日付条件です。\n")							//USTR_IllegalDtCond
+		_T("1067=選択マスク中のワークリストは変更できません。\n")	//USTR_WorkFiltered
+		_T("1068=左右が同一ディレクトリです。\n")					//USTR_SameDirLR
+		_T("1069=Gitの作業ディレクトリではありません。\n")			//USTR_NotRepository
+		_T("1070=設定パネルを隠す\n")								//USTR_HideOptPanel
+		_T("1071=設定パネルを表示\n")								//USTR_ShowOptPanel
+		_T("1072=%s コマンドで変更可能\n")							//USTR_HintOptCmd
+		_T("1073=サウンド識別子でも可\n")							//USTR_HintSndID
 
-		"1100=�I������\n"										//USTR_SelectedItem
-		"1101=�ꗗ\n"											//USTR_List
-		"1102=�A�b�v���[�h\n"									//USTR_Upload
-		"1103=�_�E�����[�h\n";									//USTR_Download
+		_T("1100=選択項目\n")										//USTR_SelectedItem
+		_T("1101=一覧\n")											//USTR_List
+		_T("1102=アップロード\n")									//USTR_Upload
+		_T("1103=ダウンロード\n");									//USTR_Download
 
-	UnicodeString ret_str = ReplaceStr(msg_lst->Values[IntToStr(id)], "�^", "\r\n");
-	ret_str = s.IsEmpty()? TRegEx::Replace(ret_str, "%s[�̂�����]?", EmptyStr) : ReplaceStr(ret_str, "%s", s);
+	UnicodeString ret_str = ReplaceStr(msg_lst->Values[IntToStr(id)], _T("／"), "\r\n");
+	ret_str = s.IsEmpty()? TRegEx::Replace(ret_str, _T("%s[のをがに]?"), EmptyStr) : ReplaceStr(ret_str, "%s", s);
 	return ret_str;
 }
 //---------------------------------------------------------------------------
@@ -110,7 +110,7 @@ UnicodeString LoadUsrMsg(int id, int id_s)
 }
 
 //---------------------------------------------------------------------------
-//���[�U��`���b�Z�[�W�� EAbort �𑗏o
+//ユーザ定義メッセージの EAbort を送出
 //---------------------------------------------------------------------------
 void UserAbort(unsigned id)
 {
@@ -149,7 +149,7 @@ void EmptyAbort()
 }
 
 //---------------------------------------------------------------------------
-//�m�F���b�Z�[�W
+//確認メッセージ
 //---------------------------------------------------------------------------
 bool SureCopy;
 bool SureMove;
@@ -167,142 +167,7 @@ bool SureDefNo;
 bool SureAdjPos;
 bool MsgPosCenter = false;
 
-//---------------------------------------------------------------------------
-//�G���[���b�Z�[�W
-//---------------------------------------------------------------------------
-void msgbox_ERR(UnicodeString msg)
-{
-	if (msg.IsEmpty()) return;
-
-	Screen->MessageFont->Assign(Application->DefaultFont);
-	TForm *MsgDlg = CreateMessageDialog(msg, mtError, TMsgDlgButtons() << mbOK, mbOK);
-	MsgDlg->ShowModal();
-	delete MsgDlg;
-}
-//---------------------------------------------------------------------------
-void msgbox_ERR(unsigned id)
-{
-	msgbox_ERR(LoadUsrMsg(id));
-}
-
-//---------------------------------------------------------------------------
-//�x�����b�Z�[�W
-//---------------------------------------------------------------------------
-void msgbox_WARN(UnicodeString msg)
-{
-	if (msg.IsEmpty()) return;
-
-	Screen->MessageFont->Assign(Application->DefaultFont);
-	TForm *MsgDlg = CreateMessageDialog(msg, mtWarning, TMsgDlgButtons() << mbOK, mbOK);
-	MsgDlg->ShowModal();
-	delete MsgDlg;
-}
-//---------------------------------------------------------------------------
-void msgbox_WARN(unsigned id)
-{
-	msgbox_WARN(LoadUsrMsg(id));
-}
-
-//---------------------------------------------------------------------------
-//�m�F���b�Z�[�W
-//---------------------------------------------------------------------------
-void msgbox_OK(UnicodeString msg, UnicodeString tit)
-{
-	Screen->MessageFont->Assign(Application->DefaultFont);
-	TForm *MsgDlg = CreateMessageDialog(msg, mtConfirmation, TMsgDlgButtons() << mbOK, mbOK);
-	if (!tit.IsEmpty()) MsgDlg->Caption = tit;
-	MsgDlg->ShowModal();
-	delete MsgDlg;
-}
-//---------------------------------------------------------------------------
-bool msgbox_Y_N(UnicodeString msg, UnicodeString tit)
-{
-	Screen->MessageFont->Assign(Application->DefaultFont);
-	TMsgDlgButtons opt = TMsgDlgButtons() << mbYes << mbNo;
-	TForm *MsgDlg = CreateMessageDialog(msg, mtConfirmation, opt, SureDefNo? mbNo : mbYes);
-	if (!tit.IsEmpty()) MsgDlg->Caption = tit;
-	int res = MsgDlg->ShowModal();
-	delete MsgDlg;
-	return (res==mrYes);
-}
-//---------------------------------------------------------------------------
-TModalResult msgbox_Y_N_C(UnicodeString msg, UnicodeString tit)
-{
-	Screen->MessageFont->Assign(Application->DefaultFont);
-	TMsgDlgButtons opt = TMsgDlgButtons() << mbYes << mbNo << mbCancel;
-	TForm *MsgDlg = CreateMessageDialog(msg, mtConfirmation, opt, SureDefNo? mbNo : mbYes);
-	if (!tit.IsEmpty()) MsgDlg->Caption = tit;
-	TModalResult res = MsgDlg->ShowModal();
-	delete MsgDlg;
-	return res;
-}
-//---------------------------------------------------------------------------
-TModalResult msgbox_Retry(UnicodeString msg, UnicodeString tit)
-{
-	Screen->MessageFont->Assign(Application->DefaultFont);
-	TMsgDlgButtons opt = TMsgDlgButtons() << mbRetry  << mbCancel;
-	TForm *MsgDlg = CreateMessageDialog(msg, mtError, opt, mbRetry);
-	if (!tit.IsEmpty()) MsgDlg->Caption = tit;
-	TModalResult res = MsgDlg->ShowModal();
-	delete MsgDlg;
-	return res;
-}
-
-//---------------------------------------------------------------------------
-bool msgbox_Sure(UnicodeString msg, bool ask, bool center)
-{
-	if (!ask) return true;
-
-	Screen->MessageFont->Assign(Application->DefaultFont);
-	TMsgDlgButtons opt = TMsgDlgButtons() << mbYes << mbNo;
-	if (SureCancel) opt << mbCancel;
-	TForm *MsgDlg = CreateMessageDialog(msg, mtConfirmation, opt, SureDefNo? mbNo : mbYes);
-
-	MsgPosCenter = center;
-	int res = MsgDlg->ShowModal();
-	MsgPosCenter = false;
-	delete MsgDlg;
-
-	return (res==mrYes);
-}
-//---------------------------------------------------------------------------
-bool msgbox_Sure(const _TCHAR *msg, bool ask, bool center)
-{
-	return msgbox_Sure(UnicodeString(msg), ask, center);
-}
-//---------------------------------------------------------------------------
-bool msgbox_Sure(unsigned id, bool ask, bool center)
-{
-	return msgbox_Sure(LoadUsrMsg(id), ask, center);
-}
-
-//---------------------------------------------------------------------------
-//�u���ׂĂɓK�p�v�`�F�b�N�{�b�N�X�t���m�F���b�Z�[�W
-//---------------------------------------------------------------------------
-int msgbox_SureAll(UnicodeString msg, bool &app_chk, bool center)
-{
-	Screen->MessageFont->Assign(Application->DefaultFont);
-	TForm *MsgDlg = CreateMessageDialog(msg, mtConfirmation,
-						TMsgDlgButtons() << mbYes << mbNo << mbCancel,
-						SureDefNo? mbNo : mbYes);
-
-	//�u���ׂĂɓK�p�v�`�F�b�N�{�b�N�X��ǉ�
-	TCheckBox *cp = new TCheckBox(MsgDlg);
-	MsgDlg->ClientHeight = MsgDlg->ClientHeight + cp->Height + 12;
-
-	cp->Caption = "���ׂĂɓK�p(&A)";
-	cp->Parent	= MsgDlg;
-	cp->Left	= 20;
-	cp->Top		= MsgDlg->ClientHeight - cp->Height - 12;
-	cp->Width	= MsgDlg->ClientWidth - cp->Left;
-
-	MsgPosCenter = center;
-	int res = MsgDlg->ShowModal();
-	MsgPosCenter = false;
-
-	app_chk = cp->Checked;
-	delete MsgDlg;
-
-	return res;
-}
+// msgbox_ERR/msgbox_WARN/msgbox_OK/msgbox_Y_N/msgbox_Y_N_C/msgbox_Retry/
+// msgbox_Sure/msgbox_SureAll (メッセージボックス表示そのもの) は
+// src/usr_msg_dlg.cpp に分離した。理由は同ファイル冒頭のコメントを参照。
 //---------------------------------------------------------------------------

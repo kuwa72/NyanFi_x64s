@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒfƒBƒŒƒNƒgƒŠˆêŠ‡ì¬ƒ_ƒCƒAƒƒO										//
+//  ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä¸€æ‹¬ä½œæˆãƒ€ã‚¤ã‚¢ãƒ­ã‚°										//
 //----------------------------------------------------------------------//
 #include "Global.h"
 #include "UserFunc.h"
@@ -77,7 +77,7 @@ void __fastcall TCreateDirsDlg::FormKeyDown(TObject *Sender, WORD &Key, TShiftSt
 	SpecialKeyProc(this, Key, Shift);
 }
 //---------------------------------------------------------------------------
-//˜A”Ô‚ğ•t‰Á
+//é€£ç•ªã‚’ä»˜åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TCreateDirsDlg::AddSerActionExecute(TObject *Sender)
 {
@@ -106,7 +106,7 @@ void __fastcall TCreateDirsDlg::AddSerActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = !StartEdit->Text.IsEmpty() && EditToInt(IncEdit, 0)>0;
 }
 //---------------------------------------------------------------------------
-//•¶š—ñ‚ğ•t‰Á
+//æ–‡å­—åˆ—ã‚’ä»˜åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TCreateDirsDlg::AddStrActionExecute(TObject *Sender)
 {
@@ -128,7 +128,7 @@ void __fastcall TCreateDirsDlg::AddStrActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = !StrEdit->Text.IsEmpty();
 }
 //---------------------------------------------------------------------------
-//“ú•t‚ğ•t‰Á
+//æ—¥ä»˜ã‚’ä»˜åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TCreateDirsDlg::AddDateActionExecute(TObject *Sender)
 {
@@ -171,25 +171,25 @@ void __fastcall TCreateDirsDlg::AddDateActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//‹ó€–Ú‚ğ’Ç‰Á
+//ç©ºé …ç›®ã‚’è¿½åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TCreateDirsDlg::AddEmptyItemClick(TObject *Sender)
 {
-	int n = inputbox_ex_n(_T("‹ó€–Ú‚ğ’Ç‰Á"), _T("€–Ú”"));
+	int n = inputbox_ex_n(_T("ç©ºé …ç›®ã‚’è¿½åŠ "), _T("é …ç›®æ•°"));
 	if (n>0) {
 		for (int i=0; i<n; i++) ListMemo->Lines->Add(EmptyStr);
 	}
 }
 
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠ\‘¢‚ğQÆ
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæ§‹é€ ã‚’å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TCreateDirsDlg::GetSubDirItemClick(TObject *Sender)
 {
 	UnicodeString dnam = RefDir;
-	if (UserModule->SelectDirEx(_T("ƒTƒuƒfƒBƒŒƒNƒgƒŠ‚ğæ“¾"), dnam)) {
+	if (UserModule->SelectDirEx(_T("ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’å–å¾—"), dnam)) {
 		cursor_HourGlass();
-		StatusBar1->Panels->Items[0]->Text = "æ“¾’†...";
+		StatusBar1->Panels->Items[0]->Text = "å–å¾—ä¸­...";
 		RefDir = dnam;
 		std::unique_ptr<TStringList> lst(new TStringList());
 		get_SubDirs(dnam, lst.get(), StatusBar1, 1);
@@ -207,7 +207,7 @@ void __fastcall TCreateDirsDlg::GetSubDirItemClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//‹Ö~•¶š‚Ì’uŠ·
+//ç¦æ­¢æ–‡å­—ã®ç½®æ›
 //---------------------------------------------------------------------------
 void __fastcall TCreateDirsDlg::RepCharItemClick(TObject *Sender)
 {
@@ -223,7 +223,7 @@ void __fastcall TCreateDirsDlg::RepCharItemClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//Œ³‚É–ß‚·
+//å…ƒã«æˆ»ã™
 //---------------------------------------------------------------------------
 void __fastcall TCreateDirsDlg::UndoActionExecute(TObject *Sender)
 {
@@ -237,11 +237,11 @@ void __fastcall TCreateDirsDlg::UndoActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒŠƒXƒg‚É–¼‘O‚ğ•t‚¯‚Ä•Û‘¶
+//ãƒªã‚¹ãƒˆã«åå‰ã‚’ä»˜ã‘ã¦ä¿å­˜
 //---------------------------------------------------------------------------
 void __fastcall TCreateDirsDlg::SaveListActionExecute(TObject *Sender)
 {
-	UserModule->PrepareSaveDlg(_T("ƒŠƒXƒg‚Ì•Û‘¶"), F_FILTER_TXT);
+	UserModule->PrepareSaveDlg(_T("ãƒªã‚¹ãƒˆã®ä¿å­˜"), F_FILTER_TXT);
 	UnicodeString fnam = UserModule->SaveDlgExecute();
 	if (!fnam.IsEmpty() && !saveto_TextUTF8(fnam, ListMemo->Lines)) msgbox_ERR(USTR_FaildSave);
 }
@@ -251,11 +251,11 @@ void __fastcall TCreateDirsDlg::SaveListActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = ListMemo->Lines->Count>0;
 }
 //---------------------------------------------------------------------------
-//ƒŠƒXƒg‚ğƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚Ş
+//ãƒªã‚¹ãƒˆã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã‚€
 //---------------------------------------------------------------------------
 void __fastcall TCreateDirsDlg::LoadListActionExecute(TObject *Sender)
 {
-	UserModule->PrepareOpenDlg(_T("ƒŠƒXƒg‚Ì“Ç‚İ‚İ"), F_FILTER_TXT, NULL);
+	UserModule->PrepareOpenDlg(_T("ãƒªã‚¹ãƒˆã®èª­ã¿è¾¼ã¿"), F_FILTER_TXT, NULL);
 	UnicodeString fnam = UserModule->OpenDlgExecute();
 	if (!fnam.IsEmpty()) {
 		std::unique_ptr<TStringList> lst(new TStringList());
@@ -267,7 +267,7 @@ void __fastcall TCreateDirsDlg::LoadListActionExecute(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//ƒŠƒXƒg‚ğƒNƒŠƒA
+//ãƒªã‚¹ãƒˆã‚’ã‚¯ãƒªã‚¢
 //---------------------------------------------------------------------------
 void __fastcall TCreateDirsDlg::ClearListItemClick(TObject *Sender)
 {
@@ -287,7 +287,7 @@ void __fastcall TCreateDirsDlg::ListMemoKeyDown(TObject *Sender, WORD &Key, TShi
 }
 
 //---------------------------------------------------------------------------
-//ì¬
+//ä½œæˆ
 //---------------------------------------------------------------------------
 void __fastcall TCreateDirsDlg::CreateActionExecute(TObject *Sender)
 {
@@ -308,12 +308,12 @@ void __fastcall TCreateDirsDlg::CreateActionUpdate(TObject *Sender)
 
 	if (itm_cnt>0) {
 		UnicodeString tmp;
-		StatusBar1->Panels->Items[0]->Text = tmp.cat_sprintf(_T("€–Ú”: %u"), itm_cnt);
+		StatusBar1->Panels->Items[0]->Text = tmp.cat_sprintf(_T("é …ç›®æ•°: %u"), itm_cnt);
 		StatusBar1->Panels->Items[1]->Text = EmptyStr;
 	}
 	else {
 		StatusBar1->Panels->Items[0]->Text = EmptyStr;
-		StatusBar1->Panels->Items[1]->Text = "ì¬‚·‚é€–Ú‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
+		StatusBar1->Panels->Items[1]->Text = "ä½œæˆã™ã‚‹é …ç›®ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚";
 	}
 }
 //---------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 /**
  * @file TagDlg.h
- * @brief ƒ^ƒOİ’è/ŒŸõ/ƒtƒHƒ‹ƒ_ƒAƒCƒRƒ“ŒŸõ
+ * @brief ã‚¿ã‚°è¨­å®š/æ¤œç´¢/ãƒ•ã‚©ãƒ«ãƒ€ã‚¢ã‚¤ã‚³ãƒ³æ¤œç´¢
  */
 //---------------------------------------------------------------------------
 #ifndef TagDlgH
@@ -24,11 +24,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒ^ƒOİ’è/ŒŸõ/ƒtƒHƒ‹ƒ_ƒAƒCƒRƒ“ŒŸõ
+ * @brief ã‚¿ã‚°è¨­å®š/æ¤œç´¢/ãƒ•ã‚©ãƒ«ãƒ€ã‚¢ã‚¤ã‚³ãƒ³æ¤œç´¢
  */
 class TTagManDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *AndAction;
 	TAction *CountTagAction;
 	TAction *DefColorAction;
@@ -125,14 +125,14 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall RevColActionExecute(TObject *Sender);
 	void __fastcall CanButtonClick(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	bool DlgInitialized;
 	int  MaxTagWidth;
 	bool InhEdit;
 	bool IsFolderIcon;
 	bool KeyHandled;
 
-	UsrScrollPanel *ListScrPanel;	//ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[
+	UsrScrollPanel *ListScrPanel;	//ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 	UsrSwatchPanel *SwatchPanel;
 
 	void __fastcall WmFormShowed(TMessage &msg);
@@ -145,7 +145,7 @@ private:	// ƒ†[ƒU[éŒ¾
 	void __fastcall SetCtrlFocus();
 	void __fastcall SetOptBtn();
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	UnicodeString CmdStr;
 
 	__fastcall TTagManDlg(TComponent* Owner);

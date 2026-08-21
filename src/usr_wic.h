@@ -1,6 +1,6 @@
 /**
  * @file usr_wic.h
- * @brief WICŠÖ˜A‚ÌŠÖ”
+ * @brief WICé–¢é€£ã®é–¢æ•°
  */
 //---------------------------------------------------------------------------
 #ifndef UserWicH
@@ -11,107 +11,107 @@
 #define WICIMG_PREVIEW		1
 #define WICIMG_THUMBNAIL	2
 
-/** ƒtƒŒ[ƒ€‚ğ—D¨“I‚Éæ“¾‚·‚éŠg’£q */
+/** ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’å„ªå‹¢çš„ã«å–å¾—ã™ã‚‹æ‹¡å¼µå­ */
 #define FEXT_FRAME_PRI		_T(".bmp.png.gif.tif.wdp.hdp.jpg.jpeg.jpe.webp.heic.eps.psd")
 
 //---------------------------------------------------------------------------
 
 /**
- * @brief WICŠg’£ƒR[ƒfƒbƒNˆê——‚Ìæ“¾
- * @param[out] lst î•ñˆê——
- * @param[out] fxstr Šg’£q
- * @return int €–Ú”
+ * @brief WICæ‹¡å¼µã‚³ãƒ¼ãƒ‡ãƒƒã‚¯ä¸€è¦§ã®å–å¾—
+ * @param[out] lst æƒ…å ±ä¸€è¦§
+ * @param[out] fxstr æ‹¡å¼µå­
+ * @return int é …ç›®æ•°
  */
 int WIC_get_ex_list(TStringList *lst, UnicodeString *fxstr = NULL);
 
 /**
- * @brief ƒƒ‚ƒŠ“à—e‚ğw’èŒ`®‚ÅƒfƒR[ƒh‚µ‚Äƒrƒbƒgƒ}ƒbƒv‚ğæ“¾
- * @param ms ‘ÎÛƒƒ‚ƒŠƒXƒgƒŠ[ƒ€
- * @param[out] o_bmp o—Íƒrƒbƒgƒ}ƒbƒv
- * @param fmt ƒRƒ“ƒeƒiŒ`®‚ÌGUID
- * @return true ¬Œ÷
- * @return false ¸”s
+ * @brief ãƒ¡ãƒ¢ãƒªå†…å®¹ã‚’æŒ‡å®šå½¢å¼ã§ãƒ‡ã‚³ãƒ¼ãƒ‰ã—ã¦ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã‚’å–å¾—
+ * @param ms å¯¾è±¡ãƒ¡ãƒ¢ãƒªã‚¹ãƒˆãƒªãƒ¼ãƒ 
+ * @param[out] o_bmp å‡ºåŠ›ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—
+ * @param fmt ã‚³ãƒ³ãƒ†ãƒŠå½¢å¼ã®GUID
+ * @return true æˆåŠŸ
+ * @return false å¤±æ•—
  */
 bool WIC_get_from_memory(TMemoryStream *ms, Graphics::TBitmap *o_bmp, GUID fmt);
 
 /**
- * @brief ƒtƒ@ƒCƒ‹‚©‚çw’è‚µ‚½í—Ş‚Ìƒrƒbƒgƒ}ƒbƒv‚ğæ“¾
- * @param fnam ƒtƒ@ƒCƒ‹–¼
- * @param[out] o_bmp o—Íƒrƒbƒgƒ}ƒbƒv
- * @param img_type í—Ş(WICIMG_FRAME, WICIMG_PREVIEW, WICIMG_THUMBNAIL)
- * @return true ¬Œ÷
- * @return false ¸”s
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰æŒ‡å®šã—ãŸç¨®é¡ã®ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã‚’å–å¾—
+ * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+ * @param[out] o_bmp å‡ºåŠ›ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—
+ * @param img_type ç¨®é¡(WICIMG_FRAME, WICIMG_PREVIEW, WICIMG_THUMBNAIL)
+ * @return true æˆåŠŸ
+ * @return false å¤±æ•—
  */
 bool WIC_load_image(UnicodeString fnam, Graphics::TBitmap *o_bmp, int img_type = WICIMG_PREVIEW);
 
 /**
- * @brief ƒrƒbƒgƒ}ƒbƒv‚ğw’èŒ`®‚Åƒtƒ@ƒCƒ‹‚É•Û‘¶
- * @param fnam ƒtƒ@ƒCƒ‹–¼
- * @param[in] i_bmp ƒrƒbƒgƒ}ƒbƒv
- * @param jpg_q JPEG‰æ¿(0`100)
- * @param jpg_ycrcb JPEGƒTƒuƒTƒ“ƒvƒŠƒ“ƒO(0`3)
- * @param grayscale jpeg/PNG ƒOƒŒ[ƒXƒP[ƒ‹(8bit)‚Å•Û‘¶
- * @param tif_cmp TIFFˆ³k(0`7)
- * @return true ¬Œ÷
- * @return false ¸”s
+ * @brief ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã‚’æŒ‡å®šå½¢å¼ã§ãƒ•ã‚¡ã‚¤ãƒ«ã«ä¿å­˜
+ * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+ * @param[in] i_bmp ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—
+ * @param jpg_q JPEGç”»è³ª(0ï½100)
+ * @param jpg_ycrcb JPEGã‚µãƒ–ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°(0ï½3)
+ * @param grayscale jpeg/PNG ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«(8bit)ã§ä¿å­˜
+ * @param tif_cmp TIFFåœ§ç¸®(0ï½7)
+ * @return true æˆåŠŸ
+ * @return false å¤±æ•—
  */
 bool WIC_save_image(UnicodeString fnam, Graphics::TBitmap *i_bmp,
 	int jpg_q = 100, int jpg_ycrcb = 0, bool grayscale = false, int tif_cmp = 0);
 
 /**
- * @brief ‰æ‘œ‚Ìk¬EŠg‘å
- * @param[in] i_bmp “ü—Íƒrƒbƒgƒ}ƒbƒv
- * @param[out] o_bmp o—Íƒrƒbƒgƒ}ƒbƒv
- * @param ratio ”{—¦(0.0:–³Œø)
- * @param s_wd ‰¡ƒTƒCƒY(0:–³Œø)
- * @param s_hi cƒTƒCƒY
- * @param s_opt ƒAƒ‹ƒSƒŠƒYƒ€
+ * @brief ç”»åƒã®ç¸®å°ãƒ»æ‹¡å¤§
+ * @param[in] i_bmp å…¥åŠ›ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—
+ * @param[out] o_bmp å‡ºåŠ›ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—
+ * @param ratio å€ç‡(0.0:ç„¡åŠ¹)
+ * @param s_wd æ¨ªã‚µã‚¤ã‚º(0:ç„¡åŠ¹)
+ * @param s_hi ç¸¦ã‚µã‚¤ã‚º
+ * @param s_opt ã‚¢ãƒ«ã‚´ãƒªã‚ºãƒ 
  *
- * ”{—¦‚©ƒTƒCƒY‚Ì‚¢‚¸‚ê‚©‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢B
+ * å€ç‡ã‹ã‚µã‚¤ã‚ºã®ã„ãšã‚Œã‹ã‚’æŒ‡å®šã—ã¦ãã ã•ã„ã€‚
 *
- * @return true ¬Œ÷
- * @return false ¸”s
+ * @return true æˆåŠŸ
+ * @return false å¤±æ•—
  */
 bool WIC_resize_image(Graphics::TBitmap *i_bmp, Graphics::TBitmap *o_bmp,
 	float ratio, unsigned int s_wd = 0, unsigned int s_hi = 0, int s_opt = 0);
 
 /**
- * @brief w’èƒTƒCƒY‚Éû‚Ü‚é‚æ‚¤‚Ék¬EŠg‘åAØ‚èo‚µ
- * @param[in] i_bmp “ü—Íƒrƒbƒgƒ}ƒbƒv
- * @param[out] o_bmp o—Íƒrƒbƒgƒ}ƒbƒv
- * @param s_wd ‰¡ƒTƒCƒY
- * @param s_hi cƒTƒCƒY
- * @param s_opt ƒAƒ‹ƒSƒŠƒYƒ€
- * @return true ¬Œ÷
- * @return false ¸”s
+ * @brief æŒ‡å®šã‚µã‚¤ã‚ºã«åã¾ã‚‹ã‚ˆã†ã«ç¸®å°ãƒ»æ‹¡å¤§ã€åˆ‡ã‚Šå‡ºã—
+ * @param[in] i_bmp å…¥åŠ›ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—
+ * @param[out] o_bmp å‡ºåŠ›ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—
+ * @param s_wd æ¨ªã‚µã‚¤ã‚º
+ * @param s_hi ç¸¦ã‚µã‚¤ã‚º
+ * @param s_opt ã‚¢ãƒ«ã‚´ãƒªã‚ºãƒ 
+ * @return true æˆåŠŸ
+ * @return false å¤±æ•—
  */
 bool WIC_fit_trim_image(Graphics::TBitmap *i_bmp, Graphics::TBitmap *o_bmp,
 	unsigned int s_wd, unsigned int s_hi, int s_opt = 0);
 
 /**
- * @brief ‰æ‘œ‚Ì‰ñ“]E”½“]
- * @param[in,out] i_bmp “üo—Íƒrƒbƒgƒ}ƒbƒv
- * @param rot_opt 1:90/ 2:180/ 3:270(¶‚É90)/ 4:¶‰E”½“]/ 5:ã‰º”½“]
- * @return true ¬Œ÷
- * @return false ¸”s
+ * @brief ç”»åƒã®å›è»¢ãƒ»åè»¢
+ * @param[in,out] i_bmp å…¥å‡ºåŠ›ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—
+ * @param rot_opt 1:90/ 2:180/ 3:270(å·¦ã«90)/ 4:å·¦å³åè»¢/ 5:ä¸Šä¸‹åè»¢
+ * @return true æˆåŠŸ
+ * @return false å¤±æ•—
  */
 bool WIC_rotate_image(Graphics::TBitmap *i_bmp, int rot_opt);
 
 /**
- * @brief ‰æ‘œ‚ÌƒOƒŒ[ƒXƒP[ƒ‹‰»
- * @param[in,out] i_bmp “üo—Íƒrƒbƒgƒ}ƒbƒv
- * @return true ¬Œ÷
- * @return false ¸”s
+ * @brief ç”»åƒã®ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«åŒ–
+ * @param[in,out] i_bmp å…¥å‡ºåŠ›ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—
+ * @return true æˆåŠŸ
+ * @return false å¤±æ•—
  */
 bool WIC_grayscale_image(Graphics::TBitmap *i_bmp);
 
 /**
- * @brief ‰æ‘œ‚ÌƒTƒCƒY‚ğæ“¾
- * @param fnam ƒtƒ@ƒCƒ‹–¼
- * @param[out] wd • 
- * @param[out] hi ‚‚³
- * @return true ¬Œ÷
- * @return false ¸”s
+ * @brief ç”»åƒã®ã‚µã‚¤ã‚ºã‚’å–å¾—
+ * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+ * @param[out] wd å¹… 
+ * @param[out] hi é«˜ã•
+ * @return true æˆåŠŸ
+ * @return false å¤±æ•—
  */
 bool WIC_get_img_size(UnicodeString fnam, unsigned int *wd, unsigned int *hi);
 

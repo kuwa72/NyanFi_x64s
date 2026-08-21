@@ -1,6 +1,6 @@
 /**
  * @file UserFunc.h
- * @brief ”Ä—p‹¤’ÊŠÖ”
+ * @brief æ±ç”¨å…±é€šé–¢æ•°
  */
 //---------------------------------------------------------------------------
 #ifndef UsrFuncH
@@ -19,28 +19,28 @@
 #include "usr_file_inf.h"
 
 //---------------------------------------------------------------------------
-#define URL_MATCH_PTN	_T("h?ttps?://[\\w/:%#$&?()~.=+-]+[\\w/]")		//!< URL—p³‹K•\Œ»
-#define MAIL_MATCH_PTN	_T("mailto:[a-zA-Z0-9]+[\\w.-]*@[\\w.-]+")		//!< ƒ[ƒ‹—p³‹K•\Œ»
-#define LOCAL_FILE_PTN	_T("file:///[^*?\"<>|)j]+\\.[a-zA-Z0-9]+")		//!< ƒ[ƒJƒ‹ƒtƒ@ƒCƒ‹‚Ì³‹K•\Œ»
+#define URL_MATCH_PTN	_T("h?ttps?://[\\w/:%#$&?()~.=+-]+[\\w/]")		//!< URLç”¨æ­£è¦è¡¨ç¾
+#define MAIL_MATCH_PTN	_T("mailto:[a-zA-Z0-9]+[\\w.-]*@[\\w.-]+")		//!< ãƒ¡ãƒ¼ãƒ«ç”¨æ­£è¦è¡¨ç¾
+#define LOCAL_FILE_PTN	_T("file:///[^*?\"<>|)ï¼‰]+\\.[a-zA-Z0-9]+")		//!< ãƒ­ãƒ¼ã‚«ãƒ«ãƒ•ã‚¡ã‚¤ãƒ«ã®æ­£è¦è¡¨ç¾
 
 #define LISTBOX_SCRMGN	2
 
 //---------------------------------------------------------------------------
 bool is_SnapToDefBtn();
 
-/** @brief ƒ}ƒEƒXƒJ[ƒ\ƒ‹ˆÊ’u‚ÌƒEƒBƒ“ƒhƒE‚ğæ“¾ */
+/** @brief ãƒã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’å–å¾— */
 HWND get_window_from_pos();
 
-/** @brief VistaˆÈ~‚ÌŠg’£ƒtƒŒ[ƒ€‚É‘Î‰‚µ‚½ƒEƒBƒ“ƒhƒE’·•ûŒ`‚Ìæ“¾ */
+/** @brief Vistaä»¥é™ã®æ‹¡å¼µãƒ•ãƒ¬ãƒ¼ãƒ ã«å¯¾å¿œã—ãŸã‚¦ã‚£ãƒ³ãƒ‰ã‚¦é•·æ–¹å½¢ã®å–å¾— */
 TRect get_window_rect(HWND hWnd);
 
-/** @brief VistaˆÈ~‚ÌŠg’£ƒtƒŒ[ƒ€‚É‘Î‰‚µ‚½ƒTƒCƒYİ’è */
+/** @brief Vistaä»¥é™ã®æ‹¡å¼µãƒ•ãƒ¬ãƒ¼ãƒ ã«å¯¾å¿œã—ãŸã‚µã‚¤ã‚ºè¨­å®š */
 void set_window_pos_ex(HWND hWnd, TRect rc);
 
-/** @brief ƒtƒH[ƒ€‚ª•\¦ƒ‚ƒjƒ^‚©‚ç‚Í‚İo‚µ‚Ä‚¢‚½‚çû‚Ü‚é‚æ‚¤‚É’²® */
+/** @brief ãƒ•ã‚©ãƒ¼ãƒ ãŒè¡¨ç¤ºãƒ¢ãƒ‹ã‚¿ã‹ã‚‰ã¯ã¿å‡ºã—ã¦ã„ãŸã‚‰åã¾ã‚‹ã‚ˆã†ã«èª¿æ•´ */
 void adjust_form_pos(TForm *frm);
 
-/** @brief ƒ_ƒCƒAƒƒO‚ğŒÄ‚Ño‚µŒ³ƒtƒH[ƒ€‚Ì’†‰›‚É•\¦ */
+/** @brief ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’å‘¼ã³å‡ºã—å…ƒãƒ•ã‚©ãƒ¼ãƒ ã®ä¸­å¤®ã«è¡¨ç¤º */
 int  show_ModalDlg(TForm *dlg);
 
 void show_PopupMenu(TPopupMenu *mp, TControl *cp);
@@ -55,8 +55,8 @@ void add_ComboBox_history(TComboBox *cp, UnicodeString kwd = EmptyStr);
 int  del_ComboBox_history(TComboBox *cp, UnicodeString kwd = EmptyStr);
 
 /**
- * @brief ƒNƒŠƒbƒvƒ{[ƒhEƒeƒLƒXƒg‚ğæ“¾
- * @param top_sw ˆês–Ú‚Ì‚İæ“¾
+ * @brief ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ãƒ»ãƒ†ã‚­ã‚¹ãƒˆã‚’å–å¾—
+ * @param top_sw ä¸€è¡Œç›®ã®ã¿å–å¾—
  * @return UnicodeString
  */
 UnicodeString GetClipboardText(bool top_sw = false);
@@ -68,64 +68,64 @@ void CloseIME(HWND hWnd);
 
 TPoint get_ListItemPos(TListBox *lp, int xp = 0);
 
-/** @brief ƒŠƒXƒgƒ{ƒbƒNƒX‚Ì€–ÚˆÊ’u‚Éƒ}ƒEƒXƒJ[ƒ\ƒ‹‚ğˆÚ“® */
+/** @brief ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®é …ç›®ä½ç½®ã«ãƒã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«ã‚’ç§»å‹• */
 void pos_ListBoxItem(TListBox *lp, int xp = 0);
 
 //---------------------------------------------------------------------------
-/** @brief w’èƒLƒƒƒ“ƒoƒX‚ÌƒtƒHƒ“ƒg‚ª“à•”ƒŒƒfƒBƒ“ƒO‚ğ‚Á‚Ä‚¢‚é‚©H */
+/** @brief æŒ‡å®šã‚­ãƒ£ãƒ³ãƒã‚¹ã®ãƒ•ã‚©ãƒ³ãƒˆãŒå†…éƒ¨ãƒ¬ãƒ‡ã‚£ãƒ³ã‚°ã‚’æŒã£ã¦ã„ã‚‹ã‹ï¼Ÿ */
 bool has_Leading(TCanvas *cv);
 
-/** @brief w’èƒtƒHƒ“ƒg‚É‚æ‚é•`‰æ•‚ğæ“¾ */
+/** @brief æŒ‡å®šãƒ•ã‚©ãƒ³ãƒˆã«ã‚ˆã‚‹æç”»å¹…ã‚’å–å¾— */
 int  get_CharWidth_Font(TFont *font, int n);
 
 int  EditToInt(TLabeledEdit *ep, int def = 0);
 int  EditToInt(TEdit *ep, int def = 0);
 
-/** @brief ƒtƒ@ƒCƒ‹–¼“ü—Í—“‚Ì‘I‘ğó‘Ô‚ğ‡‚ÉØ‚è‘Ö‚¦‚é */
+/** @brief ãƒ•ã‚¡ã‚¤ãƒ«åå…¥åŠ›æ¬„ã®é¸æŠçŠ¶æ…‹ã‚’é †ã«åˆ‡ã‚Šæ›¿ãˆã‚‹ */
 void ChangeSelFileNameEdit(TCustomEdit *ep, bool is_dir = false);
 
-/** @brief ƒRƒ}ƒ“ƒh“ü—Í—“‚Ì‘I‘ğó‘Ô‚ğ‡‚ÉØ‚è‘Ö‚¦‚é */
+/** @brief ã‚³ãƒãƒ³ãƒ‰å…¥åŠ›æ¬„ã®é¸æŠçŠ¶æ…‹ã‚’é †ã«åˆ‡ã‚Šæ›¿ãˆã‚‹ */
 void ChangeSelCmdComboBox(TComboBox *cp);
 
 void ChangeSelCmdEdit(TCustomEdit *ep);
 
-//”NŒ“ú‚©‚ç TDate ‚ğæ“¾ (Œ––•â³)
+//å¹´æœˆæ—¥ã‹ã‚‰ TDate ã‚’å–å¾— (æœˆæœ«è£œæ­£)
 /**
- * @brief ”NŒ“ú‚©‚ç TDate ‚ğæ“¾ (Œ––•â³)
- * @param y ”N
- * @param m Œ
- * @param d “ú
+ * @brief å¹´æœˆæ—¥ã‹ã‚‰ TDate ã‚’å–å¾— (æœˆæœ«è£œæ­£)
+ * @param y å¹´
+ * @param m æœˆ
+ * @param d æ—¥
  * @return TDate
- * @exception •s³‚È”N/Œ‚ğw’è‚·‚é‚Æ—áŠO‚ğ‘—o
+ * @exception ä¸æ­£ãªå¹´/æœˆã‚’æŒ‡å®šã™ã‚‹ã¨ä¾‹å¤–ã‚’é€å‡º
  */
 TDate set_NormDay(unsigned short y, unsigned short m, unsigned short d);
 
-/** @brief •¶š—ñ‚ğ TDateTime ‚É•ÏŠ· */
+/** @brief æ–‡å­—åˆ—ã‚’ TDateTime ã«å¤‰æ› */
 bool ToDateTime(UnicodeString s, TDateTime *dt);
 
 /**
- * @brief “ú•¶š—ñ‚ğæ“¾
- * @param dt “ú
- * @param omit “¯“ú‚È‚ç“ú•t‚ğÈ—ª
+ * @brief æ—¥æ™‚æ–‡å­—åˆ—ã‚’å–å¾—
+ * @param dt æ—¥æ™‚
+ * @param omit åŒæ—¥ãªã‚‰æ—¥ä»˜ã‚’çœç•¥
  * @return UnicodeString
  */
 UnicodeString format_DateTime(TDateTime dt, bool omit = false);
 
-/** @brief “ú•t•¶š—ñ‚ğæ“¾ */
+/** @brief æ—¥ä»˜æ–‡å­—åˆ—ã‚’å–å¾— */
 UnicodeString format_Date(TDateTime dt);
 
-/** @brief “ú•¶š—ñ‚ğæ“¾ (FormatDateTime ‚ÌŠg’£) */
+/** @brief æ—¥æ™‚æ–‡å­—åˆ—ã‚’å–å¾— (FormatDateTime ã®æ‹¡å¼µ) */
 UnicodeString format_DateTimeEx(UnicodeString fmt, TDateTime dt);
 
-//@‘Š‘Îw’è: {<|=|>}-n{D|M|Y}@@(D:“úAM:ŒAY:”N)
-//@â‘Îw’è: {<|=|>}yyyy/mm/dd
-//	  	  ¡“ú•t: TD
-//  ƒJ[ƒ\ƒ‹ˆÊ’u: CP (= ct)
+//ã€€ç›¸å¯¾æŒ‡å®š: {<|=|>}-n{D|M|Y}ã€€ã€€(D:æ—¥ã€M:æœˆã€Y:å¹´)
+//ã€€çµ¶å¯¾æŒ‡å®š: {<|=|>}yyyy/mm/dd
+//	  	  ä»Šæ—¥ä»˜: TD
+//  ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®: CP (= ct)
 //
-//  –ß‚è’l : 1: < ‚æ‚èŒÃ‚¢/ 2: = “¯‚¶/ 3: > ‚æ‚èV‚µ‚¢
-//			 0: ğŒ‚È‚µ/ -1: ƒGƒ‰[
+//  æˆ»ã‚Šå€¤ : 1: < ã‚ˆã‚Šå¤ã„/ 2: = åŒã˜/ 3: > ã‚ˆã‚Šæ–°ã—ã„
+//			 0: æ¡ä»¶ãªã—/ -1: ã‚¨ãƒ©ãƒ¼
 
-/** @brief “ú•tğŒ‚ğæ“¾ */
+/** @brief æ—¥ä»˜æ¡ä»¶ã‚’å–å¾— */
 int  get_DateCond(UnicodeString prm, TDateTime &dt, TDateTime ct = 0);
 
 bool test_DateCond(int cnd, TDateTime dt, TDateTime dt_r);
@@ -137,16 +137,16 @@ void ShowPropertyDialog(UnicodeString fnam);
 void delete_ListItem(TCustomListBox *lp);
 void draw_ListItemLine(TCustomListBox *lp, int idx);
 
-/** @brief ’[“_‚ªƒtƒ‰ƒbƒg‚Èü‚ğ•`‰æ */
+/** @brief ç«¯ç‚¹ãŒãƒ•ãƒ©ãƒƒãƒˆãªç·šã‚’æç”» */
 void draw_Line(TCanvas *cv, int x0, int y0, int x1, int y1, int w, TColor col, TPenStyle = psSolid);
 
-/** @brief ”wŒiF‚Ì‹P“x‚ğl—¶‚µ‚ÄƒZƒpƒŒ[ƒ^‚ğ•`‰æ */
+/** @brief èƒŒæ™¯è‰²ã®è¼åº¦ã‚’è€ƒæ…®ã—ã¦ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿ã‚’æç”» */
 void draw_Separator(TCanvas *cv, TRect rc, TColor bg = Graphics::clNone);
 
-/** @brief ”wŒiF‚ğl—¶‚µ‚Ä•ªŠ„ü‚ğ•`‰æ */
+/** @brief èƒŒæ™¯è‰²ã‚’è€ƒæ…®ã—ã¦åˆ†å‰²ç·šã‚’æç”» */
 void draw_separateLine(TCanvas *cv, TRect rc, int pos = 0);
 
-/** @brief k¬”ä—¦‚ğæ“¾ */
+/** @brief ç¸®å°æ¯”ç‡ã‚’å–å¾— */
 double get_ZoomRatio(int vw, int vh, int iw, int ih, int mgn = 0, double limit = 1.0);
 
 void alpha_blend_Rect(TCanvas *cv, int x, int y, int w, int h, TColor col, int alpha);
@@ -154,13 +154,13 @@ void alpha_blend_Rect(TCanvas *cv, TRect rc, TColor col, int alpha);
 
 void init_UpDown(TUpDown *udp, int n);
 
-/** @brief ƒOƒŠƒbƒh‚ÌƒZƒ‹•‚ğƒwƒbƒ_‚É‡‚í‚¹‚é */
+/** @brief ã‚°ãƒªãƒƒãƒ‰ã®ã‚»ãƒ«å¹…ã‚’ãƒ˜ãƒƒãƒ€ã«åˆã‚ã›ã‚‹ */
 void set_GridFromHeader(THeaderControl *hp, TStringGrid *gp);
 
-/** @brief ƒwƒbƒ_‚Ì—ñ•‚ğƒOƒŠƒbƒh‚ÌƒZƒ‹•‚É‡‚í‚¹‚é */
+/** @brief ãƒ˜ãƒƒãƒ€ã®åˆ—å¹…ã‚’ã‚°ãƒªãƒƒãƒ‰ã®ã‚»ãƒ«å¹…ã«åˆã‚ã›ã‚‹ */
 void set_HeaderFromGrid(TStringGrid *gp, THeaderControl *hp);
 
-/** @brief ƒwƒbƒ_‚Ì—ñ•‚ğİ’è(ŒÅ’è) */
+/** @brief ãƒ˜ãƒƒãƒ€ã®åˆ—å¹…ã‚’è¨­å®š(å›ºå®š) */
 void set_HeaderSecWidth(THeaderControl *hp, int cnt, ...);
 
 void adjust_HeaderSecWidth(THeaderControl *hp, int idx);
@@ -168,10 +168,10 @@ void adjust_HeaderSecWidth(THeaderControl *hp, int idx);
 int  set_SttBarPanelWidth(TStatusBar *sp, int idx, int n);
 int  set_SttBarPanelWidth(TStatusBar *sp, int idx, UnicodeString s);
 
-/** @brief ƒOƒŠƒbƒh‚Ìs‚ğƒNƒŠƒA */
+/** @brief ã‚°ãƒªãƒƒãƒ‰ã®è¡Œã‚’ã‚¯ãƒªã‚¢ */
 void clear_GridRow(TStringGrid *gp, int row, int col = 0);
 
-/** @brief ƒOƒŠƒbƒh‚ÌŒ»İˆÊ’u‚ğƒCƒ“ƒfƒbƒNƒX‰» */
+/** @brief ã‚°ãƒªãƒƒãƒ‰ã®ç¾åœ¨ä½ç½®ã‚’ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹åŒ– */
 int  get_GridIndex(TStringGrid *gp, int max_count);
 
 void ListBoxCursorDown(TListBox *lp);
@@ -190,27 +190,27 @@ void ListBoxScrollUp(TListBox *lp, int n, bool move_csr = false);
 void ListBoxScrollUp(TListBox *lp, UnicodeString prm);
 void ListBoxSelectAll(TListBox *lp, bool sw = true);
 
-/** @brief ƒŠƒXƒgƒ{ƒbƒNƒX‚Å“ª•¶šƒT[ƒ` */
+/** @brief ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã§é ­æ–‡å­—ã‚µãƒ¼ãƒ */
 int  ListBoxInitialSearch(TListBox *lp, UnicodeString kptn, bool fnam_sw = false);
 
-/** @brief ƒŠƒXƒgƒ{ƒbƒNƒX‚ÌŒ»İs‚Ì•¶š—ñ‚ğæ“¾ */
+/** @brief ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®ç¾åœ¨è¡Œã®æ–‡å­—åˆ—ã‚’å–å¾— */
 UnicodeString ListBoxGetStr(TListBox *lp);
 
-/** @brief ƒŠƒXƒgƒ{ƒbƒNƒX‚ÌŒ»İs‚ÌƒIƒuƒWƒFƒNƒg‚ğæ“¾ */
+/** @brief ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®ç¾åœ¨è¡Œã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å–å¾— */
 TObject * ListBoxGetObj(TListBox *lp);
 
-/** @brief ƒŠƒXƒgƒ{ƒbƒNƒX‚ÌŒ»İs‚©‚çƒfƒBƒŒƒNƒgƒŠ–¼‚ğæ“¾ */
+/** @brief ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®ç¾åœ¨è¡Œã‹ã‚‰ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåã‚’å–å¾— */
 UnicodeString InfListBoxGetDir(TListBox *lp);
 
-/** @brief ƒŠƒXƒgƒ{ƒbƒNƒX‚ÌŒ»İs‚©‚çURL‚ğæ“¾ */
+/** @brief ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®ç¾åœ¨è¡Œã‹ã‚‰URLã‚’å–å¾— */
 UnicodeString ListBoxGetURL(TListBox *lp);
 
-/** @brief ƒŠƒXƒgƒ{ƒbƒNƒX‚Ì Objects ‚ğ®”’l‚Æ‚µ‚Äƒ`ƒFƒbƒN‚µA€–Ú˜A”Ô‚ğİ’è */
+/** @brief ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã® Objects ã‚’æ•´æ•°å€¤ã¨ã—ã¦ãƒã‚§ãƒƒã‚¯ã—ã€é …ç›®é€£ç•ªã‚’è¨­å®š */
 void set_ListBox_ItemNo(TListBox *lp);
 
 void set_Strings_ItemNo(TStringList *lst);
 
-/** @brief ƒ`ƒFƒbƒN‚³‚ê‚Ä‚¢‚é€–Ú”‚ğæ“¾ */
+/** @brief ãƒã‚§ãƒƒã‚¯ã•ã‚Œã¦ã„ã‚‹é …ç›®æ•°ã‚’å–å¾— */
 int get_CheckListCount(TCheckListBox *lp);
 
 void GridCursorLeft(TStringGrid *gp);
@@ -226,44 +226,44 @@ int down_StrListItem(TStringList *lst, int idx);
 
 int get_IndexFromAccKey(TStringList *lst, UnicodeString key);
 
-/** @brief •¶š—ñ‚©‚çURL(ƒ[ƒJƒ‹ƒtƒ@ƒCƒ‹‚ğŠÜ‚Ş)‚ğ’Šo */
+/** @brief æ–‡å­—åˆ—ã‹ã‚‰URL(ãƒ­ãƒ¼ã‚«ãƒ«ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å«ã‚€)ã‚’æŠ½å‡º */
 UnicodeString extract_URL(UnicodeString s);
 
-/** @brief ƒCƒ“ƒ^[ƒlƒbƒgÚ‘±‚ª‚ ‚é‚©? */
+/** @brief ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒƒãƒˆæ¥ç¶šãŒã‚ã‚‹ã‹? */
 bool InternetConnected();
 
 /**
- * @brief ƒIƒ“ƒ‰ƒCƒ“ã‚Ìƒtƒ@ƒCƒ‹‚ğæ“¾
+ * @brief ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ä¸Šã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å–å¾—
  * @param url
  * @param fnam
  * @param cancel
- * @param prg_box i’»ƒo[
- * @param prg_ratio i’»—¦
- * @return int ƒtƒ@ƒCƒ‹ƒTƒCƒY
+ * @param prg_box é€²æ—ãƒãƒ¼
+ * @param prg_ratio é€²æ—ç‡
+ * @return int ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚º
  */
 int  get_OnlineFile(UnicodeString url, UnicodeString fnam, bool *cancel = NULL,
 		TPaintBox *prg_box = NULL, double *prg_ratio = NULL);
 
-/** @brief ƒXƒvƒŠƒbƒ^•‚ğİ’è */
+/** @brief ã‚¹ãƒ—ãƒªãƒƒã‚¿å¹…ã‚’è¨­å®š */
 void set_SplitterWidht(TSplitter *sp, int sp_wd);
 
-/** @brief ƒpƒlƒ‹‚Ì”z’u */
+/** @brief ãƒ‘ãƒãƒ«ã®é…ç½® */
 void set_PanelAlign(TPanel *pp, TSplitter *sp, int mode,  int sp_wd);
 void set_PanelAlign(TPanel *pp, TSplitter *sp, TAlign al, int sp_wd);
 
-/** @brief ƒRƒ“ƒgƒ[ƒ‹‚ğ‰E‰º‹÷‚É”z’u */
+/** @brief ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚’å³ä¸‹éš…ã«é…ç½® */
 void set_ControlRBCorner(TControl *cp0, TControl *cp1);
 
-/** @brief ƒoƒbƒeƒŠc—Ê(%)•¶š—ñ‚ğæ“¾ */
+/** @brief ãƒãƒƒãƒ†ãƒªæ®‹é‡(%)æ–‡å­—åˆ—ã‚’å–å¾— */
 UnicodeString get_BatteryPercentStr();
 
-/** @brief ƒoƒbƒeƒŠc—Ê(ŠÔ)•¶š—ñ‚ğæ“¾ */
+/** @brief ãƒãƒƒãƒ†ãƒªæ®‹é‡(æ™‚é–“)æ–‡å­—åˆ—ã‚’å–å¾— */
 UnicodeString get_BatteryTimeStr();
 
-/** @brief ƒhƒ‰ƒCƒu‚Ìæ‚èŠO‚µ */
+/** @brief ãƒ‰ãƒ©ã‚¤ãƒ–ã®å–ã‚Šå¤–ã— */
 bool EjectDrive(UnicodeString drvnam, bool eject);
 
-/** @brief ƒŠƒ€[ƒoƒuƒ‹/CD-ROM ˆÈŠO‚Ìæ‚èŠO‚µ */
+/** @brief ãƒªãƒ ãƒ¼ãƒãƒ–ãƒ«/CD-ROM ä»¥å¤–ã®å–ã‚Šå¤–ã— */
 bool EjectDrive2(UnicodeString drvnam, bool eject);
 
 inline bool class_is_LabeledEdit(TObject *op)
@@ -319,16 +319,16 @@ inline void cursor_Default()
 	Screen->Cursor = crDefault;
 }
 
-/** @brief ƒƒjƒ…[‚Ì—]Œv‚ÈƒZƒpƒŒ[ƒ^‚ğ”ñ•\¦‚É‚·‚é */
+/** @brief ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®ä½™è¨ˆãªã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿ã‚’éè¡¨ç¤ºã«ã™ã‚‹ */
 void reduction_MenuLine(TMenuItem *mp);
 
 //---------------------------------------------------------------------------
-extern UnicodeString WebSeaUrl;		//!< WebŒŸõ—p‚ÌŒŸõƒGƒ“ƒWƒ“URL
+extern UnicodeString WebSeaUrl;		//!< Webæ¤œç´¢ç”¨ã®æ¤œç´¢ã‚¨ãƒ³ã‚¸ãƒ³URL
 
-/** @brief WebŒŸõ•\¦•¶š—ñ‚ğæ“¾ */
+/** @brief Webæ¤œç´¢è¡¨ç¤ºæ–‡å­—åˆ—ã‚’å–å¾— */
 UnicodeString get_WebSeaCaption(UnicodeString kwd = EmptyStr, bool with_ak = true);
 
-/** @brief WebŒŸõ‚ğÀs */
+/** @brief Webæ¤œç´¢ã‚’å®Ÿè¡Œ */
 bool exe_WebSearch(UnicodeString kwd);
 
 //---------------------------------------------------------------------------

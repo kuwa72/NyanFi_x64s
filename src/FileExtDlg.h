@@ -1,6 +1,6 @@
 /**
  * @file FileExtDlg.h
- * @brief ägí£éqï àÍóó
+ * @brief Êã°ÂºµÂ≠êÂà•‰∏ÄË¶ß
  */
 //---------------------------------------------------------------------------
 #ifndef FileExtDlgH
@@ -21,22 +21,22 @@
 
 //---------------------------------------------------------------------------
 struct ext_inf_rec {
-	int 	f_count;		//!< ÉtÉ@ÉCÉãêî
-	__int64 f_size;			//!< çáåvÉTÉCÉY
-	__int64 oc_size;		//!< êËóLÉTÉCÉY
-	__int64 av_size;		//!< ïΩãœÉTÉCÉY
-	UnicodeString f_names;	//!< É^ÉuãÊêÿÇËÇÃÉtÉ@ÉCÉãñºÉäÉXÉg(ç≈ëÂêî=MAX_FLIST_CNT)
+	int 	f_count;		//!< „Éï„Ç°„Ç§„É´Êï∞
+	__int64 f_size;			//!< ÂêàË®à„Çµ„Ç§„Ç∫
+	__int64 oc_size;		//!< Âç†Êúâ„Çµ„Ç§„Ç∫
+	__int64 av_size;		//!< Âπ≥Âùá„Çµ„Ç§„Ç∫
+	UnicodeString f_names;	//!< „Çø„ÉñÂå∫Âàá„Çä„ÅÆ„Éï„Ç°„Ç§„É´Âêç„É™„Çπ„Éà(ÊúÄÂ§ßÊï∞=MAX_FLIST_CNT)
 };
 
 #define MAX_FLIST_CNT	1000
 
 //---------------------------------------------------------------------------
 /**
- * @brief ägí£éqï àÍóó
+ * @brief Êã°ÂºµÂ≠êÂà•‰∏ÄË¶ß
  */
 class TFileExtensionDlg : public TForm
 {
-__published:	// IDE Ç≈ä«óùÇ≥ÇÍÇÈÉRÉìÉ|Å[ÉlÉìÉg
+__published:	// IDE „ÅßÁÆ°ÁêÜ„Åï„Çå„Çã„Ç≥„É≥„Éù„Éº„Éç„É≥„Éà
 	TAction *FextClipCopyAction;
 	TAction *FextCsvAction;
 	TAction *FextLogOutAction;
@@ -121,7 +121,7 @@ __published:	// IDE Ç≈ä«óùÇ≥ÇÍÇÈÉRÉìÉ|Å[ÉlÉìÉg
 	void __fastcall PropertyActionExecute(TObject *Sender);
 	void __fastcall PropertyActionUpdate(TObject *Sender);
 
-private:	// ÉÜÅ[ÉUÅ[êÈåæ
+private:	// „É¶„Éº„Ç∂„ÉºÂÆ£Ë®Ä
 	TStringList *FextInfoList;
 	TStringList *FileItemList;
 	int TotalFileCount;
@@ -144,7 +144,7 @@ private:	// ÉÜÅ[ÉUÅ[êÈåæ
 	void __fastcall IniSearchList(TListBox *lp, UnicodeString ptn);
 	UnicodeString __fastcall GetCurFileItem(int idx = -1);
 
-public:		// ÉÜÅ[ÉUÅ[êÈåæ
+public:		// „É¶„Éº„Ç∂„ÉºÂÆ£Ë®Ä
 	UsrScrollPanel *InfoScrPanel;
 	UsrScrollPanel *FileScrPanel;
 

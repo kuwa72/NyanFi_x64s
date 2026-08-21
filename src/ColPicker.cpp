@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒJƒ‰[ƒsƒbƒJ[														//
+//  ã‚«ãƒ©ãƒ¼ãƒ”ãƒƒã‚«ãƒ¼														//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -28,12 +28,12 @@ void __fastcall TColorPicker::FormCreate(TObject *Sender)
 		_T("H,S,V(B)\n")
 		_T("H,S,L\n")
 		_T("COLORREF\n")
-		_T("DelphiŒ`®\n")
-		_T("VBŒ`®\n")
-		_T("HTMLŒ`®\n")
+		_T("Delphiå½¢å¼\n")
+		_T("VBå½¢å¼\n")
+		_T("HTMLå½¢å¼\n")
 		_T("RGB(x,x,x)\n")
 		_T("RGB(d,d,d)\n")
-		_T("’è”ƒVƒ“ƒ{ƒ‹\n")
+		_T("å®šæ•°ã‚·ãƒ³ãƒœãƒ«\n")
 		_T("BITMAP(32)\n")
 		_T("BITMAP(128)\n")
 		_T("BITMAP(256)\n"));
@@ -109,7 +109,7 @@ void __fastcall TColorPicker::FormKeyDown(TObject *Sender, WORD &Key, TShiftStat
 }
 
 //---------------------------------------------------------------------------
-//•\¦‚ÌXV
+//è¡¨ç¤ºã®æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TColorPicker::UpdateStt(int x, int y, float ratio)
 {
@@ -154,7 +154,7 @@ void __fastcall TColorPicker::UpdateStt(int x, int y, float ratio)
 			}
 		}
 
-		//Œ³F’l‚Ì•\¦
+		//å…ƒè‰²å€¤ã®è¡¨ç¤º
 		TColor c = col[4];
 		int cref = ColorToRGB(c);
 		int r = GetRValue(cref);
@@ -168,15 +168,15 @@ void __fastcall TColorPicker::UpdateStt(int x, int y, float ratio)
 		RgbToHsl(c, &h, &s, &l);
 		msg.cat_sprintf(_T(" / H%d S%d L%d"), h, s, l);
 		ColLabel->Caption = msg;
-		//‘ÎÛ˜g
+		//å¯¾è±¡æ 
 		bool same_col = true;
 		for (int i=1; i<9 && same_col; i++) same_col = (col[i]==col[i - 1]);
 		cv->Brush->Color = RatioCol((h>=90 && h<270)? clRed : clAqua, (std::min(std::max(100 - l, 25), 75))/100.0);
 		cv->FrameRect(same_col? Rect(0, 0, c_size*3, c_size*3) : Rect(c_size, c_size, c_size*2, c_size*2));
 
-		//’†ŠÔˆ—
+		//ä¸­é–“å‡¦ç†
 		int r2 = r, g2 = g, b2 = b;
-		//9“_•½‹Ï
+		//9ç‚¹å¹³å‡
 		if (Ave9pxCheckBox->Checked) {
 			int sum_r = 0, sum_g = 0, sum_b = 0;
 			for (int i=0; i<9; i++) {
@@ -189,28 +189,28 @@ void __fastcall TColorPicker::UpdateStt(int x, int y, float ratio)
 			g2 = sum_g/9;
 			b2 = sum_b/9;
 		}
-		//•âF
+		//è£œè‰²
 		if (CmpColCheckBox->Checked) {
 			int x = std::max(r, std::max(g2, b2)) + std::min(r2, std::min(g2, b2));
 			r2 = x - r2;
 			g2 = x - g2;
 			b2 = x - b2;
 		}
-		//ƒZ[ƒtƒJƒ‰[‹ß—
+		//ã‚»ãƒ¼ãƒ•ã‚«ãƒ©ãƒ¼è¿‘ä¼¼
 		if (SafeColCheckBox->Checked) {
 			r2 = (int)(r2/51.0 + 0.5) * 51;
 			g2 = (int)(g2/51.0 + 0.5) * 51;
 			b2 = (int)(b2/51.0 + 0.5) * 51;
 		}
 
-		//æ“¾F
+		//å–å¾—è‰²
 		TColor c2 = TColor(RGB(r2, g2, b2));
 		int cref2 = ColorToRGB(c2);
 		int h2, s2, v2;  RgbToHsv(c2, &h2, &s2, &v2);
 		int h3, s3, l2;  RgbToHsl(c2, &h3, &s3, &l2);
 		Col2Panel->Color = c2;
 
-		//ƒRƒs[•¶š—ñ
+		//ã‚³ãƒ”ãƒ¼æ–‡å­—åˆ—
 		UnicodeString colstr;
 		switch (FmtComboBox->ItemIndex) {
 		case 0: colstr.sprintf(_T("%d,%d,%d"),			r2, g2, b2);	break;
@@ -238,12 +238,12 @@ void __fastcall TColorPicker::UpdateStt(int x, int y, float ratio)
 }
 
 //---------------------------------------------------------------------------
-//Œ‹‰Ê‚ÌƒRƒs[
+//çµæœã®ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TColorPicker::CopyColor()
 {
 	UnicodeString fmt = FmtComboBox->Text;
-	//ƒrƒbƒgƒ}ƒbƒv
+	//ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—
 	if (remove_top_s(fmt, "BITMAP(")) {
 		int size = get_tkn(fmt, ')').ToIntDef(32);
 		std::unique_ptr<Graphics::TBitmap> bmp(new Graphics::TBitmap());
@@ -253,9 +253,9 @@ void __fastcall TColorPicker::CopyColor()
 		cv->FillRect(Rect(0, 0, size, size));
 		copy_to_Clipboard(bmp.get());
 	}
-	//•¶š—ñ
+	//æ–‡å­—åˆ—
 	else {
-		//˜A‘±æ“¾
+		//é€£ç¶šå–å¾—
 		if (Repeating) {
 			if (RepCount>0) {
 				if (!RepCopyBuff.IsEmpty()) {
@@ -274,10 +274,10 @@ void __fastcall TColorPicker::CopyColor()
 				if (RepComboBox->ItemIndex==3) RepCopyBuff += "\n";
 				RepCount--;
 			}
-			if (RepCount>0) return;			//Œp‘±
+			if (RepCount>0) return;			//ç¶™ç¶š
 			copy_to_Clipboard(RepCopyBuff);
 		}
-		//1‰ñæ“¾
+		//1å›å–å¾—
 		else {
 			copy_to_Clipboard(ColEdit->Text);
 		}
@@ -287,7 +287,7 @@ void __fastcall TColorPicker::CopyColor()
 }
 
 //---------------------------------------------------------------------------
-//˜A‘±æ“¾ŠJn
+//é€£ç¶šå–å¾—é–‹å§‹
 //---------------------------------------------------------------------------
 void __fastcall TColorPicker::StartRepActionExecute(TObject *Sender)
 {
@@ -303,9 +303,9 @@ void __fastcall TColorPicker::StartRepActionUpdate(TObject *Sender)
 
 	RepSttLabel->Font->Color = is_bmp? col_Error : get_TextColor();
 	UnicodeString stt_str;
-	if		(is_bmp)	stt_str = "ƒrƒbƒgƒ}ƒbƒv‚ÌƒRƒs[‚Å‚Í—˜—p‚Å‚«‚Ü‚¹‚ñB";
-	else if (Repeating)	stt_str.sprintf(_T("˜A‘±æ“¾’†...@‚ ‚Æ %u ‰ñ"), RepCount);
-	else 				stt_str = "[ŠJn]‚Å˜A‘±æ“¾‚ªn‚Ü‚è‚Ü‚·B";
+	if		(is_bmp)	stt_str = "ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã®ã‚³ãƒ”ãƒ¼ã§ã¯åˆ©ç”¨ã§ãã¾ã›ã‚“ã€‚";
+	else if (Repeating)	stt_str.sprintf(_T("é€£ç¶šå–å¾—ä¸­...ã€€ã‚ã¨ %u å›"), RepCount);
+	else 				stt_str = "[é–‹å§‹]ã§é€£ç¶šå–å¾—ãŒå§‹ã¾ã‚Šã¾ã™ã€‚";
 	RepSttLabel->Caption = stt_str;
 }
 //---------------------------------------------------------------------------

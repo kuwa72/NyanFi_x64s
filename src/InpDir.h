@@ -1,6 +1,6 @@
 /**
  * @file InpDir.h
- * @brief ƒfƒBƒŒƒNƒgƒŠ‚ğŠJ‚­ƒ_ƒCƒAƒƒO
+ * @brief ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’é–‹ããƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 //---------------------------------------------------------------------------
 #ifndef InpDirH
@@ -17,11 +17,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒfƒBƒŒƒNƒgƒŠ‚ğŠJ‚­ƒ_ƒCƒAƒƒO
+ * @brief ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’é–‹ããƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TInpDirDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *OkAction;
 	TActionList *ActionList1;
 	TButton *CanButton;
@@ -51,11 +51,11 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall SubComboBoxCloseUp(TObject *Sender);
 	void __fastcall OkActionUpdate(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	bool isWebSea;
 	bool NoCheck;
 
-	TStringList *ItemList;		//Œó•âƒŠƒXƒg
+	TStringList *ItemList;		//å€™è£œãƒªã‚¹ãƒˆ
 	bool InhFilter;
 
 	UnicodeString CurSeaPath;
@@ -64,7 +64,7 @@ private:	// ƒ†[ƒU[éŒ¾
 	void __fastcall SetList();
 	void __fastcall Filter();
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	UnicodeString InitialPath;
 	UnicodeString CommandStr;
 

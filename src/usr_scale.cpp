@@ -1,18 +1,18 @@
 //----------------------------------------------------------------------//
-// ƒXƒP[ƒŠƒ“ƒOˆ—														//
+// ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°å‡¦ç†														//
 //																		//
 //----------------------------------------------------------------------//
 #include "usr_scale.h"
 
 //---------------------------------------------------------------------------
-//ƒXƒP[ƒŠƒ“ƒO‚³‚ê‚½ƒtƒHƒ“ƒg‚ğŠ„‚è“–‚Ä‚é
+//ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°ã•ã‚ŒãŸãƒ•ã‚©ãƒ³ãƒˆã‚’å‰²ã‚Šå½“ã¦ã‚‹
 //---------------------------------------------------------------------------
 void AssignScaledFont(
-	TFont *s_font, 		//Š„“–æƒtƒHƒ“ƒg
+	TFont *s_font, 		//å‰²å½“å…ˆãƒ•ã‚©ãƒ³ãƒˆ
 	TFont *font,
-	TControl *cp,		//PPI‚ğæ“¾‚·‚éƒRƒ“ƒgƒ[ƒ‹
-	int size,			//ƒTƒCƒY	(default = 0 : ƒTƒCƒYw’è‚È‚µ)
-	TColor col)			//F		(default = clNone)
+	TControl *cp,		//PPIã‚’å–å¾—ã™ã‚‹ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«
+	int size,			//ã‚µã‚¤ã‚º	(default = 0 : ã‚µã‚¤ã‚ºæŒ‡å®šãªã—)
+	TColor col)			//è‰²		(default = clNone)
 {
 	s_font->Assign(font? font : Application->DefaultFont);
 	if (size>0) s_font->Size = size;
@@ -21,18 +21,18 @@ void AssignScaledFont(
 }
 
 //---------------------------------------------------------------------------
-//w’èƒtƒHƒ“ƒg‚Ì•`‰æ‚‚ğæ“¾
+//æŒ‡å®šãƒ•ã‚©ãƒ³ãƒˆã®æç”»é«˜ã‚’å–å¾—
 //---------------------------------------------------------------------------
 int get_FontHeightMgn(TFont *font,
-	int mgn,		//ƒ}[ƒWƒ“		(default = 0)
-	int min_mgn)	//Å¬ƒ}[ƒWƒ“	(default = 2)
+	int mgn,		//ãƒãƒ¼ã‚¸ãƒ³		(default = 0)
+	int min_mgn)	//æœ€å°ãƒãƒ¼ã‚¸ãƒ³	(default = 2)
 {
 	std::unique_ptr<Graphics::TBitmap> bmp(new Graphics::TBitmap());
 	TCanvas *cv = bmp->Canvas;
 	cv->Font->Assign(font);
 	int fh = cv->TextHeight("Q");
 	if (mgn>0) {
-		//“à•”ƒŒƒfƒBƒ“ƒO‚Æ‘ŠE
+		//å†…éƒ¨ãƒ¬ãƒ‡ã‚£ãƒ³ã‚°ã¨ç›¸æ®º
 		int ld = fh - abs(cv->Font->Height);
 		if (ld>0) mgn -= ld;
 		if (mgn<min_mgn) mgn = min_mgn;
@@ -42,14 +42,14 @@ int get_FontHeightMgn(TFont *font,
 }
 //---------------------------------------------------------------------------
 int get_FontHeightMgnS(TFont *font,
-	int mgn,		//	ƒ}[ƒWƒ“		(default = 0)
-	int min_mgn)	//	Å¬ƒ}[ƒWƒ“	(default = 2)
+	int mgn,		//	ãƒãƒ¼ã‚¸ãƒ³		(default = 0)
+	int min_mgn)	//	æœ€å°ãƒãƒ¼ã‚¸ãƒ³	(default = 2)
 {
 	return get_FontHeightMgn(font, ScaledInt(mgn), ScaledInt(min_mgn));
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒ“ƒgƒ[ƒ‹‚ÉƒXƒP[ƒŠƒ“ƒO‚³‚ê‚½ƒtƒHƒ“ƒg‚ğİ’è
+//ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã«ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°ã•ã‚ŒãŸãƒ•ã‚©ãƒ³ãƒˆã‚’è¨­å®š
 //---------------------------------------------------------------------------
 void AssignScaledFont(TWinControl *cp, TFont *font)
 {
@@ -92,7 +92,7 @@ void AssignScaledFont(TPaintBox *pp, TFont *font)
 }
 
 //---------------------------------------------------------------------------
-//ƒTƒCƒY‚©‚çƒXƒP[ƒŠƒ“ƒO‚³‚ê‚½ƒtƒHƒ“ƒg‚‚ğæ“¾
+//ã‚µã‚¤ã‚ºã‹ã‚‰ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°ã•ã‚ŒãŸãƒ•ã‚©ãƒ³ãƒˆé«˜ã‚’å–å¾—
 //---------------------------------------------------------------------------
 int ScaledFontHeight(int sz, TControl *cp)
 {

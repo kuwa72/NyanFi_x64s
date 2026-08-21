@@ -1,6 +1,6 @@
 /**
  * @file CalcDlg.h
- * @brief “d‘ì
+ * @brief é›»å“
  */
 //---------------------------------------------------------------------------
 #ifndef CalcDlgH
@@ -22,11 +22,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief “d‘ì
+ * @brief é›»å“
  */
 class TCalculator : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *AngleAction;
 	TAction *EditDefAction;
 	TAction *NotAction;
@@ -67,7 +67,7 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall NotActionUpdate(TObject *Sender);
 	void __fastcall AcBtnClick(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	TStringList *ConstList;
 	TStringList *FuncList;
 	int  AngleMode;
@@ -111,7 +111,7 @@ private:	// ƒ†[ƒU[éŒ¾
 		return (v==HUGE_VALL || IsInfinite(v) || IsNan(v));
 	}
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	UnicodeString InitialLine;
 	UnicodeString OutputLine;
 

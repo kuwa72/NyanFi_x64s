@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------//
-// Shell ŠÖ˜A															//
+// Shell é–¢é€£															//
 //																		//
 //----------------------------------------------------------------------//
 #include "usr_scale.h"
@@ -14,7 +14,7 @@
 #pragma package(smart_init)
 
 //---------------------------------------------------------------------------
-//w’èƒEƒBƒ“ƒhƒE‚ÌƒeƒLƒXƒg‚ğæ“¾
+//æŒ‡å®šã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ãƒ†ã‚­ã‚¹ãƒˆã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString get_WndText(HWND hWnd)
 {
@@ -22,7 +22,7 @@ UnicodeString get_WndText(HWND hWnd)
 	return ((::GetWindowText(hWnd, tbuf, 1023)>0)? UnicodeString(tbuf) : EmptyStr);
 }
 //---------------------------------------------------------------------------
-//w’èƒEƒBƒ“ƒhƒE‚ÌƒNƒ‰ƒX–¼‚ğæ“¾
+//æŒ‡å®šã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ã‚¯ãƒ©ã‚¹åã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString get_WndClassName(HWND hWnd)
 {
@@ -31,7 +31,7 @@ UnicodeString get_WndClassName(HWND hWnd)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒHƒ‹ƒ_‚Ì•\¦–¼‚ğ desktop.ini ‚©‚çæ“¾ (‘®«‚Í–³‹)
+//ãƒ•ã‚©ãƒ«ãƒ€ã®è¡¨ç¤ºåã‚’ desktop.ini ã‹ã‚‰å–å¾— (å±æ€§ã¯ç„¡è¦–)
 //---------------------------------------------------------------------------
 UnicodeString get_LocalFlderName(UnicodeString pnam)
 {
@@ -49,7 +49,7 @@ UnicodeString get_LocalFlderName(UnicodeString pnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒvƒƒpƒeƒB–¼‚Ì‰E‘µ‚¦•\¦•¶š—ñ‚Ìæ“¾
+//ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£åã®å³æƒãˆè¡¨ç¤ºæ–‡å­—åˆ—ã®å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString get_PropTitle(UnicodeString s)
 {
@@ -62,7 +62,7 @@ UnicodeString get_PropTitle(const _TCHAR *s)
 }
 
 //---------------------------------------------------------------------------
-//ƒvƒƒpƒeƒB€–Ú‚Ìì¬("ƒvƒƒpƒeƒB–¼: ’l•¶š—ñ");
+//ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£é …ç›®ã®ä½œæˆ("ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£å: å€¤æ–‡å­—åˆ—");
 //---------------------------------------------------------------------------
 UnicodeString make_PropLine(UnicodeString tit, UnicodeString str)
 {
@@ -116,43 +116,43 @@ void add_PropLine_if(const _TCHAR *tit, UnicodeString str, TStrings *lst, int fl
 }
 
 //---------------------------------------------------------------------------
-//Œx‚ğ’Ç‰Á
+//è­¦å‘Šã‚’è¿½åŠ 
 //---------------------------------------------------------------------------
 void add_WarnLine(UnicodeString str, TStrings *lst)
 {
-	lst->AddObject(make_PropLine(_T("Œx"), str), (TObject*)LBFLG_ERR_FIF);
+	lst->AddObject(make_PropLine(_T("è­¦å‘Š"), str), (TObject*)LBFLG_ERR_FIF);
 }
 
 //---------------------------------------------------------------------------
 UserShell *usr_SH = NULL;
 
 HWND TargetHandle = NULL;
-int  DragStartTag = -1;				//ƒhƒ‰ƒbƒO‚ªŠJn‚³‚ê‚½ƒŠƒXƒgƒ^ƒO
-int  DroppedTag	  = -1;				//ƒhƒƒbƒv‚³‚ê‚½ƒŠƒXƒgƒ^ƒO
-int  DroppedMode  = 0;				//ƒhƒƒbƒv‚Ìƒ‚[ƒh
-int  DefDropMode  = 0;				//ƒfƒtƒHƒ‹ƒg‚Ìƒhƒƒbƒv“®ì (0: ƒGƒNƒXƒvƒ[ƒ‰ŒİŠ·/ 1:ƒRƒs[/ 2:ˆÚ“®)
+int  DragStartTag = -1;				//ãƒ‰ãƒ©ãƒƒã‚°ãŒé–‹å§‹ã•ã‚ŒãŸãƒªã‚¹ãƒˆã‚¿ã‚°
+int  DroppedTag	  = -1;				//ãƒ‰ãƒ­ãƒƒãƒ—ã•ã‚ŒãŸãƒªã‚¹ãƒˆã‚¿ã‚°
+int  DroppedMode  = 0;				//ãƒ‰ãƒ­ãƒƒãƒ—ã®ãƒ¢ãƒ¼ãƒ‰
+int  DefDropMode  = 0;				//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ãƒ‰ãƒ­ãƒƒãƒ—å‹•ä½œ (0: ã‚¨ã‚¯ã‚¹ãƒ—ãƒ­ãƒ¼ãƒ©äº’æ›/ 1:ã‚³ãƒ”ãƒ¼/ 2:ç§»å‹•)
 
-UnicodeString DragDrive;			//ƒhƒ‰ƒbƒOŒ³‚Ìƒhƒ‰ƒCƒu
-bool DropRefused = false;			//‘Î‰ŠO‚Ì‘ÎÛ‚ğ‹‘”Û
+UnicodeString DragDrive;			//ãƒ‰ãƒ©ãƒƒã‚°å…ƒã®ãƒ‰ãƒ©ã‚¤ãƒ–
+bool DropRefused = false;			//å¯¾å¿œå¤–ã®å¯¾è±¡ã‚’æ‹’å¦
 
-TStringList *DroppedList = NULL;	//ƒhƒƒbƒv‚³‚ê‚½ƒtƒ@ƒCƒ‹ƒŠƒXƒg
-TListBox *L_FileListBox  = NULL;	//¶ƒtƒ@ƒCƒ‹ƒŠƒXƒg
-TListBox *R_FileListBox  = NULL;	//‰Eƒtƒ@ƒCƒ‹ƒŠƒXƒg
+TStringList *DroppedList = NULL;	//ãƒ‰ãƒ­ãƒƒãƒ—ã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆ
+TListBox *L_FileListBox  = NULL;	//å·¦ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆ
+TListBox *R_FileListBox  = NULL;	//å³ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆ
 
 TDropTargetList *TargetList;
 int TargetIndex;
 
-//ƒRƒ“ƒeƒLƒXƒgƒƒjƒ…[
+//ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆãƒ¡ãƒ‹ãƒ¥ãƒ¼
 IContextMenu2 *ContextMenu2 = NULL;
 IContextMenu3 *ContextMenu3 = NULL;
 #define USR_NENUID_BASE	1000
 
 //---------------------------------------------------------------------------
-//ƒhƒƒbƒv‚Ìƒ‚[ƒh‚ğæ“¾
+//ãƒ‰ãƒ­ãƒƒãƒ—ã®ãƒ¢ãƒ¼ãƒ‰ã‚’å–å¾—
 //---------------------------------------------------------------------------
 DWORD get_DropMode(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt)
 {
-	if (pDataObj) {	//DragEnter ‚Ìƒ`ƒFƒbƒN
+	if (pDataObj) {	//DragEnter æ™‚ã®ãƒã‚§ãƒƒã‚¯
 		FORMATETC formatetc;
 		formatetc.cfFormat = CF_HDROP;
 		formatetc.ptd	   = NULL;
@@ -161,7 +161,7 @@ DWORD get_DropMode(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt)
 		formatetc.tymed	   = TYMED_HGLOBAL;
 
 		try {
-			//ƒhƒ‰ƒbƒOŒ³‚Ìƒhƒ‰ƒCƒu‚ğæ“¾
+			//ãƒ‰ãƒ©ãƒƒã‚°å…ƒã®ãƒ‰ãƒ©ã‚¤ãƒ–ã‚’å–å¾—
 			UnicodeString dnam;
 			HRESULT hr = pDataObj->QueryGetData(&formatetc);	if (FAILED(hr)) Abort();
 			STGMEDIUM medium;
@@ -179,8 +179,8 @@ DWORD get_DropMode(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt)
 		}
 		catch (...) {
 			DragDrive = EmptyStr;
-			//ƒŠƒ“ƒN€–Ú‚©H
-			formatetc.cfFormat = ::RegisterClipboardFormat(CFSTR_FILEDESCRIPTORW);	//ƒ^ƒCƒgƒ‹—p
+			//ãƒªãƒ³ã‚¯é …ç›®ã‹ï¼Ÿ
+			formatetc.cfFormat = ::RegisterClipboardFormat(CFSTR_FILEDESCRIPTORW);	//ã‚¿ã‚¤ãƒˆãƒ«ç”¨
 			DropRefused = FAILED(pDataObj->QueryGetData(&formatetc));
 			if (!DropRefused) {
 				formatetc.cfFormat = ::RegisterClipboardFormat(CFSTR_INETURL);		//URL
@@ -196,34 +196,34 @@ DWORD get_DropMode(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt)
 
 	if (DropRefused) return DROPEFFECT_NONE;
 
-	//ƒ‚[ƒh‚Ìİ’è
+	//ãƒ¢ãƒ¼ãƒ‰ã®è¨­å®š
 	DWORD d_mode = DROPEFFECT_NONE;
 	const POINT p = {pt.x, pt.y};
 	HWND hWnd = ::WindowFromPoint(p);
 	TargetIndex = -1;
 
-	//ƒtƒ@ƒCƒ‹ƒŠƒXƒg
+	//ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆ
 	if (hWnd==L_FileListBox->Handle || hWnd==R_FileListBox->Handle) {
 		DWORD kstt = (grfKeyState & (MK_CONTROL|MK_SHIFT|MK_ALT));
-		if		(kstt==MK_CONTROL)			  d_mode = DROPEFFECT_COPY;	//ƒRƒs[
-		else if	(kstt==MK_SHIFT)			  d_mode = DROPEFFECT_MOVE;	//ˆÚ“®
-		else if (kstt==(MK_CONTROL|MK_SHIFT)) d_mode = DROPEFFECT_LINK;	//ƒVƒ‡[ƒgƒJƒbƒg
-		//ƒfƒtƒHƒ‹ƒg‚Ì‘€ì
+		if		(kstt==MK_CONTROL)			  d_mode = DROPEFFECT_COPY;	//ã‚³ãƒ”ãƒ¼
+		else if	(kstt==MK_SHIFT)			  d_mode = DROPEFFECT_MOVE;	//ç§»å‹•
+		else if (kstt==(MK_CONTROL|MK_SHIFT)) d_mode = DROPEFFECT_LINK;	//ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆ
+		//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®æ“ä½œ
 		else if (kstt==0) {
-			//ƒhƒƒbƒvæ‚Ìƒhƒ‰ƒCƒu‚Æ”äŠr‚µ‚Ä“®ì‚ğŒˆ‚ß‚é
+			//ãƒ‰ãƒ­ãƒƒãƒ—å…ˆã®ãƒ‰ãƒ©ã‚¤ãƒ–ã¨æ¯”è¼ƒã—ã¦å‹•ä½œã‚’æ±ºã‚ã‚‹
 			if (DefDropMode==0) {
 				TListBox *lp = (hWnd==L_FileListBox->Handle)? L_FileListBox : R_FileListBox;
 				UnicodeString drv = (lp->Count>0)? ExtractFileDrive(lp->Items->Strings[0]) : EmptyStr;
 				if (!DragDrive.IsEmpty() && !drv.IsEmpty() && SameText(DragDrive, drv))
-					d_mode = DROPEFFECT_MOVE;	//ˆÚ“®
+					d_mode = DROPEFFECT_MOVE;	//ç§»å‹•
 				else
-					d_mode = DROPEFFECT_COPY;	//ƒRƒs[
+					d_mode = DROPEFFECT_COPY;	//ã‚³ãƒ”ãƒ¼
 			}
 			else if (DefDropMode==2) {
-				d_mode = DROPEFFECT_MOVE;	//ˆÚ“®
+				d_mode = DROPEFFECT_MOVE;	//ç§»å‹•
 			}
 			else {
-				d_mode = DROPEFFECT_COPY;	//ƒRƒs[
+				d_mode = DROPEFFECT_COPY;	//ã‚³ãƒ”ãƒ¼
 			}
 		}
 
@@ -234,9 +234,9 @@ DWORD get_DropMode(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt)
 		else
 			DroppedMode = d_mode;
 	}
-	//‚»‚Ì‘¼
+	//ãã®ä»–
 	else if (hWnd) {
-		if (SameText(get_WndClassName(hWnd), "EDIT")) hWnd = ::GetParent(hWnd);	//ƒRƒ“ƒ{ƒ{ƒbƒNƒX‘Îô
+		if (SameText(get_WndClassName(hWnd), "EDIT")) hWnd = ::GetParent(hWnd);	//ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹å¯¾ç­–
 
 		TPoint mp = Mouse->CursorPos;
 		for (int i=0; i<TargetList->Count; i++) {
@@ -284,10 +284,10 @@ ULONG __stdcall TDropSource::Release()
 //---------------------------------------------------------------------------
 HRESULT __stdcall TDropSource::QueryContinueDrag(BOOL fEsc, DWORD grfKeyState)
 {
-	//ESCA‚Ü‚½‚Í—¼•û‚Ìƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚ç’†~
+	//ESCã€ã¾ãŸã¯ä¸¡æ–¹ã®ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸã‚‰ä¸­æ­¢
 	if (fEsc || (grfKeyState & (MK_LBUTTON|MK_RBUTTON))==(MK_LBUTTON|MK_RBUTTON))
 		return DRAGDROP_S_CANCEL;
-	//ƒ}ƒEƒXƒ{ƒ^ƒ“‚ª—£‚³‚ê‚½ê‡‚Íƒhƒƒbƒvˆ—‚Ö
+	//ãƒã‚¦ã‚¹ãƒœã‚¿ãƒ³ãŒé›¢ã•ã‚ŒãŸå ´åˆã¯ãƒ‰ãƒ­ãƒƒãƒ—å‡¦ç†ã¸
 	if ((grfKeyState & (MK_LBUTTON|MK_RBUTTON))==0)
 		return DRAGDROP_S_DROP;
 	return S_OK;
@@ -299,7 +299,7 @@ HRESULT __stdcall TDropSource::GiveFeedback(DWORD dwEffect)
 }
 
 //---------------------------------------------------------------------------
-// TDropTarget ƒNƒ‰ƒX
+// TDropTarget ã‚¯ãƒ©ã‚¹
 //---------------------------------------------------------------------------
 TDropTargetBase::TDropTargetBase()
 {
@@ -335,7 +335,7 @@ ULONG __stdcall TDropTargetBase::Release()
 }
 
 //---------------------------------------------------------------------------
-// TDropTarget ƒNƒ‰ƒX
+// TDropTarget ã‚¯ãƒ©ã‚¹
 //---------------------------------------------------------------------------
 void TDropTarget::CreateInstance(IDropTarget **pp)
 {
@@ -380,7 +380,7 @@ HRESULT __stdcall TDropTarget::Drop(IDataObject *pDataObj, DWORD grfKeyState, PO
 	formatetc.tymed    = TYMED_HGLOBAL;
 	STGMEDIUM medium;
 
-	//ƒhƒƒbƒv‚³‚ê‚½ƒtƒ@ƒCƒ‹‚ÌƒŠƒXƒg‚ğì¬
+	//ãƒ‰ãƒ­ãƒƒãƒ—ã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒªã‚¹ãƒˆã‚’ä½œæˆ
 	if (pDataObj->QueryGetData(&formatetc)==S_OK) {
 		HRESULT hr = pDataObj->GetData(&formatetc, &medium);	if (FAILED(hr)) return hr;
 		HDROP dp = (HDROP)::GlobalLock(medium.hGlobal);
@@ -396,9 +396,9 @@ HRESULT __stdcall TDropTarget::Drop(IDataObject *pDataObj, DWORD grfKeyState, PO
 		::GlobalUnlock(medium.hGlobal);
 		ReleaseStgMedium(&medium);
 	}
-	//ƒŠƒ“ƒN€–Ú
+	//ãƒªãƒ³ã‚¯é …ç›®
 	else {
-		//ƒ^ƒCƒgƒ‹
+		//ã‚¿ã‚¤ãƒˆãƒ«
 		UnicodeString fnam;
 		formatetc.cfFormat = ::RegisterClipboardFormat(CFSTR_FILEDESCRIPTORW);
 		HRESULT hr = pDataObj->QueryGetData(&formatetc);	if (FAILED(hr)) return hr;
@@ -417,21 +417,21 @@ HRESULT __stdcall TDropTarget::Drop(IDataObject *pDataObj, DWORD grfKeyState, PO
 		ReleaseStgMedium(&medium);
 
 		if (!fnam.IsEmpty() && !url.IsEmpty()) {
-			fnam = System::Netencoding::TURLEncoding::URL->Decode(fnam);	//ƒp[ƒZƒ“ƒgƒfƒR[ƒh
-			//‰æ‘œ‚Í‚»‚Ì‚Ü‚ÜA‚»‚êˆÈŠO‚ÍƒCƒ“ƒ^[ƒlƒbƒgƒVƒ‡[ƒgƒJƒbƒg
+			fnam = System::Netencoding::TURLEncoding::URL->Decode(fnam);	//ãƒ‘ãƒ¼ã‚»ãƒ³ãƒˆãƒ‡ã‚³ãƒ¼ãƒ‰
+			//ç”»åƒã¯ãã®ã¾ã¾ã€ãã‚Œä»¥å¤–ã¯ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒƒãƒˆã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆ
 			if (!test_FileExt(get_extension(get_tkn(url, '?')), FEXT_WEBIMG)) fnam = ChangeFileExt(fnam, ".url");
 			DroppedList->Add(UnicodeString().sprintf(_T("%s\t%s"), fnam.c_str(), url.c_str()));
 			DroppedMode = DROPEFFECT_LINK;
 		}
 	}
 
-	//ƒhƒƒbƒvˆ—‚ğ—v‹
+	//ãƒ‰ãƒ­ãƒƒãƒ—å‡¦ç†ã‚’è¦æ±‚
 	if (DroppedList && DroppedList->Count>0) {
-		//ƒtƒ@ƒCƒ‹ƒŠƒXƒg
+		//ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆ
 		if (TargetIndex==-1) {
 			::SendMessage(TargetHandle, WM_FORM_DROPPED, 0, 0);
 		}
-		//‚»‚Ì‘¼
+		//ãã®ä»–
 		else if (TargetIndex>=0 && TargetIndex<TargetList->Count) {
 			drop_target_rec *dp = TargetList->Items[TargetIndex];
 			::SendMessage(dp->hTargetWnd, WM_FORM_DROPPED, (WPARAM)dp->TargetWinCtrl, 0);
@@ -441,7 +441,7 @@ HRESULT __stdcall TDropTarget::Drop(IDataObject *pDataObj, DWORD grfKeyState, PO
 }
 
 //---------------------------------------------------------------------------
-//ƒhƒƒbƒvƒ^[ƒQƒbƒgEƒŠƒXƒg (TList ‚©‚çŒp³)
+//ãƒ‰ãƒ­ãƒƒãƒ—ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãƒ»ãƒªã‚¹ãƒˆ (TList ã‹ã‚‰ç¶™æ‰¿)
 //---------------------------------------------------------------------------
 __fastcall TDropTargetList::TDropTargetList(): TList()
 {
@@ -453,7 +453,7 @@ void __fastcall TDropTargetList::Notify(void *Ptr, TListNotification Action)
 }
 
 //---------------------------------------------------------------------------
-//“o˜^€–Ú‚ÌV‹K’Ç‰Á
+//ç™»éŒ²é …ç›®ã®æ–°è¦è¿½åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TDropTargetList::AddNew(TForm *form, TWinControl *ctrl)
 {
@@ -466,7 +466,7 @@ void __fastcall TDropTargetList::AddNew(TForm *form, TWinControl *ctrl)
 }
 
 //---------------------------------------------------------------------------
-//UserShell ƒNƒ‰ƒX
+//UserShell ã‚¯ãƒ©ã‚¹
 //---------------------------------------------------------------------------
 UserShell::UserShell(HWND hWnd)
 {
@@ -474,10 +474,10 @@ UserShell::UserShell(HWND hWnd)
 
 	TargetHandle = hWnd;
 
-	//•‚“®¬”“_—áŠO‚Ì—}~ƒ}ƒXƒN
+	//æµ®å‹•å°æ•°ç‚¹ä¾‹å¤–ã®æŠ‘æ­¢ãƒã‚¹ã‚¯
 	FpuTmpMask<<exInvalidOp<<exDenormalized<<exZeroDivide<<exOverflow<<exUnderflow<<exPrecision;
 
-	//ƒvƒƒpƒeƒB‚Ì€–ÚƒŠƒXƒg‚ğì¬
+	//ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®é …ç›®ãƒªã‚¹ãƒˆã‚’ä½œæˆ
 	PropertyList  = new TStringList();
 	PropNameWidth = 15;
 
@@ -505,7 +505,7 @@ UserShell::UserShell(HWND hWnd)
 	TargetIndex  = -1;
 	TargetList	 = new TDropTargetList();
 
-	//ƒhƒƒbƒvƒ^[ƒQƒbƒg‚ğ“o˜^
+	//ãƒ‰ãƒ­ãƒƒãƒ—ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’ç™»éŒ²
 	IDropTarget *pDropTarget = NULL;
 	TDropTarget::CreateInstance(&pDropTarget);
 	if (pDropTarget) {
@@ -526,14 +526,14 @@ UserShell::~UserShell()
 }
 
 //---------------------------------------------------------------------------
-//ƒhƒƒbƒvƒ^[ƒQƒbƒg‚ğ’Ç‰Á
+//ãƒ‰ãƒ­ãƒƒãƒ—ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’è¿½åŠ 
 //---------------------------------------------------------------------------
 void UserShell::AddTargetList(TForm *form, TWinControl *ctrl)
 {
 	TargetList->AddNew(form, ctrl);
 }
 //---------------------------------------------------------------------------
-//w’èƒtƒH[ƒ€‚Ìƒhƒƒbƒvƒ^[ƒQƒbƒg‚ğíœ
+//æŒ‡å®šãƒ•ã‚©ãƒ¼ãƒ ã®ãƒ‰ãƒ­ãƒƒãƒ—ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’å‰Šé™¤
 //---------------------------------------------------------------------------
 void UserShell::DelTargetItem(TForm *form)
 {
@@ -548,25 +548,25 @@ void UserShell::DelTargetItem(TForm *form)
 }
 
 //---------------------------------------------------------------------------
-// ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚©‚çIDataObjectƒCƒ“ƒ^[ƒtƒFƒCƒX‚ğæ“¾
+// ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã‹ã‚‰IDataObjectã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã‚’å–å¾—
 //---------------------------------------------------------------------------
 IDataObject* UserShell::GetFilePathDataObject(UnicodeString dnam, TStringList *flist)
 {
 	if (flist->Count==0) return NULL;
 
-	//ƒfƒXƒNƒgƒbƒv‚Ì IShellFolder ƒCƒ“ƒ^[ƒtƒFƒCƒX‚ğæ“¾
+	//ãƒ‡ã‚¹ã‚¯ãƒˆãƒƒãƒ—ã® IShellFolder ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã‚’å–å¾—
 	TComInterface<IShellFolder> desktop;
 	if (FAILED(SHGetDesktopFolder(&desktop))) return NULL;
 
-	//‘ÎÛƒtƒHƒ‹ƒ_‚ÌƒAƒCƒeƒ€ID
+	//å¯¾è±¡ãƒ•ã‚©ãƒ«ãƒ€ã®ã‚¢ã‚¤ãƒ†ãƒ ID
 	ITEMIDLIST *dir_pidl;
 	if (FAILED(desktop->ParseDisplayName(NULL, NULL, dnam.c_str(), NULL, &dir_pidl, NULL))) return NULL;
 
-	//ƒtƒHƒ‹ƒ_‚ÌIShellFolder ƒCƒ“ƒ^[ƒtƒFƒCƒX‚ğæ“¾
+	//ãƒ•ã‚©ãƒ«ãƒ€ã®IShellFolder ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã‚’å–å¾—
 	TComInterface<IShellFolder> targetFolder;
 	if (FAILED(desktop->BindToObject(dir_pidl, NULL, IID_IShellFolder, (void**)&targetFolder))) return NULL;
 
-	//‘ÎÛƒtƒ@ƒCƒ‹‚ÌƒAƒCƒeƒ€IDƒŠƒXƒg‚ğì¬
+	//å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¢ã‚¤ãƒ†ãƒ IDãƒªã‚¹ãƒˆã‚’ä½œæˆ
 	LPITEMIDLIST *p_pIDL = (LPITEMIDLIST*)CoTaskMemAlloc(sizeof(LPITEMIDLIST) * flist->Count);
 	if (!p_pIDL) return NULL;
 	for (int i=0; i<flist->Count; i++) {
@@ -575,7 +575,7 @@ IDataObject* UserShell::GetFilePathDataObject(UnicodeString dnam, TStringList *f
 				return NULL;
 	}
 
-	//IDataObject ƒCƒ“ƒ^[ƒtƒFƒCƒX‚ğæ“¾
+	//IDataObject ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã‚’å–å¾—
 	IDataObject *dataObject = NULL;
 	targetFolder->GetUIObjectOf(
 		NULL, flist->Count, (LPCITEMIDLIST*)p_pIDL, IID_IDataObject, NULL, (void**)&dataObject);
@@ -583,7 +583,7 @@ IDataObject* UserShell::GetFilePathDataObject(UnicodeString dnam, TStringList *f
 }
 
 //---------------------------------------------------------------------------
-//ƒhƒ‰ƒbƒO•ƒhƒƒbƒv‚ÌŠJn
+//ãƒ‰ãƒ©ãƒƒã‚°ï¼†ãƒ‰ãƒ­ãƒƒãƒ—ã®é–‹å§‹
 //---------------------------------------------------------------------------
 DWORD UserShell::DoFilesDragDrop(UnicodeString dnam, TStringList *flist, int tag)
 {
@@ -621,40 +621,44 @@ DWORD UserShell::DoClipDragDrop()
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒ“ƒeƒLƒXƒgƒƒjƒ…[‚ğ•\¦
-//  –ß‚è’l: ¸”s‚Ìê‡ "ERROR"A’Ç‰Á€–Ú‚È‚ç‚»‚Ì•¶š—ñA‚»‚êˆÈŠO‚Í EmptyStr
-//IƒƒCƒ“‘¤‚Å WM_INITMENUPOPUP,WM_DRAWITEM,WM_MEASUREITEM,WM_MENUCHAR ‚ğˆ—‚·‚é‚±‚Æ
+//ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’è¡¨ç¤º
+//  æˆ»ã‚Šå€¤: å¤±æ•—ã®å ´åˆ "ERROR"ã€è¿½åŠ é …ç›®ãªã‚‰ãã®æ–‡å­—åˆ—ã€ãã‚Œä»¥å¤–ã¯ EmptyStr
+//ï¼ãƒ¡ã‚¤ãƒ³å´ã§ WM_INITMENUPOPUP,WM_DRAWITEM,WM_MEASUREITEM,WM_MENUCHAR ã‚’å‡¦ç†ã™ã‚‹ã“ã¨
 //---------------------------------------------------------------------------
 UnicodeString UserShell::ShowContextMenu(
 	HWND hWnd,
-	UnicodeString dnam,		//ƒfƒBƒŒƒNƒgƒŠ–¼
-	TStringList *flist,		//‘ÎÛƒŠƒXƒg
-	TStringList *ex_item)	//’Ç‰Áƒƒjƒ…[€–ÚƒŠƒXƒg
-							//  ‘®: ƒLƒƒƒvƒVƒ‡ƒ“ \t ƒRƒ}ƒ“ƒh \t ƒAƒCƒRƒ“
+	UnicodeString dnam,		//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå
+	TStringList *flist,		//å¯¾è±¡ãƒªã‚¹ãƒˆ
+	TStringList *ex_item)	//è¿½åŠ ãƒ¡ãƒ‹ãƒ¥ãƒ¼é …ç›®ãƒªã‚¹ãƒˆ
+							//  æ›¸å¼: ã‚­ãƒ£ãƒ—ã‚·ãƒ§ãƒ³ \t ã‚³ãƒãƒ³ãƒ‰ \t ã‚¢ã‚¤ã‚³ãƒ³
 {
 	UnicodeString ret_str;
 	ITEMIDLIST *dir_pidl = NULL;
 
-	//•‚“®¬”“_—áŠO‚ğˆê“I‚Éƒ}ƒXƒN
+	//æµ®å‹•å°æ•°ç‚¹ä¾‹å¤–ã‚’ä¸€æ™‚çš„ã«ãƒã‚¹ã‚¯
 	TFPUExceptionMask orgMask = GetExceptionMask();
 	SetExceptionMask(FpuTmpMask);
 
-	try {
+	{
+		//try { ... } __finally { ... } ã‚’ RAII ã«ç½®ãæ›ãˆãŸã‚‚ã® (compat/scope_exit.h)ã€‚
+		//__finally ã¨ã®å·®ã¯ make_scope_exit ã‚’ä½œã‚‹å‰ã«æŠ•ã’ãŸå ´åˆã ã‘ã§ã€
+		//ãã®ã¨ãã¯å¾Œå§‹æœ«ã®å¯¾è±¡ãŒã¾ã ç„¡ã„ã®ã§å‘¼ã°ãªã„æ–¹ãŒæ­£ã—ã„
+		const auto nf_cleanup = compat::make_scope_exit([&] { SetExceptionMask(orgMask); ::ILFree(dir_pidl); });
 		try {
 			if (flist->Count==0) Abort();
 
-			//ƒfƒXƒNƒgƒbƒv‚Ì IShellFolder ƒCƒ“ƒ^[ƒtƒFƒCƒX‚ğæ“¾
+			//ãƒ‡ã‚¹ã‚¯ãƒˆãƒƒãƒ—ã® IShellFolder ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã‚’å–å¾—
 			TComInterface<IShellFolder> desktop;
 			if (FAILED(SHGetDesktopFolder(&desktop))) Abort();
 
-			//‘ÎÛƒtƒHƒ‹ƒ_‚ÌƒAƒCƒeƒ€ID
+			//å¯¾è±¡ãƒ•ã‚©ãƒ«ãƒ€ã®ã‚¢ã‚¤ãƒ†ãƒ ID
 			if (FAILED(desktop->ParseDisplayName(NULL, NULL, dnam.c_str(), NULL, &dir_pidl, NULL))) Abort();
 
-			//ƒtƒHƒ‹ƒ_‚ÌIShellFolder ƒCƒ“ƒ^[ƒtƒFƒCƒX‚ğæ“¾
+			//ãƒ•ã‚©ãƒ«ãƒ€ã®IShellFolder ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã‚’å–å¾—
 			TComInterface<IShellFolder> targetFolder;
 			if (FAILED(desktop->BindToObject(dir_pidl, NULL, IID_IShellFolder, (void**)&targetFolder))) Abort();
 
-			//‘ÎÛƒtƒ@ƒCƒ‹‚ÌƒAƒCƒeƒ€IDƒŠƒXƒg‚ğì¬
+			//å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¢ã‚¤ãƒ†ãƒ IDãƒªã‚¹ãƒˆã‚’ä½œæˆ
 			LPITEMIDLIST *p_pIDL = (LPITEMIDLIST*)CoTaskMemAlloc(sizeof(LPITEMIDLIST) * flist->Count);
 			if (!p_pIDL) Abort();
 			for (int i=0; i<flist->Count; i++) {
@@ -663,7 +667,7 @@ UnicodeString UserShell::ShowContextMenu(
 						Abort();
 			}
 
-			//ƒRƒ“ƒeƒLƒXƒgƒƒjƒ…[‚ğæ“¾
+			//ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’å–å¾—
 			TComInterface<IContextMenu> contextMenu;
 			if (FAILED(targetFolder->GetUIObjectOf(hWnd, flist->Count,
 				(LPCITEMIDLIST*)p_pIDL, IID_IContextMenu, NULL, (void **)&contextMenu)))
@@ -677,17 +681,17 @@ UnicodeString UserShell::ShowContextMenu(
 			else if (ContextMenu2) pCM = ContextMenu2;
 			else				   pCM = contextMenu;
 
-			std::unique_ptr<TList> m_lst(new TList());	//ƒƒjƒ…[ƒnƒ“ƒhƒ‹‚ÌƒŠƒXƒg(”jŠü—p)
-			std::unique_ptr<TList> s_lst(new TList());	//ƒTƒuƒƒjƒ…[‚ÌŠK‘wƒŠƒXƒg
+			std::unique_ptr<TList> m_lst(new TList());	//ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ«ã®ãƒªã‚¹ãƒˆ(ç ´æ£„ç”¨)
+			std::unique_ptr<TList> s_lst(new TList());	//ã‚µãƒ–ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®éšå±¤ãƒªã‚¹ãƒˆ
 
 			HMENU hMenu = ::CreatePopupMenu();
 			m_lst->Add(hMenu);
 			s_lst->Add(hMenu);
 
 			if (SUCCEEDED(pCM->QueryContextMenu(hMenu, 0, 1, 0x7fff, CMF_EXPLORE))) {
-				//’Ç‰Á€–Ú‚Ì‘}“ü
+				//è¿½åŠ é …ç›®ã®æŒ¿å…¥
 				if (ex_item && ex_item->Count>0) {
-					//‘Î‰Šg’£q‚ÌƒŠƒXƒg‚ğì¬
+					//å¯¾å¿œæ‹¡å¼µå­ã®ãƒªã‚¹ãƒˆã‚’ä½œæˆ
 					std::unique_ptr<TStringList> xlst(new TStringList());
 					for (int i=0; i<flist->Count; i++) {
 						if (dir_exists(dnam + flist->Strings[i])) {
@@ -715,9 +719,9 @@ UnicodeString UserShell::ShowContextMenu(
 						}
 
 						int pos_last = std::max(::GetMenuItemCount(hMP) - ((s_lst->Count==1)? 2 : 0), 0);
-						int pos = (!ins_top || (i==0 && SameText(lbuf, "–¼‘O‚Ì•ÏX(&M)\tRenameDlg")))? pos_last : pos_top;
+						int pos = (!ins_top || (i==0 && SameText(lbuf, "åå‰ã®å¤‰æ›´(&M)\tRenameDlg")))? pos_last : pos_top;
 
-						//ƒTƒuƒƒjƒ…[
+						//ã‚µãƒ–ãƒ¡ãƒ‹ãƒ¥ãƒ¼
 						if (remove_top_s(lbuf, '>')) {
 							HMENU hSub = ::CreatePopupMenu();
 							m_lst->Add(hSub);
@@ -739,13 +743,13 @@ UnicodeString UserShell::ShowContextMenu(
 							}
 							else hMP = hMenu;
 						}
-						//€–Ú
+						//é …ç›®
 						else {
 							TStringDynArray m_buf = split_strings_tab(lbuf);
 							UnicodeString mext = Trim(m_buf[0]);
 							UnicodeString cap  = split_tkn(mext, '|');
 
-							//‘Î‰Šg’£q‚Ìƒ`ƒFƒbƒN
+							//å¯¾å¿œæ‹¡å¼µå­ã®ãƒã‚§ãƒƒã‚¯
 							if (!mext.IsEmpty()) {
 								bool ok = true;
 								for (int j=0; j<xlst->Count && ok; j++) {
@@ -762,7 +766,7 @@ UnicodeString UserShell::ShowContextMenu(
 							mii.cch 	   = _tcslen(mii.dwTypeData);
 							::InsertMenuItem(hMP, pos, TRUE, &mii);
 							pos_top++;
-							//ƒAƒCƒRƒ“‚Ìİ’è
+							//ã‚¢ã‚¤ã‚³ãƒ³ã®è¨­å®š
 							if (m_buf.Length==3) {
 								SHFILEINFO sif;
 								if (::SHGetFileInfo(m_buf[2].c_str(), 0, &sif, sizeof(SHFILEINFO), SHGFI_ICON|SHGFI_SMALLICON)) {
@@ -790,15 +794,15 @@ UnicodeString UserShell::ShowContextMenu(
 					}
 				}
 
-				//•\¦
+				//è¡¨ç¤º
 				POINT pt;
 				::GetCursorPos(&pt);
 				int nId = ::TrackPopupMenu(hMenu, TPM_LEFTALIGN|TPM_RETURNCMD|TPM_RIGHTBUTTON, pt.x, pt.y, 0, hWnd, NULL);
-				//’Ç‰Á€–Ú
+				//è¿½åŠ é …ç›®
 				if (nId>=USR_NENUID_BASE) {
 					ret_str = Trim(ex_item->Strings[nId - USR_NENUID_BASE]);
 				}
-				//’Êí€–Ú
+				//é€šå¸¸é …ç›®
 				else if (nId!=0) {
 					CMINVOKECOMMANDINFO ici = {sizeof(CMINVOKECOMMANDINFO)};
 					ici.hwnd   = hWnd;
@@ -817,25 +821,21 @@ UnicodeString UserShell::ShowContextMenu(
 			ret_str = "ERROR";
 		}
 	}
-	__finally {
-		SetExceptionMask(orgMask);
-		::ILFree(dir_pidl);
-	}
 	return ret_str;
 }
 
 //---------------------------------------------------------------------------
-//ƒhƒ‰ƒCƒu‚ÌƒRƒ“ƒeƒLƒXƒgƒƒjƒ…[‚ğ•\¦/w’èID‚ğÀs
-//  –ß‚è’l: ¸”s‚Ìê‡ "ERROR"A’Ç‰Á€–Ú‚È‚ç‚»‚Ì•¶š—ñA‚»‚êˆÈŠO‚Í EmptyStr
-//IƒƒCƒ“‘¤‚Å WM_INITMENUPOPUP,WM_DRAWITEM,WM_MEASUREITEM,WM_MENUCHAR ‚ğˆ—‚·‚é‚±‚Æ
+//ãƒ‰ãƒ©ã‚¤ãƒ–ã®ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’è¡¨ç¤º/æŒ‡å®šIDã‚’å®Ÿè¡Œ
+//  æˆ»ã‚Šå€¤: å¤±æ•—ã®å ´åˆ "ERROR"ã€è¿½åŠ é …ç›®ãªã‚‰ãã®æ–‡å­—åˆ—ã€ãã‚Œä»¥å¤–ã¯ EmptyStr
+//ï¼ãƒ¡ã‚¤ãƒ³å´ã§ WM_INITMENUPOPUP,WM_DRAWITEM,WM_MEASUREITEM,WM_MENUCHAR ã‚’å‡¦ç†ã™ã‚‹ã“ã¨
 //---------------------------------------------------------------------------
 UnicodeString UserShell::DriveContextMenu(
 	HWND hWnd,
-	UnicodeString drvnam,	//ƒhƒ‰ƒCƒu–¼
-	TStringList *ex_item,	//’Ç‰Áƒƒjƒ…[€–ÚƒŠƒXƒg
-							// ‘®: ƒLƒƒƒvƒVƒ‡ƒ“ \t ƒRƒ}ƒ“ƒh (ƒTƒuƒƒjƒ…[‚Í”ñ‘Î‰)
-	int ex_ID)				//ƒRƒ}ƒ“ƒhID:
-							// >0 ‚Ìê‡ƒƒjƒ…[‚ğ•\¦‚¹‚¸‚É ID ‚ğÀs (default = 0)
+	UnicodeString drvnam,	//ãƒ‰ãƒ©ã‚¤ãƒ–å
+	TStringList *ex_item,	//è¿½åŠ ãƒ¡ãƒ‹ãƒ¥ãƒ¼é …ç›®ãƒªã‚¹ãƒˆ
+							// æ›¸å¼: ã‚­ãƒ£ãƒ—ã‚·ãƒ§ãƒ³ \t ã‚³ãƒãƒ³ãƒ‰ (ã‚µãƒ–ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã¯éå¯¾å¿œ)
+	int ex_ID)				//ã‚³ãƒãƒ³ãƒ‰ID:
+							// >0 ã®å ´åˆãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’è¡¨ç¤ºã›ãšã« ID ã‚’å®Ÿè¡Œ (default = 0)
 {
 	drvnam = ExtractFileDrive(drvnam);
 	if (drvnam.IsEmpty()) return EmptyStr;
@@ -846,9 +846,13 @@ UnicodeString UserShell::DriveContextMenu(
 	ITEMIDLIST  *pidlComputer = NULL;
 	ITEMIDLIST  *pidlEnum	  = NULL;
 
-	try {
+	{
+		//try { ... } __finally { ... } ã‚’ RAII ã«ç½®ãæ›ãˆãŸã‚‚ã® (compat/scope_exit.h)ã€‚
+		//__finally ã¨ã®å·®ã¯ make_scope_exit ã‚’ä½œã‚‹å‰ã«æŠ•ã’ãŸå ´åˆã ã‘ã§ã€
+		//ãã®ã¨ãã¯å¾Œå§‹æœ«ã®å¯¾è±¡ãŒã¾ã ç„¡ã„ã®ã§å‘¼ã°ãªã„æ–¹ãŒæ­£ã—ã„
+		const auto nf_cleanup = compat::make_scope_exit([&] { ::ILFree(pidlComputer); ::ILFree(pidlEnum); });
 		try {
-			//ƒfƒXƒNƒgƒbƒv‚Ì IShellFolder ƒCƒ“ƒ^[ƒtƒFƒCƒX‚ğæ“¾
+			//ãƒ‡ã‚¹ã‚¯ãƒˆãƒƒãƒ—ã® IShellFolder ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã‚’å–å¾—
 			TComInterface<IShellFolder> desktop;
 			if (FAILED(SHGetDesktopFolder(&desktop))) Abort();
 
@@ -868,7 +872,7 @@ UnicodeString UserShell::DriveContextMenu(
 				::ILFree(pidlEnum);
 			}
 
-			//ƒRƒ“ƒeƒLƒXƒgƒƒjƒ…[‚ğæ“¾
+			//ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’å–å¾—
 			TComInterface<IContextMenu> contextMenu;
 			if (FAILED(computer->GetUIObjectOf(NULL, 1,
 				(LPCITEMIDLIST *)&pidlEnum, IID_IContextMenu, NULL, (void **)&contextMenu)))
@@ -884,7 +888,7 @@ UnicodeString UserShell::DriveContextMenu(
 
 			HMENU hMenu = ::CreatePopupMenu();
 			if (SUCCEEDED(pCM->QueryContextMenu(hMenu, 0, 1, 0x7fff, CMF_EXPLORE))) {
-				//’Ç‰Á€–Ú‚Ì‘}“ü
+				//è¿½åŠ é …ç›®ã®æŒ¿å…¥
 				if (ex_item && ex_item->Count>0) {
 					MENUITEMINFO mii = {sizeof(MENUITEMINFO)};
 					for (int i=0; i<ex_item->Count; i++) {
@@ -904,18 +908,18 @@ UnicodeString UserShell::DriveContextMenu(
 
 				int nId = (ex_ID>0)? ex_ID + 1 : 0;
 				if (nId==0) {
-					//ƒƒjƒ…[‚ğ•\¦
+					//ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’è¡¨ç¤º
 					POINT pt;
 					::GetCursorPos(&pt);
 					nId = ::TrackPopupMenu(hMenu, TPM_LEFTALIGN|TPM_RETURNCMD|TPM_RIGHTBUTTON,
 											pt.x, pt.y, 0, hWnd, NULL);
 				}
 
-				//’Ç‰Á€–Ú
+				//è¿½åŠ é …ç›®
 				if (nId>=USR_NENUID_BASE) {
 					ret_str = Trim(ex_item->Strings[nId - USR_NENUID_BASE]);
 				}
-				//’Êí€–Ú
+				//é€šå¸¸é …ç›®
 				else if (nId!=0) {
 					CMINVOKECOMMANDINFO ici = {sizeof(CMINVOKECOMMANDINFO)};
 					ici.hwnd   = hWnd;
@@ -934,38 +938,38 @@ UnicodeString UserShell::DriveContextMenu(
 			ret_str = "ERROR";
 		}
 	}
-	__finally {
-		::ILFree(pidlComputer);
-		::ILFree(pidlEnum);
-	}
 
 	return ret_str;
 }
 
 //---------------------------------------------------------------------------
-//Copy/ Cut ‚È‚Ç‚ğÀs
+//Copy/ Cut ãªã©ã‚’å®Ÿè¡Œ
 //---------------------------------------------------------------------------
 bool UserShell::InvokeMenuCmd(HWND hWnd, UnicodeString dnam, TStringList *flist, LPCSTR cmd)
 {
 	bool ok = false;
 	ITEMIDLIST *dir_pidl = NULL;
 
-	try {
+	{
+		//try { ... } __finally { ... } ã‚’ RAII ã«ç½®ãæ›ãˆãŸã‚‚ã® (compat/scope_exit.h)ã€‚
+		//__finally ã¨ã®å·®ã¯ make_scope_exit ã‚’ä½œã‚‹å‰ã«æŠ•ã’ãŸå ´åˆã ã‘ã§ã€
+		//ãã®ã¨ãã¯å¾Œå§‹æœ«ã®å¯¾è±¡ãŒã¾ã ç„¡ã„ã®ã§å‘¼ã°ãªã„æ–¹ãŒæ­£ã—ã„
+		const auto nf_cleanup = compat::make_scope_exit([&] { ::ILFree(dir_pidl); });
 		try {
 			if (flist->Count==0) Abort();
 
-			//ƒfƒXƒNƒgƒbƒv‚Ì IShellFolder ƒCƒ“ƒ^[ƒtƒFƒCƒX‚ğæ“¾
+			//ãƒ‡ã‚¹ã‚¯ãƒˆãƒƒãƒ—ã® IShellFolder ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã‚’å–å¾—
 			TComInterface<IShellFolder> desktop;
 			if (FAILED(SHGetDesktopFolder(&desktop))) Abort();
 
-			//‘ÎÛƒtƒHƒ‹ƒ_‚ÌƒAƒCƒeƒ€ID
+			//å¯¾è±¡ãƒ•ã‚©ãƒ«ãƒ€ã®ã‚¢ã‚¤ãƒ†ãƒ ID
 			if (FAILED(desktop->ParseDisplayName(NULL, NULL, dnam.c_str(), NULL, &dir_pidl, NULL))) Abort();
 
-			//ƒtƒHƒ‹ƒ_‚ÌIShellFolder ƒCƒ“ƒ^[ƒtƒFƒCƒX‚ğæ“¾
+			//ãƒ•ã‚©ãƒ«ãƒ€ã®IShellFolder ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã‚’å–å¾—
 			TComInterface<IShellFolder> targetFolder;
 			if (FAILED(desktop->BindToObject(dir_pidl, NULL, IID_IShellFolder, (void**)&targetFolder))) Abort();
 
-			//‘ÎÛƒtƒ@ƒCƒ‹‚ÌƒAƒCƒeƒ€IDƒŠƒXƒg‚ğì¬
+			//å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¢ã‚¤ãƒ†ãƒ IDãƒªã‚¹ãƒˆã‚’ä½œæˆ
 			LPITEMIDLIST *p_pIDL = (LPITEMIDLIST*)CoTaskMemAlloc(sizeof(LPITEMIDLIST) * flist->Count);
 			if (!p_pIDL) Abort();
 			for (int i=0; i<flist->Count; i++) {
@@ -974,7 +978,7 @@ bool UserShell::InvokeMenuCmd(HWND hWnd, UnicodeString dnam, TStringList *flist,
 						Abort();
 			}
 
-			//ƒRƒ“ƒeƒLƒXƒgƒƒjƒ…[‚ğæ“¾
+			//ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’å–å¾—
 			TComInterface<IContextMenu> contextMenu;
 			if (FAILED(targetFolder->GetUIObjectOf(hWnd, flist->Count,
 				(LPCITEMIDLIST*)p_pIDL, IID_IContextMenu, NULL, (void **)&contextMenu)))
@@ -994,14 +998,11 @@ bool UserShell::InvokeMenuCmd(HWND hWnd, UnicodeString dnam, TStringList *flist,
 			;
 		}
 	}
-	__finally {
-		::ILFree(dir_pidl);
-	}
 	return ok;
 }
 
 //---------------------------------------------------------------------------
-// ƒtƒ@ƒCƒ‹–¼‚ğw’è‚µ‚ÄÀs
+// ãƒ•ã‚¡ã‚¤ãƒ«åã‚’æŒ‡å®šã—ã¦å®Ÿè¡Œ
 //---------------------------------------------------------------------------
 bool UserShell::ShowFileRun()
 {
@@ -1015,7 +1016,7 @@ bool UserShell::ShowFileRun()
 }
 
 //---------------------------------------------------------------------------
-//ƒVƒ‡[ƒgƒJƒbƒg‚Ìì¬
+//ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã®ä½œæˆ
 //---------------------------------------------------------------------------
 bool UserShell::CreateShortCut(UnicodeString fnam, UnicodeString target, UnicodeString cmdprm,
 	UnicodeString wdir, UnicodeString desc)
@@ -1024,7 +1025,7 @@ bool UserShell::CreateShortCut(UnicodeString fnam, UnicodeString target, Unicode
 
 	try {
 		if (wdir.IsEmpty() && !::PathIsDirectory(target.c_str())) wdir = ExtractFilePath(target);
-		if (desc.IsEmpty()) desc = ExtractFileName(target) + "‚Ö‚ÌƒVƒ‡[ƒgƒJƒbƒg";
+		if (desc.IsEmpty()) desc = ExtractFileName(target) + "ã¸ã®ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆ";
 
 		TComInterface<IShellLink>   psl;
 		TComInterface<IPersistFile> ppf;
@@ -1047,81 +1048,85 @@ bool UserShell::CreateShortCut(UnicodeString fnam, UnicodeString target, Unicode
 }
 
 //---------------------------------------------------------------------------
-//ƒvƒƒpƒeƒBî•ñ‚ğæ“¾
-//  –ß‚è’l: ”F¯‚³‚ê‚½í—Ş
+//ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£æƒ…å ±ã‚’å–å¾—
+//  æˆ»ã‚Šå€¤: èªè­˜ã•ã‚ŒãŸç¨®é¡
 //---------------------------------------------------------------------------
 UnicodeString UserShell::get_PropInf(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	TStringList  *lst,		//î•ñƒŠƒXƒg (default = NULL)
-	UnicodeString idx_str,	//ƒvƒƒpƒeƒB–¼ (, ‹æØ‚è‚Å•¡”w’è‰Â default = EmptyStr)
-	bool lst_sw)			//–¼‘O=’lŒ`®‚Åæ“¾ (default = false);
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	TStringList  *lst,		//æƒ…å ±ãƒªã‚¹ãƒˆ (default = NULL)
+	UnicodeString idx_str,	//ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£å (, åŒºåˆ‡ã‚Šã§è¤‡æ•°æŒ‡å®šå¯ default = EmptyStr)
+	bool lst_sw)			//åå‰=å€¤å½¢å¼ã§å–å¾— (default = false);
 {
 	UnicodeString typ_str;
 	ITEMIDLIST *dir_pidl = NULL;
 	ITEMIDLIST *object	 = NULL;
 
-	//•‚“®¬”“_—áŠO‚ğˆê“I‚Éƒ}ƒXƒN
+	//æµ®å‹•å°æ•°ç‚¹ä¾‹å¤–ã‚’ä¸€æ™‚çš„ã«ãƒã‚¹ã‚¯
 	TFPUExceptionMask orgMask = GetExceptionMask();
 	SetExceptionMask(FpuTmpMask);
 
-	try {
+	{
+		//try { ... } __finally { ... } ã‚’ RAII ã«ç½®ãæ›ãˆãŸã‚‚ã® (compat/scope_exit.h)ã€‚
+		//__finally ã¨ã®å·®ã¯ make_scope_exit ã‚’ä½œã‚‹å‰ã«æŠ•ã’ãŸå ´åˆã ã‘ã§ã€
+		//ãã®ã¨ãã¯å¾Œå§‹æœ«ã®å¯¾è±¡ãŒã¾ã ç„¡ã„ã®ã§å‘¼ã°ãªã„æ–¹ãŒæ­£ã—ã„
+		const auto nf_cleanup = compat::make_scope_exit([&] { SetExceptionMask(orgMask); ::ILFree(dir_pidl); ::ILFree(object); });
 		try {
 			TComInterface<IShellFolder> desktop;
 			if (FAILED(SHGetDesktopFolder(&desktop))) Abort();
 
-			//‘ÎÛƒtƒHƒ‹ƒ_‚ÌƒAƒCƒeƒ€ID
+			//å¯¾è±¡ãƒ•ã‚©ãƒ«ãƒ€ã®ã‚¢ã‚¤ãƒ†ãƒ ID
 			if (FAILED(desktop->ParseDisplayName(NULL, NULL,
 				ExtractFileDir(fnam).c_str(), NULL, &dir_pidl, NULL)))
 					Abort();
-			//ƒtƒHƒ‹ƒ_‚ÌIShellFolder2 ƒCƒ“ƒ^[ƒtƒFƒCƒX‚ğæ“¾
+			//ãƒ•ã‚©ãƒ«ãƒ€ã®IShellFolder2 ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã‚’å–å¾—
 			TComInterface<IShellFolder2> targetFolder;
 			if (FAILED(desktop->BindToObject(dir_pidl, NULL, IID_IShellFolder2, (void**)&targetFolder))) Abort();
-			//‘ÎÛƒtƒ@ƒCƒ‹‚ÌƒAƒCƒeƒ€ID
+			//å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¢ã‚¤ãƒ†ãƒ ID
 			if (FAILED(targetFolder->ParseDisplayName(NULL, NULL,
 				ExtractFileName(fnam).c_str(), NULL, &object, NULL)))
 					Abort();
 
-			//u”F¯‚³‚ê‚½í—Şv‚ğæ“¾
+			//ã€Œèªè­˜ã•ã‚ŒãŸç¨®é¡ã€ã‚’å–å¾—
 			SHELLDETAILS details;
 			_TCHAR szBuf[256];
-			int idx = get_ListIntVal(PropertyList, "”F¯‚³‚ê‚½í—Ş", -1);
+			int idx = get_ListIntVal(PropertyList, "èªè­˜ã•ã‚ŒãŸç¨®é¡", -1);
 			if (idx!=-1) {
 				if (SUCCEEDED(targetFolder->GetDetailsOf(object, idx, &details))) {
 					StrRetToBuf(&details.str, NULL, szBuf, sizeof(szBuf)/sizeof(_TCHAR));
 					typ_str = szBuf;
-					if (SameText(typ_str, "–¢w’è")) {
-						if (SameText(ExtractFileExt(fnam), ".ts")) typ_str = "ƒrƒfƒI";
+					if (SameText(typ_str, "æœªæŒ‡å®š")) {
+						if (SameText(ExtractFileExt(fnam), ".ts")) typ_str = "ãƒ“ãƒ‡ã‚ª";
 					}
 				}
 			}
 
 			if (idx_str.IsEmpty()) {
-				//u”F¯‚³‚ê‚½í—Şv‚É‚µ‚½‚ª‚Á‚Äæ“¾€–Ú‚ğ‘I‘ğ
-				switch (idx_of_word_i("ƒrƒfƒI|ƒI[ƒfƒBƒI|ƒCƒ[ƒW|ƒAƒvƒŠƒP[ƒVƒ‡ƒ“|ƒhƒLƒ…ƒƒ“ƒg|–¢w’è", typ_str)) {
+				//ã€Œèªè­˜ã•ã‚ŒãŸç¨®é¡ã€ã«ã—ãŸãŒã£ã¦å–å¾—é …ç›®ã‚’é¸æŠ
+				switch (idx_of_word_i("ãƒ“ãƒ‡ã‚ª|ã‚ªãƒ¼ãƒ‡ã‚£ã‚ª|ã‚¤ãƒ¡ãƒ¼ã‚¸|ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³|ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ|æœªæŒ‡å®š", typ_str)) {
 				case 0:
-					idx_str = "ƒ^ƒCƒgƒ‹,’·‚³,ƒtƒŒ[ƒ€•,ƒtƒŒ[ƒ€‚,$R,ƒf[ƒ^‘¬“x,‘ƒrƒbƒg ƒŒ[ƒg,ƒtƒŒ[ƒ€—¦,$A,’˜ìŒ ";
+					idx_str = "ã‚¿ã‚¤ãƒˆãƒ«,é•·ã•,ãƒ•ãƒ¬ãƒ¼ãƒ å¹…,ãƒ•ãƒ¬ãƒ¼ãƒ é«˜,$R,ãƒ‡ãƒ¼ã‚¿é€Ÿåº¦,ç·ãƒ“ãƒƒãƒˆ ãƒ¬ãƒ¼ãƒˆ,ãƒ•ãƒ¬ãƒ¼ãƒ ç‡,$A,è‘—ä½œæ¨©";
 					break;
 				case 1:
-					idx_str = "’·‚³,ƒrƒbƒg ƒŒ[ƒg,’˜ìŒ ";
+					idx_str = "é•·ã•,ãƒ“ãƒƒãƒˆ ãƒ¬ãƒ¼ãƒˆ,è‘—ä½œæ¨©";
 					break;
 				case 2:
-					idx_str = "ƒrƒbƒg‚Ì[‚³";
-					if (!SameText(ExtractFileExt(fnam), ".png")) idx_str += ",…•½•ûŒü‚Ì‰ğ‘œ“x,‚’¼•ûŒü‚Ì‰ğ‘œ“x";
-					idx_str += ",ƒvƒƒOƒ‰ƒ€–¼";
+					idx_str = "ãƒ“ãƒƒãƒˆã®æ·±ã•";
+					if (!SameText(ExtractFileExt(fnam), ".png")) idx_str += ",æ°´å¹³æ–¹å‘ã®è§£åƒåº¦,å‚ç›´æ–¹å‘ã®è§£åƒåº¦";
+					idx_str += ",ãƒ—ãƒ­ã‚°ãƒ©ãƒ å";
 					break;
 				case 3:
-					idx_str = "ƒtƒ@ƒCƒ‹‚Ìà–¾,ƒtƒ@ƒCƒ‹ ƒo[ƒWƒ‡ƒ“,»•i–¼,»•iƒo[ƒWƒ‡ƒ“,’˜ìŒ ,ƒtƒ@ƒCƒ‹–¼";
+					idx_str = "ãƒ•ã‚¡ã‚¤ãƒ«ã®èª¬æ˜,ãƒ•ã‚¡ã‚¤ãƒ« ãƒãƒ¼ã‚¸ãƒ§ãƒ³,è£½å“å,è£½å“ãƒãƒ¼ã‚¸ãƒ§ãƒ³,è‘—ä½œæ¨©,ãƒ•ã‚¡ã‚¤ãƒ«å";
 					break;
 				case 4:
-					idx_str = "ƒ^ƒCƒgƒ‹,ì¬Ò,‰ïĞ,ƒvƒƒOƒ‰ƒ€–¼";
+					idx_str = "ã‚¿ã‚¤ãƒˆãƒ«,ä½œæˆè€…,ä¼šç¤¾,ãƒ—ãƒ­ã‚°ãƒ©ãƒ å";
 					break;
 				case 5:
-					idx_str = "ƒ^ƒCƒgƒ‹,ì¬Ò,‰ïĞ,’˜ìŒ ,¤•W,ƒtƒ@ƒCƒ‹ ƒo[ƒWƒ‡ƒ“";
+					idx_str = "ã‚¿ã‚¤ãƒˆãƒ«,ä½œæˆè€…,ä¼šç¤¾,è‘—ä½œæ¨©,å•†æ¨™,ãƒ•ã‚¡ã‚¤ãƒ« ãƒãƒ¼ã‚¸ãƒ§ãƒ³";
 					break;
 				}
 			}
 
-			//€–Ú“à—e‚ğæ“¾
+			//é …ç›®å†…å®¹ã‚’å–å¾—
 			if (lst && !idx_str.IsEmpty()) {
 				TStringDynArray i_lst = SplitString(idx_str, ",");
 				UnicodeString tmp;
@@ -1135,35 +1140,35 @@ UnicodeString UserShell::get_PropInf(
 					StrRetToBuf(&details.str, NULL, szBuf, sizeof(szBuf)/sizeof(_TCHAR));
 					UnicodeString vstr = szBuf;	if (vstr.IsEmpty()) continue;
 
-					if		(SameStr(inam, "ƒtƒŒ[ƒ€•")) f_wd = extract_int(vstr);
-					else if (SameStr(inam, "ƒtƒŒ[ƒ€‚")) f_hi = extract_int(vstr);
+					if		(SameStr(inam, "ãƒ•ãƒ¬ãƒ¼ãƒ å¹…")) f_wd = extract_int(vstr);
+					else if (SameStr(inam, "ãƒ•ãƒ¬ãƒ¼ãƒ é«˜")) f_hi = extract_int(vstr);
 
 					if (lst_sw)
 						lst->Add(tmp.sprintf(_T("%s=%s"), inam.c_str(), vstr.c_str()));
 					else {
 						tmp = ReplaceStr(inam, " ", "");
-						tmp = ReplaceStr(tmp,  "ƒo[ƒWƒ‡ƒ“", "Ver.");
-						tmp = ReplaceStr(tmp, "ƒtƒ@ƒCƒ‹‚Ìà–¾", "à–¾");
-						if (EndsStr("‰ğ‘œ“x", tmp) && extract_int(vstr)>0x10000) continue;	//*** ˆÙí’l
-						if (tmp.Length()>(PropNameWidth/2)) remove_text(tmp, "‚Ì");
+						tmp = ReplaceStr(tmp,  "ãƒãƒ¼ã‚¸ãƒ§ãƒ³", "Ver.");
+						tmp = ReplaceStr(tmp, "ãƒ•ã‚¡ã‚¤ãƒ«ã®èª¬æ˜", "èª¬æ˜");
+						if (EndsStr("è§£åƒåº¦", tmp) && extract_int(vstr)>0x10000) continue;	//*** ç•°å¸¸å€¤
+						if (tmp.Length()>(PropNameWidth/2)) remove_text(tmp, "ã®");
 						add_PropLine(tmp, vstr, lst);
 					}
 				}
 
-				//ƒAƒXƒyƒNƒg”ä
+				//ã‚¢ã‚¹ãƒšã‚¯ãƒˆæ¯”
 				int idx = lst->IndexOf("$R");
 				if (idx!=-1) {
-					if (f_wd>0 && f_hi>0) lst->Strings[idx] = make_PropLine(_T("ƒAƒXƒyƒNƒg”ä"), get_AspectStr(f_wd, f_hi));
+					if (f_wd>0 && f_hi>0) lst->Strings[idx] = make_PropLine(_T("ã‚¢ã‚¹ãƒšã‚¯ãƒˆæ¯”"), get_AspectStr(f_wd, f_hi));
 					else lst->Delete(idx);
 				}
 
-				//ƒI[ƒfƒBƒI
+				//ã‚ªãƒ¼ãƒ‡ã‚£ã‚ª
 				idx = lst->IndexOf("$A");
 				if (idx!=-1) {
 					UnicodeString vstr, ustr;
 					VARIANT varValue;	VariantInit(&varValue);
 					SHCOLUMNID psid;
-					//ƒrƒbƒgƒŒ[ƒg
+					//ãƒ“ãƒƒãƒˆãƒ¬ãƒ¼ãƒˆ
 					psid.fmtid = Sysutils::StringToGUID("{64440490-4c8b-11d1-8b70-080036b11a03}");
 					psid.pid = 4;
 					if (FAILED(targetFolder->GetDetailsEx(object, &psid, &varValue))) Abort();
@@ -1174,7 +1179,7 @@ UnicodeString UserShell::get_PropInf(
 						cat_separator(vstr, " ");
 						vstr.cat_sprintf(_T("%u%s"), v, ustr.c_str());
 					}
-					//ƒTƒ“ƒvƒ‹ƒŒ[ƒg
+					//ã‚µãƒ³ãƒ—ãƒ«ãƒ¬ãƒ¼ãƒˆ
 					psid.pid = 5;
 					if (FAILED(targetFolder->GetDetailsEx(object, &psid, &varValue))) Abort();
 					v = varValue.lVal;
@@ -1183,16 +1188,16 @@ UnicodeString UserShell::get_PropInf(
 						if (v>1000) { v /= 1000; ustr.Insert("k" ,1); }
 						vstr.cat_sprintf(_T(" %u%s"), v, ustr.c_str());
 					}
-					//ƒ`ƒƒƒ“ƒlƒ‹
+					//ãƒãƒ£ãƒ³ãƒãƒ«
 					psid.pid = 7;
 					if (FAILED(targetFolder->GetDetailsEx(object, &psid, &varValue))) Abort();
 					switch (varValue.lVal) {
-					case 1:  vstr += " ƒ‚ƒm";		break;
-					case 2:  vstr += " ƒXƒeƒŒƒI";	break;
+					case 1:  vstr += " ãƒ¢ãƒ";		break;
+					case 2:  vstr += " ã‚¹ãƒ†ãƒ¬ã‚ª";	break;
 					default: vstr.cat_sprintf(_T(" %uch"), varValue.lVal);
 					}
 
-					if (!vstr.IsEmpty()) lst->Strings[idx] = make_PropLine(_T("ƒI[ƒfƒBƒI"), vstr);
+					if (!vstr.IsEmpty()) lst->Strings[idx] = make_PropLine(_T("ã‚ªãƒ¼ãƒ‡ã‚£ã‚ª"), vstr);
 					else lst->Delete(idx);
 				}
 			}
@@ -1201,17 +1206,12 @@ UnicodeString UserShell::get_PropInf(
 			typ_str = EmptyStr;
 		}
 	}
-	__finally {
-		SetExceptionMask(orgMask);
-		::ILFree(dir_pidl);
-		::ILFree(object);
-	}
 
 	return typ_str;
 }
 
 //---------------------------------------------------------------------------
-//w’èƒvƒƒpƒeƒB–¼‚Ìî•ñ•¶š—ñ‚ğæ“¾
+//æŒ‡å®šãƒ—ãƒ­ãƒ‘ãƒ†ã‚£åã®æƒ…å ±æ–‡å­—åˆ—ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString UserShell::get_PropStr(UnicodeString fnam, UnicodeString prp_nam)
 {
@@ -1219,23 +1219,27 @@ UnicodeString UserShell::get_PropStr(UnicodeString fnam, UnicodeString prp_nam)
 	ITEMIDLIST *dir_pidl = NULL;
 	ITEMIDLIST *object	 = NULL;
 
-	//•‚“®¬”“_—áŠO‚ğˆê“I‚Éƒ}ƒXƒN
+	//æµ®å‹•å°æ•°ç‚¹ä¾‹å¤–ã‚’ä¸€æ™‚çš„ã«ãƒã‚¹ã‚¯
 	TFPUExceptionMask orgMask = GetExceptionMask();
 	SetExceptionMask(FpuTmpMask);
 
-	try {
+	{
+		//try { ... } __finally { ... } ã‚’ RAII ã«ç½®ãæ›ãˆãŸã‚‚ã® (compat/scope_exit.h)ã€‚
+		//__finally ã¨ã®å·®ã¯ make_scope_exit ã‚’ä½œã‚‹å‰ã«æŠ•ã’ãŸå ´åˆã ã‘ã§ã€
+		//ãã®ã¨ãã¯å¾Œå§‹æœ«ã®å¯¾è±¡ãŒã¾ã ç„¡ã„ã®ã§å‘¼ã°ãªã„æ–¹ãŒæ­£ã—ã„
+		const auto nf_cleanup = compat::make_scope_exit([&] { SetExceptionMask(orgMask); ::ILFree(dir_pidl); ::ILFree(object); });
 		try {
 			TComInterface<IShellFolder> desktop;
 			if (FAILED(SHGetDesktopFolder(&desktop))) Abort();
 
-			//‘ÎÛƒtƒHƒ‹ƒ_‚ÌƒAƒCƒeƒ€ID
+			//å¯¾è±¡ãƒ•ã‚©ãƒ«ãƒ€ã®ã‚¢ã‚¤ãƒ†ãƒ ID
 			if (FAILED(desktop->ParseDisplayName(NULL, NULL,
 				ExtractFileDir(fnam).c_str(), NULL, &dir_pidl, NULL)))
 					Abort();
-			//ƒtƒHƒ‹ƒ_‚ÌIShellFolder2 ƒCƒ“ƒ^[ƒtƒFƒCƒX‚ğæ“¾
+			//ãƒ•ã‚©ãƒ«ãƒ€ã®IShellFolder2 ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã‚’å–å¾—
 			TComInterface<IShellFolder2> targetFolder;
 			if (FAILED(desktop->BindToObject(dir_pidl, NULL, IID_IShellFolder2, (void**)&targetFolder))) Abort();
-			//‘ÎÛƒtƒ@ƒCƒ‹‚ÌƒAƒCƒeƒ€ID
+			//å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¢ã‚¤ãƒ†ãƒ ID
 			if (FAILED(targetFolder->ParseDisplayName(NULL, NULL,
 				ExtractFileName(fnam).c_str(), NULL, &object, NULL)))
 					Abort();
@@ -1251,27 +1255,22 @@ UnicodeString UserShell::get_PropStr(UnicodeString fnam, UnicodeString prp_nam)
 			ret_str = EmptyStr;
 		}
 	}
-	__finally {
-		SetExceptionMask(orgMask);
-		::ILFree(dir_pidl);
-		::ILFree(object);
-	}
 	return ret_str;
 }
 
 //---------------------------------------------------------------------------
-//»•iƒo[ƒWƒ‡ƒ“•¶š—ñ‚ğæ“¾
+//è£½å“ãƒãƒ¼ã‚¸ãƒ§ãƒ³æ–‡å­—åˆ—ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString UserShell::get_VerStr(UnicodeString fnam)
 {
-	UnicodeString vstr = get_PropStr(fnam, "»•iƒo[ƒWƒ‡ƒ“");
+	UnicodeString vstr = get_PropStr(fnam, "è£½å“ãƒãƒ¼ã‚¸ãƒ§ãƒ³");
 	vstr = ReplaceStr(vstr, ",", ".");
 	vstr = ReplaceStr(vstr, " ", "");
 	return vstr;
 }
 
 //---------------------------------------------------------------------------
-//ƒŠƒXƒg‚©‚çw’èƒvƒƒpƒeƒB‚Ì’l‚ğæ“¾
+//ãƒªã‚¹ãƒˆã‹ã‚‰æŒ‡å®šãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®å€¤ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString UserShell::get_PropValue(TStringList *lst, UnicodeString name)
 {
@@ -1287,12 +1286,12 @@ UnicodeString UserShell::get_PropValue(TStringList *lst, UnicodeString name)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹Ä¶ŠÔ(•b)‚ğæ“¾
+//ãƒ•ã‚¡ã‚¤ãƒ«å†ç”Ÿæ™‚é–“(ç§’)ã‚’å–å¾—
 //---------------------------------------------------------------------------
 int UserShell::get_Duration(UnicodeString fnam)
 {
 	int t = -1;
-	UnicodeString lnstr = get_PropStr(fnam, "’·‚³");
+	UnicodeString lnstr = get_PropStr(fnam, "é•·ã•");
 	if (lnstr.Length()==8 && lnstr[3]==':' && lnstr[6]==':') {
 		int h = lnstr.SubString(1, 2).ToIntDef(0);
 		int m = lnstr.SubString(4, 2).ToIntDef(0);
@@ -1334,25 +1333,25 @@ UnicodeString UserShell::msRead_strdat(TMemoryStream *ms, int &ptr, bool is_uc)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚Ìí—Ş‚ğæ“¾
+//ãƒ•ã‚¡ã‚¤ãƒ«ã®ç¨®é¡ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString UserShell::get_FileTypeStr(UnicodeString fnam)
 {
 	std::unique_ptr<TStringList> typ_lst(new TStringList());
 	typ_lst->Text =
-		".exe=ƒAƒvƒŠƒP[ƒVƒ‡ƒ“\n"
-		".lnk=ƒVƒ‡[ƒgƒJƒbƒg\n"
-		".url=ƒCƒ“ƒ^[ƒlƒbƒg ƒVƒ‡[ƒgƒJƒbƒg\n"
-		".wmf=Windowsƒƒ^ƒtƒ@ƒCƒ‹\n"
-		".emf=Šg’£ƒƒ^ƒtƒ@ƒCƒ‹\n"
-		".mp3=MP3 Œ`®ƒTƒEƒ“ƒh\n"
-		".wav=Wave ƒTƒEƒ“ƒh\n"
-		".ttf=TrueType ƒtƒHƒ“ƒg ƒtƒ@ƒCƒ‹\n"
-		".ttc=TrueType ƒRƒŒƒNƒVƒ‡ƒ“ ƒtƒHƒ“ƒg ƒtƒ@ƒCƒ‹\n"
-		".otf=OpenType ƒtƒHƒ“ƒg ƒtƒ@ƒCƒ‹\n"
-		".fon=ƒtƒHƒ“ƒg ƒtƒ@ƒCƒ‹\n"
-		".nwl=NyanFi ƒ[ƒNƒŠƒXƒg\n"
-		".nbt=NyanFi ƒRƒ}ƒ“ƒhƒtƒ@ƒCƒ‹\n";
+		".exe=ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³\n"
+		".lnk=ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆ\n"
+		".url=ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒƒãƒˆ ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆ\n"
+		".wmf=Windowsãƒ¡ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«\n"
+		".emf=æ‹¡å¼µãƒ¡ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«\n"
+		".mp3=MP3 å½¢å¼ã‚µã‚¦ãƒ³ãƒ‰\n"
+		".wav=Wave ã‚µã‚¦ãƒ³ãƒ‰\n"
+		".ttf=TrueType ãƒ•ã‚©ãƒ³ãƒˆ ãƒ•ã‚¡ã‚¤ãƒ«\n"
+		".ttc=TrueType ã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ ãƒ•ã‚©ãƒ³ãƒˆ ãƒ•ã‚¡ã‚¤ãƒ«\n"
+		".otf=OpenType ãƒ•ã‚©ãƒ³ãƒˆ ãƒ•ã‚¡ã‚¤ãƒ«\n"
+		".fon=ãƒ•ã‚©ãƒ³ãƒˆ ãƒ•ã‚¡ã‚¤ãƒ«\n"
+		".nwl=NyanFi ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆ\n"
+		".nbt=NyanFi ã‚³ãƒãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«\n";
 
 	UnicodeString typ_str;
 	UnicodeString fext = get_extension(fnam).LowerCase();
@@ -1360,17 +1359,17 @@ UnicodeString UserShell::get_FileTypeStr(UnicodeString fnam)
 		typ_str = typ_lst->Values[fext];
 		if (typ_str.IsEmpty()) {
 			std::unique_ptr<TStringList> lst(new TStringList());
-			get_PropInf(fnam, lst.get(), "í—Ş", true);
+			get_PropInf(fnam, lst.get(), "ç¨®é¡", true);
 			if (lst->Count>0) typ_str = lst->ValueFromIndex[0];
-			if (typ_str.IsEmpty() && remove_top_s(fext, '.')) typ_str.sprintf(_T("%s ƒtƒ@ƒCƒ‹"), fext.UpperCase().c_str());
+			if (typ_str.IsEmpty() && remove_top_s(fext, '.')) typ_str.sprintf(_T("%s ãƒ•ã‚¡ã‚¤ãƒ«"), fext.UpperCase().c_str());
 		}
 	}
 	else if (SameText(get_tkn(ExtractFileName(fnam), '_'), ".nyanfi")) {
-		typ_str = ".nyanfi ƒtƒ@ƒCƒ‹";
+		typ_str = ".nyanfi ãƒ•ã‚¡ã‚¤ãƒ«";
 	}
 	else {
 		UnicodeString nnam = ExtractFileName(fnam);
-		typ_str = nnam + " ƒtƒ@ƒCƒ‹";
+		typ_str = nnam + " ãƒ•ã‚¡ã‚¤ãƒ«";
 		if (is_ADS_name(fnam) && SameText(nnam, "favicon")) {
 			if 		(test_Icon(fnam)) typ_str += " (.ico)";
 			else if (test_Png(fnam))  typ_str += " (.png)";
@@ -1381,15 +1380,15 @@ UnicodeString UserShell::get_FileTypeStr(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//ƒVƒ‡[ƒgƒJƒbƒgî•ñ‚Ìæ“¾
+//ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆæƒ…å ±ã®å–å¾—
 //---------------------------------------------------------------------------
 bool UserShell::get_LnkInf(UnicodeString fnam, TStringList *lst,
-	UnicodeString *nam,		//ƒŠƒ“ƒNæ
-	UnicodeString *prm,		//ƒpƒ‰ƒ[ƒ^
-	UnicodeString *fld,		//ì‹ÆêŠ
-	int *shw, 				//Às‚Ì‘å‚«‚³
-	UnicodeString *rem, 	//ƒRƒƒ“ƒg
-	bool *rau)				//ŠÇ—Ò‚Æ‚µ‚ÄÀs
+	UnicodeString *nam,		//ãƒªãƒ³ã‚¯å…ˆ
+	UnicodeString *prm,		//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
+	UnicodeString *fld,		//ä½œæ¥­å ´æ‰€
+	int *shw, 				//å®Ÿè¡Œæ™‚ã®å¤§ãã•
+	UnicodeString *rem, 	//ã‚³ãƒ¡ãƒ³ãƒˆ
+	bool *rau)				//ç®¡ç†è€…ã¨ã—ã¦å®Ÿè¡Œ
 {
 	try {
 		std::unique_ptr<TFileStream>   fs(new TFileStream(fnam, fmOpenRead | fmShareDenyNone));
@@ -1444,12 +1443,12 @@ bool UserShell::get_LnkInf(UnicodeString fnam, TStringList *lst,
 				int len = msRead_ushort(msp, id_p);
 				if (len==0) break;
 				BYTE *bp = (BYTE*)msp->Memory + id_p;
-				//ƒpƒX–¼
+				//ãƒ‘ã‚¹å
 				_TCHAR pstr[MAX_PATH + 1];
 				if (i==0 && SHGetPathFromIDList((LPCITEMIDLIST)bp, pstr)) {
 					pnam = pstr;
 				}
-				//GUID (¦‚±‚±‚Í•sŠm‚©)
+				//GUID (â€»ã“ã“ã¯ä¸ç¢ºã‹)
 				else if (len==30 && bp[2]==0x71 && bp[3]==0x80) {
 					GUID *ip = (GUID *)&bp[14];
 					RPC_WSTR ws;
@@ -1545,30 +1544,30 @@ bool UserShell::get_LnkInf(UnicodeString fnam, TStringList *lst,
 		UnicodeString l_fnam = cv_env_var(l_nam);
 
 		if (lst) {
-			add_PropLine_if(_T("ƒŠƒ“ƒNæ"),		l_nam, lst, LBFLG_PATH_FIF);
-			add_PropLine_if(_T("ƒpƒ‰ƒ[ƒ^"),	l_prm, lst);
-			add_PropLine_if(_T("ì‹ÆêŠ"),		l_fld, lst, LBFLG_PATH_FIF);
-			add_PropLine_if(_T("ƒL["),			l_key, lst);
+			add_PropLine_if(_T("ãƒªãƒ³ã‚¯å…ˆ"),		l_nam, lst, LBFLG_PATH_FIF);
+			add_PropLine_if(_T("ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿"),	l_prm, lst);
+			add_PropLine_if(_T("ä½œæ¥­å ´æ‰€"),		l_fld, lst, LBFLG_PATH_FIF);
+			add_PropLine_if(_T("ã‚­ãƒ¼"),			l_key, lst);
 
 			switch (show_cmd) {
-			case SW_SHOWNORMAL:		add_PropLine(_T("‘å‚«‚³"), "’Êí",   lst); 	break;
-			case SW_SHOWMINIMIZED:	add_PropLine(_T("‘å‚«‚³"), "Å¬‰»", lst);	break;
-			case SW_SHOWMAXIMIZED:	add_PropLine(_T("‘å‚«‚³"), "Å‘å‰»", lst);	break;
+			case SW_SHOWNORMAL:		add_PropLine(_T("å¤§ãã•"), "é€šå¸¸",   lst); 	break;
+			case SW_SHOWMINIMIZED:	add_PropLine(_T("å¤§ãã•"), "æœ€å°åŒ–", lst);	break;
+			case SW_SHOWMAXIMIZED:	add_PropLine(_T("å¤§ãã•"), "æœ€å¤§åŒ–", lst);	break;
 			}
 
-			add_PropLine_if(_T("ƒRƒƒ“ƒg"),		l_rem, lst);
-			if (is_rau) add_PropLine(_T("Ú×İ’è"), "ŠÇ—Ò‚Æ‚µ‚ÄÀs", lst);
+			add_PropLine_if(_T("ã‚³ãƒ¡ãƒ³ãƒˆ"),		l_rem, lst);
+			if (is_rau) add_PropLine(_T("è©³ç´°è¨­å®š"), "ç®¡ç†è€…ã¨ã—ã¦å®Ÿè¡Œ", lst);
 
-			//ƒŠƒ“ƒNæƒ`ƒFƒbƒN
+			//ãƒªãƒ³ã‚¯å…ˆãƒã‚§ãƒƒã‚¯
 			if (!l_fnam.IsEmpty() && !StartsStr("::", l_fnam)) {
 				if (file_exists(l_fnam)) {
 					if (dir_exists(l_fnam))
-						add_PropLine(_T("ƒŠƒ“ƒNæ‚Ìí—Ş"), "ƒfƒBƒŒƒNƒgƒŠ", lst);
+						add_PropLine(_T("ãƒªãƒ³ã‚¯å…ˆã®ç¨®é¡"), "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª", lst);
 					else
-						add_PropLine(_T("ƒŠƒ“ƒNæ‚Ìí—Ş"), get_FileTypeStr(l_fnam), lst);
+						add_PropLine(_T("ãƒªãƒ³ã‚¯å…ˆã®ç¨®é¡"), get_FileTypeStr(l_fnam), lst);
 				}
 				else {
-					add_PropLine_if(_T("ƒGƒ‰["), "ƒŠƒ“ƒNæ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB", lst, LBFLG_ERR_FIF);
+					add_PropLine_if(_T("ã‚¨ãƒ©ãƒ¼"), "ãƒªãƒ³ã‚¯å…ˆãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚", lst, LBFLG_ERR_FIF);
 				}
 			}
 		}
@@ -1589,7 +1588,7 @@ bool UserShell::get_LnkInf(UnicodeString fnam, TStringList *lst,
 }
 
 //---------------------------------------------------------------------------
-//ƒVƒ‡[ƒgƒJƒbƒg‚ÌƒŠƒ“ƒNæ‚ğæ“¾
+//ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã®ãƒªãƒ³ã‚¯å…ˆã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString UserShell::get_LnkName(UnicodeString fnam)
 {
@@ -1599,12 +1598,12 @@ UnicodeString UserShell::get_LnkName(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//.ico (:favicon ‚à‰Â)ƒtƒ@ƒCƒ‹‚©‚çw’èƒTƒCƒY‚ÌƒAƒCƒRƒ“‚ğæ“¾
+//.ico (:favicon ã‚‚å¯)ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰æŒ‡å®šã‚µã‚¤ã‚ºã®ã‚¢ã‚¤ã‚³ãƒ³ã‚’å–å¾—
 //---------------------------------------------------------------------------
 HICON UserShell::get_ico_f(
 	UnicodeString fnam,
-	int  size,			//Šm”FƒTƒCƒY
-	bool force)			//w’èƒTƒCƒY‚Å‹­§æ“¾	(default = false)
+	int  size,			//ç¢ºèªã‚µã‚¤ã‚º
+	bool force)			//æŒ‡å®šã‚µã‚¤ã‚ºã§å¼·åˆ¶å–å¾—	(default = false)
 {
 	HICON hIcon = NULL;
 	try {
@@ -1631,17 +1630,17 @@ HICON UserShell::get_ico_f(
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚©‚çw’èƒTƒCƒY‚ÌƒAƒCƒRƒ“‚ğæ“¾
+//ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰æŒ‡å®šã‚µã‚¤ã‚ºã®ã‚¢ã‚¤ã‚³ãƒ³ã‚’å–å¾—
 //---------------------------------------------------------------------------
 HICON UserShell::get_Icon(
-	UnicodeString fnam,	//ƒtƒ@ƒCƒ‹–¼
-	int &size,			//[i/o] w’èƒTƒCƒY (æ“¾ƒTƒCƒY‚ª•Ô‚é)
-	bool chk_sz)		//ƒTƒCƒYƒ`ƒFƒbƒN‚ğs‚¤	(default = true)
+	UnicodeString fnam,	//ãƒ•ã‚¡ã‚¤ãƒ«å
+	int &size,			//[i/o] æŒ‡å®šã‚µã‚¤ã‚º (å–å¾—ã‚µã‚¤ã‚ºãŒè¿”ã‚‹)
+	bool chk_sz)		//ã‚µã‚¤ã‚ºãƒã‚§ãƒƒã‚¯ã‚’è¡Œã†	(default = true)
 {
 	HICON hIcon = NULL;
 	UnicodeString fext = get_extension(fnam);
 
-	//ƒCƒ“ƒfƒbƒNƒXw’è
+	//ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹æŒ‡å®š
 	int idx = get_tkn_r(fnam, ',').ToIntDef(-1);
 	if (idx!=-1) {
 		HICON icons[1];
@@ -1654,21 +1653,21 @@ HICON UserShell::get_Icon(
 		return hIcon;
 	}
 
-	//‘ã‘Öƒf[ƒ^ƒXƒgƒŠ[ƒ€(.ico/favicon ‚Ì‚İ)
+	//ä»£æ›¿ãƒ‡ãƒ¼ã‚¿ã‚¹ãƒˆãƒªãƒ¼ãƒ (.ico/favicon ã®ã¿)
 	if (is_ADS_name(fnam)) {
 		return get_ico_f(fnam, size);
 	}
 
-	//ƒCƒ“ƒ^[ƒlƒbƒgƒVƒ‡[ƒgƒJƒbƒg(:favicon)
+	//ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒƒãƒˆã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆ(:favicon)
 	if (SameText(fext, ".url")) {
 		hIcon = get_ico_f(fnam + FAVICON_ADS, 16);
 		if (hIcon) return hIcon;
 	}
 
-	//ƒ}ƒEƒXƒ|ƒCƒ“ƒ^
+	//ãƒã‚¦ã‚¹ãƒã‚¤ãƒ³ã‚¿
 	if (SameText(fext, ".cur")) {
 		if (size>32) return NULL;
-		//ƒ‰[ƒW‚Ü‚½‚ÍƒXƒ‚[ƒ‹ƒAƒCƒRƒ“‚ğæ“¾
+		//ãƒ©ãƒ¼ã‚¸ã¾ãŸã¯ã‚¹ãƒ¢ãƒ¼ãƒ«ã‚¢ã‚¤ã‚³ãƒ³ã‚’å–å¾—
 		SHFILEINFO sif;
 		if (::SHGetFileInfo(fnam.c_str(), 0, &sif, sizeof(SHFILEINFO),
 			SHGFI_ICON | ((size==32)? SHGFI_LARGEICON : SHGFI_SMALLICON)))
@@ -1676,24 +1675,28 @@ HICON UserShell::get_Icon(
 		return hIcon;
 	}
 
-	//‚»‚Ì‘¼ˆê”Ê
+	//ãã®ä»–ä¸€èˆ¬
 	bool res = true;
 	ITEMIDLIST *dir_pidl = NULL;
 	ITEMIDLIST *object	 = NULL;
-	try {
+	{
+		//try { ... } __finally { ... } ã‚’ RAII ã«ç½®ãæ›ãˆãŸã‚‚ã® (compat/scope_exit.h)ã€‚
+		//__finally ã¨ã®å·®ã¯ make_scope_exit ã‚’ä½œã‚‹å‰ã«æŠ•ã’ãŸå ´åˆã ã‘ã§ã€
+		//ãã®ã¨ãã¯å¾Œå§‹æœ«ã®å¯¾è±¡ãŒã¾ã ç„¡ã„ã®ã§å‘¼ã°ãªã„æ–¹ãŒæ­£ã—ã„
+		const auto nf_cleanup = compat::make_scope_exit([&] { ::ILFree(dir_pidl); ::ILFree(object); });
 		try {
-			//ƒfƒXƒNƒgƒbƒv‚Ì IShellFolder ƒCƒ“ƒ^[ƒtƒFƒCƒX‚ğæ“¾
+			//ãƒ‡ã‚¹ã‚¯ãƒˆãƒƒãƒ—ã® IShellFolder ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã‚’å–å¾—
 			TComInterface<IShellFolder> desktop;
 			if (FAILED(::SHGetDesktopFolder(&desktop))) Abort();
 
-			//‘ÎÛƒtƒHƒ‹ƒ_‚ÌƒAƒCƒeƒ€ID
+			//å¯¾è±¡ãƒ•ã‚©ãƒ«ãƒ€ã®ã‚¢ã‚¤ãƒ†ãƒ ID
 			if (FAILED(desktop->ParseDisplayName(NULL, NULL,
 				ExtractFileDir(fnam).c_str(), NULL, &dir_pidl, NULL)))
 					Abort();
-			//ƒtƒHƒ‹ƒ_‚ÌIShellFolder ƒCƒ“ƒ^[ƒtƒFƒCƒX‚ğæ“¾
+			//ãƒ•ã‚©ãƒ«ãƒ€ã®IShellFolder ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã‚’å–å¾—
 			TComInterface<IShellFolder> targetFolder;
 			if (FAILED(desktop->BindToObject(dir_pidl, NULL, IID_IShellFolder, (void**)&targetFolder))) Abort();
-			//‘ÎÛƒtƒ@ƒCƒ‹‚ÌƒAƒCƒeƒ€ID
+			//å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¢ã‚¤ãƒ†ãƒ ID
 			if (FAILED(targetFolder->ParseDisplayName(NULL, NULL,
 				ExtractFileName(fnam).c_str(), NULL, &object, NULL)))
 					Abort();
@@ -1702,12 +1705,12 @@ HICON UserShell::get_Icon(
 			if (FAILED(targetFolder->GetUIObjectOf(NULL, 1, (LPCITEMIDLIST*)&object,
 				IID_IExtractIcon, NULL, (void **)&pExtractIcon)))
 					Abort();
-			//Locationæ“¾
+			//Locationå–å¾—
 			_TCHAR path[MAX_PATH] = _T("");
 			int  idx   = 0;
 			UINT flags = 0;
 			if (pExtractIcon->GetIconLocation(GIL_FORSHELL, path, MAX_PATH, &idx, &flags)==S_OK) {
-				// ƒAƒCƒRƒ“æ“¾
+				// ã‚¢ã‚¤ã‚³ãƒ³å–å¾—
 				if (pExtractIcon->Extract(path, idx, &hIcon, NULL, MAKELONG(size, 0))!=S_OK) Abort();
 			}
 		}
@@ -1724,13 +1727,9 @@ HICON UserShell::get_Icon(
 			}
 		}
 	}
-	__finally {
-		::ILFree(dir_pidl);
-		::ILFree(object);
-	}
 	if (!res) return NULL;
 
-	//ƒTƒCƒYŠm”F
+	//ã‚µã‚¤ã‚ºç¢ºèª
 	if (hIcon && chk_sz) {
 		bool ok = false;
 		ICONINFO ii = {};
@@ -1753,7 +1752,7 @@ HICON UserShell::get_Icon(
 	return hIcon;
 }
 //---------------------------------------------------------------------------
-//ƒXƒ‚[ƒ‹ƒAƒCƒRƒ“‚ğæ“¾
+//ã‚¹ãƒ¢ãƒ¼ãƒ«ã‚¢ã‚¤ã‚³ãƒ³ã‚’å–å¾—
 //---------------------------------------------------------------------------
 HICON UserShell::get_SmallIcon(UnicodeString fnam)
 {
@@ -1761,7 +1760,7 @@ HICON UserShell::get_SmallIcon(UnicodeString fnam)
 	return get_Icon(fnam, size, false);
 }
 //---------------------------------------------------------------------------
-//ƒXƒ‚[ƒ‹ƒAƒCƒRƒ“‚ğ•`‰æ
+//ã‚¹ãƒ¢ãƒ¼ãƒ«ã‚¢ã‚¤ã‚³ãƒ³ã‚’æç”»
 //---------------------------------------------------------------------------
 bool UserShell::draw_SmallIcon(UnicodeString fnam, TCanvas *cv, int x, int y, TControl *cp)
 {
@@ -1789,7 +1788,7 @@ bool UserShell::draw_SmallIcon(UnicodeString fnam, TImage *ip, TColor bg, TContr
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚©‚çƒTƒ€ƒlƒCƒ‹‚ğæ“¾
+//ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ã‚µãƒ ãƒã‚¤ãƒ«ã‚’å–å¾—
 //---------------------------------------------------------------------------
 bool UserShell::get_Thumbnail(UnicodeString fnam, Graphics::TBitmap *o_bmp, int o_size)
 {
@@ -1799,20 +1798,24 @@ bool UserShell::get_Thumbnail(UnicodeString fnam, Graphics::TBitmap *o_bmp, int 
 	ITEMIDLIST *dir_pidl = NULL;
 	ITEMIDLIST *object	 = NULL;
 
-	try {
+	{
+		//try { ... } __finally { ... } ã‚’ RAII ã«ç½®ãæ›ãˆãŸã‚‚ã® (compat/scope_exit.h)ã€‚
+		//__finally ã¨ã®å·®ã¯ make_scope_exit ã‚’ä½œã‚‹å‰ã«æŠ•ã’ãŸå ´åˆã ã‘ã§ã€
+		//ãã®ã¨ãã¯å¾Œå§‹æœ«ã®å¯¾è±¡ãŒã¾ã ç„¡ã„ã®ã§å‘¼ã°ãªã„æ–¹ãŒæ­£ã—ã„
+		const auto nf_cleanup = compat::make_scope_exit([&] { ::ILFree(dir_pidl); ::ILFree(object); });
 		try {
-			//ƒfƒXƒNƒgƒbƒv‚Ì IShellFolder ƒCƒ“ƒ^[ƒtƒFƒCƒX‚ğæ“¾
+			//ãƒ‡ã‚¹ã‚¯ãƒˆãƒƒãƒ—ã® IShellFolder ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã‚’å–å¾—
 			TComInterface<IShellFolder> desktop;
 			if (FAILED(SHGetDesktopFolder(&desktop))) Abort();
 
-			//‘ÎÛƒtƒHƒ‹ƒ_‚ÌƒAƒCƒeƒ€ID
+			//å¯¾è±¡ãƒ•ã‚©ãƒ«ãƒ€ã®ã‚¢ã‚¤ãƒ†ãƒ ID
 			if (FAILED(desktop->ParseDisplayName(NULL, NULL,
 				ExtractFileDir(fnam).c_str(), NULL, &dir_pidl, NULL)))
 					Abort();
-			//ƒtƒHƒ‹ƒ_‚ÌIShellFolder ƒCƒ“ƒ^[ƒtƒFƒCƒX‚ğæ“¾
+			//ãƒ•ã‚©ãƒ«ãƒ€ã®IShellFolder ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã‚’å–å¾—
 			TComInterface<IShellFolder> targetFolder;
 			if (FAILED(desktop->BindToObject(dir_pidl, NULL, IID_IShellFolder, (void**)&targetFolder))) Abort();
-			//‘ÎÛƒtƒ@ƒCƒ‹‚ÌƒAƒCƒeƒ€ID
+			//å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¢ã‚¤ãƒ†ãƒ ID
 			if (FAILED(targetFolder->ParseDisplayName(NULL, NULL,
 				ExtractFileName(fnam).c_str(), NULL, &object, NULL)))
 	 				Abort();
@@ -1837,15 +1840,11 @@ bool UserShell::get_Thumbnail(UnicodeString fnam, Graphics::TBitmap *o_bmp, int 
 			res = false;
 		}
 	}
-	__finally {
-		::ILFree(dir_pidl);
-		::ILFree(object);
-	}
 	return res;
 }
 
 //---------------------------------------------------------------------------
-//Šù’mƒpƒX‚ÌGUID•¶š—ñ‚ğƒpƒX–¼‚É•ÏŠ·
+//æ—¢çŸ¥ãƒ‘ã‚¹ã®GUIDæ–‡å­—åˆ—ã‚’ãƒ‘ã‚¹åã«å¤‰æ›
 //---------------------------------------------------------------------------
 UnicodeString UserShell::KnownGuidStrToPath(UnicodeString s)
 {
@@ -1863,7 +1862,7 @@ UnicodeString UserShell::KnownGuidStrToPath(UnicodeString s)
 	return ret_str;
 }
 //---------------------------------------------------------------------------
-//Šù’mƒpƒXID‚ğƒpƒX–¼‚É•ÏŠ·
+//æ—¢çŸ¥ãƒ‘ã‚¹IDã‚’ãƒ‘ã‚¹åã«å¤‰æ›
 //---------------------------------------------------------------------------
 UnicodeString UserShell::KnownGuidToPath(REFKNOWNFOLDERID id)
 {
@@ -1877,12 +1876,12 @@ UnicodeString UserShell::KnownGuidToPath(REFKNOWNFOLDERID id)
 }
 
 //---------------------------------------------------------------------------
-//“ÁêƒtƒHƒ‹ƒ_ˆê——‚É’Ç‰Á(ƒ[ƒNƒŠƒXƒgŒ`®)
+//ç‰¹æ®Šãƒ•ã‚©ãƒ«ãƒ€ä¸€è¦§ã«è¿½åŠ (ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆå½¢å¼)
 //---------------------------------------------------------------------------
 void UserShell::AddKnownPath(
 	REFKNOWNFOLDERID id,	//ID
-	TStringList *lst,		//[o] ƒŠƒXƒg
-	bool brk_sw)			//ã’[‚É‹æØ‚èü‚ğ•\¦	(default = false)
+	TStringList *lst,		//[o] ãƒªã‚¹ãƒˆ
+	bool brk_sw)			//ä¸Šç«¯ã«åŒºåˆ‡ã‚Šç·šã‚’è¡¨ç¤º	(default = false)
 {
 	UnicodeString dnam = KnownGuidToPath(id);
 	if (!dnam.IsEmpty()) {
@@ -1896,7 +1895,7 @@ void UserShell::AddKnownPath(
 void UserShell::AddEnvPath(
 	UnicodeString enam,
 	TStringList *lst,
-	bool brk_sw)			//ã’[‚É‹æØ‚èü‚ğ•\¦	(default = false)
+	bool brk_sw)			//ä¸Šç«¯ã«åŒºåˆ‡ã‚Šç·šã‚’è¡¨ç¤º	(default = false)
 {
 	UnicodeString dnam = cv_env_str(enam);
 	if (!dnam.IsEmpty() && dnam.Pos('%')==0) {
@@ -1908,7 +1907,7 @@ void UserShell::AddEnvPath(
 }
 
 //---------------------------------------------------------------------------
-//“ÁêƒtƒHƒ‹ƒ_ˆê——‚ğæ“¾(ƒ[ƒNƒŠƒXƒgŒ`®)
+//ç‰¹æ®Šãƒ•ã‚©ãƒ«ãƒ€ä¸€è¦§ã‚’å–å¾—(ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆå½¢å¼)
 //---------------------------------------------------------------------------
 void UserShell::get_SpecialFolderList(TStringList *lst)
 {
@@ -1938,7 +1937,7 @@ void UserShell::get_SpecialFolderList(TStringList *lst)
 	AddKnownPath(FOLDERID_History,			lst);
 	AddKnownPath(FOLDERID_InternetCache,	lst);
 
-	lst->Add("\t-");	//ƒZƒpƒŒ[ƒ^
+	lst->Add("\t-");	//ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿
 	AddKnownPath(FOLDERID_PublicDesktop,	lst);
 	AddKnownPath(FOLDERID_PublicDocuments,	lst);
 	AddKnownPath(FOLDERID_PublicPictures,	lst);
@@ -1960,15 +1959,15 @@ void UserShell::get_SpecialFolderList(TStringList *lst)
 	AddEnvPath("%TEMP%",					lst);
 	AddEnvPath("%TMP%",						lst);
 
-	lst->Add("\t-");	//ƒZƒpƒŒ[ƒ^
-	lst->Add("shell:::{20D04FE0-3AEA-1069-A2D8-08002B30309D}\tPC/ƒRƒ“ƒsƒ…[ƒ^");
-	lst->Add("shell:::{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}\tƒlƒbƒgƒ[ƒN");
-	lst->Add("shell:::{208D2C60-3AEA-1069-A2D7-08002B30309D}\tƒlƒbƒgƒ[ƒN(ƒ[ƒNƒOƒ‹[ƒv)");
+	lst->Add("\t-");	//ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿
+	lst->Add("shell:::{20D04FE0-3AEA-1069-A2D8-08002B30309D}\tPC/ã‚³ãƒ³ãƒ”ãƒ¥ãƒ¼ã‚¿");
+	lst->Add("shell:::{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}\tãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯");
+	lst->Add("shell:::{208D2C60-3AEA-1069-A2D7-08002B30309D}\tãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯(ãƒ¯ãƒ¼ã‚¯ã‚°ãƒ«ãƒ¼ãƒ—)");
 	lst->Add("shell:::{ED7BA470-8E54-465E-825C-99712043E01C}\tGodMode");
-	lst->Add("shell:ControlPanelFolder\tƒRƒ“ƒgƒ[ƒ‹ƒpƒlƒ‹");
-	lst->Add("shell:ConnectionsFolder\tƒlƒbƒgƒ[ƒNÚ‘±");
-	lst->Add("shell:PrintersFolder\tƒvƒŠƒ“ƒ^[");
-	lst->Add("shell:RecycleBinFolder\t‚²‚İ” ");
+	lst->Add("shell:ControlPanelFolder\tã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ãƒ‘ãƒãƒ«");
+	lst->Add("shell:ConnectionsFolder\tãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯æ¥ç¶š");
+	lst->Add("shell:PrintersFolder\tãƒ—ãƒªãƒ³ã‚¿ãƒ¼");
+	lst->Add("shell:RecycleBinFolder\tã”ã¿ç®±");
 	lst->Add("shell:AppsFolder\tApplications");
 }
 //---------------------------------------------------------------------------

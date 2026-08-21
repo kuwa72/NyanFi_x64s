@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ÉRÉ}ÉìÉhÉâÉCÉìÇÃé¿çs												//
+//  „Ç≥„Éû„É≥„Éâ„É©„Ç§„É≥„ÅÆÂÆüË°å												//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -46,23 +46,23 @@ void __fastcall TExeCmdDlg::FormShow(TObject *Sender)
 	UacDlgCheckBox->Checked		= IniFile->ReadBoolGen(_T("ExeDlgUacDlg"));
 
 	ExeComboBox->SetFocus();
-	//ÉJÅ[É\Éãà íuÇÃÉtÉ@ÉCÉãñºÇì¸óÕ
+	//„Ç´„Éº„ÇΩ„É´‰ΩçÁΩÆ„ÅÆ„Éï„Ç°„Ç§„É´Âêç„ÇíÂÖ•Âäõ
 	if (inp_CurName) {
 		UnicodeString fnam = add_quot_if_spc(FileRec->n_name);
 		int p;
-		//é¿çsâ¬î\ÉtÉ@ÉCÉã
+		//ÂÆüË°åÂèØËÉΩ„Éï„Ç°„Ç§„É´
 		if (test_FileExt(FileRec->f_ext, FExtExeFile)) {
 			ExeComboBox->Text = fnam += " ";
 			p = ExeComboBox->Text.Length();
 		}
-		//ÇªÇÃëºÇÃÉtÉ@ÉCÉã
+		//„Åù„ÅÆ‰ªñ„ÅÆ„Éï„Ç°„Ç§„É´
 		else {
 			ExeComboBox->Text = " " + fnam;
 			p = 0;
 		}
 		ExeComboBox->SelStart = p;
 	}
-	//ëOâÒópÇ¢ÇΩÉRÉ}ÉìÉhÇï\é¶
+	//ÂâçÂõûÁî®„ÅÑ„Åü„Ç≥„Éû„É≥„Éâ„ÇíË°®Á§∫
 	else if (inp_LastCmd) {
 		if (ExeComboBox->Items->Count>0) ExeComboBox->ItemIndex = 0;
 	}
@@ -91,7 +91,7 @@ void __fastcall TExeCmdDlg::FormKeyDown(TObject *Sender, WORD &Key, TShiftState 
 }
 
 //---------------------------------------------------------------------------
-//çÄñ⁄ÇÃçÌèú
+//È†ÖÁõÆ„ÅÆÂâäÈô§
 //---------------------------------------------------------------------------
 void __fastcall TExeCmdDlg::DelItemActionExecute(TObject *Sender)
 {
@@ -103,7 +103,7 @@ void __fastcall TExeCmdDlg::DelItemActionUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = !ExeComboBox->Text.IsEmpty();
 }
 //---------------------------------------------------------------------------
-//óöóÇÃÉNÉäÉA
+//Â±•Ê≠¥„ÅÆ„ÇØ„É™„Ç¢
 //---------------------------------------------------------------------------
 void __fastcall TExeCmdDlg::ClrHistoryItemClick(TObject *Sender)
 {
@@ -111,7 +111,7 @@ void __fastcall TExeCmdDlg::ClrHistoryItemClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ämíË
+//Á¢∫ÂÆö
 //---------------------------------------------------------------------------
 void __fastcall TExeCmdDlg::OkActionExecute(TObject *Sender)
 {

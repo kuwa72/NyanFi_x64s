@@ -1,6 +1,6 @@
 /**
  * @file FindTag.h
- * @brief ƒ^ƒO–¼‚ÌŒŸõ
+ * @brief ã‚¿ã‚°åã®æ¤œç´¢
  */
 //---------------------------------------------------------------------------
 #ifndef FindTagH
@@ -18,11 +18,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒ^ƒO–¼‚ÌŒŸõ
+ * @brief ã‚¿ã‚°åã®æ¤œç´¢
  */
 class TFindTagForm : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *CopyAction;
 	TAction *SelAllAction;
 	TAction *TagJumpAction;
@@ -65,7 +65,7 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall SelAllActionExecute(TObject *Sender);
 	void __fastcall CopyActionUpdate(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	TStringList *TagList;
 	TStringList *ResListBuf;
 
@@ -77,15 +77,15 @@ private:	// ƒ†[ƒU[éŒ¾
 	void __fastcall ClearTagList();
 	void __fastcall UpdateList();
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	UnicodeString TagFile;
 	UnicodeString TagName;
 	UnicodeString TagCmd;
 	UnicodeString FileName;
 	UnicodeString TagInfo;
 
-	UsrScrollPanel *TagsScrPanel;	//!< ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[
-	UsrScrollPanel *InfoScrPanel;	//!< ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[
+	UsrScrollPanel *TagsScrPanel;	//!< ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
+	UsrScrollPanel *InfoScrPanel;	//!< ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 
 	__fastcall TFindTagForm(TComponent* Owner);
 };

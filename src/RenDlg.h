@@ -1,6 +1,6 @@
 /**
  * @file RenDlg.h
- * @brief –¼‘O‚Ì•ÏXƒ_ƒCƒAƒƒO
+ * @brief åå‰ã®å¤‰æ›´ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 //---------------------------------------------------------------------------
 #ifndef RenDlgH
@@ -25,11 +25,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief –¼‘O‚Ì•ÏXƒ_ƒCƒAƒƒO
+ * @brief åå‰ã®å¤‰æ›´ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TRenameDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *AddAssRenAction;
 	TAction *AddCnvChAction;
 	TAction *ChgAssRenAction;
@@ -246,7 +246,7 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall EditListActionUpdate(TObject *Sender);
 	void __fastcall Fmt_DT_BtnClick(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	bool DlgInitialized;
 	bool Previewing;
 	bool Previewed;
@@ -254,18 +254,18 @@ private:	// ƒ†[ƒU[éŒ¾
 	bool ExistErr;
 	bool KeyHandled;
 
-	UnicodeString cmnFext;		//‹¤’ÊŠg’£q
-	bool isMp3;					//‚·‚×‚Ä‚Ì‘ÎÛ‚ªMP3
-	bool isFlac;				//‚·‚×‚Ä‚Ì‘ÎÛ‚ªFLAC
+	UnicodeString cmnFext;		//å…±é€šæ‹¡å¼µå­
+	bool isMp3;					//ã™ã¹ã¦ã®å¯¾è±¡ãŒMP3
+	bool isFlac;				//ã™ã¹ã¦ã®å¯¾è±¡ãŒFLAC
 
 	TEdit	  *LastEdit;
 	TComboBox *LastComboBox;
 	int LastSelStart;
 	int LastSelLength;
 
-	TStringList *SerFormatList;	//˜A”Ô‰ü–¼‘®İ’èƒŠƒXƒg
+	TStringList *SerFormatList;	//é€£ç•ªæ”¹åæ›¸å¼è¨­å®šãƒªã‚¹ãƒˆ
 
-	SttProgressBar *SttPrgBar;	//ƒvƒƒOƒŒƒXƒo[
+	SttProgressBar *SttPrgBar;	//ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹ãƒãƒ¼
 
 	void __fastcall WmFormShowed(TMessage &msg);
 
@@ -291,23 +291,23 @@ private:	// ƒ†[ƒU[éŒ¾
 	bool __fastcall IsMp3Sheet()	 { return (NamePageControl->ActivePage==Mp3Sheet); }
 	bool __fastcall IsOptionSheet()	 { return (NamePageControl->ActivePage==OptionSheet); }
 
-public:		// ƒ†[ƒU[éŒ¾
-	TStringList *CurNameList;	//!< ƒJƒŒƒ“ƒg‚Ì‘Sƒtƒ@ƒCƒ‹ƒŠƒXƒg
-	TStringList *ItemList;		//!< ‘ÎÛƒŠƒXƒg
-	TStringList *NewNameList;	//!< V‚µ‚¢–¼‘O‚ÌƒŠƒXƒg
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	TStringList *CurNameList;	//!< ã‚«ãƒ¬ãƒ³ãƒˆã®å…¨ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆ
+	TStringList *ItemList;		//!< å¯¾è±¡ãƒªã‚¹ãƒˆ
+	TStringList *NewNameList;	//!< æ–°ã—ã„åå‰ã®ãƒªã‚¹ãƒˆ
 
-	UnicodeString OppPath;		//!< ”½‘ÎƒpƒX(ƒJƒŒƒ“ƒg‘¤‰ü–¼‚É‚æ‚é”½‰f‚Ìƒ`ƒFƒbƒN—p)
+	UnicodeString OppPath;		//!< åå¯¾ãƒ‘ã‚¹(ã‚«ãƒ¬ãƒ³ãƒˆå´æ”¹åã«ã‚ˆã‚‹åæ˜ ã®ãƒã‚§ãƒƒã‚¯ç”¨)
 
-	TStringList *RepRenList;	//!< ‰ü–¼ƒŠƒXƒg
-	UnicodeString RenListFile;	//!< ‰ü–¼ƒŠƒXƒgƒtƒ@ƒCƒ‹–¼
+	TStringList *RepRenList;	//!< æ”¹åãƒªã‚¹ãƒˆ
+	UnicodeString RenListFile;	//!< æ”¹åãƒªã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«å
 
-	bool EditedList;			//!< ƒŠƒXƒg•ÒW‚É‚æ‚é‰ü–¼
-	bool IsMulti;				//!< •¡”‚Ì‘ÎÛ‚ª‚ ‚é
-	bool NameChanged;			//!< ˜A”Ô‰ü–¼‚Å–¼‘O•ÏX
-	bool FExtChanged;			//!< ˜A”Ô‰ü–¼‚ÅŠg’£q•ÏX
-	bool AttrChanged;			//!< ‘®«•ÏX
-	bool TimeChanged;			//!< ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv•ÏX
-	bool KeepCsr;				//!< ’P“Æ‰ü–¼Œã‚ÉƒJ[ƒ\ƒ‹‚ğˆÚ“®‚µ‚È‚¢
+	bool EditedList;			//!< ãƒªã‚¹ãƒˆç·¨é›†ã«ã‚ˆã‚‹æ”¹å
+	bool IsMulti;				//!< è¤‡æ•°ã®å¯¾è±¡ãŒã‚ã‚‹
+	bool NameChanged;			//!< é€£ç•ªæ”¹åã§åå‰å¤‰æ›´
+	bool FExtChanged;			//!< é€£ç•ªæ”¹åã§æ‹¡å¼µå­å¤‰æ›´
+	bool AttrChanged;			//!< å±æ€§å¤‰æ›´
+	bool TimeChanged;			//!< ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—å¤‰æ›´
+	bool KeepCsr;				//!< å˜ç‹¬æ”¹åå¾Œã«ã‚«ãƒ¼ã‚½ãƒ«ã‚’ç§»å‹•ã—ãªã„
 
 	__fastcall TRenameDlg(TComponent* Owner);
 

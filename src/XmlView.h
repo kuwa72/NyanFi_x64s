@@ -1,6 +1,6 @@
 /**
  * @file XmlView.h
- * @brief XMLƒrƒ…[ƒA
+ * @brief XMLãƒ“ãƒ¥ãƒ¼ã‚¢
  */
 //---------------------------------------------------------------------------
 #ifndef XmlViewH
@@ -24,11 +24,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief XMLƒrƒ…[ƒA
+ * @brief XMLãƒ“ãƒ¥ãƒ¼ã‚¢
  */
 class TXmlViewer : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *AutoAction;
 	TAction *CollapseAction;
 	TAction *CopyAction;
@@ -102,16 +102,16 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall FindEditKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 	void __fastcall FindEditKeyPress(TObject *Sender, System::WideChar &Key);
 
-private:	// ƒ†[ƒU[éŒ¾
-	//ViewBusy ƒvƒƒpƒeƒB
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	//ViewBusy ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	bool FViewBusy;
 	void __fastcall SetViewBusy(bool Value);
-	/** @brief ƒcƒŠ[ƒrƒ…[ˆ—’† */
+	/** @brief ãƒ„ãƒªãƒ¼ãƒ“ãƒ¥ãƒ¼å‡¦ç†ä¸­ */
 	__property bool ViewBusy = {read = FViewBusy,  write = SetViewBusy};
 
-	int ViewMode;				//!< •\¦ƒ‚[ƒh(0: –¼‘O/ 1: –¼‘O [‘®«]/ 2:XML)
+	int ViewMode;				//!< è¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰(0: åå‰/ 1: åå‰ [å±æ€§]/ 2:XML)
 
-	TStringList *XmlnsList;		//!< –¼‘O‹óŠÔƒŠƒXƒg
+	TStringList *XmlnsList;		//!< åå‰ç©ºé–“ãƒªã‚¹ãƒˆ
 	UnicodeString ErrMsg;
 	bool KeyHandled;
 
@@ -126,7 +126,7 @@ private:	// ƒ†[ƒU[éŒ¾
 	UnicodeString __fastcall GetXmlStr();
 	bool __fastcall MatchNode(TTreeNode *Node);
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	UnicodeString FileName;
 
 	__fastcall TXmlViewer(TComponent* Owner);

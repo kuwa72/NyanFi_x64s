@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒRƒ}ƒ“ƒh‚Ì“ü—Í														//
+//  ã‚³ãƒãƒ³ãƒ‰ã®å…¥åŠ›														//
 //----------------------------------------------------------------------//
 #include "usr_excmd.h"
 #include "UserFunc.h"
@@ -33,13 +33,13 @@ void __fastcall TInpCmdsDlg::FormShow(TObject *Sender)
 	Constraints->MaxHeight = 0;
 
 	if (toCopy || toRefer) {
-		set_FormTitle(this, toCopy? _T("ƒRƒ}ƒ“ƒh–¼‚ÌƒRƒs[") : _T("ƒRƒ}ƒ“ƒh–¼‚ÌQÆ"));
+		set_FormTitle(this, toCopy? _T("ã‚³ãƒãƒ³ãƒ‰åã®ã‚³ãƒ”ãƒ¼") : _T("ã‚³ãƒãƒ³ãƒ‰åã®å‚ç…§"));
 		ModePanel->Visible = true;
 		ClientHeight = MainPanel->Height + ModePanel->Height;
 		CmdsComboBox->Tag = 0;
 	}
 	else {
-		set_FormTitle(this, _T("ƒRƒ}ƒ“ƒh‚Ì“ü—Í"));
+		set_FormTitle(this, _T("ã‚³ãƒãƒ³ãƒ‰ã®å…¥åŠ›"));
 		ModePanel->Visible = false;
 		ClientHeight = MainPanel->Height;
 		CmdsComboBox->Tag = CBTAG_HISTORY;
@@ -92,7 +92,7 @@ void __fastcall TInpCmdsDlg::FormKeyDown(TObject *Sender, WORD &Key, TShiftState
 }
 
 //---------------------------------------------------------------------------
-//Œó•âƒŠƒXƒg‚ğİ’è
+//å€™è£œãƒªã‚¹ãƒˆã‚’è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall TInpCmdsDlg::SetList()
 {
@@ -118,7 +118,7 @@ void __fastcall TInpCmdsDlg::SetList()
 	}
 	if (HistoryList) CmdsComboBox->Items->Assign(HistoryList); else CmdsComboBox->Clear();
 
-	//Œó•âƒŠƒXƒg‚Ìİ’è
+	//å€™è£œãƒªã‚¹ãƒˆã®è¨­å®š
 	ItemList->Clear();
 	for (int i=0; i<CmdSetList->Count; i++) {
 		UnicodeString lbuf = CmdSetList->Strings[i];
@@ -141,27 +141,27 @@ void __fastcall TInpCmdsDlg::SetList()
 	}
 
 	if (!IsRef) {
-		//ƒRƒ}ƒ“ƒhƒtƒ@ƒCƒ‹
+		//ã‚³ãƒãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«
 		std::unique_ptr<TStringList> f_lst(new TStringList());
 		get_files(ExePath, "*.nbt", f_lst.get(), true);
 		for (int i=0; i<f_lst->Count; i++) ItemList->Add("@" + to_relative_name(f_lst->Strings[i]));
 
-		//ƒGƒCƒŠƒAƒX
+		//ã‚¨ã‚¤ãƒªã‚¢ã‚¹
 		if (ScrMode==SCMD_FLIST) {
 			UnicodeString tmp;
-			//’Ç‰Áƒƒjƒ…[
+			//è¿½åŠ ãƒ¡ãƒ‹ãƒ¥ãƒ¼
 			for (int i=0; i<ExtMenuList->Count; i++) {
 				TStringDynArray itm_buf = get_csv_array(ExtMenuList->Strings[i], EXTMENU_CSVITMCNT, true);
 				if (!itm_buf[3].IsEmpty()) ItemList->Add(tmp.sprintf(_T("$%s %s"), itm_buf[3].c_str(), itm_buf[0].c_str()));
 			}
-			//ŠO•”ƒc[ƒ‹
+			//å¤–éƒ¨ãƒ„ãƒ¼ãƒ«
 			for (int i=0; i<ExtToolList->Count; i++) {
 				TStringDynArray itm_buf = get_csv_array(ExtToolList->Strings[i], EXTTOOL_CSVITMCNT, true);
 				if (!itm_buf[4].IsEmpty()) ItemList->Add(tmp.sprintf(_T("$%s %s"), itm_buf[4].c_str(), itm_buf[0].c_str()));
 			}
 		}
 
-		//•â•ƒRƒ}ƒ“ƒh
+		//è£œåŠ©ã‚³ãƒãƒ³ãƒ‰
 		ItemList->AddStrings(SubCmdList);
 	}
 
@@ -213,12 +213,12 @@ void __fastcall TInpCmdsDlg::CmdsComboBoxKeyDown(TObject *Sender, WORD &Key, TSh
 			UnicodeString wd = get_tkn(SubComboBox->Text, ' ');
 			SubComboBox->DroppedDown = false;
 			UnicodeString lbuf = cp_inp->Text;
-			//ƒRƒ}ƒ“ƒh
+			//ã‚³ãƒãƒ³ãƒ‰
 			if (SubComboBox->Tag==0) {
 				int p = pos_r_q_colon(lbuf);
 				lbuf = (p>0)? (lbuf.SubString(1, p) + " ") : EmptyStr;
 			}
-			//ƒpƒ‰ƒ[ƒ^
+			//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 			else {
 				int p= pos_r_q("_", lbuf);
 				lbuf = (p>0)? lbuf.SubString(1, p) : EmptyStr;
@@ -249,13 +249,13 @@ void __fastcall TInpCmdsDlg::CmdsComboBoxKeyDown(TObject *Sender, WORD &Key, TSh
 		UnicodeString kwd = cp_inp->Text;
 		int p = pos_r_q_colon(kwd);
 		UnicodeString wd = (p>0)? kwd.SubString(p + 1, kwd.Length() - p) : kwd;
-		//ƒpƒ‰ƒ[ƒ^‚È‚µ‚È‚çƒRƒ}ƒ“ƒh‚²‚Æíœ
+		//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãªã—ãªã‚‰ã‚³ãƒãƒ³ãƒ‰ã”ã¨å‰Šé™¤
 		if (!ContainsStr(wd, "_")) {
 			cp_inp->Text	  = (p>1)? kwd.SubString(1, p - 1) : EmptyStr;
 			cp_inp->SelLength = 0;
 			cp_inp->SelStart  = cp_inp->Text.Length();
 		}
-		//ƒpƒ‰ƒ[ƒ^“ü—Í’†‚Í’Êí‚Ì•¶šíœ
+		//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å…¥åŠ›ä¸­ã¯é€šå¸¸ã®æ–‡å­—å‰Šé™¤
 		else {
 			InhFilter = true;
 			handled   = false;
@@ -280,7 +280,7 @@ void __fastcall TInpCmdsDlg::CmdsComboBoxKeyDown(TObject *Sender, WORD &Key, TSh
 	else if (SameText(KeyStr, "F2")) {
 		if (!cp_down) ChangeSelCmdComboBox(cp_inp);
 	}
-	//ó‹µˆË‘¶ƒwƒ‹ƒv
+	//çŠ¶æ³ä¾å­˜ãƒ˜ãƒ«ãƒ—
 	else if (equal_F1(KeyStr)) {
 		UnicodeString kwd;
 		if (SubComboBox->Tag==0) {
@@ -302,14 +302,14 @@ void __fastcall TInpCmdsDlg::CmdsComboBoxKeyDown(TObject *Sender, WORD &Key, TSh
 		}
 		else {
 			topic = (SubCmdList->IndexOf(kwd)!=-1)?
-						HELPTOPIC_XC :		//•â•ƒRƒ}ƒ“ƒh
+						HELPTOPIC_XC :		//è£œåŠ©ã‚³ãƒãƒ³ãƒ‰
 					((IsRef && ModeTabControl->TabIndex==1) || (!IsRef && ScrMode==SCMD_TVIEW))?
-						HELPTOPIC_TV :		//ƒeƒLƒXƒgƒrƒ…[ƒA
+						HELPTOPIC_TV :		//ãƒ†ã‚­ã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã‚¢
 					((IsRef && ModeTabControl->TabIndex==2) || (!IsRef && ScrMode==SCMD_IVIEW))?
-						HELPTOPIC_IV :		//ƒCƒ[ƒWƒrƒ…[ƒA
+						HELPTOPIC_IV :		//ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢
 					(IsRef && ModeTabControl->TabIndex==3)?
-						HELPTOPIC_CILW :	//ƒƒO
-						HELPTOPIC_FL;		//ƒtƒ@ƒCƒ‰[
+						HELPTOPIC_CILW :	//ãƒ­ã‚°
+						HELPTOPIC_FL;		//ãƒ•ã‚¡ã‚¤ãƒ©ãƒ¼
 
 			if (topic.Pos('#')==0 && !kwd.IsEmpty()) topic.cat_sprintf(_T("#%s"), kwd.c_str());
 		}
@@ -337,7 +337,7 @@ void __fastcall TInpCmdsDlg::CmdsComboBoxSelect(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//Œó•â‚Ì•`‰æ
+//å€™è£œã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TInpCmdsDlg::SubComboBoxDrawItem(TWinControl *Control, int Index,
 		TRect &Rect, TOwnerDrawState State)
@@ -382,7 +382,7 @@ void __fastcall TInpCmdsDlg::SubComboBoxCloseUp(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒBƒ‹ƒ^
+//ãƒ•ã‚£ãƒ«ã‚¿
 //---------------------------------------------------------------------------
 void __fastcall TInpCmdsDlg::Filter()
 {
@@ -401,19 +401,19 @@ void __fastcall TInpCmdsDlg::Filter()
 	if (p>0) kwd = Trim(kwd.Delete(1, p));
 
 	std::unique_ptr<TStringList> lst(new TStringList());
-	//ƒpƒ‰ƒ[ƒ^
+	//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 	if (ContainsStr(kwd, "_")) {
 		get_PrmList(get_CmdStr(kwd), ScrModeIdStr.Pos(IdChar) - 1, lst.get());
 		kwd = get_tkn_r(kwd, '_');
 		SubComboBox->Tag = 1;
 	}
-	//ƒRƒ}ƒ“ƒh
+	//ã‚³ãƒãƒ³ãƒ‰
 	else {
 		SubComboBox->Tag = 0;
 		if (!kwd.IsEmpty()) lst->Assign(ItemList);
 	}
 
-	//i‚è‚İ
+	//çµã‚Šè¾¼ã¿
 	if (lst->Count>0 && ((SubComboBox->Tag==0 && !contained_wd_i("*|?| ", kwd)) || SubComboBox->Tag==1)) {
 		UnicodeString ptn = (isFuzzy && !MigemoCheckBox->Checked)?
 			get_fuzzy_ptn(kwd, true) :
@@ -437,7 +437,7 @@ void __fastcall TInpCmdsDlg::Filter()
 				changed = !SameStr(SubComboBox->Items->Strings[i], lst->Strings[i]);
 		}
 		if (changed) {
-			//— ƒRƒ“ƒ{ƒ{ƒbƒNƒX‚ÉŠ„‚è“–‚Ä
+			//è£ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹ã«å‰²ã‚Šå½“ã¦
 			cursor_Default();
 			SubComboBox->LockDrawing();
 			SubComboBox->DroppedDown = false;
@@ -446,7 +446,7 @@ void __fastcall TInpCmdsDlg::Filter()
 			SubComboBox->ItemIndex	 = 0;
 			SubComboBox->Enabled	 = true;
 			SubComboBox->UnlockDrawing();
-			Screen->Cursor = crArrow;	//¦ƒhƒƒbƒvƒ_ƒEƒ“‚ÉƒJ[ƒ\ƒ‹‚ªÁ‚¦‚éŒ»Û‚Ö‚Ì‘Îô
+			Screen->Cursor = crArrow;	//â€»ãƒ‰ãƒ­ãƒƒãƒ—ãƒ€ã‚¦ãƒ³æ™‚ã«ã‚«ãƒ¼ã‚½ãƒ«ãŒæ¶ˆãˆã‚‹ç¾è±¡ã¸ã®å¯¾ç­–
 		}
 	}
 	else {

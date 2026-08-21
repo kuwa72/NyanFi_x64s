@@ -1,6 +1,6 @@
 /**
  * @file usr_msg.h
- * @brief ÉÅÉbÉZÅ[ÉW
+ * @brief „É°„ÉÉ„Çª„Éº„Ç∏
  */
 //---------------------------------------------------------------------------
 #ifndef UsrMsgH
@@ -99,21 +99,21 @@ void CancelAbort();
 void EmptyAbort();
 
 //---------------------------------------------------------------------------
-extern bool SureCopy;		//!< ÉRÉsÅ[
-extern bool SureMove;		//!< à⁄ìÆ
-extern bool SureDelete;		//!< çÌèú
-extern bool SureUnPack;		//!< âìÄ
-extern bool SureExec;		//!< é¿çs
-extern bool SureOther;		//!< ÇªÇÃëº
-extern bool SureExit;		//!< èIóπ
-extern bool SureCmpDel;		//!< äÆëSçÌèúÇÕ2ìxämîF
-extern bool SureWorkList;	//!< ÉèÅ[ÉNÉäÉXÉgÇÃçƒì«Ç›çûÇ›
+extern bool SureCopy;		//!< „Ç≥„Éî„Éº
+extern bool SureMove;		//!< ÁßªÂãï
+extern bool SureDelete;		//!< ÂâäÈô§
+extern bool SureUnPack;		//!< Ëß£Âáç
+extern bool SureExec;		//!< ÂÆüË°å
+extern bool SureOther;		//!< „Åù„ÅÆ‰ªñ
+extern bool SureExit;		//!< ÁµÇ‰∫Ü
+extern bool SureCmpDel;		//!< ÂÆåÂÖ®ÂâäÈô§„ÅØ2Â∫¶Á¢∫Ë™ç
+extern bool SureWorkList;	//!< „ÉØ„Éº„ÇØ„É™„Çπ„Éà„ÅÆÂÜçË™≠„ÅøËæº„Åø
 
 //---------------------------------------------------------------------------
-extern bool SureCancel;		//!< ÉLÉÉÉìÉZÉãÉ{É^ÉìÇï\é¶
-extern bool SureDefNo;		//!< ÅuÇ¢Ç¢Ç¶ÅvÇ™ÉfÉtÉHÉãÉg
-extern bool SureAdjPos;		//!< ï\é¶à íuÇèÛãµÇ…çáÇÌÇπÇƒí≤êÆ
-extern bool MsgPosCenter;	//!< ÉÅÉCÉìâÊñ ÇÃíÜâõÇ…ï\é¶
+extern bool SureCancel;		//!< „Ç≠„É£„É≥„Çª„É´„Éú„Çø„É≥„ÇíË°®Á§∫
+extern bool SureDefNo;		//!< „Äå„ÅÑ„ÅÑ„Åà„Äç„Åå„Éá„Éï„Ç©„É´„Éà
+extern bool SureAdjPos;		//!< Ë°®Á§∫‰ΩçÁΩÆ„ÇíÁä∂Ê≥Å„Å´Âêà„Çè„Åõ„Å¶Ë™øÊï¥
+extern bool MsgPosCenter;	//!< „É°„Ç§„É≥ÁîªÈù¢„ÅÆ‰∏≠Â§Æ„Å´Ë°®Á§∫
 
 //---------------------------------------------------------------------------
 void msgbox_ERR(UnicodeString msg);

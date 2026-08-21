@@ -1,6 +1,6 @@
 /**
  * @file DotDlg.h
- * @brief .nyanfi ƒtƒ@ƒCƒ‹‚Ìİ’èƒ_ƒCƒAƒƒO
+ * @brief .nyanfi ãƒ•ã‚¡ã‚¤ãƒ«ã®è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 //---------------------------------------------------------------------------
 #ifndef DotDlgH
@@ -21,12 +21,12 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief .nyanfi ƒtƒ@ƒCƒ‹‚Ìİ’èƒ_ƒCƒAƒƒO
+ * @brief .nyanfi ãƒ•ã‚¡ã‚¤ãƒ«ã®è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  * 
  */
 class TDotNyanDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *CreNyanAction;
 	TAction *DelNyanAction;
 	TAction *DisableColAction;
@@ -102,7 +102,7 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall DelNyanActionExecute(TObject *Sender);
 	void __fastcall DelNyanActionUpdate(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	bool NyanExists;
 	TStringList *ColBufList;
 	TStringList *InheritList;
@@ -111,7 +111,7 @@ private:	// ƒ†[ƒU[éŒ¾
 	void __fastcall SetOderOption(TStringList *lst);
 	void __fastcall SetColorOption(TStringList *lst);
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	UnicodeString DotNyanName;
 
 	__fastcall TDotNyanDlg(TComponent* Owner);

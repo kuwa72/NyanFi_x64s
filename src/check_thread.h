@@ -1,6 +1,6 @@
 /**
  * @file check_thread.h
- * @brief UNC�p�X�̑��݃`�F�b�N�E�X���b�h
+ * @brief UNCパスの存在チェック・スレッド
  */
 //---------------------------------------------------------------------------
 #ifndef TCheckPathThreadH
@@ -10,7 +10,7 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief UNC�p�X�̑��݃`�F�b�N�E�X���b�h
+ * @brief UNCパスの存在チェック・スレッド
  */
 class TCheckPathThread : public TThread
 {
@@ -19,7 +19,7 @@ private:
 
 	TMultiReadExclusiveWriteSynchronizer *TaskRWLock;
 
-	//�X���b�h�Z�[�t���l�������v���p�e�B
+	//スレッドセーフを考慮したプロパティ
 	UnicodeString FPathName;
 	UnicodeString __fastcall GetPathName()
 	{
@@ -35,8 +35,15 @@ private:
 		TaskRWLock->EndWrite();
 	}
 
+	// 上のプロパティ・プロキシから private のアクセサを呼ぶため
+	template <class O, class T, T (O::*G)(), void (O::*S)(T)>
+	friend class compat::RWMutableProperty;
+
 public:
-	__property UnicodeString PathName = {read = GetPathName,  write = SetPathName};
+	// __property を読み書きプロキシに置き換えたもの (排他ロックを取るため
+	// getter が非 const・setter が値渡し。src 側の宣言は変えていない)
+	compat::RWMutableProperty<TCheckPathThread, UnicodeString,
+	                          &TCheckPathThread::GetPathName, &TCheckPathThread::SetPathName> PathName{this};
 
 	bool isOk;
 	UnicodeString ErrMsg;

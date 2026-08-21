@@ -1,6 +1,6 @@
 /**
  * @file usr_file_inf.h
- * @brief ŠeíƒtƒH[ƒ}ƒbƒg‚Ìƒtƒ@ƒCƒ‹î•ñ‚ğæ“¾
+ * @brief å„ç¨®ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã®ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã‚’å–å¾—
  */
 //---------------------------------------------------------------------------
 #ifndef UsrFileInfH
@@ -10,51 +10,51 @@
 #include "usr_arc.h"
 
 //---------------------------------------------------------------------------
-#define FILE_RBUF_SIZE	32768			//!< ƒtƒ@ƒCƒ‹“Ç‚İ‚İ—pƒoƒbƒtƒ@ƒTƒCƒY(32KB)
-#define TXT_DETECT_SIZE	0x10000			//!< ƒeƒLƒXƒg”»’è‚Ì“Ç‚İ‚İƒTƒCƒY(64KB)
+#define FILE_RBUF_SIZE	32768			//!< ãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿ç”¨ãƒãƒƒãƒ•ã‚¡ã‚µã‚¤ã‚º(32KB)
+#define TXT_DETECT_SIZE	0x10000			//!< ãƒ†ã‚­ã‚¹ãƒˆåˆ¤å®šã®èª­ã¿è¾¼ã¿ã‚µã‚¤ã‚º(64KB)
 
 //---------------------------------------------------------------------------
-//ƒXƒgƒŠ[ƒ€–¼
-#define NYANFIDEF_ADS ":nyanfi.def"		//!< İ’èî•ñ
-#define THUMB_JPG_ADS ":thumbnail.jpg"	//!< ƒTƒ€ƒlƒCƒ‹‰æ‘œ
-#define THUMB_TXT_ADS ":thumbnail.txt"	//!< ƒTƒ€ƒlƒCƒ‹î•ñ
+//ã‚¹ãƒˆãƒªãƒ¼ãƒ å
+#define NYANFIDEF_ADS ":nyanfi.def"		//!< è¨­å®šæƒ…å ±
+#define THUMB_JPG_ADS ":thumbnail.jpg"	//!< ã‚µãƒ ãƒã‚¤ãƒ«ç”»åƒ
+#define THUMB_TXT_ADS ":thumbnail.txt"	//!< ã‚µãƒ ãƒã‚¤ãƒ«æƒ…å ±
 #define FAVICON_ADS   ":favicon"
 
 #define DROPBOX_ADS   ":com.dropbox.attrs"
 
 //---------------------------------------------------------------------------
-//Šg’£q
-#define FEXT_ARCHIVE	FEXT_ZIP FEXT_7Z FEXT_TAR FEXT_RAR						//!< ƒA[ƒJƒCƒu
-#define FEXT_EXECUTE	_T(".exe.com.bat.cmd.msi.msu.lnk.scr")					//!< Às‰Â”\
+//æ‹¡å¼µå­
+#define FEXT_ARCHIVE	FEXT_ZIP FEXT_7Z FEXT_TAR FEXT_RAR						//!< ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–
+#define FEXT_EXECUTE	_T(".exe.com.bat.cmd.msi.msu.lnk.scr")					//!< å®Ÿè¡Œå¯èƒ½
 #define FEXT_JPEG		_T(".jpg.jpeg.jpe.jif.jfif")							//!< Jpeg
-#define FEXT_META		_T(".wmf.emf")											//!< ƒƒ^ƒtƒ@ƒCƒ‹
+#define FEXT_META		_T(".wmf.emf")											//!< ãƒ¡ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«
 #define FEXT_RAW		_T(".3fr.arw.cr2.crw.dng.erf.mef.nef.nrw.orf.pef.raf.raw.rw2.sr2.srw.x3f")
 																				//!< RAW
 #define FEXT_PSP		_T(".psp.pspimage")										//!< Paint Shop Pro
-#define FEXT_WICSTD		FEXT_JPEG _T(".bmp.png.gif.tif.wdp.hdp")				//!< WIC‚ª•W€‚Å•\¦‰Â”\
-#define FEXT_EXIF		FEXT_JPEG FEXT_RAW _T(".heic")							//!< Exifî•ñæ“¾‰Â”\
-#define FEXT_IMAGE		FEXT_WICSTD FEXT_RAW FEXT_META _T(".heic.webp")			//!< ‰æ‘œ
-#define FEXT_WEBIMG		FEXT_JPEG _T(".gif.png.webp.ico")						//!< Web‚Å—p‚¢‚ç‚ê‚é‰æ‘œ
-#define FEXT_FONT		_T(".ttf.ttc.fon.otf")									//!< ƒtƒHƒ“ƒg
-#define FEXT_MCISND		_T(".wav.wma.mp3.mid.rmi")								//!< MCI‘Î‰ƒTƒEƒ“ƒh
+#define FEXT_WICSTD		FEXT_JPEG _T(".bmp.png.gif.tif.wdp.hdp")				//!< WICãŒæ¨™æº–ã§è¡¨ç¤ºå¯èƒ½
+#define FEXT_EXIF		FEXT_JPEG FEXT_RAW _T(".heic")							//!< Exifæƒ…å ±å–å¾—å¯èƒ½
+#define FEXT_IMAGE		FEXT_WICSTD FEXT_RAW FEXT_META _T(".heic.webp")			//!< ç”»åƒ
+#define FEXT_WEBIMG		FEXT_JPEG _T(".gif.png.webp.ico")						//!< Webã§ç”¨ã„ã‚‰ã‚Œã‚‹ç”»åƒ
+#define FEXT_FONT		_T(".ttf.ttc.fon.otf")									//!< ãƒ•ã‚©ãƒ³ãƒˆ
+#define FEXT_MCISND		_T(".wav.wma.mp3.mid.rmi")								//!< MCIå¯¾å¿œã‚µã‚¦ãƒ³ãƒ‰
 #define FEXT_VIDEO		_T(".avi.asf.flv.mkv.mov.mp4.mpg.mts.ogm.ts.m2ts.vob.webm.wmv")
-																				//!< “®‰æ
+																				//!< å‹•ç”»
 
-#define FEXT_DURATION	FEXT_MCISND FEXT_VIDEO _T(".cda.opus.flac")				//!< ’·‚³‚ğ‚Â
-#define FEXT_ICONVIEW	_T(".exe.dll.bpl.dpl.cpl.ico.cur.ani")					//!< ƒAƒCƒRƒ“’Šo‰Â”\
-#define FEXT_ICON_CNT	_T(".exe.dll.bpl.dpl.cpl.ico.cur")						//!< ƒAƒCƒRƒ“”æ“¾‰Â”\
-#define FEXT_APPINFO	_T(".exe.dll.ax.rll.bpl.dpl.cpl.ocx.spi.sph.scr")		//!< ƒAƒvƒŠî•ñæ“¾‰Â”\
-#define FEXT_INDIVICO	_T(".exe.ico.cur.ani.lnk.url.library-ms")				//!< ŒÅ—L‚ÌƒAƒCƒRƒ“‚ğ‚Â
+#define FEXT_DURATION	FEXT_MCISND FEXT_VIDEO _T(".cda.opus.flac")				//!< é•·ã•ã‚’æŒã¤
+#define FEXT_ICONVIEW	_T(".exe.dll.bpl.dpl.cpl.ico.cur.ani")					//!< ã‚¢ã‚¤ã‚³ãƒ³æŠ½å‡ºå¯èƒ½
+#define FEXT_ICON_CNT	_T(".exe.dll.bpl.dpl.cpl.ico.cur")						//!< ã‚¢ã‚¤ã‚³ãƒ³æ•°å–å¾—å¯èƒ½
+#define FEXT_APPINFO	_T(".exe.dll.ax.rll.bpl.dpl.cpl.ocx.spi.sph.scr")		//!< ã‚¢ãƒ—ãƒªæƒ…å ±å–å¾—å¯èƒ½
+#define FEXT_INDIVICO	_T(".exe.ico.cur.ani.lnk.url.library-ms")				//!< å›ºæœ‰ã®ã‚¢ã‚¤ã‚³ãƒ³ã‚’æŒã¤
 
 #define FEXT_CSV		_T(".csv.tsv")											//!< CSV
 
 #define FEXT_TEXT		FEXT_PROGRAM FEXT_HTML FEXT_XML FEXT_CSV _T(".txt.ini.md.inf.json.def.log.nbt.bat.cmd.reg.cbproj.dfm.dsp.dsw.css.hhp.hex.m3u.m3u8.mot.wpl.yml.yaml")
-																				//!< ƒeƒLƒXƒgƒtƒ@ƒCƒ‹
+																				//!< ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«
 
 #define FEXT_NONTEXT	_T(".ani.bin.chm.cur.hlp.ico.lnk.pdf.res.swf") FEXT_APPINFO FEXT_ARCHIVE FEXT_IMAGE FEXT_VIDEO FEXT_MCISND FEXT_FONT
-																				//!< ”ñƒeƒLƒXƒgƒtƒ@ƒCƒ‹
+																				//!< éãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«
 
-#define FEXT_ARCVIEW	FEXT_TEXT _T(".ico.cur.wav.mp3")						//!< ƒA[ƒJƒCƒu“à•\¦
+#define FEXT_ARCVIEW	FEXT_TEXT _T(".ico.cur.wav.mp3")						//!< ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–å†…è¡¨ç¤º
 
 //---------------------------------------------------------------------------
 #define FEXT_C_SRC	_T(".c.cc.cpp.cxx")
@@ -63,16 +63,16 @@
 #define FEXT_PASCAL	_T(".pas.dpr.dpk.inc")
 
 #define FEXT_PROGRAM	FEXT_C_SH FEXT_PASCAL _T(".ahk.as.asm.awk.bas.bsh.cgi.cs.d.fs.go.hs.hsp.inc.java.js.jsx.kt.kts.lisp.lsp.lua.mac.php.pl.pm.ps1.psm1.py.qml.rb.rc.drc.rs.sh.swift.scala.sql.st.vb.vbs.v.vhd.ts.PspScript")
-															//!< ƒvƒƒOƒ‰ƒ€
+															//!< ãƒ—ãƒ­ã‚°ãƒ©ãƒ 
 
 #define FEXT_HTML	_T(".htm.html.sht.shtm.shtml.hta.xhtml.xht.hhc.hhk.php")
-															//!< HTML•¶‘
+															//!< HTMLæ–‡æ›¸
 #define FEXT_XML	_T(".xml.xsd.xsl.xslt.dtd.svg.rdf.manifest.library-ms.cdxml.ps1xml.ptxml.csproj.vbproj.vcxproj.cbproj.xaml")
 															//!< XML
 
 #define FEXT_NRM_REM	FEXT_C_SH _T(".as.cs.css.d.go.idl.java.js.jsx.kt.qml.rc.rs.scala.swift.ts.v")	
-															//!< ƒRƒƒ“ƒg‚ª // or /*`*/
-#define FEXT_SMCL_REM	_T(".as.asm.h51.h32.hsp.nbt.qbt")	//!< ƒRƒƒ“ƒg‚ª ;
+															//!< ã‚³ãƒ¡ãƒ³ãƒˆãŒ // or /*ï½*/
+#define FEXT_SMCL_REM	_T(".as.asm.h51.h32.hsp.nbt.qbt")	//!< ã‚³ãƒ¡ãƒ³ãƒˆãŒ ;
 
 //---------------------------------------------------------------------------
 bool test_ExifExt(UnicodeString fext);

@@ -1,6 +1,6 @@
 /**
  * @file CmdListDlg.h
- * @brief ƒRƒ}ƒ“ƒhƒtƒ@ƒCƒ‹ˆê——
+ * @brief ã‚³ãƒãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§
  */
 //---------------------------------------------------------------------------
 #ifndef CmdListDlgH
@@ -22,11 +22,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒRƒ}ƒ“ƒhƒtƒ@ƒCƒ‹ˆê——
+ * @brief ã‚³ãƒãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§
  */
 class TCmdFileListDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *CnfExeAction;
 	TAction *EditCopyAction;
 	TAction *EditSelectAllAction;
@@ -97,7 +97,7 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall ReqEditActionExecute(TObject *Sender);
 	void __fastcall ReqEditActionUpdate(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	TStringList *GridItemList;
 	TStringList *cmdfile_List;
 
@@ -110,10 +110,10 @@ private:	// ƒ†[ƒU[éŒ¾
 	void __fastcall UpdateGrid();
 	int  __fastcall GetGridIndex();
 
-public:		// ƒ†[ƒU[éŒ¾
-	UsrScrollPanel *GridScrPanel;	//!< ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[
-	UsrScrollPanel *PrevScrPanel;	//!< ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[
-	UsrScrollPanel *ReferScrPanel;	//!< ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	UsrScrollPanel *GridScrPanel;	//!< ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
+	UsrScrollPanel *PrevScrPanel;	//!< ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
+	UsrScrollPanel *ReferScrPanel;	//!< ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 
 	UnicodeString CmdFileName;
 	bool ToFilter;

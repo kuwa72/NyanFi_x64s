@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒ}ƒXƒN/ƒ}ƒbƒ`‘I‘ðƒ_ƒCƒAƒƒO											//
+//  ãƒžã‚¹ã‚¯/ãƒžãƒƒãƒé¸æŠžãƒ€ã‚¤ã‚¢ãƒ­ã‚°											//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -29,13 +29,13 @@ void __fastcall TMaskSelectDlg::FormShow(TObject *Sender)
 
 	set_ComboBox_AutoComp(this);
 
-	Caption = get_word_i_idx("ƒpƒXƒ}ƒXƒN|ƒ}ƒXƒN‘I‘ð|ƒ}ƒbƒ`‘I‘ð",
+	Caption = get_word_i_idx("ãƒ‘ã‚¹ãƒžã‚¹ã‚¯|ãƒžã‚¹ã‚¯é¸æŠž|ãƒžãƒƒãƒé¸æŠž",
 				idx_of_word_i("InputPathMask|MaskSelect|MatchSelect", CmdName));
 
 	IsMask = !SameText(CmdName, "MatchSelect");
 	IniFile->LoadComboBoxItems(MaskSelComboBox, IsMask? _T("MaskSelHistory") : _T("MatchSelHistory"));
 	MaskSelComboBox->Tag  = CBTAG_HISTORY | (!IsMask? CBTAG_RGEX_V|CBTAG_RGEX_E : 0);
-	MaskSelComboBox->Hint = IsMask? "; ‚Å‹æØ‚Á‚Ä•¡”Žw’è‰Â”\" : "; ‚Å‹æØ‚Á‚Ä•¡”Žw’è‰Â”\A/`/ ‚Í³‹K•\Œ»";
+	MaskSelComboBox->Hint = IsMask? "; ã§åŒºåˆ‡ã£ã¦è¤‡æ•°æŒ‡å®šå¯èƒ½" : "; ã§åŒºåˆ‡ã£ã¦è¤‡æ•°æŒ‡å®šå¯èƒ½ã€/ï½ž/ ã¯æ­£è¦è¡¨ç¾";
 	MaskSelComboBox->SetFocus();
 }
 //---------------------------------------------------------------------------

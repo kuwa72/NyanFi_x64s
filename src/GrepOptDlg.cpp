@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  GREPŠg’£İ’è														//
+//  GREPæ‹¡å¼µè¨­å®š														//
 //----------------------------------------------------------------------//
 #include "usr_shell.h"
 #include "UserFunc.h"
@@ -24,7 +24,7 @@ void __fastcall TGrepExOptDlg::FormCreate(TObject *Sender)
 {
 	UserModule->SetUsrPopupMenu(this);
 
-	//ƒRƒ“ƒgƒ[ƒ‹‚Ìƒ^ƒO‚ÉA‘Î‰‚·‚é•Ï”‚Ìƒ|ƒCƒ“ƒ^‚ğİ’è
+	//ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã®ã‚¿ã‚°ã«ã€å¯¾å¿œã™ã‚‹å¤‰æ•°ã®ãƒã‚¤ãƒ³ã‚¿ã‚’è¨­å®š
 	OutFileEdit->Tag        = (NativeInt)&GrepFileName;
 	AppNameEdit->Tag        = (NativeInt)&GrepAppName;
 	AppParamEdit->Tag       = (NativeInt)&GrepAppParam;
@@ -46,13 +46,13 @@ void __fastcall TGrepExOptDlg::FormCreate(TObject *Sender)
 	AppendLogCheckBox->Tag  = (NativeInt)&ReplaceAppend;
 	OpenLogCheckBox->Tag    = (NativeInt)&OpenReplaceLog;
 
-	//ƒhƒƒbƒvƒ^[ƒQƒbƒg‚ğİ’è
+	//ãƒ‰ãƒ­ãƒƒãƒ—ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’è¨­å®š
 	usr_SH->AddTargetList(this, AppNameEdit);
 }
 //---------------------------------------------------------------------------
 void __fastcall TGrepExOptDlg::FormShow(TObject *Sender)
 {
-	//ƒ^ƒO‚ğ—p‚¢‚ÄƒRƒ“ƒgƒ[ƒ‹‚É’l‚ğİ’è
+	//ã‚¿ã‚°ã‚’ç”¨ã„ã¦ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã«å€¤ã‚’è¨­å®š
 	BringOptionByTag(this);
 
 	switch (GrepOutMode) {
@@ -61,7 +61,7 @@ void __fastcall TGrepExOptDlg::FormShow(TObject *Sender)
 	default: OutMode0Btn->Checked = true;
 	}
 
-	//ŒŸõ
+	//æ¤œç´¢
 	if (NyanFiForm->GrepPageControl->ActivePage==NyanFiForm->FindSheet) {
 		OutModeSheet->TabVisible = true;
 		OutFormSheet->TabVisible = true;
@@ -69,7 +69,7 @@ void __fastcall TGrepExOptDlg::FormShow(TObject *Sender)
 		InsStrWEdit->Enabled	 = true;
 		InsStrW2Edit->Enabled	 = true;
 	}
-	//’uŠ·
+	//ç½®æ›
 	else {
 		OutModeSheet->TabVisible = false;
 		OutFormSheet->TabVisible = true;
@@ -86,7 +86,7 @@ void __fastcall TGrepExOptDlg::FormClose(TObject *Sender, TCloseAction &Action)
 }
 
 //---------------------------------------------------------------------------
-//ƒwƒ‹ƒv
+//ãƒ˜ãƒ«ãƒ—
 //---------------------------------------------------------------------------
 bool __fastcall TGrepExOptDlg::FormHelp(WORD Command, THelpEventData Data, bool &CallHelp)
 {
@@ -107,7 +107,7 @@ void __fastcall TGrepExOptDlg::PageControl1DrawTab(TCustomTabControl *Control,
 }
 
 //---------------------------------------------------------------------------
-//ƒƒbƒvó‚¯“ü‚ê
+//ãƒ­ãƒƒãƒ—å—ã‘å…¥ã‚Œ
 //---------------------------------------------------------------------------
 void __fastcall TGrepExOptDlg::WmDropped(TMessage &msg)
 {
@@ -115,36 +115,36 @@ void __fastcall TGrepExOptDlg::WmDropped(TMessage &msg)
 }
 
 //---------------------------------------------------------------------------
-//o—Íƒtƒ@ƒCƒ‹‚ÌQÆ
+//å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TGrepExOptDlg::RefOutBtnClick(TObject *Sender)
 {
-	UserModule->PrepareOpenDlg(_T("o—Íƒtƒ@ƒCƒ‹‚Ìw’è"), F_FILTER_TXT);
+	UserModule->PrepareOpenDlg(_T("å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã®æŒ‡å®š"), F_FILTER_TXT);
 	UserModule->OpenDlgToEdit(OutFileEdit);
 	SetFocus();
 }
 
 //---------------------------------------------------------------------------
-//‹N“®ƒAƒvƒŠ‚ÌQÆ
+//èµ·å‹•ã‚¢ãƒ—ãƒªã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TGrepExOptDlg::RefAppBtnClick(TObject *Sender)
 {
 	UnicodeString fnam = AppNameEdit->Text;
-	UserModule->PrepareOpenDlg(_T("‹N“®ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚Ìw’è"), F_FILTER_EXE, fnam.c_str(), ExtractFilePath(fnam));
+	UserModule->PrepareOpenDlg(_T("èµ·å‹•ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã®æŒ‡å®š"), F_FILTER_EXE, fnam.c_str(), ExtractFilePath(fnam));
 	UserModule->OpenDlgToEdit(AppNameEdit);
 	SetFocus();
 }
 //---------------------------------------------------------------------------
-//ì‹ÆƒfƒBƒŒƒNƒgƒŠ‚ÌQÆ
+//ä½œæ¥­ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TGrepExOptDlg::RefDirBtnClick(TObject *Sender)
 {
 	UnicodeString dnam = GrepAppDir;
-	if (UserModule->SelectDirEx(_T("ì‹ÆƒfƒBƒŒƒNƒgƒŠ"), dnam)) AppDirEdit->Text = dnam;
+	if (UserModule->SelectDirEx(_T("ä½œæ¥­ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª"), dnam)) AppDirEdit->Text = dnam;
 }
 
 //---------------------------------------------------------------------------
-//ƒTƒ“ƒvƒ‹•\¦‚ÌXV
+//ã‚µãƒ³ãƒ—ãƒ«è¡¨ç¤ºã®æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TGrepExOptDlg::SampleChange(TObject *Sender)
 {
@@ -160,17 +160,17 @@ void __fastcall TGrepExOptDlg::SampleChange(TObject *Sender)
 	std::unique_ptr<TStringList> l_list(new TStringList());
 	UnicodeString ln_str;
 	if (NyanFiForm->GrepPageControl->ActivePage==NyanFiForm->FindSheet) {
-		ln_str = "‚±‚ê‚ÍŒŸõ‚Ì";
+		ln_str = "ã“ã‚Œã¯æ¤œç´¢ã®";
 		ln_str += conv_esc_char(InsStrWEdit->Text);
-		ln_str += "ƒ}ƒbƒ`Œê";
+		ln_str += "ãƒãƒƒãƒèª";
 		ln_str += conv_esc_char(InsStrW2Edit->Text);
-		ln_str += "‚Å‚·B";
+		ln_str += "ã§ã™ã€‚";
 	}
 	else {
-		ln_str = "‚±‚ê‚Í’uŠ·Œ‹‰Ê‚ÌƒTƒ“ƒvƒ‹‚Å‚·B";
+		ln_str = "ã“ã‚Œã¯ç½®æ›çµæœã®ã‚µãƒ³ãƒ—ãƒ«ã§ã™ã€‚";
 	}
 
-	ln_str += "\n‚±‚ê‚Í2s–Ú‚Å‚·Bs“ª‚Éƒ^ƒu‚Í‚ ‚è‚Ü‚¹‚ñB\n\t‚±‚ê‚Í3s–Ú‚Å‚·Bs“ª‚Éƒ^ƒu‚ª‚ ‚è‚Ü‚·B";
+	ln_str += "\nã“ã‚Œã¯2è¡Œç›®ã§ã™ã€‚è¡Œé ­ã«ã‚¿ãƒ–ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚\n\tã“ã‚Œã¯3è¡Œç›®ã§ã™ã€‚è¡Œé ­ã«ã‚¿ãƒ–ãŒã‚ã‚Šã¾ã™ã€‚";
 
 	if (RepTabCheckBox->Checked) ln_str = ReplaceStr(ln_str, "\t", " ");
 	if (TrimLeftCheckBox->Checked) {
@@ -188,29 +188,29 @@ void __fastcall TGrepExOptDlg::SampleChange(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒoƒbƒNƒAƒbƒvæ‚ÌQÆ
+//ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—å…ˆã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TGrepExOptDlg::RefBakBtnClick(TObject *Sender)
 {
 	UnicodeString dnam = GrepAppDir;
-	if (UserModule->SelectDirEx(_T("ƒoƒbƒNƒAƒbƒvæ"), dnam)) RepBakDirEdit->Text = dnam;
+	if (UserModule->SelectDirEx(_T("ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—å…ˆ"), dnam)) RepBakDirEdit->Text = dnam;
 }
 
 //---------------------------------------------------------------------------
-//ƒƒOƒtƒ@ƒCƒ‹‚ÌQÆ
+//ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã®å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TGrepExOptDlg::RefLogBtnClick(TObject *Sender)
 {
-	UserModule->PrepareOpenDlg(_T("’uŠ·ƒƒOƒtƒ@ƒCƒ‹‚Ìw’è"), F_FILTER_TXT);
+	UserModule->PrepareOpenDlg(_T("ç½®æ›ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã®æŒ‡å®š"), F_FILTER_TXT);
 	UserModule->OpenDlgToEdit(LogFileEdit);
 	SetFocus();
 }
 //---------------------------------------------------------------------------
-//Šm’è
+//ç¢ºå®š
 //---------------------------------------------------------------------------
 void __fastcall TGrepExOptDlg::OkButtonClick(TObject *Sender)
 {
-	//ƒRƒ“ƒgƒ[ƒ‹‚Ìƒ^ƒO‚É‚µ‚½‚ª‚Á‚Ä•ÏX‚ğ“K—p
+	//ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã®ã‚¿ã‚°ã«ã—ãŸãŒã£ã¦å¤‰æ›´ã‚’é©ç”¨
 	ApplyOptionByTag((TForm *)this);
 }
 //---------------------------------------------------------------------------

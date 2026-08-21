@@ -1,6 +1,6 @@
 /**
  * @file EditHistDlg.h
- * @brief Å‹ß•ÒW/‰{——‚µ‚½/g‚Á‚½ƒtƒ@ƒCƒ‹ˆê——/xƒ}[ƒNˆê——/ ƒŠƒ|ƒWƒgƒŠˆê——/ ƒ_ƒCƒŒƒNƒgƒ^ƒOƒWƒƒƒ“ƒv
+ * @brief æœ€è¿‘ç·¨é›†/é–²è¦§ã—ãŸ/ä½¿ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§/æ ãƒãƒ¼ã‚¯ä¸€è¦§/ ãƒªãƒã‚¸ãƒˆãƒªä¸€è¦§/ ãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã‚¿ã‚°ã‚¸ãƒ£ãƒ³ãƒ—
  */
 //---------------------------------------------------------------------------
 #ifndef EditHistDlgH
@@ -24,11 +24,11 @@
 
 //---------------------------------------------------------------------------
 /**
-* @brief Å‹ß•ÒW/‰{——‚µ‚½/g‚Á‚½ƒtƒ@ƒCƒ‹ˆê——/xƒ}[ƒNˆê——/ ƒŠƒ|ƒWƒgƒŠˆê——/ ƒ_ƒCƒŒƒNƒgƒ^ƒOƒWƒƒƒ“ƒv
+* @brief æœ€è¿‘ç·¨é›†/é–²è¦§ã—ãŸ/ä½¿ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§/æ ãƒãƒ¼ã‚¯ä¸€è¦§/ ãƒªãƒã‚¸ãƒˆãƒªä¸€è¦§/ ãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã‚¿ã‚°ã‚¸ãƒ£ãƒ³ãƒ—
  */
 class TEditHistoryDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *ClrAllRecentAction;
 	TAction *ClrBrkRecentAction;
 	TAction *GitViewerAction;
@@ -146,7 +146,7 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall NoRepoItemClick(TObject *Sender);
 	void __fastcall GitViewerActionExecute(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	bool DlgInitialized;
 	bool KeyHandled;
 
@@ -154,8 +154,8 @@ private:	// ƒ†[ƒU[éŒ¾
 	TStringList *HistBufList;
 
 	int MaxFextWd;
-	int ListSortMode;		//ƒ}[ƒN/ƒŠƒ|ƒWƒgƒŠˆê——‚Ìƒ\[ƒgƒ‚[ƒh
-	int ListSortOdr[6];		//ƒ}[ƒN/ƒŠƒ|ƒWƒgƒŠˆê——‚Ìƒ\[ƒg•ûŒü
+	int ListSortMode;		//ãƒãƒ¼ã‚¯/ãƒªãƒã‚¸ãƒˆãƒªä¸€è¦§ã®ã‚½ãƒ¼ãƒˆãƒ¢ãƒ¼ãƒ‰
+	int ListSortOdr[6];		//ãƒãƒ¼ã‚¯/ãƒªãƒã‚¸ãƒˆãƒªä¸€è¦§ã®ã‚½ãƒ¼ãƒˆæ–¹å‘
 
 	void __fastcall WmNyanFiFlIcon(TMessage &msg) { EditHistGrid->Invalidate(); }
 
@@ -169,16 +169,16 @@ private:	// ƒ†[ƒU[éŒ¾
 	bool __fastcall del_HistItem();
 	bool __fastcall set_FileName(int idx);
 
-public:		// ƒ†[ƒU[éŒ¾
-	UsrScrollPanel *GridScrPanel;	//!< ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	UsrScrollPanel *GridScrPanel;	//!< ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 
-	bool isView;		//!< Å‹ß‰{——‚µ‚½ƒtƒ@ƒCƒ‹ˆê——(false = •ÒW‚µ‚½`)
-	bool isRecent;		//!< Å‹ßg‚Á‚½ƒtƒ@ƒCƒ‹ˆê——
-	bool isMark;		//!< ƒ}[ƒNˆê——
-	bool isRepo;		//!< ƒŠƒ|ƒWƒgƒŠˆê——
-	bool isTags;		//!< ƒ_ƒCƒŒƒNƒgƒ^ƒOƒWƒƒƒ“ƒv
+	bool isView;		//!< æœ€è¿‘é–²è¦§ã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§(false = ç·¨é›†ã—ãŸï½)
+	bool isRecent;		//!< æœ€è¿‘ä½¿ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§
+	bool isMark;		//!< ãƒãƒ¼ã‚¯ä¸€è¦§
+	bool isRepo;		//!< ãƒªãƒã‚¸ãƒˆãƒªä¸€è¦§
+	bool isTags;		//!< ãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã‚¿ã‚°ã‚¸ãƒ£ãƒ³ãƒ—
 	bool isTagPtn;
-	bool ToFilter;		//!< ƒtƒBƒ‹ƒ^—“‚ÉƒtƒH[ƒJƒX
+	bool ToFilter;		//!< ãƒ•ã‚£ãƒ«ã‚¿æ¬„ã«ãƒ•ã‚©ãƒ¼ã‚«ã‚¹
 
 	TStringList *TagJumpList;
 

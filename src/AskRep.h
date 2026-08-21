@@ -1,6 +1,6 @@
 /**
  * @file AskRep.h
- * @brief 置換確認ダイアログ
+ * @brief 鄂ｮ謠帷｢ｺ隱阪ム繧､繧｢繝ｭ繧ｰ
  */
 //----------------------------------------------------------------------------
 #ifndef AskRepH
@@ -20,7 +20,7 @@
 
 //----------------------------------------------------------------------------
 /**
- * @brief 置換確認ダイアログ
+ * @brief 鄂ｮ謠帷｢ｺ隱阪ム繧､繧｢繝ｭ繧ｰ
  */
 class TAskRepDlg : public TForm
 {
@@ -45,7 +45,7 @@ __published:
 	void __fastcall RepListBoxEnter(TObject *Sender);
 
 private:
-	UsrScrollPanel *ListScrPanel;	//シンプルスクロールバー
+	UsrScrollPanel *ListScrPanel;	//繧ｷ繝ｳ繝励Ν繧ｹ繧ｯ繝ｭ繝ｼ繝ｫ繝舌�ｼ
 
 public:
 	UnicodeString FileName;

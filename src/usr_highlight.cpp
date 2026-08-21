@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------//
-// \•¶‹­’²•\¦															//
+// æ§‹æ–‡å¼·èª¿è¡¨ç¤º															//
 //																		//
 //----------------------------------------------------------------------//
 #include "usr_str.h"
@@ -8,7 +8,7 @@
 #include "usr_highlight.h"
 
 //---------------------------------------------------------------------------
-// \•¶‹­’²•\¦’è‹`ƒtƒ@ƒCƒ‹‚ÌƒNƒ‰ƒX
+// æ§‹æ–‡å¼·èª¿è¡¨ç¤ºå®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¯ãƒ©ã‚¹
 //---------------------------------------------------------------------------
 HighlightFile *UserHighlight = NULL;
 
@@ -27,7 +27,7 @@ HighlightFile::~HighlightFile()
 }
 
 //---------------------------------------------------------------------------
-//İ’è“à—e‚Ìƒ`ƒFƒbƒN
+//è¨­å®šå†…å®¹ã®ãƒã‚§ãƒƒã‚¯
 //---------------------------------------------------------------------------
 void HighlightFile::CheckValues()
 {
@@ -54,11 +54,11 @@ void HighlightFile::CheckValues()
 		}
 	}
 
-	if (ErrorList->Count>0) ErrorList->Add("    İ’è‚ÉŒë‚è‚ª‚ ‚è‚Ü‚·B");
+	if (ErrorList->Count>0) ErrorList->Add(_T("    è¨­å®šã«èª¤ã‚ŠãŒã‚ã‚Šã¾ã™ã€‚"));
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚ª•Ï‰»‚µ‚Ä‚¢‚½‚çÄ“Ç‚İ‚İ
+//ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ãŒå¤‰åŒ–ã—ã¦ã„ãŸã‚‰å†èª­ã¿è¾¼ã¿
 //---------------------------------------------------------------------------
 bool HighlightFile::Recycle()
 {
@@ -76,13 +76,13 @@ bool HighlightFile::Recycle()
 }
 
 //---------------------------------------------------------------------------
-//\•¶‹­’²•\¦’è‹`ƒtƒ@ƒCƒ‹‚©‚ç‘Î‰ƒZƒNƒVƒ‡ƒ“‚ğæ“¾
+//æ§‹æ–‡å¼·èª¿è¡¨ç¤ºå®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰å¯¾å¿œã‚»ã‚¯ã‚·ãƒ§ãƒ³ã‚’å–å¾—
 //---------------------------------------------------------------------------
 bool HighlightFile::GetSection(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	bool is_clip,			//ƒNƒŠƒbƒvƒ{[ƒh		(default = false)
-	bool is_log,			//ƒ^ƒXƒNƒƒO			(default = false)
-	bool is_h2t)			//HTML¨TEXT•ÏŠ·ƒ‚[ƒh	(default = false)
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	bool is_clip,			//ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰		(default = false)
+	bool is_log,			//ã‚¿ã‚¹ã‚¯ãƒ­ã‚°			(default = false)
+	bool is_h2t)			//HTMLâ†’TEXTå¤‰æ›ãƒ¢ãƒ¼ãƒ‰	(default = false)
 {
 	CurSection = EmptyStr;
 	UnicodeString fext = get_extension(fnam);
@@ -100,7 +100,7 @@ bool HighlightFile::GetSection(
 		if (CurSection.IsEmpty()) continue;
 
 		if (!is_clip && !is_log) {
-			//‘ÎÛƒpƒX
+			//å¯¾è±¡ãƒ‘ã‚¹
 			TStringDynArray path_lst = split_strings_semicolon(ReadKeyStr(_T("TargetPath")));
 			if (path_lst.Length>0) {
 				bool ok = false;
@@ -110,7 +110,7 @@ bool HighlightFile::GetSection(
 				}
 				if (!ok) CurSection = EmptyStr;
 			}
-			//œŠO‘ÎÛƒpƒX
+			//é™¤å¤–å¯¾è±¡ãƒ‘ã‚¹
 			if (!CurSection.IsEmpty()) {
 				TStringDynArray path_lst = split_strings_semicolon(ReadKeyStr(_T("ExcludePath")));
 				if (path_lst.Length>0) {
@@ -122,7 +122,7 @@ bool HighlightFile::GetSection(
 					if (!ok) CurSection = EmptyStr;
 				}
 			}
-			//‘ÎÛ–¼
+			//å¯¾è±¡å
 			if (!CurSection.IsEmpty()) {
 				TStringDynArray name_lst = split_strings_semicolon(ReadKeyStr(_T("TargetName")));
 				if (name_lst.Length>0) {
@@ -137,7 +137,7 @@ bool HighlightFile::GetSection(
 			}
 		}
 
-		//ƒ}ƒbƒ`
+		//ãƒãƒƒãƒ
 		if (!CurSection.IsEmpty()) break;
 	}
 
@@ -153,14 +153,14 @@ UnicodeString HighlightFile::ReadKeyStr(const _TCHAR *key)
 }
 //---------------------------------------------------------------------------
 int HighlightFile::ReadKeyInt(const _TCHAR *key,
-	int def)	//ƒfƒtƒHƒ‹ƒg’l	(default = 0)
+	int def)	//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤	(default = 0)
 {
 	if (CurSection.IsEmpty()) return 0;
 	return ReadInteger(CurSection, key, def);
 }
 //---------------------------------------------------------------------------
 bool HighlightFile::ReadKeyBool(const _TCHAR *key,
-	bool def)	//ƒfƒtƒHƒ‹ƒg’l	(default = false)
+	bool def)	//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤	(default = false)
 {
 	if (CurSection.IsEmpty()) return false;
 
@@ -168,7 +168,7 @@ bool HighlightFile::ReadKeyBool(const _TCHAR *key,
 }
 
 //---------------------------------------------------------------------------
-//³‹K•\Œ»ƒpƒ^[ƒ“
+//æ­£è¦è¡¨ç¾ãƒ‘ã‚¿ãƒ¼ãƒ³
 //---------------------------------------------------------------------------
 UnicodeString HighlightFile::ReadRegExPtn(const _TCHAR *key)
 {
@@ -178,29 +178,29 @@ UnicodeString HighlightFile::ReadRegExPtn(const _TCHAR *key)
 	return (chk_RegExPtn(ptn)? ptn : EmptyStr);
 }
 //---------------------------------------------------------------------------
-//16i2Œ…RRGGBBŒ`®‚ğ TColor ‚Æ‚µ‚Äæ“¾
+//16é€²2æ¡RRGGBBå½¢å¼ã‚’ TColor ã¨ã—ã¦å–å¾—
 //---------------------------------------------------------------------------
 TColor HighlightFile::ReadColorRGB6H(const _TCHAR *key,
-	TColor def)	//ƒfƒtƒHƒ‹ƒg’l	(default = clBlack)
+	TColor def)	//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤	(default = clBlack)
 {
 	UnicodeString s = ReadString(CurSection, key, EmptyStr);
 	return TRegEx::IsMatch(s, "^[0-9a-fA-F]{6}")? xRRGGBB_to_col(s) : def;
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒƒ“ƒg¯•Ê•¶š—ñ‚ğæ“¾
+//ã‚³ãƒ¡ãƒ³ãƒˆè­˜åˆ¥æ–‡å­—åˆ—ã‚’å–å¾—
 //---------------------------------------------------------------------------
 bool HighlightFile::GetCommentList(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	TStringList *ln_lst,	//1sƒRƒƒ“ƒg
-	TStringList *bgn_lst,	//ƒuƒƒbƒNŠJn
-	TStringList *end_lst,	//ƒuƒƒbƒNI—¹
-	bool is_h2t,			//HTML¨TEXT•ÏŠ·ƒ‚[ƒh	(default = false)
-	bool only_def)			//ƒfƒtƒHƒ‹ƒg‚Ì‚İæ“¾	(default = false)
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	TStringList *ln_lst,	//1è¡Œã‚³ãƒ¡ãƒ³ãƒˆ
+	TStringList *bgn_lst,	//ãƒ–ãƒ­ãƒƒã‚¯é–‹å§‹
+	TStringList *end_lst,	//ãƒ–ãƒ­ãƒƒã‚¯çµ‚äº†
+	bool is_h2t,			//HTMLâ†’TEXTå¤‰æ›ãƒ¢ãƒ¼ãƒ‰	(default = false)
+	bool only_def)			//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã¿å–å¾—	(default = false)
 {
 	if (fnam.IsEmpty()) return false;
 
-	//ƒ†[ƒU’è‹`‚©‚çæ“¾
+	//ãƒ¦ãƒ¼ã‚¶å®šç¾©ã‹ã‚‰å–å¾—
 	if (!only_def && GetSection(fnam)) {
 		UnicodeString key;
 		for (int i=1; ; i++) {
@@ -216,7 +216,7 @@ bool HighlightFile::GetCommentList(
 			end_lst->Add(e_str);
 		}
 	}
-	//ƒfƒtƒHƒ‹ƒg
+	//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ
 	else {
 		UnicodeString fext = get_extension(fnam);
 
@@ -232,7 +232,7 @@ bool HighlightFile::GetCommentList(
 			bgn_lst->Add("{");	end_lst->Add("}");
 			bgn_lst->Add("(*");	end_lst->Add("*)");
 		}
-		//ŒÂ•Ê
+		//å€‹åˆ¥
 		else if (test_FileExt(fext, ".ahk")) {
 			ln_lst->Add(";");
 			bgn_lst->Add("/*");	end_lst->Add("*/");
@@ -304,7 +304,7 @@ bool HighlightFile::GetCommentList(
 		else if (test_FileExt(fext, ".vhd")) {
 			ln_lst->Add("--");
 		}
-		//‚»‚Ì‘¼
+		//ãã®ä»–
 		else if (test_FileExt(fext, ".dsp.dsw.nodoka.yml.yaml.PspScript")) {
 			ln_lst->Add("#");
 		}
@@ -320,27 +320,27 @@ bool HighlightFile::GetCommentList(
 }
 
 //---------------------------------------------------------------------------
-//ƒŠƒXƒgƒ{ƒbƒNƒX‚Ìw’ès‚ÌƒRƒƒ“ƒgŠJnˆÊ’u‚ğæ“¾
+//ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®æŒ‡å®šè¡Œã®ã‚³ãƒ¡ãƒ³ãƒˆé–‹å§‹ä½ç½®ã‚’å–å¾—
 //---------------------------------------------------------------------------
 int HighlightFile::GetCommentPos(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	TListBox *lp, int idx,	//ƒŠƒXƒgƒ{ƒbƒNƒXAƒCƒ“ƒfƒbƒNƒX
-	bool en_mlt)			//•¡”sƒRƒƒ“ƒg‚É‘Î‰	(default = true)
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	TListBox *lp, int idx,	//ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã€ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
+	bool en_mlt)			//è¤‡æ•°è¡Œã‚³ãƒ¡ãƒ³ãƒˆã«å¯¾å¿œ	(default = true)
 {
 	int p = 0;
 
-	std::unique_ptr<TStringList> ln_lst(new TStringList());		//1sƒRƒƒ“ƒg
-	std::unique_ptr<TStringList> bg_lst(new TStringList());		//ƒuƒƒbƒNŠJn
-	std::unique_ptr<TStringList> ed_lst(new TStringList());		//ƒuƒƒbƒNI—¹
+	std::unique_ptr<TStringList> ln_lst(new TStringList());		//1è¡Œã‚³ãƒ¡ãƒ³ãƒˆ
+	std::unique_ptr<TStringList> bg_lst(new TStringList());		//ãƒ–ãƒ­ãƒƒã‚¯é–‹å§‹
+	std::unique_ptr<TStringList> ed_lst(new TStringList());		//ãƒ–ãƒ­ãƒƒã‚¯çµ‚äº†
 
 	if (GetCommentList(fnam, ln_lst.get(), bg_lst.get(), ed_lst.get())) {
 		UnicodeString s = lp->Items->Strings[idx];
 
-		//sƒRƒƒ“ƒg
+		//è¡Œã‚³ãƒ¡ãƒ³ãƒˆ
 		int p_ln = 0;
 		for (int i=0; i<ln_lst->Count && p_ln==0; i++) p_ln = pos_i(ln_lst->Strings[i], s);
 
-		//ƒuƒƒbƒNƒRƒƒ“ƒg(s‘S‘Ì)
+		//ãƒ–ãƒ­ãƒƒã‚¯ã‚³ãƒ¡ãƒ³ãƒˆ(è¡Œå…¨ä½“)
 		bool flag = false;
 		if (en_mlt && p_ln!=1) {
 			for (int i=0; i<bg_lst->Count && !flag; i++) {
@@ -348,17 +348,17 @@ int HighlightFile::GetCommentPos(
 				UnicodeString ed_str = ed_lst->Strings[i];
 				bool is_same = SameStr(bg_str, ed_str);
 				UnicodeString lbuf	 = Trim(s);
-				//ƒuƒƒbƒNƒRƒƒ“ƒg“à‚©?
+				//ãƒ–ãƒ­ãƒƒã‚¯ã‚³ãƒ¡ãƒ³ãƒˆå†…ã‹?
 				if (!ContainsStr(lbuf, bg_str) && !ContainsStr(lbuf, ed_str)) {
-					int range = 50;	//*** ƒ`ƒFƒbƒN”ÍˆÍ
+					int range = 50;	//*** ãƒã‚§ãƒƒã‚¯ç¯„å›²
 					int idxj = idx - 1;
-					//ã•ûƒ`ƒFƒbƒN
+					//ä¸Šæ–¹ãƒã‚§ãƒƒã‚¯
 					for (int j=0; j<range && !flag && idx>=0; j++,idxj--) {
 						UnicodeString jbuf = Trim(lp->Items->Strings[idxj]);
 						if (EndsStr(ed_str, jbuf)) break;
 						if (StartsStr(bg_str, jbuf)) flag = true;
 					}
-					//‰º•ûƒ`ƒFƒbƒN
+					//ä¸‹æ–¹ãƒã‚§ãƒƒã‚¯
 					if (flag) {
 						flag = false;
 						idxj = idx + 1;
@@ -369,11 +369,11 @@ int HighlightFile::GetCommentPos(
 						}
 					}
 				}
-				//ƒuƒƒbƒNƒRƒƒ“ƒgŠJns‚©?
+				//ãƒ–ãƒ­ãƒƒã‚¯ã‚³ãƒ¡ãƒ³ãƒˆé–‹å§‹è¡Œã‹?
 				else if (remove_top_s(lbuf, bg_str)) {
 					flag = EndsStr(ed_str, lbuf) || !ContainsStr(lbuf, ed_str);
 				}
-				//ƒuƒƒbƒNƒRƒƒ“ƒgI—¹s‚©?
+				//ãƒ–ãƒ­ãƒƒã‚¯ã‚³ãƒ¡ãƒ³ãƒˆçµ‚äº†è¡Œã‹?
 				else if (remove_end_s(lbuf, ed_str)) {
 					flag = StartsStr(bg_str, lbuf) || !ContainsStr(lbuf, bg_str);
 				}
@@ -384,7 +384,7 @@ int HighlightFile::GetCommentPos(
 			p = 1;
 		}
 		else {
-			//1s‚Éû‚Ü‚éƒuƒƒbƒNƒRƒƒ“ƒg
+			//1è¡Œã«åã¾ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã‚³ãƒ¡ãƒ³ãƒˆ
 			int p_mlt = 0;
 			for (int i=0; i<bg_lst->Count && p_mlt==0; i++) {
 				int p_end = EndsStr(ed_lst->Strings[i], s)? (s.Length() - ed_lst->Strings[i].Length() + 1) : 0;
@@ -414,7 +414,7 @@ int HighlightFile::GetCommentPos(
 }
 
 //---------------------------------------------------------------------------
-//Šg’£qˆË‘¶‚ÌƒfƒtƒHƒ‹ƒgŒ©o‚µƒpƒ^[ƒ“‚ğæ“¾
+//æ‹¡å¼µå­ä¾å­˜ã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆè¦‹å‡ºã—ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString HighlightFile::GetDefHeadlnPtn(UnicodeString fext)
 {
@@ -427,23 +427,23 @@ UnicodeString HighlightFile::GetDefHeadlnPtn(UnicodeString fext)
 		test_FileExt(fext, ".pod.pl.pm")   ? "^=head\\d\\b" : "");
 }
 //---------------------------------------------------------------------------
-//Œ©o‚µƒpƒ^[ƒ“‚ğæ“¾
+//è¦‹å‡ºã—ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString HighlightFile::GetHeadlinePtn(
-	UnicodeString fnam,		//ƒtƒ@ƒCƒ‹–¼
-	TStringList *hl_lst,	//Šg’£q‘Î‰Œ©o‚µƒŠƒXƒg	(default = NULL)
-	bool only_def)			//ƒfƒtƒHƒ‹ƒg‚Ì‚İ‚ğæ“¾		(default = false)
+	UnicodeString fnam,		//ãƒ•ã‚¡ã‚¤ãƒ«å
+	TStringList *hl_lst,	//æ‹¡å¼µå­å¯¾å¿œè¦‹å‡ºã—ãƒªã‚¹ãƒˆ	(default = NULL)
+	bool only_def)			//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã¿ã‚’å–å¾—		(default = false)
 {
 	UnicodeString h_ptn;
 	UnicodeString fext = get_extension(fnam);
-	//ƒ†[ƒU’è‹`
+	//ãƒ¦ãƒ¼ã‚¶å®šç¾©
 	if (!only_def && GetSection(fnam)) h_ptn = ReadRegExPtn(_T("HeadlinePtn"));
 
-	//Šg’£qŠÖ˜A•t‚¯
+	//æ‹¡å¼µå­é–¢é€£ä»˜ã‘
 	if (h_ptn.IsEmpty() && hl_lst && !fext.IsEmpty())
 		h_ptn = hl_lst->Values[get_tkn_r(fext, '.').LowerCase()];
 
-	//ƒfƒtƒHƒ‹ƒg
+	//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ
 	if (h_ptn.IsEmpty()) h_ptn = GetDefHeadlnPtn(fext);
 	if (h_ptn.IsEmpty()) {
 		h_ptn = test_FileExt(fext, ".ini.inf.reg.url") ? "^\\[.+?\\]" :
@@ -455,16 +455,16 @@ UnicodeString HighlightFile::GetHeadlinePtn(
 //---------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------
-//ˆÈ‰º‚ÍƒfƒtƒHƒ‹ƒg‚Ìİ’è‚ğæ“¾
+//ä»¥ä¸‹ã¯ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®è¨­å®šã‚’å–å¾—
 //---------------------------------------------------------------------------
-//—\–ñŒêƒpƒ^[ƒ“‚ğæ“¾
+//äºˆç´„èªãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString GetDefReservedPtn(
-	UnicodeString fext,		//Šg’£q
-	bool &sns_case, 		//‘å¬•¶š‚ğ‹æ•Ê
-	bool is_xml,			//‘ÎÛ‚ªXML
-	bool is_log,			//‘ÎÛ‚ªƒ^ƒXƒNƒƒO
-	bool is_h2t)			//HTML¨TEXT•ÏŠ·ƒ‚[ƒh
+	UnicodeString fext,		//æ‹¡å¼µå­
+	bool &sns_case, 		//å¤§å°æ–‡å­—ã‚’åŒºåˆ¥
+	bool is_xml,			//å¯¾è±¡ãŒXML
+	bool is_log,			//å¯¾è±¡ãŒã‚¿ã‚¹ã‚¯ãƒ­ã‚°
+	bool is_h2t)			//HTMLâ†’TEXTå¤‰æ›ãƒ¢ãƒ¼ãƒ‰
 {
 	UnicodeString ret_str;
 
@@ -779,7 +779,7 @@ UnicodeString GetDefReservedPtn(
 }
 
 //---------------------------------------------------------------------------
-//”’lƒpƒ^[ƒ“‚ğæ“¾
+//æ•°å€¤ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString GetDefNumericPtn(UnicodeString fext)
 {
@@ -799,12 +799,12 @@ UnicodeString GetDefNumericPtn(UnicodeString fext)
 }
 
 //---------------------------------------------------------------------------
-//ƒVƒ“ƒ{ƒ‹•¶š‚ğæ“¾
+//ã‚·ãƒ³ãƒœãƒ«æ–‡å­—ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString GetDefSymbolChars(
-	UnicodeString fext,		//Šg’£q
-	bool is_xml,			//‘ÎÛ‚ªXML
-	bool is_h2t)			//HTML¨TEXT•ÏŠ·ƒ‚[ƒh
+	UnicodeString fext,		//æ‹¡å¼µå­
+	bool is_xml,			//å¯¾è±¡ãŒXML
+	bool is_h2t)			//HTMLâ†’TEXTå¤‰æ›ãƒ¢ãƒ¼ãƒ‰
 {
 	return (
 		is_xml?									"{}/=<>:;?" :
@@ -822,14 +822,14 @@ UnicodeString GetDefSymbolChars(
 }
 
 //---------------------------------------------------------------------------
-//•¶š—ñˆø—p•„‚ğæ“¾
+//æ–‡å­—åˆ—å¼•ç”¨ç¬¦ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString GetDefQuotChars(
-	UnicodeString fext,		//Šg’£q
-	bool &use_esc,			//[o] ƒGƒXƒP[ƒvƒV[ƒPƒ“ƒX—L‚è
-	bool is_xml,			//‘ÎÛ‚ªXML
-	bool is_ini,			//‘ÎÛ‚ªINIƒtƒ@ƒCƒ‹‘®
-	bool is_h2t)			//HTML¨TEXT•ÏŠ·ƒ‚[ƒh
+	UnicodeString fext,		//æ‹¡å¼µå­
+	bool &use_esc,			//[o] ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã‚·ãƒ¼ã‚±ãƒ³ã‚¹æœ‰ã‚Š
+	bool is_xml,			//å¯¾è±¡ãŒXML
+	bool is_ini,			//å¯¾è±¡ãŒINIãƒ•ã‚¡ã‚¤ãƒ«æ›¸å¼
+	bool is_h2t)			//HTMLâ†’TEXTå¤‰æ›ãƒ¢ãƒ¼ãƒ‰
 {
 	use_esc = (!test_FileExt(fext, ".vbs.bas.vb.mac.qbt") && !is_ini);
 
@@ -851,12 +851,12 @@ UnicodeString GetDefQuotChars(
 }
 
 //---------------------------------------------------------------------------
-//ŠÖ”ƒpƒ^[ƒ“‚ğæ“¾
+//é–¢æ•°ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString GetDefFunctionPtn(
-	UnicodeString fext,			//Šg’£q
-	UnicodeString &name_ptn,	//[o] –¼‘Oæ“¾ƒpƒ^[ƒ“
-	bool is_h2t)				//HTML¨TEXT•ÏŠ·ƒ‚[ƒh
+	UnicodeString fext,			//æ‹¡å¼µå­
+	UnicodeString &name_ptn,	//[o] åå‰å–å¾—ãƒ‘ã‚¿ãƒ¼ãƒ³
+	bool is_h2t)				//HTMLâ†’TEXTå¤‰æ›ãƒ¢ãƒ¼ãƒ‰
 {
 	UnicodeString func_ptn;
 	name_ptn = EmptyStr;
@@ -939,7 +939,7 @@ UnicodeString GetDefFunctionPtn(
 }
 
 //---------------------------------------------------------------------------
-//SearchPair ƒRƒ}ƒ“ƒh—pŒŸõƒpƒ^[ƒ“‚ğæ“¾
+//SearchPair ã‚³ãƒãƒ³ãƒ‰ç”¨æ¤œç´¢ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’å–å¾—
 //---------------------------------------------------------------------------
 bool GetSearchPairPtn(UnicodeString fext, TStringList *lst)
 {
@@ -973,12 +973,12 @@ bool GetSearchPairPtn(UnicodeString fext, TStringList *lst)
 }
 
 //---------------------------------------------------------------------------
-//w’èŠg’£q‚É‘Î‚·‚éƒfƒtƒHƒ‹ƒg‚Ì\•¶‹­’²•\¦’è‹`‚ğæ“¾
+//æŒ‡å®šæ‹¡å¼µå­ã«å¯¾ã™ã‚‹ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®æ§‹æ–‡å¼·èª¿è¡¨ç¤ºå®šç¾©ã‚’å–å¾—
 //---------------------------------------------------------------------------
 bool GetDefaultHighlight(
-	UnicodeString fext,		//Šg’£q
-	TStringList *lst,		//[o] Œ‹‰ÊƒŠƒXƒg
-	TStringList *hl_lst)	//Šg’£q‘Î‰Œ©o‚µƒŠƒXƒg	(default = NULL)
+	UnicodeString fext,		//æ‹¡å¼µå­
+	TStringList *lst,		//[o] çµæœãƒªã‚¹ãƒˆ
+	TStringList *hl_lst)	//æ‹¡å¼µå­å¯¾å¿œè¦‹å‡ºã—ãƒªã‚¹ãƒˆ	(default = NULL)
 {
 	if (!StartsStr('.', fext)) fext.Insert(".", 1);
 
@@ -989,10 +989,10 @@ bool GetDefaultHighlight(
 	lst->Clear();
 	lst->Add(lbuf.sprintf(_T("[%s]"), fext.c_str()));
 
-	//ƒRƒƒ“ƒg
-	std::unique_ptr<TStringList> ln_lst(new TStringList());		//1sƒRƒƒ“ƒg
-	std::unique_ptr<TStringList> bgn_lst(new TStringList());	//ƒuƒƒbƒNŠJn
-	std::unique_ptr<TStringList> end_lst(new TStringList());	//ƒuƒƒbƒNI—¹
+	//ã‚³ãƒ¡ãƒ³ãƒˆ
+	std::unique_ptr<TStringList> ln_lst(new TStringList());		//1è¡Œã‚³ãƒ¡ãƒ³ãƒˆ
+	std::unique_ptr<TStringList> bgn_lst(new TStringList());	//ãƒ–ãƒ­ãƒƒã‚¯é–‹å§‹
+	std::unique_ptr<TStringList> end_lst(new TStringList());	//ãƒ–ãƒ­ãƒƒã‚¯çµ‚äº†
 	if (UserHighlight->GetCommentList("*" + fext, ln_lst.get(), bgn_lst.get(), end_lst.get(), false, true)) {
 		for (int i=0; i<ln_lst->Count; i++)
 			lst->Add(lbuf.sprintf(_T("Comment%u=%s"), i + 1, ln_lst->Strings[i].c_str()));
@@ -1013,24 +1013,24 @@ bool GetDefaultHighlight(
 		}
 	}
 
-	//Œ©o‚µ
+	//è¦‹å‡ºã—
 	UnicodeString hl_ptn = UserHighlight->GetHeadlinePtn("*" + fext, hl_lst, true);
 	if (!hl_ptn.IsEmpty()) lst->Add("HeadlinePtn=" + hl_ptn);
 
-	//—\–ñŒê
+	//äºˆç´„èª
 	bool sns_case;
 	UnicodeString res_str = GetDefReservedPtn(fext, sns_case, is_xml, false, false);
 	if (!res_str.IsEmpty()) {
 		lst->Add("ReservedPtn=" + res_str);
 		lst->Add(lbuf.sprintf(_T("ReservedCase=%u"), sns_case? 1 : 0));
 	}
-	//”’l
+	//æ•°å€¤
 	res_str = GetDefNumericPtn(fext);
 	if (!res_str.IsEmpty()) lst->Add("NumericPtn=" + res_str);
-	//ƒVƒ“ƒ{ƒ‹
+	//ã‚·ãƒ³ãƒœãƒ«
 	res_str = GetDefSymbolChars(fext, is_xml, false);
 	if (!res_str.IsEmpty()) lst->Add("Symbol=" + res_str);
-	//•¶š—ñ
+	//æ–‡å­—åˆ—
 	bool use_esc;
 	res_str = GetDefQuotChars(fext, use_esc, is_xml, is_ini, false);
 	if (!res_str.IsEmpty()) {
@@ -1038,7 +1038,7 @@ bool GetDefaultHighlight(
 		lst->Add(lbuf.sprintf(_T("UseEsc=%u"), use_esc? 1 : 0));
 	}
 
-	//ŠÖ”
+	//é–¢æ•°
 	UnicodeString name_ptn;
 	res_str = GetDefFunctionPtn(fext, name_ptn, false);
 	if (!res_str.IsEmpty()) {
@@ -1046,7 +1046,7 @@ bool GetDefaultHighlight(
 		if (!name_ptn.IsEmpty()) lst->Add("FuncNamePtn=" + name_ptn);
 	}
 
-	//SearchPair —pƒpƒ^[ƒ“
+	//SearchPair ç”¨ãƒ‘ã‚¿ãƒ¼ãƒ³
 	std::unique_ptr<TStringList> ptn_lst(new TStringList());
 	if (GetSearchPairPtn(fext, ptn_lst.get())) {
 		for (int i=0; i<ptn_lst->Count; i++) {

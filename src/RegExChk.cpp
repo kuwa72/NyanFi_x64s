@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ³‹K•\Œ»ƒ`ƒFƒbƒJ[													//
+//  æ­£è¦è¡¨ç¾ãƒã‚§ãƒƒã‚«ãƒ¼													//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -25,7 +25,7 @@ void __fastcall TRegExChecker::FormCreate(TObject *Sender)
 	ResultList = new TStringList();
 	DetailList = new TStringList();
 
-	//³‹K•\Œ»‚Ìà–¾‚ğİ’è
+	//æ­£è¦è¡¨ç¾ã®èª¬æ˜ã‚’è¨­å®š
 	TStringList *lst = UserModule->RefRegExList;
 	for (int i=0; i<lst->Count; i++) {
 		UnicodeString lbuf = lst->Strings[i];
@@ -53,7 +53,7 @@ void __fastcall TRegExChecker::FormShow(TObject *Sender)
 	UpdtCheckBox->Checked   = IniFile->ReadBoolGen(_T("RegExChkUpdate"),	false);
 	DetailCheckBox->Checked = IniFile->ReadBoolGen(_T("RegExChkDetail"),	false);
 
-	//ƒtƒHƒ“ƒg‚Ìİ’è
+	//ãƒ•ã‚©ãƒ³ãƒˆã®è¨­å®š
 	std::unique_ptr<TFont> ttFont(new TFont());
 	ttFont->Assign(ViewerFont);
 	ttFont->Size  = Font->Size;
@@ -73,7 +73,7 @@ void __fastcall TRegExChecker::FormShow(TObject *Sender)
 
 	StxPaintBox->Top = PtnComboBox->Top + PtnComboBox->Height;
 
-	//ŒŸõ‘ÎÛ‚Ìİ’è
+	//æ¤œç´¢å¯¾è±¡ã®è¨­å®š
 	ObjMemo->Clear();
 	bool ok = false;
 	FileEdit->Text = IniFile->ReadStrGen(_T("RegExChkFile"));
@@ -93,7 +93,7 @@ void __fastcall TRegExChecker::FormShow(TObject *Sender)
 		for (int i=0; i<ibuf.Length; i++) ObjMemo->Lines->Add(ibuf[i]);
 	}
 
-	//ƒTƒ“ƒvƒ‹‚Ìİ’è
+	//ã‚µãƒ³ãƒ—ãƒ«ã®è¨­å®š
 	std::unique_ptr<TStringList> s_lst(new TStringList());
 	SampleFile = to_absolute_name(IniFile->ReadStrGen(_T("RegExChkSample")));
 	if (load_text_ex(SampleFile, s_lst.get())) {
@@ -101,14 +101,14 @@ void __fastcall TRegExChecker::FormShow(TObject *Sender)
 	}
 	if (Trim(s_lst->Text).IsEmpty()) {
 		s_lst->Text =
-			"y ƒTƒ“ƒvƒ‹ z\n"
-			"“ú•t\t[12]\\d{3}/(0?[1-9]|1[0-2])/([12][0-9]|3[01]|0?[1-9])\n"
-			"\t([01]?[0-9]|2[0-3])(:[0-5][0-9]){1,2}\n"
+			"ã€ ã‚µãƒ³ãƒ—ãƒ« ã€‘\n"
+			"æ—¥ä»˜\t[12]\\d{3}/(0?[1-9]|1[0-2])/([12][0-9]|3[01]|0?[1-9])\n"
+			"æ™‚åˆ»\t([01]?[0-9]|2[0-3])(:[0-5][0-9]){1,2}\n"
 			"URL\thttps?://[\\w/:%#$&?()~.=+-]+\n"
-			"‹ô”\t\\d*[02468]\n"
-			"Šï”\t\\d*[13579]\n"
-			"‘SŠp\t[^ -~¡-ß\\t]+\n"
-			"”¼Šp¶Å\t[¡-ß]+\n";
+			"å¶æ•°\t\\d*[02468]\n"
+			"å¥‡æ•°\t\\d*[13579]\n"
+			"å…¨è§’\t[^ -~ï½¡-ï¾Ÿ\\t]+\n"
+			"åŠè§’ï½¶ï¾…\t[ï½¡-ï¾Ÿ]+\n";
 	}
 	AssignSample(s_lst.get());
 
@@ -124,7 +124,7 @@ void __fastcall TRegExChecker::FormShow(TObject *Sender)
 	PtnSelStart  = PtnComboBox->SelStart;
 	PtnSelLength = PtnComboBox->SelLength;
 
-	ResultLabel->Caption = "Œ‹‰Ê";
+	ResultLabel->Caption = "çµæœ";
 	ResListBox->Clear();
 	ResultList->Clear();
 	DetailList->Clear();
@@ -139,14 +139,14 @@ void __fastcall TRegExChecker::FormClose(TObject *Sender, TCloseAction &Action)
 
 	IniFile->SavePosInfo(this);
 
-	//ŒŸõ‘ÎÛ‚Ì•Û‘¶
+	//æ¤œç´¢å¯¾è±¡ã®ä¿å­˜
 	UnicodeString lbuf;
 	for (int i=0; i<ObjMemo->Lines->Count && i<20; i++) {
 		if (i>0) lbuf += ",";
 		lbuf += make_csv_str(ObjMemo->Lines->Strings[i]);
 	}
 	IniFile->WriteStrGen( _T("RegExChkText"),	lbuf);
-	//ŒŸõ‘ÎÛƒtƒ@ƒCƒ‹‚ÌXV
+	//æ¤œç´¢å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®æ›´æ–°
 	IniFile->WriteStrGen( _T("RegExChkFile"),	FileEdit->Text);
 	if (!FileEdit->Text.IsEmpty() && UpdtCheckBox->Checked && ObjMemo->Modified) {
 		UnicodeString fnam = to_absolute_name(FileEdit->Text);
@@ -181,7 +181,7 @@ void __fastcall TRegExChecker::FormKeyDown(TObject *Sender, WORD &Key, TShiftSta
 }
 
 //---------------------------------------------------------------------------
-//ƒeƒXƒg
+//ãƒ†ã‚¹ãƒˆ
 //---------------------------------------------------------------------------
 void __fastcall TRegExChecker::TestActionExecute(TObject *Sender)
 {
@@ -215,7 +215,7 @@ void __fastcall TRegExChecker::TestActionExecute(TObject *Sender)
 				lbuf += ("\f" + mbuf);
 				ResultList->AddObject(lbuf, (TObject*)0);
 				DetailList->AddObject(lbuf, (TObject*)0);
-				//Ú×
+				//è©³ç´°
 				for (int j=0; j<mts.Count; j++) {
 					if (mts.Item[j].Success) {
 						//Match
@@ -236,21 +236,21 @@ void __fastcall TRegExChecker::TestActionExecute(TObject *Sender)
 		ResListBox->ScrollWidth = max_wd + ResListBox->Font->Size * 2;
 		cursor_Default();
 
-		//Œ‹‰Ê
+		//çµæœ
 		if (ResListBox->Count>0) {
 			add_ComboBox_history(PtnComboBox);
-			ResultLabel->Caption = UnicodeString().sprintf(_T("%usA%u‰ÓŠ‚Åƒ}ƒbƒ`‚µ‚Ü‚µ‚½"), MatchLines, MatchCount);
+			ResultLabel->Caption = UnicodeString().sprintf(_T("%uè¡Œã€%uç®‡æ‰€ã§ãƒãƒƒãƒã—ã¾ã—ãŸ"), MatchLines, MatchCount);
 			ResultLabel->Font->Color = get_TextColor();
 		}
 		else {
-			ResultLabel->Caption = "ƒ}ƒbƒ`‚µ‚Ü‚¹‚ñ";
+			ResultLabel->Caption = "ãƒãƒƒãƒã—ã¾ã›ã‚“";
 			ResultLabel->Font->Color = col_Error;
 			beep_Warn();
 		}
 	}
 	catch (...) {
 		cursor_Default();
-		ResultLabel->Caption = "¸”s‚µ‚Ü‚µ‚½";
+		ResultLabel->Caption = "å¤±æ•—ã—ã¾ã—ãŸ";
 		ResultLabel->Font->Color = col_Error;
 		beep_Warn();
 	}
@@ -269,7 +269,7 @@ void __fastcall TRegExChecker::TestActionUpdate(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//’uŠ·
+//ç½®æ›
 //---------------------------------------------------------------------------
 void __fastcall TRegExChecker::ReplaceActionExecute(TObject *Sender)
 {
@@ -309,14 +309,14 @@ void __fastcall TRegExChecker::ReplaceActionExecute(TObject *Sender)
 				rbuf += ("\f" + mbuf);
 				ResultList->AddObject(rbuf, (TObject*)0);
 				DetailList->AddObject(rbuf, (TObject*)0);
-				//Ú×
+				//è©³ç´°
 				for (int j=0; j<mts.Count; j++) {
 					if (mts.Item[j].Success) {
 						//Replace
 						DetailList->AddObject("Replace " + IntToStr(j + 1) + ":" + mts.Item[j].Value, (TObject*)1);
 						UnicodeString rwd = TRegEx::Replace(mts.Item[j].Value, ptnstr, ReplaceEdit->Text, opt);
 						DetailList->AddObject(
-							"¨:" + TRegEx::Replace(mts.Item[j].Value, ptnstr, ReplaceEdit->Text, opt), (TObject*)2);
+							"â†’:" + TRegEx::Replace(mts.Item[j].Value, ptnstr, ReplaceEdit->Text, opt), (TObject*)2);
 						//Group
 						if (mts.Item[j].Groups.Count>1) {
 							for (int k=1; k<mts.Item[j].Groups.Count; k++) {
@@ -333,20 +333,20 @@ void __fastcall TRegExChecker::ReplaceActionExecute(TObject *Sender)
 		ResListBox->ScrollWidth = max_wd + ResListBox->Font->Size * 2;
 		cursor_Default();
 
-		//Œ‹‰Ê
+		//çµæœ
 		if (ResListBox->Count>0) {
-			ResultLabel->Caption	 = UnicodeString().sprintf(_T("%usA%u‰ÓŠ‚ğ’uŠ·‚µ‚Ü‚µ‚½"), MatchLines, MatchCount);
+			ResultLabel->Caption	 = UnicodeString().sprintf(_T("%uè¡Œã€%uç®‡æ‰€ã‚’ç½®æ›ã—ã¾ã—ãŸ"), MatchLines, MatchCount);
 			ResultLabel->Font->Color = get_TextColor();
 		}
 		else {
-			ResultLabel->Caption	 = "ƒ}ƒbƒ`‚µ‚Ü‚¹‚ñ";
+			ResultLabel->Caption	 = "ãƒãƒƒãƒã—ã¾ã›ã‚“";
 			ResultLabel->Font->Color = col_Error;
 			beep_Warn();
 		}
 	}
 	catch (...) {
 		cursor_Default();
-		ResultLabel->Caption	 = "¸”s‚µ‚Ü‚µ‚½";
+		ResultLabel->Caption	 = "å¤±æ•—ã—ã¾ã—ãŸ";
 		ResultLabel->Font->Color = col_Error;
 		beep_Warn();
 	}
@@ -358,7 +358,7 @@ void __fastcall TRegExChecker::ReplaceActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//“\‚è•t‚¯
+//è²¼ã‚Šä»˜ã‘
 //---------------------------------------------------------------------------
 void __fastcall TRegExChecker::PasteActionExecute(TObject *Sender)
 {
@@ -381,7 +381,7 @@ void __fastcall TRegExChecker::PasteActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒRƒs[
+//ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TRegExChecker::CopyActionExecute(TObject *Sender)
 {
@@ -417,11 +417,11 @@ void __fastcall TRegExChecker::ReferListBoxDblClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ŒŸõ‘ÎÛƒtƒ@ƒCƒ‹‚Ìw’è
+//æ¤œç´¢å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®æŒ‡å®š
 //---------------------------------------------------------------------------
 void __fastcall TRegExChecker::RefFileBtnClick(TObject *Sender)
 {
-	UserModule->PrepareOpenDlg(_T("ŒŸõ‘ÎÛ‚Ìw’è"), F_FILTER_TXT, _T("*.txt"));
+	UserModule->PrepareOpenDlg(_T("æ¤œç´¢å¯¾è±¡ã®æŒ‡å®š"), F_FILTER_TXT, _T("*.txt"));
 	if (UserModule->OpenDlgToEdit(FileEdit, true)) {
 		UnicodeString fnam = to_absolute_name(FileEdit->Text);
 		if (file_exists(fnam)) {
@@ -435,7 +435,7 @@ void __fastcall TRegExChecker::RefFileBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//Œ‹‰Ê‚Ì•`‰æ
+//çµæœã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TRegExChecker::ResListBoxDrawItem(TWinControl *Control, int Index,
 	TRect &Rect, TOwnerDrawState State)
@@ -451,13 +451,13 @@ void __fastcall TRegExChecker::ResListBoxDrawItem(TWinControl *Control, int Inde
 	UnicodeString lbuf = lp->Items->Strings[Index];
 	int	flag  = (int)lp->Items->Objects[Index];
 
-	//ƒZƒpƒŒ[ƒ^
+	//ã‚»ãƒ‘ãƒ¬ãƒ¼ã‚¿
 	if (flag==9) {
 		draw_Separator(cv, Rect);
 		return;
 	}
 
-	//ƒ}ƒbƒ`s
+	//ãƒãƒƒãƒè¡Œ
 	if (flag==0) {
 		TStringDynArray mbuf = split_strings_tab(get_tkn_r(lbuf, "\f"));
 		lbuf = get_tkn(lbuf, "\f");
@@ -482,7 +482,7 @@ void __fastcall TRegExChecker::ResListBoxDrawItem(TWinControl *Control, int Inde
 			}
 		}
 
-		//•`‰æ
+		//æç”»
 		cv->Font->Color  = FgCol[1];
 		cv->Brush->Color = BgCol[1];
 		rc.Left += SCALED_THIS(4);
@@ -504,18 +504,18 @@ void __fastcall TRegExChecker::ResListBoxDrawItem(TWinControl *Control, int Inde
 		}
 	}
 	else {
-		//Ú×
+		//è©³ç´°
 		if (lbuf.Pos(":")) {
 			UnicodeString t = get_tkn(lbuf, ":");
-			if (!SameStr(t, "¨")) t += ":";
+			if (!SameStr(t, "â†’")) t += ":";
 			UnicodeString s = get_tkn_r(lbuf, ":");
-			//€–Ú–¼
+			//é …ç›®å
 			rc.Left += SCALED_THIS(8);
 			int wd = cv->TextWidth("WWWWWWWWWW");
 			cv->Font->Color = (flag==1)? col_Headline : col_Reserved;
 			cv->TextRect(rc, rc.Left + wd - cv->TextWidth(t), rc.Top, t);
 			rc.Left += (wd + SCALED_THIS(8));
-			//•¶š—ñ
+			//æ–‡å­—åˆ—
 			out_TextRect(cv, rc, "\"", col_Symbol); 
 			if (s.Pos("\t")) {
 				int ofs = 1;
@@ -537,7 +537,7 @@ void __fastcall TRegExChecker::ResListBoxDrawItem(TWinControl *Control, int Inde
 			}
 			out_TextRect(cv, rc, "\"", col_Symbol); 
 		}
-		//‚»‚Ì‘¼
+		//ãã®ä»–
 		else {
 			out_TextRect(cv, rc, lbuf, get_ViewFgCol()); 
 		}
@@ -545,7 +545,7 @@ void __fastcall TRegExChecker::ResListBoxDrawItem(TWinControl *Control, int Inde
 }
 
 //---------------------------------------------------------------------------
-//\•¶ƒJƒ‰[ƒo[‚Ì•`‰æ
+//æ§‹æ–‡ã‚«ãƒ©ãƒ¼ãƒãƒ¼ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TRegExChecker::PtnComboBoxChange(TObject *Sender)
 {
@@ -709,11 +709,11 @@ void __fastcall TRegExChecker::ReloadSample()
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚©‚çƒTƒ“ƒvƒ‹‚ğ“Ç‚İ‚Ş
+//ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ã‚µãƒ³ãƒ—ãƒ«ã‚’èª­ã¿è¾¼ã‚€
 //---------------------------------------------------------------------------
 void __fastcall TRegExChecker::LoadSamplActionExecute(TObject *Sender)
 {
-	UserModule->PrepareOpenDlg(_T("ƒTƒ“ƒvƒ‹‚ğŠJ‚­"), F_FILTER_TXT, _T("*.txt"), ExtractFilePath(SampleFile));
+	UserModule->PrepareOpenDlg(_T("ã‚µãƒ³ãƒ—ãƒ«ã‚’é–‹ã"), F_FILTER_TXT, _T("*.txt"), ExtractFilePath(SampleFile));
 	UnicodeString fnam;
 	if (UserModule->OpenDlgToStr(fnam)) {
 		std::unique_ptr<TStringList> s_lst(new TStringList());
@@ -725,7 +725,7 @@ void __fastcall TRegExChecker::LoadSamplActionExecute(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//•ÒW
+//ç·¨é›†
 //---------------------------------------------------------------------------
 void __fastcall TRegExChecker::EditSampleActionExecute(TObject *Sender)
 {

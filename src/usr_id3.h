@@ -1,13 +1,13 @@
 /**
  * @file usr_id3.h
- * @brief MP3 ID3ƒ^ƒOî•ñ‚Ìˆ—
+ * @brief MP3 ID3ã‚¿ã‚°æƒ…å ±ã®å‡¦ç†
  */
 //---------------------------------------------------------------------------
 #ifndef UsrID3H
 #define UsrID3H
 
 //---------------------------------------------------------------------------
-/** @brief ID3ƒwƒbƒ_ */
+/** @brief ID3ãƒ˜ãƒƒãƒ€ */
 struct id3_hdr {
 	char hdr_id[3];
 	BYTE maj_ver;
@@ -15,20 +15,20 @@ struct id3_hdr {
 	BYTE flag;
 	BYTE size[4];
 };
-/** @brief Šg’£ƒwƒbƒ_ */
+/** @brief æ‹¡å¼µãƒ˜ãƒƒãƒ€ */
 struct id3_ex_hdr {
 	BYTE size[4];
 	BYTE flag[2];
 };
 
-/** @brief ƒtƒŒ[ƒ€ƒwƒbƒ_(v2.3,v2.4) */
+/** @brief ãƒ•ãƒ¬ãƒ¼ãƒ ãƒ˜ãƒƒãƒ€(v2.3,v2.4) */
 struct id3_frm_hdr {
 	char frame_id[4];
 	BYTE size[4];
 	BYTE flag[2];
 };
 
-/** @brief ƒtƒŒ[ƒ€ƒwƒbƒ_(v2.2) */
+/** @brief ãƒ•ãƒ¬ãƒ¼ãƒ ãƒ˜ãƒƒãƒ€(v2.2) */
 struct id3_frm_hdr_2 {
 	char frame_id[3];
 	BYTE size[3];
@@ -36,20 +36,20 @@ struct id3_frm_hdr_2 {
 
 //---------------------------------------------------------------------------
 /**
- * @brief MP3ƒtƒ@ƒCƒ‹‚Ì ID3 Tag v2/v1 î•ñ‚ğæ“¾
- * @param fnam ƒtƒ@ƒCƒ‹–¼
- * @param[out] lst Œ‹‰ÊƒŠƒXƒg(€–Ú=“à—e)
- * @param id_min Å¬ŒÀ‚Ìî•ñ‚ğ (T??=Œ`®‚Åæ“¾)
- * @return true ¬Œ÷ 
+ * @brief MP3ãƒ•ã‚¡ã‚¤ãƒ«ã® ID3 Tag v2/v1 æƒ…å ±ã‚’å–å¾—
+ * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+ * @param[out] lst çµæœãƒªã‚¹ãƒˆ(é …ç›®=å†…å®¹)
+ * @param id_min æœ€å°é™ã®æƒ…å ±ã‚’ (T??=å½¢å¼ã§å–å¾—)
+ * @return true æˆåŠŸ 
  */
 bool ID3_GetInf(UnicodeString fnam, TStringList* lst, bool id_min = false);
 
 /**
- * @brief MP3ƒtƒ@ƒCƒ‹‚©‚ç–„‚ß‚İ‰æ‘œ‚ğƒrƒbƒgƒ}ƒbƒv‚Åæ“¾/ƒtƒ@ƒCƒ‹o—Í
- * @param fnam ƒtƒ@ƒCƒ‹–¼
- * @param[out] bmpimg o—Íƒrƒbƒgƒ}ƒbƒv
- * @param o_fnam o—Íƒtƒ@ƒCƒ‹–¼
- * @return true ¬Œ÷
+ * @brief MP3ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰åŸ‹ã‚è¾¼ã¿ç”»åƒã‚’ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã§å–å¾—/ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›
+ * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+ * @param[out] bmpimg å‡ºåŠ›ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—
+ * @param o_fnam å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«å
+ * @return true æˆåŠŸ
  */
 bool ID3_GetImage(UnicodeString fnam, Graphics::TBitmap *bmpimg, UnicodeString o_fnam = EmptyStr);
 

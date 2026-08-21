@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  Šg’£q•Êˆê——														//
+//  æ‹¡å¼µå­åˆ¥ä¸€è¦§														//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -14,19 +14,19 @@
 TFileExtensionDlg *FileExtensionDlg = NULL;
 
 //---------------------------------------------------------------------------
-//Šg’£qˆê——ƒ\[ƒg—p”äŠrŠÖ”
+//æ‹¡å¼µå­ä¸€è¦§ã‚½ãƒ¼ãƒˆç”¨æ¯”è¼ƒé–¢æ•°
 //---------------------------------------------------------------------------
-int ExtSortOdr[4];		//Šg’£qˆê——‚Ìƒ\[ƒg•ûŒü
-int FileSortOdr[2];		//ƒtƒ@ƒCƒ‹ˆê——‚Ìƒ\[ƒg•ûŒü
+int ExtSortOdr[4];		//æ‹¡å¼µå­ä¸€è¦§ã®ã‚½ãƒ¼ãƒˆæ–¹å‘
+int FileSortOdr[2];		//ãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§ã®ã‚½ãƒ¼ãƒˆæ–¹å‘
 
 //---------------------------------------------------------------------------
-//Šg’£q
+//æ‹¡å¼µå­
 int __fastcall FextComp_Ext(TStringList *List, int Index1, int Index2)
 {
 	return (StrCmpLogicalW(List->Strings[Index1].c_str(), List->Strings[Index2].c_str()) * ExtSortOdr[0]);
 }
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹”
+//ãƒ•ã‚¡ã‚¤ãƒ«æ•°
 int __fastcall FextComp_Count(TStringList *List, int Index1, int Index2)
 {
 	ext_inf_rec *ip0 = (ext_inf_rec*)List->Objects[Index1];
@@ -38,7 +38,7 @@ int __fastcall FextComp_Count(TStringList *List, int Index1, int Index2)
 		((ip1->f_count < ip0->f_count)? 1 : -1) * ExtSortOdr[1];
 }
 //---------------------------------------------------------------------------
-//‡ŒvƒTƒCƒY
+//åˆè¨ˆã‚µã‚¤ã‚º
 int __fastcall FextComp_Size(TStringList *List, int Index1, int Index2)
 {
 	ext_inf_rec *ip0 = (ext_inf_rec*)List->Objects[Index1];
@@ -50,7 +50,7 @@ int __fastcall FextComp_Size(TStringList *List, int Index1, int Index2)
 		((ip1->f_size < ip0->f_size)? 1 : -1) * ExtSortOdr[2];
 }
 //---------------------------------------------------------------------------
-//•½‹ÏƒTƒCƒY
+//å¹³å‡ã‚µã‚¤ã‚º
 int __fastcall FextComp_Ave(TStringList *List, int Index1, int Index2)
 {
 	ext_inf_rec *ip0 = (ext_inf_rec*)List->Objects[Index1];
@@ -62,7 +62,7 @@ int __fastcall FextComp_Ave(TStringList *List, int Index1, int Index2)
 		((ip1->av_size < ip0->av_size)? 1 : -1) * ExtSortOdr[3];
 }
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹–¼
+//ãƒ•ã‚¡ã‚¤ãƒ«å
 int __fastcall FextComp_Name(TStringList *List, int Index1, int Index2)
 {
 	UnicodeString fnam0 = ExtractFileName(List->Strings[Index1]);
@@ -72,7 +72,7 @@ int __fastcall FextComp_Name(TStringList *List, int Index1, int Index2)
 		StrCmpLogicalW(fnam0.c_str(), fnam1.c_str()) * FileSortOdr[0];
 }
 //---------------------------------------------------------------------------
-//êŠ
+//å ´æ‰€
 int __fastcall FextComp_Path(TStringList *List, int Index1, int Index2)
 {
 	UnicodeString dnam0 = ExtractFileDir(List->Strings[Index1]);
@@ -83,7 +83,7 @@ int __fastcall FextComp_Path(TStringList *List, int Index1, int Index2)
 }
 
 //---------------------------------------------------------------------------
-// TFileExtensionDlg ƒNƒ‰ƒX
+// TFileExtensionDlg ã‚¯ãƒ©ã‚¹
 //---------------------------------------------------------------------------
 __fastcall TFileExtensionDlg::TFileExtensionDlg(TComponent* Owner)
 	: TForm(Owner)
@@ -101,7 +101,7 @@ void __fastcall TFileExtensionDlg::FormCreate(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TFileExtensionDlg::FormShow(TObject *Sender)
 {
-	Caption = UnicodeString().sprintf(_T("Šg’£q•Êˆê—— - [%s]"), yen_to_delimiter(PathName).c_str());
+	Caption = UnicodeString().sprintf(_T("æ‹¡å¼µå­åˆ¥ä¸€è¦§ - [%s]"), yen_to_delimiter(PathName).c_str());
 	IniFile->LoadPosInfo(this, DialogCenter);
 
 	ExtSortMode    = IniFile->ReadIntGen(_T("FileExtSortModeX"));
@@ -114,16 +114,16 @@ void __fastcall TFileExtensionDlg::FormShow(TObject *Sender)
 	FileSortOdr[0] = IniFile->ReadIntGen(_T("FileExtSortOdrF0"), 1);
 	FileSortOdr[1] = IniFile->ReadIntGen(_T("FileExtSortOdrF1"), 1);
 
-	//ƒNƒ‰ƒXƒ^ƒTƒCƒYæ“¾
+	//ã‚¯ãƒ©ã‚¹ã‚¿ã‚µã‚¤ã‚ºå–å¾—
 	ClusterSize = get_ClusterSize(PathName);
 
-	//Šg’£qˆê——‚Ì‰Šú‰»
+	//æ‹¡å¼µå­ä¸€è¦§ã®åˆæœŸåŒ–
 	set_StdListBox(InfoListBox);
 	set_UsrScrPanel(InfoScrPanel);
 	TCanvas *cv = InfoListBox->Canvas;
 
-	//ƒwƒbƒ_‚ğ‰Šú‰»
-	InitializeListHeader(FextInfHeader, _T("Šg’£q|ƒtƒ@ƒCƒ‹”|‡ŒvƒTƒCƒY|•½‹ÏƒTƒCƒY"));
+	//ãƒ˜ãƒƒãƒ€ã‚’åˆæœŸåŒ–
+	InitializeListHeader(FextInfHeader, _T("æ‹¡å¼µå­|ãƒ•ã‚¡ã‚¤ãƒ«æ•°|åˆè¨ˆã‚µã‚¤ã‚º|å¹³å‡ã‚µã‚¤ã‚º"));
 	FExtSctWd = get_CharWidth(cv, 14, SCALED_THIS((IconMode==1)? 20 : 0));	//" .XXXXXXXXXXXX"
 	FCntSctWd = get_CharWidth(cv, 10);	//" 9,999,999"
 	SizeSctWd = get_CharWidth(cv, 13);	//" 1999.999 MB "
@@ -136,9 +136,9 @@ void __fastcall TFileExtensionDlg::FormShow(TObject *Sender)
 	FextInfBar->Height = get_FontHeightMgnS(FextInfBar->Font, 6);
 	for (int i=0; i<FextInfBar->Panels->Count; i++) FextInfBar->Panels->Items[i]->Text = EmptyStr;
 
-	//ƒtƒ@ƒCƒ‹ˆê——‚Ì‰Šú‰»
+	//ãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§ã®åˆæœŸåŒ–
 	FilePanel->Height = IniFile->ReadScaledIntGen(_T("FileExtListHeight"), 150, this);
-	InitializeListHeader(FileListHeader, _T("ƒtƒ@ƒCƒ‹–¼|êŠ"));
+	InitializeListHeader(FileListHeader, _T("ãƒ•ã‚¡ã‚¤ãƒ«å|å ´æ‰€"));
 	FileListHeader->Sections->Items[0]->Width = IniFile->ReadScaledIntGen(_T("FileExtFileHdrW0"), 200, this);
 	FileListHeader->Sections->Items[1]->Width = ClientWidth - FileListHeader->Sections->Items[0]->Width;
 
@@ -162,7 +162,7 @@ void __fastcall TFileExtensionDlg::WmFormShowed(TMessage &msg)
 {
 	Repaint();
 
-	//ŒŸõ’†ƒqƒ“ƒg•\¦‚Ìİ’è
+	//æ¤œç´¢ä¸­ãƒ’ãƒ³ãƒˆè¡¨ç¤ºã®è¨­å®š
 	AssignScaledFont(HintLabel, HintFont);
 	
 	HintLabel->Caption	  = LoadUsrMsg(USTR_SearchingESC);
@@ -177,7 +177,7 @@ void __fastcall TFileExtensionDlg::WmFormShowed(TMessage &msg)
 	AccDeniedCnt = 0;
 
 	if (GetInfo(PathName)) {
-		//•½‹ÏƒTƒCƒYŒvZ/ Šg’£q‚ÌÅ‘å•\¦•‚ğæ“¾
+		//å¹³å‡ã‚µã‚¤ã‚ºè¨ˆç®—/ æ‹¡å¼µå­ã®æœ€å¤§è¡¨ç¤ºå¹…ã‚’å–å¾—
 		TCanvas *cv = InfoListBox->Canvas;
 		cv->Font->Assign(InfoListBox->Font);
 		for (int i=0; i<FextInfoList->Count; i++) {
@@ -187,13 +187,13 @@ void __fastcall TFileExtensionDlg::WmFormShowed(TMessage &msg)
 		SortListX();
 		AverageSize = (TotalFileCount>0)? TotalSize/TotalFileCount : 0;
 
-		//‘Œv•\¦
+		//ç·è¨ˆè¡¨ç¤º
 		FextInfBar->Panels->Items[0]->Text = FextInfoList->Count;
 		FextInfBar->Panels->Items[1]->Text = get_size_str_B(TotalFileCount, 0);
 		FextInfBar->Panels->Items[2]->Text = get_size_str_G(TotalSize,   10, SizeDecDigits);
 		FextInfBar->Panels->Items[3]->Text = get_size_str_G(AverageSize, 10, SizeDecDigits);
 
-		//ƒŠƒXƒgƒ{ƒbƒNƒX‚ÉŠ„‚è“–‚Ä(‰¼‘z)
+		//ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã«å‰²ã‚Šå½“ã¦(ä»®æƒ³)
 		InfoListBox->Count = FextInfoList->Count;
 		if (FextInfoList->Count>0) {
 			InfoListBox->ItemIndex = 0;
@@ -205,7 +205,7 @@ void __fastcall TFileExtensionDlg::WmFormShowed(TMessage &msg)
 	HintPanel->Visible = false;
 
 	if (AccDeniedCnt>0)
-		msgbox_OK(ErrMesage.sprintf(_T("Œx: %uŒÂ‚ÌƒfƒBƒŒƒNƒgƒŠ‚ÅƒAƒNƒZƒX‚ª‹‘”Û‚³‚ê‚Ü‚µ‚½B"), AccDeniedCnt));
+		msgbox_OK(ErrMesage.sprintf(_T("è­¦å‘Š: %uå€‹ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã§ã‚¢ã‚¯ã‚»ã‚¹ãŒæ‹’å¦ã•ã‚Œã¾ã—ãŸã€‚"), AccDeniedCnt));
 
 	InfoListBox->SetFocus();
 	cursor_Default();
@@ -267,8 +267,8 @@ void __fastcall TFileExtensionDlg::ListSplitterMoved(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//Šg’£qˆê——‚ğæ“¾
-//  –ß‚è’l: false=ƒLƒƒƒ“ƒZƒ‹‚³‚ê‚½
+//æ‹¡å¼µå­ä¸€è¦§ã‚’å–å¾—
+//  æˆ»ã‚Šå€¤: false=ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã•ã‚ŒãŸ
 //---------------------------------------------------------------------------
 bool __fastcall TFileExtensionDlg::GetInfo(UnicodeString pnam)
 {
@@ -283,21 +283,21 @@ bool __fastcall TFileExtensionDlg::GetInfo(UnicodeString pnam)
 		try {
 			do {
 				UnicodeString fext = ((sr.Attr & faDirectory)==0)? get_extension(sr.Name).LowerCase() : EmptyStr;
-				//ƒTƒuƒfƒBƒŒƒNƒgƒŠ‚ğŒŸõ
+				//ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’æ¤œç´¢
 				if (sr.Attr & faDirectory) {
 					if (!ContainsStr("..", sr.Name) && !GetInfo(pnam + sr.Name)) Abort();
 				}
-				//ƒ‰ƒCƒuƒ‰ƒŠ
+				//ãƒ©ã‚¤ãƒ–ãƒ©ãƒª
 				else if (snam.IsEmpty() && test_LibExt(fext)) {
 					std::unique_ptr<TStringList> lib(new TStringList());
 					get_LibraryList(pnam + sr.Name, lib.get());
 					for (int i=0; i<lib->Count; i++) if (!GetInfo(lib->Strings[i])) Abort();
 				}
-				//ƒtƒ@ƒCƒ‹
+				//ãƒ•ã‚¡ã‚¤ãƒ«
 				else {
 					if (fext.IsEmpty()) fext = ".";
 					int idx = FextInfoList->IndexOf(fext);
-					//Šù‘¶
+					//æ—¢å­˜
 					if (idx!=-1) {
 						ext_inf_rec *ip = (ext_inf_rec*)FextInfoList->Objects[idx];
 						ip->f_count++;
@@ -310,7 +310,7 @@ bool __fastcall TFileExtensionDlg::GetInfo(UnicodeString pnam)
 						if (ip->f_count<=MAX_FLIST_CNT)
 							ip->f_names.cat_sprintf(_T("%s%s\r\n"), snam.c_str(), sr.Name.c_str());
 					}
-					//V‹K
+					//æ–°è¦
 					else {
 						ext_inf_rec *ip = new ext_inf_rec;
 						ip->f_count = 1;
@@ -322,13 +322,13 @@ bool __fastcall TFileExtensionDlg::GetInfo(UnicodeString pnam)
 						ip->f_names.sprintf(_T("%s%s\r\n"), snam.c_str(), sr.Name.c_str());
 
 						FextInfoList->AddObject(fext, (TObject*)ip);
-						//Šg’£q”•\¦XV
+						//æ‹¡å¼µå­æ•°è¡¨ç¤ºæ›´æ–°
 						FextInfBar->Panels->Items[0]->Text = FextInfoList->Count;
 					}
 					TotalFileCount++;
 					TotalSize += sr.Size;
 				}
-				//ƒtƒ@ƒCƒ‹”•\¦XV
+				//ãƒ•ã‚¡ã‚¤ãƒ«æ•°è¡¨ç¤ºæ›´æ–°
 				if (TotalFileCount%256==255) {
 					FextInfBar->Panels->Items[1]->Text = get_size_str_B(TotalFileCount, 0);
 					FextInfBar->Repaint();
@@ -352,11 +352,11 @@ bool __fastcall TFileExtensionDlg::GetInfo(UnicodeString pnam)
 }
 
 //---------------------------------------------------------------------------
-//Œ‹‰Êˆê——‚ğæ“¾
+//çµæœä¸€è¦§ã‚’å–å¾—
 //---------------------------------------------------------------------------
 void __fastcall TFileExtensionDlg::GetResult(TStringList *lst, int mode)
 {
-	//Šg’£qˆê——
+	//æ‹¡å¼µå­ä¸€è¦§
 	if (InfoListBox->Focused()) {
 		int max_fext = 6;
 		for (int i=0; i<FextInfoList->Count; i++) max_fext = std::max(max_fext, FextInfoList->Strings[i].Length());
@@ -366,17 +366,17 @@ void __fastcall TFileExtensionDlg::GetResult(TStringList *lst, int mode)
 
 		switch (mode) {
 		case 1:	//CSV
-			lst->Add("\"Šg’£q\",\"ƒtƒ@ƒCƒ‹”\",\"‡ŒvƒTƒCƒY\",\"•½‹ÏƒTƒCƒY\"");
+			lst->Add("\"æ‹¡å¼µå­\",\"ãƒ•ã‚¡ã‚¤ãƒ«æ•°\",\"åˆè¨ˆã‚µã‚¤ã‚º\",\"å¹³å‡ã‚µã‚¤ã‚º\"");
 			break;
 		case 2:	//TSV
-			lst->Add("Šg’£q\tƒtƒ@ƒCƒ‹”\t‡ŒvƒTƒCƒY\t•½‹ÏƒTƒCƒY");
+			lst->Add("æ‹¡å¼µå­\tãƒ•ã‚¡ã‚¤ãƒ«æ•°\tåˆè¨ˆã‚µã‚¤ã‚º\tå¹³å‡ã‚µã‚¤ã‚º");
 			break;
 		default:
 			lst->Add(PathName);
-			lst->Add(lbuf.sprintf(_T("Šg’£q%*sƒtƒ@ƒCƒ‹”   ƒTƒCƒY    ”ä—¦      •½‹Ï"), max_fext - 6, _T(" ")));
+			lst->Add(lbuf.sprintf(_T("æ‹¡å¼µå­%*sãƒ•ã‚¡ã‚¤ãƒ«æ•°   ã‚µã‚¤ã‚º    æ¯”ç‡      å¹³å‡"), max_fext - 6, _T(" ")));
 			lst->Add(hr_str);
 		}
-		//€–Ú
+		//é …ç›®
 		for (int i=0; i<FextInfoList->Count; i++) {
 			UnicodeString fext = FextInfoList->Strings[i];
 			if (fext.IsEmpty()) fext = ".";
@@ -397,7 +397,7 @@ void __fastcall TFileExtensionDlg::GetResult(TStringList *lst, int mode)
 						get_size_str_G(ip->av_size, 10, SizeDecDigits).c_str()));
 			}
 		}
-		//Œv
+		//è¨ˆ
 		if (mode==0) {
 			lst->Add(hr_str);
 			lst->Add(lbuf.sprintf(_T("%-*u  %s  %s         %s"),
@@ -405,11 +405,11 @@ void __fastcall TFileExtensionDlg::GetResult(TStringList *lst, int mode)
 				get_size_str_B(TotalFileCount, 7).c_str(),
 				get_size_str_G(TotalSize,   10, SizeDecDigits).c_str(),
 				get_size_str_G(AverageSize, 10, SizeDecDigits).c_str()));
-			//Œx
+			//è­¦å‘Š
 			if (!ErrMesage.IsEmpty()) lst->Add(ErrMesage);
 		}
 	}
-	//ƒtƒ@ƒCƒ‹ˆê——
+	//ãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§
 	else if (FileListBox->Focused()) {
 		lst->Assign(FileItemList);
 		lst->Insert(0, PathName);
@@ -417,7 +417,7 @@ void __fastcall TFileExtensionDlg::GetResult(TStringList *lst, int mode)
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚Ìƒ\[ƒg
+//ä¸€è¦§ã®ã‚½ãƒ¼ãƒˆ
 //---------------------------------------------------------------------------
 void __fastcall TFileExtensionDlg::SortListX(int mode)
 {
@@ -446,7 +446,7 @@ void __fastcall TFileExtensionDlg::SortListF(int mode)
 }
 
 //---------------------------------------------------------------------------
-//“ª•¶šƒT[ƒ`
+//é ­æ–‡å­—ã‚µãƒ¼ãƒ
 //---------------------------------------------------------------------------
 void __fastcall TFileExtensionDlg::IniSearchList(TListBox *lp, UnicodeString ptn)
 {
@@ -468,7 +468,7 @@ void __fastcall TFileExtensionDlg::IniSearchList(TListBox *lp, UnicodeString ptn
 }
 
 //---------------------------------------------------------------------------
-//ƒJ[ƒ\ƒ‹ˆÊ’u‚Ìƒtƒ@ƒCƒ‹–¼‚ğæ“¾
+//ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®ãƒ•ã‚¡ã‚¤ãƒ«åã‚’å–å¾—
 //---------------------------------------------------------------------------
 UnicodeString __fastcall TFileExtensionDlg::GetCurFileItem(int idx)
 {
@@ -498,7 +498,7 @@ void __fastcall TFileExtensionDlg::FextInfBarDrawPanel(TStatusBar *StatusBar, TS
 	cv->TextOut(xp, yp, lbuf);
 }
 //---------------------------------------------------------------------------
-//ƒwƒbƒ_‚Ì•`‰æ
+//ãƒ˜ãƒƒãƒ€ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TFileExtensionDlg::FextHeaderDrawSection(THeaderControl *HeaderControl,
 		THeaderSection *Section, const TRect &Rect, bool Pressed)
@@ -516,7 +516,7 @@ void __fastcall TFileExtensionDlg::FextHeaderDrawSection(THeaderControl *HeaderC
 }
 
 //---------------------------------------------------------------------------
-//Šg’£qˆê——: ƒ\[ƒg•ÏX
+//æ‹¡å¼µå­ä¸€è¦§: ã‚½ãƒ¼ãƒˆå¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TFileExtensionDlg::FextInfHeaderSectionClick(THeaderControl *HeaderControl,
 		THeaderSection *Section)
@@ -529,7 +529,7 @@ void __fastcall TFileExtensionDlg::FextInfHeaderSectionClick(THeaderControl *Hea
 }
 
 //---------------------------------------------------------------------------
-//Šg’£qˆê——‚Ì•`‰æ
+//æ‹¡å¼µå­ä¸€è¦§ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TFileExtensionDlg::InfoListBoxDrawItem(TWinControl *Control, int Index,
 	TRect &Rect, TOwnerDrawState State)
@@ -550,25 +550,25 @@ void __fastcall TFileExtensionDlg::InfoListBoxDrawItem(TWinControl *Control, int
 	int yp = Rect.Top  + get_TopMargin(cv);
 
 	UnicodeString fext = FextInfoList->Strings[Index];
-	//ƒAƒCƒRƒ“
+	//ã‚¢ã‚¤ã‚³ãƒ³
 	if (IconMode==1) {
 		HICON hIcon = get_fext_SmallIcon(fext);
 		if (hIcon) ::DrawIconEx(cv->Handle, xp, yp, hIcon, SCALED_THIS(16), SCALED_THIS(16), 0, NULL, DI_NORMAL);
 	}
 
-	//Šg’£q
+	//æ‹¡å¼µå­
 	cv->Font->Color = get_ExtColor(fext);
 	int i_w = SCALED_THIS(IconMode==1? 20 : 0);
 	cv->TextOut(xp + i_w, yp, minimize_str(fext, cv, FExtSctWd - i_w, true));
 	xp += FExtSctWd - SCALED_THIS(8);
 
-	//ƒtƒ@ƒCƒ‹”
+	//ãƒ•ã‚¡ã‚¤ãƒ«æ•°
 	UnicodeString lbuf = get_size_str_B(ip->f_count, 7);
 	cv->Font->Color = get_ListFgCol();
 	cv->TextOut(xp + FCntSctWd - cv->TextWidth(lbuf), yp, lbuf);
 	xp += FCntSctWd;
 
-	//‡ŒvƒTƒCƒY
+	//åˆè¨ˆã‚µã‚¤ã‚º
 	lbuf = get_size_str_G(ip->f_size, ((SizeFormatMode>0)? 7 : 10), SizeDecDigits, SizeFormatMode);
 
 	float r = (TotalSize>0)? (1.0 * ip->f_size/TotalSize) : 0.0;
@@ -579,25 +579,25 @@ void __fastcall TFileExtensionDlg::InfoListBoxDrawItem(TWinControl *Control, int
 	cv->TextOut(xp + SizeSctWd + PercSctWd - cv->TextWidth(lbuf), yp, lbuf);
 	xp += SizeSctWd + PercSctWd + SCALED_THIS(8);
 
-	//ƒOƒ‰ƒt
+	//ã‚°ãƒ©ãƒ•
 	TRect rc = Rect;
 	rc.Left = xp; rc.Right = xp + SCALED_THIS(100);
 	rc.Top += SCALED_THIS(6); rc.Bottom -= SCALED_THIS(6);
 	draw_BarGraph(cv, rc, r);
 	xp += SCALED_THIS(108);
 
-	//•½‹ÏƒTƒCƒY
+	//å¹³å‡ã‚µã‚¤ã‚º
 	lbuf = get_size_str_G(ip->av_size, 10, SizeDecDigits);
 	cv->Brush->Color = bgcol;
 	cv->Font->Color  = get_SizeColor(ip->av_size, get_ListFgCol());
 	cv->TextOut(xp + SizeSctWd - cv->TextWidth(lbuf), yp, lbuf);
 
-	//ƒJ[ƒ\ƒ‹
+	//ã‚«ãƒ¼ã‚½ãƒ«
 	draw_ListCursor2(lp, Rect, Index, State);
 }
 
 //---------------------------------------------------------------------------
-//Šg’£qˆê——: ƒL[‘€ì
+//æ‹¡å¼µå­ä¸€è¦§: ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TFileExtensionDlg::InfoListBoxKeyDown(TObject *Sender, WORD &Key,
 		TShiftState Shift)
@@ -613,10 +613,10 @@ void __fastcall TFileExtensionDlg::InfoListBoxKeyDown(TObject *Sender, WORD &Key
 		ModalResult = mrCancel;
 	else if (is_ToRightOpe(KeyStr, cmd_F) || equal_ENTER(KeyStr))
 		FileListBox->SetFocus();
-	//“ª•¶šƒT[ƒ`
-	else if (is_IniSeaKey(KeyStr))	//KeyStr ‚É³‹K•\Œ»ƒpƒ^[ƒ“‚ª•Ô‚é
+	//é ­æ–‡å­—ã‚µãƒ¼ãƒ
+	else if (is_IniSeaKey(KeyStr))	//KeyStr ã«æ­£è¦è¡¨ç¾ãƒ‘ã‚¿ãƒ¼ãƒ³ãŒè¿”ã‚‹
 		IniSearchList(lp, KeyStr);
-	//‰EƒNƒŠƒbƒNƒƒjƒ…[
+	//å³ã‚¯ãƒªãƒƒã‚¯ãƒ¡ãƒ‹ãƒ¥ãƒ¼
 	else if (contained_wd_i(KeysStr_Popup, KeyStr))
 		show_PopupMenu(lp);
 	else return;
@@ -626,7 +626,7 @@ void __fastcall TFileExtensionDlg::InfoListBoxKeyDown(TObject *Sender, WORD &Key
 //---------------------------------------------------------------------------
 void __fastcall TFileExtensionDlg::InfoListBoxKeyPress(TObject *Sender, System::WideChar &Key)
 {
-	//ƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`‚ğ‰ñ”ğ
+	//ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ã‚¿ãƒ«ã‚µãƒ¼ãƒã‚’å›é¿
 	Key = 0;
 }
 
@@ -645,22 +645,22 @@ void __fastcall TFileExtensionDlg::InfoListBoxClick(TObject *Sender)
 		FileListBox->ItemIndex = -1;
 		UnicodeString msg = FextInfoList->Strings[idx];
 		__int64 g_size = ip->oc_size - ip->f_size;
-		msg.cat_sprintf(_T("    ƒtƒ@ƒCƒ‹”:%s  ‡Œv:%s  è—L:%s"),
+		msg.cat_sprintf(_T("    ãƒ•ã‚¡ã‚¤ãƒ«æ•°:%s  åˆè¨ˆ:%s  å æœ‰:%s"),
 			get_size_str_B(ip->f_count, 0).c_str(),
 			get_size_str_G(ip->f_size, 0, SizeDecDigits).c_str(),
 			get_size_str_G(ip->oc_size, 0, SizeDecDigits).c_str());
 		if (ip->oc_size>0) {
-			msg.cat_sprintf(_T("  ƒMƒƒƒbƒv:%s(%.1f%%)"),
+			msg.cat_sprintf(_T("  ã‚®ãƒ£ãƒƒãƒ—:%s(%.1f%%)"),
 				get_size_str_G(g_size, 0, SizeDecDigits).c_str(), 100.0 * g_size/ip->oc_size);
 		}
-		msg.cat_sprintf(_T("  •½‹Ï:%s"), get_size_str_G(ip->av_size, 0, SizeDecDigits).c_str());
+		msg.cat_sprintf(_T("  å¹³å‡:%s"), get_size_str_G(ip->av_size, 0, SizeDecDigits).c_str());
 		FileInfBar->Panels->Items[0]->Text = msg;
 	}
 
 	FileScrPanel->UpdateKnob();
 }
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹ˆê——‚Ì•`‰æ
+//ãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TFileExtensionDlg::FileListBoxDrawItem(TWinControl *Control, int Index,
 	TRect &Rect, TOwnerDrawState State)
@@ -677,7 +677,7 @@ void __fastcall TFileExtensionDlg::FileListBoxDrawItem(TWinControl *Control, int
 
 	if (Index==MAX_FLIST_CNT) {
 		cv->Font->Color = col_Teal;
-		cv->TextOut(xp, yp, UnicodeString().sprintf(_T("c‘¼ %u Files"), CurFileCount - MAX_FLIST_CNT));
+		cv->TextOut(xp, yp, UnicodeString().sprintf(_T("â€¦ä»– %u Files"), CurFileCount - MAX_FLIST_CNT));
 	}
 	else {
 		int w_fn = FileListHeader->Sections->Items[0]->Width;
@@ -693,11 +693,11 @@ void __fastcall TFileExtensionDlg::FileListBoxDrawItem(TWinControl *Control, int
 
 		cv->Font->Color = get_ListFgCol();
 
-		//Šg’£q”ñ•ª—£
+		//æ‹¡å¼µå­éåˆ†é›¢
 		if (NoSpaceFExt) {
 			cv->TextOut(xp, yp, minimize_str(fnam, cv, w_fn, OmitEndOfName));
 		}
-		//Šg’£q•ª—£
+		//æ‹¡å¼µå­åˆ†é›¢
 		else {
 			UnicodeString fext = get_extension(fnam);
 			int x_wd = std::min(cv->TextWidth(get_FExtMaxStr()), cv->TextWidth(fext.UpperCase()));
@@ -719,7 +719,7 @@ void __fastcall TFileExtensionDlg::FileListBoxDrawItem(TWinControl *Control, int
 		}
 	}
 
-	//ƒJ[ƒ\ƒ‹
+	//ã‚«ãƒ¼ã‚½ãƒ«
 	if (lp->Focused() || FileInfoDlg->Visible) draw_ListCursor2(lp, Rect, Index, State);
 }
 //---------------------------------------------------------------------------
@@ -744,7 +744,7 @@ void __fastcall TFileExtensionDlg::FileListBoxExit(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹ˆê——: ƒL[‘€ì
+//ãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§: ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TFileExtensionDlg::FileListBoxKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -777,19 +777,19 @@ void __fastcall TFileExtensionDlg::FileListBoxKeyDown(TObject *Sender, WORD &Key
 		}
 		else beep_Warn();
 	}
-	//“ª•¶šƒT[ƒ`
-	else if (is_IniSeaKey(KeyStr)) {	//KeyStr ‚É³‹K•\Œ»ƒpƒ^[ƒ“‚ª•Ô‚é
+	//é ­æ–‡å­—ã‚µãƒ¼ãƒ
+	else if (is_IniSeaKey(KeyStr)) {	//KeyStr ã«æ­£è¦è¡¨ç¾ãƒ‘ã‚¿ãƒ¼ãƒ³ãŒè¿”ã‚‹
 		IniSearchList(lp, KeyStr);
 	}
-	//ƒtƒ@ƒCƒ‹î•ñ
+	//ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±
 	else if (StartsText("ShowFileInfo", cmd_F)) {
 		ShowFileInfoAction->Execute();
 	}
-	//ƒvƒƒpƒeƒB
+	//ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	else if (SameText(cmd_F, "PropertyDlg")) {
 		PropertyAction->Execute();
 	}
-	//‰EƒNƒŠƒbƒNƒƒjƒ…[
+	//å³ã‚¯ãƒªãƒƒã‚¯ãƒ¡ãƒ‹ãƒ¥ãƒ¼
 	else if (contained_wd_i(KeysStr_Popup, KeyStr)) {
 		show_PopupMenu(lp);
 	}
@@ -805,15 +805,15 @@ void __fastcall TFileExtensionDlg::FileListBoxClick(TObject *Sender)
 	if (!fnam.IsEmpty()) {
 		UnicodeString lbuf = get_file_attr_str(file_GetAttr(fnam));
 		__int64 f_size = get_file_size(fnam);
-		lbuf.cat_sprintf(_T("  %s    ƒTƒCƒY:%s"),
+		lbuf.cat_sprintf(_T("  %s    ã‚µã‚¤ã‚º:%s"),
 			format_DateTime(get_file_age(fnam)).c_str(), get_size_str_G(f_size, 0, SizeDecDigits).c_str());
 		if (ClusterSize>0) {
 			__int64 clu_n  = f_size/ClusterSize + ((f_size%ClusterSize>0)? 1 : 0);
 			__int64 o_size = clu_n * ClusterSize;
-			lbuf.cat_sprintf(_T("  è—L:%s"), get_size_str_G(o_size, 0, SizeDecDigits).c_str());
+			lbuf.cat_sprintf(_T("  å æœ‰:%s"), get_size_str_G(o_size, 0, SizeDecDigits).c_str());
 			if (o_size>0) {
 				__int64 g_size = o_size - f_size;
-				lbuf.cat_sprintf(_T("  ƒMƒƒƒbƒv:%s(%.1f%%)"),
+				lbuf.cat_sprintf(_T("  ã‚®ãƒ£ãƒƒãƒ—:%s(%.1f%%)"),
 					get_size_str_G(g_size, 0, SizeDecDigits).c_str(), 100.0 * g_size/o_size);
 			}
 		}
@@ -832,7 +832,7 @@ void __fastcall TFileExtensionDlg::FileListHeaderSectionResize(THeaderControl *H
 }
 
 //---------------------------------------------------------------------------
-//ƒ\[ƒg•ÏX
+//ã‚½ãƒ¼ãƒˆå¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TFileExtensionDlg::FileListHeaderSectionClick(THeaderControl *HeaderControl,
 		THeaderSection *Section)
@@ -845,7 +845,7 @@ void __fastcall TFileExtensionDlg::FileListHeaderSectionClick(THeaderControl *He
 }
 
 //---------------------------------------------------------------------------
-//ƒNƒŠƒbƒvƒ{[ƒh‚ÉƒRƒs[
+//ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã«ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TFileExtensionDlg::FextClipCopyActionExecute(TObject *Sender)
 {
@@ -854,7 +854,7 @@ void __fastcall TFileExtensionDlg::FextClipCopyActionExecute(TObject *Sender)
 	copy_to_Clipboard(r_lst->Text);
 }
 //---------------------------------------------------------------------------
-//ƒƒO‚Éo—Í
+//ãƒ­ã‚°ã«å‡ºåŠ›
 //---------------------------------------------------------------------------
 void __fastcall TFileExtensionDlg::FextLogOutActionExecute(TObject *Sender)
 {
@@ -863,13 +863,13 @@ void __fastcall TFileExtensionDlg::FextLogOutActionExecute(TObject *Sender)
 	AddLogStrings(r_lst.get());
 }
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚É•Û‘¶
+//ãƒ•ã‚¡ã‚¤ãƒ«ã«ä¿å­˜
 //---------------------------------------------------------------------------
 void __fastcall TFileExtensionDlg::FextSaveActionExecute(TObject *Sender)
 {
 	int mode = ((TAction*)Sender)->Tag;
 
-	UserModule->SaveTxtDlg->Title = LoadUsrMsg(USTR_SaveAs, (mode==1)? _T("ˆê——(CSV)") : (mode==2)? _T("ˆê——(TSV)") : _T("ˆê——"));
+	UserModule->SaveTxtDlg->Title = LoadUsrMsg(USTR_SaveAs, (mode==1)? _T("ä¸€è¦§(CSV)") : (mode==2)? _T("ä¸€è¦§(TSV)") : _T("ä¸€è¦§"));
 	UserModule->SaveTxtDlg->Filter		  = (mode==1)? F_FILTER_CSV : (mode==2)? F_FILTER_TSV : F_FILTER_TXT;
 	UserModule->SaveTxtDlg->DefaultExt	  = (mode==1)? "csv" : "txt";
 	UserModule->SaveTxtDlg->FileName	  = (mode==1)? "*.csv" : "*.txt";
@@ -899,7 +899,7 @@ void __fastcall TFileExtensionDlg::FextCsvActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‰[‚ÅŠg’£qŒŸõ
+//ãƒ•ã‚¡ã‚¤ãƒ©ãƒ¼ã§æ‹¡å¼µå­æ¤œç´¢
 //---------------------------------------------------------------------------
 void __fastcall TFileExtensionDlg::FextMaskFindActionExecute(TObject *Sender)
 {
@@ -911,7 +911,7 @@ void __fastcall TFileExtensionDlg::FextMaskFindActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//Šg’£qˆê——: ƒ\[ƒg
+//æ‹¡å¼µå­ä¸€è¦§: ã‚½ãƒ¼ãƒˆ
 //---------------------------------------------------------------------------
 void __fastcall TFileExtensionDlg::SortFextActionExecute(TObject *Sender)
 {
@@ -928,7 +928,7 @@ void __fastcall TFileExtensionDlg::SortFextActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹ˆê——: ƒ\[ƒg
+//ãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§: ã‚½ãƒ¼ãƒˆ
 //---------------------------------------------------------------------------
 void __fastcall TFileExtensionDlg::SortFileActionExecute(TObject *Sender)
 {
@@ -945,14 +945,14 @@ void __fastcall TFileExtensionDlg::SortFileActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹î•ñ
+//ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±
 //---------------------------------------------------------------------------
 void __fastcall TFileExtensionDlg::ShowFileInfoActionExecute(TObject *Sender)
 {
 	FileInfoDlg->ShowModalEx(GetCurFileItem());
 }
 //---------------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹‚ÌƒvƒƒpƒeƒB
+//ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 //---------------------------------------------------------------------------
 void __fastcall TFileExtensionDlg::PropertyActionExecute(TObject *Sender)
 {

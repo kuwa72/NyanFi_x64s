@@ -1,6 +1,6 @@
 /**
  * @file MaskDlg.h
- * @brief ƒpƒXƒ}ƒXƒNEƒ_ƒCƒAƒƒO
+ * @brief ãƒ‘ã‚¹ãƒã‚¹ã‚¯ãƒ»ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 //---------------------------------------------------------------------------
 #ifndef MaskDlgH
@@ -21,11 +21,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒpƒXƒ}ƒXƒNEƒ_ƒCƒAƒƒO
+ * @brief ãƒ‘ã‚¹ãƒã‚¹ã‚¯ãƒ»ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TPathMaskDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *AddItemAction;
 	TAction *EditItemAction;
 	TActionList *ActionList1;
@@ -66,8 +66,8 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall AddItemActionUpdate(TObject *Sender);
 	void __fastcall ChgOptBtnClick(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
-	UsrScrollPanel *ListScrPanel;	//ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	UsrScrollPanel *ListScrPanel;	//ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 
 	void __fastcall WmMenuChar(TMessage &msg)
 	{
@@ -76,7 +76,7 @@ private:	// ƒ†[ƒU[éŒ¾
 
 	void __fastcall SetOptBtn();
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	__fastcall TPathMaskDlg(TComponent* Owner);
 
 	BEGIN_MESSAGE_MAP

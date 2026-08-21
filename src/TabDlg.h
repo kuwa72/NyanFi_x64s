@@ -1,6 +1,6 @@
 /**
  * @file TabDlg.h
- * @brief ƒ^ƒu‚Ìİ’èƒ_ƒCƒAƒƒO
+ * @brief ã‚¿ãƒ–ã®è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 //---------------------------------------------------------------------------
 #ifndef TabDlgH
@@ -16,11 +16,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒ^ƒu‚Ìİ’èƒ_ƒCƒAƒƒO
+ * @brief ã‚¿ãƒ–ã®è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TTabSetDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TButton *CanButton;
 	TButton *OkButton;
 	TButton *RefHome1Btn;
@@ -52,9 +52,9 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall WorkRadioBtnClick(TObject *Sender);
 	void __fastcall OkButtonClick(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 
-public:		// ƒ†[ƒU[éSetTabDlg TabIndex;
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£SetTabDlg TabIndex;
 	int TabIndex;
 	UnicodeString CurPath1, CurPath2;
 

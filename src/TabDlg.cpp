@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒ^ƒu‚Ìİ’è															//
+//  ã‚¿ãƒ–ã®è¨­å®š															//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -28,7 +28,7 @@ void __fastcall TTabSetDlg::FormCreate(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TTabSetDlg::FormShow(TObject *Sender)
 {
-	UnicodeString tit = "ƒ^ƒu‚Ìİ’è";
+	UnicodeString tit = "ã‚¿ãƒ–ã®è¨­å®š";
 	if (!TabGroupName.IsEmpty()) tit.cat_sprintf(_T(" - %s"), ExtractFileName(TabGroupName).c_str());
 	Caption = tit;
 
@@ -65,11 +65,11 @@ void __fastcall TTabSetDlg::FormKeyDown(TObject *Sender, WORD &Key, TShiftState 
 }
 
 //---------------------------------------------------------------------------
-//ƒAƒCƒRƒ“‚ğQÆ
+//ã‚¢ã‚¤ã‚³ãƒ³ã‚’å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TTabSetDlg::RefIconBtnClick(TObject *Sender)
 {
-	UserModule->PrepareOpenDlg(_T("ƒ^ƒu‚ÌƒAƒCƒRƒ“"), F_FILTER_ICO);
+	UserModule->PrepareOpenDlg(_T("ã‚¿ãƒ–ã®ã‚¢ã‚¤ã‚³ãƒ³"), F_FILTER_ICO);
 	UserModule->OpenDlgToEdit(IconEdit, true);
 }
 //---------------------------------------------------------------------------
@@ -78,25 +78,25 @@ void __fastcall TTabSetDlg::IconEditChange(TObject *Sender)
 	usr_SH->draw_SmallIcon(to_absolute_name(IconEdit->Text), IcoImage, get_ActTabBgCol(), this);
 }
 //---------------------------------------------------------------------------
-//ƒz[ƒ€‚ğQÆ
+//ãƒ›ãƒ¼ãƒ ã‚’å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TTabSetDlg::RefHomeBtnClick(TObject *Sender)
 {
 	TEdit *ep = (TEdit*)((((TComponent*)Sender)->Tag==1)? HomeDir2Edit : HomeDir1Edit);
 	UnicodeString dnam = ep->Text;
-	if (UserModule->SelectDirEx(_T("ƒ^ƒu‚Ìƒz[ƒ€"), dnam)) ep->Text = to_path_name(dnam);
+	if (UserModule->SelectDirEx(_T("ã‚¿ãƒ–ã®ãƒ›ãƒ¼ãƒ "), dnam)) ep->Text = to_path_name(dnam);
 }
 //---------------------------------------------------------------------------
-//ƒ[ƒNƒŠƒXƒg‚ğQÆ
+//ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã‚’å‚ç…§
 //---------------------------------------------------------------------------
 void __fastcall TTabSetDlg::RefWorkBtnClick(TObject *Sender)
 {
-	UserModule->PrepareOpenDlg(_T("ƒ[ƒNƒŠƒXƒg‚Ìw’è"), F_FILTER_NWL, _T("*.nwl"), WorkListPath);
+	UserModule->PrepareOpenDlg(_T("ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆã®æŒ‡å®š"), F_FILTER_NWL, _T("*.nwl"), WorkListPath);
 	UserModule->OpenDlgToEdit(WorkListEdit, true);
 }
 
 //---------------------------------------------------------------------------
-//Œ»İ‚ÌƒfƒBƒŒƒNƒgƒŠ‚ğİ’è
+//ç¾åœ¨ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall TTabSetDlg::SetCurDirBtnClick(TObject *Sender)
 {
@@ -111,7 +111,7 @@ void __fastcall TTabSetDlg::WorkRadioBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//Šm’è
+//ç¢ºå®š
 //---------------------------------------------------------------------------
 void __fastcall TTabSetDlg::OkButtonClick(TObject *Sender)
 {

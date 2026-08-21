@@ -1,6 +1,6 @@
 /**
  * @file JoinDlg.h
- * @brief ƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚ÌŒ‹‡ƒ_ƒCƒAƒƒO
+ * @brief ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®çµåˆãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 //---------------------------------------------------------------------------
 #ifndef JoinDlgH
@@ -18,11 +18,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚ÌŒ‹‡ƒ_ƒCƒAƒƒO
+ * @brief ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®çµåˆãƒ€ã‚¤ã‚¢ãƒ­ã‚°
  */
 class TJoinTextDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *EditTmpltAction;
 	TAction *JoinAction;
 	TActionList *ActionList1;
@@ -54,9 +54,9 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall EditTmpltActionUpdate(TObject *Sender);
 	void __fastcall JoinActionUpdate(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	__fastcall TJoinTextDlg(TComponent* Owner);
 };
 //---------------------------------------------------------------------------

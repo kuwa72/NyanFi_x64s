@@ -1,6 +1,6 @@
 /**
  * @file ShareDlg.h
- * @brief ‹¤—LƒtƒHƒ‹ƒ_/ƒ‰ƒCƒuƒ‰ƒŠ/ŒŸõİ’è/ƒfƒBƒŒƒNƒgƒŠ‘I‘ğ
+ * @brief å…±æœ‰ãƒ•ã‚©ãƒ«ãƒ€/ãƒ©ã‚¤ãƒ–ãƒ©ãƒª/æ¤œç´¢è¨­å®š/ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªé¸æŠ
  */
 //---------------------------------------------------------------------------
 #ifndef ShareDlgH
@@ -23,11 +23,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ‹¤—LƒtƒHƒ‹ƒ_/ƒ‰ƒCƒuƒ‰ƒŠ/ŒŸõİ’è/ƒfƒBƒŒƒNƒgƒŠ‘I‘ğ
+ * @brief å…±æœ‰ãƒ•ã‚©ãƒ«ãƒ€/ãƒ©ã‚¤ãƒ–ãƒ©ãƒª/æ¤œç´¢è¨­å®š/ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªé¸æŠ
  */
 class TNetShareDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *CopyPathAction;
 	TAction *CopyPathAllAction;
 	TAction *CopyUncAction;
@@ -81,8 +81,8 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall PropertyActionExecute(TObject *Sender);
 	void __fastcall PropertyActionUpdate(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
-	UsrScrollPanel *ListScrPanel;	//ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	UsrScrollPanel *ListScrPanel;	//ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 
 	bool isPC;
 	int  LibIdxBase;
@@ -120,19 +120,19 @@ private:	// ƒ†[ƒU[éŒ¾
 		return IncludeTrailingPathDelimiter(pnam);
 	}
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	UnicodeString ComputerName;
 	UnicodeString PathName;
 	UnicodeString FileName;
 	UnicodeString Title;
 
-	bool isShare;		//!< ‹¤—LƒtƒHƒ‹ƒ_
-	bool isOnlySub;		//!< ƒTƒuƒfƒBƒŒƒNƒgƒŠ‘I‘ğ‚Ì‚İ
-	bool isLibrary;		//!< ƒ‰ƒCƒuƒ‰ƒŠ
-	bool isFindSet;		//!< ŒŸõİ’è
+	bool isShare;		//!< å…±æœ‰ãƒ•ã‚©ãƒ«ãƒ€
+	bool isOnlySub;		//!< ã‚µãƒ–ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªé¸æŠã®ã¿
+	bool isLibrary;		//!< ãƒ©ã‚¤ãƒ–ãƒ©ãƒª
+	bool isFindSet;		//!< æ¤œç´¢è¨­å®š
 
 	bool isUNC;
-	bool rqRetPath;		//!< ‘I‘ğ‚µ‚½ƒpƒX‚ğ•Ô‚·(ƒfƒBƒŒƒNƒgƒŠ•ÏX‚Ís‚í‚È‚¢)
+	bool rqRetPath;		//!< é¸æŠã—ãŸãƒ‘ã‚¹ã‚’è¿”ã™(ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå¤‰æ›´ã¯è¡Œã‚ãªã„)
 
 	__fastcall TNetShareDlg(TComponent* Owner);
 

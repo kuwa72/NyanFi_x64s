@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ‰æ‘œƒrƒ…[ˆ—ƒXƒŒƒbƒh												//
+//  ç”»åƒãƒ“ãƒ¥ãƒ¼å‡¦ç†ã‚¹ãƒ¬ãƒƒãƒ‰												//
 //----------------------------------------------------------------------//
 #include "usr_wic.h"
 #include "usr_exif.h"
@@ -15,7 +15,7 @@
 #pragma package(smart_init)
 
 //---------------------------------------------------------------------------
-//ƒXƒŒƒbƒh‚Ì‰Šú‰»
+//ã‚¹ãƒ¬ãƒƒãƒ‰ã®åˆæœŸåŒ–
 //---------------------------------------------------------------------------
 __fastcall TImgViewThread::TImgViewThread(bool CreateSuspended) : TThread(CreateSuspended)
 {
@@ -78,7 +78,7 @@ bool __fastcall TImgViewThread::IsWaiting()
 }
 
 //---------------------------------------------------------------------------
-//ƒLƒ…[‚Éˆ——v‹‚ğ’Ç‰Á
+//ã‚­ãƒ¥ãƒ¼ã«å‡¦ç†è¦æ±‚ã‚’è¿½åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TImgViewThread::AddRequest(const _TCHAR *cmd, UnicodeString prm1, UnicodeString prm2)
 {
@@ -99,17 +99,17 @@ void __fastcall TImgViewThread::AddRequest(const _TCHAR *cmd, int prm)
 }
 
 //---------------------------------------------------------------------------
-//‰æ‘œ‚ğƒNƒŠƒA(Synchronize ‚ÅŒÄ‚Ño‚·‚±‚Æ)
+//ç”»åƒã‚’ã‚¯ãƒªã‚¢(Synchronize ã§å‘¼ã³å‡ºã™ã“ã¨)
 //---------------------------------------------------------------------------
 void __fastcall TImgViewThread::ClearImage()
 {
 	TImage *v_img = NULL;
 
-	//ƒCƒ[ƒWƒrƒ…[ƒA
+	//ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢
 	if (NyanFiForm->ImgViewPanel->Visible) {
 		v_img = NyanFiForm->ViewerImage;
 	}
-	//ƒvƒŒƒrƒ…[
+	//ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼
 	else if (NyanFiForm->PreviewPanel->Visible) {
 		v_img = NyanFiForm->PreviewImage;
 		v_img->Cursor = crDefault;
@@ -136,7 +136,7 @@ void __fastcall TImgViewThread::ClearImage()
 }
 
 //---------------------------------------------------------------------------
-//‰æ‘œ‚ğ•\¦ (Synchronize ‚ÅŒÄ‚Ño‚·‚±‚Æ)
+//ç”»åƒã‚’è¡¨ç¤º (Synchronize ã§å‘¼ã³å‡ºã™ã“ã¨)
 //---------------------------------------------------------------------------
 void __fastcall TImgViewThread::DrawImage()
 {
@@ -146,12 +146,12 @@ void __fastcall TImgViewThread::DrawImage()
 	TImage *v_img	= NULL;
 	TPanel *v_panel = NULL;
 
-	//ƒCƒ[ƒWƒrƒ…[ƒA
+	//ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢
 	if (NyanFiForm->ImgViewPanel->Visible) {
 		v_img	= NyanFiForm->ViewerImage;
 		v_panel = NyanFiForm->ImgScrollPanel;
 	}
-	//ƒvƒŒƒrƒ…[
+	//ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼
 	else if (NyanFiForm->PreviewPanel->Visible) {
 		v_img	= NyanFiForm->PreviewImage;
 		v_img->Transparent = false;
@@ -162,7 +162,7 @@ void __fastcall TImgViewThread::DrawImage()
 
 	bool is_viewer = SameStr(v_img->Name, "ViewerImage");
 
-	//‰ñ“]
+	//å›è»¢
 	if (!ImgBuff->Empty && Rotation>0) {
 		WIC_rotate_image(ImgBuff, Rotation);
 		Rotation = 0;
@@ -176,21 +176,21 @@ void __fastcall TImgViewThread::DrawImage()
 		if (iw==0 || ih==0) return;
 
 		double r = 1.0;
-		//ƒvƒŒƒrƒ…[‚Ü‚½‚ÍƒtƒBƒbƒg•\¦
+		//ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã¾ãŸã¯ãƒ•ã‚£ãƒƒãƒˆè¡¨ç¤º
 		if (!is_viewer || Fitted) {
 			r = get_ZoomRatio(v_panel->ClientWidth, v_panel->ClientHeight, iw, ih,
 				is_viewer? ImgFrameMargin : 0,
 				Fitted? (std::max(ImgFitMaxZoom, 100)/100.0) : 1.0);
 			if (is_viewer) ZoomRatio = r * 100;
 		}
-		//ƒY[ƒ€
+		//ã‚ºãƒ¼ãƒ 
 		else if (is_viewer && ZoomRatio!=100) {
 			r = ZoomRatio / 100.0;
 		}
 
 		ZoomRatioF = r;
 
-		//ƒƒ^ƒtƒ@ƒCƒ‹
+		//ãƒ¡ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«
 		if (ImgIsWmf) {
 			if (r!=1.0) {
 				iw *= r;  ih *= r;
@@ -203,7 +203,7 @@ void __fastcall TImgViewThread::DrawImage()
 			cv->FillRect(rc);
 			cv->StretchDraw(rc, MetaBuff);
 			cv->Unlock();
-			//‰ñ“]E”½“]
+			//å›è»¢ãƒ»åè»¢
 			if (Rotation>0) {
 				Img_rot_str.cat_sprintf(_T("%u"), Rotation);
 				Rotation = 0;
@@ -211,14 +211,14 @@ void __fastcall TImgViewThread::DrawImage()
 			for (int i=1; i<=Img_rot_str.Length(); i++) {
 				WIC_rotate_image(ViewBuff, Img_rot_str.SubString(i, 1).ToIntDef(0));
 			}
-			//ç’·‚Èˆ——š—ğ‚ğíœ
+			//å†—é•·ãªå‡¦ç†å±¥æ­´ã‚’å‰Šé™¤
 			if (Img_rot_str.Length()>1)
 				Img_rot_str = TRegEx::Replace(Img_rot_str, "13|31|44|55|1111|3333", EmptyStr);
 		}
-		//‰æ‘œƒtƒ@ƒCƒ‹
+		//ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«
 		else {
 			if (r!=1.0) {
-				//Šg‘åEk¬
+				//æ‹¡å¤§ãƒ»ç¸®å°
 				if (WicScaleOpt>=0 && WicScaleOpt<=4) {
 					WIC_resize_image(ImgBuff, ViewBuff, r, 0, 0, WicScaleOpt);
 				}
@@ -232,12 +232,12 @@ void __fastcall TImgViewThread::DrawImage()
 				}
 			}
 			else {
-				//“™”{
+				//ç­‰å€
 				ViewBuff->Assign(ImgBuff);
 			}
 		}
 
-		//ƒOƒŒ[ƒXƒP[ƒ‹‰»
+		//ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«åŒ–
 		if (GrayScaled) WIC_grayscale_image(ViewBuff);
 
 		if (is_viewer) {
@@ -248,19 +248,19 @@ void __fastcall TImgViewThread::DrawImage()
 		}
 	}
 
-	//•`‰æ
+	//æç”»
 	v_img->Center = true;
 
-	//ƒCƒ[ƒWƒrƒ…[ƒA
+	//ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢
 	if (is_viewer) {
 		TControlScrollBar *hbar = NyanFiForm->ImgScrollBox->HorzScrollBar;
 		TControlScrollBar *vbar = NyanFiForm->ImgScrollBox->VertScrollBar;
 
 		if (ViewBuff->Width>v_panel->ClientWidth || ViewBuff->Height>v_panel->ClientHeight) {
-			//ƒXƒNƒ[ƒ‹ƒo[İ’è
+			//ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼è¨­å®š
 			hbar->Range = ViewBuff->Width;
 			vbar->Range = ViewBuff->Height;
-			//ƒZƒ“ƒ^[‚ÉˆÚ“®
+			//ã‚»ãƒ³ã‚¿ãƒ¼ã«ç§»å‹•
 			hbar->Position = (hbar->Range - v_panel->ClientWidth)/2;
 			vbar->Position = (vbar->Range - v_panel->ClientHeight)/2;
 		}
@@ -272,18 +272,18 @@ void __fastcall TImgViewThread::DrawImage()
 		NyanFiForm->ImgScrollBox->Color = ImgIsWmf? col_bgWMF : col_bgImage;
 		v_img->Picture->Bitmap->Assign(ViewBuff);
 
-		//•ªŠ„ƒOƒŠƒbƒh
+		//åˆ†å‰²ã‚°ãƒªãƒƒãƒ‰
 		if (is_viewer && ShowGrid) draw_ImgGrid(v_img->Picture->Bitmap->Canvas, ViewBuff);
 
 		NyanFiForm->SetSttBarInf();
 
-		//ƒqƒXƒgƒOƒ‰ƒ€
+		//ãƒ’ã‚¹ãƒˆã‚°ãƒ©ãƒ 
 		if (HistForm->Visible) HistForm->DrawHistogram(ImgBuff);
 
-		//ˆóüİ’è
+		//å°åˆ·è¨­å®š
 		if (PrintImgDlg && PrintImgDlg->Visible) PrintImgDlg->DrawImage();
 	}
-	//ƒvƒŒƒrƒ…[•\¦
+	//ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼è¡¨ç¤º
 	else {
 		NyanFiForm->PreviewSttLabel->Visible = false;
 		NyanFiForm->PreviewSttLabel->Caption = EmptyStr;
@@ -298,7 +298,7 @@ void __fastcall TImgViewThread::DrawImage()
 }
 
 //---------------------------------------------------------------------------
-//ƒCƒ[ƒWƒvƒŒƒrƒ…[‚É ViewBuff ‚ğ•\¦ (Synchronize ‚ÅŒÄ‚Ño‚·‚±‚Æ)
+//ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã« ViewBuff ã‚’è¡¨ç¤º (Synchronize ã§å‘¼ã³å‡ºã™ã“ã¨)
 //---------------------------------------------------------------------------
 void __fastcall TImgViewThread::DrawViewBuff()
 {
@@ -321,7 +321,7 @@ void __fastcall TImgViewThread::DrawViewBuff()
 }
 
 //---------------------------------------------------------------------------
-//ƒƒbƒZ[ƒW‚ğ•\¦ (Synchronize ‚ÅŒÄ‚Ño‚·‚±‚Æ)
+//ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¡¨ç¤º (Synchronize ã§å‘¼ã³å‡ºã™ã“ã¨)
 //---------------------------------------------------------------------------
 void __fastcall TImgViewThread::DrawMessage()
 {
@@ -338,7 +338,7 @@ void __fastcall TImgViewThread::DrawMessage()
 		}
 	}
 	else {
-		//ƒCƒ[ƒWƒrƒ…[ƒA
+		//ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ“ãƒ¥ãƒ¼ã‚¢
 		if (NyanFiForm->ImgViewPanel->Visible) {
 			if (ShowSttBar) {
 				NyanFiForm->StatusBar1->Panels->Items[0]->Text = MsgStr;
@@ -349,7 +349,7 @@ void __fastcall TImgViewThread::DrawMessage()
 				NyanFiForm->ShowMessageHint(MsgStr, col_bgWarn, true);
 			}
 		}
-		//ƒvƒŒƒrƒ…[
+		//ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼
 		else if (NyanFiForm->PreviewPanel->Visible) {
 			TLabel *lp = NyanFiForm->PreviewSttLabel;
 			lp->Caption 	= MsgStr;
@@ -367,7 +367,7 @@ void __fastcall TImgViewThread::Execute()
 	::CoInitialize(NULL);
 
 	while (!Terminated) {
-		//ˆ—ƒLƒ…[‚©‚çæ‚èo‚µ
+		//å‡¦ç†ã‚­ãƒ¥ãƒ¼ã‹ã‚‰å–ã‚Šå‡ºã—
 		TaskRWLock->BeginWrite();
 		while (RequestList->Count>0) {
 			TStringDynArray r_buf = SplitString(RequestList->Strings[0], "\t");
@@ -397,28 +397,28 @@ void __fastcall TImgViewThread::Execute()
 		}
 		TaskRWLock->EndWrite();
 
-		//•`‰æ—v‹
+		//æç”»è¦æ±‚
 		if (ReqRedraw || ReqReload) {
 			Synchronize(&DrawImage);
 			TaskRWLock->BeginWrite();
 			ReqRedraw = ReqReload = false;
 			TaskRWLock->EndWrite();
 		}
-		//ƒNƒŠƒA—v‹
+		//ã‚¯ãƒªã‚¢è¦æ±‚
 		else if (ReqClear) {
 			Synchronize(&ClearImage);
 			ImgBuff->Handle  = NULL;
 			ViewBuff->Handle = NULL;
 			TaskRWLock->BeginWrite();  ReqClear = false;  TaskRWLock->EndWrite();
 		}
-		//‘Ò‚¿—v‹
+		//å¾…ã¡è¦æ±‚
 		else if (ReqWait) {
 			TaskBusy = true;
 			Sleep(MinShowTime);
 			TaskBusy = false;
 			TaskRWLock->BeginWrite();  ReqWait = false;  TaskRWLock->EndWrite();
 		}
-		//ƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚İ
+		//ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã¿
 		else if (!FileName.IsEmpty()) {
 			TaskBusy = true;
 			try {
@@ -429,7 +429,7 @@ void __fastcall TImgViewThread::Execute()
 				TDateTime f_time = get_file_age(fnam);
 				bool is_prv_buf = false;
 
-				//ƒAƒCƒRƒ“/ƒtƒHƒ“ƒg‚ÌƒvƒŒƒrƒ…[
+				//ã‚¢ã‚¤ã‚³ãƒ³/ãƒ•ã‚©ãƒ³ãƒˆã®ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼
 				if (UseViewBuff) {
 					UseViewBuff = false;
 					is_prv_buf	= true;
@@ -448,28 +448,28 @@ void __fastcall TImgViewThread::Execute()
 						int s_8 = SCALED_MAIN(8);
 						int fh = cv->TextHeight("Q") + s_2;
 
-						//”wŒi
+						//èƒŒæ™¯
 						cv->Brush->Color = col_bgImage;
 						cv->FillRect(Rect(0, 0, bg_bmp->Width, bg_bmp->Height));
 
-						//ƒtƒHƒ“ƒg
+						//ãƒ•ã‚©ãƒ³ãƒˆ
 						if (test_FontExt(fext)) {
 							UnicodeString fnt_name = get_FontInf(Img_f_name);
 							if (!fnt_name.IsEmpty()) {
-								//ƒ†[ƒUw’èF
+								//ãƒ¦ãƒ¼ã‚¶æŒ‡å®šè‰²
 								if (FontSampleBgCol!=col_None) {
 									cv->Brush->Color = FontSampleBgCol;
 									cv->FillRect(Rect(0, 0, bg_bmp->Width, bg_bmp->Height));
 								}
 								if (FontSampleFgCol!=col_None) cv->Font->Color = FontSampleFgCol;
 
-								//ƒtƒHƒ“ƒg–¼
+								//ãƒ•ã‚©ãƒ³ãƒˆå
 								cv->TextOut(s_2, s_2, fnt_name);
 
 								bool tmp_flag = (Screen->Fonts->IndexOf(fnt_name)==-1)?
 												(::AddFontResourceEx(fnam.c_str(), FR_PRIVATE, NULL)>0) : false;
 
-								//ƒTƒ“ƒvƒ‹•\¦
+								//ã‚µãƒ³ãƒ—ãƒ«è¡¨ç¤º
 								std::unique_ptr<TFont> tmp_font(new TFont());
 								tmp_font->Name	= fnt_name;
 								tmp_font->Color = cv->Font->Color;
@@ -480,18 +480,18 @@ void __fastcall TImgViewThread::Execute()
 									TRect rc = Rect(0, 0, bg_bmp->Width, bg_bmp->Height);
 									rc.Left = s_2;
 									rc.Top  = SCALED_MAIN(4) + fh;
-									//•¶š/ƒVƒ“ƒ{ƒ‹
+									//æ–‡å­—/ã‚·ãƒ³ãƒœãƒ«
 									UnicodeString lbuf = (tm.tmCharSet==SYMBOL_CHARSET)? FontSampleSym : FontSampleTxt;
 									::DrawText(cv->Handle, lbuf.c_str(), -1, &rc, DT_LEFT);
 
-									//Šî€ü‚Ì•`‰æ
+									//åŸºæº–ç·šã®æç”»
 									if (FontSampleShowGrid && FontSampleGridCol!=col_None) {
 										DynamicArray<int> y_lst;
 										y_lst.Length = 4;
-										y_lst[0] = rc.Top;							//ã’[
-										y_lst[1] = y_lst[0] + tm.tmInternalLeading;	//“à•”ƒŒƒfƒBƒ“ƒO
-										y_lst[2] = y_lst[0] + tm.tmAscent;			//ƒx[ƒXƒ‰ƒCƒ“(ƒAƒZƒ“ƒg)
-										y_lst[3] = y_lst[2] + tm.tmDescent;			//‰º’[
+										y_lst[0] = rc.Top;							//ä¸Šç«¯
+										y_lst[1] = y_lst[0] + tm.tmInternalLeading;	//å†…éƒ¨ãƒ¬ãƒ‡ã‚£ãƒ³ã‚°
+										y_lst[2] = y_lst[0] + tm.tmAscent;			//ãƒ™ãƒ¼ã‚¹ãƒ©ã‚¤ãƒ³(ã‚¢ã‚»ãƒ³ãƒˆ)
+										y_lst[3] = y_lst[2] + tm.tmDescent;			//ä¸‹ç«¯
 
 										cv->Pen->Style = psSolid;
 										cv->Pen->Width = ScaledInt(1);
@@ -505,7 +505,7 @@ void __fastcall TImgViewThread::Execute()
 								if (tmp_flag) ::RemoveFontResourceEx(fnam.c_str(), FR_PRIVATE, NULL);
 							}
 						}
-						//FŒ©–{
+						//è‰²è¦‹æœ¬
 						else if (IsSwatchbook(fnam)) {
 							if (LoadSwatchbook(fnam, true)>0) {
 								TRect rc = Rect(0,0, std::min(bg_bmp->Width - s_8, 280), std::min(bg_bmp->Height - s_8, 144));
@@ -513,7 +513,7 @@ void __fastcall TImgViewThread::Execute()
 								DrawSwatchbook(cv, rc, true);
 							}
 						}
-						//ƒAƒCƒRƒ“
+						//ã‚¢ã‚¤ã‚³ãƒ³
 						else {
 							int x = s_2;
 							int y = s_2;
@@ -538,7 +538,7 @@ void __fastcall TImgViewThread::Execute()
 								}
 							}
 
-							//’ŠoƒAƒCƒRƒ“
+							//æŠ½å‡ºã‚¢ã‚¤ã‚³ãƒ³
 							if (test_FileExt(fext, FEXT_ICONVIEW)) {
 								int ixn = (int)::ExtractIcon(HInstance, Img_f_name.c_str(), -1);
 								if (ixn>1) {
@@ -575,23 +575,23 @@ void __fastcall TImgViewThread::Execute()
 					}
 					cv->Unlock();
 				}
-				//‚»‚Ì‘¼‚Ìƒtƒ@ƒCƒ‹
+				//ãã®ä»–ã®ãƒ•ã‚¡ã‚¤ãƒ«
 				else if (Img_f_name!=fnam || Img_f_size!=f_size || Img_f_time!=f_time) {
 					Img_f_name = fnam; Img_f_size = f_size; Img_f_time = f_time;
 					ImgIsWmf = test_MetaExt(fext);
 					ImgBuff->Handle  = NULL;
 					ViewBuff->Handle = NULL;
 
-					MsgStr	 = "“Ç’†...";
+					MsgStr	 = "èª­è¾¼ä¸­...";
 					MsgIsErr = false;
 					Synchronize(&DrawMessage);
 
-					//“®‰æ
+					//å‹•ç”»
 					if (ReqVideo || test_FileExt(fext, FEXT_VIDEO)) {
 						ReqVideo = false;
-						if (!usr_SH->get_Thumbnail(Img_f_name, ImgBuff, 2048)) TextAbort(_T("ƒTƒ€ƒlƒCƒ‹‚ªæ“¾‚Å‚«‚Ü‚¹‚ñ"));
+						if (!usr_SH->get_Thumbnail(Img_f_name, ImgBuff, 2048)) TextAbort(_T("ã‚µãƒ ãƒã‚¤ãƒ«ãŒå–å¾—ã§ãã¾ã›ã‚“"));
 					}
-					//ƒƒ^ƒtƒ@ƒCƒ‹
+					//ãƒ¡ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«
 					else if (ImgIsWmf) {
 						MetaBuff->LoadFromFile(Img_f_name);
 						Img_rot_str = EmptyStr;
@@ -614,7 +614,7 @@ void __fastcall TImgViewThread::Execute()
 							TaskRWLock->BeginWrite(); ReqClear = false;  TaskRWLock->EndWrite();
 						}
 					}
-					//ƒfƒBƒŒƒNƒgƒŠ‚Ì“Á‘åƒAƒCƒRƒ“
+					//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ç‰¹å¤§ã‚¢ã‚¤ã‚³ãƒ³
 					else if (ends_PathDlmtr(Img_f_name) && ShowDirJumboIco) {
 						UnicodeString dnam = ExcludeTrailingPathDelimiter(Img_f_name);
 						int size = 256;
@@ -625,13 +625,13 @@ void __fastcall TImgViewThread::Execute()
 						{
 							cv->Brush->Color = get_WinColor();
 							cv->FillRect(Rect(0, 0, size, size));
-							//ƒTƒ€ƒlƒCƒ‹
+							//ã‚µãƒ ãƒã‚¤ãƒ«
 							std::unique_ptr<Graphics::TBitmap> bmp(new Graphics::TBitmap());
 							if (usr_SH->get_Thumbnail(dnam, bmp.get(), size)) {
 								bmp->AlphaFormat = afDefined;
 								cv->Draw(0, 0, bmp.get());
 							}
-							//ƒAƒCƒRƒ“
+							//ã‚¢ã‚¤ã‚³ãƒ³
 							else {
 								HICON hIcon = usr_SH->get_Icon(dnam, size);
 								if (hIcon) {
@@ -644,7 +644,7 @@ void __fastcall TImgViewThread::Execute()
 						cv->Unlock();
 						Rotation = 0;
 					}
-					//ZIP“à‰æ‘œ
+					//ZIPå†…ç”»åƒ
 					else if (test_FileExt(fext, FEXT_ZIPIMG)) {
 						int res = 0;
 						UnicodeString tmp_name = ExtractInZipImg(Img_f_name, get_img_fext());
@@ -655,13 +655,13 @@ void __fastcall TImgViewThread::Execute()
 						if (res==0) UserAbort(USTR_FaildLoad);
 						Rotation = 0;
 					}
-					//‰æ‘œ
+					//ç”»åƒ
 					else if (test_FileExt(fext, FEXT_META + get_img_fext())
 						|| (EndsText(FAVICON_ADS, Img_f_name) && test_Png(Img_f_name)))
 					{
 						int res = load_ImageFile(Img_f_name, ImgBuff, WICIMG_PREVIEW, col_bgImage);
 						if (res==0) UserAbort(USTR_FaildLoad);
-						//Œ©ŠJ‚«ƒ‚[ƒh
+						//è¦‹é–‹ããƒ¢ãƒ¼ãƒ‰
 						if (DoublePage) {
 							if (!FileName2.IsEmpty()) {
 								std::unique_ptr<Graphics::TBitmap> i2buf(new Graphics::TBitmap());
@@ -670,7 +670,7 @@ void __fastcall TImgViewThread::Execute()
 
 								int i_h1 = ImgBuff->Height;
 								int i_h2 = i2buf->Height;
-								//Œ©ŠJ‚«ŠÔŠu‚ÌŒvZ
+								//è¦‹é–‹ãé–“éš”ã®è¨ˆç®—
 								int w_dp = 0;
 								if (ImgDblMargin>0) {
 									int vw = NyanFiForm->ImgScrollPanel->ClientWidth - ImgFrameMargin*2 - ImgDblMargin;
@@ -687,7 +687,7 @@ void __fastcall TImgViewThread::Execute()
 									if (r>1.0) r = 1.0;
 									if (r>0) w_dp = ImgDblMargin / r;
 								}
-								//‰æ‘œ‚ÌŒ‹‡
+								//ç”»åƒã®çµåˆ
 								std::unique_ptr<Graphics::TBitmap> wbuf(new Graphics::TBitmap());
 								wbuf->SetSize(
 									ImgBuff->Width + i2buf->Width + w_dp, std::max(ImgBuff->Height, i2buf->Height));
@@ -697,7 +697,7 @@ void __fastcall TImgViewThread::Execute()
 									w_cv->Brush->Color = col_bgDblPg;
 									w_cv->FillRect(Rect(0, 0, wbuf->Width, wbuf->Height));
 									int xp = 0, yp;
-									//‰E’Ô‚¶
+									//å³ç¶´ã˜
 									if (RightBind) {
 										yp = (i_h2<i_h1)? (i_h1 - i_h2)/2 : 0;
 										w_cv->Draw(xp, yp, i2buf.get());
@@ -705,7 +705,7 @@ void __fastcall TImgViewThread::Execute()
 										yp = (i_h1<i_h2)? (i_h2 - i_h1)/2 : 0;
 										w_cv->Draw(xp, yp, ImgBuff);
 									}
-									//¶’Ô‚¶
+									//å·¦ç¶´ã˜
 									else {
 										yp = (i_h1<i_h2)? (i_h2 - i_h1)/2 : 0;
 										w_cv->Draw(xp, yp, ImgBuff);
@@ -719,7 +719,7 @@ void __fastcall TImgViewThread::Execute()
 							}
 							Rotation = 0;
 						}
-						//’Êíƒ‚[ƒh
+						//é€šå¸¸ãƒ¢ãƒ¼ãƒ‰
 						else {
 							if (RotViewImg && ExifOri>0 && res!=LOADED_BY_WIC) {
 								if		(ExifOri==6) Rotation = 1;
@@ -733,7 +733,7 @@ void __fastcall TImgViewThread::Execute()
 					Synchronize(&DrawMessage);
 				}
 
-				//•\¦
+				//è¡¨ç¤º
 				if (is_prv_buf) {
 					Synchronize(&DrawViewBuff);
 				}

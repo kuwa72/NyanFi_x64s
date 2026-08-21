@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒ^ƒOÝ’è/ŒŸõ														//
-//  ƒtƒHƒ‹ƒ_ƒAƒCƒRƒ“ŒŸõ												//
+//  ã‚¿ã‚°è¨­å®š/æ¤œç´¢														//
+//  ãƒ•ã‚©ãƒ«ãƒ€ã‚¢ã‚¤ã‚³ãƒ³æ¤œç´¢												//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -85,7 +85,7 @@ void __fastcall TTagManDlg::FormShow(TObject *Sender)
 	OptPanel->Height	  = FindOptPanel->Height + InpOptPanel->Height;
 
 	if (IsFolderIcon) {
-		set_FormTitle(this, _T("ƒtƒHƒ‹ƒ_ƒAƒCƒRƒ“ŒŸõ"));
+		set_FormTitle(this, _T("ãƒ•ã‚©ãƒ«ãƒ€ã‚¢ã‚¤ã‚³ãƒ³æ¤œç´¢"));
 		FindOptPanel->Visible	 = true;
 		ResLinkCheckBox->Checked = IniFile->ReadBoolGen(_T("FindIcoResLink"));
 		ResLinkPanel->Visible	 = true;
@@ -101,10 +101,10 @@ void __fastcall TTagManDlg::FormShow(TObject *Sender)
 		OptPanel->Visible		 = IniFile->ReadBoolGen(_T("FindTagShowOpt"),	true);
 		HideCheckBox->Checked	 = IniFile->ReadBoolGen(_T("FindTagDlgHide"));
 		HidePanel->Visible		 = true;
-		Caption = UnicodeString().cat_sprintf(_T("ƒ^ƒOŒŸõ (%s)"), AndCheckBox->Checked? _T("AND") : _T("OR"));
+		Caption = UnicodeString().cat_sprintf(_T("ã‚¿ã‚°æ¤œç´¢ (%s)"), AndCheckBox->Checked? _T("AND") : _T("OR"));
 	}
 	else if (SameText(CmdStr, "SetTag")) {
-		set_FormTitle(this, _T("ƒ^ƒO‚ÌÝ’è"));
+		set_FormTitle(this, _T("ã‚¿ã‚°ã®è¨­å®š"));
 		OptPanel->Height	  = InpOptPanel->Height;
 		OptPanel->Visible	  = IniFile->ReadBoolGen(_T("SetTagShowOpt"),	true);
 		HideCheckBox->Checked = IniFile->ReadBoolGen(_T("SetTagDlgHide"));
@@ -117,14 +117,14 @@ void __fastcall TTagManDlg::FormShow(TObject *Sender)
 		}
 	}
 	else if (SameText(CmdStr, "AddTag")) {
-		set_FormTitle(this, _T("ƒ^ƒO‚Ì’Ç‰Á"));
+		set_FormTitle(this, _T("ã‚¿ã‚°ã®è¿½åŠ "));
 		OptPanel->Height	  = InpOptPanel->Height;
 		OptPanel->Visible	  = IniFile->ReadBoolGen(_T("AddTagShowOpt"),	true);
 		HideCheckBox->Checked = IniFile->ReadBoolGen(_T("AddTagDlgHide"));
 		HidePanel->Visible	  = true;
 	}
 	else if (SameText(CmdStr, "TagSelect")) {
-		set_FormTitle(this, _T("ƒ^ƒO‘I‘ð"));
+		set_FormTitle(this, _T("ã‚¿ã‚°é¸æŠž"));
 		FindOptPanel->Visible	 = true;
 		AndCheckBox->Checked	 = IniFile->ReadBoolGen(_T("TagSelDlgAnd"),	true);
 		AndPanel->Visible		 = true;
@@ -284,7 +284,7 @@ void __fastcall TTagManDlg::AndActionExecute(TObject *Sender)
 	ap->Checked = !ap->Checked;
 
 	if (SameText(CmdStr, "FindTag")) {
-		Caption = UnicodeString().cat_sprintf(_T("ƒ^ƒOŒŸõ (%s)"), AndCheckBox->Checked? _T("AND") : _T("OR"));
+		Caption = UnicodeString().cat_sprintf(_T("ã‚¿ã‚°æ¤œç´¢ (%s)"), AndCheckBox->Checked? _T("AND") : _T("OR"));
 	}
 	SetCtrlFocus();
 }
@@ -306,7 +306,7 @@ void __fastcall TTagManDlg::SelMaskActionExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//Ý’èƒpƒlƒ‹‚ÌŠJ•Â
+//è¨­å®šãƒ‘ãƒãƒ«ã®é–‹é–‰
 //---------------------------------------------------------------------------
 void __fastcall TTagManDlg::SetOptBtn()
 {
@@ -330,7 +330,7 @@ void __fastcall TTagManDlg::ChgOptBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//“ü—Í—“‚Å‚Ì‘€ì
+//å…¥åŠ›æ¬„ã§ã®æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TTagManDlg::TagEditChange(TObject *Sender)
 {
@@ -383,7 +383,7 @@ void __fastcall TTagManDlg::TagEditKeyPress(TObject *Sender, System::WideChar &K
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚Ì•`‰æ
+//ä¸€è¦§ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TTagManDlg::TagCheckListBoxDrawItem(TWinControl *Control, int Index,
 	TRect &Rect, TOwnerDrawState State)
@@ -397,7 +397,7 @@ void __fastcall TTagManDlg::TagCheckListBoxDrawItem(TWinControl *Control, int In
 	int xp = Rect.Left + SCALED_THIS(4);
 	int yp = Rect.Top  + get_TopMargin(cv);
 
-	//ƒtƒHƒ‹ƒ_ƒAƒCƒRƒ“
+	//ãƒ•ã‚©ãƒ«ãƒ€ã‚¢ã‚¤ã‚³ãƒ³
 	if (IsFolderIcon) {
 		UnicodeString inam = lp->Items->Strings[Index];
 		draw_SmallIcon2(inam, cv, xp, yp, this);
@@ -405,14 +405,14 @@ void __fastcall TTagManDlg::TagCheckListBoxDrawItem(TWinControl *Control, int In
 		cv->Font->Color = get_ExtColor(get_extension(inam));
 		cv->TextOut(xp, yp, get_base_name(inam));
 	}
-	//ƒ^ƒO
+	//ã‚¿ã‚°
 	else {
 		if (RevTagColor) yp += SCALED_THIS(2);
 		usr_TAG->DrawTags(lp->Items->Strings[Index], cv, xp, yp,
 			(RevTagColor? get_ListBgCol() : col_None), UserModule->SpuitEnabled());
 	}
 
-	//Žg—p”
+	//ä½¿ç”¨æ•°
 	int n = (int)lp->Items->Objects[Index];
 	if (n>0) {
 		cv->Font->Color = get_ListFgCol();
@@ -421,7 +421,7 @@ void __fastcall TTagManDlg::TagCheckListBoxDrawItem(TWinControl *Control, int In
 		cv->TextOut(xp, yp, lbuf);
 	}
 
-	//ƒJ[ƒ\ƒ‹
+	//ã‚«ãƒ¼ã‚½ãƒ«
 	if (Index==lp->ItemIndex) {
 		int lw = lp->Focused()? std::max(CursorWidth, 1) : 1;
 		int yp = Rect.Bottom - lw;
@@ -431,7 +431,7 @@ void __fastcall TTagManDlg::TagCheckListBoxDrawItem(TWinControl *Control, int In
 	if (State.Contains(odFocused)) lp->Canvas->DrawFocusRect(Rect);
 }
 //---------------------------------------------------------------------------
-//ƒ^ƒOˆê——‚Å‚Ì‘€ì
+//ã‚¿ã‚°ä¸€è¦§ã§ã®æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TTagManDlg::TagCheckListBoxClickCheck(TObject *Sender)
 {
@@ -468,21 +468,21 @@ void __fastcall TTagManDlg::TagCheckListBoxKeyDown(TObject *Sender, WORD &Key, T
 	else if (contained_wd_i(KeysStr_CsrUp, KeyStr)) {
 		Key = VK_UP;
 	}
-	//ƒ^ƒO‚Ì‰ü–¼
+	//ã‚¿ã‚°ã®æ”¹å
 	else if (SameText(cmd_F, "RenameDlg")) {
 		RenTagAction->Execute();
 	}
-	//ƒ^ƒO‚Ìíœ
+	//ã‚¿ã‚°ã®å‰Šé™¤
 	else if (SameText(cmd_F, "Delete")) {
 		DelTagAction->Execute();
 	}
-	//‘Sƒ`ƒFƒbƒN/‰ðœ
+	//å…¨ãƒã‚§ãƒƒã‚¯/è§£é™¤
 	else if (lp->Count>0 && StartsText("SelAll", cmd_F)) {
 		lp->CheckAll((get_CheckListCount(lp)>0)? cbUnchecked : cbChecked);
 		lp->Invalidate();
 		TagCheckListBoxClickCheck(NULL);
 	}
-	//“ª•¶ŽšƒT[ƒ`
+	//é ­æ–‡å­—ã‚µãƒ¼ãƒ
 	else if (is_IniSeaKey(KeyStr)) {
 		int idx = lp->ItemIndex;
 		int idx0=-1, idx1=-1;
@@ -499,7 +499,7 @@ void __fastcall TTagManDlg::TagCheckListBoxKeyDown(TObject *Sender, WORD &Key, T
 			lp->Invalidate();
 		}
 	}
-	//‰EƒNƒŠƒbƒNƒƒjƒ…[
+	//å³ã‚¯ãƒªãƒƒã‚¯ãƒ¡ãƒ‹ãƒ¥ãƒ¼
 	else if (StartsText("ContextMenu", cmd_F)) {
 		show_PopupMenu(lp);
 	}
@@ -513,7 +513,7 @@ void __fastcall TTagManDlg::TagCheckListBoxKeyPress(TObject *Sender, System::Wid
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒO–¼‚Ì•ÏX
+//ã‚¿ã‚°åã®å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TTagManDlg::RenTagActionExecute(TObject *Sender)
 {
@@ -521,38 +521,38 @@ void __fastcall TTagManDlg::RenTagActionExecute(TObject *Sender)
 
 	UnicodeString old_tag = TagCheckListBox->Items->Strings[TagCheckListBox->ItemIndex];
 	UnicodeString new_tag = old_tag;
-	if (input_query_ex(_T("ƒ^ƒO–¼‚Ì•ÏX"), _T("ƒ^ƒO–¼"), &new_tag)
+	if (input_query_ex(_T("ã‚¿ã‚°åã®å¤‰æ›´"), _T("ã‚¿ã‚°å"), &new_tag)
 		&& !new_tag.IsEmpty() && !SameStr(old_tag, new_tag))
 	{
 		int new_idx = TagCheckListBox->Items->IndexOf(new_tag);
 		int old_idx = TagCheckListBox->Items->IndexOf(old_tag);
-		if (new_idx!=-1 && new_idx!=old_idx && !msgbox_Sure(_T("Šù‘¶‚Ì“¯–¼ƒ^ƒO‚É“‡‚µ‚Ü‚·‚©H"))) return;
+		if (new_idx!=-1 && new_idx!=old_idx && !msgbox_Sure(_T("æ—¢å­˜ã®åŒåã‚¿ã‚°ã«çµ±åˆã—ã¾ã™ã‹ï¼Ÿ"))) return;
 
 		int cnt = usr_TAG->RenTag(old_tag, new_tag);
 		MaxTagWidth = usr_TAG->IniCheckList(TagCheckListBox, new_tag, ShowTagCountAction->Checked);
 		ListScrPanel->UpdateKnob();
-		if (cnt>0) msgbox_OK(UnicodeString().sprintf(_T("%u€–Ú‚Ìƒ^ƒOÝ’è‚ðXV‚µ‚Ü‚µ‚½B"), cnt));
+		if (cnt>0) msgbox_OK(UnicodeString().sprintf(_T("%ué …ç›®ã®ã‚¿ã‚°è¨­å®šã‚’æ›´æ–°ã—ã¾ã—ãŸã€‚"), cnt));
 	}
 }
 //---------------------------------------------------------------------------
-//ƒ^ƒO–¼‚Ìíœ
+//ã‚¿ã‚°åã®å‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TTagManDlg::DelTagActionExecute(TObject *Sender)
 {
 	if (TagCheckListBox->ItemIndex==-1) return;
 
 	UnicodeString tag = TagCheckListBox->Items->Strings[TagCheckListBox->ItemIndex];
-	UnicodeString msg; msg.sprintf(_T("[%s] ‚ðƒ^ƒOƒf[ƒ^‚©‚çíœ‚µ‚Ü‚·‚©?"), tag.c_str());
+	UnicodeString msg; msg.sprintf(_T("[%s] ã‚’ã‚¿ã‚°ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å‰Šé™¤ã—ã¾ã™ã‹?"), tag.c_str());
 	if (msgbox_Sure(msg)) {
 		int cnt = usr_TAG->DelTagData(tag);
 		MaxTagWidth = usr_TAG->IniCheckList(TagCheckListBox, EmptyStr, ShowTagCountAction->Checked);
 		ListScrPanel->UpdateKnob();
 		TagEdit->Text = EmptyStr;
-		if (cnt>0) msgbox_OK(UnicodeString().sprintf(_T("%u€–Ú‚Ìƒ^ƒO‚ðíœ‚µ‚Ü‚µ‚½B"), cnt));
+		if (cnt>0) msgbox_OK(UnicodeString().sprintf(_T("%ué …ç›®ã®ã‚¿ã‚°ã‚’å‰Šé™¤ã—ã¾ã—ãŸã€‚"), cnt));
 	}
 }
 //---------------------------------------------------------------------------
-//ƒ^ƒOF‚ÌÝ’è
+//ã‚¿ã‚°è‰²ã®è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall TTagManDlg::SetColorActionExecute(TObject *Sender)
 {
@@ -587,7 +587,7 @@ void __fastcall TTagManDlg::RefTagColBtnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒO‚ÌŽg—p”‚ðƒJƒEƒ“ƒg
+//ã‚¿ã‚°ã®ä½¿ç”¨æ•°ã‚’ã‚«ã‚¦ãƒ³ãƒˆ
 //---------------------------------------------------------------------------
 void __fastcall TTagManDlg::CountTagActionExecute(TObject *Sender)
 {
@@ -600,7 +600,7 @@ void __fastcall TTagManDlg::CountTagActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒ^ƒO‚ÌŽg—p”‚ð•\Ž¦
+//ã‚¿ã‚°ã®ä½¿ç”¨æ•°ã‚’è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TTagManDlg::ShowTagCountActionExecute(TObject *Sender)
 {
@@ -615,26 +615,26 @@ void __fastcall TTagManDlg::ShowTagCountActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//‘¶Ý‚µ‚È‚¢€–Ú‚Ìƒf[ƒ^íœ
+//å­˜åœ¨ã—ãªã„é …ç›®ã®ãƒ‡ãƒ¼ã‚¿å‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TTagManDlg::TrimDataActionExecute(TObject *Sender)
 {
-	if (msgbox_Sure(LoadUsrMsg(USTR_DeleteQ, _T("‘¶Ý‚µ‚È‚¢€–Ú‚Ìƒf[ƒ^")), SureDelete)) {
+	if (msgbox_Sure(LoadUsrMsg(USTR_DeleteQ, _T("å­˜åœ¨ã—ãªã„é …ç›®ã®ãƒ‡ãƒ¼ã‚¿")), SureDelete)) {
 		cursor_HourGlass();
 		int cnt = usr_TAG->TrimData();
 		cursor_Default();
 
 		UnicodeString msg;
 		if (cnt>0)
-			msg.sprintf(_T("%u ŒÂ‚Ìƒf[ƒ^‚ðíœ‚µ‚Ü‚µ‚½B"), cnt);
+			msg.sprintf(_T("%u å€‹ã®ãƒ‡ãƒ¼ã‚¿ã‚’å‰Šé™¤ã—ã¾ã—ãŸã€‚"), cnt);
 		else
-			msg = "‘¶Ý‚µ‚È‚¢€–Ú‚Ìƒf[ƒ^‚Í‚ ‚è‚Ü‚¹‚ñ‚Å‚µ‚½B";
+			msg = "å­˜åœ¨ã—ãªã„é …ç›®ã®ãƒ‡ãƒ¼ã‚¿ã¯ã‚ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚";
 		msgbox_OK(msg);
 	}
 }
 
 //---------------------------------------------------------------------------
-//ŒŸõ“®ì‚ðƒRƒ}ƒ“ƒhƒtƒ@ƒCƒ‹‚Æ‚µ‚Ä•Û‘¶
+//æ¤œç´¢å‹•ä½œã‚’ã‚³ãƒžãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã¨ã—ã¦ä¿å­˜
 //---------------------------------------------------------------------------
 void __fastcall TTagManDlg::TagPopupMenuPopup(TObject *Sender)
 {
@@ -644,7 +644,7 @@ void __fastcall TTagManDlg::TagPopupMenuPopup(TObject *Sender)
 void __fastcall TTagManDlg::MakeNbtActionExecute(TObject *Sender)
 {
 	TAction *ap = (TAction *)Sender;
-	UserModule->PrepareSaveDlg(_T("ƒRƒ}ƒ“ƒhƒtƒ@ƒCƒ‹‚Æ‚µ‚Ä•Û‘¶"), F_FILTER_NBT, NULL, CmdFilePath);
+	UserModule->PrepareSaveDlg(_T("ã‚³ãƒžãƒ³ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã¨ã—ã¦ä¿å­˜"), F_FILTER_NBT, NULL, CmdFilePath);
 	UnicodeString fnam = UserModule->SaveDlgExecute();
 	if (!fnam.IsEmpty()) {
 		CmdFilePath = ExtractFilePath(fnam);
@@ -652,7 +652,7 @@ void __fastcall TTagManDlg::MakeNbtActionExecute(TObject *Sender)
 		UnicodeString kwd = TagEdit->Text;
 		if (!AndCheckBox->Checked) kwd = ReplaceStr(kwd, ";", "|");
 		UnicodeString tmp;
-		fbuf->Add(tmp.sprintf(_T(";ƒ^ƒOŒŸõ [%s]"), kwd.c_str()));
+		fbuf->Add(tmp.sprintf(_T(";ã‚¿ã‚°æ¤œç´¢ [%s]"), kwd.c_str()));
 		if (ap->Tag==1) fbuf->Add("ToOpposite");
 		fbuf->Add(tmp.sprintf(_T("FindTag_%s"), kwd.c_str()));
 		if (!saveto_TextUTF8(fnam, fbuf.get())) msgbox_ERR(USTR_FaildSave);
@@ -667,7 +667,7 @@ void __fastcall TTagManDlg::MakeNbtActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒXƒ|ƒCƒg
+//ã‚¹ãƒã‚¤ãƒˆ
 //---------------------------------------------------------------------------
 void __fastcall TTagManDlg::SpuitImageMouseDown(TObject *Sender, TMouseButton Button,
 	TShiftState Shift, int X, int Y)
@@ -675,7 +675,7 @@ void __fastcall TTagManDlg::SpuitImageMouseDown(TObject *Sender, TMouseButton Bu
 	TCheckListBox *lp = TagCheckListBox;
 	if (Button!=mbLeft || lp->ItemIndex==-1) return;
 
-	//ƒXƒEƒHƒbƒ`ƒuƒbƒN
+	//ã‚¹ã‚¦ã‚©ãƒƒãƒãƒ–ãƒƒã‚¯
 	SetCustomColToSwatch(UserModule->ColorDlg->CustomColors);
 	SwatchPanel->Visible = true;
 	SwatchPanel->BringToFront();

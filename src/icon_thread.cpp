@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒAƒCƒRƒ“Žæ“¾ƒXƒŒƒbƒh												//
+//  ã‚¢ã‚¤ã‚³ãƒ³å–å¾—ã‚¹ãƒ¬ãƒƒãƒ‰												//
 //----------------------------------------------------------------------//
 #include "Global.h"
 #include "AppDlg.h"
@@ -13,7 +13,7 @@
 #pragma package(smart_init)
 
 //---------------------------------------------------------------------------
-//ƒXƒŒƒbƒh‚Ì‰Šú‰»
+//ã‚¹ãƒ¬ãƒƒãƒ‰ã®åˆæœŸåŒ–
 //---------------------------------------------------------------------------
 __fastcall TGetIconThread::TGetIconThread(bool CreateSuspended) : TThread(CreateSuspended)
 {
@@ -23,7 +23,7 @@ __fastcall TGetIconThread::TGetIconThread(bool CreateSuspended) : TThread(Create
 }
 
 //---------------------------------------------------------------------------
-//Žæ“¾‚Ì’Ê’m
+//å–å¾—ã®é€šçŸ¥
 //---------------------------------------------------------------------------
 void __fastcall TGetIconThread::IconNotify()
 {
@@ -40,7 +40,7 @@ void __fastcall TGetIconThread::IconNotify()
 void __fastcall TGetIconThread::Execute()
 {
 	while (!Terminated) {
-		//ƒLƒƒƒVƒ…”§ŒÀ
+		//ã‚­ãƒ£ã‚·ãƒ¥æ•°åˆ¶é™
 		IconRWLock->BeginWrite();
 			while (CachedIcoList->Count > IconCache) {
 				delete (TIcon*)CachedIcoList->Objects[0];
@@ -48,7 +48,7 @@ void __fastcall TGetIconThread::Execute()
 			}
 		IconRWLock->EndWrite();
 
-		//Žæ“¾
+		//å–å¾—
 		int last_cnt = GetTickCount();
 		int i = 0, cnt = 0;
 		bool quit = false;
@@ -66,10 +66,10 @@ void __fastcall TGetIconThread::Execute()
 			IconRWLock->EndRead();
 			if (fnam.IsEmpty()) continue;
 
-			//ƒAƒCƒRƒ“‚ðŽæ“¾
+			//ã‚¢ã‚¤ã‚³ãƒ³ã‚’å–å¾—
 			HICON hIcon = get_file_SmallIcon(fnam);
 
-			//ƒLƒƒƒbƒVƒ…‚ÉÝ’è
+			//ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã«è¨­å®š
 			IconRWLock->BeginWrite();
 				int idx = CachedIcoList->IndexOf(fnam);
 				if (idx!=-1) {
@@ -80,7 +80,7 @@ void __fastcall TGetIconThread::Execute()
 				}
 			IconRWLock->EndWrite();
 
-			//200ms–ˆ‚É’Ê’m
+			//200msæ¯Žã«é€šçŸ¥
 			if (((int)GetTickCount() - last_cnt)>200 && cnt>0) {	//***
 				IconNotify();
 				last_cnt = GetTickCount();
@@ -88,7 +88,7 @@ void __fastcall TGetIconThread::Execute()
 			}
 		}
 
-		//Žc‚è‚ª‚ ‚ê‚Î’Ê’m
+		//æ®‹ã‚ŠãŒã‚ã‚Œã°é€šçŸ¥
 		if (cnt>0) IconNotify();
 
 		Sleep(50);

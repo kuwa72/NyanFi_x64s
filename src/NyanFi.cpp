@@ -96,13 +96,13 @@ int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR lpCmdLine, int)
 
 	StartedCount = GetTickCount();
 
-	ExePath = ReplaceStr(ExtractFilePath(Application->ExeName), "\\.\\", "\\");	//IDEÀs‚Ì‘Îô
+	ExePath = ReplaceStr(ExtractFilePath(Application->ExeName), "\\.\\", "\\");	//IDEå®Ÿè¡Œæ™‚ã®å¯¾ç­–
 
-	//‹N“®ƒIƒvƒVƒ‡ƒ“‚ğæ“¾
+	//èµ·å‹•æ™‚ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚’å–å¾—
 	std::unique_ptr<TStringList> opt_lst(new TStringList());
 	split_cmd_line(lpCmdLine, opt_lst.get());
 
-	//INIƒtƒ@ƒCƒ‹–¼‚Ìİ’è
+	//INIãƒ•ã‚¡ã‚¤ãƒ«åã®è¨­å®š
 	UnicodeString inam;
 	for (int i=0; i<opt_lst->Count; i++) {
 		UnicodeString lbuf = opt_lst->Strings[i];
@@ -113,7 +113,7 @@ int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR lpCmdLine, int)
 	}
 	if (inam.IsEmpty()) inam = ChangeFileExt(Application->ExeName, ".INI");
 
-	//“ñd‹N“®‚ª‹–‰Â‚³‚ê‚Ä‚¢‚é‚©‚ğƒ`ƒFƒbƒN
+	//äºŒé‡èµ·å‹•ãŒè¨±å¯ã•ã‚Œã¦ã„ã‚‹ã‹ã‚’ãƒã‚§ãƒƒã‚¯
 	try {
 		std::unique_ptr<TStringList> ibuf(new TStringList());
 		ibuf->LoadFromFile(inam, TEncoding::UTF8);
@@ -123,10 +123,10 @@ int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR lpCmdLine, int)
 		;
 	}
 
-	//ƒ~ƒ…[ƒeƒbƒNƒX‚É‚æ‚è“ñd‹N“®‚ğƒ`ƒFƒbƒN
+	//ãƒŸãƒ¥ãƒ¼ãƒ†ãƒƒã‚¯ã‚¹ã«ã‚ˆã‚ŠäºŒé‡èµ·å‹•ã‚’ãƒã‚§ãƒƒã‚¯
 	HANDLE hMutex = ::CreateMutex(NULL, FALSE, _T("NyanFi_is_running"));
 	if (GetLastError()==ERROR_ALREADY_EXISTS) {
-		//Šù‘¶—L‚è
+		//æ—¢å­˜æœ‰ã‚Š
 		HWND hPrimeWnd = get_PrimNyanWnd();
 		if (hPrimeWnd) {
 			IsPrimary = false;
@@ -137,7 +137,7 @@ int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR lpCmdLine, int)
 				if (::IsIconic(hPrimeWnd)) ::SendMessage(hPrimeWnd, WM_SYSCOMMAND, SC_RESTORE, 0);
 				::SetForegroundWindow(hPrimeWnd);
 			}
-			//ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“‚Ì“à—e‚ğ‘—‚é
+			//ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã®å†…å®¹ã‚’é€ã‚‹
 			if (cmdlen>0) {
 				COPYDATASTRUCT cd;
 				cd.dwData = 1;
@@ -150,17 +150,17 @@ int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR lpCmdLine, int)
 			}
 		}
 
-		if (!restart && !duplicate) {	//Ä‹N“®‚Å–³‚¢ê‡“ñd‹N“®‚¹‚¸‚ÉI—¹
+		if (!restart && !duplicate) {	//å†èµ·å‹•ã§ç„¡ã„å ´åˆäºŒé‡èµ·å‹•ã›ãšã«çµ‚äº†
 			::CloseHandle(hMutex);
 			return 0;
 		}
 	}
 
-	//Ä‹N“®‚Ì‚½‚ß‚ÉŠù‘¶‚ÌI—¹‚ğ‘Ò‚Â(Å‘å20•b)
+	//å†èµ·å‹•ã®ãŸã‚ã«æ—¢å­˜ã®çµ‚äº†ã‚’å¾…ã¤(æœ€å¤§20ç§’)
 	if (restart) {
 		bool ok = false;
 		for (int i=0; i<200 && !ok; i++) if (::WaitForSingleObject(hMutex, 100)==WAIT_OBJECT_0) ok = true;
-		if (!ok) {	//Šù‘¶‚ªI—¹‚³‚ê‚È‚¢‚Ì‚ÅI—¹
+		if (!ok) {	//æ—¢å­˜ãŒçµ‚äº†ã•ã‚Œãªã„ã®ã§çµ‚äº†
 			::CloseHandle(hMutex);
 			return 0;
 		}
@@ -174,7 +174,7 @@ int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR lpCmdLine, int)
 		Application->Initialize();
 		Application->MainFormOnTaskBar = true;
 
-		//ƒ‰ƒ“ƒhƒXƒP[ƒvƒ‚[ƒh‚ÉŒÅ’è
+		//ãƒ©ãƒ³ãƒ‰ã‚¹ã‚±ãƒ¼ãƒ—ãƒ¢ãƒ¼ãƒ‰ã«å›ºå®š
 		FUNC_SetDisplayAutoRotationPreferences lpfSetDisplayAutoRotationPreferences
 			= (FUNC_SetDisplayAutoRotationPreferences)::GetProcAddress(
 				::GetModuleHandle(_T("user32.dll")), "SetDisplayAutoRotationPreferences");
@@ -183,21 +183,21 @@ int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR lpCmdLine, int)
 				ORIENTATION_PREFERENCE_LANDSCAPE | ORIENTATION_PREFERENCE_LANDSCAPE_FLIPPED);
 		}
 
-		//INIƒtƒ@ƒCƒ‹‚Ì‰Šú‰»
+		//INIãƒ•ã‚¡ã‚¤ãƒ«ã®åˆæœŸåŒ–
 		IniFile = new UsrIniFile(inam);
 		TStyleManager::TrySetStyle(IniFile->ReadStrGen(_T("VclSytle"), "Windows"));
 		VclStyle = TStyleManager::ActiveStyle->Name;
 
-		//ƒXƒvƒ‰ƒbƒVƒ…•\¦
+		//ã‚¹ãƒ—ãƒ©ãƒƒã‚·ãƒ¥è¡¨ç¤º
 		if (IniFile->ReadBoolGen(_T("ShowSplash"))) {
 			SplashForm = new TSplashForm(Application);
-			//ƒo[ƒWƒ‡ƒ“
+			//ãƒãƒ¼ã‚¸ãƒ§ãƒ³
 			unsigned mj, mi, bl;
 			if (GetProductVersion(Application->ExeName, mj, mi, bl)) {
 				SplashForm->VerLabel->Caption =
 					UnicodeString().sprintf(_T("V%.2f (%s)"), (mj*100 + mi*10 + bl)/100.0, _T("x64 VCL Style"));
 				SplashForm->Show();
-				SplashForm->SetMsgLabel(_T("‰Šú‰»’†..."));
+				SplashForm->SetMsgLabel(_T("åˆæœŸåŒ–ä¸­..."));
 			}
 		}
 
@@ -246,10 +246,10 @@ int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR lpCmdLine, int)
 	::CloseHandle(hMutex);
 	OutDebugStr("  <= CloseHandle(hMutex)");
 
-	//Ä‹N“®—pƒoƒbƒ`ƒtƒ@ƒCƒ‹‚ğ‹N“®
+	//å†èµ·å‹•ç”¨ãƒãƒƒãƒãƒ•ã‚¡ã‚¤ãƒ«ã‚’èµ·å‹•
 	if (!RstBatName.IsEmpty()) {
 		if (!Execute_ex(RstBatName, EmptyStr, ExtractFilePath(Application->ExeName), "H")) {
-			msgbox_ERR("ƒoƒbƒ`ƒtƒ@ƒCƒ‹‚Ì‹N“®‚É¸”s‚µ‚Ü‚µ‚½B");
+			msgbox_ERR("ãƒãƒƒãƒãƒ•ã‚¡ã‚¤ãƒ«ã®èµ·å‹•ã«å¤±æ•—ã—ã¾ã—ãŸã€‚");
 		}
 	}
 

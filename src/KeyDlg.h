@@ -1,6 +1,6 @@
 /**
  * @file KeyDlg.h
- * @brief ƒL[Š„‚è“–‚Äˆê——
+ * @brief ã‚­ãƒ¼å‰²ã‚Šå½“ã¦ä¸€è¦§
  */
 //---------------------------------------------------------------------------
 #ifndef KeyDlgH
@@ -23,11 +23,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒL[Š„‚è“–‚Äˆê——
+ * @brief ã‚­ãƒ¼å‰²ã‚Šå½“ã¦ä¸€è¦§
  */
 class TKeyListDlg : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *HelpCmdAction;
 	TAction *MigemoAction;
 	TAction *ShowAllCmdAction;
@@ -88,7 +88,7 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall HelpCmdActionUpdate(TObject *Sender);
 	void __fastcall OptionItemClick(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	TStringList *CurList;
 	int  KeySortMode;
 	bool KeyHandled;
@@ -100,8 +100,8 @@ private:	// ƒ†[ƒU[éŒ¾
 
 	void __fastcall GetStrList(TStringList *lst);
 
-public:		// ƒ†[ƒU[éŒ¾
-	UsrScrollPanel *GridScrPanel;	//!< ƒVƒ“ƒvƒ‹ƒXƒNƒ[ƒ‹ƒo[
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
+	UsrScrollPanel *GridScrPanel;	//!< ã‚·ãƒ³ãƒ—ãƒ«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼
 
 	UnicodeString CommandStr;
 	bool ToFilter;

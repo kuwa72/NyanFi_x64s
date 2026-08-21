@@ -1,6 +1,6 @@
 /**
  * @file usr_highlight.h
- * @brief \•¶‹­’²•\¦
+ * @brief æ§‹æ–‡å¼·èª¿è¡¨ç¤º
  */
 //---------------------------------------------------------------------------
 #ifndef UsrHighlightH
@@ -11,17 +11,17 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief \•¶‹­’²•\¦’è‹`ƒtƒ@ƒCƒ‹
+ * @brief æ§‹æ–‡å¼·èª¿è¡¨ç¤ºå®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«
  */
 class HighlightFile : public UsrIniFile
 {
 private:
-	TDateTime HighlightTime;	//Œ»İ‚Ìƒ^ƒCƒ€ƒXƒ^ƒ“ƒv
+	TDateTime HighlightTime;	//ç¾åœ¨ã®ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—
 
 	void CheckValues();
 
 public:
-	UnicodeString CurSection;	//!< g—p’†‚ÌƒZƒNƒVƒ‡ƒ“
+	UnicodeString CurSection;	//!< ä½¿ç”¨ä¸­ã®ã‚»ã‚¯ã‚·ãƒ§ãƒ³
 	TStringList   *ErrorList;
 
 	HighlightFile(UnicodeString fnam);
@@ -33,58 +33,58 @@ public:
 	UnicodeString ReadRegExPtn(const _TCHAR *key);
 	TColor		  ReadColorRGB6H(const _TCHAR *key, TColor def = clBlack);
 
-	/** @brief ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚ª•Ï‰»‚µ‚Ä‚¢‚½‚çÄ“Ç‚İ‚İ */
+	/** @brief ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ãŒå¤‰åŒ–ã—ã¦ã„ãŸã‚‰å†èª­ã¿è¾¼ã¿ */
 	bool Recycle();
 
 	/**
-	 * @brief \•¶‹­’²•\¦’è‹`ƒtƒ@ƒCƒ‹‚©‚ç‘Î‰ƒZƒNƒVƒ‡ƒ“‚ğæ“¾
-	 * @param fnam ƒtƒ@ƒCƒ‹–¼
-	 * @param is_clip ƒNƒŠƒbƒvƒ{[ƒh
-	 * @param is_log ƒ^ƒXƒNƒƒO
-	 * @param is_h2t HTML¨TEXT•ÏŠ·ƒ‚[ƒh
-	 * @return true ƒZƒNƒVƒ‡ƒ“‚ğæ“¾
+	 * @brief æ§‹æ–‡å¼·èª¿è¡¨ç¤ºå®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰å¯¾å¿œã‚»ã‚¯ã‚·ãƒ§ãƒ³ã‚’å–å¾—
+	 * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+	 * @param is_clip ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰
+	 * @param is_log ã‚¿ã‚¹ã‚¯ãƒ­ã‚°
+	 * @param is_h2t HTMLâ†’TEXTå¤‰æ›ãƒ¢ãƒ¼ãƒ‰
+	 * @return true ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã‚’å–å¾—
 	 */
 	bool GetSection(UnicodeString fnam,
 			bool is_clip = false, bool is_log = false, bool is_h2t = false);
 
 	/**
-	 * @brief ƒRƒƒ“ƒg¯•Ê•¶š—ñ‚ğæ“¾
-	 * @param fnam ƒtƒ@ƒCƒ‹–¼
-	 * @param ln_lst 1sƒRƒƒ“ƒg
-	 * @param bgn_lst ƒuƒƒbƒNŠJn
-	 * @param end_lst ƒuƒƒbƒNI—¹
-	 * @param is_h2t HTML¨TEXT•ÏŠ·ƒ‚[ƒh
-	 * @param only_def ƒfƒtƒHƒ‹ƒg‚Ì‚İæ“¾
-	 * @return true ƒRƒƒ“ƒg¯•Ê•¶š—ñ‚ ‚è
+	 * @brief ã‚³ãƒ¡ãƒ³ãƒˆè­˜åˆ¥æ–‡å­—åˆ—ã‚’å–å¾—
+	 * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+	 * @param ln_lst 1è¡Œã‚³ãƒ¡ãƒ³ãƒˆ
+	 * @param bgn_lst ãƒ–ãƒ­ãƒƒã‚¯é–‹å§‹
+	 * @param end_lst ãƒ–ãƒ­ãƒƒã‚¯çµ‚äº†
+	 * @param is_h2t HTMLâ†’TEXTå¤‰æ›ãƒ¢ãƒ¼ãƒ‰
+	 * @param only_def ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã¿å–å¾—
+	 * @return true ã‚³ãƒ¡ãƒ³ãƒˆè­˜åˆ¥æ–‡å­—åˆ—ã‚ã‚Š
 	 */
 	bool GetCommentList(UnicodeString fnam,
 			TStringList *ln_lst, TStringList *bgn_lst, TStringList *end_lst,
 			bool is_h2t = false, bool only_def = false);
 
 	/**
-	 * @brief ƒŠƒXƒgƒ{ƒbƒNƒX‚Ìw’ès‚ÌƒRƒƒ“ƒgŠJnˆÊ’u‚ğæ“¾
-	 * @param fnam ƒtƒ@ƒCƒ‹–¼
-	 * @param lp ƒŠƒXƒgƒ{ƒbƒNƒX
-	 * @param idx ƒCƒ“ƒfƒbƒNƒX
-	 * @param en_mlt •¡”sƒRƒƒ“ƒg‚É‘Î‰
-	 * @return int ƒRƒƒ“ƒgŠJnˆÊ’u
+	 * @brief ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®æŒ‡å®šè¡Œã®ã‚³ãƒ¡ãƒ³ãƒˆé–‹å§‹ä½ç½®ã‚’å–å¾—
+	 * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+	 * @param lp ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹
+	 * @param idx ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
+	 * @param en_mlt è¤‡æ•°è¡Œã‚³ãƒ¡ãƒ³ãƒˆã«å¯¾å¿œ
+	 * @return int ã‚³ãƒ¡ãƒ³ãƒˆé–‹å§‹ä½ç½®
 	 */
 	int GetCommentPos(UnicodeString fnam, TListBox *lp, int idx, bool en_mlt = true);
 
 	/**
-	 * @brief Šg’£qˆË‘¶‚ÌƒfƒtƒHƒ‹ƒgŒ©o‚µƒpƒ^[ƒ“‚ğæ“¾
-	 * @param fext Šg’£q
-	 * @return UnicodeString ƒfƒtƒHƒ‹ƒgŒ©o‚µƒpƒ^[ƒ“
+	 * @brief æ‹¡å¼µå­ä¾å­˜ã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆè¦‹å‡ºã—ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’å–å¾—
+	 * @param fext æ‹¡å¼µå­
+	 * @return UnicodeString ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆè¦‹å‡ºã—ãƒ‘ã‚¿ãƒ¼ãƒ³
 	 */
 	UnicodeString GetDefHeadlnPtn(UnicodeString fext);
 
 	/**
-	 * @brief Œ©o‚µƒpƒ^[ƒ“‚ğæ“¾
+	 * @brief è¦‹å‡ºã—ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’å–å¾—
 	 * 
-	 * @param fnam ƒtƒ@ƒCƒ‹–¼
-	 * @param hl_lst Šg’£q‘Î‰Œ©o‚µƒŠƒXƒg
-	 * @param only_def ƒfƒtƒHƒ‹ƒg‚Ì‚İæ“¾
-	 * @return UnicodeString Œ©o‚µƒpƒ^[ƒ“
+	 * @param fnam ãƒ•ã‚¡ã‚¤ãƒ«å
+	 * @param hl_lst æ‹¡å¼µå­å¯¾å¿œè¦‹å‡ºã—ãƒªã‚¹ãƒˆ
+	 * @param only_def ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã¿å–å¾—
+	 * @return UnicodeString è¦‹å‡ºã—ãƒ‘ã‚¿ãƒ¼ãƒ³
 	 */
 	UnicodeString GetHeadlinePtn(UnicodeString fnam, TStringList *hl_lst = NULL, bool only_def = false);
 };
@@ -93,66 +93,66 @@ extern HighlightFile *UserHighlight;
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒfƒtƒHƒ‹ƒg‚Ì—\–ñŒêƒpƒ^[ƒ“‚ğæ“¾
- * @param fext Šg’£q
- * @param sns_case ‘å¬•¶š‚ğ‹æ•Ê
- * @param is_xml ‘ÎÛ‚ªXML
- * @param is_log ‘ÎÛ‚ªƒ^ƒXƒNƒƒO
- * @param is_h2t HTML¨TEXT•ÏŠ·ƒ‚[ƒh
- * @return UnicodeString —\–ñŒêƒpƒ^[ƒ“ 
+ * @brief ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®äºˆç´„èªãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’å–å¾—
+ * @param fext æ‹¡å¼µå­
+ * @param sns_case å¤§å°æ–‡å­—ã‚’åŒºåˆ¥
+ * @param is_xml å¯¾è±¡ãŒXML
+ * @param is_log å¯¾è±¡ãŒã‚¿ã‚¹ã‚¯ãƒ­ã‚°
+ * @param is_h2t HTMLâ†’TEXTå¤‰æ›ãƒ¢ãƒ¼ãƒ‰
+ * @return UnicodeString äºˆç´„èªãƒ‘ã‚¿ãƒ¼ãƒ³ 
  */
 UnicodeString GetDefReservedPtn(UnicodeString fext, bool &sns_case, bool is_xml, bool is_log, bool is_h2t);
 
 /**
- * @brief ƒfƒtƒHƒ‹ƒg‚Ì”’lƒpƒ^[ƒ“‚ğæ“¾
- * @param fext Šg’£q
- * @return UnicodeString ”’lƒpƒ^[ƒ“
+ * @brief ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®æ•°å€¤ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’å–å¾—
+ * @param fext æ‹¡å¼µå­
+ * @return UnicodeString æ•°å€¤ãƒ‘ã‚¿ãƒ¼ãƒ³
  */
 UnicodeString GetDefNumericPtn(UnicodeString fext);
 
 /**
- * @brief ƒfƒtƒHƒ‹ƒg‚ÌƒVƒ“ƒ{ƒ‹•¶š‚ğæ“¾
- * @param fext Šg’£q
- * @param is_xml ‘ÎÛ‚ªXML
- * @param is_h2t HTML¨TEXT•ÏŠ·ƒ‚[ƒh
+ * @brief ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã‚·ãƒ³ãƒœãƒ«æ–‡å­—ã‚’å–å¾—
+ * @param fext æ‹¡å¼µå­
+ * @param is_xml å¯¾è±¡ãŒXML
+ * @param is_h2t HTMLâ†’TEXTå¤‰æ›ãƒ¢ãƒ¼ãƒ‰
  * @return UnicodeString 
  */
 UnicodeString GetDefSymbolChars(UnicodeString fext, bool is_xml, bool is_h2t);
 
 /**
- * @brief ƒfƒtƒHƒ‹ƒg‚Ì•¶š—ñˆø—p•„
- * @param fext Šg’£q
- * @param[o] use_esc ƒGƒXƒP[ƒvƒV[ƒPƒ“ƒX—L‚è
- * @param is_xml ‘ÎÛ‚ªXML
- * @param is_ini ‘ÎÛ‚ªINIƒtƒ@ƒCƒ‹‘®
- * @param is_h2t HTML¨TEXT•ÏŠ·ƒ‚[ƒh
- * @return UnicodeString •¶š—ñˆø—p•„
+ * @brief ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®æ–‡å­—åˆ—å¼•ç”¨ç¬¦
+ * @param fext æ‹¡å¼µå­
+ * @param[o] use_esc ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã‚·ãƒ¼ã‚±ãƒ³ã‚¹æœ‰ã‚Š
+ * @param is_xml å¯¾è±¡ãŒXML
+ * @param is_ini å¯¾è±¡ãŒINIãƒ•ã‚¡ã‚¤ãƒ«æ›¸å¼
+ * @param is_h2t HTMLâ†’TEXTå¤‰æ›ãƒ¢ãƒ¼ãƒ‰
+ * @return UnicodeString æ–‡å­—åˆ—å¼•ç”¨ç¬¦
  */
 UnicodeString GetDefQuotChars(UnicodeString fext, bool &use_esc, bool is_xml, bool is_ini, bool is_h2t);
 
 /**
- * @brief ƒfƒtƒHƒ‹ƒg‚ÌŠÖ”ƒpƒ^[ƒ“‚ğæ“¾
- * @param fext Šg’£q
- * @param[out] name_ptn –¼‘Oæ“¾ƒpƒ^[ƒ“
- * @param is_h2t HTML¨TEXT•ÏŠ·ƒ‚[ƒh
- * @return UnicodeString ŠÖ”ƒpƒ^[ƒ“
+ * @brief ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®é–¢æ•°ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’å–å¾—
+ * @param fext æ‹¡å¼µå­
+ * @param[out] name_ptn åå‰å–å¾—ãƒ‘ã‚¿ãƒ¼ãƒ³
+ * @param is_h2t HTMLâ†’TEXTå¤‰æ›ãƒ¢ãƒ¼ãƒ‰
+ * @return UnicodeString é–¢æ•°ãƒ‘ã‚¿ãƒ¼ãƒ³
  */
 UnicodeString GetDefFunctionPtn(UnicodeString fext, UnicodeString &name_ptn, bool is_h2t);
 
 /**
- * @brief SearchPair ƒRƒ}ƒ“ƒh—pŒŸõƒpƒ^[ƒ“‚ğæ“¾
- * @param fext Šg’£q
- * @param[out] lst ŒŸõƒpƒ^[ƒ“‚ÌƒŠƒXƒg
- * @return true ŒŸõƒpƒ^[ƒ“‚ ‚è
+ * @brief SearchPair ã‚³ãƒãƒ³ãƒ‰ç”¨æ¤œç´¢ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’å–å¾—
+ * @param fext æ‹¡å¼µå­
+ * @param[out] lst æ¤œç´¢ãƒ‘ã‚¿ãƒ¼ãƒ³ã®ãƒªã‚¹ãƒˆ
+ * @return true æ¤œç´¢ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚ã‚Š
  */
 bool GetSearchPairPtn(UnicodeString fext, TStringList *lst);
 
 /**
- * @brief ƒfƒtƒHƒ‹ƒg‚Ì\•¶‹­’²•\¦’è‹`‚ğæ“¾
- * @param fext Šg’£q
- * @param[out] lst Œ‹‰ÊƒŠƒXƒg
- * @param hl_lst Šg’£q‘Î‰Œ©o‚µƒŠƒXƒg
- * @return true \•¶‹­’²•\¦’è‹`‚ ‚è
+ * @brief ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®æ§‹æ–‡å¼·èª¿è¡¨ç¤ºå®šç¾©ã‚’å–å¾—
+ * @param fext æ‹¡å¼µå­
+ * @param[out] lst çµæœãƒªã‚¹ãƒˆ
+ * @param hl_lst æ‹¡å¼µå­å¯¾å¿œè¦‹å‡ºã—ãƒªã‚¹ãƒˆ
+ * @return true æ§‹æ–‡å¼·èª¿è¡¨ç¤ºå®šç¾©ã‚ã‚Š
  */
 bool GetDefaultHighlight(UnicodeString fext, TStringList *lst, TStringList *hl_lst = NULL);
 //---------------------------------------------------------------------------

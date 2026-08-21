@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ƒfƒBƒŒƒNƒgƒŠ—š—ğ/ ƒXƒ^ƒbƒN											//
+//  ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå±¥æ­´/ ã‚¹ã‚¿ãƒƒã‚¯											//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -80,16 +80,16 @@ void __fastcall TDirHistoryDlg::FormKeyDown(TObject *Sender, WORD &Key, TShiftSt
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚ÌXV
+//ä¸€è¦§ã®æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TDirHistoryDlg::UpdateListBox(
-	int idx)	//ƒCƒ“ƒfƒbƒNƒX	(default = 0)
+	int idx)	//ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹	(default = 0)
 {
 	if (IsFindDirHist) UserModule->RepaintBlink();
 
 	ListBuff->Clear();
 
-	//ƒtƒBƒ‹ƒ^ŒŸõƒ‚[ƒh
+	//ãƒ•ã‚£ãƒ«ã‚¿æ¤œç´¢ãƒ¢ãƒ¼ãƒ‰
 	if (IsFindDirHist) {
 		if (!IncSeaWord.IsEmpty()) {
 			std::unique_ptr<TStringList> f_lst(new TStringList());
@@ -103,7 +103,7 @@ void __fastcall TDirHistoryDlg::UpdateListBox(
 			ListBuff->Assign(AllDirHistory);
 		}
 	}
-	//Å‹ßg‚Á‚½ƒfƒBƒŒƒNƒgƒŠ
+	//æœ€è¿‘ä½¿ã£ãŸãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 	else if (IdRecentDir) {
 		UnicodeString dnam = usr_SH->KnownGuidToPath(FOLDERID_Recent);
 		if (!dnam.IsEmpty()) {
@@ -121,7 +121,7 @@ void __fastcall TDirHistoryDlg::UpdateListBox(
 				else {
 					if (!dir_exists(lnam)) continue;
 				}
-				//~‡ƒ\[ƒg‚Ì‚½‚ß‚Ég—p“ú‚ğˆê“I‚É•t‰Á
+				//é™é †ã‚½ãƒ¼ãƒˆã®ãŸã‚ã«ä½¿ç”¨æ—¥æ™‚ã‚’ä¸€æ™‚çš„ã«ä»˜åŠ 
 				i_lst->Add(FormatDateTime("yyyymmddhhnnss", get_file_age(fnam))
 							+ "\t\"" + IncludeTrailingPathDelimiter(lnam) + "\",\"" + fnam + "\"");
 			}
@@ -132,13 +132,13 @@ void __fastcall TDirHistoryDlg::UpdateListBox(
 			}
 		}
 	}
-	//’Êíƒ‚[ƒh
+	//é€šå¸¸ãƒ¢ãƒ¼ãƒ‰
 	else {
 		TStringList *h_lst = IsDirStack? DirStack : IsAllDirHist? AllDirHistory : get_DirHistory(CurTabIndex, RefListTag);
 		if (h_lst) ListBuff->Assign(h_lst);
 	}
 
-	//ƒŠƒXƒgƒ{ƒbƒNƒX‚ÉŠ„‚è“–‚Ä(‰¼‘z)
+	//ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã«å‰²ã‚Šå½“ã¦(ä»®æƒ³)
 	TListBox *lp = DirHistListBox;
 	int top = lp->TopIndex;
 	lp->Count = ListBuff->Count;
@@ -147,29 +147,29 @@ void __fastcall TDirHistoryDlg::UpdateListBox(
 	lp->SetFocus();
 	ListScrPanel->UpdateKnob();
 
-	//ƒ^ƒCƒgƒ‹
+	//ã‚¿ã‚¤ãƒˆãƒ«
 	UnicodeString tit;
 	if (IsDirStack) {
-		tit = "ƒfƒBƒŒƒNƒgƒŠEƒXƒ^ƒbƒN";
+		tit = "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãƒ»ã‚¹ã‚¿ãƒƒã‚¯";
 	}
 	else if (IsFindDirHist) {
-		tit.sprintf(_T("ƒfƒBƒŒƒNƒgƒŠ—š—ğ - ‘S‘ÌŒŸõ (%u/%u)"), ListBuff->Count, AllDirHistory->Count);
+		tit.sprintf(_T("ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå±¥æ­´ - å…¨ä½“æ¤œç´¢ (%u/%u)"), ListBuff->Count, AllDirHistory->Count);
 	}
 	else if (IsAllDirHist) {
-		tit = "ƒfƒBƒŒƒNƒgƒŠ—š—ğ - ‘S‘Ì";
+		tit = "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå±¥æ­´ - å…¨ä½“";
 	}
 	else if (IdRecentDir) {
-		tit = "Å‹ßg‚Á‚½ƒfƒBƒŒƒNƒgƒŠ";
+		tit = "æœ€è¿‘ä½¿ã£ãŸãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª";
 	}
 	else {
-		tit.sprintf(_T("ƒfƒBƒŒƒNƒgƒŠ—š—ğ - %s"), get_LRUD_str(RefListTag).c_str());
-		if (RefListTag!=CurListTag) tit += " (”½‘Î‘¤‚ğQÆ)";
+		tit.sprintf(_T("ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå±¥æ­´ - %s"), get_LRUD_str(RefListTag).c_str());
+		if (RefListTag!=CurListTag) tit += " (åå¯¾å´ã‚’å‚ç…§)";
 	}
 	Caption = tit;
 }
 
 //---------------------------------------------------------------------------
-//€–Ú‚Ì•`‰æ
+//é …ç›®ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TDirHistoryDlg::DirHistListBoxDrawItem(TWinControl *Control, int Index,
 	TRect &Rect, TOwnerDrawState State)
@@ -210,7 +210,7 @@ void __fastcall TDirHistoryDlg::DirHistListBoxDrawItem(TWinControl *Control, int
 		PathNameOut(lbuf, NULL, false, cv, xp, yp);
 	}
 
-	//ƒJ[ƒ\ƒ‹
+	//ã‚«ãƒ¼ã‚½ãƒ«
 	draw_ListCursor2(lp, Rect, Index, State);
 }
 
@@ -221,7 +221,7 @@ void __fastcall TDirHistoryDlg::DirHistListBoxData(TWinControl *Control, int Ind
 }
 
 //---------------------------------------------------------------------------
-//ƒL[‘€ì
+//ã‚­ãƒ¼æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TDirHistoryDlg::DirHistListBoxKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -240,14 +240,14 @@ void __fastcall TDirHistoryDlg::DirHistListBoxKeyDown(TObject *Sender, WORD &Key
 		TListBox *lp = (TListBox*)Sender;
 		UnicodeString cur_dnam = get_csv_item(ListBoxGetStr(lp), 0);
 
-		//Šm’è
+		//ç¢ºå®š
 		if ((!IsFindDirHist && is_Num0to9(KeyStr)) || equal_ENTER(KeyStr)) {
 			int idx = is_Num0to9(KeyStr)? ((KeyStr.ToIntDef(0) + 9)%10) : lp->ItemIndex;
 			if (idx<0 || idx>=lp->Count) SkipAbort();
 			UnicodeString dnam = get_csv_item(lp->Items->Strings[idx], 0);
-			//ƒfƒBƒŒƒNƒgƒŠ
+			//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 			if (ends_PathDlmtr(dnam)) {
-				if (!is_drive_accessible(dnam)) TextAbort(_T("ƒhƒ‰ƒCƒu‚ª–³Œø‚Å‚·B"));
+				if (!is_drive_accessible(dnam)) TextAbort(_T("ãƒ‰ãƒ©ã‚¤ãƒ–ãŒç„¡åŠ¹ã§ã™ã€‚"));
 
 				if (dir_exists(dnam)) {
 					bool is_cur = (RefListTag==CurListTag);
@@ -257,7 +257,7 @@ void __fastcall TDirHistoryDlg::DirHistListBoxKeyDown(TObject *Sender, WORD &Key
 				}
 				else {
 					msgbox_WARN(LoadUsrMsg(USTR_NotFound));
-					//‘¶İ‚µ‚È‚¢ƒfƒBƒŒƒNƒgƒŠ‚ğíœ
+					//å­˜åœ¨ã—ãªã„ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’å‰Šé™¤
 					if (h_lst) {
 						int i = 0;
 						while (i<h_lst->Count) {
@@ -267,13 +267,13 @@ void __fastcall TDirHistoryDlg::DirHistListBoxKeyDown(TObject *Sender, WORD &Key
 					}
 				}
 			}
-			//ƒ[ƒNƒŠƒXƒg
+			//ãƒ¯ãƒ¼ã‚¯ãƒªã‚¹ãƒˆ
 			else if (test_NwlExt(get_extension(dnam))) {
 				WorkListName = dnam;
 				ModalResult  = mrOk;
 			}
 		}
-		//ƒtƒBƒ‹ƒ^ŒŸõ
+		//ãƒ•ã‚£ãƒ«ã‚¿æ¤œç´¢
 		else if (IsFindDirHist && update_IncSeaWord(IncSeaWord, KeyStr)) {
 			UpdateListBox();
 		}
@@ -285,12 +285,12 @@ void __fastcall TDirHistoryDlg::DirHistListBoxKeyDown(TObject *Sender, WORD &Key
 			IsMigemo = SameText(cmd_S, "MigemoMode")? (!IsMigemo && usr_Migemo->DictReady) : false;
 			UpdateListBox();
 		}
-		//ƒJ[ƒ\ƒ‹ˆÚ“®
+		//ã‚«ãƒ¼ã‚½ãƒ«ç§»å‹•
 		else if (SameText(cmd_S, "IncSearchUp"))	ListBoxCursorUp(lp);
 		else if (SameText(cmd_S, "IncSearchDown"))	ListBoxCursorDown(lp);
 		else if (MovListBoxFromFilter(lp, KeyStr))	;
 		else if	(ExeCmdListBox(lp, cmd_F))			;
-		//—š—ğ€–Ú‚Ìíœ
+		//å±¥æ­´é …ç›®ã®å‰Šé™¤
 		else if (equal_DEL(KeyStr) || SameText(cmd_F, "Delete")) {
 			if (lp->ItemIndex==-1) SkipAbort();
 			if (IsFindDirHist) {
@@ -309,7 +309,7 @@ void __fastcall TDirHistoryDlg::DirHistListBoxKeyDown(TObject *Sender, WORD &Key
 			}
 			UpdateListBox(lp->ItemIndex);
 		}
-		//”½‘Î‘¤‚Ì—š—ğ‚ğQÆ
+		//åå¯¾å´ã®å±¥æ­´ã‚’å‚ç…§
 		else if (!IsFindDirHist && is_ToRightOpe(KeyStr, cmd_F)) {
 			if (h_ptr && RefListTag==0) {
 				RefListTag = 1;
@@ -324,11 +324,11 @@ void __fastcall TDirHistoryDlg::DirHistListBoxKeyDown(TObject *Sender, WORD &Key
 				if (h_p) UpdateListBox(*h_p);
 			}
 		}
-		//ƒvƒƒpƒeƒB
+		//ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 		else if (SameText(cmd_F, "PropertyDlg")) PropertyAction->Execute();
-		//‰EƒNƒŠƒbƒNƒƒjƒ…[
+		//å³ã‚¯ãƒªãƒƒã‚¯ãƒ¡ãƒ‹ãƒ¥ãƒ¼
 		else if (contained_wd_i(KeysStr_Popup, KeyStr))	show_PopupMenu(lp);
-		//•Â‚¶‚é
+		//é–‰ã˜ã‚‹
 		else if (SameText(cmd_F, "ReturnList")) ModalResult = mrCancel;
 		else handled = false;
 	}
@@ -343,11 +343,11 @@ void __fastcall TDirHistoryDlg::DirHistListBoxKeyDown(TObject *Sender, WORD &Key
 //---------------------------------------------------------------------------
 void __fastcall TDirHistoryDlg::DirHistListBoxKeyPress(TObject *Sender, System::WideChar &Key)
 {
-	//ƒCƒ“ƒNƒŠƒƒ“ƒ^ƒ‹ƒT[ƒ`‚ğ‰ñ”ğ
+	//ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ã‚¿ãƒ«ã‚µãƒ¼ãƒã‚’å›é¿
 	if (_istalnum(Key) || is_KeyDown(VK_CONTROL)) Key = 0;
 }
 //---------------------------------------------------------------------------
-//ƒ}ƒEƒX‘€ì
+//ãƒã‚¦ã‚¹æ“ä½œ
 //---------------------------------------------------------------------------
 void __fastcall TDirHistoryDlg::DirHistListBoxDblClick(TObject *Sender)
 {
@@ -355,19 +355,19 @@ void __fastcall TDirHistoryDlg::DirHistListBoxDblClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//“ü—Í—“‚Ì•`‰æ
+//å…¥åŠ›æ¬„ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TDirHistoryDlg::InpPaintBoxPaint(TObject *Sender)
 {
 	draw_InputPaintBox((TPaintBox*)Sender, (IsMigemo? "Migemo: " : "") + IncSeaWord);
 }
 //---------------------------------------------------------------------------
-//w’èƒfƒBƒŒƒNƒgƒŠˆÈ‰º‚ğ‘S‘Ì—š—ğ‚É’Ç‰Á
+//æŒ‡å®šãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä»¥ä¸‹ã‚’å…¨ä½“å±¥æ­´ã«è¿½åŠ 
 //---------------------------------------------------------------------------
 void __fastcall TDirHistoryDlg::AddDirsCore(
 	UnicodeString pnam,
 	TStrings *lst,
-	TStringDynArray ex_lst)	//œŠOƒŠƒXƒg	(ŠÂ‹«•Ï”A%ExePath% ‘Î‰)
+	TStringDynArray ex_lst)	//é™¤å¤–ãƒªã‚¹ãƒˆ	(ç’°å¢ƒå¤‰æ•°ã€%ExePath% å¯¾å¿œ)
 {
 	if (pnam.IsEmpty() || !dir_exists(pnam)) return;
 
@@ -378,7 +378,7 @@ void __fastcall TDirHistoryDlg::AddDirsCore(
 			if ((sr.Attr & faDirectory)==0 || ContainsStr("..", sr.Name)) continue;
 			UnicodeString snam = pnam + sr.Name;
 
-			//œŠO
+			//é™¤å¤–
 			for (int i=0; i<ex_lst.Length && !snam.IsEmpty(); i++) {
 				if (ex_lst[i].IsEmpty()) continue;
 				if (ContainsText(snam, cv_env_str(ex_lst[i]))) snam = EmptyStr;
@@ -390,7 +390,7 @@ void __fastcall TDirHistoryDlg::AddDirsCore(
 			HintLabel2->Invalidate();
 
 			AddDirsCore(snam, lst, ex_lst);
-			if (is_KeyPress_ESC()) FindAborted = true;	//’†’f
+			if (is_KeyPress_ESC()) FindAborted = true;	//ä¸­æ–­
 		} while(!FindAborted && FindNext(sr)==0);
 		FindClose(sr);
 	}
@@ -399,14 +399,14 @@ void __fastcall TDirHistoryDlg::AddDirsCore(
 void __fastcall TDirHistoryDlg::AddDirsActionExecute(TObject *Sender)
 {
 	UnicodeString dnam = CurPathName;
-	if (UserModule->SelectDirEx(_T("‘S‘Ì—š—ğ‚É’Ç‰Á‚·‚éƒfƒBƒŒƒNƒgƒŠ‚ğ‘I‘ğ"), dnam)) {
+	if (UserModule->SelectDirEx(_T("å…¨ä½“å±¥æ­´ã«è¿½åŠ ã™ã‚‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’é¸æŠ"), dnam)) {
 		FindBusy	= true;
 		FindAborted = false;
 
-		//ŒŸõ’†ƒqƒ“ƒg•\¦‚Ìİ’è
+		//æ¤œç´¢ä¸­ãƒ’ãƒ³ãƒˆè¡¨ç¤ºã®è¨­å®š
 		AssignScaledFont(HintLabel1, HintFont);
 		AssignScaledFont(HintLabel2, HintFont);
-		HintLabel1->Caption   = "ŒŸõ’†...@ESCƒL[‚Å’†’f";
+		HintLabel1->Caption   = "æ¤œç´¢ä¸­...ã€€ESCã‚­ãƒ¼ã§ä¸­æ–­";
 		HintLabel2->Caption   = EmptyStr;
 		HintPanel->Color	  = col_bgHint;
 		HintPanel->BoundsRect = DirHistListBox->ClientRect.CenteredRect(HintPanel->ClientRect);
@@ -419,7 +419,7 @@ void __fastcall TDirHistoryDlg::AddDirsActionExecute(TObject *Sender)
 		sbuf->Add(IncludeTrailingPathDelimiter(dnam));
 		AddDirsCore(dnam, sbuf.get(), ex_lst);
 
-		HintLabel1->Caption = "’Ç‰Á’†...@ESCƒL[‚Å’†’f";
+		HintLabel1->Caption = "è¿½åŠ ä¸­...ã€€ESCã‚­ãƒ¼ã§ä¸­æ–­";
 		HintLabel2->Caption = "0";
 		int cnt = 0;
 		UnicodeString all_buf = AllDirHistory->Text.UpperCase();
@@ -431,7 +431,7 @@ void __fastcall TDirHistoryDlg::AddDirsActionExecute(TObject *Sender)
 				HintLabel2->Caption = ++cnt;
 				HintLabel2->Invalidate();
 			}
-			if (is_KeyPress_ESC()) FindAborted = true;		//’†’f
+			if (is_KeyPress_ESC()) FindAborted = true;		//ä¸­æ–­
 		}
 
 		AllDirHistory->Sort();
@@ -444,7 +444,7 @@ void __fastcall TDirHistoryDlg::AddDirsActionExecute(TObject *Sender)
 		if (FindAborted)
 			msgbox_WARN(LoadUsrMsg(USTR_Canceled));
 		else
-			msgbox_OK(UnicodeString().sprintf(_T("%uŒÂ‚ÌƒfƒBƒŒƒNƒgƒŠ‚ğ’Ç‰Á‚µ‚Ü‚µ‚½B"), cnt));
+			msgbox_OK(UnicodeString().sprintf(_T("%uå€‹ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’è¿½åŠ ã—ã¾ã—ãŸã€‚"), cnt));
 	}
 }
 //---------------------------------------------------------------------------
@@ -456,16 +456,16 @@ void __fastcall TDirHistoryDlg::AddDirsActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//—š—ğ‚ğ‚·‚×‚Äíœ
+//å±¥æ­´ã‚’ã™ã¹ã¦å‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TDirHistoryDlg::ClearAllActionExecute(TObject *Sender)
 {
 	if (IsAllDirHist || IsFindDirHist) {
-		if (msgbox_Sure(LoadUsrMsg(USTR_DelHistoryQ, _T("‘S‘Ì"))))
+		if (msgbox_Sure(LoadUsrMsg(USTR_DelHistoryQ, _T("å…¨ä½“"))))
 			AllDirHistory->Clear();
 	}
 	else if (!IsDirStack) {
-		if (msgbox_Sure(LoadUsrMsg(USTR_DelHistoryQ, get_LRUD_str() + "‘¤")))
+		if (msgbox_Sure(LoadUsrMsg(USTR_DelHistoryQ, get_LRUD_str() + "å´")))
 			clear_DirHistory(CurTabIndex, CurListTag);
 	}
 	UpdateListBox();
@@ -475,14 +475,14 @@ void __fastcall TDirHistoryDlg::ClearAllActionUpdate(TObject *Sender)
 {
 	TAction *ap = (TAction*)Sender;
 	ap->Enabled = !IsDirStack && !FindBusy;
-	ap->Caption = (IsAllDirHist || IsFindDirHist)? "‘S‘Ì—š—ğ‚ğ‚·‚×‚Äíœ(&A)" : "ƒJƒŒƒ“ƒg‘¤‚Ì—š—ğ‚ğ‚·‚×‚Äíœ(&A)";
+	ap->Caption = (IsAllDirHist || IsFindDirHist)? "å…¨ä½“å±¥æ­´ã‚’ã™ã¹ã¦å‰Šé™¤(&A)" : "ã‚«ãƒ¬ãƒ³ãƒˆå´ã®å±¥æ­´ã‚’ã™ã¹ã¦å‰Šé™¤(&A)";
 }
 //---------------------------------------------------------------------------
-//i‚è‚İ•\¦’†‚Ì—š—ğ‚ğíœ
+//çµã‚Šè¾¼ã¿è¡¨ç¤ºä¸­ã®å±¥æ­´ã‚’å‰Šé™¤
 //---------------------------------------------------------------------------
 void __fastcall TDirHistoryDlg::ClearFltActionExecute(TObject *Sender)
 {
-	if (msgbox_Sure(LoadUsrMsg(USTR_DelHistoryQ, _T("i‚è‚İ•\¦’†")))) {
+	if (msgbox_Sure(LoadUsrMsg(USTR_DelHistoryQ, _T("çµã‚Šè¾¼ã¿è¡¨ç¤ºä¸­")))) {
 		cursor_HourGlass();
 		for (int i=0; i<ListBuff->Count; i++) {
 			UnicodeString dnam = get_csv_item(ListBuff->Strings[i], 0);
@@ -503,7 +503,7 @@ void __fastcall TDirHistoryDlg::ClearFltActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ˆê——‚ğƒRƒs[
+//ä¸€è¦§ã‚’ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TDirHistoryDlg::CopyAllActionExecute(TObject *Sender)
 {
@@ -521,7 +521,7 @@ void __fastcall TDirHistoryDlg::CopyAllActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒfƒBƒŒƒNƒgƒŠ‚ÌƒvƒƒpƒeƒB
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 //---------------------------------------------------------------------------
 void __fastcall TDirHistoryDlg::PropertyActionExecute(TObject *Sender)
 {

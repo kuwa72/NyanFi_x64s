@@ -1,6 +1,6 @@
 /**
  * @file GraphFrm.h
- * @brief ƒOƒ‰ƒt•\¦
+ * @brief ã‚°ãƒ©ãƒ•è¡¨ç¤º
  */
 //---------------------------------------------------------------------------
 #ifndef GraphFrmH
@@ -18,11 +18,11 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒOƒ‰ƒt•\¦
+ * @brief ã‚°ãƒ©ãƒ•è¡¨ç¤º
  */
 class TGraphForm : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	TAction *ShowAveAction;
 	TAction *ShowMaxAction;
 	TAction *ShowMinAction;
@@ -46,17 +46,17 @@ __published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	void __fastcall CopyImgItemClick(TObject *Sender);
 	void __fastcall ShowInfActionExecute(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	long double MinItemValue;
 	long double MaxItemValue;
 	long double AveItemValue;
-	int f_Width;	//¬”•”‚Ì•\¦Œ…”
+	int f_Width;	//å°æ•°éƒ¨ã®è¡¨ç¤ºæ¡æ•°
 
 	int x_Margin;
 
 	TStringList *ValueList;
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	TStringList *DataList;
 	int  CsvCol;
 	bool TopIsHeader;

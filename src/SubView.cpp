@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  ÉTÉuÉrÉÖÅ[ÉA														//
+//  „Çµ„Éñ„Éì„É•„Éº„Ç¢														//
 //----------------------------------------------------------------------//
 #include "usr_wic.h"
 #include "usr_id3.h"
@@ -29,7 +29,7 @@ void __fastcall TSubViewer::FormCreate(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TSubViewer::FormShow(TObject *Sender)
 {
-	//ÉtÉ@ÉCÉãèÓïÒÉ_ÉCÉAÉçÉOÇ∆èdÇ»ÇÁÇ»Ç¢ÇÊÇ§Ç…èâä˙âª
+	//„Éï„Ç°„Ç§„É´ÊÉÖÂ†±„ÉÄ„Ç§„Ç¢„É≠„Ç∞„Å®Èáç„Å™„Çâ„Å™„ÅÑ„Çà„ÅÜ„Å´ÂàùÊúüÂåñ
 	if (formFileInf && !IniFile->KeyExists(SCT_General, "SubViewerFILeft")) {
 		Top  = FileInfoDlg->Top;
 		Left = FileInfoDlg->Left + FileInfoDlg->Width;
@@ -71,7 +71,7 @@ void __fastcall TSubViewer::FormResize(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ÉYÅ[ÉÄî{ó¶(%)ÇéÊìæ
+//„Ç∫„Éº„É†ÂÄçÁéá(%)„ÇíÂèñÂæó
 //---------------------------------------------------------------------------
 double __fastcall TSubViewer::GetZoomRatio()
 {
@@ -83,7 +83,7 @@ double __fastcall TSubViewer::GetZoomRatio()
 }
 
 //---------------------------------------------------------------------------
-//âÊëúÇÃï`âÊ
+//ÁîªÂÉè„ÅÆÊèèÁîª
 //---------------------------------------------------------------------------
 void __fastcall TSubViewer::DrawImage(UnicodeString fnam)
 {
@@ -131,7 +131,7 @@ void __fastcall TSubViewer::DrawImage(UnicodeString fnam)
 					if (test_ExifExt(fext)) {
 						int ori = 0;
 						ex_str	= get_ExifInfStr(fnam, &ori);
-						//âÒì]
+						//ÂõûËª¢
 						int rot = (ori==6)? 1 : (ori==3)? 2 : (ori==8)? 3 : 0;
 						if (RotViewImg && rot>0 && res!=LOADED_BY_WIC) WIC_rotate_image(bmp.get(), rot);
 					}
@@ -169,17 +169,17 @@ void __fastcall TSubViewer::DrawImage(UnicodeString fnam)
 			FileName = fnam;
 		}
 
-		//ÉTÉCÉY
-		if (ex_str.IsEmpty() || ex_str.Pos(" Å~ ")==0) {
+		//„Çµ„Ç§„Ç∫
+		if (ex_str.IsEmpty() || ex_str.Pos(" √ó ")==0) {
 			ins_sep_cat(ex_str, "  ", get_wd_x_hi_str(Image1->Picture->Width, Image1->Picture->Height));
 		}
 
 		if (isClip)
-			TitleInf.sprintf(_T("ÉNÉäÉbÉvÉ{Å[Éh  %s"), ex_str.c_str());
+			TitleInf.sprintf(_T("„ÇØ„É™„ÉÉ„Éó„Éú„Éº„Éâ  %s"), ex_str.c_str());
 		else
 			TitleInf.sprintf(_T("%s  %s"), ExtractFileName(FileName).c_str(), ex_str.c_str());
 
-		//ï\é¶î{ó¶
+		//Ë°®Á§∫ÂÄçÁéá
 		ZoomInf.sprintf(_T("  (%4.1f%%)"), GetZoomRatio());
 
 		Caption = TitleInf + ZoomInf;
@@ -193,7 +193,7 @@ void __fastcall TSubViewer::DrawImage(UnicodeString fnam)
 }
 
 //---------------------------------------------------------------------------
-//âÒì]
+//ÂõûËª¢
 //---------------------------------------------------------------------------
 void __fastcall TSubViewer::RotateImage(int rn)
 {
@@ -206,7 +206,7 @@ void __fastcall TSubViewer::RotateImage(int rn)
 }
 
 //---------------------------------------------------------------------------
-//ÉçÉbÉN
+//„É≠„ÉÉ„ÇØ
 //---------------------------------------------------------------------------
 void __fastcall TSubViewer::LockImage()
 {
@@ -232,14 +232,14 @@ void __fastcall TSubViewer::FormClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//É|ÉbÉvÉAÉbÉvÉÅÉjÉÖÅ[
+//„Éù„ÉÉ„Éó„Ç¢„ÉÉ„Éó„É°„Éã„É•„Éº
 //---------------------------------------------------------------------------
 void __fastcall TSubViewer::PopupMenu1Popup(TObject *Sender)
 {
 	LockItem->Checked = ImgLocked;
 }
 //---------------------------------------------------------------------------
-//îwåiêFÇê›íË
+//ËÉåÊôØËâ≤„ÇíË®≠ÂÆö
 //---------------------------------------------------------------------------
 void __fastcall TSubViewer::BgColItemClick(TObject *Sender)
 {
@@ -253,7 +253,7 @@ void __fastcall TSubViewer::BgColItemClick(TObject *Sender)
 	Application->MainForm->SetFocus();
 }
 //---------------------------------------------------------------------------
-//ÉçÉbÉN
+//„É≠„ÉÉ„ÇØ
 //---------------------------------------------------------------------------
 void __fastcall TSubViewer::LockItemClick(TObject *Sender)
 {
@@ -263,7 +263,7 @@ void __fastcall TSubViewer::LockItemClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//90ìxâÒì]
+//90Â∫¶ÂõûËª¢
 //---------------------------------------------------------------------------
 void __fastcall TSubViewer::RotateActionExecute(TObject *Sender)
 {

@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  É^ÉOñºÇÃåüçı														//
+//  „Çø„Ç∞Âêç„ÅÆÊ§úÁ¥¢														//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -41,7 +41,7 @@ void __fastcall TFindTagForm::FormShow(TObject *Sender)
 
 	ListSplitter->Color = get_SplitterCol();
 
-	UnicodeString tit = "É^ÉOñºåüçı";
+	UnicodeString tit = "„Çø„Ç∞ÂêçÊ§úÁ¥¢";
 	if (!FileName.IsEmpty()) tit.cat_sprintf(_T(" - %s"), ExtractFileName(FileName).c_str());
 	Caption = tit;
 
@@ -136,7 +136,7 @@ void __fastcall TFindTagForm::UpdateList()
 		MaxTagWidth = std::max(lp->Canvas->TextWidth(ResListBuf->Strings[i]), MaxTagWidth);
 	cursor_Default();
 
-	//ÉäÉXÉgÉ{ÉbÉNÉXÇ…äÑÇËìñÇƒ(âºëz)
+	//„É™„Çπ„Éà„Éú„ÉÉ„ÇØ„Çπ„Å´Ââ≤„ÇäÂΩì„Å¶(‰ªÆÊÉ≥)
 	lp->Count = ResListBuf->Count;
 	if (lp->Count>0) lp->ItemIndex = 0;
 	lp->Invalidate();
@@ -147,7 +147,7 @@ void __fastcall TFindTagForm::UpdateList()
 }
 
 //---------------------------------------------------------------------------
-//ì¸óÕóìÇÃï`âÊ
+//ÂÖ•ÂäõÊ¨Ñ„ÅÆÊèèÁîª
 //---------------------------------------------------------------------------
 void __fastcall TFindTagForm::InpPaintBoxPaint(TObject *Sender)
 {
@@ -155,7 +155,7 @@ void __fastcall TFindTagForm::InpPaintBoxPaint(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//àÍóóÇÃï`âÊ
+//‰∏ÄË¶ß„ÅÆÊèèÁîª
 //---------------------------------------------------------------------------
 void __fastcall TFindTagForm::TagsListBoxDrawItem(TWinControl *Control, int Index,
 	TRect &Rect, TOwnerDrawState State)
@@ -193,7 +193,7 @@ void __fastcall TFindTagForm::TagsListBoxDrawItem(TWinControl *Control, int Inde
 		cv->TextOut(xp, yp, lbuf);
 	}
 
-	//ÉJÅ[É\Éã
+	//„Ç´„Éº„ÇΩ„É´
 	draw_ListCursor2(lp, Rect, Index, State);
 }
 //---------------------------------------------------------------------------
@@ -220,7 +220,7 @@ void __fastcall TFindTagForm::TagsListBoxClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ämíË
+//Á¢∫ÂÆö
 //---------------------------------------------------------------------------
 void __fastcall TFindTagForm::TagsListBoxDblClick(TObject *Sender)
 {
@@ -230,7 +230,7 @@ void __fastcall TFindTagForm::TagsListBoxDblClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//É^ÉOñºàÍóóÇ≈ÇÃÉLÅ[ëÄçÏ
+//„Çø„Ç∞Âêç‰∏ÄË¶ß„Åß„ÅÆ„Ç≠„ÉºÊìç‰Ωú
 //---------------------------------------------------------------------------
 void __fastcall TFindTagForm::TagsListBoxKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -284,12 +284,12 @@ void __fastcall TFindTagForm::TagsListBoxKeyDown(TObject *Sender, WORD &Key, TSh
 //---------------------------------------------------------------------------
 void __fastcall TFindTagForm::TagsListBoxKeyPress(TObject *Sender, System::WideChar &Key)
 {
-	//ÉCÉìÉNÉäÉÅÉìÉ^ÉãÉTÅ[É`ÇâÒî
+	//„Ç§„É≥„ÇØ„É™„É°„É≥„Çø„É´„Çµ„Éº„ÉÅ„ÇíÂõûÈÅø
 	if (_istalnum(Key) || Key==VK_SPACE || Key==VK_RETURN) Key = 0;
 }
 
 //---------------------------------------------------------------------------
-//ÉtÉ@ÉCÉãñºÉäÉXÉgÇÃï`âÊ
+//„Éï„Ç°„Ç§„É´Âêç„É™„Çπ„Éà„ÅÆÊèèÁîª
 //---------------------------------------------------------------------------
 void __fastcall TFindTagForm::InfoListBoxDrawItem(TWinControl *Control, int Index,
 	TRect &Rect, TOwnerDrawState State)
@@ -307,11 +307,11 @@ void __fastcall TFindTagForm::InfoListBoxDrawItem(TWinControl *Control, int Inde
 	cv->Font->Color = get_ExtColor(get_extension(fnam));
 	cv->TextOut(xp, yp, fnam);
 
-	//ÉJÅ[É\Éã
+	//„Ç´„Éº„ÇΩ„É´
 	draw_ListCursor(lp, Rect, Index, State);
 }
 //---------------------------------------------------------------------------
-//ÉtÉ@ÉCÉãñºàÍóóÇ≈ÇÃÉLÅ[ëÄçÏ
+//„Éï„Ç°„Ç§„É´Âêç‰∏ÄË¶ß„Åß„ÅÆ„Ç≠„ÉºÊìç‰Ωú
 //---------------------------------------------------------------------------
 void __fastcall TFindTagForm::InfoListBoxKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
@@ -351,7 +351,7 @@ void __fastcall TFindTagForm::InfoListBoxDblClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ÉrÉÖÅ[ÉAÇ≈É_ÉCÉåÉNÉgÉ^ÉOÉWÉÉÉìÉv
+//„Éì„É•„Éº„Ç¢„Åß„ÉÄ„Ç§„É¨„ÇØ„Éà„Çø„Ç∞„Ç∏„É£„É≥„Éó
 //---------------------------------------------------------------------------
 void __fastcall TFindTagForm::TagViewActionExecute(TObject *Sender)
 {
@@ -360,7 +360,7 @@ void __fastcall TFindTagForm::TagViewActionExecute(TObject *Sender)
 	else if (InfoListBox->Focused()) InfoListBoxDblClick(Sender);
 }
 //---------------------------------------------------------------------------
-//ÉGÉfÉBÉ^Ç≈É_ÉCÉåÉNÉgÉ^ÉOÉWÉÉÉìÉv
+//„Ç®„Éá„Ç£„Çø„Åß„ÉÄ„Ç§„É¨„ÇØ„Éà„Çø„Ç∞„Ç∏„É£„É≥„Éó
 //---------------------------------------------------------------------------
 void __fastcall TFindTagForm::TagJumpActionExecute(TObject *Sender)
 {
@@ -374,7 +374,7 @@ void __fastcall TFindTagForm::PopupItemUpdate(TObject *Sender)
 	((TAction*)Sender)->Enabled = (TagsListBox->ItemIndex!=-1);
 }
 //---------------------------------------------------------------------------
-//ÉRÉsÅ[
+//„Ç≥„Éî„Éº
 //---------------------------------------------------------------------------
 void __fastcall TFindTagForm::CopyActionExecute(TObject *Sender)
 {
@@ -384,7 +384,7 @@ void __fastcall TFindTagForm::CopyActionExecute(TObject *Sender)
 	ModalResult = mrOk;
 }
 //---------------------------------------------------------------------------
-//Ç∑Ç◊ÇƒëIë
+//„Åô„Åπ„Å¶ÈÅ∏Êäû
 //---------------------------------------------------------------------------
 void __fastcall TFindTagForm::SelAllActionExecute(TObject *Sender)
 {

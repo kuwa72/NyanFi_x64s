@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------//
-// GREPˆ—ƒXƒŒƒbƒh														//
+// GREPå‡¦ç†ã‚¹ãƒ¬ãƒƒãƒ‰														//
 //----------------------------------------------------------------------//
 #include "usr_str.h"
 #include "usr_file_ex.h"
@@ -48,7 +48,7 @@ void __fastcall TGrepThread::Execute()
 			if (load_text_ex(FileName, f_buf.get())==0) Abort();
 		}
 
-		//ƒtƒBƒ‹ƒ^‚Ì‰Šú‰»
+		//ãƒ•ã‚£ãƒ«ã‚¿ã®åˆæœŸåŒ–
 		std::unique_ptr<FileFilter> FLT(new FileFilter());
 		FilterOption opt;
 		opt << foIsGrep;
@@ -58,7 +58,7 @@ void __fastcall TGrepThread::Execute()
 		TRegExOptions re_opt;
 		if (!Options.Contains(goCaseSens)) re_opt << roIgnoreCase;
 
-		//DFMƒIƒuƒWƒFƒNƒg
+		//DFMã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 		if (!FLT->objType.IsEmpty() && !FLT->propName.IsEmpty()) {
 			conv_DfmText(f_buf.get());
 
@@ -104,7 +104,7 @@ void __fastcall TGrepThread::Execute()
 												Options.Contains(goCaseSens), Options.Contains(goWord));
 								}
 								if (found) {
-									UnicodeString itmstr;	//ƒtƒ@ƒCƒ‹–¼ [TAB] s”Ô†:Idx:0 [TAB] ƒ}ƒbƒ`s
+									UnicodeString itmstr;	//ãƒ•ã‚¡ã‚¤ãƒ«å [TAB] è¡Œç•ªå·:Idx:0 [TAB] ãƒãƒƒãƒè¡Œ
 									UnicodeString s = otyp + "." + onam + "." + get_tkn(lbuf, "=") + "= ";
 									itmstr.sprintf(_T("%s\t%d:%d:0\t%s\n"),
 										FileName.c_str(), lp, s.Length() + 1, (s + vbuf).c_str());
@@ -118,7 +118,7 @@ void __fastcall TGrepThread::Execute()
 			}
 			if (ResultList->Count>0) Synchronize(&AddResult);
 		}
-		//’Êí
+		//é€šå¸¸
 		else {
 			for (int lp=FLT->topLine; lp<=FLT->endLine; lp++) {
 				int r_idx, r_len;
@@ -138,9 +138,9 @@ void __fastcall TGrepThread::Execute()
 				}
 
 				if (found) {
-					UnicodeString itmstr;	//ƒtƒ@ƒCƒ‹–¼ [TAB] s”Ô†:Idx:Len [TAB] ƒ}ƒbƒ`s\nŸ3s
+					UnicodeString itmstr;	//ãƒ•ã‚¡ã‚¤ãƒ«å [TAB] è¡Œç•ªå·:Idx:Len [TAB] ãƒãƒƒãƒè¡Œ\næ¬¡3è¡Œ
 					itmstr.sprintf(_T("%s\t%d:%d:%d\t%s\n"), FileName.c_str(), lp + 1, r_idx, r_len, lbuf.c_str());
-					//Ÿ3s•ª‚ğ•t‰Á(‹ós‚Íœ‚­‚ªA\n‚Í‘}“ü)
+					//æ¬¡3è¡Œåˆ†ã‚’ä»˜åŠ (ç©ºè¡Œã¯é™¤ããŒã€\nã¯æŒ¿å…¥)
 					int p = lp + 1;
 					int lcnt = 0;
 					while (p<f_buf->Count && lcnt<3) {

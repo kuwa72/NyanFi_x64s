@@ -1,6 +1,6 @@
 /**
  * @file ModalScr.h
- * @brief ƒ‚[ƒ_ƒ‹•\¦Œø‰Ê—pƒXƒNƒŠ[ƒ“
+ * @brief ãƒ¢ãƒ¼ãƒ€ãƒ«è¡¨ç¤ºåŠ¹æœç”¨ã‚¹ã‚¯ãƒªãƒ¼ãƒ³
  */
 //---------------------------------------------------------------------------
 #ifndef ModalScrH
@@ -14,18 +14,18 @@
 
 //---------------------------------------------------------------------------
 /**
- * @brief ƒ‚[ƒ_ƒ‹•\¦Œø‰Ê—pƒXƒNƒŠ[ƒ“
+ * @brief ãƒ¢ãƒ¼ãƒ€ãƒ«è¡¨ç¤ºåŠ¹æœç”¨ã‚¹ã‚¯ãƒªãƒ¼ãƒ³
  */
 class TModalScrForm : public TForm
 {
-__published:	// IDE ‚ÅŠÇ—‚³‚ê‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+__published:	// IDE ã§ç®¡ç†ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall FormActivate(TObject *Sender);
 	void __fastcall FormHide(TObject *Sender);
 
-private:	// ƒ†[ƒU[éŒ¾
+private:	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 
-public:		// ƒ†[ƒU[éŒ¾
+public:		// ãƒ¦ãƒ¼ã‚¶ãƒ¼å®£è¨€
 	bool FullScr;
 
 	__fastcall TModalScrForm(TComponent* Owner);

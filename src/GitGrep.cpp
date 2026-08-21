@@ -34,7 +34,7 @@ void __fastcall TGitGrepForm::FormCreate(TObject *Sender)
 
 	KeyHandled = false;
 
-	//ƒXƒeƒBƒbƒL[
+	//ã‚¹ãƒ†ã‚£ãƒƒã‚­ãƒ¼
 	StickyPanel = new TPanel(this);
 	StickyPanel->Parent     = ResultListBox->Parent;
 	StickyPanel->Visible    = false;
@@ -107,7 +107,7 @@ void __fastcall TGitGrepForm::RegExCheckBoxClick(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//GREPŠJn
+//GREPé–‹å§‹
 //---------------------------------------------------------------------------
 void __fastcall TGitGrepForm::GrepStartActionExecute(TObject *Sender)
 {
@@ -153,7 +153,7 @@ void __fastcall TGitGrepForm::GrepStartActionExecute(TObject *Sender)
 
 	ResultListBox->Count = 0;
 	ResultBuff->Clear();
-	StatusBar1->Panels->Items[0]->Text = "ŒŸõ’†... ESC‚Å’†’f";
+	StatusBar1->Panels->Items[0]->Text = "æ¤œç´¢ä¸­... ESCã§ä¸­æ–­";
 	StatusBar1->Panels->Items[1]->Text = "git " + prm;
 	unsigned int start_cnt = GetTickCount();
 
@@ -170,7 +170,7 @@ void __fastcall TGitGrepForm::GrepStartActionExecute(TObject *Sender)
 			IniFile->SaveComboBoxItems(FindComboBox, RegExCheckBox->Checked? _T("GitGrepPtnHistory") : _T("GitGrepFindHistory"));
 			add_ComboBox_history(PathComboBox);
 
-			//ƒtƒ@ƒCƒ‹”‚ğƒJƒEƒ“ƒg/Å‘å•\¦•‚ğæ“¾
+			//ãƒ•ã‚¡ã‚¤ãƒ«æ•°ã‚’ã‚«ã‚¦ãƒ³ãƒˆ/æœ€å¤§è¡¨ç¤ºå¹…ã‚’å–å¾—
 			TCanvas *cv = ResultListBox->Canvas;
 			MaxFileWd = cv->TextWidth(StringOfChar(_T('W'), 16));
 			int f_cnt = 0;
@@ -196,16 +196,16 @@ void __fastcall TGitGrepForm::GrepStartActionExecute(TObject *Sender)
 			ResultListBox->SetFocus();
 
 			StatusBar1->Panels->Items[0]->Text =
-				UnicodeString().sprintf(_T("%uƒtƒ@ƒCƒ‹‚Å %us”­Œ© (%.1f•b)"),
+				UnicodeString().sprintf(_T("%uãƒ•ã‚¡ã‚¤ãƒ«ã§ %uè¡Œç™ºè¦‹ (%.1fç§’)"),
 					f_cnt, ResultListBox->Count, (GetTickCount() - start_cnt)/1000.0);
 		}
 		else {
-			StatusBar1->Panels->Items[0]->Text = "Œ©‚Â‚©‚è‚Ü‚¹‚ñ";
+			StatusBar1->Panels->Items[0]->Text = "è¦‹ã¤ã‹ã‚Šã¾ã›ã‚“";
 			beep_Warn();
 		}
 	}
 	else {
-		if (GitGrepAborted) StatusBar1->Panels->Items[0]->Text = "’†’f‚µ‚Ü‚µ‚½B";
+		if (GitGrepAborted) StatusBar1->Panels->Items[0]->Text = "ä¸­æ–­ã—ã¾ã—ãŸã€‚";
 	}
 }
 //---------------------------------------------------------------------------
@@ -270,13 +270,13 @@ void __fastcall TGitGrepForm::ResultListBoxDrawItem(TWinControl *Control, int In
 		}
 		xp = MaxFileWd + SCALED_THIS(16);
 
-		//s”Ô†
+		//è¡Œç•ªå·
 		rc.Left = xp;
 		LineNoOut(cv, rc, mt.Groups.Item[4].Value);
 		cv->Brush->Color = get_ListBgCol();
 		xp += cv->TextWidth("000000 ") + SCALED_THIS(4);
 
-		//ƒtƒ@ƒCƒ‹‹«ŠE
+		//ãƒ•ã‚¡ã‚¤ãƒ«å¢ƒç•Œ
 		if (!SameText(pnam, pnam_nxt)) {
 			cv->Pen->Style = psSolid;
 			cv->Pen->Width = ScaledInt(1);
@@ -284,7 +284,7 @@ void __fastcall TGitGrepForm::ResultListBoxDrawItem(TWinControl *Control, int In
 			cv->MoveTo(Rect.Left, Rect.Bottom - 1);
 			cv->LineTo(rc.Left, Rect.Bottom - 1);
 		}
-		//ƒ}ƒbƒ`Œê‚ÌƒŠƒXƒg‚ğì¬
+		//ãƒãƒƒãƒèªã®ãƒªã‚¹ãƒˆã‚’ä½œæˆ
 		UnicodeString lbuf = mt.Groups.Item[5].Value;
 		std::unique_ptr<TStringList> wlist(new TStringList());
 		SearchOption opt;
@@ -292,7 +292,7 @@ void __fastcall TGitGrepForm::ResultListBoxDrawItem(TWinControl *Control, int In
 		if (RegExCheckBox->Checked) opt << soRegEx;
 		if (CaseCheckBox->Checked)	opt << soCaseSens;
 		get_MatchWordListEx(lbuf, Keyword, opt, wlist.get());
-		//ƒ}ƒbƒ`Œê‚Ì‹­’²•\¦
+		//ãƒãƒƒãƒèªã®å¼·èª¿è¡¨ç¤º
 		cv->Font->Color = get_ListFgCol();
 		TxtOutOption t_opt;  t_opt << toNormal;
 		EmphasisTextOutEx(lbuf, wlist.get(), cv, xp, yp, t_opt);
@@ -333,7 +333,7 @@ void __fastcall TGitGrepForm::ResultListBoxKeyPress(TObject *Sender, System::Wid
 }
 
 //---------------------------------------------------------------------------
-//ƒXƒeƒBƒbƒL[‚ğXV
+//ã‚¹ãƒ†ã‚£ãƒƒã‚­ãƒ¼ã‚’æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TGitGrepForm::UpdateSticky()
 {
@@ -414,25 +414,25 @@ void __fastcall TGitGrepForm::onStickyClick(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//ŒŸõŒ‹‰Ê‚ğƒNƒŠƒbƒvƒ{[ƒh‚ÉƒRƒs[
+//æ¤œç´¢çµæœã‚’ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã«ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TGitGrepForm::ClipCopyActionExecute(TObject *Sender)
 {
 	copy_to_Clipboard(ResultBuff->Text);
 }
 //---------------------------------------------------------------------------
-//ƒJ[ƒ\ƒ‹s‚ğƒNƒŠƒbƒvƒ{[ƒh‚ÉƒRƒs[
+//ã‚«ãƒ¼ã‚½ãƒ«è¡Œã‚’ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã«ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TGitGrepForm::LineCopyActionExecute(TObject *Sender)
 {
 	if (ResultListBox->ItemIndex!=-1) copy_to_Clipboard(ResultListBox->Items->Strings[ResultListBox->ItemIndex]);
 }
 //---------------------------------------------------------------------------
-//ŒŸõŒ‹‰Ê‚É–¼‘O‚ğ•t‚¯‚Ä•Û‘¶
+//æ¤œç´¢çµæœã«åå‰ã‚’ä»˜ã‘ã¦ä¿å­˜
 //---------------------------------------------------------------------------
 void __fastcall TGitGrepForm::SaveAsActionExecute(TObject *Sender)
 {
-	UserModule->SaveTxtDlg->Title		  = LoadUsrMsg(USTR_SaveAs, _T("ŒŸõŒ‹‰Ê"));
+	UserModule->SaveTxtDlg->Title		  = LoadUsrMsg(USTR_SaveAs, _T("æ¤œç´¢çµæœ"));
 	UserModule->SaveTxtDlg->InitialDir    = ExcludeTrailingPathDelimiter(SaveTxtPath);
 	UserModule->SaveTxtDlg->EncodingIndex = SaveEncIndex;
 	if (UserModule->SaveTxtDlg->Execute()) {
@@ -448,7 +448,7 @@ void __fastcall TGitGrepForm::ResultActionUpdate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒeƒLƒXƒgƒGƒfƒBƒ^‚ÅŠJ‚­
+//ãƒ†ã‚­ã‚¹ãƒˆã‚¨ãƒ‡ã‚£ã‚¿ã§é–‹ã
 //---------------------------------------------------------------------------
 void __fastcall TGitGrepForm::EditFileActionExecute(TObject *Sender)
 {
@@ -462,7 +462,7 @@ void __fastcall TGitGrepForm::EditFileActionExecute(TObject *Sender)
 				fnam = IncludeTrailingPathDelimiter(WorkDir) + slash_to_yen(fnam);
 			}
 			else {
-				MsgHint->ShowMsgHint("ƒtƒ@ƒCƒ‹’Šo’†...", this, col_bgHint);
+				MsgHint->ShowMsgHint("ãƒ•ã‚¡ã‚¤ãƒ«æŠ½å‡ºä¸­...", this, col_bgHint);
 				GitBusy = true;
 				fnam = save_GitRevAsTemp(hash, fnam, WorkDir);
 				GitBusy = false;
@@ -476,14 +476,14 @@ void __fastcall TGitGrepForm::EditFileActionExecute(TObject *Sender)
 void __fastcall TGitGrepForm::EditFileActionUpdate(TObject *Sender)
 {
 	TAction *ap = (TAction *)Sender;
-	UnicodeString s = "ƒeƒLƒXƒgƒGƒfƒBƒ^‚ÅŠJ‚­";
+	UnicodeString s = "ãƒ†ã‚­ã‚¹ãƒˆã‚¨ãƒ‡ã‚£ã‚¿ã§é–‹ã";
 	s += (CommitID.IsEmpty()? "(&E)" : " - Temp (&E)");
 	ap->Caption = s;
 	ap->Enabled = (ResultListBox->ItemIndex != -1);
 }
 
 //---------------------------------------------------------------------------
-//‚±‚Ìƒtƒ@ƒCƒ‹‚Ì“à—e‚ğ•\¦
+//ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã®å†…å®¹ã‚’è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TGitGrepForm::ViewFileActionExecute(TObject *Sender)
 {
@@ -501,7 +501,7 @@ void __fastcall TGitGrepForm::ViewFileActionExecute(TObject *Sender)
 				ok = load_text_ex(fnam, o_lst.get())!=0;
 			}
 			else {
-				MsgHint->ShowMsgHint("ƒtƒ@ƒCƒ‹’Šo’†...", this, col_bgHint);
+				MsgHint->ShowMsgHint("ãƒ•ã‚¡ã‚¤ãƒ«æŠ½å‡ºä¸­...", this, col_bgHint);
 				GitBusy = true;
 				UnicodeString prm;
 				prm.sprintf(_T("cat-file -p %s:%s"), hash.c_str(), fnam.c_str());
@@ -512,7 +512,7 @@ void __fastcall TGitGrepForm::ViewFileActionExecute(TObject *Sender)
 			}
 
 			if (ok) {
-				GeneralInfoDlg->Caption     = UnicodeString().sprintf(_T("ƒtƒ@ƒCƒ‹“à—e - %s"), fnam.c_str());
+				GeneralInfoDlg->Caption     = UnicodeString().sprintf(_T("ãƒ•ã‚¡ã‚¤ãƒ«å†…å®¹ - %s"), fnam.c_str());
 				GeneralInfoDlg->FileName    = fnam;
 				GeneralInfoDlg->isNonFile   = !hash.IsEmpty();
 				GeneralInfoDlg->fromPopWnd  = true;

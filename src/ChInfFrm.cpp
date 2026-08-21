@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------//
 // NyanFi																//
-//  •¶šî•ñ															//
+//  æ–‡å­—æƒ…å ±															//
 //----------------------------------------------------------------------//
 #include "UserFunc.h"
 #include "UserMdl.h"
@@ -76,11 +76,11 @@ void __fastcall TCharInfoForm::SetCharFont()
 }
 
 //---------------------------------------------------------------------------
-//•\¦‚ğXV
+//è¡¨ç¤ºã‚’æ›´æ–°
 //---------------------------------------------------------------------------
 void __fastcall TCharInfoForm::UpdateChar(
-	UnicodeString c,		//‘ÎÛ•¶š(ƒTƒƒQ[ƒgƒyƒA‘Î‰)
-	UnicodeString inf)		//•t‰Áî•ñ	(default = EmptyStr)
+	UnicodeString c,		//å¯¾è±¡æ–‡å­—(ã‚µãƒ­ã‚²ãƒ¼ãƒˆãƒšã‚¢å¯¾å¿œ)
+	UnicodeString inf)		//ä»˜åŠ æƒ…å ±	(default = EmptyStr)
 {
 	UniCharName = NumRefHex = NumRefDec = RefInfo = EmptyStr;
 
@@ -93,7 +93,7 @@ void __fastcall TCharInfoForm::UpdateChar(
 	if (!c.IsEmpty()) {
 		CharPanel->Caption = SameStr(c, "&")? _T("&&") : c.c_str();
 
-		//Œ‡‘¹A‰üs‚Ìƒ`ƒFƒbƒN
+		//æ¬ æã€æ”¹è¡Œã®ãƒã‚§ãƒƒã‚¯
 		bool nc, is_cr;
 		if (c.Length()==1) {
 			nc    = !SameStr(c, UnicodeString(AnsiString(c)));
@@ -116,50 +116,50 @@ void __fastcall TCharInfoForm::UpdateChar(
 
 		//JIS
 		cd_str = "       JIS: ";
-		kt_str = "      ‹æ“_: ";
-		tp_str = "      í—Ş: ";
+		kt_str = "      åŒºç‚¹: ";
+		tp_str = "      ç¨®é¡: ";
 
 		if (!nc && !is_cr) {
 			std::unique_ptr<TEncoding> enc_jis(TEncoding::GetEncoding(50220));
 			DynamicArray<System::Byte> byt_jis = enc_jis->GetBytes(c);
-			//‘SŠp
+			//å…¨è§’
 			if (byt_jis.Length==8) {
 				cd_str.cat_sprintf(_T("%02X%02X"), byt_jis[3], byt_jis[4]);
-				int k = byt_jis[3] - 32;	//‹æ
-				int t = byt_jis[4] - 32;	//“_
+				int k = byt_jis[3] - 32;	//åŒº
+				int t = byt_jis[4] - 32;	//ç‚¹
 				kt_str.cat_sprintf(_T("%02u-%02u "), k, t);
-				if		(k>=16 && k<=47) tp_str += "‘æˆê…€Š¿š";
-				else if (k>=48 && k<=84) tp_str += "‘æ“ñ…€Š¿š";
+				if		(k>=16 && k<=47) tp_str += "ç¬¬ä¸€æ°´æº–æ¼¢å­—";
+				else if (k>=48 && k<=84) tp_str += "ç¬¬äºŒæ°´æº–æ¼¢å­—";
 				else tp_str += get_word_i_idx(
-						"|‹L†|‹L†|‰p”š|‚Ğ‚ç‚ª‚È|ƒJƒ^ƒJƒi|ƒMƒŠƒVƒA•¶š|ƒLƒŠƒ‹•¶š|Œrü‘f•Ğ", k);
+						"|è¨˜å·|è¨˜å·|è‹±æ•°å­—|ã²ã‚‰ãŒãª|ã‚«ã‚¿ã‚«ãƒŠ|ã‚®ãƒªã‚·ã‚¢æ–‡å­—|ã‚­ãƒªãƒ«æ–‡å­—|ç½«ç·šç´ ç‰‡", k);
 			}
 			else if (byt_jis.Length==9 && byt_jis[3]=='D') {
 				cd_str.cat_sprintf(_T("%02X%02X (X0212)"), byt_jis[4], byt_jis[5]);
-				tp_str += "•â•Š¿š";
+				tp_str += "è£œåŠ©æ¼¢å­—";
 			}
-			//”¼Šp
+			//åŠè§’
 			else if (byt_jis.Length==1) {
 				unsigned char c1 = byt_jis[0];
 				cd_str.cat_sprintf(_T("%02X"), c1);
 				if (c1<=0x1f) {
-					tp_str += "§Œä•¶š";
+					tp_str += "åˆ¶å¾¡æ–‡å­—";
 					if		(c1=='\t') tp_str += "  TAB";
 					else if (c1=='\a') tp_str += "  BEL";
 					else if (c1=='\f') tp_str += "  FF";
 				}
 				else if (c1==0x20) {
-					tp_str += "”¼Šp‹ó”’";
+					tp_str += "åŠè§’ç©ºç™½";
 				}
 				else if (c1>=0x21 && c1<=0x7e) {
-					tp_str.cat_sprintf(_T("%s"), isalnum(c1)? _T("”¼Šp‰p”š") : _T("”¼Šp‹L†"));
+					tp_str.cat_sprintf(_T("%s"), isalnum(c1)? _T("åŠè§’è‹±æ•°å­—") : _T("åŠè§’è¨˜å·"));
 				}
 			}
 		}
-		//‰üs
+		//æ”¹è¡Œ
 		else if (is_cr) {
-			tp_str += "‰üs";
+			tp_str += "æ”¹è¡Œ";
 		}
-		//Unicode §Œä•¶š
+		//Unicode åˆ¶å¾¡æ–‡å­—
 		else {
 			UnicodeString chx;
 			DynamicArray<System::Byte> cbt = WideBytesOf(c);
@@ -169,10 +169,10 @@ void __fastcall TCharInfoForm::UpdateChar(
 						 "202b=RLE\n202d=LRO\n202e=RLO\n202c=PDF\n206e=NADS\n"
 						 "206f=NODS\n206b=ASS\n206a=ISS\n206d=AAFS\n206c=IAFS\n";
 			UnicodeString s = clst->Values[chx];
-			if (!s.IsEmpty()) tp_str.cat_sprintf(_T("§Œä•¶š %s"), s.c_str());
+			if (!s.IsEmpty()) tp_str.cat_sprintf(_T("åˆ¶å¾¡æ–‡å­— %s"), s.c_str());
 		}
 
-		if (c.Length()==2) tp_str += "ƒTƒƒQ[ƒgƒyƒA";
+		if (c.Length()==2) tp_str += "ã‚µãƒ­ã‚²ãƒ¼ãƒˆãƒšã‚¢";
 
 		i_lst->Add(cd_str);
 		i_lst->Add(kt_str);
@@ -192,7 +192,7 @@ void __fastcall TCharInfoForm::UpdateChar(
 		int uc;
 		if (!is_cr) {
 			if (c.Length()==2) {
-				//ƒTƒƒQ[ƒgƒyƒA
+				//ã‚µãƒ­ã‚²ãƒ¼ãƒˆãƒšã‚¢
 				uc = SurrogateToUnicodePoint(c);
 				cd_str.cat_sprintf(_T("U+%05X (%04X %04X)"), uc, c[1], c[2]);
 				UniCharName.sprintf(_T("\\U%08X"), uc);
@@ -216,8 +216,8 @@ void __fastcall TCharInfoForm::UpdateChar(
 		}
 		i_lst->Add(cd_str);
 
-		//ƒuƒƒbƒN–¼
-		cd_str = "  ƒuƒƒbƒN: " + get_UnicodeBlockName(uc);
+		//ãƒ–ãƒ­ãƒƒã‚¯å
+		cd_str = "  ãƒ–ãƒ­ãƒƒã‚¯: " + get_UnicodeBlockName(uc);
 		i_lst->Add(cd_str);
 	}
 	else {
@@ -231,7 +231,7 @@ void __fastcall TCharInfoForm::UpdateChar(
 }
 
 //---------------------------------------------------------------------------
-//î•ñ‚Ì•`‰æ
+//æƒ…å ±ã®æç”»
 //---------------------------------------------------------------------------
 void __fastcall TCharInfoForm::InfoListBoxDrawItem(TWinControl *Control, int Index,
 	TRect &Rect, TOwnerDrawState State)
@@ -242,7 +242,7 @@ void __fastcall TCharInfoForm::InfoListBoxDrawItem(TWinControl *Control, int Ind
 }
 
 //---------------------------------------------------------------------------
-//‰EƒNƒŠƒbƒNƒƒjƒ…[
+//å³ã‚¯ãƒªãƒƒã‚¯ãƒ¡ãƒ‹ãƒ¥ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TCharInfoForm::PopupMenu1Popup(TObject *Sender)
 {
@@ -253,7 +253,7 @@ void __fastcall TCharInfoForm::PopupMenu1Popup(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//î•ñ‚ğƒRƒs[
+//æƒ…å ±ã‚’ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TCharInfoForm::CopyItemClick(TObject *Sender)
 {
@@ -263,21 +263,21 @@ void __fastcall TCharInfoForm::CopyItemClick(TObject *Sender)
 	copy_to_Clipboard(i_lst->Text);
 }
 //---------------------------------------------------------------------------
-//ƒ†ƒjƒo[ƒTƒ‹•¶š–¼‚ğƒRƒs[
+//ãƒ¦ãƒ‹ãƒãƒ¼ã‚µãƒ«æ–‡å­—åã‚’ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TCharInfoForm::CopyUniChNameItemClick(TObject *Sender)
 {
 	copy_to_Clipboard(UniCharName);
 }
 //---------------------------------------------------------------------------
-//”’l•¶šQÆ(10i”)‚ğƒRƒs[
+//æ•°å€¤æ–‡å­—å‚ç…§(10é€²æ•°)ã‚’ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TCharInfoForm::NumRefDecItemClick(TObject *Sender)
 {
 	copy_to_Clipboard(NumRefDec);
 }
 //---------------------------------------------------------------------------
-//”’l•¶šQÆ(16i”)‚ğƒRƒs[
+//æ•°å€¤æ–‡å­—å‚ç…§(16é€²æ•°)ã‚’ã‚³ãƒ”ãƒ¼
 //---------------------------------------------------------------------------
 void __fastcall TCharInfoForm::NumRefHexItemClick(TObject *Sender)
 {
@@ -285,7 +285,7 @@ void __fastcall TCharInfoForm::NumRefHexItemClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//ƒtƒHƒ“ƒg‚Ì•ÏX
+//ãƒ•ã‚©ãƒ³ãƒˆã®å¤‰æ›´
 //---------------------------------------------------------------------------
 void __fastcall TCharInfoForm::ChgFontItemClick(TObject *Sender)
 {
@@ -294,7 +294,7 @@ void __fastcall TCharInfoForm::ChgFontItemClick(TObject *Sender)
 	if (UserModule->FontDlgToFont(CharInfFont)) SetCharFont();
 }
 //---------------------------------------------------------------------------
-//ƒTƒ“ƒvƒ‹‚Ì”zF‚ğİ’è
+//ã‚µãƒ³ãƒ—ãƒ«ã®é…è‰²ã‚’è¨­å®š
 //---------------------------------------------------------------------------
 void __fastcall TCharInfoForm::SetColItemClick(TObject *Sender)
 {
@@ -308,7 +308,7 @@ void __fastcall TCharInfoForm::SetColItemClick(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-//ƒtƒHƒ“ƒg–¼‚ğ•\¦
+//ãƒ•ã‚©ãƒ³ãƒˆåã‚’è¡¨ç¤º
 //---------------------------------------------------------------------------
 void __fastcall TCharInfoForm::FontNameItemClick(TObject *Sender)
 {
