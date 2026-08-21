@@ -221,7 +221,11 @@ public:
 	bool FTopIsHeader;
 	void __fastcall SetTopIsHeader(bool Value);
 	/** @brief 先頭行はCSV項目名 */
-	__property bool TopIsHeader = {read = FTopIsHeader,  write = SetTopIsHeader};
+	// __property bool TopIsHeader = {read = FTopIsHeader, write = SetTopIsHeader};
+	// 読みはメンバ変数の直読み、書きはセッター経由。C++Builder の __property は
+	// read にメンバ変数を直接書けるので、それに対応するプロキシに置き換えた
+	compat::FieldRWProperty<TTxtViewer, bool, &TTxtViewer::FTopIsHeader,
+	                        &TTxtViewer::SetTopIsHeader> TopIsHeader{this};
 
 	unsigned int BinarySize;		//!< バイナリ読込サイズ
 	unsigned __int64 BinFileSize;	//!< ファイルサイズ

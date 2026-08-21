@@ -13,6 +13,7 @@
 #ifndef NYANFI_COMPAT_APPLICATION_H
 #define NYANFI_COMPAT_APPLICATION_H
 
+#include <map>
 #include <memory>
 #include <vector>
 
@@ -24,6 +25,9 @@
 #include "compat/classes.h"
 #include "compat/graphics.h"
 #include "compat/property.h"
+
+// TMonitor の実体は compat/gui_stubs.h にあり、このヘッダより後に読まれる
+class TMonitor;
 #include "compat/ustring.h"
 #include "compat/vcl_forward.h"
 
@@ -155,6 +159,48 @@ public:
 		             y + ::GetSystemMetrics(SM_CYVIRTUALSCREEN));
 	}
 	compat::ROProperty<TScreen, TRect, &TScreen::GetDesktopRect> DesktopRect{this};
+
+	/// カーソル ID → HCURSOR の表。
+	/// 実測: `Screen->Cursors[crHandGrabR] = (HCURSOR)::LoadImage(...)`
+	/// (UserMdl.cpp:48,49 / imgv_thread.cpp:565) の**書き込みだけ**。
+	/// VCL も同じく ID とハンドルの対応表を持つので、std::map で実装する
+	/// (読み出す側は実コントロールなので、シムでは登録だけで足りる)
+	class CursorsProperty {
+	public:
+		HCURSOR &operator[](int index) { return table_[index]; }
+		HCURSOR operator[](int index) const
+		{
+			const auto it = table_.find(index);
+			return (it != table_.end())? it->second : NULL;
+		}
+
+	private:
+		std::map<int, HCURSOR> table_;
+	};
+	CursorsProperty Cursors;
+
+	/// ヒント (ツールチップ) の描画に使うフォント。
+	/// 実測: `src/usr_hintwin.cpp:46` の `Screen->HintFont->Assign(Font)` 1箇所だけ
+	/// (ヒントウィンドウが自分のフォントを流し込む)。値を保持するだけでよい
+	TFont *HintFont = nullptr;
+
+	/// 現在フォーカスのあるコントロール。
+	/// 実測: `Screen->ActiveControl` を 6箇所が読む
+	/// (RenDlg.cpp:632 / UserMdl.cpp:470,490,498,540,626)。いずれも
+	/// **NULL チェックの上で使う**か、退避して後で戻すだけ。
+	///
+	/// @warning **常に nullptr。** シムには実フォームが無く、フォーカスを
+	///          追跡していない。呼び出し側は NULL を想定した書き方に
+	///          なっているので落ちないが、「フォーカスが無い」と同じ扱いに
+	///          なる (報告書 §19)
+	TWinControl *ActiveControl = nullptr;
+
+	/// 指定した点を含むモニタを返す。
+	/// 実測: `src/usr_hintwin.cpp:52` の
+	/// `Screen->MonitorFromPoint(..., mdNearest)->Left` 1箇所だけ。
+	/// @warning 宣言のみ (規約4)。TMonitor の実体は compat/gui_stubs.h にあり、
+	///          このヘッダより後に読まれるので前方宣言で受ける
+	TMonitor *MonitorFromPoint(const TPoint &point, int defaultTo) const;
 
 	/// インストール済みフォント名の一覧。
 	/// 実測: Global.cpp:5979 の `Screen->Fonts->IndexOf(font_name)` 1箇所だけ

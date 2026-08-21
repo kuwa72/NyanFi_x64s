@@ -781,8 +781,14 @@ Phase 3 の第1段で入れたもののうち、そこに当たるものをこ�
 | `TPicture::Bitmap` / `TImage::Picture` / `TImageCollectionItem::SourceImages` (nullptr) | VCL は自動生成するがシムは nullptr のまま。**リンクエラーではなく nullptr 参照**になる |
 | `TPngImage::Empty` / `SupportsPartialTransparency` / `TMetafile::Empty` (固定の bool) | 変化しないので、分岐すると常に「空 / 透過なし」側を通る |
 | `TScreen::Forms` / `FormCount` (常に空) | `for (i<FormCount) Forms[i]` の走査が 0回になる。**フォームが1つも無い状態と区別がつかない** |
+| `TScreen::ActiveControl` (常に nullptr) | 読む 6箇所 (RenDlg.cpp:632 / UserMdl.cpp:470,490,498,540,626) はすべて NULL チェック付きか退避用なので落ちないが、**「フォーカスが無い」と同じ扱いになる** |
+| `TScreen::HintFont` (nullptr) | `usr_hintwin.cpp:46` の `HintFont->Assign(Font)` が nullptr 参照になる。GUI 側で実体を入れるまで、ヒントを出す経路を通すと落ちる |
 | `TApplication::MainFormHandle` (GUI が代入するまで NULL) | `SendMessage(NULL, ...)` は**エラーも出さずに 0 を返す**。`grep_thread.cpp:167` の完了通知が届かない |
 | `TApplication::ShowHint` (保持するだけ) | 読む箇所は src に無いので現状は無害 |
+| `TMaskEdit::EditText` (Text と同じ値を返す) | VCL ではマスク文字を除いた素の入力を返す。マスク付きの入力欄では差が出る (`UserMdl.cpp:547` は長さの比較にしか使わないので現状は無害) |
+| `TFontDialog::Font` (nullptr) | VCL は自動生成する。触ると nullptr 参照 |
+| `TOpenDialog::Files` (nullptr) | 同上。複数選択の一覧 |
+| `TControl::Repaint` / `Invalidate` (何もしない) | 描画経路がシムに無い。表示が更新されないだけで壊れはしない |
 
 このうち `MainFormHandle` だけは **GUI 側で代入すれば直る**ので、Phase 3 の第2段で
 `gui/nyanfi_app.cpp` に入れる。
