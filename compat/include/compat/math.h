@@ -12,6 +12,8 @@
 #ifndef NYANFI_COMPAT_MATH_H
 #define NYANFI_COMPAT_MATH_H
 
+#include <cmath>
+
 #include "compat/config.h"
 #include "compat/set.h"
 #include "compat/types.h"
@@ -112,6 +114,13 @@ constexpr int Sign(T value)
 
 /// Epsilon<=0 の場合は厳密な 0 判定 (Delphi の IsZero(A, 0) と同じ)
 bool IsZero(double value, double epsilon = 0.0);
+
+/// 非数か (System.Math::IsNan)。
+/// 実測: src/InspectFrm.cpp:224,250 が `IsNan(v)? "NAN" : ...` と表示に使う
+inline bool IsNan(double value) { return std::isnan(value); }
+/// 無限大か (System.Math::IsInfinite)。
+/// 実測: src/CalcDlg.cpp:262 が計算結果の妥当性チェックに使う
+inline bool IsInfinite(double value) { return std::isinf(value); }
 
 //---------------------------------------------------------------------------
 // 値の比較 (System.Math) — 戻り値は System.Types の TValueRelationship

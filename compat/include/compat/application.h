@@ -13,6 +13,7 @@
 #ifndef NYANFI_COMPAT_APPLICATION_H
 #define NYANFI_COMPAT_APPLICATION_H
 
+#include <map>
 #include <memory>
 #include <vector>
 
@@ -158,6 +159,25 @@ public:
 		             y + ::GetSystemMetrics(SM_CYVIRTUALSCREEN));
 	}
 	compat::ROProperty<TScreen, TRect, &TScreen::GetDesktopRect> DesktopRect{this};
+
+	/// カーソル ID → HCURSOR の表。
+	/// 実測: `Screen->Cursors[crHandGrabR] = (HCURSOR)::LoadImage(...)`
+	/// (UserMdl.cpp:48,49 / imgv_thread.cpp:565) の**書き込みだけ**。
+	/// VCL も同じく ID とハンドルの対応表を持つので、std::map で実装する
+	/// (読み出す側は実コントロールなので、シムでは登録だけで足りる)
+	class CursorsProperty {
+	public:
+		HCURSOR &operator[](int index) { return table_[index]; }
+		HCURSOR operator[](int index) const
+		{
+			const auto it = table_.find(index);
+			return (it != table_.end())? it->second : NULL;
+		}
+
+	private:
+		std::map<int, HCURSOR> table_;
+	};
+	CursorsProperty Cursors;
 
 	/// ヒント (ツールチップ) の描画に使うフォント。
 	/// 実測: `src/usr_hintwin.cpp:46` の `Screen->HintFont->Assign(Font)` 1箇所だけ

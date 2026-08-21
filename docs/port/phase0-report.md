@@ -785,6 +785,10 @@ Phase 3 の第1段で入れたもののうち、そこに当たるものをこ�
 | `TScreen::HintFont` (nullptr) | `usr_hintwin.cpp:46` の `HintFont->Assign(Font)` が nullptr 参照になる。GUI 側で実体を入れるまで、ヒントを出す経路を通すと落ちる |
 | `TApplication::MainFormHandle` (GUI が代入するまで NULL) | `SendMessage(NULL, ...)` は**エラーも出さずに 0 を返す**。`grep_thread.cpp:167` の完了通知が届かない |
 | `TApplication::ShowHint` (保持するだけ) | 読む箇所は src に無いので現状は無害 |
+| `TMaskEdit::EditText` (Text と同じ値を返す) | VCL ではマスク文字を除いた素の入力を返す。マスク付きの入力欄では差が出る (`UserMdl.cpp:547` は長さの比較にしか使わないので現状は無害) |
+| `TFontDialog::Font` (nullptr) | VCL は自動生成する。触ると nullptr 参照 |
+| `TOpenDialog::Files` (nullptr) | 同上。複数選択の一覧 |
+| `TControl::Repaint` / `Invalidate` (何もしない) | 描画経路がシムに無い。表示が更新されないだけで壊れはしない |
 
 このうち `MainFormHandle` だけは **GUI 側で代入すれば直る**ので、Phase 3 の第2段で
 `gui/nyanfi_app.cpp` に入れる。

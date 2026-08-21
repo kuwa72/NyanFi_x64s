@@ -114,6 +114,28 @@ enum TFormStyle { fsNormal, fsMDIChild, fsMDIForm, fsStayOnTop };
 /// InpDir.h:42 / InpExDlg.h:72 ほか)
 enum TCloseAction { caNone, caHide, caFree, caMinimize };
 
+/// ウィンドウハンドルから VCL のコントロールを引く。
+/// 実測: `FindControl(get_window_from_pos())` (UserMdl.cpp:380,401) と
+/// MainFrm.cpp:1637 の 3箇所。
+/// @warning 宣言のみ (規約4)。シムは HWND とコントロールの対応表を持たない。
+///          nullptr を返す実装にすると「常に別のコントロール」と判定されて
+///          静かに挙動が変わる (UserMdl.cpp:380 はスポイトの色取得の判定)
+class TWinControl;
+TWinControl *FindControl(HWND handle);
+
+/// フォルダ選択ダイアログの追加オプション (Vcl.FileCtrl)。
+/// 実測: `TSelectDirExtOpts() << sdNewUI << sdShowShares` (UserMdl.cpp:946) のみ
+enum TSelectDirExtOpt { sdNewUI, sdShowShares, sdNewFolder, sdShowEdit, sdValidateDir };
+using TSelectDirExtOpts = Set<TSelectDirExtOpt, sdNewUI, sdValidateDir>;
+
+/// フォルダ選択ダイアログ (Vcl.FileCtrl::SelectDirectory)。
+/// @warning 宣言のみ。ダイアログを実際に出す経路なので実装しない (規約4)
+bool SelectDirectory(const UnicodeString &caption, const UnicodeString &root,
+                     UnicodeString &directory, TSelectDirExtOpts options, TForm *parent);
+
+/// Vcl.Controls::TDragMode 相当 (実測: UserMdl.cpp:138 の `DragMode==dmAutomatic`)
+enum TDragMode { dmManual, dmAutomatic };
+
 /// Vcl.Controls::TDragState 相当 (実測: UserMdl.h:255 の DragOver ハンドラの引数型のみ)
 enum TDragState { dsDragEnter, dsDragLeave, dsDragMove };
 
@@ -155,7 +177,53 @@ public:
 	}
 	void SetCursorPos(const TPoint &value) { ::SetCursorPos(value.x, value.y); }
 
-	compat::RWProperty<TMouse, TPoint, &TMouse::GetCursorPos, &TMouse::SetCursorPos> CursorPos{this};
+	/**
+	 * @brief `Mouse->CursorPos` 専用のプロキシ
+	 * @details 汎用の RWProperty ではなく専用にしてあるのは、src が
+	 *          `Mouse->CursorPos.x` / `.y` と**データメンバとして**触るため
+	 *          (UserMdl.cpp:404 / MainFrm.cpp:2221,3088,3139)。
+	 *          プロキシはメンバ関数しか転送できないので `.x` を通せない。
+	 *
+	 *          汎用のプロパティ全部に x/y を生やすと、値型が何であっても
+	 *          メンバが増えて紛らわしい。ここだけに閉じた形にした。
+	 */
+	class CursorPosProperty {
+	public:
+		/// `.x` / `.y` (読み取り専用。読むたびに実際のカーソル位置を取る)
+		class Axis {
+		public:
+			Axis(const TMouse *owner, bool isY) : owner_(owner), isY_(isY) {}
+			operator int() const
+			{
+				const TPoint p = owner_->GetCursorPos();
+				return isY_? p.Y : p.X;
+			}
+
+		private:
+			const TMouse *owner_;
+			bool isY_;
+		};
+
+		explicit CursorPosProperty(TMouse *owner)
+			: x(owner, false), y(owner, true), X(owner, false), Y(owner, true), owner_(owner) {}
+		CursorPosProperty(const CursorPosProperty &) = delete;
+
+		operator TPoint() const { return owner_->GetCursorPos(); }
+		TPoint get() const { return owner_->GetCursorPos(); }
+
+		CursorPosProperty &operator=(const TPoint &value)
+		{
+			owner_->SetCursorPos(value);
+			return *this;
+		}
+
+		Axis x, y, X, Y;
+
+	private:
+		TMouse *owner_;
+	};
+
+	CursorPosProperty CursorPos{this};
 };
 
 namespace compat {
@@ -187,6 +255,20 @@ using TGridDrawState = Set<TGridDrawStateType, gdSelected, gdPressed>;
 /// イベント型 (compat/events.h の TClosureEvent 参照。__closure 拡張が無い
 /// 標準 C++ での代替なので、実際の発火は出来ない。詳細は events.h 参照)
 using TNotifyEvent = TClosureEvent<TObject *>;
+
+// ドラッグ＆ドロップのイベント。
+// 実測: src/UserMdl.h:253-257 の宣言に合わせてある
+//   ListBoxStartDrag(TObject *Sender, TDragObject *&DragObject)
+//   ListBoxDragOver (TObject *Sender, TObject *Source, int X, int Y, TDragState State, bool &Accept)
+//   ListBoxDragDrop (TObject *Sender, TObject *Source, int X, int Y)
+//   ListBoxEndDrag  (TObject *Sender, TObject *Target, int X, int Y)
+// TDragObject / TDragState はこのファイルの上方 (117-122行) で定義済み
+/// 右クリックメニュー (実測: UserMdl.h:258 の宣言に合わせてある)
+using TContextPopupEvent = TClosureEvent<TObject *, const TPoint &, bool &>;
+using TStartDragEvent = TClosureEvent<TObject *, TDragObject *&>;
+using TDragOverEvent = TClosureEvent<TObject *, TObject *, int, int, TDragState, bool &>;
+using TDragDropEvent = TClosureEvent<TObject *, TObject *, int, int>;
+using TEndDragEvent = TClosureEvent<TObject *, TObject *, int, int>;
 using TMouseEvent = TClosureEvent<TObject *, TMouseButton, TShiftState, int, int>;
 /// Vcl.Controls::TMouseMoveEvent 相当 (OnMouseMove は Button を持たない別シグネチャ)
 using TMouseMoveEvent = TClosureEvent<TObject *, TShiftState, int, int>;
@@ -318,6 +400,28 @@ public:
 class TControl : public TComponent {
 public:
 	explicit TControl(TComponent *owner = nullptr) : TComponent(owner) {}
+
+	/// ドラッグの開始方法 (dmManual / dmAutomatic)。
+	/// 実測: UserMdl.cpp:138 が `DragMode==dmAutomatic` を見るだけ
+	TDragMode DragMode = dmManual;
+
+	/// 再描画。実測: UserMdl.cpp / usr_hintwin.cpp などが呼ぶ。
+	/// **本物の描画経路がシムに無いので何もしない** (ヘッダ冒頭の
+	/// 「real no-op」の扱い。呼んでも表示が変わらないだけで壊れない)
+	void Repaint() {}
+	void Invalidate() {}
+
+	/// ツールチップに出す文字列。VCL では TControl のプロパティ。
+	/// 実測: `->Hint` が src 全体で 10箇所 (UserMdl.cpp の 5箇所を含む)
+	UnicodeString Hint;
+
+	//-- ドラッグ＆ドロップのイベント -------------------------------------
+	// 実測: UserMdl.cpp が TListBox / TCheckListBox に対して代入するだけで、
+	// 発火させる側 (実コントロール) はシムに無い。値を保持する
+	TStartDragEvent OnStartDrag;
+	TEndDragEvent OnEndDrag;
+	TDragOverEvent OnDragOver;
+	TDragDropEvent OnDragDrop;
 
 	/// @warning 宣言のみ。実際に呼び出す経路がリンクされると未定義参照になる
 	NativeInt Perform(unsigned msg, NativeInt wParam, NativeInt lParam);
@@ -451,6 +555,19 @@ public:
 	/// 選択文字数 (Global.cpp:14788)
 	int SelLength = 0;
 
+	/// 選択されている文字列。**代入すると選択範囲がその文字列で置き換わる**
+	/// (VCL の意味論)。実測: UserMdl.cpp が 13箇所で読み書きする
+	/// (貼り付け / ファイル名の挿入など)。
+	///
+	/// @warning アクセサは宣言のみ (規約4)。素のデータメンバにすると
+	///          「代入したのにテキストが変わらない」で静かに壊れる。
+	///          実際のキャレットと選択は実コントロールが持つので、
+	///          ヘッドレスでは実装できない
+	UnicodeString GetSelText() const;
+	void SetSelText(const UnicodeString &value);
+	compat::RWProperty<TCustomEdit, UnicodeString, &TCustomEdit::GetSelText,
+	                   &TCustomEdit::SetSelText> SelText{this};
+
 	/// @brief テキスト全体を選択する
 	/// @details 実測: UserFunc.cpp:322,383 (ChangeSelFileNameEdit /
 	///          ChangeSelCmdEdit の「全体を選択」)、InpExDlg.cpp:218,226,316、
@@ -473,6 +590,15 @@ class TLabeledEdit : public TCustomEdit {
 
 /// TMaskEdit 相当 (最小実装)
 class TMaskEdit : public TCustomEdit {
+public:
+	/// マスクを除いた素の入力文字列。実測: UserMdl.cpp:547 が Text と
+	/// 長さを比べるだけ。VCL では Text と別物だが、マスクを実装していないので
+	/// **同じ値を返す** (マスク付きの入力欄では差が出る。報告書 §19)
+	UnicodeString GetEditText() const { return Text; }
+	void SetEditText(const UnicodeString &v) { Text = v; }
+	compat::RWProperty<TMaskEdit, UnicodeString, &TMaskEdit::GetEditText,
+	                   &TMaskEdit::SetEditText> EditText{this};
+
 };
 
 /// TMemo 相当 (最小実装)
@@ -498,6 +624,18 @@ public:
 /// TComboBox 相当 (最小実装。Font は TControl から継承)
 class TComboBox : public TWinControl {
 public:
+	/// 右クリックメニューのイベント。実測: UserMdl.cpp が代入するだけ
+	/// (`ComboBoxContextPopup(TObject*, const TPoint&, bool&)`。UserMdl.h:258)
+	TContextPopupEvent OnContextPopup;
+
+	/// 選択されている文字列。代入すると選択範囲が置き換わる (VCL の意味論)。
+	/// 実測: UserMdl.cpp が 10箇所で読み書きする。
+	/// @warning アクセサは宣言のみ (規約4)。TCustomEdit::SelText と同じ理由
+	UnicodeString GetSelText() const;
+	void SetSelText(const UnicodeString &value);
+	compat::RWProperty<TComboBox, UnicodeString, &TComboBox::GetSelText,
+	                   &TComboBox::SetSelText> SelText{this};
+
 	/// 実 VCL の TComboBox は Items (TStrings) をコンストラクタで自前に生成
 	/// して所有する (TCustomListBox と同じ理由)。Canvas は TListBox と同じく
 	/// 描画先を持たない既定の TCanvas (DC 無し)
@@ -821,8 +959,15 @@ public:
 	bool Checked = false;
 	/// Global.cpp:2810-2811 が読み書きする
 	bool Enabled = true;
+	/// メニュー/ツールバーに出すか。実測: UserMdl.cpp が 25箇所で読み書きする
+	bool Visible = true;
+	/// メニュー項目などに出す文言
+	UnicodeString Caption;
 	/// @warning 宣言のみ (OnUpdate を発火して表示状態を更新する。Global.cpp:6497)
 	void Update();
+	/// @warning 宣言のみ。**実行するとコマンドが走る**ので実装しない (規約4)。
+	///          実測: UserMdl.cpp の 3箇所
+	void Execute();
 };
 
 /// TActionList 相当 (最小実装。src/ ではフォームのメンバとして保持されるだけで
@@ -989,6 +1134,12 @@ public:
  */
 class TCustomListBox : public TWinControl {
 public:
+	/// 指定した位置にある項目の添字 (無ければ -1)。
+	/// 実測: MainFrm.cpp:3011,3211,10795 / UserMdl.cpp。
+	/// @warning 宣言のみ (規約4)。可変高と横スクロールがあるので、
+	///          項目高さから割り算する近似は静かにずれる
+	int ItemAtPos(const TPoint &pos, bool existing);
+
 	/// 実 VCL の TCustomListBox は Items (TStrings) をコンストラクタで自前に
 	/// 生成して所有する (呼び出し側が LoadFromFile/Assign 等で直接書き込む
 	/// 対象なので、外部の TStringList への差し替えも許すよう生ポインタの
@@ -1638,12 +1789,44 @@ public:
 class TCommonDialog : public TComponent {
 };
 
+/**
+ * @brief Vcl.Dialogs::TOpenDialog 相当 (ファイルを開くダイアログ)
+ * @details 実測 (src/UserMdl.cpp:928-993 ほか): Title / Filter / FilterIndex /
+ *          DefaultExt / FileName / InitialDir / Options を設定して
+ *          `Execute()` を呼び、真なら FileName を読む、という使い方だけ。
+ *
+ *          設定値は素のデータメンバでよい (設定しただけでは何も起きないので
+ *          静かに壊れる余地が無い)。**`Execute()` だけが宣言のみ** (規約4)。
+ *          呼ぶとリンクエラーになるので、ダイアログを出す経路が未移植のまま
+ *          動くことはない。
+ */
 class TOpenDialog : public TCommonDialog {
+public:
+	UnicodeString Title;
+	UnicodeString Filter;
+	int FilterIndex = 1;
+	UnicodeString DefaultExt;
+	UnicodeString FileName;
+	UnicodeString InitialDir;
+	TStrings *Files = nullptr;	//!< 複数選択時の一覧 (VCL は自動生成。未実装)
+
+	/// @warning 宣言のみ。ダイアログを実際に出す経路なので実装しない
+	bool Execute();
 };
+
 class TSaveDialog : public TOpenDialog {
 };
-/// Vcl.Dialogs::TSaveTextFileDialog 相当
+
+/// Vcl.Dialogs::TSaveTextFileDialog 相当。
+/// `Encodings` は文字コードの選択肢 (実測: src/UserMdl.cpp:59-60 が
+/// Clear() してコードページ名を並べる)。VCL と同じくコンストラクタで生成して所有する
 class TSaveTextFileDialog : public TSaveDialog {
+public:
+	TSaveTextFileDialog() : Encodings(new TStringList()) {}
+	~TSaveTextFileDialog() override { delete Encodings; }
+
+	TStrings *Encodings;
+	int EncodingIndex = 0;
 };
 /// Vcl.ExtDlgs::TOpenPictureDialog 相当
 class TOpenPictureDialog : public TOpenDialog {
@@ -1658,7 +1841,14 @@ public:
 
 	TStrings *CustomColors;
 };
+/// TFontDialog 相当。`Font` は選択されたフォント (実測: UserMdl.cpp が
+/// 設定してから Execute し、真なら読み戻す)
 class TFontDialog : public TCommonDialog {
+public:
+	TFont *Font = nullptr;	//!< @warning VCL は自動生成するがシムは nullptr (報告書 §19)
+
+	/// @warning 宣言のみ
+	bool Execute();
 };
 
 //---------------------------------------------------------------------------
