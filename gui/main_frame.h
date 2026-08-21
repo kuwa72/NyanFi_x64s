@@ -25,6 +25,7 @@
 #include <wx/wx.h>
 
 #include "gui/file_ops.h"
+#include "gui/links.h"
 #include "gui/file_pane.h"
 #include "gui/image_viewer.h"
 #include "gui/key_map.h"
@@ -169,6 +170,10 @@ private:
 	//-- クリップボード経由のファイル操作 (機能群5の続き) ---------------------
 	void CmdFilesToClip(bool cut);  //!< CopyToClip / CutToClip
 	void CmdPaste();                //!< Paste (破壊的。確認ダイアログを出す)
+
+	//-- リンク・属性 (機能群6) -----------------------------------------------
+	void CmdCreateLinks(links::LinkKind kind);  //!< 反対ペインにリンクを作る
+	void CmdSetDirTime();                       //!< ディレクトリの日時を配下の最新に
 
 	DirStack dir_stack_;          //!< ディレクトリ・スタック (PushDir / PopDir)
 	bool sync_lr_ = false;        //!< 左右のディレクトリを同期させるか (SyncLR)
