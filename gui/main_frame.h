@@ -166,6 +166,10 @@ private:
 	/// 空のファイルを作る (NewFile)
 	void CmdNewFile();
 
+	//-- クリップボード経由のファイル操作 (機能群5の続き) ---------------------
+	void CmdFilesToClip(bool cut);  //!< CopyToClip / CutToClip
+	void CmdPaste();                //!< Paste (破壊的。確認ダイアログを出す)
+
 	DirStack dir_stack_;          //!< ディレクトリ・スタック (PushDir / PopDir)
 	bool sync_lr_ = false;        //!< 左右のディレクトリを同期させるか (SyncLR)
 

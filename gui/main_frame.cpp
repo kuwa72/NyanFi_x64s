@@ -21,6 +21,7 @@
 
 #include "gui/file_info_panel.h"
 #include "gui/file_open.h"
+#include "gui/clipboard_files.h"
 #include "gui/file_ops.h"
 #include "gui/grep_dialog.h"
 #include "gui/image_load.h"
@@ -835,6 +836,148 @@ void MainFrame::CmdNewFile()
 }
 
 //---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// クリップボード経由のファイル操作
+//
+// エクスプローラと相互運用するため、Win32 の CF_HDROP と
+// CFSTR_PREFERREDDROPEFFECT をそのまま扱う。wx の wxFileDataObject は
+// CF_HDROP は載せられるが「コピーか切り取りか」を載せられないため、
+// ここだけ Win32 API を直接使う (VCL 版も同じ2つの形式を使っている。
+// MainFrm.cpp:28677-28704)。
+//---------------------------------------------------------------------------
+namespace {
+
+/// CF_HDROP を作る (DROPFILES + ワイド文字のパス列 + 終端の二重 NUL)
+HGLOBAL make_hdrop(const std::vector<UnicodeString> &paths)
+{
+	std::size_t chars = 1;  // 終端の余分な NUL
+	for (const UnicodeString &p : paths) chars += static_cast<std::size_t>(p.Length()) + 1;
+
+	const std::size_t bytes = sizeof(DROPFILES) + chars * sizeof(wchar_t);
+	HGLOBAL h = ::GlobalAlloc(GHND, bytes);
+	if (h == NULL) return NULL;
+
+	BYTE *base = static_cast<BYTE *>(::GlobalLock(h));
+	DROPFILES *df = reinterpret_cast<DROPFILES *>(base);
+	df->pFiles = sizeof(DROPFILES);
+	df->fWide = TRUE;
+
+	wchar_t *w = reinterpret_cast<wchar_t *>(base + sizeof(DROPFILES));
+	for (const UnicodeString &p : paths) {
+		::wcscpy(w, p.c_str());
+		w += p.Length() + 1;
+	}
+	*w = L'\0';  // 二重 NUL で終端
+
+	::GlobalUnlock(h);
+	return h;
+}
+
+/// DWORD ひとつだけのグローバルメモリ (Preferred DropEffect 用)
+HGLOBAL make_dword(DWORD value)
+{
+	HGLOBAL h = ::GlobalAlloc(GHND, sizeof(DWORD));
+	if (h == NULL) return NULL;
+	*static_cast<DWORD *>(::GlobalLock(h)) = value;
+	::GlobalUnlock(h);
+	return h;
+}
+
+}  // namespace
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdFilesToClip(bool cut)
+{
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> names = pane->GetSelectedNames();
+	if (names.empty()) { SetStatusWarning(_T("対象がありません")); return; }
+
+	std::vector<UnicodeString> paths;
+	for (const UnicodeString &name : names) paths.push_back(pane->GetPath() + name);
+
+	if (!::OpenClipboard(static_cast<HWND>(GetHandle()))) {
+		SetStatusWarning(_T("クリップボードを開けません"));
+		return;
+	}
+	::EmptyClipboard();
+
+	HGLOBAL hdrop = make_hdrop(paths);
+	if (hdrop != NULL) ::SetClipboardData(CF_HDROP, hdrop);
+
+	// VCL と同じ形式で「コピーか切り取りか」を載せる
+	const UINT fmt = ::RegisterClipboardFormatW(CFSTR_PREFERREDDROPEFFECT);
+	HGLOBAL heff = make_dword(cut? DROPEFFECT_MOVE : DROPEFFECT_COPY);
+	if (fmt != 0 && heff != NULL) ::SetClipboardData(fmt, heff);
+
+	::CloseClipboard();
+	SetStatusWarning(UnicodeString().sprintf(cut? _T("%d 件を切り取りました") : _T("%d 件をコピーしました"),
+	                                         static_cast<int>(paths.size())));
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdPaste()
+{
+	if (!::IsClipboardFormatAvailable(CF_HDROP)) {
+		SetStatusWarning(_T("クリップボードにファイルがありません"));
+		return;
+	}
+	if (!::OpenClipboard(static_cast<HWND>(GetHandle()))) {
+		SetStatusWarning(_T("クリップボードを開けません"));
+		return;
+	}
+
+	std::vector<UnicodeString> paths;
+	bool is_move = false;
+	{
+		HDROP dp = static_cast<HDROP>(::GetClipboardData(CF_HDROP));
+		if (dp != NULL) {
+			const UINT count = ::DragQueryFileW(dp, 0xFFFFFFFF, NULL, 0);
+			for (UINT i = 0; i < count; ++i) {
+				wchar_t buf[MAX_PATH * 2] = {};
+				if (::DragQueryFileW(dp, i, buf, MAX_PATH * 2) > 0) paths.push_back(UnicodeString(buf));
+			}
+		}
+		const UINT fmt = ::RegisterClipboardFormatW(CFSTR_PREFERREDDROPEFFECT);
+		if (fmt != 0) {
+			const DWORD *ep = static_cast<const DWORD *>(::GetClipboardData(fmt));
+			if (ep != NULL) is_move = clipboard_files::IsMoveEffect(*ep);
+		}
+	}
+	::CloseClipboard();
+
+	if (paths.empty()) { SetStatusWarning(_T("クリップボードにファイルがありません")); return; }
+
+	FilePane *pane = ActivePane();
+	const UnicodeString dst = pane->GetPath();
+	const UnicodeString verb = is_move? _T("移動") : _T("コピー");
+
+	// 弾いた分は黙って捨てず、必ず見せる (規約: 破壊的操作)
+	const clipboard_files::PasteCheck check = clipboard_files::ValidatePasteTargets(paths, dst);
+	if (!check.rejected.empty()) {
+		UnicodeString msg = _T("次の項目は貼り付けられません:\r\n");
+		for (const UnicodeString &r : check.rejected) msg += _T("  ") + r + _T("\r\n");
+		if (check.accepted.empty()) {
+			wxMessageBox(to_wx(msg), to_wx(_T("貼り付け")), wxOK | wxICON_WARNING, this);
+			return;
+		}
+		msg += _T("\r\n残りを") + verb + _T("しますか?");
+		if (wxMessageBox(to_wx(msg), to_wx(_T("貼り付け")), wxYES_NO | wxICON_WARNING, this) != wxYES) return;
+	}
+
+	std::vector<UnicodeString> names;
+	for (const UnicodeString &p : check.accepted) names.push_back(ExtractFileName(ExcludeTrailingPathDelimiter(p)));
+	if (!ConfirmItems(this, _T("貼り付け"), verb, names, dst)) return;
+
+	const file_ops::FileOpResult result = is_move? file_ops::MoveItems(check.accepted, dst)
+	                                             : file_ops::CopyItems(check.accepted, dst);
+	panes_[0]->Reload();
+	panes_[1]->Reload();
+	wxMessageBox(to_wx(file_ops::Summarize(result)), to_wx(_T("貼り付けの結果")),
+	             wxOK | wxICON_INFORMATION, this);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
 void MainFrame::UpdateStatus()
 {
 	for (int i = 0; i < 2; ++i) {
@@ -1156,6 +1299,15 @@ bool MainFrame::Execute(const UnicodeString &command)
 	}
 	else if (SameStr(command, _T("NewFile")) || SameStr(command, _T("NewTextFile"))) {
 		CmdNewFile();
+	}
+	else if (SameStr(command, _T("CopyToClip"))) {
+		CmdFilesToClip(false);
+	}
+	else if (SameStr(command, _T("CutToClip"))) {
+		CmdFilesToClip(true);
+	}
+	else if (SameStr(command, _T("Paste"))) {
+		CmdPaste();
 	}
 	else if (SameStr(command, _T("KeyList"))) {
 		ShowKeyList();
