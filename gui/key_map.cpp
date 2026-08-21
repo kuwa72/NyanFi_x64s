@@ -185,6 +185,14 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Ctrl+Shift+L"), _T("SubDirList"));
 	Assign(_T("Ctrl+Shift+F"), _T("SpecialDirList"));
 
+	// ファイル操作。VCL の既定表に無いので推測
+	Assign(_T("Shift+C"), _T("CopyTo"));
+	Assign(_T("Shift+M"), _T("MoveTo"));
+	Assign(_T("Ctrl+Shift+U"), _T("NameToUpper"));
+	Assign(_T("Ctrl+Shift+N"), _T("NameToLower"));
+	Assign(_T("Ctrl+C"), _T("CopyFileName"));
+	Assign(_T("Ctrl+N"), _T("NewFile"));
+
 	// 並べ替え・絞り込み。"S" は src/Global.cpp の既定キー表にある実際の割り当て
 	// ("F:S=SortDlg") と同じ。Ctrl+M / Ctrl+U は既定キー表に対応する記載が無く
 	// (パスマスクはコンボボックス操作が前提で単独のキー割り当てが見当たらない)、

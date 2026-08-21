@@ -24,6 +24,7 @@
 
 #include <wx/wx.h>
 
+#include "gui/file_ops.h"
 #include "gui/file_pane.h"
 #include "gui/image_viewer.h"
 #include "gui/key_map.h"
@@ -154,6 +155,16 @@ private:
 	void CmdToTab();                 //!< 番号/キャプションでタブを選ぶ (ToTab)
 	void CmdSubDirList();            //!< サブディレクトリ一覧から選んで移動
 	void CmdSpecialDirList();        //!< 特殊フォルダ一覧から選んで移動
+
+	//-- ファイル操作 (機能群5) -----------------------------------------------
+	/// 入力したディレクトリへコピー/移動する (CopyTo / MoveTo)
+	void CmdCopyMoveTo(bool move);
+	/// 名前の大文字/小文字を変換する (NameToUpper / NameToLower)
+	void CmdChangeNameCase(file_ops::NameCase how);
+	/// ファイル名をクリップボードへ (CopyFileName)
+	void CmdCopyFileName(bool full_path);
+	/// 空のファイルを作る (NewFile)
+	void CmdNewFile();
 
 	DirStack dir_stack_;          //!< ディレクトリ・スタック (PushDir / PopDir)
 	bool sync_lr_ = false;        //!< 左右のディレクトリを同期させるか (SyncLR)
