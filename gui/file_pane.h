@@ -96,6 +96,30 @@ public:
 	/// `gui/selection.h` に渡すため。絞り込みで隠れている項目は含まない)
 	std::vector<FileItem> VisibleItems() const;
 
+	//-- 結果リスト (検索結果などの、別ディレクトリの項目が混ざった一覧) ------
+	/**
+	 * @brief 結果リストを表示する
+	 * @param title 見出し (ヘッダに出す)
+	 * @param items 表示する項目 (それぞれ full_path を持つこと)
+	 * @details **このモードの間は Reload() でディスクを読み直さない。**
+	 *          読み直すと結果が消えてしまうため。`ReturnToList()` で通常の
+	 *          一覧に戻る (VCL の ReturnList 相当)
+	 */
+	void ShowResultList(const UnicodeString &title, const std::vector<FileItem> &items);
+
+	/// 結果リストを表示中か
+	bool IsResultList() const { return result_mode_; }
+	/// 結果リストの見出し
+	UnicodeString ResultTitle() const { return result_title_; }
+	/// 通常の一覧に戻る (ReturnList)
+	void ReturnToList();
+
+	/// 項目のフルパスを返す。結果リストなら full_path、通常なら path_ + name
+	UnicodeString FullPathOf(const FileItem &item) const
+	{
+		return item.full_path.IsEmpty()? (path_ + item.name) : item.full_path;
+	}
+
 	/// `VisibleItems()` で取り出したものの選択状態を書き戻す。
 	/// **並び順が変わっていないことが前提**なので、取り出してから
 	/// 書き戻すまでの間に再読み込みや並べ替えを挟まないこと
@@ -166,6 +190,9 @@ private:
 	const FileItem &ItemAt(int index) const { return all_items_[order_[static_cast<std::size_t>(index)]]; }
 
 	UnicodeString path_;
+	bool result_mode_ = false;      //!< 結果リストを表示中か
+	UnicodeString result_title_;    //!< 結果リストの見出し
+
 	bool show_hidden_ = false;      //!< 隠しファイルを出すか (ShowHideAtr)
 	bool show_system_ = false;      //!< システムファイルを出すか (ShowSystemAtr)
 	bool byte_size_ = false;        //!< サイズをバイト単位で出すか (ShowByteSize)

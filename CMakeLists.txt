@@ -247,6 +247,7 @@ if(TARGET nyanfi_core)
 		gui/external.cpp
 		gui/dir_info.cpp
 		gui/misc_ops.cpp
+		gui/find_files.cpp
 	)
 	target_include_directories(nyanfi_gui_core PUBLIC ${PROJECT_SOURCE_DIR})
 	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core shell32 netapi32)

@@ -17,6 +17,8 @@
 /// 一覧の1行
 struct FileItem {
 	UnicodeString name;    //!< ファイル名 (パスを含まない)
+	UnicodeString full_path;//!< フルパス。**結果リストのときだけ**入る
+	                       //!< (通常の一覧はペインのディレクトリと name で決まるので空)
 	Int64 size = 0;        //!< サイズ (ディレクトリは -1)
 	TDateTime stamp;       //!< 最終更新日時
 	int attr = 0;          //!< 属性 (faXXX)

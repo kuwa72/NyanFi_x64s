@@ -1862,6 +1862,61 @@ void MainFrame::CmdRestart()
 }
 
 //---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// 検索と結果リスト
+//---------------------------------------------------------------------------
+void MainFrame::CmdFindFiles(find_files::Target target)
+{
+	FilePane *pane = ActivePane();
+
+	const UnicodeString what = (target == find_files::Target::Directories)? _T("ディレクトリ名")
+	                         : (target == find_files::Target::Both)?        _T("名前")
+	                                                                      : _T("ファイル名");
+	const wxString input = wxGetTextFromUser(
+		to_wx(what + _T(" のマスクを入力してください (例: *.txt;*.md)")),
+		to_wx(what + _T("の検索")), to_wx(_T("*")), this);
+	if (input.IsEmpty()) return;
+
+	find_files::Query q;
+	q.mask = to_us(input);
+	q.target = target;
+	q.recursive = true;
+	q.show_hidden = pane->GetShowHidden();
+	q.show_system = pane->GetShowSystem();
+
+	::wxBeginBusyCursor();
+	const find_files::Result r = find_files::Search(pane->GetPath(), q);
+	::wxEndBusyCursor();
+
+	if (r.items.empty()) {
+		wxMessageBox(to_wx(UnicodeString().sprintf(_T("見つかりませんでした (%d 件を走査)"), r.scanned)),
+		             to_wx(what + _T("の検索")), wxOK | wxICON_INFORMATION, this);
+		return;
+	}
+
+	UnicodeString title;
+	title.sprintf(_T("検索: %s  (%d 件"), q.mask.c_str(), static_cast<int>(r.items.size()));
+	// 打ち切ったら黙っていない
+	if (r.truncated_hits) title += _T(" / 上限で打ち切り");
+	if (r.truncated_scan) title += _T(" / 走査を打ち切り");
+	title += _T(")");
+
+	pane->ShowResultList(title, r.items);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdReturnList()
+{
+	FilePane *pane = ActivePane();
+	// ESC に割り当てているので、結果リストでないときは黙って何もしない
+	// (押すたびに警告が出ると邪魔になる)
+	if (!pane->IsResultList()) return;
+	pane->ReturnToList();
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
 void MainFrame::UpdateStatus()
 {
 	for (int i = 0; i < 2; ++i) {
@@ -1869,7 +1924,11 @@ void MainFrame::UpdateStatus()
 
 		// パス + 並べ替えキー/方向 + (絞り込み中なら) マスクをヘッダに出す。
 		// マスク中は絞り込み状態が見えないと危険なので必ず表示する
-		UnicodeString label = mark + panes_[i]->GetPath() + _T("  [") + panes_[i]->GetSortSummary() + _T("]");
+		// 結果リストのときは見出しを出す。**通常の一覧と見分けが付かないと
+		// 「ディレクトリを移動したのに戻らない」と誤解する**
+		UnicodeString label = panes_[i]->IsResultList()
+			? (mark + panes_[i]->ResultTitle() + _T("  ← ") + panes_[i]->GetPath())
+			: (mark + panes_[i]->GetPath() + _T("  [") + panes_[i]->GetSortSummary() + _T("]"));
 		if (panes_[i]->HasMask()) label += _T("  マスク: ") + panes_[i]->GetMask();
 		headers_[i]->SetLabel(to_wx(label));
 	}
@@ -2319,6 +2378,19 @@ bool MainFrame::Execute(const UnicodeString &command)
 	}
 	else if (SameStr(command, _T("Restart"))) {
 		CmdRestart();
+	}
+	//-- 検索と結果リスト -----------------------------------------------------
+	else if (SameStr(command, _T("FindFileDlg"))) {
+		CmdFindFiles(find_files::Target::Files);
+	}
+	else if (SameStr(command, _T("FindDirDlg"))) {
+		CmdFindFiles(find_files::Target::Directories);
+	}
+	else if (SameStr(command, _T("FindFileDirDlg"))) {
+		CmdFindFiles(find_files::Target::Both);
+	}
+	else if (SameStr(command, _T("ReturnList"))) {
+		CmdReturnList();
 	}
 	else if (SameStr(command, _T("KeyList"))) {
 		ShowKeyList();
