@@ -235,7 +235,12 @@ bool RenameItem(const UnicodeString &dir, const UnicodeString &old_name,
 		error_out = _T("元のファイルが見つかりません");
 		return false;
 	}
-	if (file_exists(new_path) || dir_exists(new_path)) {
+	// **大文字小文字だけの変更は、宛先の存在チェックを飛ばす。**
+	// Windows のファイル名は大文字小文字を区別しないので、`a.txt` を `A.txt` に
+	// するとき new_path が「既に存在する」と判定される。これを弾いていたため
+	// **大文字小文字だけの改名が常に失敗していた** (NameToUpper/NameToLower を
+	// 足したときに発覚)。SameText なら同一ファイルなので上書きの心配は無い
+	if (!SameText(old_name, new_name) && (file_exists(new_path) || dir_exists(new_path))) {
 		error_out = _T("同名のファイルまたはディレクトリが既に存在します");
 		return false;
 	}
@@ -303,6 +308,47 @@ bool SendToTrash(const std::vector<UnicodeString> &paths, UnicodeString &error_o
 		return false;
 	}
 	return true;
+}
+
+
+//---------------------------------------------------------------------------
+UnicodeString ApplyNameCase(const UnicodeString &name, NameCase how)
+{
+	// VCL は名前全体を変換する (MainFrm.cpp:22212)。拡張子だけ残したりしない
+	return (how == NameCase::Upper)? name.UpperCase() : name.LowerCase();
+}
+
+//---------------------------------------------------------------------------
+FileOpResult ChangeNameCase(const UnicodeString &dir, const std::vector<UnicodeString> &names,
+                            NameCase how)
+{
+	FileOpResult result;
+	const UnicodeString base = IncludeTrailingPathDelimiter(dir);
+
+	for (const UnicodeString &name : names) {
+		const UnicodeString to = ApplyNameCase(name, how);
+
+		// 変わらないなら何もしない。同じ名前への rename は環境によって失敗する
+		if (SameStr(name, to)) continue;
+
+		// 宛先の重複判定は RenameItem 側が持つ (大文字小文字だけの違いは
+		// 同一ファイルなので通す、という判断もそちらにある)
+		UnicodeString error;
+		if (RenameItem(base, name, to, error)) result.success_count++;
+		else result.failures.push_back(name + _T(": ") + error);
+	}
+	return result;
+}
+
+//---------------------------------------------------------------------------
+UnicodeString FormatFileNames(const std::vector<UnicodeString> &paths, bool full_path)
+{
+	UnicodeString out;
+	for (const UnicodeString &p : paths) {
+		if (!out.IsEmpty()) out += _T("\r\n");
+		out += full_path? p : ExtractFileName(p);
+	}
+	return out;
 }
 
 }  // namespace file_ops

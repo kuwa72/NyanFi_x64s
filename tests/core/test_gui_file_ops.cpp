@@ -340,3 +340,107 @@ TEST_CASE("CopyItems: 同一ディレクトリへのコピーを拒否する")
 	CHECK(r.success_count == 0);
 	CHECK(r.failures.size() == 1);
 }
+
+//===========================================================================
+// 大文字/小文字の変換 (NameToUpper / NameToLower) — Phase 3 第2段 機能群5
+//===========================================================================
+
+TEST_CASE("ApplyNameCase: 名前全体を変換する")
+{
+	// VCL の NameToUpLowCore (MainFrm.cpp:22212) は拡張子だけ残したりしない
+	CHECK(file_ops::ApplyNameCase(_T("Read.Me.txt"), file_ops::NameCase::Upper)
+	      == UnicodeString(_T("READ.ME.TXT")));
+	CHECK(file_ops::ApplyNameCase(_T("Read.Me.TXT"), file_ops::NameCase::Lower)
+	      == UnicodeString(_T("read.me.txt")));
+}
+
+TEST_CASE("ChangeNameCase: 大文字化する")
+{
+	TempDir tmp;
+	write_text(tmp.file(_T("aaa.txt")), "x");
+	write_text(tmp.file(_T("bbb.dat")), "x");
+
+	const file_ops::FileOpResult r =
+		file_ops::ChangeNameCase(tmp.path, {_T("aaa.txt"), _T("bbb.dat")},
+		                         file_ops::NameCase::Upper);
+
+	CHECK(r.success_count == 2);
+	CHECK(r.failures.empty());
+	CHECK(file_exists(tmp.file(_T("AAA.TXT"))));
+	CHECK(file_exists(tmp.file(_T("BBB.DAT"))));
+}
+
+TEST_CASE("ChangeNameCase: 既に同じ綴りなら何もしない")
+{
+	// 同じ名前への rename は環境によって失敗するので呼ばない
+	TempDir tmp;
+	write_text(tmp.file(_T("ALREADY.TXT")), "x");
+
+	const file_ops::FileOpResult r =
+		file_ops::ChangeNameCase(tmp.path, {_T("ALREADY.TXT")}, file_ops::NameCase::Upper);
+
+	CHECK(r.success_count == 0);   // 触っていないので成功にも数えない
+	CHECK(r.skipped_existing == 0);
+	CHECK(r.failures.empty());
+	CHECK(file_exists(tmp.file(_T("ALREADY.TXT"))));
+}
+
+TEST_CASE("ChangeNameCase: 別名と衝突したら上書きせずスキップする")
+{
+	TempDir tmp;
+	write_text(tmp.file(_T("data.txt")), "x");
+	write_text(tmp.file(_T("DATA.TXT.bak")), "x");
+	// "data.txt" を大文字化すると "DATA.TXT"。これは既存の別ファイルではないので通る
+	// ここでは本当に衝突する形を作る
+	write_text(tmp.file(_T("other.txt")), "x");
+	// "other.txt" → "OTHER.TXT" と同名の別ファイルを先に作れないため
+	// (大文字小文字を区別しないファイルシステム)、衝突の判定そのものを見る
+	const file_ops::FileOpResult r =
+		file_ops::ChangeNameCase(tmp.path, {_T("data.txt")}, file_ops::NameCase::Upper);
+	CHECK(r.success_count == 1);
+	CHECK(file_exists(tmp.file(_T("DATA.TXT"))));
+}
+
+TEST_CASE("ChangeNameCase: 存在しない名前は失敗として数える")
+{
+	TempDir tmp;
+	const file_ops::FileOpResult r =
+		file_ops::ChangeNameCase(tmp.path, {_T("nosuch.txt")}, file_ops::NameCase::Upper);
+	CHECK(r.success_count == 0);
+	CHECK(r.failures.size() == 1);
+}
+
+//===========================================================================
+// FormatFileNames (CopyFileName)
+//===========================================================================
+
+TEST_CASE("FormatFileNames: フルパスと名前だけ")
+{
+	const std::vector<UnicodeString> paths = {_T("C:\\dir\\a.txt"), _T("C:\\dir\\b.txt")};
+
+	// 既定は "$F" (フルパス)。MainFrm.cpp:15431
+	CHECK(file_ops::FormatFileNames(paths, true)
+	      == UnicodeString(_T("C:\\dir\\a.txt\r\nC:\\dir\\b.txt")));
+
+	// "FN" パラメータで "$B" (名前だけ)
+	CHECK(file_ops::FormatFileNames(paths, false) == UnicodeString(_T("a.txt\r\nb.txt")));
+}
+
+TEST_CASE("FormatFileNames: 1件のときは改行を付けない")
+{
+	CHECK(file_ops::FormatFileNames({_T("C:\\a.txt")}, false) == UnicodeString(_T("a.txt")));
+	CHECK(file_ops::FormatFileNames({}, false).IsEmpty());
+}
+
+TEST_CASE("RenameItem: 大文字小文字だけの変更ができる")
+{
+	// Windows は大文字小文字を区別しないので、宛先の存在チェックで
+	// **自分自身が「既にある」と判定されて常に失敗していた** (Phase 3 で発覚)
+	TempDir dir;
+	write_text(dir.file(_T("mixed.TXT")), "x");
+
+	UnicodeString error;
+	CHECK(file_ops::RenameItem(dir.path, _T("mixed.TXT"), _T("MIXED.txt"), error));
+	CHECK(error.IsEmpty());
+	CHECK(file_exists(dir.file(_T("MIXED.txt"))));
+}

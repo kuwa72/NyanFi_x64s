@@ -109,6 +109,45 @@ bool SendToTrash(const std::vector<UnicodeString> &paths, UnicodeString &error_o
  * @param dst 先のパス
  * @return bool 同じか配下なら true (操作してはいけない)
  */
+/// 名前の大文字/小文字変換のしかた (NameToUpper / NameToLower)
+enum class NameCase { Upper, Lower };
+
+/**
+ * @brief 大文字/小文字を変換した後の名前を返す
+ * @details 実測: VCL の `NameToUpLowCore` (MainFrm.cpp:22212) は
+ *          `fp->f_name.UpperCase()` と**名前全体**を変換する
+ *          (拡張子だけ残すようなことはしない)。
+ *
+ *          VCL は `f_name` がフルパスなのでパス部分まで変換されるが、
+ *          Windows のパスは大文字小文字を区別しないので結果は同じになる。
+ *          こちらは**名前の部分だけ**を変換する (パスを変えないので意図が明確)。
+ * @return 変換後の名前。変わらないなら元と同じ文字列
+ */
+UnicodeString ApplyNameCase(const UnicodeString &name, NameCase how);
+
+/**
+ * @brief 大文字/小文字の変換をまとめて行う (NameToUpper / NameToLower)
+ * @param dir 対象のディレクトリ (末尾の区切りは有無どちらでもよい)
+ * @param names 対象の名前 (パスを含まない)
+ * @param how 変換のしかた
+ * @return 成功・失敗の件数と失敗の内訳
+ * @details **変わらない名前は何もしない** (既に大文字なら rename を呼ばない)。
+ *          呼ぶと「同じ名前へのリネーム」になり、環境によっては失敗するため。
+ *          衝突 (変換後の名前が既にある) は失敗として数え、上書きしない
+ */
+FileOpResult ChangeNameCase(const UnicodeString &dir, const std::vector<UnicodeString> &names,
+                            NameCase how);
+
+/**
+ * @brief クリップボードへ入れるファイル名の文字列を作る (CopyFileName)
+ * @param paths 対象のフルパス
+ * @param full_path true ならフルパス、false なら名前だけ
+ * @details 実測: VCL の `CopyFileName` (MainFrm.cpp:15429) は既定が `"$F"`
+ *          (フルパス)、`"FN"` パラメータで `"$B"` (名前だけ) になる。
+ *          区切りは改行 (CRLF)
+ */
+UnicodeString FormatFileNames(const std::vector<UnicodeString> &paths, bool full_path);
+
 bool IsSameOrInside(const UnicodeString &src, const UnicodeString &dst);
 
 }  // namespace file_ops

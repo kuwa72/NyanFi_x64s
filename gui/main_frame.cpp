@@ -4,6 +4,8 @@
  */
 #include "gui/main_frame.h"
 
+#include <wx/clipbrd.h>
+
 #include <algorithm>
 #include <array>
 #include <functional>
@@ -712,6 +714,127 @@ void MainFrame::CmdSpecialDirList()
 }
 
 //---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// ファイル操作 (機能群5)
+//---------------------------------------------------------------------------
+void MainFrame::CmdCopyMoveTo(bool move)
+{
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> names = pane->GetSelectedNames();
+	const UnicodeString verb = move? _T("移動") : _T("コピー");
+	if (names.empty()) { SetStatusWarning(verb + _T("対象がありません")); return; }
+
+	const wxString input = wxGetTextFromUser(
+		to_wx(verb + _T("先のディレクトリを入力してください")), to_wx(verb + _T("先の指定")),
+		to_wx(OppositePane()->GetPath()), this);
+	if (input.IsEmpty()) return;
+
+	UnicodeString dst;
+	if (!ResolveDirectoryInput(to_us(input), pane->GetPath(), dst)) {
+		wxMessageBox(to_wx(_T("ディレクトリが見つかりません: ") + to_us(input)),
+		             to_wx(verb), wxOK | wxICON_WARNING, this);
+		return;
+	}
+
+	// 自分自身や配下への操作を弾く (規約: 破壊的な機能を足すとき)。
+	// file_ops 側でも見るが、確認ダイアログを出す前に落としたい
+	for (const UnicodeString &name : names) {
+		if (file_ops::IsSameOrInside(pane->GetPath() + name, dst)) {
+			wxMessageBox(to_wx(_T("自分自身または配下のディレクトリへは") + verb + _T("できません: ") + name),
+			             to_wx(verb), wxOK | wxICON_WARNING, this);
+			return;
+		}
+	}
+
+	if (!ConfirmItems(this, verb, verb, names, dst)) return;
+
+	std::vector<UnicodeString> paths;
+	for (const UnicodeString &name : names) paths.push_back(pane->GetPath() + name);
+
+	const file_ops::FileOpResult result = move? file_ops::MoveItems(paths, dst)
+	                                          : file_ops::CopyItems(paths, dst);
+	panes_[0]->Reload();
+	panes_[1]->Reload();
+	wxMessageBox(to_wx(file_ops::Summarize(result)), to_wx(verb + _T("の結果")),
+	             wxOK | wxICON_INFORMATION, this);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdChangeNameCase(file_ops::NameCase how)
+{
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> names = pane->GetSelectedNames();
+	const UnicodeString verb = (how == file_ops::NameCase::Upper)? _T("大文字化") : _T("小文字化");
+	if (names.empty()) { SetStatusWarning(verb + _T("の対象がありません")); return; }
+
+	// 改名も元に戻しにくい操作なので確認する (規約: 破壊的操作の前に必ず確認)
+	if (!ConfirmItems(this, verb, verb, names, pane->GetPath())) return;
+
+	const file_ops::FileOpResult result = file_ops::ChangeNameCase(pane->GetPath(), names, how);
+	pane->Reload();
+	wxMessageBox(to_wx(file_ops::Summarize(result)), to_wx(verb + _T("の結果")),
+	             wxOK | wxICON_INFORMATION, this);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdCopyFileName(bool full_path)
+{
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> names = pane->GetSelectedNames();
+	if (names.empty()) { SetStatusWarning(_T("対象がありません")); return; }
+
+	std::vector<UnicodeString> paths;
+	for (const UnicodeString &name : names) paths.push_back(pane->GetPath() + name);
+
+	const UnicodeString text = file_ops::FormatFileNames(paths, full_path);
+	if (wxTheClipboard->Open()) {
+		wxTheClipboard->SetData(new wxTextDataObject(to_wx(text)));
+		wxTheClipboard->Close();
+		SetStatusWarning(UnicodeString().sprintf(_T("%d 件の名前をコピーしました"),
+		                                         static_cast<int>(names.size())));
+	}
+	else {
+		SetStatusWarning(_T("クリップボードを開けません"));
+	}
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdNewFile()
+{
+	FilePane *pane = ActivePane();
+	const wxString input = wxGetTextFromUser(to_wx(_T("作成するファイル名を入力してください")),
+	                                          to_wx(_T("新規ファイルの作成")), wxEmptyString, this);
+	if (input.IsEmpty()) return;
+
+	const UnicodeString path = IncludeTrailingPathDelimiter(pane->GetPath()) + to_us(input);
+	if (file_exists(path) || dir_exists(path)) {
+		// 既存があれば上書きしない (規約: 上書きを既定にしない)
+		wxMessageBox(to_wx(_T("同名のファイルまたはディレクトリが既にあります")),
+		             to_wx(_T("新規ファイルの作成")), wxOK | wxICON_WARNING, this);
+		return;
+	}
+
+	HANDLE h = ::CreateFileW(path.c_str(), GENERIC_WRITE, 0, NULL, CREATE_NEW,
+	                         FILE_ATTRIBUTE_NORMAL, NULL);
+	if (h == INVALID_HANDLE_VALUE) {
+		wxMessageBox(to_wx(_T("作成できませんでした: ") + to_us(input)),
+		             to_wx(_T("新規ファイルの作成")), wxOK | wxICON_ERROR, this);
+		return;
+	}
+	::CloseHandle(h);
+
+	pane->Reload();
+	// 作ったファイルにカーソルを合わせる
+	const std::vector<UnicodeString> names = pane->VisibleNames();
+	for (std::size_t i = 0; i < names.size(); ++i) {
+		if (SameText(names[i], to_us(input))) { pane->MoveCursorTo(static_cast<int>(i)); break; }
+	}
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
 void MainFrame::UpdateStatus()
 {
 	for (int i = 0; i < 2; ++i) {
@@ -1014,6 +1137,25 @@ bool MainFrame::Execute(const UnicodeString &command)
 	}
 	else if (SameStr(command, _T("SpecialDirList"))) {
 		CmdSpecialDirList();
+	}
+	//-- ファイル操作 ---------------------------------------------------------
+	else if (SameStr(command, _T("CopyTo"))) {
+		CmdCopyMoveTo(false);
+	}
+	else if (SameStr(command, _T("MoveTo"))) {
+		CmdCopyMoveTo(true);
+	}
+	else if (SameStr(command, _T("NameToUpper"))) {
+		CmdChangeNameCase(file_ops::NameCase::Upper);
+	}
+	else if (SameStr(command, _T("NameToLower"))) {
+		CmdChangeNameCase(file_ops::NameCase::Lower);
+	}
+	else if (SameStr(command, _T("CopyFileName"))) {
+		CmdCopyFileName(true);
+	}
+	else if (SameStr(command, _T("NewFile")) || SameStr(command, _T("NewTextFile"))) {
+		CmdNewFile();
 	}
 	else if (SameStr(command, _T("KeyList"))) {
 		ShowKeyList();
