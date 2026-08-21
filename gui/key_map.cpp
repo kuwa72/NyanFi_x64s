@@ -232,6 +232,14 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Ctrl+Alt+P"), _T("PowerShell"));
 	Assign(_T("Ctrl+Alt+E"), _T("OpenByExp"));
 
+	// 情報系。I は src/Global.cpp:2084 の既定表にある実際の割り当て
+	Assign(_T("I"), _T("CalcDirSize"));
+	// 以下は既定表に無いので推測
+	Assign(_T("Shift+I"), _T("CalcDirSizeAll"));
+	Assign(_T("Ctrl+Alt+L"), _T("FileExtList"));
+	Assign(_T("Ctrl+Alt+T"), _T("ListTree"));
+	Assign(_T("Ctrl+Alt+A"), _T("AboutNyanFi"));
+
 	// 並べ替え・絞り込み。"S" は src/Global.cpp の既定キー表にある実際の割り当て
 	// ("F:S=SortDlg") と同じ。Ctrl+M / Ctrl+U は既定キー表に対応する記載が無く
 	// (パスマスクはコンボボックス操作が前提で単独のキー割り当てが見当たらない)、
