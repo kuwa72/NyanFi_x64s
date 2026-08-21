@@ -76,6 +76,11 @@ bool FilePane::SetPath(const UnicodeString &path, bool record_history)
 	const UnicodeString newpath = IncludeTrailingPathDelimiter(path);
 	if (!dir_exists(newpath)) return false;
 
+	// ディレクトリを移ったら結果リストは終わり。**ここで落とさないと
+	// Collect() が早期 return するので「移動したのに結果が出たまま」になる**
+	result_mode_ = false;
+	result_title_ = EmptyStr;
+
 	path_ = newpath;
 	cursor_ = 0;
 	top_ = 0;
@@ -105,6 +110,10 @@ void FilePane::Reload()
 //---------------------------------------------------------------------------
 void FilePane::Collect()
 {
+	// 結果リストの間はディスクを読み直さない (読むと結果が消える)。
+	// ReturnToList() が result_mode_ を落としてから Reload() する
+	if (result_mode_) return;
+
 	all_items_.clear();
 
 	if (!is_root_dir(path_)) {
@@ -353,7 +362,42 @@ bool FilePane::EnterCurrent()
 	if (itm == nullptr || !itm->is_dir) return false;
 
 	if (itm->is_parent) return GoParent();
+
+	// 結果リストの項目は別のディレクトリにあるので full_path を使う。
+	// 入った時点で通常の一覧に戻る (VCL も結果リストからディレクトリに入ると
+	// そのディレクトリの一覧になる)
+	if (result_mode_) {
+		const UnicodeString target = FullPathOf(*itm);
+		result_mode_ = false;
+		result_title_ = EmptyStr;
+		return SetPath(target);
+	}
 	return SetPath(path_ + itm->name);
+}
+
+//---------------------------------------------------------------------------
+void FilePane::ShowResultList(const UnicodeString &title, const std::vector<FileItem> &items)
+{
+	result_mode_ = true;
+	result_title_ = title;
+
+	all_items_ = items;
+	// 結果リストには ".." を入れない (戻る先が1つに決まらないため)
+	ApplyFilterAndSort();
+
+	cursor_ = 0;
+	top_ = 0;
+	Refresh();
+}
+
+//---------------------------------------------------------------------------
+void FilePane::ReturnToList()
+{
+	if (!result_mode_) return;
+	// 先に落とさないと Collect() が早期 return して一覧が戻らない
+	result_mode_ = false;
+	result_title_ = EmptyStr;
+	Reload();
 }
 
 //---------------------------------------------------------------------------

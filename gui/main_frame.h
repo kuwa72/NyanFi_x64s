@@ -28,6 +28,7 @@
 #include "gui/external.h"
 #include "gui/misc_ops.h"
 #include "gui/file_ops.h"
+#include "gui/find_files.h"
 #include "gui/links.h"
 #include "gui/file_pane.h"
 #include "gui/image_viewer.h"
@@ -218,6 +219,10 @@ private:
 	void CmdNetConnect(bool disconnect);  //!< ネットワークドライブの割り当て / 切断
 	void CmdListClipboard();      //!< クリップボードの内容を表示
 	void CmdRestart();            //!< 再起動
+
+	//-- 検索と結果リスト -----------------------------------------------------
+	void CmdFindFiles(find_files::Target target);  //!< 名前で探して結果リストに出す
+	void CmdReturnList();                           //!< 通常の一覧に戻る (ReturnList)
 
 	DirStack dir_stack_;          //!< ディレクトリ・スタック (PushDir / PopDir)
 	bool sync_lr_ = false;        //!< 左右のディレクトリを同期させるか (SyncLR)

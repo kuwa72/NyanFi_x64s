@@ -247,6 +247,13 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Ctrl+Alt+S"), _T("ShareList"));
 	Assign(_T("Ctrl+Alt+C"), _T("ListClipboard"));
 
+	// 検索と結果リスト。F3 は src/Global.cpp:2100 の既定表にある実際の割り当て
+	Assign(_T("F3"), _T("FindFileDlg"));
+	// 以下は既定表に無いので推測
+	Assign(_T("Shift+F3"), _T("FindDirDlg"));
+	Assign(_T("Ctrl+F3"), _T("FindFileDirDlg"));
+	Assign(_T("ESC"), _T("ReturnList"));
+
 	// 並べ替え・絞り込み。"S" は src/Global.cpp の既定キー表にある実際の割り当て
 	// ("F:S=SortDlg") と同じ。Ctrl+M / Ctrl+U は既定キー表に対応する記載が無く
 	// (パスマスクはコンボボックス操作が前提で単独のキー割り当てが見当たらない)、
