@@ -800,3 +800,29 @@ Phase 3 の第1段で入れたもののうち、そこに当たるものをこ�
 
 このうち `MainFormHandle` だけは **GUI 側で代入すれば直る**ので、Phase 3 の第2段で
 `gui/nyanfi_app.cpp` に入れる。
+
+---
+
+## 20. 移植済みなのにリンクできないファイル
+
+`src/usr_shell.cpp` は**コンパイルは通る (0 エラー) がリンクできない**。
+Phase 3 第2段でコンテキストメニューを実装しようとして分かった。
+
+同じファイルにあるアイコン取得の経路が、規約4 に従って**宣言のみ**にしてある
+GUI スタブを呼んでいる:
+
+    Graphics::TIcon::SetSize(int, int)
+    Graphics::TIcon::ReleaseHandle()
+    Graphics::TGraphic::LoadFromFile(const UnicodeString &)
+    Graphics::TBitmap::SetHandle(HBITMAP)
+
+`--gc-sections` はシンボル解決の**後**に走るので、呼ばれない経路でも未定義参照
+になる (規約4 の注意書きのとおり)。
+
+**そのため `UserShell::ShowContextMenu` を使えず、コンテキストメニューは
+`gui/main_frame.cpp` に `IContextMenu` を直接叩く形で書いた** (約80行)。
+移植済みのコードを使う方針から外れているので、**アイコン処理を実装したら
+そちらへ寄せること**。
+
+同じ理由で使えていないものが他にもあるはずで、「コンパイルが通る」と
+「使える」の間にこの段差があることを覚えておく。

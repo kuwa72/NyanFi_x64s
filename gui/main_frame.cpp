@@ -1414,6 +1414,191 @@ void MainFrame::CmdListFileName()
 }
 
 //---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// 外部連携 (機能群10)
+//---------------------------------------------------------------------------
+namespace {
+
+/// LaunchSpec のとおりに起動する
+bool launch(const external::LaunchSpec &spec, HWND owner)
+{
+	const HINSTANCE r = ::ShellExecuteW(
+		owner, L"open", spec.file.c_str(),
+		spec.parameters.IsEmpty()? NULL : spec.parameters.c_str(),
+		spec.directory.IsEmpty()? NULL : spec.directory.c_str(), SW_SHOWNORMAL);
+	// ShellExecute は成功時に 32 より大きい値を返す
+	return reinterpret_cast<INT_PTR>(r) > 32;
+}
+
+}  // namespace
+
+void MainFrame::CmdLaunchShell(external::ShellKind kind)
+{
+	const external::LaunchSpec spec = external::ShellLaunchSpec(kind, ActivePane()->GetPath());
+	if (!launch(spec, static_cast<HWND>(GetHandle()))) {
+		SetStatusWarning(_T("起動できません: ") + spec.file);
+	}
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdOpenByExplorer()
+{
+	FilePane *pane = ActivePane();
+	const FileItem *itm = pane->GetCurrentItem();
+
+	// カーソルが有効ならその項目を選択した状態で、そうでなければカレントを開く
+	const bool has_item = (itm != nullptr && !itm->is_parent);
+	const UnicodeString path = has_item? (pane->GetPath() + itm->name) : pane->GetPath();
+	const external::LaunchSpec spec =
+		external::ExplorerLaunchSpec(path, has_item? itm->is_dir : true);
+
+	if (!launch(spec, static_cast<HWND>(GetHandle()))) {
+		SetStatusWarning(_T("エクスプローラを開けません"));
+	}
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdContextMenu()
+{
+	// **移植済みの UserShell::ShowContextMenu を使えていない。**
+	// src/usr_shell.cpp はコンパイルは通るが、同じファイルにあるアイコン取得の
+	// 経路が Graphics::TIcon::SetSize / TGraphic::LoadFromFile / TBitmap::SetHandle
+	// を呼んでおり、それらは規約4 に従って宣言のみ。--gc-sections はシンボル解決の
+	// 後に走るのでリンクエラーになる (CLAUDE.md 規約4 の注意書き)。
+	// アイコン処理を実装したら、こちらを消して UserShell に寄せること (報告書 §20)。
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> names = pane->GetSelectedNames();
+	if (names.empty()) { SetStatusWarning(_T("対象がありません")); return; }
+
+	const UnicodeString dir = ExcludeTrailingPathDelimiter(pane->GetPath());
+
+	IShellFolder *desktop = NULL;
+	if (FAILED(::SHGetDesktopFolder(&desktop)) || desktop == NULL) {
+		SetStatusWarning(_T("シェルを取得できません"));
+		return;
+	}
+
+	LPITEMIDLIST dir_pidl = NULL;
+	IShellFolder *folder = NULL;
+	std::vector<LPCITEMIDLIST> child_pidls;
+	std::vector<LPITEMIDLIST> owned;
+	IContextMenu *menu = NULL;
+
+	auto cleanup = [&] {
+		if (menu != NULL) menu->Release();
+		for (LPITEMIDLIST p : owned) ::CoTaskMemFree(p);
+		if (folder != NULL) folder->Release();
+		if (dir_pidl != NULL) ::CoTaskMemFree(dir_pidl);
+		if (desktop != NULL) desktop->Release();
+	};
+
+	if (FAILED(desktop->ParseDisplayName(NULL, NULL, const_cast<LPWSTR>(dir.c_str()),
+	                                      NULL, &dir_pidl, NULL))
+	    || FAILED(desktop->BindToObject(dir_pidl, NULL, IID_IShellFolder,
+	                                     reinterpret_cast<void **>(&folder)))) {
+		cleanup();
+		SetStatusWarning(_T("ディレクトリを解決できません"));
+		return;
+	}
+
+	for (const UnicodeString &name : names) {
+		LPITEMIDLIST p = NULL;
+		if (SUCCEEDED(folder->ParseDisplayName(NULL, NULL, const_cast<LPWSTR>(name.c_str()),
+		                                        NULL, &p, NULL)) && p != NULL) {
+			owned.push_back(p);
+			child_pidls.push_back(p);
+		}
+	}
+	if (child_pidls.empty()) { cleanup(); SetStatusWarning(_T("対象を解決できません")); return; }
+
+	if (FAILED(folder->GetUIObjectOf(static_cast<HWND>(GetHandle()),
+	                                  static_cast<UINT>(child_pidls.size()), child_pidls.data(),
+	                                  IID_IContextMenu, NULL, reinterpret_cast<void **>(&menu)))
+	    || menu == NULL) {
+		cleanup();
+		SetStatusWarning(_T("コンテキストメニューを取得できません"));
+		return;
+	}
+
+	HMENU hmenu = ::CreatePopupMenu();
+	if (hmenu == NULL) { cleanup(); return; }
+
+	// 1 から始めるのは、0 を「選ばれなかった」と区別するため
+	const UINT kFirst = 1;
+	const UINT kLast = 0x7FFF;
+	if (SUCCEEDED(menu->QueryContextMenu(hmenu, 0, kFirst, kLast, CMF_NORMAL))) {
+		::POINT pt = {};
+		::GetCursorPos(&pt);
+		const int cmd = ::TrackPopupMenu(hmenu, TPM_RETURNCMD | TPM_LEFTALIGN | TPM_RIGHTBUTTON,
+		                                 pt.x, pt.y, 0, static_cast<HWND>(GetHandle()), NULL);
+		if (cmd > 0) {
+			CMINVOKECOMMANDINFO ici = {};
+			ici.cbSize = sizeof(ici);
+			ici.hwnd = static_cast<HWND>(GetHandle());
+			ici.lpVerb = MAKEINTRESOURCEA(cmd - kFirst);
+			ici.nShow = SW_SHOWNORMAL;
+			menu->InvokeCommand(&ici);
+		}
+	}
+	::DestroyMenu(hmenu);
+	cleanup();
+
+	// メニューからの操作でファイルが変わりうるので読み直す
+	panes_[0]->Reload();
+	panes_[1]->Reload();
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdOpenTrash()
+{
+	external::LaunchSpec spec;
+	spec.file = _T("explorer.exe");
+	spec.parameters = _T("shell:RecycleBinFolder");
+	if (!launch(spec, static_cast<HWND>(GetHandle()))) SetStatusWarning(_T("ごみ箱を開けません"));
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdOpenCtrlPanel()
+{
+	external::LaunchSpec spec;
+	spec.file = _T("control.exe");
+	if (!launch(spec, static_cast<HWND>(GetHandle()))) {
+		SetStatusWarning(_T("コントロールパネルを開けません"));
+	}
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdFileRun()
+{
+	// Windows の「ファイル名を指定して実行」を出す。
+	// VCL は自前で組み立てているが、シェルの標準ダイアログで足りる
+	typedef void(WINAPI * RunFileDlgW)(HWND, HICON, LPCWSTR, LPCWSTR, LPCWSTR, UINT);
+	HMODULE h = ::LoadLibraryW(L"shell32.dll");
+	if (h != NULL) {
+		RunFileDlgW fn = reinterpret_cast<RunFileDlgW>(
+			reinterpret_cast<void *>(::GetProcAddress(h, MAKEINTRESOURCEA(61))));
+		if (fn != NULL) {
+			fn(static_cast<HWND>(GetHandle()), NULL,
+			   ExcludeTrailingPathDelimiter(ActivePane()->GetPath()).c_str(), NULL, NULL, 0);
+			::FreeLibrary(h);
+			return;
+		}
+		::FreeLibrary(h);
+	}
+	// **序数 61 は文書化されていない**ので、取れなければ入力で代替する
+	const wxString input = wxGetTextFromUser(to_wx(_T("実行するコマンドを入力してください")),
+	                                          to_wx(_T("ファイル名を指定して実行")),
+	                                          wxEmptyString, this);
+	if (input.IsEmpty()) return;
+
+	external::LaunchSpec spec;
+	spec.file = to_us(input);
+	spec.directory = ExcludeTrailingPathDelimiter(ActivePane()->GetPath());
+	if (!launch(spec, static_cast<HWND>(GetHandle()))) SetStatusWarning(_T("実行できません"));
+}
+
+//---------------------------------------------------------------------------
 void MainFrame::UpdateStatus()
 {
 	for (int i = 0; i < 2; ++i) {
@@ -1805,6 +1990,31 @@ bool MainFrame::Execute(const UnicodeString &command)
 	}
 	else if (SameStr(command, _T("ListFileName"))) {
 		CmdListFileName();
+	}
+	//-- 外部連携 -------------------------------------------------------------
+	else if (SameStr(command, _T("CommandPrompt"))) {
+		CmdLaunchShell(external::ShellKind::CommandPrompt);
+	}
+	else if (SameStr(command, _T("PowerShell"))) {
+		CmdLaunchShell(external::ShellKind::PowerShell);
+	}
+	else if (SameStr(command, _T("WinTerminal"))) {
+		CmdLaunchShell(external::ShellKind::WindowsTerminal);
+	}
+	else if (SameStr(command, _T("OpenByExp"))) {
+		CmdOpenByExplorer();
+	}
+	else if (SameStr(command, _T("ContextMenu"))) {
+		CmdContextMenu();
+	}
+	else if (SameStr(command, _T("OpenTrash"))) {
+		CmdOpenTrash();
+	}
+	else if (SameStr(command, _T("OpenCtrlPanel"))) {
+		CmdOpenCtrlPanel();
+	}
+	else if (SameStr(command, _T("FileRun"))) {
+		CmdFileRun();
 	}
 	else if (SameStr(command, _T("KeyList"))) {
 		ShowKeyList();

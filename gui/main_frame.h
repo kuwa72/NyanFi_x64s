@@ -24,6 +24,7 @@
 
 #include <wx/wx.h>
 
+#include "gui/external.h"
 #include "gui/file_ops.h"
 #include "gui/links.h"
 #include "gui/file_pane.h"
@@ -193,6 +194,14 @@ private:
 	void CmdJoinText();        //!< テキストを1つに結合する
 	void CmdConvertTextEnc();  //!< 文字コードを変換する (破壊的)
 	void CmdListFileName();    //!< ファイル名の一覧を出す
+
+	//-- 外部連携 (機能群10) --------------------------------------------------
+	void CmdLaunchShell(external::ShellKind kind);  //!< cmd / PowerShell / wt を開く
+	void CmdOpenByExplorer();  //!< エクスプローラで開く
+	void CmdContextMenu();     //!< シェルのコンテキストメニューを出す
+	void CmdOpenTrash();       //!< ごみ箱を開く
+	void CmdFileRun();         //!< 「ファイル名を指定して実行」
+	void CmdOpenCtrlPanel();   //!< コントロールパネルを開く
 
 	DirStack dir_stack_;          //!< ディレクトリ・スタック (PushDir / PopDir)
 	bool sync_lr_ = false;        //!< 左右のディレクトリを同期させるか (SyncLR)
