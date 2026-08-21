@@ -18,6 +18,7 @@
 #ifndef NYANFI_GUI_MAIN_FRAME_H
 #define NYANFI_GUI_MAIN_FRAME_H
 
+#include <functional>
 #include <memory>
 #include <vector>
 
@@ -113,6 +114,19 @@ private:
 	void CmdAddTab();   //!< タブを追加する (Ctrl+T、推測のキー)。現在のタブを複製して末尾に追加
 	void CmdDelTab();   //!< 現在のタブを閉じる (Ctrl+W、推測のキー)。最後の1枚は閉じない
 	void CmdNextTab();  //!< 次のタブへ (Ctrl+Tab、推測のキー)
+
+	//-- 選択操作の受け渡し (判断は gui/selection.h の純関数が持つ。規約8) ----
+	/// ステータスバーに一時的な警告を出す (次の UpdateStatus() で消える)
+	void SetStatusWarning(const UnicodeString &text);
+	/// 表示中の項目を取り出して fn を適用し、書き戻す。
+	/// fn が選択を1件も作らなかったら false (呼び出し側が警告を出す)
+	bool ApplySelection(FilePane *pane, const std::function<void(std::vector<FileItem> &)> &fn);
+	/// カーソル位置の選択を反転してから delta だけ動かす (Shift+↑↓ / SelectUp)
+	void MarkCurrentAndMove(FilePane *pane, int delta);
+	/// from から to までを選択する (ページ移動・先頭末尾移動と組で使う)
+	void MarkBetween(FilePane *pane, int from, int to);
+	/// 指定文字列を含む項目を選択する (MatchSelect)
+	void CmdMatchSelect();
 	void CmdPrevTab();  //!< 前のタブへ (Shift+Ctrl+Tab、推測のキー)
 	void ShowTabListDialog();  //!< タブの一覧から選ぶ (Ctrl+E、推測のキー。F:PopupTab に相当)
 	/// 現在のタブの記録 (tabs_.MutableCurrent()) を、いま実際に両ペインが
