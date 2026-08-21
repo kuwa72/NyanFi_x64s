@@ -134,6 +134,97 @@ private:
 	Owner *owner_;
 };
 
+/// 値型の読み書きプロパティ (getter が非 const、setter が値渡しの場合)
+///
+/// `src/task_thread.h` などスレッド系のクラスは
+/// `bool __fastcall GetTaskReady()` / `void __fastcall SetTaskReady(bool Value)`
+/// のように **getter が非 const、setter が値渡し** で書かれている
+/// (排他ロックを取るため const にできない)。RWValueProperty はこの形に
+/// 束縛できないので、専用の版を用意する。src 側の宣言は変えない (規約3)。
+template <class Owner, class T, T (Owner::*Getter)(), void (Owner::*Setter)(T)>
+class RWMutableProperty {
+public:
+	explicit RWMutableProperty(Owner *owner) : owner_(owner) {}
+	RWMutableProperty(const RWMutableProperty &) = delete;
+
+	operator T() const { return (owner_->*Getter)(); }
+	T operator()() const { return (owner_->*Getter)(); }
+	T get() const { return (owner_->*Getter)(); }
+
+	NYANFI_PROPERTY_FORWARD_CONST_METHODS
+
+	RWMutableProperty &operator=(const T &value)
+	{
+		(owner_->*Setter)(value);
+		return *this;
+	}
+
+	RWMutableProperty &operator=(const RWMutableProperty &rhs)
+	{
+		(owner_->*Setter)(static_cast<T>(rhs));
+		return *this;
+	}
+
+private:
+	Owner *owner_;
+};
+
+/// 読み取り専用プロパティ (getter が非 const の場合)
+template <class Owner, class T, T (Owner::*Getter)()>
+class ROMutableProperty {
+public:
+	explicit ROMutableProperty(Owner *owner) : owner_(owner) {}
+	ROMutableProperty(const ROMutableProperty &) = delete;
+
+	operator T() const { return (owner_->*Getter)(); }
+	T operator()() const { return (owner_->*Getter)(); }
+	T get() const { return (owner_->*Getter)(); }
+
+	NYANFI_PROPERTY_FORWARD_CONST_METHODS
+
+private:
+	Owner *owner_;
+};
+
+/// ポインタ要素の添字プロパティ: `lst->Items[i]` / `lst->Items[i] = p`
+///
+/// `__property T * Items[int Index] = {read=Get, write=Put};` の置き換え。
+/// `src/usr_shell.h` の `TItemsProperty` を手で書いた実例があるが、同じ形が
+/// `MarkList.h` と `task_thread.h` にも出てきたのでテンプレートにまとめた。
+///
+/// `operator->` を持たせてあるのは、既存コードに `Items[i]->Member` の書き方が
+/// あるため。`operator T *` だけだと `->` が通らない。
+template <class Owner, class T, T *(Owner::*Getter)(int), void (Owner::*Setter)(int, T *)>
+class IndexedPtrProperty {
+public:
+	explicit IndexedPtrProperty(Owner *owner) : owner_(owner) {}
+	IndexedPtrProperty(const IndexedPtrProperty &) = delete;
+
+	/// 1要素への参照。読みと書きの両方に使う
+	class Ref {
+	public:
+		Ref(Owner *owner, int index) : owner_(owner), index_(index) {}
+
+		operator T *() const { return (owner_->*Getter)(index_); }
+		T *operator->() const { return (owner_->*Getter)(index_); }
+
+		Ref &operator=(T *item)
+		{
+			(owner_->*Setter)(index_, item);
+			return *this;
+		}
+
+	private:
+		Owner *owner_;
+		int index_;
+	};
+
+	Ref operator[](int index) const { return Ref(owner_, index); }
+
+private:
+	Owner *owner_;
+};
+
 }  // namespace compat
 
 #endif  // NYANFI_COMPAT_PROPERTY_H

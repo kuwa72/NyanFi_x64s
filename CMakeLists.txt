@@ -107,6 +107,7 @@ add_library(nyanfi_compat STATIC
 	compat/src/json.cpp
 	compat/src/graphics.cpp
 	compat/src/registry.cpp
+	compat/src/iduri.cpp
 )
 target_include_directories(nyanfi_compat PUBLIC compat/include)
 target_link_libraries(nyanfi_compat PUBLIC

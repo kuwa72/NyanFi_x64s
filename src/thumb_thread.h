@@ -90,14 +90,22 @@ private:
 
 	void __fastcall Execute();
 
+	// 下のプロパティ・プロキシから private のアクセサを呼ぶため
+	template <class O, class T, T (O::*G)(), void (O::*S)(T)>
+	friend class compat::RWMutableProperty;
+	template <class O, class T, T (O::*G)()>
+	friend class compat::ROMutableProperty;
+
 public:
 	HWND CallbackWnd;
 
-	__property bool ReqClear = {read = GetReqClear, write = SetReqClear};	//!< リストのクリア要求
-	__property bool ReqStart = {read = GetReqStart, write = SetReqStart};	//!< 取得スタート要求
-	__property bool ReqMake  = {read = GetReqMake,  write = SetReqMake};	//!< 個別作成要求
-	__property bool IsEmpty  = {read = GetIsEmpty,  write = SetIsEmpty};	//!< サムネイル未取得
-	__property int  Count    = {read = GetCount};							//!< リスト項目数
+	// __property を読み書きプロキシに置き換えたもの。getter が非 const・setter が
+	// 値渡しなのは排他ロック (TaskRWLock) を取るためで、src 側の宣言は変えていない
+	compat::RWMutableProperty<TThumbnailThread, bool, &TThumbnailThread::GetReqClear, &TThumbnailThread::SetReqClear> ReqClear{this};	//!< リストのクリア要求
+	compat::RWMutableProperty<TThumbnailThread, bool, &TThumbnailThread::GetReqStart, &TThumbnailThread::SetReqStart> ReqStart{this};	//!< 取得スタート要求
+	compat::RWMutableProperty<TThumbnailThread, bool, &TThumbnailThread::GetReqMake,  &TThumbnailThread::SetReqMake>  ReqMake{this};		//!< 個別作成要求
+	compat::RWMutableProperty<TThumbnailThread, bool, &TThumbnailThread::GetIsEmpty,  &TThumbnailThread::SetIsEmpty>  IsEmpty{this};		//!< サムネイル未取得
+	compat::ROMutableProperty<TThumbnailThread, int,  &TThumbnailThread::GetCount>                                    Count{this};		//!< リスト項目数
 
 	int MakeIndex;
 	int StartIndex;
