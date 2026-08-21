@@ -58,6 +58,9 @@ class UsrIniFile;
 /// 1ペイン分のタブの状態 (ディレクトリ + 並べ替え設定)
 struct PaneTabState {
 	UnicodeString directory;             //!< このタブでのディレクトリ (末尾 "\\" 付き)
+	UnicodeString home;                  //!< このタブのホーム (TabHome の戻り先。
+	                                     //!< VCL の TabList CSV の home0/home1 に相当。
+	                                     //!< 空ならタブを作ったときのディレクトリ)
 	SortKey sort_key = SortKey::Name;    //!< 並べ替えキー (tab_info::sort_mode に相当)
 	bool sort_descending = false;
 	bool dirs_first = true;
@@ -126,6 +129,41 @@ public:
 	 * @return 閉じられたら true。タブが1枚しか無い/index が範囲外なら false
 	 */
 	bool CloseTabAt(int index);
+
+	/**
+	 * @brief 現在のタブを移動する (F:MoveTab)
+	 * @param direction 負なら前へ、正なら次へ
+	 * @return 移動したら true。タブが1枚以下なら false
+	 * @details VCL 版 (MainFrm.cpp:37422) はパラメータ無しのとき
+	 *          **末尾から先頭へ回る** (`(tab_idx0 < Count-1)? +1 : 0`)。
+	 *          前へも同様に先頭から末尾へ回る。移動後もそのタブが選ばれたまま
+	 */
+	bool MoveCurrentTab(int direction);
+
+	/**
+	 * @brief 現在のタブ以外をすべて閉じる (F:SoloTab)
+	 * @return 閉じたタブの枚数
+	 * @details VCL 版 (MainFrm.cpp:37401) と同じ。1枚しか無ければ 0 を返す
+	 */
+	int CloseOtherTabs();
+
+	/**
+	 * @brief タブをホームのディレクトリへ戻す (F:TabHome)
+	 * @param all true ならすべてのタブ、false なら現在のタブだけ
+	 * @return 戻したタブの枚数
+	 * @details VCL 版 (MainFrm.cpp:37590) は CSV の home0/home1 が**空でない
+	 *          ときだけ**書き戻す。空のペインは触らない
+	 */
+	int GoHome(bool all);
+
+	/**
+	 * @brief 番号 (1 起点) またはキャプションでタブを選ぶ (F:ToTab)
+	 * @return 選べたら true
+	 * @details VCL 版 (MainFrm.cpp:37462) は **まず数値として解釈**し、
+	 *          数値でなければキャプションの完全一致 (大文字小文字を区別しない)
+	 *          で探す。番号は 1 起点
+	 */
+	bool SelectByParam(const UnicodeString &param);
 
 	/// 次のタブへ切り替える (周回。VCL 版の NextTabActionExecute と同じ)
 	void NextTab();

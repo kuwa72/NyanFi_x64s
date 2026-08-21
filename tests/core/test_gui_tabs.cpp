@@ -294,3 +294,142 @@ TEST_CASE("SaveToIni: このクラスのセクション以外を書き換えな�
 	std::unique_ptr<UsrIniFile> check(new UsrIniFile(ini_path));
 	CHECK(check->ReadString(_T("General"), _T("SomeOtherKey")) == UnicodeString(_T("SomeOtherValue")));
 }
+
+//===========================================================================
+// MoveTab / SoloTab / TabHome / ToTab (Phase 3 第2段の機能群4)
+//===========================================================================
+
+namespace {
+
+/// dir を左ペインに持つタブを n 枚並べた TabManager を作る
+TabManager make_tabs(const std::vector<UnicodeString> &dirs)
+{
+	TabManager tm;
+	tm.MutableCurrent().panes[0].directory = dirs[0];
+	for (std::size_t i = 1; i < dirs.size(); i++) {
+		TabState st;
+		st.panes[0].directory = dirs[i];
+		tm.AddTab(st);
+	}
+	tm.SelectAt(0);
+	return tm;
+}
+
+}  // namespace
+
+TEST_CASE("MoveCurrentTab: 末尾から先頭へ回る")
+{
+	// MainFrm.cpp:37429 の `(tab_idx0 < Count-1)? +1 : 0`
+	TabManager tm = make_tabs({_T("C:\\a\\"), _T("C:\\b\\"), _T("C:\\c\\")});
+
+	REQUIRE(tm.MoveCurrentTab(1));
+	CHECK(tm.CurrentIndex() == 1);
+	CHECK(tm.At(0).panes[0].directory == UnicodeString(_T("C:\\b\\")));
+	CHECK(tm.At(1).panes[0].directory == UnicodeString(_T("C:\\a\\")));
+
+	// 末尾まで動かしてもう一度 → 先頭へ回る
+	REQUIRE(tm.MoveCurrentTab(1));
+	CHECK(tm.CurrentIndex() == 2);
+	REQUIRE(tm.MoveCurrentTab(1));
+	CHECK(tm.CurrentIndex() == 0);
+	CHECK(tm.At(0).panes[0].directory == UnicodeString(_T("C:\\a\\")));
+}
+
+TEST_CASE("MoveCurrentTab: 前へも先頭から末尾へ回る")
+{
+	TabManager tm = make_tabs({_T("C:\\a\\"), _T("C:\\b\\"), _T("C:\\c\\")});
+	REQUIRE(tm.MoveCurrentTab(-1));
+	CHECK(tm.CurrentIndex() == 2);
+	CHECK(tm.At(2).panes[0].directory == UnicodeString(_T("C:\\a\\")));
+}
+
+TEST_CASE("MoveCurrentTab: タブが1枚なら何もしない")
+{
+	TabManager tm;
+	CHECK_FALSE(tm.MoveCurrentTab(1));
+	CHECK_FALSE(tm.MoveCurrentTab(0));
+}
+
+TEST_CASE("CloseOtherTabs: 現在のタブだけ残す")
+{
+	TabManager tm = make_tabs({_T("C:\\a\\"), _T("C:\\b\\"), _T("C:\\c\\")});
+	tm.SelectAt(1);
+
+	CHECK(tm.CloseOtherTabs() == 2);
+	CHECK(tm.Count() == 1);
+	CHECK(tm.CurrentIndex() == 0);
+	CHECK(tm.Current().panes[0].directory == UnicodeString(_T("C:\\b\\")));
+}
+
+TEST_CASE("CloseOtherTabs: 1枚なら 0")
+{
+	TabManager tm;
+	CHECK(tm.CloseOtherTabs() == 0);
+	CHECK(tm.Count() == 1);
+}
+
+TEST_CASE("GoHome: home が空のペインは触らない")
+{
+	// MainFrm.cpp:37597 の `if (... && !itm_buf[4].IsEmpty())`
+	TabManager tm;
+	tm.MutableCurrent().panes[0].directory = _T("C:\\now\\");
+	tm.MutableCurrent().panes[0].home = _T("C:\\home\\");
+	tm.MutableCurrent().panes[1].directory = _T("D:\\now\\");
+	// panes[1].home は空のまま
+
+	CHECK(tm.GoHome(false) == 1);
+	CHECK(tm.Current().panes[0].directory == UnicodeString(_T("C:\\home\\")));
+	CHECK(tm.Current().panes[1].directory == UnicodeString(_T("D:\\now\\")));  // 触らない
+}
+
+TEST_CASE("GoHome: all なら全部のタブを戻す")
+{
+	TabManager tm = make_tabs({_T("C:\\a\\"), _T("C:\\b\\")});
+	for (int i = 0; i < 2; i++) {
+		tm.SelectAt(i);
+		tm.MutableCurrent().panes[0].home = _T("C:\\home\\");
+	}
+	tm.SelectAt(0);
+
+	CHECK(tm.GoHome(true) == 2);
+	CHECK(tm.At(0).panes[0].directory == UnicodeString(_T("C:\\home\\")));
+	CHECK(tm.At(1).panes[0].directory == UnicodeString(_T("C:\\home\\")));
+}
+
+TEST_CASE("GoHome: 既にホームなら数えない")
+{
+	TabManager tm;
+	tm.MutableCurrent().panes[0].directory = _T("C:\\home\\");
+	tm.MutableCurrent().panes[0].home = _T("C:\\home\\");
+	CHECK(tm.GoHome(false) == 0);
+}
+
+TEST_CASE("SelectByParam: 番号は 1 起点")
+{
+	// MainFrm.cpp:37464 はまず数値として解釈する
+	TabManager tm = make_tabs({_T("C:\\a\\"), _T("C:\\b\\"), _T("C:\\c\\")});
+
+	CHECK(tm.SelectByParam(_T("2")));
+	CHECK(tm.CurrentIndex() == 1);
+
+	CHECK(tm.SelectByParam(_T("1")));
+	CHECK(tm.CurrentIndex() == 0);
+
+	CHECK_FALSE(tm.SelectByParam(_T("0")));   // 1 起点なので 0 は範囲外
+	CHECK_FALSE(tm.SelectByParam(_T("99")));
+}
+
+TEST_CASE("SelectByParam: 数値でなければキャプションで探す")
+{
+	TabManager tm = make_tabs({_T("C:\\alpha\\"), _T("C:\\beta\\")});
+
+	CHECK(tm.SelectByParam(_T("beta")));
+	CHECK(tm.CurrentIndex() == 1);
+
+	// 大文字小文字は区別しない
+	CHECK(tm.SelectByParam(_T("ALPHA")));
+	CHECK(tm.CurrentIndex() == 0);
+
+	CHECK_FALSE(tm.SelectByParam(_T("nosuch")));
+	CHECK_FALSE(tm.SelectByParam(EmptyStr));
+}
