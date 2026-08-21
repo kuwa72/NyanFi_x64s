@@ -240,6 +240,13 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Ctrl+Alt+T"), _T("ListTree"));
 	Assign(_T("Ctrl+Alt+A"), _T("AboutNyanFi"));
 
+	// 設定・その他。VCL の既定表に無いので推測
+	Assign(_T("Ctrl+Alt+I"), _T("EditIniFile"));
+	Assign(_T("Ctrl+Alt+V"), _T("ViewIniFile"));
+	Assign(_T("Ctrl+Alt+N"), _T("NameFromClip"));
+	Assign(_T("Ctrl+Alt+S"), _T("ShareList"));
+	Assign(_T("Ctrl+Alt+C"), _T("ListClipboard"));
+
 	// 並べ替え・絞り込み。"S" は src/Global.cpp の既定キー表にある実際の割り当て
 	// ("F:S=SortDlg") と同じ。Ctrl+M / Ctrl+U は既定キー表に対応する記載が無く
 	// (パスマスクはコンボボックス操作が前提で単独のキー割り当てが見当たらない)、
