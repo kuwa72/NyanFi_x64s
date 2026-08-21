@@ -163,11 +163,78 @@ bool SetCurrentDir(const UnicodeString &dir);
 UnicodeString GetEnvironmentVariable(const UnicodeString &name);
 
 //---------------------------------------------------------------------------
+// ディスク容量 (System.SysUtils)
+//
+// 実呼び出し箇所 (grep 実測):
+//   DiskSize 3 (src/Global.cpp:6147 / src/DriveDlg.cpp:176 / src/MainFrm.cpp:6735)
+//   DiskFree 2 (src/DriveDlg.cpp:177 / src/MainFrm.cpp:6736)
+// いずれも `int dn = (char)dstr[1] - 'A' + 1;` で **1=A の 1 始まり**の
+// ドライブ番号を作り、戻り値を `__int64` で受けて `sTotal>0 && sFree>=0` で
+// 妥当性を見ている。したがって単位はバイト、失敗は負値 (-1)。
+//---------------------------------------------------------------------------
+/// ドライブの総容量 (バイト)。drive は 0=カレント, 1=A, 2=B ... 失敗時 -1
+Int64 DiskSize(Byte drive);
+/// ドライブの空き容量 (バイト)。呼び出し元に割り当て可能な量を返す。失敗時 -1
+Int64 DiskFree(Byte drive);
+
+//---------------------------------------------------------------------------
+// バージョン情報 (System.SysUtils)
+//
+// 実呼び出し箇所: src/Global.cpp:1186 / src/NyanFi.cpp:196。どちらも
+//   `unsigned mj, mi, bl; GetProductVersion(Application->ExeName, mj, mi, bl)`
+// で、その後 `mj*100 + mi*10 + bl` を 100 で割って "V%.2f" と表示する。
+// src/NyanFi.cbproj の VerInfo_Keys は ProductVersion=16.2.7.0 なので
+// 16 → "V16.27" になる。つまり
+//   Major = HIWORD(dwProductVersionMS) / Minor = LOWORD(dwProductVersionMS)
+//   Build = HIWORD(dwProductVersionLS)
+// の対応。第4フィールド (LOWORD(LS)) は捨てる。
+//---------------------------------------------------------------------------
+/**
+ * @brief 実行ファイルの ProductVersion を読む
+ * @param fileName 対象ファイル
+ * @param major    [out] 第1フィールド
+ * @param minor    [out] 第2フィールド
+ * @param build    [out] 第3フィールド
+ * @return バージョンリソースを読めたら true (失敗時、出力は 0)
+ */
+bool GetProductVersion(const UnicodeString &fileName, unsigned &major, unsigned &minor, unsigned &build);
+
+//---------------------------------------------------------------------------
+// OS バージョン (System.SysUtils の TOSVersion)
+//
+// 実呼び出し箇所: src/Global.cpp:2278 の 1 行だけ
+//   `ret_str.sprintf(_T("%u.%u.%u "), TOSVersion::Major, TOSVersion::Minor, TOSVersion::Build);`
+// レジストリから採れなかったときのフォールバックで、直後に
+// ビルド番号で Windows 11 を判定している。
+//
+// 実 C++Builder の TOSVersion はほかに Name / Platform / Architecture /
+// ServicePackMajor / ToString() を持つが、src では使われていないので
+// 足していない (必要になったらここに追加する)。
+//---------------------------------------------------------------------------
+/**
+ * @brief OS のバージョン番号
+ * @details **実装は RtlGetVersion (ntdll) を使う**。Delphi の TOSVersion は
+ *          GetVersionEx を使うが、Windows 8.1 以降は互換性マニフェストが
+ *          無いと 6.2 を返してしまい、直後の Windows 11 判定
+ *          (ビルド番号 >= 22000) が成立しなくなる。マニフェストの有無に
+ *          関わらず正しい値が要るので RtlGetVersion を選んだ (シム独自の判断)。
+ */
+struct TOSVersion {
+	static const int Major;  //!< メジャーバージョン (Windows 10 / 11 は 10)
+	static const int Minor;  //!< マイナーバージョン
+	static const int Build;  //!< ビルド番号 (22000 以上なら Windows 11)
+};
+
+//---------------------------------------------------------------------------
 namespace System {
 namespace Sysutils {
+using ::DiskFree;
+using ::DiskSize;
 using ::EAbort;
 using ::EConvertError;
 using ::Exception;
+using ::GetProductVersion;
+using ::TOSVersion;
 using ::TSearchRec;
 }  // namespace Sysutils
 using namespace Sysutils;

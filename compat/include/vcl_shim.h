@@ -18,6 +18,7 @@
 #include "compat/property.h"
 #include "compat/vcl_forward.h"
 #include "compat/set.h"
+#include "compat/types.h"
 #include "compat/ustring.h"
 
 #include "compat/datetime.h"
@@ -37,5 +38,6 @@
 #include "compat/json.h"
 #include "compat/regex.h"
 #include "compat/registry.h"
+#include "compat/zip.h"
 
 #endif  // NYANFI_VCL_SHIM_H

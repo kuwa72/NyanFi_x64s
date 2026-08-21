@@ -7,6 +7,8 @@
 #include "compat/datetime.h"
 #include "compat/exception.h"  // EConvertError (StrToDateTime の失敗時例外)
 
+#include <cmath>
+
 TEST_CASE("TDateTime は 1899-12-30 を 0 とする通し日数")
 {
 	CHECK(static_cast<double>(TDateTime(0)) == doctest::Approx(0.0));
@@ -166,4 +168,146 @@ TEST_CASE("DaysInMonth (UserFunc.cpp が使用。Phase 0 の対象外ファイ�
 	CHECK(DaysInMonth(TDateTime(2024, 2, 1)) == 29);  // うるう年
 	CHECK(DaysInMonth(TDateTime(2023, 2, 1)) == 28);
 	CHECK(DaysInMonth(TDateTime(2024, 4, 1)) == 30);
+}
+
+//---------------------------------------------------------------------------
+// System.DateUtils の追加分 (Phase 3 / Global.cpp のために足したもの)
+//---------------------------------------------------------------------------
+TEST_CASE("DateOf/TimeOf は日付部分と時刻部分に分ける")
+{
+	TDateTime dt = TDateTime(2024, 5, 17, 13, 45, 30, 500);
+	CHECK(static_cast<double>(DateOf(dt)) == doctest::Approx(static_cast<double>(TDateTime(2024, 5, 17))));
+
+	unsigned short h, mi, s, ms;
+	DecodeTime(TimeOf(dt), h, mi, s, ms);
+	CHECK(h == 13);
+	CHECK(mi == 45);
+	CHECK(s == 30);
+	CHECK(ms == 500);
+}
+
+TEST_CASE("Today は Date と同じ (時刻 0:00 の当日)")
+{
+	// src/Global.cpp:14157 が `int n = dt - Today();` と整数日差を採るので、
+	// 小数部が残っていないことが要件になる
+	TDateTime t = Today();
+	CHECK(static_cast<double>(t) == doctest::Approx(static_cast<double>(Date())));
+	CHECK(static_cast<double>(t) == doctest::Approx(std::trunc(static_cast<double>(t))));
+}
+
+TEST_CASE("IsSameDay/IsToday は時刻を無視して日付だけ見る")
+{
+	TDateTime a = TDateTime(2024, 5, 17, 0, 0, 0, 0);
+	TDateTime b = TDateTime(2024, 5, 17, 23, 59, 59, 999);
+	TDateTime c = TDateTime(2024, 5, 18, 0, 0, 0, 0);
+	CHECK(IsSameDay(a, b));
+	CHECK_FALSE(IsSameDay(a, c));
+
+	CHECK(IsToday(Now()));
+	CHECK_FALSE(IsToday(IncDay(Today(), -1)));
+}
+
+TEST_CASE("IncMilliSecond/IncSecond/IncMinute/IncHour")
+{
+	TDateTime base = TDateTime(2024, 5, 17, 10, 0, 0, 0);
+
+	unsigned short h, mi, s, ms;
+	DecodeTime(IncHour(base, 12), h, mi, s, ms);
+	CHECK(h == 22);
+
+	// src/RenDlg.cpp:1183 の `IncHour(DateOf(Now()), 12)` = 当日の正午
+	DecodeTime(IncHour(DateOf(base), 12), h, mi, s, ms);
+	CHECK(h == 12);
+	CHECK(mi == 0);
+	CHECK(s == 0);
+
+	DecodeTime(IncMinute(base, 90), h, mi, s, ms);
+	CHECK(h == 11);
+	CHECK(mi == 30);
+
+	DecodeTime(IncSecond(base, -1), h, mi, s, ms);
+	CHECK(h == 9);
+	CHECK(mi == 59);
+	CHECK(s == 59);
+
+	DecodeTime(IncMilliSecond(base, 1500), h, mi, s, ms);
+	CHECK(s == 1);
+	CHECK(ms == 500);
+}
+
+TEST_CASE("MilliSecondsBetween/SecondsBetween/DaysBetween は常に非負")
+{
+	TDateTime a = TDateTime(2024, 5, 17, 10, 0, 0, 0);
+	TDateTime b = TDateTime(2024, 5, 17, 10, 0, 2, 500);
+
+	CHECK(MilliSecondsBetween(a, b) == 2500);
+	CHECK(MilliSecondsBetween(b, a) == 2500);  // 引数の順に依らない
+	CHECK(SecondsBetween(a, b) == 2);          // 切り捨て
+
+	CHECK(DaysBetween(TDateTime(2024, 5, 17), TDateTime(2024, 5, 20)) == 3);
+	CHECK(DaysBetween(TDateTime(2024, 5, 20), TDateTime(2024, 5, 17)) == 3);
+	// 端数の日は切り捨て (src/FindDlg.cpp が相対日数として使う)
+	CHECK(DaysBetween(TDateTime(2024, 5, 17, 0, 0, 0, 0), TDateTime(2024, 5, 18, 12, 0, 0, 0)) == 1);
+}
+
+TEST_CASE("WithinPastMilliSeconds はタイムスタンプの許容誤差判定 (境界を含む)")
+{
+	// src の既定 TimeTolerance=2000ms。src/Global.cpp:3624 is_NewerTime() ほか
+	const Int64 tolerance = 2000;
+	TDateTime a = TDateTime(2024, 5, 17, 10, 0, 0, 0);
+
+	CHECK(WithinPastMilliSeconds(a, a, tolerance));
+	CHECK(WithinPastMilliSeconds(a, TDateTime(2024, 5, 17, 10, 0, 1, 999), tolerance));
+	CHECK(WithinPastMilliSeconds(a, TDateTime(2024, 5, 17, 10, 0, 2, 0), tolerance));   // 境界は含む
+	CHECK_FALSE(WithinPastMilliSeconds(a, TDateTime(2024, 5, 17, 10, 0, 2, 1), tolerance));
+	// 「Past」という名前だが、未来向きでも真になる (RTL と同じ)
+	CHECK(WithinPastMilliSeconds(TDateTime(2024, 5, 17, 10, 0, 2, 0), a, tolerance));
+}
+
+TEST_CASE("CompareDate は日付部分だけを比べる")
+{
+	TDateTime d17am = TDateTime(2024, 5, 17, 1, 0, 0, 0);
+	TDateTime d17pm = TDateTime(2024, 5, 17, 23, 0, 0, 0);
+	TDateTime d18 = TDateTime(2024, 5, 18, 0, 0, 0, 0);
+
+	CHECK(CompareDate(d17am, d17pm) == EqualsValue);
+	CHECK(CompareDate(d17am, d18) == LessThanValue);
+	CHECK(CompareDate(d18, d17pm) == GreaterThanValue);
+
+	// 名前空間つきの呼び方 (src/Global.cpp:5677 / src/UserFunc.cpp:516)
+	CHECK(Dateutils::CompareDate(d17am, d18) == LessThanValue);
+	CHECK(System::Dateutils::CompareDate(d17am, d18) == LessThanValue);
+}
+
+TEST_CASE("CompareDateTime は 1ms の分解能で比べる")
+{
+	TDateTime a = TDateTime(2024, 5, 17, 10, 0, 0, 0);
+	TDateTime b = TDateTime(2024, 5, 17, 10, 0, 0, 1);
+
+	CHECK(CompareDateTime(a, a) == EqualsValue);
+	CHECK(CompareDateTime(a, b) == LessThanValue);
+	CHECK(CompareDateTime(b, a) == GreaterThanValue);
+	// 1ms 未満の差は同値
+	CHECK(CompareDateTime(a, TDateTime(static_cast<double>(a) + OneMillisecond / 4)) == EqualsValue);
+}
+
+TEST_CASE("CompareTime は時刻部分だけを比べる")
+{
+	// src/Global.cpp:5714 は再生時間 (ms) を 86400000 で割った「日の小数部」を渡す
+	TTime t1 = 3600000.0 / 86400000.0;  // 1 時間
+	TTime t2 = 7200000.0 / 86400000.0;  // 2 時間
+
+	CHECK(CompareTime(t1, t1) == EqualsValue);
+	CHECK(CompareTime(t1, t2) == LessThanValue);
+	CHECK(CompareTime(t2, t1) == GreaterThanValue);
+
+	// 日付が違っても時刻が同じなら EqualsValue
+	CHECK(CompareTime(TDateTime(2024, 5, 17, 10, 0, 0, 0), TDateTime(2030, 1, 1, 10, 0, 0, 0)) == EqualsValue);
+}
+
+TEST_CASE("DateTimeToMilliseconds は 1899-12-30 からの通算ミリ秒")
+{
+	CHECK(DateTimeToMilliseconds(TDateTime(1899, 12, 30)) == 0);
+	CHECK(DateTimeToMilliseconds(TDateTime(1899, 12, 31)) == 86400000);
+	CHECK(DateTimeToMilliseconds(TDateTime(1899, 12, 30, 0, 0, 1, 0)) == 1000);
 }
