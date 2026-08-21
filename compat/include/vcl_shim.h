@@ -39,6 +39,7 @@
 #include "compat/ioutils.h"
 #include "compat/json.h"
 #include "compat/regex.h"
+#include "compat/netencoding.h"
 #include "compat/registry.h"
 #include "compat/zip.h"
 

@@ -62,7 +62,15 @@ namespace compat {
 	/* 戻り値を void にしてあるのは、UnicodeString::Insert が参照を返すため      */   \
 	/* そのまま転送すると破棄済みの一時オブジェクトへの参照になるから。          */   \
 	template <class... A>                                                              \
-	void Insert(A &&...a) const { auto tmp = get(); tmp.Insert(std::forward<A>(a)...); }
+	void Insert(A &&...a) const { auto tmp = get(); tmp.Insert(std::forward<A>(a)...); } \
+	/* c_str は「その式の中でだけ使う」ことが前提。プロパティの読みは値返しなので */  \
+	/* 一時オブジェクトを指し、式を抜けると無効になる。                          */  \
+	/*   OK : ::PathIsDirectory(PathName.c_str())   (check_thread.cpp:35)        */  \
+	/*   NG : const wchar_t *p = obj->Prop.c_str(); (式を抜けた時点でダングリング) */  \
+	/* **C++Builder の __property でもまったく同じ**なので、危険度は移植で         */  \
+	/* 増えていない。src は C++Builder 向けに書かれているため、ここで通る形は      */  \
+	/* 向こうでも通っていたことになる。                                           */  \
+	auto c_str() const { return get().c_str(); }
 
 /// 読み取り専用プロパティ: `obj->Count`
 template <class Owner, class T, T (Owner::*Getter)() const>

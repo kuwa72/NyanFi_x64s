@@ -472,6 +472,15 @@ public:
 	public:
 		ItemRef(TList *owner, int index) : owner_(owner), index_(index) {}
 		operator void *() const { return owner_->Get(index_); }
+
+		/// `(HMENU)m_lst->Items[i]` のような C 形式キャスト用
+		/// (src/usr_shell.cpp:742,818)。C++Builder では Items[i] が素の `void *`
+		/// なのでキャストがそのまま通るが、プロキシ経由だと
+		/// 「ユーザ定義変換 → void* → reinterpret」の 2段になり static_cast の
+		/// 範囲を超える。explicit にしてあるのは、暗黙変換の候補に入って
+		/// `Items[i] == NULL` などを曖昧にしないため
+		template <class T>
+		explicit operator T *() const { return static_cast<T *>(owner_->Get(index_)); }
 		ItemRef &operator=(void *value)
 		{
 			owner_->Put(index_, value);

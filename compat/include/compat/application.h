@@ -82,6 +82,19 @@ public:
 	/// 15516 / 15525 で `"ms-its:" + HelpFile` として読む
 	UnicodeString HelpFile;
 
+	/// メインウィンドウのハンドル。
+	///
+	/// 実測: `src/grep_thread.cpp:167` が **ワーカースレッドから
+	/// `::SendMessage(Application->MainFormHandle, WM_NYANFI_GREP_END, ...)` で
+	/// 完了を通知する**のと、`src/About.cpp:43` がダイアログの親にする 2箇所。
+	///
+	/// @warning **GUI 側が起動時に代入すること。** VCL は MainForm から自動で
+	///          決まるが、シムには実フォームが無いので設定されない。
+	///          NULL のままだと `SendMessage(NULL, ...)` が**エラーも出さずに
+	///          0 を返す**ため、grep の完了通知が黙って届かなくなる。
+	///          `gui/nyanfi_app.cpp` の起動処理で `MainFrame` のハンドルを入れる。
+	HWND MainFormHandle = NULL;
+
 	/// 現在アクティブなフォームのウィンドウハンドル。
 	/// 実測: Global.cpp:3511 / UserFunc.cpp:1453 / UserMdl.cpp の CloseIME が
 	/// **Win32 の HWND としてそのまま渡す**用途だけ。VCL の TForm を辿る必要が
