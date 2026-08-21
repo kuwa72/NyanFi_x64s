@@ -352,6 +352,7 @@ UnicodeString(double)                       FloatToStr 相当
 | `delete_Dirs` | 「サブディレクトリを含めたディレクトリの削除」と書かれているが、ファイルは削除せず無視する。そのため木の中にファイルが1つでも残っていると削除が失敗し、上位まで連鎖して木全体が消えない |
 | `chk_cre_dir` | 新規作成時のみ末尾 `\` 付きで返し、既存ディレクトリのときは引数をそのまま返す (末尾 `\` の有無が不定) |
 | `EXIF_format_inf` の ISO フォールバック | `get_tkn_r(lst->Values["NK:2"], ',')` は「最初の区切りより後ろ全部」を返すため、`"100,200,320"` から最右トークンではなく `"200,320"` が ISO 値として採用される |
+| `Global.cpp:15077` のリストコピー「AD」 | `cb_buf->Text.Insert(GetClipboardText(), 1)` が**何もしていない**。`__property` の読みは値返しなので、返ってきた一時オブジェクトを書き換えても元に反映されず、2行下の `copy_to_Clipboard(cb_buf->Text)` はクリップボードの内容を含まない。つまり「AD (クリップボードに追加)」が効かない。C++Builder でも同じ挙動になるため移植で持ち込んだものではない。シム側も同じ挙動に揃え、`tests/compat/test_property.cpp` で固定した |
 
 ## 13. Phase 2 の骨格 (wxWidgets)
 

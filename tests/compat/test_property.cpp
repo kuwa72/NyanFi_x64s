@@ -192,3 +192,20 @@ TEST_CASE("IndexedPtrProperty: 未設定の要素は nullptr")
 	IndexedStyle::Item *p = o.Items[3];
 	CHECK(p == nullptr);
 }
+
+//===========================================================================
+// 既存の挙動をそのまま再現している箇所 (規約6)
+//===========================================================================
+
+TEST_CASE("RWProperty: Insert は何もしない (C++Builder と同じ)")
+{
+	// __property の読みは値返しなので、返ってきた一時オブジェクトを書き換えても
+	// 元には反映されない。C++Builder でも同じで、これは**既存のバグを再現している**。
+	// 実際に src/Global.cpp:15077 の `cb_buf->Text.Insert(GetClipboardText(), 1)` は
+	// 何もしておらず、リストのコピーで「AD (クリップボードに追加)」が効いていない
+	// (報告書 §12)。直さずに固定する。
+	ConstStyle o;
+	o.Text = _T("abc");
+	o.Text.Insert(_T("XY"), 1);
+	CHECK(o.text_ == UnicodeString(_T("abc")));  // 変わらない
+}

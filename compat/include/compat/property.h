@@ -53,7 +53,16 @@ namespace compat {
 	template <class... A>                                                              \
 	auto ToDouble(A &&...a) const { return get().ToDouble(std::forward<A>(a)...); }     \
 	template <class... A>                                                              \
-	auto LastDelimiter(A &&...a) const { return get().LastDelimiter(std::forward<A>(a)...); }
+	auto LastDelimiter(A &&...a) const { return get().LastDelimiter(std::forward<A>(a)...); } \
+	/* Insert は「一時オブジェクトを書き換えて捨てる」= 何もしない。            */   \
+	/* C++Builder でも __property の読みは値返しなので挙動は同じで、意図的に     */   \
+	/* そちらに合わせてある (規約6: 既存のバグは直さず記録する)。               */   \
+	/* 実際に src/Global.cpp:15077 の `cb_buf->Text.Insert(...)` は何もしておらず、*/  \
+	/* 「AD (クリップボードに追加)」が効いていない (報告書 §12)。               */   \
+	/* 戻り値を void にしてあるのは、UnicodeString::Insert が参照を返すため      */   \
+	/* そのまま転送すると破棄済みの一時オブジェクトへの参照になるから。          */   \
+	template <class... A>                                                              \
+	void Insert(A &&...a) const { auto tmp = get(); tmp.Insert(std::forward<A>(a)...); }
 
 /// 読み取り専用プロパティ: `obj->Count`
 template <class Owner, class T, T (Owner::*Getter)() const>
