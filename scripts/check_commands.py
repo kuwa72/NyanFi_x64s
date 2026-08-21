@@ -58,9 +58,38 @@ def gui_commands() -> dict:
 	return found
 
 
+def duplicate_keys() -> dict:
+	"""同じキーに2回以上 Assign しているものを探す。
+
+	`Assign` は後勝ちで上書きするので、**先に書いた方が黙って効かなくなる**。
+	コンパイルもテストも通るので気づけない (実際に Ctrl+E を PopupTab と
+	OpenByExp の両方に割り当ててしまい、後者が無効になっていた)。
+	"""
+	text = (ROOT / "gui" / "key_map.cpp").read_text(encoding="utf-8")
+	seen = {}
+	dup = {}
+	for m in re.finditer(r'Assign\(_T\("([^"]+)"\), _T\("([A-Za-z0-9_]+)"\)\)', text):
+		key, cmd = m.group(1), m.group(2)
+		line = text[: m.start()].count("\n") + 1
+		if key in seen:
+			dup.setdefault(key, [seen[key]]).append((cmd, line))
+		else:
+			seen[key] = (cmd, line)
+	return dup
+
+
 def main() -> int:
 	vcl = vcl_commands()
 	gui = gui_commands()
+
+	dup = duplicate_keys()
+	if dup:
+		print(f"同じキーへの割り当てが {len(dup)} 件あります (後に書いた方が勝ちます):")
+		for key, entries in sorted(dup.items()):
+			where = " / ".join(f"{c} (key_map.cpp:{ln})" for c, ln in entries)
+			print(f"  {key:16} {where}")
+		print("\n先に書いた方は黙って効かなくなります。キーを分けてください。")
+		return 1
 
 	# get_CsrKeyCmd() が返す名前は set_CmdList の表には無いが VCL の実装が使う
 	csr = (ROOT / "src" / "usr_cmdlist.cpp").read_text(encoding="utf-8")

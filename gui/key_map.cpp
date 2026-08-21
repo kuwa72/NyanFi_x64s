@@ -225,6 +225,13 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Ctrl+Shift+R"), _T("ConvertTextEnc"));
 	Assign(_T("Ctrl+Shift+B"), _T("ListFileName"));
 
+	// 外部連携。X は src/Global.cpp:2097 の既定表にある実際の割り当て
+	Assign(_T("X"), _T("ContextMenu"));
+	// 以下は既定表に無いので推測
+	Assign(_T("Ctrl+Shift+Q"), _T("CommandPrompt"));
+	Assign(_T("Ctrl+Alt+P"), _T("PowerShell"));
+	Assign(_T("Ctrl+Alt+E"), _T("OpenByExp"));
+
 	// 並べ替え・絞り込み。"S" は src/Global.cpp の既定キー表にある実際の割り当て
 	// ("F:S=SortDlg") と同じ。Ctrl+M / Ctrl+U は既定キー表に対応する記載が無く
 	// (パスマスクはコンボボックス操作が前提で単独のキー割り当てが見当たらない)、
