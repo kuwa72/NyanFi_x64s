@@ -1082,3 +1082,21 @@ const RTL_OSVERSIONINFOW &real_os_version()
 const int TOSVersion::Major = static_cast<int>(real_os_version().dwMajorVersion);
 const int TOSVersion::Minor = static_cast<int>(real_os_version().dwMinorVersion);
 const int TOSVersion::Build = static_cast<int>(real_os_version().dwBuildNumber);
+
+//---------------------------------------------------------------------------
+/**
+ * @brief "{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}" を GUID にする
+ * @details 詳細と実呼び出し箇所は compat/sysutils.h のコメントを参照。
+ *          `CLSIDFromString` は波括弧付きの形式を受け取る (Delphi の
+ *          StringToGUID と同じ)。
+ */
+TGUID StringToGUID(const UnicodeString &s)
+{
+	TGUID guid = {};
+	if (::CLSIDFromString(const_cast<LPOLESTR>(s.c_str()), &guid) != NOERROR) {
+		// Delphi は EConvertError。呼び出し側 (usr_shell.cpp:1858) が
+		// catch (...) で受けるので、種類は合わせなくてよい
+		throw EConvertError(UnicodeString(_T("GUID に変換できません: ")) + s);
+	}
+	return guid;
+}

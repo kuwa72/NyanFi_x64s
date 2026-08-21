@@ -88,9 +88,42 @@ void DecodeTime(const TDateTime &dt, unsigned short &hour, unsigned short &min, 
 //---------------------------------------------------------------------------
 // 文字列変換
 //---------------------------------------------------------------------------
-/// FormatDateTime 互換。対応トークン: y/yy/yyyy, m/mm, d/dd, h/hh, n/nn, s/ss, z/zzz。
+/**
+ * @brief System.SysUtils::TFormatSettings 相当 (日付・時刻の名前表)
+ * @details 実測: `src/UserFunc.cpp:449` が
+ *          `remove_text(fmt, "$EN")? TFormatSettings::Create("en-US") : TFormatSettings::Create()`
+ *          として **ユーザ書式に `$EN` が付いていたら英語の曜日名・月名で出す**
+ *          ために使う。`src/task_thread.cpp:236,1882` は既定のまま
+ *          `FormatDateTime("hh:nn:ss.zzz ", Now(), fs)` に渡すだけ。
+ *
+ *          名前は `GetLocaleInfoEx` から取る。曜日の添字は **0 = 日曜**
+ *          (Delphi の `ShortDayNames[1]` = 日曜 に合わせた 0 始まり)。
+ *          Windows の `LOCALE_SDAYNAME1` は月曜なので、詰め替えでずらしている。
+ */
+struct TFormatSettings {
+	UnicodeString ShortDayNames[7];    //!< [0]=日 .. [6]=土
+	UnicodeString LongDayNames[7];
+	UnicodeString ShortMonthNames[12]; //!< [0]=1月 .. [11]=12月
+	UnicodeString LongMonthNames[12];
+	UnicodeString TimeAMString;
+	UnicodeString TimePMString;
+
+	/// 利用者の既定ロケールで作る
+	static TFormatSettings Create();
+	/// ロケール名を指定して作る ("en-US" など)
+	static TFormatSettings Create(const UnicodeString &localeName);
+};
+
+/// FormatDateTime 互換。対応トークン:
+///   y/yy/yyyy, m/mm (月番号), mmm/mmmm (月名), d/dd (日), ddd/dddd (曜日名),
+///   h/hh, n/nn, s/ss, z/zzz, ampm/am/pm
 /// ' または " で囲んだ区間はリテラルとして通す (Delphi の書式仕様)。
+///
+/// @note 名前を使うトークン (mmm/mmmm/ddd/dddd/ampm) は TFormatSettings を
+///       渡さない版では**利用者の既定ロケール**の名前になる (Delphi と同じ)。
 UnicodeString FormatDateTime(const UnicodeString &format, const TDateTime &dt);
+UnicodeString FormatDateTime(const UnicodeString &format, const TDateTime &dt,
+                              const TFormatSettings &settings);
 UnicodeString DateTimeToStr(const TDateTime &dt);  //!< 既定書式 "yyyy/mm/dd hh:nn:ss" を使う (下記【注意】参照)
 TDateTime StrToDateTime(const UnicodeString &s);   //!< 失敗時 EConvertError 相当 → std::invalid_argument
 bool TryStrToDateTime(const UnicodeString &s, TDateTime &result);

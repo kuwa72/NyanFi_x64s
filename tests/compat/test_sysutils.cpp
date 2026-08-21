@@ -254,3 +254,39 @@ TEST_CASE("TOSVersion は実際の OS バージョンを返す")
 	MESSAGE("TOSVersion = " << TOSVersion::Major << "." << TOSVersion::Minor << "."
 	                        << TOSVersion::Build);
 }
+
+//===========================================================================
+// StringToGUID
+//
+// 実測: src/usr_shell.cpp:1853 の KnownGuidStrToPath が唯一の呼び出しで、
+// 結果を ::SHGetKnownFolderPath にそのまま渡す。
+//===========================================================================
+
+TEST_CASE("StringToGUID: 波括弧付きの GUID 文字列を変換する")
+{
+	// FOLDERID_Windows = {F38BF404-1D43-42F2-9305-67DE0B28FC23}
+	const TGUID g = StringToGUID(_T("{F38BF404-1D43-42F2-9305-67DE0B28FC23}"));
+	CHECK(g.Data1 == 0xF38BF404);
+	CHECK(g.Data2 == 0x1D43);
+	CHECK(g.Data3 == 0x42F2);
+	CHECK(g.Data4[0] == 0x93);
+	CHECK(g.Data4[7] == 0x23);
+}
+
+TEST_CASE("StringToGUID: 大文字小文字と既知フォルダの値")
+{
+	// 呼び出し側 (KnownGuidStrToPath) は結果を SHGetKnownFolderPath に渡すので、
+	// 値がそのまま一致することが要件。ここでは shlobj を引かずに値だけを見る
+	// (SHGetKnownFolderPath 経由の確認は src/usr_shell.cpp 側のテストで行う)
+	const TGUID a = StringToGUID(_T("{f38bf404-1d43-42f2-9305-67de0b28fc23}"));
+	const TGUID b = StringToGUID(_T("{F38BF404-1D43-42F2-9305-67DE0B28FC23}"));
+	CHECK(::IsEqualGUID(a, b));
+}
+
+TEST_CASE("StringToGUID: 不正な文字列は例外を投げる")
+{
+	// 黙って空 GUID を返すと SHGetKnownFolderPath が別のフォルダを返しかねない。
+	// 呼び出し側は catch (...) で受けている
+	CHECK_THROWS(StringToGUID(_T("not-a-guid")));
+	CHECK_THROWS(StringToGUID(UnicodeString()));
+}

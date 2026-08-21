@@ -311,3 +311,90 @@ TEST_CASE("DateTimeToMilliseconds は 1899-12-30 からの通算ミリ秒")
 	CHECK(DateTimeToMilliseconds(TDateTime(1899, 12, 31)) == 86400000);
 	CHECK(DateTimeToMilliseconds(TDateTime(1899, 12, 30, 0, 0, 1, 0)) == 1000);
 }
+
+//===========================================================================
+// TFormatSettings と名前を使う書式トークン
+//
+// 実測: src/UserFunc.cpp:449 が「ユーザ書式に $EN が付いていたら英語の
+// 曜日名・月名で出す」ために TFormatSettings::Create("en-US") を使う。
+//
+// **以前は ddd/dddd も日の数字を出していて C++Builder と食い違っていた**
+// (dddd が "01" になる)。ここで固定する。
+//===========================================================================
+
+TEST_CASE("FormatDateTime: ddd / dddd は曜日名になる")
+{
+	// 2026-08-21 は金曜日
+	const TDateTime dt = EncodeDate(2026, 8, 21);
+	const TFormatSettings en = TFormatSettings::Create(_T("en-US"));
+
+	CHECK(FormatDateTime(_T("ddd"), dt, en) == UnicodeString(_T("Fri")));
+	CHECK(FormatDateTime(_T("dddd"), dt, en) == UnicodeString(_T("Friday")));
+
+	// d / dd は今までどおり日の数字
+	CHECK(FormatDateTime(_T("d"), dt, en) == UnicodeString(_T("21")));
+	CHECK(FormatDateTime(_T("dd"), dt, en) == UnicodeString(_T("21")));
+}
+
+TEST_CASE("FormatDateTime: mmm / mmmm は月名になる")
+{
+	const TDateTime dt = EncodeDate(2026, 8, 21);
+	const TFormatSettings en = TFormatSettings::Create(_T("en-US"));
+
+	CHECK(FormatDateTime(_T("mmm"), dt, en) == UnicodeString(_T("Aug")));
+	CHECK(FormatDateTime(_T("mmmm"), dt, en) == UnicodeString(_T("August")));
+
+	// m / mm は月番号のまま
+	CHECK(FormatDateTime(_T("m"), dt, en) == UnicodeString(_T("8")));
+	CHECK(FormatDateTime(_T("mm"), dt, en) == UnicodeString(_T("08")));
+}
+
+TEST_CASE("FormatDateTime: 曜日の添字が日曜始まりでずれていない")
+{
+	// Windows の LOCALE_SDAYNAME1 は月曜なので、詰め替えを間違えると1日ずれる。
+	// 2026-08-16(日) から 1週間を全部見る
+	const TFormatSettings en = TFormatSettings::Create(_T("en-US"));
+	const wchar_t *expect[7] = {L"Sunday", L"Monday", L"Tuesday", L"Wednesday",
+	                            L"Thursday", L"Friday", L"Saturday"};
+	for (int i = 0; i < 7; i++) {
+		const TDateTime dt = EncodeDate(2026, 8, 16) + i;
+		CHECK(FormatDateTime(_T("dddd"), dt, en) == UnicodeString(expect[i]));
+	}
+}
+
+TEST_CASE("FormatDateTime: ampm")
+{
+	const TFormatSettings en = TFormatSettings::Create(_T("en-US"));
+	const TDateTime morning = EncodeDate(2026, 8, 21) + EncodeTime(9, 0, 0, 0);
+	const TDateTime evening = EncodeDate(2026, 8, 21) + EncodeTime(21, 0, 0, 0);
+
+	CHECK(FormatDateTime(_T("ampm"), morning, en) == en.TimeAMString);
+	CHECK(FormatDateTime(_T("ampm"), evening, en) == en.TimePMString);
+
+	// 設定を渡さない版は利用者の既定ロケールを使う (Delphi と同じ)。
+	// 日本語環境では "午前"/"午後" になるので en-US とは一致しない
+	const TFormatSettings def = TFormatSettings::Create();
+	CHECK(FormatDateTime(_T("ampm"), morning) == def.TimeAMString);
+	CHECK(FormatDateTime(_T("ampm"), evening) == def.TimePMString);
+}
+
+TEST_CASE("FormatDateTime: 既存の書式は変わっていない")
+{
+	// src が実際に使っている書式 (task_thread.cpp:237 ほか)
+	const TDateTime dt = EncodeDate(2026, 8, 21) + EncodeTime(13, 5, 9, 42);
+	CHECK(FormatDateTime(_T("yyyy/mm/dd hh:nn:ss"), dt) == UnicodeString(_T("2026/08/21 13:05:09")));
+	CHECK(FormatDateTime(_T("hh:nn:ss.zzz "), dt) == UnicodeString(_T("13:05:09.042 ")));
+}
+
+TEST_CASE("TFormatSettings: 名前表が埋まっている")
+{
+	const TFormatSettings fs = TFormatSettings::Create();
+	for (int i = 0; i < 7; i++) {
+		CHECK_FALSE(fs.LongDayNames[i].IsEmpty());
+		CHECK_FALSE(fs.ShortDayNames[i].IsEmpty());
+	}
+	for (int i = 0; i < 12; i++) {
+		CHECK_FALSE(fs.LongMonthNames[i].IsEmpty());
+		CHECK_FALSE(fs.ShortMonthNames[i].IsEmpty());
+	}
+}

@@ -226,9 +226,30 @@ struct TOSVersion {
 };
 
 //---------------------------------------------------------------------------
+/// System.SysUtils::TGUID 相当。Delphi の TGUID は Win32 の GUID と
+/// 同じレイアウトで、`::SHGetKnownFolderPath(guid, ...)` にそのまま渡せる
+/// (実測: src/usr_shell.cpp:1853-1855 がこの使い方をする唯一の箇所)
+using TGUID = ::GUID;
+
+/**
+ * @brief "{xxxxxxxx-xxxx-...}" 形式の文字列を GUID にする
+ * @details 実測: `src/usr_shell.cpp:1853` の
+ *          `TGUID guid = StringToGUID(s); ::SHGetKnownFolderPath(guid, ...)`
+ *          1箇所だけ。`s` は ini の `KnownGuidStrToPath` に渡される既知フォルダの
+ *          GUID 文字列。
+ * @note Delphi は変換に失敗すると EConvertError を投げる。呼び出し側は
+ *       `try { ... } catch (...) { ret_str = EmptyStr; }` で受けているので、
+ *       ここも失敗時に例外を投げる (黙って空 GUID を返すと、SHGetKnownFolderPath が
+ *       別のフォルダを返しかねない)
+ */
+TGUID StringToGUID(const UnicodeString &s);
+
+//---------------------------------------------------------------------------
 namespace System {
 namespace Sysutils {
 using ::DiskFree;
+using ::StringToGUID;
+using ::TGUID;
 using ::DiskSize;
 using ::EAbort;
 using ::EConvertError;

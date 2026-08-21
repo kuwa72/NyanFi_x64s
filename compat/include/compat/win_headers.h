@@ -30,6 +30,10 @@
 #include <wincodec.h>
 #include <wincodecsdk.h>
 
+// DWM (Global.cpp / UserFunc.cpp の DwmGetWindowAttribute)。
+// C++Builder では vcl.h 経由で暗黙に入っていた
+#include <dwmapi.h>
+
 #include <commctrl.h>
 #include <winioctl.h>
 

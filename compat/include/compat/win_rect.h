@@ -20,9 +20,9 @@
  *          対象は src を grep して実際に `&<TRect>` を渡している API:
  *          DrawText 6 / GetWindowRect 5 / ClipCursor 2 / AdjustWindowRect 2 /
  *          InvalidateRect 1 / GetUpdateRect 1 / DrawEdge 1。
- *          `DwmGetWindowAttribute` も 2箇所あるが、dwmapi.h を取り込んでいる
- *          ファイルがまだビルド対象に無いのでここには置いていない。
- *          新しい API が出てきたらここに足す。
+ *          `DwmGetWindowAttribute` は本物が `PVOID` で受けるので型としては
+ *          通ってしまうが、`sizeof(rc)` が RECT と違うため**黙って壊れる**。
+ *          これも受けて詰め替える。新しい API が出てきたらここに足す。
  *
  *          **各オーバーロードはテンプレートにしてある。** 素の関数にすると
  *          `::InvalidateRect(hWnd, NULL, TRUE)` (Global.cpp:15076) が
@@ -86,6 +86,19 @@ inline BOOL InvalidateRect(HWND hWnd, const R *rect, BOOL erase)
 //---------------------------------------------------------------------------
 // 出力あり (必ず書き戻す)
 //---------------------------------------------------------------------------
+/// `::DwmGetWindowAttribute(hWnd, DWMWA_EXTENDED_FRAME_BOUNDS, &rc, sizeof(rc))`
+/// (src/UserFunc.cpp:43,54)。本物は `PVOID` で受けるので RECT* でも通るが、
+/// TRect* のままだと sizeof が RECT と違うため**黙って壊れる**。ここで受けて
+/// 詰め替える
+template <class R, NYANFI_ONLY_TRECT(R)>
+inline HRESULT DwmGetWindowAttribute(HWND hWnd, DWORD attribute, R *value, DWORD)
+{
+	::RECT w = {};
+	const HRESULT hr = ::DwmGetWindowAttribute(hWnd, attribute, &w, sizeof(w));
+	if (SUCCEEDED(hr) && value != nullptr) compat::from_win_rect(*value, w);
+	return hr;
+}
+
 template <class R, NYANFI_ONLY_TRECT(R)>
 inline BOOL GetWindowRect(HWND hWnd, R *rect)
 {

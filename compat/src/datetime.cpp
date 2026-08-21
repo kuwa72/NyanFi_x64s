@@ -197,7 +197,74 @@ void DecodeTime(const TDateTime &dt, unsigned short &hour, unsigned short &min, 
 // 実測 (yyyy/mm/dd, hh:nn:ss, yyyymmddhhnnss, hh:nn:ss.zzz 系のみ) に基づき
 // 未実装 (無言のスキップではなく、ここに明記する)。
 //---------------------------------------------------------------------------
-UnicodeString FormatDateTime(const UnicodeString &format, const TDateTime &dt)
+//---------------------------------------------------------------------------
+// TFormatSettings
+//---------------------------------------------------------------------------
+namespace {
+
+/// 曜日の添字 (0=日曜)。TDateTime のシリアル値 0 は 1899-12-30 の土曜日なので、
+/// (serial + 6) % 7 で日曜始まりの添字になる
+int day_of_week_index(const TDateTime &dt)
+{
+	const long long serial = static_cast<long long>(std::floor(static_cast<double>(dt)));
+	int idx = static_cast<int>((serial + 6) % 7);
+	if (idx < 0) idx += 7;
+	return idx;
+}
+
+/// GetLocaleInfoEx の1項目を UnicodeString で取る
+UnicodeString locale_str(const wchar_t *localeName, LCTYPE type)
+{
+	wchar_t buf[128] = {};
+	const int n = ::GetLocaleInfoEx(localeName, type, buf, 128);
+	return (n > 0)? UnicodeString(buf) : UnicodeString();
+}
+
+/// 名前表を localeName から埋める。localeName が nullptr なら利用者の既定
+void fill_format_settings(TFormatSettings &fs, const wchar_t *localeName)
+{
+	// Windows の LOCALE_SDAYNAME1 は**月曜**。Delphi の曜日配列は日曜始まりなので
+	// 添字を詰め替える (0=日曜)。日曜は LOCALE_SDAYNAME7
+	static const LCTYPE kLongDay[7] = {
+		LOCALE_SDAYNAME7, LOCALE_SDAYNAME1, LOCALE_SDAYNAME2, LOCALE_SDAYNAME3,
+		LOCALE_SDAYNAME4, LOCALE_SDAYNAME5, LOCALE_SDAYNAME6,
+	};
+	static const LCTYPE kShortDay[7] = {
+		LOCALE_SABBREVDAYNAME7, LOCALE_SABBREVDAYNAME1, LOCALE_SABBREVDAYNAME2,
+		LOCALE_SABBREVDAYNAME3, LOCALE_SABBREVDAYNAME4, LOCALE_SABBREVDAYNAME5,
+		LOCALE_SABBREVDAYNAME6,
+	};
+	for (int i = 0; i < 7; i++) {
+		fs.LongDayNames[i] = locale_str(localeName, kLongDay[i]);
+		fs.ShortDayNames[i] = locale_str(localeName, kShortDay[i]);
+	}
+	for (int i = 0; i < 12; i++) {
+		fs.LongMonthNames[i] = locale_str(localeName, LOCALE_SMONTHNAME1 + i);
+		fs.ShortMonthNames[i] = locale_str(localeName, LOCALE_SABBREVMONTHNAME1 + i);
+	}
+	fs.TimeAMString = locale_str(localeName, LOCALE_S1159);
+	fs.TimePMString = locale_str(localeName, LOCALE_S2359);
+}
+
+}  // namespace
+
+TFormatSettings TFormatSettings::Create()
+{
+	TFormatSettings fs;
+	fill_format_settings(fs, LOCALE_NAME_USER_DEFAULT);
+	return fs;
+}
+
+TFormatSettings TFormatSettings::Create(const UnicodeString &localeName)
+{
+	TFormatSettings fs;
+	fill_format_settings(fs, localeName.IsEmpty()? LOCALE_NAME_USER_DEFAULT : localeName.c_str());
+	return fs;
+}
+
+//---------------------------------------------------------------------------
+UnicodeString FormatDateTime(const UnicodeString &format, const TDateTime &dt,
+                              const TFormatSettings &settings)
 {
 	unsigned short y, mo, d, h, mi, se, ms;
 	DecodeDate(dt, y, mo, d);
@@ -241,16 +308,39 @@ UnicodeString FormatDateTime(const UnicodeString &format, const TDateTime &dt)
 		}
 		if (c == L'm' || c == L'M') {
 			int n = countRun(L'm');
-			std::swprintf(buf, 16, (n >= 2) ? L"%02u" : L"%u", mo);
-			out += buf;
+			// Delphi: m/mm = 月番号、mmm = 月名(短)、mmmm = 月名(長)
+			if (n == 3)      out += settings.ShortMonthNames[mo - 1].c_str();
+			else if (n >= 4) out += settings.LongMonthNames[mo - 1].c_str();
+			else {
+				std::swprintf(buf, 16, (n >= 2) ? L"%02u" : L"%u", mo);
+				out += buf;
+			}
 			p += n;
 			continue;
 		}
 		if (c == L'd' || c == L'D') {
 			int n = countRun(L'd');
-			std::swprintf(buf, 16, (n >= 2) ? L"%02u" : L"%u", d);
-			out += buf;
+			// Delphi: d/dd = 日、ddd = 曜日名(短)、dddd = 曜日名(長)。
+			// **以前は ddd/dddd も日の数字を出していて C++Builder と食い違っていた**
+			if (n >= 3) {
+				const int dow = day_of_week_index(dt);  // 0=日曜
+				out += (n == 3)? settings.ShortDayNames[dow].c_str()
+				               : settings.LongDayNames[dow].c_str();
+			}
+			else {
+				std::swprintf(buf, 16, (n >= 2) ? L"%02u" : L"%u", d);
+				out += buf;
+			}
 			p += n;
+			continue;
+		}
+		// ampm / am/pm (Delphi の書式。h は 12時間制にはしない点も Delphi と同じで、
+		// 呼び出し側が hh と組み合わせて使う)
+		if ((c == L'a' || c == L'A') && end - p >= 4 &&
+		    (::wcsnicmp(p, L"ampm", 4) == 0 || ::wcsnicmp(p, L"am/pm", 5) == 0)) {
+			const int len = (::wcsnicmp(p, L"am/pm", 5) == 0)? 5 : 4;
+			out += (h < 12)? settings.TimeAMString.c_str() : settings.TimePMString.c_str();
+			p += len;
 			continue;
 		}
 		if (c == L'h' || c == L'H') {
@@ -287,6 +377,17 @@ UnicodeString FormatDateTime(const UnicodeString &format, const TDateTime &dt)
 	return UnicodeString(out);
 }
 
+//---------------------------------------------------------------------------
+UnicodeString FormatDateTime(const UnicodeString &format, const TDateTime &dt)
+{
+	// Delphi と同じく、名前を使うトークンは利用者の既定ロケールの名前になる。
+	// 毎回 GetLocaleInfoEx を叩かないよう1回だけ作って使い回す
+	// (VCL も起動時に1回だけ作る)
+	static const TFormatSettings kDefault = TFormatSettings::Create();
+	return FormatDateTime(format, dt, kDefault);
+}
+
+//---------------------------------------------------------------------------
 UnicodeString DateTimeToStr(const TDateTime &dt)
 {
 	// 【注意】実 RTL は FormatSettings (ロケール) 依存。本シムは対象コードで

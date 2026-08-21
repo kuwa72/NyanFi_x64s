@@ -121,6 +121,7 @@ target_link_libraries(nyanfi_compat PUBLIC
 	gdi32
 	user32
 	rstrtmgr
+	dwmapi	# DwmGetWindowAttribute (Global.cpp / UserFunc.cpp)
 )
 
 #-----------------------------------------------------------------------------
