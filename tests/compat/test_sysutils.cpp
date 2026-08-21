@@ -1,0 +1,292 @@
+/**
+ * @file tests/compat/test_sysutils.cpp
+ * @brief compat/sysutils.h の単体テスト (doctest)
+ */
+#include "doctest/doctest.h"
+
+#include "compat/sysutils.h"
+
+TEST_CASE("UpperCase/LowerCase は ASCII のみを変換する")
+{
+	// 日本語や全角文字はそのまま (AnsiUpperCase/AnsiLowerCase と違い ASCII 限定)
+	CHECK(UpperCase("abcXYZ123") == "ABCXYZ123");
+	CHECK(LowerCase("abcXYZ123") == "abcxyz123");
+	CHECK(UpperCase(_T("日本語abc")) == _T("日本語ABC"));
+}
+
+TEST_CASE("SameText/CompareText は ASCII の大小文字を無視する (実測 179 箇所で最多)")
+{
+	CHECK(SameText("Hello", "HELLO"));
+	CHECK(SameText("Hello", "hello"));
+	CHECK_FALSE(SameText("Hello", "Hello!"));
+	CHECK(CompareText("abc", "ABC") == 0);
+	CHECK(CompareText("abc", "abd") < 0);
+}
+
+TEST_CASE("SameStr/CompareStr は序数 (大小文字を区別)")
+{
+	CHECK(SameStr("abc", "abc"));
+	CHECK_FALSE(SameStr("abc", "ABC"));
+	CHECK(CompareStr("abc", "abd") < 0);
+}
+
+TEST_CASE("ContainsText/StartsText/EndsText は大小文字無視")
+{
+	CHECK(ContainsText("Hello World", "WORLD"));
+	CHECK_FALSE(ContainsText("Hello World", "xyz"));
+	CHECK(StartsText("HE", "Hello"));
+	CHECK(EndsText("LO", "Hello"));
+	CHECK_FALSE(StartsText("lo", "Hello"));
+}
+
+TEST_CASE("ContainsStr/StartsStr/EndsStr は大小文字を区別")
+{
+	CHECK(ContainsStr("Hello World", "World"));
+	CHECK_FALSE(ContainsStr("Hello World", "WORLD"));
+	CHECK(StartsStr("He", "Hello"));
+	CHECK_FALSE(StartsStr("he", "Hello"));
+}
+
+TEST_CASE("Trim/TrimLeft/TrimRight")
+{
+	CHECK(Trim("  abc  ") == "abc");
+	CHECK(TrimLeft("  abc  ") == "abc  ");
+	CHECK(TrimRight("  abc  ") == "  abc");
+	CHECK(Trim("") == "");
+	CHECK(Trim("   ") == "");
+}
+
+TEST_CASE("SplitString は Delphi 仕様 (区切り文字の集合、空要素も残す)")
+{
+	TStringDynArray a = SplitString("a,b,,c", ",");
+	REQUIRE(a.Length == 4);
+	CHECK(a[0] == "a");
+	CHECK(a[1] == "b");
+	CHECK(a[2] == "");
+	CHECK(a[3] == "c");
+
+	// 区切り文字は「集合」: file_filter.cpp 等で SplitString(s, '|') のように
+	// 1 文字だけの UnicodeString を渡すケースも多い
+	TStringDynArray b = SplitString("x|y|z", "|");
+	REQUIRE(b.Length == 3);
+	CHECK(b[0] == "x");
+	CHECK(b[2] == "z");
+
+	// 複数種の区切り文字を集合として扱う (usr_file_ex.cpp の split_strings_semicolon 相当)
+	TStringDynArray c = SplitString("a;b,c", ";,");
+	REQUIRE(c.Length == 3);
+
+	// 区切り文字が空なら全体を1要素として返す
+	TStringDynArray d = SplitString("abc", "");
+	REQUIRE(d.Length == 1);
+	CHECK(d[0] == "abc");
+
+	// 先頭/末尾が区切り文字なら空要素が残る
+	TStringDynArray e = SplitString(",a,", ",");
+	REQUIRE(e.Length == 3);
+	CHECK(e[0] == "");
+	CHECK(e[2] == "");
+}
+
+TEST_CASE("ExtractFileName/ExtractFileExt/ChangeFileExt")
+{
+	CHECK(ExtractFileName("C:\\foo\\bar.txt") == "bar.txt");
+	CHECK(ExtractFileExt("C:\\foo\\bar.txt") == ".txt");
+	CHECK(ExtractFileExt("C:\\foo\\bar") == "");
+	CHECK(ChangeFileExt("C:\\foo\\bar.txt", ".jpg") == "C:\\foo\\bar.jpg");
+	CHECK(ChangeFileExt("C:\\foo\\bar", ".jpg") == "C:\\foo\\bar.jpg");
+}
+
+TEST_CASE("ExtractFilePath/ExtractFileDir")
+{
+	CHECK(ExtractFilePath("C:\\foo\\bar.txt") == "C:\\foo\\");
+	CHECK(ExtractFileDir("C:\\foo\\bar.txt") == "C:\\foo");
+	// ルート直下は末尾の \\ を残す (実 RTL の ExtractFileDir と同じ特殊ケース)
+	CHECK(ExtractFileDir("C:\\foo.txt") == "C:\\");
+}
+
+TEST_CASE("ExtractFileDrive は UNC パスを落とさない")
+{
+	CHECK(ExtractFileDrive("C:\\foo\\bar.txt") == "C:");
+	CHECK(ExtractFileDrive("\\\\server\\share\\dir\\file.txt") == "\\\\server\\share");
+	CHECK(ExtractFileDrive("relative\\path") == "");
+}
+
+TEST_CASE("IncludeTrailingPathDelimiter/ExcludeTrailingPathDelimiter")
+{
+	CHECK(IncludeTrailingPathDelimiter("C:\\foo") == "C:\\foo\\");
+	CHECK(IncludeTrailingPathDelimiter("C:\\foo\\") == "C:\\foo\\");
+	CHECK(ExcludeTrailingPathDelimiter("C:\\foo\\") == "C:\\foo");
+	CHECK(ExcludeTrailingPathDelimiter("C:\\foo") == "C:\\foo");
+}
+
+TEST_CASE("IntToStr/IntToHex/StrToInt/StrToIntDef")
+{
+	CHECK(IntToStr(12345) == "12345");
+	CHECK(IntToStr(-7) == "-7");
+	CHECK(IntToHex(255, 1) == "FF");
+	CHECK(IntToHex(1, 4) == "0001");
+	CHECK(StrToInt("42") == 42);
+	CHECK(StrToIntDef("abc", -1) == -1);
+	CHECK(StrToIntDef("42", -1) == 42);
+}
+
+TEST_CASE("StrToInt は失敗時 EConvertError を送出する")
+{
+	CHECK_THROWS_AS(StrToInt("abc"), EConvertError);
+}
+
+TEST_CASE("FormatFloat: 実測で使われる \",0\" (桁区切り整数)")
+{
+	CHECK(FormatFloat(",0", 1234567.0) == "1,234,567");
+	CHECK(FormatFloat(",0", 0.0) == "0");
+	CHECK(FormatFloat(",0", 999.0) == "999");
+}
+
+TEST_CASE("StringOfChar / QuotedStr")
+{
+	CHECK(StringOfChar('_', 5) == "_____");
+	CHECK(StringOfChar('x', 0) == "");
+	CHECK(QuotedStr("it's") == "'it''s'");
+}
+
+TEST_CASE("StringReplace / ReplaceStr / ReplaceText")
+{
+	CHECK(ReplaceStr("aXbXc", "X", "-") == "a-b-c");
+	CHECK(ReplaceText("aXbxc", "X", "-") == "a-b-c");
+	CHECK(StringReplace("aXbXc", "X", "-", false, false) == "a-bXc");
+}
+
+TEST_CASE("LeftStr/RightStr/MidStr/PosEx")
+{
+	CHECK(LeftStr("abcdef", 3) == "abc");
+	CHECK(RightStr("abcdef", 3) == "def");
+	CHECK(MidStr("abcdef", 2, 3) == "bcd");
+	CHECK(PosEx("b", "ababab", 2) == 2);
+	CHECK(PosEx("b", "ababab", 3) == 4);
+}
+
+TEST_CASE("faAnyFile による FindFirst は . と .. を含む (実 RTL の ExcludeAttr=0 相当)")
+{
+	// 対象コード (usr_file_ex.cpp) は FindFirst の結果を自前で
+	// ContainsStr("..", sr.Name) 判定して除外している。つまり RTL 側は
+	// "." / ".." を除外せずにそのまま返す必要がある。
+	TSearchRec sr;
+	int res = FindFirst(GetCurrentDir() + "\\*", faAnyFile, sr);
+	if (res == 0) {
+		bool sawDot = false, sawDotDot = false;
+		do {
+			if (sr.Name == ".") sawDot = true;
+			if (sr.Name == "..") sawDotDot = true;
+		} while (FindNext(sr) == 0);
+		FindClose(sr);
+		CHECK(sawDot);
+		CHECK(sawDotDot);
+	}
+}
+
+//---------------------------------------------------------------------------
+// Phase 3 で src/Global.cpp のために足した分
+//---------------------------------------------------------------------------
+TEST_CASE("DiskSize/DiskFree はバイト単位で返し、不正なドライブは -1")
+{
+	// src の呼び出し形: `int dn = (char)dstr[1] - 'A' + 1; DiskSize(dn)`
+	// 妥当性の判定も src と同じ `sTotal>0 && sFree>=0`
+	Int64 total = DiskSize(0);  // 0 = カレントドライブ
+	Int64 avail = DiskFree(0);
+	REQUIRE(total > 0);
+	CHECK(avail >= 0);
+	CHECK(avail <= total);
+	CHECK(total > static_cast<Int64>(1024) * 1024);  // バイト単位 (セクタ数ではない)
+
+	// ドライブ文字から作った 1 始まりの番号でも読める。
+	// カレントディレクトリはドライブ文字を持たないことがある (WSL から実行すると
+	// \\wsl.localhost\... になる) ので、システムディレクトリのドライブを使う
+	wchar_t sysdir[MAX_PATH + 1] = {0};
+	REQUIRE(::GetSystemDirectoryW(sysdir, MAX_PATH) > 0);
+	REQUIRE(sysdir[1] == L':');
+	Byte dn = static_cast<Byte>(UpperCase(UnicodeString(sysdir).SubString(1, 1))[1] - L'A' + 1);
+	Int64 sysTotal = DiskSize(dn);
+	CHECK(sysTotal > 0);
+	CHECK(DiskFree(dn) >= 0);
+	CHECK(DiskFree(dn) <= sysTotal);
+
+	// 範囲外のドライブ番号は -1 (src は負値を弾いている)
+	CHECK(DiskSize(200) == -1);
+	CHECK(DiskFree(200) == -1);
+}
+
+TEST_CASE("GetProductVersion はバージョンリソースの a.b.c を返す")
+{
+	// バージョンリソースを必ず持っているファイルとして kernel32.dll を使う
+	wchar_t sysdir[MAX_PATH + 1] = {0};
+	REQUIRE(::GetSystemDirectoryW(sysdir, MAX_PATH) > 0);
+	UnicodeString dll = UnicodeString(sysdir) + "\\kernel32.dll";
+
+	unsigned mj = 999, mi = 999, bl = 999;
+	REQUIRE(GetProductVersion(dll, mj, mi, bl));
+	CHECK(mj >= 6);        // Windows 7 以降が対象 (WINVER=0x0601)
+	CHECK(mj < 100);
+	CHECK(mi < 100);
+	CHECK(bl > 0);
+
+	// 失敗時は false を返し、出力を 0 にする
+	unsigned a = 7, b = 7, c = 7;
+	CHECK_FALSE(GetProductVersion(GetCurrentDir() + "\\no_such_file_12345.exe", a, b, c));
+	CHECK(a == 0);
+	CHECK(b == 0);
+	CHECK(c == 0);
+	CHECK_FALSE(GetProductVersion(EmptyStr, a, b, c));
+}
+
+TEST_CASE("TOSVersion は実際の OS バージョンを返す")
+{
+	// src/Global.cpp:2278 は "%u.%u.%u" で表示し、直後にビルド番号で
+	// Windows 11 (>=22000) を判定する
+	CHECK(TOSVersion::Major >= 6);   // Windows 7 以降
+	CHECK(TOSVersion::Major <= 20);  // 桁が壊れていないこと
+	CHECK(TOSVersion::Minor >= 0);
+	CHECK(TOSVersion::Build > 0);
+
+	// GetVersionEx は互換性マニフェストが無いと 6.2 で頭打ちになる。
+	// RtlGetVersion を使っているので、Windows 10/11 上では 10 が返るはず。
+	// ただし Windows 7/8 の CI も否定しないよう、ここでは緩く見る
+	MESSAGE("TOSVersion = " << TOSVersion::Major << "." << TOSVersion::Minor << "."
+	                        << TOSVersion::Build);
+}
+
+//===========================================================================
+// StringToGUID
+//
+// 実測: src/usr_shell.cpp:1853 の KnownGuidStrToPath が唯一の呼び出しで、
+// 結果を ::SHGetKnownFolderPath にそのまま渡す。
+//===========================================================================
+
+TEST_CASE("StringToGUID: 波括弧付きの GUID 文字列を変換する")
+{
+	// FOLDERID_Windows = {F38BF404-1D43-42F2-9305-67DE0B28FC23}
+	const TGUID g = StringToGUID(_T("{F38BF404-1D43-42F2-9305-67DE0B28FC23}"));
+	CHECK(g.Data1 == 0xF38BF404);
+	CHECK(g.Data2 == 0x1D43);
+	CHECK(g.Data3 == 0x42F2);
+	CHECK(g.Data4[0] == 0x93);
+	CHECK(g.Data4[7] == 0x23);
+}
+
+TEST_CASE("StringToGUID: 大文字小文字と既知フォルダの値")
+{
+	// 呼び出し側 (KnownGuidStrToPath) は結果を SHGetKnownFolderPath に渡すので、
+	// 値がそのまま一致することが要件。ここでは shlobj を引かずに値だけを見る
+	// (SHGetKnownFolderPath 経由の確認は src/usr_shell.cpp 側のテストで行う)
+	const TGUID a = StringToGUID(_T("{f38bf404-1d43-42f2-9305-67de0b28fc23}"));
+	const TGUID b = StringToGUID(_T("{F38BF404-1D43-42F2-9305-67DE0B28FC23}"));
+	CHECK(::IsEqualGUID(a, b));
+}
+
+TEST_CASE("StringToGUID: 不正な文字列は例外を投げる")
+{
+	// 黙って空 GUID を返すと SHGetKnownFolderPath が別のフォルダを返しかねない。
+	// 呼び出し側は catch (...) で受けている
+	CHECK_THROWS(StringToGUID(_T("not-a-guid")));
+	CHECK_THROWS(StringToGUID(UnicodeString()));
+}

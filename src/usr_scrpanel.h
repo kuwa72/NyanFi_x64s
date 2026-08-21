@@ -133,8 +133,32 @@ public:
 		UsKnobWidth = UnscaledInt(Value, ParentPanel);
 		LastPPI     = ParentPanel->CurrentPPI;
 	}
+
+	/**
+	 * @brief ノブ幅の読み書き
+	 * @details 旧 `__property int KnobWidth = {read = FKnobWidth, write = SetKnobWidth};`
+	 *          C++Builder 拡張のプロパティ構文は clang-cl / mingw-w64 では通らないため、
+	 *          呼び出し形 (`KnobWidth = n` / `int n = KnobWidth`) を変えずに済む
+	 *          プロキシへ置き換えた (issue #1 Phase 1)。標準C++のみで書いてあるので
+	 *          BCC64 でもそのまま通る。
+	 */
+	class TKnobWidthProperty
+	{
+	public:
+		explicit TKnobWidthProperty(UsrScrollPanel *owner) : Owner(owner) {}
+
+		operator int() const { return Owner->FKnobWidth; }
+		TKnobWidthProperty &operator=(int value)
+		{
+			Owner->SetKnobWidth(value);
+			return *this;
+		}
+
+	private:
+		UsrScrollPanel *Owner;
+	};
 	/** ノブ幅 */
-	__property int KnobWidth = {read = FKnobWidth,  write = SetKnobWidth};
+	TKnobWidthProperty KnobWidth{this};
 
 	Graphics::TBitmap *KnobImgBuffV;	//!< 垂直ノブ画像
 	Graphics::TBitmap *KnobImgBuffH;	//!< 水平ノブ画像
@@ -160,7 +184,29 @@ public:
 			if (ScrPanelH) ScrPanelH->Visible = VisibleH = false;
 		}
 	}
-	__property bool Visible = {read = FVisible,  write = SetVisible};
+
+	/**
+	 * @brief 表示状態の読み書き
+	 * @details 旧 `__property bool Visible = {read = FVisible, write = SetVisible};`
+	 *          KnobWidth と同じ理由で標準C++の添字なしプロキシへ置き換えた
+	 *          (issue #1 Phase 1)。
+	 */
+	class TVisibleProperty
+	{
+	public:
+		explicit TVisibleProperty(UsrScrollPanel *owner) : Owner(owner) {}
+
+		operator bool() const { return Owner->FVisible; }
+		TVisibleProperty &operator=(bool value)
+		{
+			Owner->SetVisible(value);
+			return *this;
+		}
+
+	private:
+		UsrScrollPanel *Owner;
+	};
+	TVisibleProperty Visible{this};
 
 	bool VisibleV;						//!< 垂直スクロールバーの表示状態
 	bool VisibleH;						//!< 水平スクロールバーの表示状態

@@ -38,7 +38,25 @@ private:
 	}
 
 public:
-	__property BYTE Bytes[unsigned int Index] = {read=Get};
+	/**
+	 * @brief Bytes[Index] の読み取り
+	 * @details 旧 `__property BYTE Bytes[unsigned int Index] = {read=Get};`
+	 *          C++Builder 拡張のプロパティ構文は clang-cl / mingw-w64 では通らないため、
+	 *          呼び出し形 (`mmf->Bytes[i]`) を変えずに済む添字プロキシへ置き換えた
+	 *          (issue #1 Phase 0)。標準C++のみで書いてあるので BCC64 でもそのまま通る。
+	 */
+	class TBytesProperty
+	{
+	public:
+		explicit TBytesProperty(MemMapFile *owner) : Owner(owner) {}
+
+		BYTE operator[](unsigned int index) const { return Owner->Get(index); }
+
+	private:
+		MemMapFile *Owner;
+	};
+
+	TBytesProperty Bytes{this};
 
 	__int64 FileSize;		//!< ファイルサイズ
 	unsigned int BuffSize;	//!< バッファ(マップ)サイズ

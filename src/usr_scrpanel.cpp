@@ -295,7 +295,7 @@ void __fastcall UsrScrollPanel::UpdateKnob()
 				ScrPage = lst_hi/lp->ItemHeight;
 				if (lp->Count>ScrPage) {
 					double r = 1.0 * ScrPage / lp->Count;
-					ScrKnobRectV = Rect(0, 0, ScrPaintBoxV->Width, std::max((int)(lst_hi * r), KnobWidth));
+					ScrKnobRectV = Rect(0, 0, ScrPaintBoxV->Width, std::max((int)(lst_hi * r), (int)KnobWidth));
 					ScrKnobMaxY  = lst_hi - ScrKnobRectV.Height() - 1;
 					int yp = std::min((int)(1.0 * lp->TopIndex / lp->Count * lst_hi), ScrKnobMaxY);
 					ScrKnobRectV.Location = Point(0, yp);
@@ -338,7 +338,7 @@ void __fastcall UsrScrollPanel::UpdateKnob()
 				ScrPage = lst_hi/lp->ItemHeight;
 				if (lp->Count>ScrPage) {
 					double r = 1.0 * ScrPage / lp->Count;
-					ScrKnobRectV = Rect(0, 0, ScrPaintBoxV->Width, std::max((int)(lst_hi * r), KnobWidth));
+					ScrKnobRectV = Rect(0, 0, ScrPaintBoxV->Width, std::max((int)(lst_hi * r), (int)KnobWidth));
 					ScrKnobMaxY  = lst_hi - ScrKnobRectV.Height() - 1;
 					int yp = std::min((int)(1.0 * lp->TopIndex / lp->Count * lst_hi), ScrKnobMaxY);
 					ScrKnobRectV.Location = Point(0, yp);
@@ -362,7 +362,7 @@ void __fastcall UsrScrollPanel::UpdateKnob()
 				ScrPage = gp->VisibleRowCount;
 				if (gp->RowCount > ScrPage) {
 					double r = 1.0 * grid_hi / get_GridTotalHeight();
-					ScrKnobRectV = Rect(0, 0, ScrPaintBoxV->Width, std::max((int)(grid_hi * r), KnobWidth));
+					ScrKnobRectV = Rect(0, 0, ScrPaintBoxV->Width, std::max((int)(grid_hi * r), (int)KnobWidth));
 					ScrKnobMaxY  = grid_hi - ScrKnobRectV.Height() - 1;
 					int yp = std::min((int)(1.0 * gp->TopRow / gp->RowCount * grid_hi), ScrKnobMaxY);
 					ScrKnobRectV.Location = Point(0, yp);
@@ -405,7 +405,7 @@ void __fastcall UsrScrollPanel::UpdateKnob()
 				if (bp->Max>ScrPage) {
 					int scr_hi = ScrPanelV->ClientHeight;
 					double r = 1.0 * ScrPage / (bp->Max - bp->Min);
-					ScrKnobRectV = Rect(0, 0, ScrPaintBoxV->Width, std::max((int)(scr_hi * r), KnobWidth));
+					ScrKnobRectV = Rect(0, 0, ScrPaintBoxV->Width, std::max((int)(scr_hi * r), (int)KnobWidth));
 					ScrKnobMaxY  = scr_hi - ScrKnobRectV.Height() - 1;
 					int yp = std::min((int)(1.0 * (bp->Position - bp->Min) / (bp->Max - bp->Min) * scr_hi), ScrKnobMaxY);
 					ScrKnobRectV.Location = Point(0, yp);

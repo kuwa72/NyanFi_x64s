@@ -41,18 +41,18 @@ UnicodeString GetFilterInfStr(UnicodeString filter, bool is_grep)
 
 			//HtmlHead
 			if (SameText(f, "HtmlHead")) {
-				ins_sep_cat(ret_str, " | ", "head要素行");
+				ins_sep_cat(ret_str, " | ", _T("head要素行"));
 				continue;
 			}
 			//HtmlBody
 			if (SameText(f, "HtmlBody")) {
-				ins_sep_cat(ret_str, " | ", "body要素行");
+				ins_sep_cat(ret_str, " | ", _T("body要素行"));
 				continue;
 			}
 
 			//HtmlRe
 			if (SameText(f, "HtmlRem")) {
-				ins_sep_cat(ret_str, " | ", (is_grep? "コメント" : "コメント行"));
+				ins_sep_cat(ret_str, " | ", (is_grep? _T("コメント") : _T("コメント行")));
 				continue;
 			}
 

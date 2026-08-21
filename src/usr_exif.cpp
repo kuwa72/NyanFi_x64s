@@ -439,7 +439,7 @@ void EXIF_format_inf(UnicodeString fext, TStringList *lst)
 	if (idx!=-1) {
 		vstr = lst->Values[vnam];
 		if (!vstr.IsEmpty()) {
-			vstr = get_word_i_idx("0 ?|1 横(そのまま)|2 横(左右反転)|3 横(180度回転)|4 横(上下反転)|5 縦(左右反転 + 270度回転)|6 縦(90度回転)|7 縦(左右反転 + 90度回転)|8 縦(270度回転)", vstr.ToIntDef(0));
+			vstr = get_word_i_idx(_T("0 ?|1 横(そのまま)|2 横(左右反転)|3 横(180度回転)|4 横(上下反転)|5 縦(左右反転 + 270度回転)|6 縦(90度回転)|7 縦(左右反転 + 90度回転)|8 縦(270度回転)"), vstr.ToIntDef(0));
 			lst->Add(tmp.sprintf(_T("%sL=%s"), vnam.c_str(), vstr.c_str()));
 		}
 	}
@@ -469,8 +469,8 @@ void EXIF_format_inf(UnicodeString fext, TStringList *lst)
 		if (!vstr.IsEmpty()) {
 			int n = vstr.ToIntDef(0);
 			vstr = get_word_i_idx(
-				"不明|マニュアル|ノーマル|絞り優先|シャッター優先|Creative|Action|ポートレート|ランドスケープ", n);
-			if (vstr.IsEmpty()) vstr = "不明";
+				_T("不明|マニュアル|ノーマル|絞り優先|シャッター優先|Creative|Action|ポートレート|ランドスケープ"), n);
+			if (vstr.IsEmpty()) vstr = _T("不明");
 			lst->Add(tmp.sprintf(_T("%sL=%s"), vnam.c_str(), vstr.c_str()));
 		}
 	}
@@ -483,11 +483,11 @@ void EXIF_format_inf(UnicodeString fext, TStringList *lst)
 		if (!vstr.IsEmpty()) {
 			int n = vstr.ToIntDef(0);
 			if (n==255) {
-				vstr = "その他";
+				vstr = _T("その他");
 			}
 			else {
-				vstr = get_word_i_idx("不明|平均|中央重視|スポット|マルチスポット|分割測光|部分測光", n);
-				if (vstr.IsEmpty()) vstr = "不明";
+				vstr = get_word_i_idx(_T("不明|平均|中央重視|スポット|マルチスポット|分割測光|部分測光"), n);
+				if (vstr.IsEmpty()) vstr = _T("不明");
 			}
 			lst->ValueFromIndex[idx] = vstr;
 		}

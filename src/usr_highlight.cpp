@@ -54,7 +54,7 @@ void HighlightFile::CheckValues()
 		}
 	}
 
-	if (ErrorList->Count>0) ErrorList->Add("    設定に誤りがあります。");
+	if (ErrorList->Count>0) ErrorList->Add(_T("    設定に誤りがあります。"));
 }
 
 //---------------------------------------------------------------------------

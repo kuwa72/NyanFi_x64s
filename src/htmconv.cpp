@@ -338,9 +338,9 @@ UnicodeString HtmConv::RefEntity(UnicodeString s)
 			"&#169;\t(c)\n"		//&copy;
 			"&#174;\t(R)\n"		//&reg;
 			"&#8194;\t \n"		//&ensp;
-			"&#8195;\t　\n"		//&emsp;
+			_T("&#8195;\t　\n")		//&emsp;
 			"&#8211;\t-\n"		//&ndash;
-			"&#8212;\t－\n";	//&mdash;
+			_T("&#8212;\t－\n");	//&mdash;
 		s = replace_str_by_list(s, ent_lst.get());
 	}
 
@@ -452,7 +452,7 @@ void HtmConv::Convert()
 		UlMarkStr = "- ";
 	}
 	else {
-		UlMarkStr = "・";
+		UlMarkStr = _T("・");
 	}
 
 	std::unique_ptr<TStringList> lst(new TStringList());
@@ -926,7 +926,7 @@ void HtmConv::Convert()
 				}
 				//画像
 				else if (SameStr(tag, "IMG")) {
-					UnicodeString alt_str = def_if_empty(GetTagAtr(lbuf, tag, _T("ALT")), "画像");
+					UnicodeString alt_str = def_if_empty(GetTagAtr(lbuf, tag, _T("ALT")), _T("画像"));
 					UnicodeString src_str = ToAbsUrl(GetTagAtr(lbuf, tag, _T("SRC")));
 					TxtLineBuf.cat_sprintf(_T("![%s](%s)"), alt_str.c_str(), src_str.c_str());
 				}
