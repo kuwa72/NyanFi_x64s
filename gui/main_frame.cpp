@@ -588,6 +588,130 @@ void MainFrame::CmdShowDirStack()
 }
 
 //---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// タブ操作 (判断は gui/tabs.h の TabManager が持つ。規約8)
+//---------------------------------------------------------------------------
+void MainFrame::CmdMoveTab(int direction)
+{
+	StoreCurrentTabState();
+	if (!tabs_.MoveCurrentTab(direction)) { SetStatusWarning(_T("タブが1枚しかありません")); return; }
+	RefreshTabBar();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdSoloTab()
+{
+	StoreCurrentTabState();
+	const int n = tabs_.CloseOtherTabs();
+	if (n == 0) { SetStatusWarning(_T("タブが1枚しかありません")); return; }
+	RefreshTabBar();
+	SetStatusWarning(UnicodeString().sprintf(_T("%d 枚のタブを閉じました"), n));
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdTabHome(bool all)
+{
+	StoreCurrentTabState();
+	const int n = tabs_.GoHome(all);
+	if (n == 0) { SetStatusWarning(_T("ホームが設定されていません")); return; }
+	ApplyTabState(tabs_.Current());
+	RefreshTabBar();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdToTab()
+{
+	// VCL は ActionParam を受けるが、Phase 2 骨格にはコマンドへ引数を渡す
+	// 仕組みが無いので、番号かキャプションを訊く形にした
+	const wxString param = wxGetTextFromUser(
+		to_wx(_T("タブの番号 (1 起点) またはキャプションを入力してください")),
+		to_wx(_T("指定のタブへ")), wxEmptyString, this);
+	if (param.IsEmpty()) return;
+
+	StoreCurrentTabState();
+	if (!tabs_.SelectByParam(to_us(param))) {
+		SetStatusWarning(_T("該当するタブがありません: ") + to_us(param));
+		return;
+	}
+	ApplyTabState(tabs_.Current());
+	RefreshTabBar();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdSubDirList()
+{
+	FilePane *pane = ActivePane();
+	const UnicodeString base = IncludeTrailingPathDelimiter(pane->GetPath());
+
+	wxArrayString choices;
+	std::vector<UnicodeString> dirs;
+	TSearchRec sr;
+	if (FindFirst(base + "*", faDirectory, sr) == 0) {
+		do {
+			if (SameStr(sr.Name, ".") || SameStr(sr.Name, "..")) continue;
+			if ((sr.Attr & faDirectory) == 0) continue;
+			dirs.push_back(sr.Name);
+			choices.Add(to_wx(sr.Name));
+		} while (FindNext(sr) == 0);
+		FindClose(sr);
+	}
+
+	if (dirs.empty()) { SetStatusWarning(_T("サブディレクトリがありません")); return; }
+
+	const int sel = wxGetSingleChoiceIndex(to_wx(_T("移動先を選んでください")),
+	                                       to_wx(_T("サブディレクトリ一覧")), choices, this);
+	if (sel < 0) return;
+	pane->SetPath(base + dirs[static_cast<std::size_t>(sel)]);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdSpecialDirList()
+{
+	// 移植済みの get_SpecialFolder() (usr_file_ex.h) が Windows の
+	// 既知フォルダを引く。VCL 版の SpecialDirList と同じ顔ぶれに寄せた
+	struct Entry { const wchar_t *label; int csidl; };
+	static const Entry kEntries[] = {
+		{L"デスクトップ", CSIDL_DESKTOPDIRECTORY},
+		{L"ドキュメント", CSIDL_PERSONAL},
+		{L"ダウンロード", -1},  // CSIDL には無いのでプロファイル配下から作る
+		{L"ピクチャ", CSIDL_MYPICTURES},
+		{L"ミュージック", CSIDL_MYMUSIC},
+		{L"ビデオ", CSIDL_MYVIDEO},
+		{L"アプリケーション データ", CSIDL_APPDATA},
+		{L"プログラム ファイル", CSIDL_PROGRAM_FILES},
+		{L"Windows", CSIDL_WINDOWS},
+		{L"システム", CSIDL_SYSTEM},
+	};
+
+	wxArrayString choices;
+	std::vector<UnicodeString> paths;
+	for (const Entry &e : kEntries) {
+		UnicodeString path;
+		if (e.csidl == -1) {
+			const UnicodeString prof = GetEnvironmentVariable(_T("USERPROFILE"));
+			if (!prof.IsEmpty()) path = IncludeTrailingPathDelimiter(prof) + _T("Downloads");
+		}
+		else {
+			wchar_t buf[MAX_PATH] = {};
+			if (SUCCEEDED(::SHGetFolderPathW(NULL, e.csidl, NULL, 0, buf))) path = buf;
+		}
+		if (path.IsEmpty() || !dir_exists(path)) continue;
+
+		paths.push_back(path);
+		choices.Add(to_wx(UnicodeString(e.label) + _T("  ") + path));
+	}
+
+	if (paths.empty()) { SetStatusWarning(_T("特殊フォルダを取得できません")); return; }
+
+	const int sel = wxGetSingleChoiceIndex(to_wx(_T("移動先を選んでください")),
+	                                       to_wx(_T("特殊フォルダ一覧")), choices, this);
+	if (sel < 0) return;
+	ActivePane()->SetPath(paths[static_cast<std::size_t>(sel)]);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
 void MainFrame::UpdateStatus()
 {
 	for (int i = 0; i < 2; ++i) {
@@ -871,6 +995,25 @@ bool MainFrame::Execute(const UnicodeString &command)
 		sync_lr_ = !sync_lr_;
 		SetStatusWarning(sync_lr_? _T("左右の同期: 有効") : _T("左右の同期: 解除"));
 		if (sync_lr_) CmdToOppSameItem();
+	}
+	//-- タブ操作 -------------------------------------------------------------
+	else if (SameStr(command, _T("MoveTab"))) {
+		CmdMoveTab(1);
+	}
+	else if (SameStr(command, _T("SoloTab"))) {
+		CmdSoloTab();
+	}
+	else if (SameStr(command, _T("TabHome"))) {
+		CmdTabHome(false);
+	}
+	else if (SameStr(command, _T("ToTab"))) {
+		CmdToTab();
+	}
+	else if (SameStr(command, _T("SubDirList"))) {
+		CmdSubDirList();
+	}
+	else if (SameStr(command, _T("SpecialDirList"))) {
+		CmdSpecialDirList();
 	}
 	else if (SameStr(command, _T("KeyList"))) {
 		ShowKeyList();
@@ -1687,6 +1830,9 @@ void MainFrame::CmdAddTab()
 	StoreCurrentTabState();  // 現在のタブの記録を最新化してから複製する
 
 	TabState state = tabs_.Current();
+	// タブを作った時点のディレクトリをホームにする (TabHome の戻り先)。
+	// VCL は TabList の CSV に home0/home1 として持つ
+	for (int i = 0; i < 2; ++i) state.panes[i].home = state.panes[i].directory;
 	tabs_.AddTab(state);
 	ApplyTabState(tabs_.Current());  // 内容は複製なので実際にはペインは変化しない
 	RefreshTabBar();

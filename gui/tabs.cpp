@@ -171,3 +171,70 @@ void TabManager::LoadFromIni(UsrIniFile &ini)
 	const int saved_current = ini.ReadInteger(kSection, _T("Current"), 0);
 	current_ = (saved_current >= 0 && saved_current < static_cast<int>(tabs_.size())) ? saved_current : 0;
 }
+
+//---------------------------------------------------------------------------
+bool TabManager::MoveCurrentTab(int direction)
+{
+	if (Count() < 2 || direction == 0) return false;
+
+	const int from = current_;
+	// VCL は末尾から先頭へ回る (MainFrm.cpp:37429-37430)
+	const int to = (direction > 0)? ((from < Count() - 1)? from + 1 : 0)
+	                              : ((from > 0)? from - 1 : Count() - 1);
+	if (from == to) return false;
+
+	const TabState moved = tabs_[static_cast<std::size_t>(from)];
+	tabs_.erase(tabs_.begin() + from);
+	tabs_.insert(tabs_.begin() + to, moved);
+	current_ = to;  // 移動後もそのタブが選ばれたまま
+	return true;
+}
+
+//---------------------------------------------------------------------------
+int TabManager::CloseOtherTabs()
+{
+	if (Count() < 2) return 0;
+
+	const TabState keep = Current();
+	const int closed = Count() - 1;
+	tabs_.clear();
+	tabs_.push_back(keep);
+	current_ = 0;
+	return closed;
+}
+
+//---------------------------------------------------------------------------
+int TabManager::GoHome(bool all)
+{
+	int n = 0;
+	for (int i = 0; i < Count(); i++) {
+		if (!all && i != current_) continue;
+
+		TabState &t = tabs_[static_cast<std::size_t>(i)];
+		bool changed = false;
+		for (int k = 0; k < 2; k++) {
+			// VCL は home が**空でないときだけ**書き戻す (MainFrm.cpp:37597-37598)
+			if (t.panes[k].home.IsEmpty()) continue;
+			if (t.panes[k].directory != t.panes[k].home) changed = true;
+			t.panes[k].directory = t.panes[k].home;
+		}
+		if (changed) n++;
+	}
+	return n;
+}
+
+//---------------------------------------------------------------------------
+bool TabManager::SelectByParam(const UnicodeString &param)
+{
+	if (param.IsEmpty()) return false;
+
+	// VCL はまず数値として解釈する (MainFrm.cpp:37464)。番号は 1 起点
+	const int num = param.ToIntDef(-1);
+	if (num != -1) return SelectAt(num - 1);
+
+	// 数値でなければキャプションの完全一致 (大文字小文字を区別しない)
+	for (int i = 0; i < Count(); i++) {
+		if (SameText(CaptionAt(i), param)) return SelectAt(i);
+	}
+	return false;
+}

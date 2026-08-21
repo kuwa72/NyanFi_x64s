@@ -147,6 +147,14 @@ private:
 	void CmdPopDir();
 	void CmdShowDirStack();
 
+	//-- タブ操作 (機能群4) ---------------------------------------------------
+	void CmdMoveTab(int direction);  //!< タブの位置を移動 (MoveTab)
+	void CmdSoloTab();               //!< 他のタブをすべて閉じる (SoloTab)
+	void CmdTabHome(bool all);       //!< タブをホームへ戻す (TabHome)
+	void CmdToTab();                 //!< 番号/キャプションでタブを選ぶ (ToTab)
+	void CmdSubDirList();            //!< サブディレクトリ一覧から選んで移動
+	void CmdSpecialDirList();        //!< 特殊フォルダ一覧から選んで移動
+
 	DirStack dir_stack_;          //!< ディレクトリ・スタック (PushDir / PopDir)
 	bool sync_lr_ = false;        //!< 左右のディレクトリを同期させるか (SyncLR)
 

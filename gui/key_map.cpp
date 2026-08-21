@@ -175,6 +175,16 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Ctrl+Shift+D"), _T("PushDir"));
 	Assign(_T("Ctrl+Shift+P"), _T("PopDir"));
 
+	// タブ操作。VCL の既定表にタブのエントリが1件も無いので全部推測
+	// (既存の Ctrl+T / Ctrl+W / Ctrl+Tab と揃えた)
+	Assign(_T("Ctrl+Shift+T"), _T("SoloTab"));
+	Assign(_T("Ctrl+Shift+H"), _T("TabHome"));
+	Assign(_T("Ctrl+Shift+M"), _T("MoveTab"));
+	Assign(_T("Ctrl+Shift+G"), _T("ToTab"));
+	// ディレクトリ一覧
+	Assign(_T("Ctrl+Shift+L"), _T("SubDirList"));
+	Assign(_T("Ctrl+Shift+F"), _T("SpecialDirList"));
+
 	// 並べ替え・絞り込み。"S" は src/Global.cpp の既定キー表にある実際の割り当て
 	// ("F:S=SortDlg") と同じ。Ctrl+M / Ctrl+U は既定キー表に対応する記載が無く
 	// (パスマスクはコンボボックス操作が前提で単独のキー割り当てが見当たらない)、
