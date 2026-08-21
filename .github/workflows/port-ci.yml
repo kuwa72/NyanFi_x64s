@@ -99,6 +99,12 @@ jobs:
       - name: 非 ASCII の narrow リテラルが残っていないか
         run: python3 scripts/check_literals.py
 
+      # コマンド名が VCL の表 (usr_cmdlist.cpp) と一致しているか。
+      # ずれていると本物の ini (KeyFuncList) を読んでもそのコマンドだけ
+      # 黙って効かない。実際に8件ずれていた
+      - name: コマンド名が VCL の表と一致しているか
+        run: python3 scripts/check_commands.py
+
       - name: Configure
         run: |
           cmake -S . -B build -G Ninja \

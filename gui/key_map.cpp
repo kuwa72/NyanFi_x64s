@@ -114,9 +114,9 @@ void KeyMap::LoadDefaults()
 	// "F:Ctrl+Enter=OpenByApp" (アプリケーションから開く) と同じ
 	Assign(_T("ENTER"), _T("OpenStandard"));
 	Assign(_T("Ctrl+Enter"), _T("OpenByApp"));
-	Assign(_T("BKSP"), _T("UpDir"));
-	Assign(_T("TAB"), _T("ChangePane"));
-	Assign(_T("F5"), _T("Refresh"));
+	Assign(_T("BKSP"), _T("ToParent"));
+	Assign(_T("TAB"), _T("ToOpposite"));
+	Assign(_T("F5"), _T("ReloadList"));
 
 	// テキストビューア。"V" は src/Global.cpp の既定キー表 ("F:V=TextViewer")
 	// と同じ。ビューア自体のキー操作 (行移動・検索・折り返し切替・閉じる) は
@@ -140,9 +140,9 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Ctrl+F"), _T("Grep"));
 
 	// マーク
-	Assign(_T("SPACE"), _T("MarkItem"));
-	Assign(_T("Ctrl+A"), _T("MarkAll"));
-	Assign(_T("Ctrl+D"), _T("UnMarkAll"));
+	Assign(_T("SPACE"), _T("Select"));
+	Assign(_T("Ctrl+A"), _T("SelAllItem"));
+	Assign(_T("Ctrl+D"), _T("ClearAll"));
 
 	// 並べ替え・絞り込み。"S" は src/Global.cpp の既定キー表にある実際の割り当て
 	// ("F:S=SortDlg") と同じ。Ctrl+M / Ctrl+U は既定キー表に対応する記載が無く
@@ -181,7 +181,7 @@ void KeyMap::LoadDefaults()
 	// (src/MainFrm.dfm の PropertyDlgAction にも ShortCut が無く、メニュー専用
 	// らしい)。Alt+Enter は Windows のプロパティ表示の慣習に合わせた
 	// Phase 2 骨格独自の割り当て (推測。要検証)
-	Assign(_T("F1"), _T("ShowKeyList"));
+	Assign(_T("F1"), _T("KeyList"));
 	Assign(_T("F12"), _T("ShowCmdList"));
 	Assign(_T("Alt+Enter"), _T("PropertyDlg"));
 	Assign(_T("Alt+F4"), _T("Exit"));

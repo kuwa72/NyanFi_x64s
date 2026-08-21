@@ -471,28 +471,30 @@ bool MainFrame::Execute(const UnicodeString &command)
 	else if (SameStr(command, _T("PropertyDlg"))) {
 		CmdPropertyDlg();
 	}
-	else if (SameStr(command, _T("UpDir")) || SameStr(command, _T("ToLeft"))) {
+	else if (SameStr(command, _T("ToParent")) || SameStr(command, _T("ToLeft"))) {
 		pane->GoParent();
 	}
 	else if (SameStr(command, _T("ToRight"))) {
 		pane->EnterCurrent();
 	}
-	else if (SameStr(command, _T("ChangePane"))) {
+	else if (SameStr(command, _T("ToOpposite"))) {
 		SetActivePane(1 - active_);
 	}
-	else if (SameStr(command, _T("Refresh"))) {
+	else if (SameStr(command, _T("ReloadList"))) {
 		pane->Reload();
 	}
-	else if (SameStr(command, _T("MarkItem"))) {
+	else if (SameStr(command, _T("Select"))) {
 		pane->ToggleMark();
 	}
-	else if (SameStr(command, _T("MarkAll"))) {
-		pane->MarkAll(true);
+	else if (SameStr(command, _T("SelAllItem"))) {
+		// VCL の SelAllItemActionExecute (MainFrm.cpp:24846) と同じ判定。
+		// 「選択が1件も無ければ全選択、1件でもあれば全解除」のトグル
+		pane->MarkAll(pane->GetMarkedCount() == 0);
 	}
-	else if (SameStr(command, _T("UnMarkAll"))) {
+	else if (SameStr(command, _T("ClearAll"))) {
 		pane->MarkAll(false);
 	}
-	else if (SameStr(command, _T("ShowKeyList"))) {
+	else if (SameStr(command, _T("KeyList"))) {
 		ShowKeyList();
 	}
 	else if (SameStr(command, _T("ShowCmdList"))) {

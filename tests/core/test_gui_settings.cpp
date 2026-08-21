@@ -120,7 +120,7 @@ TEST_CASE("Settings: DefaultIniPath は実行ファイルと同じ場所の別�
 TEST_CASE("KeyMap: 既定の割り当てが引ける")
 {
 	KeyMap km;
-	CHECK(km.Lookup(_T("F5")) == UnicodeString(_T("Refresh")));
+	CHECK(km.Lookup(_T("F5")) == UnicodeString(_T("ReloadList")));
 	CHECK(km.Lookup(_T("Ctrl+Q")) == UnicodeString(_T("Exit")));
 	CHECK(km.Lookup(_T("NoSuchKey")).IsEmpty());
 	CHECK(km.Lookup(EmptyStr).IsEmpty());
@@ -228,7 +228,7 @@ TEST_CASE("VkFromWxKeyCode: 変換した値が get_KeyStr でキー名になる"
 	CHECK_FALSE(km.Lookup(get_KeyStr(KeyMap::VkFromWxKeyCode(315))).IsEmpty());
 	CHECK_FALSE(km.Lookup(get_KeyStr(KeyMap::VkFromWxKeyCode(317))).IsEmpty());
 	CHECK(km.Lookup(get_KeyStr(KeyMap::VkFromWxKeyCode(366))) == UnicodeString(_T("PageUp")));
-	CHECK(km.Lookup(get_KeyStr(KeyMap::VkFromWxKeyCode(344))) == UnicodeString(_T("Refresh")));
+	CHECK(km.Lookup(get_KeyStr(KeyMap::VkFromWxKeyCode(344))) == UnicodeString(_T("ReloadList")));
 }
 
 //===========================================================================
@@ -299,7 +299,7 @@ TEST_CASE("LoadFromIni: KeyFuncList の F: エントリで既定の割り当て�
 	CHECK(km.Lookup(_T("SELECT+DOWN")).IsEmpty());
 	CHECK(km.Lookup(_T("Ctrl+K~D")).IsEmpty());
 	// 既定のまま残っている割り当てにも影響が無いこと
-	CHECK(km.Lookup(_T("F5")) == UnicodeString(_T("Refresh")));
+	CHECK(km.Lookup(_T("F5")) == UnicodeString(_T("ReloadList")));
 }
 
 TEST_CASE("LoadFromIni: ini が存在しない場合は既定のまま (無視する)")
@@ -307,7 +307,7 @@ TEST_CASE("LoadFromIni: ini が存在しない場合は既定のまま (無視�
 	TempDir dir;
 	KeyMap km;
 	km.LoadFromIni(dir.file(_T("does_not_exist.ini")));
-	CHECK(km.Lookup(_T("F5")) == UnicodeString(_T("Refresh")));
+	CHECK(km.Lookup(_T("F5")) == UnicodeString(_T("ReloadList")));
 	CHECK(km.Lookup(_T("Ctrl+Q")) == UnicodeString(_T("Exit")));
 }
 
@@ -322,7 +322,7 @@ TEST_CASE("LoadFromIni: KeyFuncList セクションが無い場合は既定の�
 
 	KeyMap km;
 	km.LoadFromIni(ini_path);
-	CHECK(km.Lookup(_T("F5")) == UnicodeString(_T("Refresh")));
+	CHECK(km.Lookup(_T("F5")) == UnicodeString(_T("ReloadList")));
 }
 
 TEST_CASE("LoadFromIni: 呼び出し元の ini を書き換えない (読み込み専用)")
