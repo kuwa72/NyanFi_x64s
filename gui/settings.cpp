@@ -28,6 +28,9 @@ void Settings::Load()
 
 	LeftDir  = ini_->ReadString(kSection, _T("LeftDir"),  EmptyStr);
 	RightDir = ini_->ReadString(kSection, _T("RightDir"), EmptyStr);
+
+	WorkListName = ini_->ReadString(kSection, _T("WorkListName"), EmptyStr);
+	HomeWorkList = ini_->ReadString(kSection, _T("HomeWorkList"), EmptyStr);
 }
 
 //---------------------------------------------------------------------------
@@ -41,6 +44,9 @@ bool Settings::Save()
 
 	ini_->WriteString(kSection, _T("LeftDir"),  LeftDir);
 	ini_->WriteString(kSection, _T("RightDir"), RightDir);
+
+	ini_->WriteString(kSection, _T("WorkListName"), WorkListName);
+	ini_->WriteString(kSection, _T("HomeWorkList"), HomeWorkList);
 
 	return ini_->UpdateFile();
 }

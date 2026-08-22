@@ -27,6 +27,12 @@ struct FileItem {
 	bool marked = false;   //!< マーク済みか
 	bool matched = false;  //!< インクリメンタルサーチのキーワードに一致しているか
 	                       //!< (表示のハイライトにのみ使う一時的な状態。gui/navigation.h を参照)
+
+	//-- ワークリスト専用 (gui/work_list.h)。通常の一覧では既定値のまま ---------
+	UnicodeString alias;      //!< 別名。空でなければ name の代わりに表示する
+	                          //!< (MainFrm.cpp:10500 と同じ)
+	bool is_separator = false;//!< 区切り行。名前も日時も持たず、横線として描く
+	bool missing = false;     //!< 登録されているが実体が見つからない (VCL の faInvalid)
 };
 
 /**

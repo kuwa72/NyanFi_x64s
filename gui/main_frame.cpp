@@ -328,6 +328,20 @@ void MainFrame::LoadSettings()
 	}
 	RefreshTabBar();
 
+	// ワークリスト。VCL も起動時に前回の WorkListName を読み直す
+	// (MainFrm.cpp:656)。**中身は読むが表示はしない** ("W" を押して出す)
+	work_home_ = settings_.HomeWorkList;
+	work_name_ = settings_.WorkListName;
+	if (!work_name_.IsEmpty()) {
+		UnicodeString error;
+		if (!work_list::Load(work_name_, /*auto_delete=*/false, work_items_, error)) {
+			// 起動時に読めなくてもダイアログは出さない (毎回出ると邪魔になる)。
+			// 名前だけ残しておくと保存で上書きしてしまうので、無名に戻す
+			work_items_.clear();
+			work_name_ = EmptyStr;
+		}
+	}
+
 	const WindowState &w = settings_.Window;
 	SetSize(wxSize(w.width, w.height));
 	if (w.left != -1 && w.top != -1) SetPosition(wxPoint(w.left, w.top));
@@ -345,6 +359,9 @@ void MainFrame::SaveSettings()
 	// タブが無い/未対応のビルドでも最後に開いていたディレクトリだけは復元できる
 	settings_.LeftDir  = panes_[0]->GetPath();
 	settings_.RightDir = panes_[1]->GetPath();
+
+	settings_.WorkListName = work_name_;
+	settings_.HomeWorkList = work_home_;
 
 	settings_.Window.maximized = IsMaximized();
 	// 最大化中は座標・サイズを更新しない (次回、通常サイズに戻したときの
@@ -999,6 +1016,7 @@ void MainFrame::CmdCreateLinks(links::LinkKind kind)
 	                         : (kind == links::LinkKind::Hard)?     _T("ハードリンク")
 	                                                              : _T("シンボリックリンク");
 	if (names.empty()) { SetStatusWarning(verb + _T("の対象がありません")); return; }
+	if (RejectIfOppositeIsResultList(verb + _T("の作成"))) return;
 
 	// VCL と同じく**反対ペインのディレクトリ**に作る (MainFrm.cpp:15873)
 	const UnicodeString dst = OppositePane()->GetPath();
@@ -1107,6 +1125,7 @@ void MainFrame::CmdTestArchive()
 //---------------------------------------------------------------------------
 void MainFrame::CmdUnPack(bool to_current)
 {
+	if (!to_current && RejectIfOppositeIsResultList(_T("展開"))) return;
 	FilePane *pane = ActivePane();
 	const std::vector<UnicodeString> names = pane->GetSelectedNames();
 	if (names.empty()) { SetStatusWarning(_T("展開する書庫がありません")); return; }
@@ -1136,6 +1155,7 @@ void MainFrame::CmdUnPack(bool to_current)
 //---------------------------------------------------------------------------
 void MainFrame::CmdPack(bool to_current)
 {
+	if (!to_current && RejectIfOppositeIsResultList(_T("書庫の作成"))) return;
 	FilePane *pane = ActivePane();
 	const std::vector<UnicodeString> names = pane->GetSelectedNames();
 	if (names.empty()) { SetStatusWarning(_T("書庫に詰めるものがありません")); return; }
@@ -1997,6 +2017,9 @@ void MainFrame::UpdateStatus()
 		UnicodeString label = panes_[i]->IsResultList()
 			? (mark + panes_[i]->ResultTitle() + _T("  ← ") + panes_[i]->GetPath())
 			: (mark + panes_[i]->GetPath() + _T("  [") + panes_[i]->GetSortSummary() + _T("]"));
+		// ワークリストは並べ替えが効かないので、その旨も出す (押しても
+		// 何も起きない理由が分からないと混乱するため)
+		if (panes_[i]->IsOrderKept()) label += _T("  [並び順を保持]");
 		if (panes_[i]->HasMask()) label += _T("  マスク: ") + panes_[i]->GetMask();
 		headers_[i]->SetLabel(to_wx(label));
 	}
@@ -2057,6 +2080,13 @@ void MainFrame::OnCharHook(wxKeyEvent &event)
 //---------------------------------------------------------------------------
 void MainFrame::OnClose(wxCloseEvent &event)
 {
+	// ワークリストの未保存の変更を黙って捨てない (VCL も終了時に聞く。
+	// MainFrm.cpp:977)。「中止」なら閉じるのをやめる
+	SyncWorkMarks();
+	if (!ConfirmDiscardWorkList()) {
+		if (event.CanVeto()) { event.Veto(); return; }
+	}
+
 	SaveSettings();
 	event.Skip();
 }
@@ -2066,9 +2096,17 @@ void MainFrame::OnClose(wxCloseEvent &event)
  * @brief コマンド名で処理を実行する
  * @details コマンド名の綴りは usr_cmdlist.cpp のコマンド表に合わせている。
  *          未実装のコマンドは false を返し、キーは通常処理に流す。
+ *
+ *          引数は VCL と同じく `_` の後ろに付く (`WorkList_OP` など)。
+ *          分離には移植済みの `get_CmdStr` / `get_PrmStr` (src/usr_cmdlist.h)
+ *          をそのまま使う。**コマンド名に `_` を含むものは表に1つも無い**
+ *          (464個を確認) ので、区切りは一意に決まる
  */
-bool MainFrame::Execute(const UnicodeString &command)
+bool MainFrame::Execute(const UnicodeString &full_command)
 {
+	const UnicodeString command = get_CmdStr(full_command);
+	const UnicodeString param = get_PrmStr(full_command);
+
 	FilePane *pane = ActivePane();
 
 	if (SameStr(command, _T("CursorUp"))) {
@@ -2466,6 +2504,51 @@ bool MainFrame::Execute(const UnicodeString &command)
 	else if (SameStr(command, _T("SelSameDir"))) {
 		CmdSelSameDir();
 	}
+	//-- ワークリスト (機能群14) ----------------------------------------------
+	else if (SameStr(command, _T("WorkList"))) {
+		// VCL の ActionParam と同じ: OP=反対側に出す / DI=存在しない項目を外す
+		if (SameText(param, _T("DI")))      CmdDropMissingWorkItems();
+		else                                CmdWorkList(SameText(param, _T("OP")));
+	}
+	else if (SameStr(command, _T("HomeWorkList"))) {
+		CmdHomeWorkList();
+	}
+	else if (SameStr(command, _T("NewWorkList"))) {
+		CmdNewWorkList();
+	}
+	else if (SameStr(command, _T("LoadWorkList"))) {
+		CmdLoadWorkList();
+	}
+	else if (SameStr(command, _T("SaveWorkList"))) {
+		CmdSaveWorkList();
+	}
+	else if (SameStr(command, _T("SaveAsWorkList"))) {
+		// FL = 「カレントの内容をワークリストとして保存」(usr_cmdlist.cpp:969)
+		CmdSaveAsWorkList(SameText(param, _T("FL")));
+	}
+	else if (SameStr(command, _T("SelWorkItem"))) {
+		CmdSelWorkItem();
+	}
+	else if (SameStr(command, _T("SetAlias"))) {
+		CmdSetAlias();
+	}
+	else if (SameStr(command, _T("InsSeparator"))) {
+		CmdInsSeparator();
+	}
+	else if (SameStr(command, _T("SendToWorkList"))) {
+		CmdSendToWorkList();
+	}
+	// WorkItemUP/Down/Move は VCL では ItemTmpUp/Down/Move を呼ぶだけの別名
+	// (MainFrm.cpp:27839-27860)。こちらも同じ実装に振る
+	else if (SameStr(command, _T("WorkItemUP")) || SameStr(command, _T("ItemTmpUp"))) {
+		CmdWorkItemMove(-1);
+	}
+	else if (SameStr(command, _T("WorkItemDown")) || SameStr(command, _T("ItemTmpDown"))) {
+		CmdWorkItemMove(1);
+	}
+	else if (SameStr(command, _T("WorkItemMove")) || SameStr(command, _T("ItemTmpMove"))) {
+		CmdWorkItemMove(0);
+	}
 	else if (SameStr(command, _T("KeyList"))) {
 		ShowKeyList();
 	}
@@ -2488,7 +2571,10 @@ bool MainFrame::Execute(const UnicodeString &command)
 		CmdMove();
 	}
 	else if (SameStr(command, _T("Delete"))) {
-		CmdDelete();
+		// ワークリストの上での Delete は**ファイルを消さず**一覧から外す
+		// (MainFrm.cpp:28916 と同じ)。ここを外すと登録した実ファイルが
+		// ゴミ箱へ行ってしまう
+		if (IsWorkActive()) CmdRemoveWorkItems(); else CmdDelete();
 	}
 	else if (SameStr(command, _T("CreateDir"))) {
 		CmdCreateDir();
@@ -2896,6 +2982,11 @@ void MainFrame::ShowInputDirDialog()
  */
 void MainFrame::CmdCopy()
 {
+	// 反対側がワークリストなら、コピーではなく**登録**になる
+	// (MainFrm.cpp:28355 と同じ)。ファイルは動かさない
+	if (WorkPane() != nullptr && work_pane_ != active_) { CmdSendToWorkList(); return; }
+	if (RejectIfOppositeIsResultList(_T("コピー"))) return;
+
 	FilePane *pane = ActivePane();
 	FilePane *dst_pane = OppositePane();
 
@@ -2928,6 +3019,8 @@ void MainFrame::CmdCopy()
  */
 void MainFrame::CmdMove()
 {
+	if (RejectIfOppositeIsResultList(_T("移動"))) return;
+
 	FilePane *pane = ActivePane();
 	FilePane *dst_pane = OppositePane();
 
@@ -2996,6 +3089,15 @@ bool MainFrame::RejectOnResultList(const UnicodeString &verb)
 {
 	if (!ActivePane()->IsResultList()) return false;
 	wxMessageBox(to_wx(_T("結果リストの上では") + verb + _T("できません (ESC で一覧に戻れます)")),
+	             to_wx(verb), wxOK | wxICON_WARNING, this);
+	return true;
+}
+
+//---------------------------------------------------------------------------
+bool MainFrame::RejectIfOppositeIsResultList(const UnicodeString &verb)
+{
+	if (!OppositePane()->IsResultList()) return false;
+	wxMessageBox(to_wx(_T("反対側が結果リストなので、宛先が決まりません (") + verb + _T(")")),
 	             to_wx(verb), wxOK | wxICON_WARNING, this);
 	return true;
 }
@@ -3438,4 +3540,415 @@ void MainFrame::ApplyTabState(const TabState &state)
 void MainFrame::RefreshTabBar()
 {
 	if (tab_bar_ != nullptr) tab_bar_->SetTabs(tabs_.Captions(), tabs_.CurrentIndex());
+}
+
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// ワークリスト (機能群14)
+//
+// VCL 版の該当は Global.cpp の load_WorkList / save_WorkList と、MainFrm.cpp の
+// WorkListAction / SendToWorkList / SelWorkItem / SetAlias / InsSeparator /
+// ItemTmpUp / ItemTmpDown / ItemTmpMove。
+//
+// 中身 (work_items_) が正で、ペインには写すだけ。並べ替え・追加・削除・
+// .nwl の読み書きはすべて wx 非依存の work_list:: にある (規約8)。
+//
+// **ペインは左右で1つを共有する。** VCL の WorkList もグローバル1本で、
+// 左右どちらにも同じものが出る (両側に別々のワークリストは持てない)。
+//---------------------------------------------------------------------------
+FilePane *MainFrame::WorkPane()
+{
+	if (work_pane_ < 0) return nullptr;
+	// ESC・ディレクトリ移動・項目に入る、のいずれかでペイン側が通常の一覧に
+	// 戻っていることがある。ここで気付いて状態を合わせる
+	if (!panes_[work_pane_]->IsOrderKept()) {
+		work_pane_ = -1;
+		return nullptr;
+	}
+	return panes_[work_pane_];
+}
+
+//---------------------------------------------------------------------------
+UnicodeString MainFrame::WorkListCaption() const
+{
+	// VCL のステータス表示 (Global.cpp:16019) と同じ "<ワーク> 名前" の形
+	UnicodeString caption = _T("<ワーク> ");
+	caption += work_name_.IsEmpty()? _T("(無名)") : ExtractFileName(work_name_);
+	if (work_changed_) caption += _T(" *");
+	caption.cat_sprintf(_T("  %d 件"), static_cast<int>(work_items_.size()));
+	return caption;
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::ShowWorkListOn(int index)
+{
+	work_pane_ = index;
+	panes_[index]->ShowOrderedList(WorkListCaption(), work_list::ToFileItems(work_items_));
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::SyncWorkMarks()
+{
+	FilePane *pane = WorkPane();
+	if (pane == nullptr) return;
+	// 絞り込み中は表示から漏れた項目があり、添字が work_items_ と一対一に
+	// 対応しない。そのまま書き戻すと**別の項目に選択が付く**
+	if (pane->HasMask()) return;
+	// ShowOrderedList は並べ替えないので、絞り込みが無ければ並びは同じ
+	work_list::ApplyMarks(work_items_, pane->VisibleItems());
+}
+
+//---------------------------------------------------------------------------
+bool MainFrame::RejectWhenWorkFiltered()
+{
+	FilePane *pane = WorkPane();
+	if (pane == nullptr || !pane->HasMask()) return false;
+	SetStatusWarning(_T("絞り込み中のワークリストは変更できません (Ctrl+U で解除)"));
+	return true;
+}
+
+//---------------------------------------------------------------------------
+bool MainFrame::ConfirmDiscardWorkList()
+{
+	if (!work_changed_) return true;
+
+	const int r = wxMessageBox(to_wx(_T("ワークリストの変更を保存しますか?")),
+	                           to_wx(_T("ワークリスト")), wxYES_NO | wxCANCEL | wxICON_QUESTION, this);
+	if (r == wxCANCEL) return false;
+	if (r == wxYES) return CmdSaveWorkList();
+	return true;  // 保存しないで捨てる
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief ワークリストの表示/解除 (WorkList)
+ * @param opposite 反対側のペインに出す (VCL の ActionParam "OP")
+ * @details 既に出ているペインでもう一度呼ぶと通常の一覧に戻る。
+ *          左右で1つを共有するので、反対側に出すときは元の側を戻す
+ */
+void MainFrame::CmdWorkList(bool opposite)
+{
+	const int target = opposite? (1 - active_) : active_;
+
+	FilePane *cur_work = WorkPane();
+	if (cur_work != nullptr) {
+		SyncWorkMarks();
+		const int shown = work_pane_;
+		cur_work->ReturnToList();
+		work_pane_ = -1;
+		// 同じ側で呼ばれたなら「解除」。違う側なら付け替える
+		if (shown == target) { UpdateStatus(); return; }
+	}
+	ShowWorkListOn(target);
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdHomeWorkList()
+{
+	if (work_home_.IsEmpty()) {
+		SetStatusWarning(_T("ホームワークリストが設定されていません"));
+		return;
+	}
+	if (!ConfirmDiscardWorkList()) return;
+
+	UnicodeString error;
+	if (!work_list::Load(work_home_, /*auto_delete=*/false, work_items_, error)) {
+		wxMessageBox(to_wx(_T("ホームワークリストを開けません: ") + error),
+		             to_wx(_T("ワークリスト")), wxOK | wxICON_WARNING, this);
+		return;
+	}
+	work_name_ = to_absolute_name(work_home_);
+	work_changed_ = false;
+	ShowWorkListOn(active_);
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdNewWorkList()
+{
+	if (!ConfirmDiscardWorkList()) return;
+
+	work_items_.clear();
+	work_name_ = EmptyStr;
+	work_changed_ = false;
+	ShowWorkListOn(active_);
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdLoadWorkList()
+{
+	if (!ConfirmDiscardWorkList()) return;
+
+	wxFileDialog dlg(this, to_wx(_T("ワークリストを読み込む")),
+	                 to_wx(work_name_.IsEmpty()? ActivePane()->GetPath() : ExtractFilePath(work_name_)),
+	                 wxEmptyString, _T("NyanFi ワークリスト (*.nwl)|*.nwl|すべて (*.*)|*.*"),
+	                 wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+	if (dlg.ShowModal() != wxID_OK) return;
+
+	const UnicodeString path = to_us(dlg.GetPath());
+	UnicodeString error;
+	if (!work_list::Load(path, /*auto_delete=*/false, work_items_, error)) {
+		wxMessageBox(to_wx(_T("開けません: ") + error), to_wx(_T("ワークリスト")),
+		             wxOK | wxICON_WARNING, this);
+		return;
+	}
+	work_name_ = path;
+	work_changed_ = false;
+
+	// 実体の無い項目は消さずに残して知らせる (VCL の AutoDelWorkList=false 相当)。
+	// **黙って捨てない**: 外付けドライブが繋がっていないだけかもしれない
+	int missing = 0;
+	for (const work_list::WorkItem &w : work_items_) {
+		if (w.missing) ++missing;
+	}
+	if (missing > 0) {
+		SetStatusWarning(UnicodeString().sprintf(
+			_T("%d 件は実体が見つかりません (外すには WorkList の DI)"), missing));
+	}
+	ShowWorkListOn(active_);
+}
+
+//---------------------------------------------------------------------------
+bool MainFrame::CmdSaveWorkList()
+{
+	if (work_name_.IsEmpty()) return CmdSaveAsWorkList(false);
+
+	SyncWorkMarks();
+	UnicodeString error;
+	if (!work_list::Save(work_name_, work_items_, error)) {
+		wxMessageBox(to_wx(_T("保存できません: ") + error), to_wx(_T("ワークリスト")),
+		             wxOK | wxICON_ERROR, this);
+		return false;
+	}
+	work_changed_ = false;
+	if (WorkPane() != nullptr) ShowWorkListOn(work_pane_);
+	SetStatusWarning(_T("保存しました: ") + ExtractFileName(work_name_));
+	return true;
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 名前を付けて保存 (SaveAsWorkList)
+ * @param from_list true なら**現在の一覧の内容**をワークリストとして書き出す
+ *        (VCL の ActionParam "FL")。ワークリスト自体は変えない
+ */
+bool MainFrame::CmdSaveAsWorkList(bool from_list)
+{
+	wxFileDialog dlg(this, to_wx(from_list? _T("カレントの内容をワークリストとして保存")
+	                                      : _T("ワークリストに名前を付けて保存")),
+	                 to_wx(work_name_.IsEmpty()? ActivePane()->GetPath() : ExtractFilePath(work_name_)),
+	                 to_wx(work_name_.IsEmpty()? _T("WORKLIST.nwl") : ExtractFileName(work_name_)),
+	                 _T("NyanFi ワークリスト (*.nwl)|*.nwl"),
+	                 wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+	if (dlg.ShowModal() != wxID_OK) return false;
+
+	const UnicodeString path = to_us(dlg.GetPath());
+
+	std::vector<work_list::WorkItem> items;
+	if (from_list) {
+		FilePane *pane = ActivePane();
+		for (const FileItem &f : pane->VisibleItems()) {
+			if (f.is_parent || f.is_separator) continue;
+			work_list::WorkItem w;
+			w.path   = pane->FullPathOf(f);
+			w.alias  = f.alias;
+			w.is_dir = f.is_dir;
+			items.push_back(w);
+		}
+		if (items.empty()) { SetStatusWarning(_T("書き出す項目がありません")); return false; }
+	}
+	else {
+		SyncWorkMarks();
+		items = work_items_;
+	}
+
+	UnicodeString error;
+	if (!work_list::Save(path, items, error)) {
+		wxMessageBox(to_wx(_T("保存できません: ") + error), to_wx(_T("ワークリスト")),
+		             wxOK | wxICON_ERROR, this);
+		return false;
+	}
+
+	// "FL" は書き出すだけで、編集中のワークリストは差し替えない (VCL も同じ)
+	if (!from_list) {
+		work_name_ = path;
+		work_changed_ = false;
+		if (WorkPane() != nullptr) ShowWorkListOn(work_pane_);
+	}
+	SetStatusWarning(_T("保存しました: ") + ExtractFileName(path));
+	return true;
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdSelWorkItem()
+{
+	FilePane *pane = ActivePane();
+	std::vector<FileItem> items = pane->VisibleItems();
+
+	int first = -1;
+	int hit = 0;
+	for (std::size_t i = 0; i < items.size(); ++i) {
+		if (items[i].is_parent || items[i].is_separator) continue;
+		const bool on = (work_list::IndexOfPath(work_items_, pane->FullPathOf(items[i])) != -1);
+		items[i].marked = on;
+		if (on) { ++hit; if (first < 0) first = static_cast<int>(i); }
+	}
+	pane->ApplyMarks(items);
+
+	if (first < 0) { SetStatusWarning(_T("ワークリストに登録された項目はありません")); return; }
+	pane->MoveCursorTo(first);
+	SetStatusWarning(UnicodeString().sprintf(_T("%d 件を選択しました"), hit));
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdSetAlias()
+{
+	if (!IsWorkActive()) { SetStatusWarning(_T("ワークリストではありません")); return; }
+	if (RejectWhenWorkFiltered()) return;
+
+	FilePane *pane = WorkPane();
+	const int idx = pane->GetCursor();
+	if (idx < 0 || idx >= static_cast<int>(work_items_.size())) return;
+
+	work_list::WorkItem &w = work_items_[static_cast<std::size_t>(idx)];
+	if (w.is_separator) { SetStatusWarning(_T("区切り行には別名を付けられません")); return; }
+
+	// VCL は既定値に別名、無ければファイル名主部を入れる (MainFrm.cpp:25417)
+	const UnicodeString def = w.alias.IsEmpty()? get_base_name(w.path) : w.alias;
+	const wxString input = wxGetTextFromUser(to_wx(_T("別名 (空にすると本来の名前に戻ります)")),
+	                                          to_wx(_T("別名の設定")), to_wx(def), this);
+	if (input == wxEmptyString && def.IsEmpty()) return;
+
+	SyncWorkMarks();
+	w.alias = to_us(input);
+	work_changed_ = true;
+	ShowWorkListOn(work_pane_);
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdInsSeparator()
+{
+	if (!IsWorkActive()) { SetStatusWarning(_T("ワークリストではありません")); return; }
+	if (RejectWhenWorkFiltered()) return;
+
+	SyncWorkMarks();
+	work_list::InsertSeparator(work_items_, WorkPane()->GetCursor());
+	work_changed_ = true;
+	ShowWorkListOn(work_pane_);
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 項目を動かす (WorkItemUP / WorkItemDown / WorkItemMove)
+ * @param direction -1 = 1つ上へ / +1 = 1つ下へ / 0 = 選択項目をカーソル位置へ
+ */
+void MainFrame::CmdWorkItemMove(int direction)
+{
+	if (!IsWorkActive()) { SetStatusWarning(_T("ワークリストではありません")); return; }
+	if (RejectWhenWorkFiltered()) return;
+
+	SyncWorkMarks();
+	FilePane *pane = WorkPane();
+	int cursor = pane->GetCursor();
+
+	bool moved = false;
+	if (direction < 0)      moved = work_list::MoveUp(work_items_, cursor);
+	else if (direction > 0) moved = work_list::MoveDown(work_items_, cursor);
+	else                    moved = work_list::MoveSelectedTo(work_items_, cursor);
+	if (!moved) return;
+
+	work_changed_ = true;
+	ShowWorkListOn(work_pane_);
+	pane->MoveCursorTo(cursor);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 選択項目をワークリストに登録する
+ * @details VCL の I: モードの SendToWorkList と、反対側がワークリストのときの
+ *          Copy (MainFrm.cpp:28355) にあたる。ここでは1つのコマンドにまとめ、
+ *          **アクティブペインの選択項目をワークリストへ足す**
+ */
+void MainFrame::CmdSendToWorkList()
+{
+	FilePane *pane = ActivePane();
+	if (IsWorkActive()) { SetStatusWarning(_T("ワークリスト自身は登録できません")); return; }
+	if (RejectWhenWorkFiltered()) return;
+
+	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
+	if (paths.empty()) { SetStatusWarning(_T("対象がありません")); return; }
+
+	SyncWorkMarks();
+	int added = 0, dup = 0;
+	for (const UnicodeString &p : paths) {
+		if (work_list::Add(work_items_, p)) ++added; else ++dup;
+	}
+
+	if (added > 0) work_changed_ = true;
+	if (WorkPane() != nullptr) ShowWorkListOn(work_pane_);
+
+	UnicodeString msg;
+	msg.sprintf(_T("%d 件をワークリストに登録しました"), added);
+	if (dup > 0) msg.cat_sprintf(_T(" (%d 件は登録済みか見つかりません)"), dup);
+	SetStatusWarning(msg);
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief ワークリストから外す
+ * @details ワークリストの上で Delete を押したときの動き (MainFrm.cpp:28916)。
+ *          **ファイルは消さない。**一覧から外すだけ
+ */
+void MainFrame::CmdRemoveWorkItems()
+{
+	if (!IsWorkActive()) return;
+	if (RejectWhenWorkFiltered()) return;
+
+	SyncWorkMarks();
+	FilePane *pane = WorkPane();
+
+	std::vector<std::size_t> targets;
+	for (std::size_t i = 0; i < work_items_.size(); ++i) {
+		if (work_items_[i].marked) targets.push_back(i);
+	}
+	if (targets.empty()) {
+		const int idx = pane->GetCursor();
+		if (idx < 0 || idx >= static_cast<int>(work_items_.size())) return;
+		targets.push_back(static_cast<std::size_t>(idx));
+	}
+
+	UnicodeString msg;
+	msg.sprintf(_T("%d 件をワークリストから外しますか?\r\n(ファイルは削除しません)"),
+	            static_cast<int>(targets.size()));
+	if (wxMessageBox(to_wx(msg), to_wx(_T("ワークリスト")), wxYES_NO | wxICON_QUESTION, this) != wxYES) return;
+
+	for (std::size_t i = targets.size(); i-- > 0;) {
+		work_items_.erase(work_items_.begin() + static_cast<std::ptrdiff_t>(targets[i]));
+	}
+	work_changed_ = true;
+	ShowWorkListOn(work_pane_);
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdDropMissingWorkItems()
+{
+	if (!IsWorkActive()) { SetStatusWarning(_T("ワークリストではありません")); return; }
+	if (RejectWhenWorkFiltered()) return;
+
+	SyncWorkMarks();
+	int missing = 0;
+	for (const work_list::WorkItem &w : work_items_) {
+		if (w.missing) ++missing;
+	}
+	if (missing == 0) { SetStatusWarning(_T("実体の無い項目はありません")); return; }
+
+	UnicodeString msg;
+	msg.sprintf(_T("存在しない %d 件をワークリストから外しますか?"), missing);
+	if (wxMessageBox(to_wx(msg), to_wx(_T("ワークリスト")), wxYES_NO | wxICON_QUESTION, this) != wxYES) return;
+
+	work_list::RemoveMissing(work_items_);
+	work_changed_ = true;
+	ShowWorkListOn(work_pane_);
 }
