@@ -347,6 +347,17 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Shift+Alt+R"), _T("SaveAsResultList"));
 	Assign(_T("Shift+Alt+O"), _T("LoadResultList"));
 
+	// 表示の切り替え。**VCL の既定表に無いのですべて推測**。
+	// 拡大/縮小はブラウザやエディタの慣習に寄せた
+	Assign(_T("Ctrl+SEMICOLON"), _T("ZoomIn"));
+	Assign(_T("Ctrl+MINUS"), _T("ZoomOut"));
+	Assign(_T("Ctrl+0"), _T("ZoomReset"));
+	Assign(_T("Shift+Alt+F"), _T("SetFontSize"));
+	Assign(_T("Shift+Alt+A"), _T("AlphaBlend"));
+	Assign(_T("Shift+Alt+P"), _T("WinPos"));
+	Assign(_T("Shift+Alt+Z"), _T("FileListOnly"));
+	Assign(_T("Shift+Alt+B"), _T("SetSttBarFmt"));
+
 	// 並べ替え・絞り込み。"S" は src/Global.cpp の既定キー表にある実際の割り当て
 	// ("F:S=SortDlg") と同じ。Ctrl+M / Ctrl+U は既定キー表に対応する記載が無く
 	// (パスマスクはコンボボックス操作が前提で単独のキー割り当てが見当たらない)、

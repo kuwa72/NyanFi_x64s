@@ -2742,6 +2742,31 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	else if (SameStr(command, _T("LoadResultList"))) {
 		CmdLoadResultList();
 	}
+	//-- 表示の切り替え (機能群22) --------------------------------------------
+	else if (SameStr(command, _T("SetFontSize"))) {
+		CmdSetFontSize(param);
+	}
+	else if (SameStr(command, _T("ZoomIn"))) {
+		CmdZoom(param.IsEmpty()? 1 : param.ToIntDef(1));
+	}
+	else if (SameStr(command, _T("ZoomOut"))) {
+		CmdZoom(-(param.IsEmpty()? 1 : param.ToIntDef(1)));
+	}
+	else if (SameStr(command, _T("ZoomReset"))) {
+		CmdZoom(0);
+	}
+	else if (SameStr(command, _T("AlphaBlend"))) {
+		CmdAlphaBlend(param);
+	}
+	else if (SameStr(command, _T("WinPos"))) {
+		CmdWinPos(param);
+	}
+	else if (SameStr(command, _T("FileListOnly"))) {
+		CmdFileListOnly(param);
+	}
+	else if (SameStr(command, _T("SetSttBarFmt"))) {
+		CmdSetSttBarFmt();
+	}
 	else if (SameStr(command, _T("KeyList"))) {
 		ShowKeyList();
 	}
@@ -5534,4 +5559,131 @@ void MainFrame::CmdLoadResultList()
 	                static_cast<int>(items.size()));
 	pane->ShowResultList(caption, items);
 	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// 表示の切り替え (機能群22)
+//
+// 引数の解釈と値の計算は wx 非依存の gui/view_settings.h が持ち、ここは
+// ウィンドウとペインへ当てはめるだけ (規約8)。
+//
+// **VCL にあってここに無い部品**: ツールバー・メニューバー・ファンクション
+// キーバー・アイコン表示・画像プレビュー。部品そのものが未実装なので、
+// 対応するコマンド (ShowToolBar / MenuBar / ShowFKeyBar / ShowIcon /
+// ShowPreview / SetSubSize) は繋いでいない (報告書 §31)
+//---------------------------------------------------------------------------
+void MainFrame::CmdSetFontSize(const UnicodeString &param)
+{
+	const int current = panes_[0]->GetFontSize();
+	int next = current;
+	if (!view_settings::ParseFontSize(param, current, view_settings::kDefaultFontSize, next)) {
+		SetStatusWarning(_T("フォントサイズを解釈できません: ") + param);
+		return;
+	}
+	for (int i = 0; i < 2; ++i) panes_[i]->SetFontSize(next);
+	SetStatusWarning(UnicodeString().sprintf(_T("フォントサイズ %d"), next));
+}
+
+//---------------------------------------------------------------------------
+/// delta が 0 なら既定サイズに戻す (ZoomReset)
+void MainFrame::CmdZoom(int delta)
+{
+	const int current = panes_[0]->GetFontSize();
+	const int next = (delta == 0)? view_settings::kDefaultFontSize
+	                             : view_settings::AdjustFontSize(current, delta);
+	if (next == current) return;
+
+	for (int i = 0; i < 2; ++i) panes_[i]->SetFontSize(next);
+	SetStatusWarning(UnicodeString().sprintf(_T("フォントサイズ %d"), next));
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdAlphaBlend(const UnicodeString &param)
+{
+	int next = alpha_value_;
+	const view_settings::AlphaAction action =
+		view_settings::ParseAlpha(param, alpha_value_, alpha_enabled_, next);
+
+	if (action == view_settings::AlphaAction::NeedsDialog) {
+		const wxString input = wxGetTextFromUser(
+			to_wx(UnicodeString().sprintf(_T("不透明度 (%d〜%d)"),
+			                               view_settings::kMinAlpha, view_settings::kMaxAlpha)),
+			to_wx(_T("透過表示")), to_wx(IntToStr(alpha_value_)), this);
+		if (input.IsEmpty()) return;
+		const int typed = to_us(input).ToIntDef(-1);
+		if (typed < view_settings::kMinAlpha || typed > view_settings::kMaxAlpha) {
+			SetStatusWarning(_T("範囲外です"));
+			return;
+		}
+		next = typed;
+	}
+	else if (action == view_settings::AlphaAction::Disable) {
+		next = view_settings::kMaxAlpha;
+	}
+
+	alpha_enabled_ = (next < view_settings::kMaxAlpha);
+	alpha_value_ = next;
+
+	// 不透明に戻すときも SetTransparent(255) を呼ぶ (呼ばないと透けたまま)
+	if (!SetTransparent(static_cast<wxByte>(next))) {
+		SetStatusWarning(_T("この環境では透過表示にできません"));
+		return;
+	}
+	SetStatusWarning(alpha_enabled_
+		? UnicodeString().sprintf(_T("不透明度 %d"), next)
+		: UnicodeString(_T("透過を解除しました")));
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdWinPos(const UnicodeString &param)
+{
+	view_settings::WindowEdges edges;
+	if (!view_settings::ParseWindowPos(param, edges)) {
+		SetStatusWarning(_T("位置の指定を解釈できません: ") + param);
+		return;
+	}
+
+	const wxRect r = GetRect();
+	int l = 0, t = 0, rt = 0, b = 0;
+	if (!view_settings::ApplyWindowPos(edges, r.GetLeft(), r.GetTop(),
+	                                    r.GetRight(), r.GetBottom(), l, t, rt, b)) {
+		SetStatusWarning(_T("その指定では大きさが 0 以下になります"));
+		return;
+	}
+	SetSize(wxRect(l, t, rt - l + 1, b - t + 1));
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 一覧だけにする (FileListOnly)
+ * @details VCL はツールバー・メニューバーなども隠すが、こちらに有るのは
+ *          タブバーとステータスバーだけなのでその2つを隠す
+ */
+void MainFrame::CmdFileListOnly(const UnicodeString &param)
+{
+	file_list_only_ = view_settings::ApplyToggle(file_list_only_,
+	                                              view_settings::ParseToggle(param));
+	if (tab_bar_ != nullptr) tab_bar_->Show(!file_list_only_);
+	if (GetStatusBar() != nullptr) GetStatusBar()->Show(!file_list_only_);
+	Layout();
+	// OnSize がタブバーの高さを見て配置し直すので、明示的に呼ぶ
+	wxSizeEvent dummy(GetSize());
+	OnSize(dummy);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdSetSttBarFmt()
+{
+	const wxString input = wxGetTextFromUser(
+		to_wx(_T("ステータスバーの書式 ($P パス / $B 名前 / $Z サイズ / $T 日時。空で既定に戻す)")),
+		to_wx(_T("ステータスバー書式")), to_wx(stt_bar_fmt_), this);
+	// **空文字列は「既定に戻す」なので、キャンセルと区別する必要がある**。
+	// wxGetTextFromUser はどちらも空を返すので、ここでは
+	// 「空を入力したら既定に戻す」だけにしてある (キャンセルとの区別は付かない)
+	stt_bar_fmt_ = to_us(input);
+	UpdateStatus();
+	SetStatusWarning(stt_bar_fmt_.IsEmpty()? _T("既定の表示に戻しました")
+	                                       : _T("書式を変えました"));
 }
