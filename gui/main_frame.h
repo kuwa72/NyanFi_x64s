@@ -27,6 +27,7 @@
 #include "gui/bookmarks.h"
 #include "gui/convert_ops.h"
 #include "gui/history.h"
+#include "gui/named_state.h"
 #include "gui/log_win.h"
 #include "gui/dir_info.h"
 #include "gui/external.h"
@@ -300,6 +301,14 @@ private:
 	bool ConfirmDiscardWorkList();
 	/// ヘッダに出す見出し ("<ワーク> 名前  n 件")
 	UnicodeString WorkListCaption() const;
+
+	//-- 名前を付けた状態の保存と読み込み (機能群21。判断は gui/named_state.h) --
+	void CmdSaveTabGroup(bool as_new);  //!< タブグループを保存 (SaveTabGroup / SaveAsTabGroup)
+	void CmdLoadTabGroup();             //!< タブグループを読み込む (LoadTabGroup)
+	void CmdSaveResultList();           //!< 結果リストを保存 (SaveAsResultList)
+	void CmdLoadResultList();           //!< 結果リストを読み込む (LoadResultList)
+
+	UnicodeString tab_group_path_;      //!< 最後に保存/読み込みしたタブグループ
 
 	//-- 履歴 (機能群20。判断は gui/history.h) --------------------------------
 	//
