@@ -335,6 +335,12 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Shift+Alt+I"), _T("LogFileInfo"));
 	Assign(_T("Shift+Alt+N"), _T("ListNyanFi"));
 
+	// 履歴。**VCL の既定表に1件も無いのですべて推測**
+	Assign(_T("Shift+Alt+H"), _T("RecentList"));
+	Assign(_T("Shift+Alt+E"), _T("EditHistory"));
+	Assign(_T("Shift+Alt+W"), _T("ViewHistory"));
+	Assign(_T("Shift+Alt+K"), _T("CmdHistory"));
+
 	// 並べ替え・絞り込み。"S" は src/Global.cpp の既定キー表にある実際の割り当て
 	// ("F:S=SortDlg") と同じ。Ctrl+M / Ctrl+U は既定キー表に対応する記載が無く
 	// (パスマスクはコンボボックス操作が前提で単独のキー割り当てが見当たらない)、

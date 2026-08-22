@@ -1265,3 +1265,48 @@ VCL のログは1行の**先頭1文字**が状態を表し、処理の途中で
   **上限を超えたら古い行から捨てること**を含む
 - `gui/main_frame.cpp` 側の受け渡しにテストは無い (wx 依存)
 - キー割り当ては全部推測
+
+---
+
+## 29. 履歴 (Phase 3 機能群20)
+
+`EditHistory` / `ViewHistory` / `RecentList` / `CmdHistory`。
+
+### 実測して分かったこと
+
+- ini の `L:TextEditHistory=50,true` のような行の **`50` は上限件数、`true` は
+  `del_quot`** (`ReadString` が引用符を外すか) だった
+  (`UsrIniFile::LoadListItems`, src/UIniFile.h:106)。
+  **MRU の重複除去フラグではない**
+- `add_TextEditHistory` (Global.cpp:11093) は
+  **`SameText` で一致するものを消してから先頭に挿す**。
+  つまり大文字小文字を区別せず、重複は作らず、使うたびに先頭へ来る
+- **`RecentList` には VCL 側の状態が無い。** `EditHistDlg.cpp:403` が
+  Windows の「最近使った項目」フォルダ (`FOLDERID_Recent`) の `.lnk` を
+  その場で数え上げており、一覧から消すと `.lnk` ファイルごと消える
+- **`CmdHistory` は重複を許す実行ログ**で、末尾に足して 1000 件で
+  古い方から捨てる。**ini に保存もしない** (`AddCmdHistory`, Global.cpp:15995)
+
+### VCL と変えたところ (理由付き)
+
+| | VCL | ここ | 理由 |
+|---|---|---|---|
+| `RecentList` | Windows の「最近使った項目」を直接読む | **自前の履歴を持つ** | `.lnk` の読み書きに `IShellLink` が要り、消すと OS 側の記録まで消える。自前なら壊す心配が無い |
+| `CmdHistory` | 重複を許す実行ログ。ini に保存しない | 他と同じ重複無しの履歴にして ini にも保存 | 「さっき使ったコマンドをもう一度」に使うなら重複は邪魔。**VCL と挙動が違うので明記する** |
+| 上限の適用 | 保存時にだけ切り詰める | 追加のたびに切り詰める | 保存後の状態は同じ |
+
+### 積むところ
+
+- テキストビューアで開いたら `ViewHistory` と `RecentList` へ
+- 関連付けで開いたら `RecentList` へ
+- `Execute()` を通ったコマンドは `CmdHistory` へ。
+  ただし**履歴の表示そのものは積まない** (選ぶたびに並びが動くと選びにくい)
+
+### 検証の範囲
+
+- `gui/history.cpp` は 22 ケース (core 全体: 842 ケース / 2,610 アサーション)。
+  重複時の並び・上限超過・ini への往復を含む
+- `gui/main_frame.cpp` 側の受け渡しにテストは無い (wx 依存)
+- **`FileEdit` (エディタで開く) が未実装**なので、`EditHistory` に積まれる
+  経路がまだ無い。一覧は常に空になる
+- キー割り当ては全部推測

@@ -332,6 +332,12 @@ void MainFrame::LoadSettings()
 	}
 	RefreshTabBar();
 
+	// 履歴。ini から読み直す (種類ごとにキーが分かれている)
+	history::LoadFromIni(settings_.Ini(), history::Kind::Edit, hist_edit_);
+	history::LoadFromIni(settings_.Ini(), history::Kind::View, hist_view_);
+	history::LoadFromIni(settings_.Ini(), history::Kind::Recent, hist_recent_);
+	history::LoadFromIni(settings_.Ini(), history::Kind::Command, hist_cmd_);
+
 	// ワークリスト。VCL も起動時に前回の WorkListName を読み直す
 	// (MainFrm.cpp:656)。**中身は読むが表示はしない** ("W" を押して出す)
 	work_home_ = settings_.HomeWorkList;
@@ -366,6 +372,11 @@ void MainFrame::SaveSettings()
 
 	settings_.WorkListName = work_name_;
 	settings_.HomeWorkList = work_home_;
+
+	history::SaveToIni(settings_.Ini(), history::Kind::Edit, hist_edit_);
+	history::SaveToIni(settings_.Ini(), history::Kind::View, hist_view_);
+	history::SaveToIni(settings_.Ini(), history::Kind::Recent, hist_recent_);
+	history::SaveToIni(settings_.Ini(), history::Kind::Command, hist_cmd_);
 
 	settings_.Window.maximized = IsMaximized();
 	// 最大化中は座標・サイズを更新しない (次回、通常サイズに戻したときの
@@ -2111,6 +2122,10 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	const UnicodeString command = get_CmdStr(full_command);
 	const UnicodeString param = get_PrmStr(full_command);
 
+	// 実行したコマンドを履歴に積む。**履歴の表示そのものは積まない**
+	// (履歴から選ぶたびに履歴が動くと選びにくい)
+	if (!SameStr(command, _T("CmdHistory"))) hist_cmd_.Add(full_command);
+
 	FilePane *pane = ActivePane();
 
 	if (SameStr(command, _T("CursorUp"))) {
@@ -2697,6 +2712,19 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	}
 	else if (SameStr(command, _T("ListNyanFi"))) {
 		CmdListNyanFi();
+	}
+	//-- 履歴 (機能群20) ------------------------------------------------------
+	else if (SameStr(command, _T("EditHistory"))) {
+		CmdShowHistory(history::Kind::Edit);
+	}
+	else if (SameStr(command, _T("ViewHistory"))) {
+		CmdShowHistory(history::Kind::View);
+	}
+	else if (SameStr(command, _T("RecentList"))) {
+		CmdShowHistory(history::Kind::Recent);
+	}
+	else if (SameStr(command, _T("CmdHistory"))) {
+		CmdShowHistory(history::Kind::Command);
 	}
 	else if (SameStr(command, _T("KeyList"))) {
 		ShowKeyList();
@@ -3343,6 +3371,8 @@ void MainFrame::CmdOpenStandard()
 	const UnicodeString full_path = pane->FullPathOf(*itm);
 	if (test_ExeExt(get_extension(full_path)) && !ConfirmExecute(this, full_path)) return;
 
+	RecordHistory(history::Kind::Recent, full_path);
+
 	UnicodeString error;
 	if (!file_open::OpenStandard(full_path, error, static_cast<HWND>(GetHandle())) && !error.IsEmpty()) {
 		wxMessageBox(to_wx(error), to_wx(_T("開けませんでした")), wxOK | wxICON_ERROR, this);
@@ -3400,6 +3430,7 @@ void MainFrame::CmdTextViewer()
 		wxMessageBox(to_wx(error), to_wx(_T("開けませんでした")), wxOK | wxICON_ERROR, this);
 		return;
 	}
+	RecordHistory(history::Kind::View, full_path);
 
 	ShowViewer(true);
 }
@@ -5267,4 +5298,92 @@ void MainFrame::CmdListNyanFi()
 	log_.AddBlankIfNeeded();
 	for (const UnicodeString &line : log_win::FormatAboutLines()) log_.AddRaw(line);
 	CmdListLog();
+}
+
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// 履歴 (機能群20)
+//
+// 判断 (重複時に先頭へ移す・上限で古いものを捨てる・ini との往復) は
+// wx 非依存の gui/history.h が持つ。ここは受け渡しと一覧表示だけ。
+//
+// **VCL と持ち方が違うものがある** (報告書 §29):
+//   RecentList  VCL は Windows の「最近使った項目」フォルダを直接見る。
+//               こちらは自前の履歴を持つ
+//   CmdHistory  VCL は重複を許す実行ログで、ini に保存もしない。
+//               こちらは他と同じ重複無しの履歴にして ini にも保存する
+//---------------------------------------------------------------------------
+history::HistoryList &MainFrame::HistoryOf(history::Kind kind)
+{
+	switch (kind) {
+	case history::Kind::Edit:    return hist_edit_;
+	case history::Kind::View:    return hist_view_;
+	case history::Kind::Recent:  return hist_recent_;
+	case history::Kind::Command: return hist_cmd_;
+	}
+	return hist_recent_;
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::RecordHistory(history::Kind kind, const UnicodeString &entry)
+{
+	if (entry.IsEmpty()) return;
+	HistoryOf(kind).Add(entry);
+	// 「最近使った」はファイルを開いた操作すべてを拾う
+	if (kind != history::Kind::Recent && kind != history::Kind::Command) {
+		hist_recent_.Add(entry);
+	}
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 履歴の一覧から選んで開く
+ * @details ファイルの履歴は選ぶとそのディレクトリへ移ってカーソルを合わせる。
+ *          コマンドの履歴は選ぶとそのコマンドをもう一度実行する
+ */
+void MainFrame::CmdShowHistory(history::Kind kind)
+{
+	history::HistoryList &list = HistoryOf(kind);
+
+	// ファイルの履歴は、消えたものを出しても選べないので先に外す
+	if (kind != history::Kind::Command) {
+		const int dropped = list.DropMissingFiles();
+		if (dropped > 0) {
+			SetStatusWarning(UnicodeString().sprintf(_T("%d 件は実体が無いので外しました"), dropped));
+		}
+	}
+
+	const std::vector<UnicodeString> &entries = list.Entries();
+	if (entries.empty()) { SetStatusWarning(_T("履歴がありません")); return; }
+
+	const UnicodeString title =
+		  (kind == history::Kind::Edit)?    _T("最近編集したファイル")
+		: (kind == history::Kind::View)?    _T("最近閲覧したファイル")
+		: (kind == history::Kind::Command)? _T("コマンド履歴")
+		                                  : _T("最近使ったファイル");
+
+	wxArrayString choices;
+	for (const UnicodeString &e : entries) choices.Add(to_wx(e));
+
+	const int sel = wxGetSingleChoiceIndex(to_wx(_T("選んでください")), to_wx(title), choices, this);
+	if (sel < 0) return;
+
+	const UnicodeString picked = entries[static_cast<std::size_t>(sel)];
+
+	if (kind == history::Kind::Command) {
+		if (!Execute(picked)) SetStatusWarning(_T("実行できません: ") + picked);
+		return;
+	}
+
+	const UnicodeString dir = ExtractFilePath(picked);
+	if (!dir_exists(dir)) { SetStatusWarning(_T("ディレクトリがありません: ") + dir); return; }
+
+	FilePane *pane = ActivePane();
+	pane->SetPath(dir);
+	const std::vector<UnicodeString> names = pane->VisibleNames();
+	const UnicodeString want = ExtractFileName(picked);
+	for (std::size_t i = 0; i < names.size(); ++i) {
+		if (SameText(names[i], want)) { pane->MoveCursorTo(static_cast<int>(i)); break; }
+	}
+	UpdateStatus();
 }
