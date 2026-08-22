@@ -217,6 +217,10 @@ endif()
 # tab_info (src/Global.h、実測) は左右ペイン共有の1本のタブバーだったため、
 # gui/tabs.h もそれに合わせた設計にしてある (詳細はそのファイルの解説を参照)。
 #
+# gui/bookmarks.cpp (栞マーク) も同じ理由でここに含める。保存先は移植済みの
+# UsrIniFile (src/UIniFile.cpp) をそのまま使い、「次/前の栞へどう折り返すか」
+# だけを純関数として持つ (tests/core/test_gui_bookmarks.cpp)。
+#
 # gui/work_list.cpp (ワークリストの .nwl 読み書き・並べ替え・追加削除) も同じ理由
 # (wx 非依存、tests/core/test_gui_work_list.cpp から直接テストする) でここに
 # 含める。並べ替えの規則は VCL の ItemTmpUp/Down/Move (src/MainFrm.cpp) を、
@@ -254,6 +258,7 @@ if(TARGET nyanfi_core)
 		gui/misc_ops.cpp
 		gui/find_files.cpp
 		gui/work_list.cpp
+		gui/bookmarks.cpp
 	)
 	target_include_directories(nyanfi_gui_core PUBLIC ${PROJECT_SOURCE_DIR})
 	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core shell32 netapi32)

@@ -275,6 +275,26 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Ctrl+Down"), _T("WorkItemDown"));
 	Assign(_T("Ctrl+Alt+Enter"), _T("WorkItemMove"));
 
+	// 栞マークとタグ。**VCL の既定表に1件も無いのですべて推測**。
+	// Ctrl+ と Ctrl+Shift+ の英字は埋まってしまったので Alt+ を使う
+	// (このウィンドウはメニューバーを持たないのでニーモニックと衝突しない)
+	Assign(_T("Alt+M"), _T("Mark"));
+	Assign(_T("Alt+I"), _T("Mark_IM"));        // メモ付きで付ける
+	Assign(_T("Alt+C"), _T("ClearMark"));      // 一覧の栞を外す
+	Assign(_T("Alt+Q"), _T("ClearMark_AC"));   // すべての栞を外す
+	Assign(_T("Alt+N"), _T("NextMark"));
+	Assign(_T("Alt+P"), _T("PrevMark"));
+	Assign(_T("Alt+S"), _T("SelMark"));
+	Assign(_T("Alt+K"), _T("MarkMask"));
+	Assign(_T("Alt+L"), _T("MarkList"));
+	Assign(_T("Alt+F"), _T("FindMark"));
+	Assign(_T("Alt+T"), _T("SetTag"));
+	Assign(_T("Alt+A"), _T("AddTag"));
+	Assign(_T("Alt+D"), _T("DelTag"));
+	Assign(_T("Alt+G"), _T("TagSelect"));
+	Assign(_T("Alt+R"), _T("FindTag"));
+	Assign(_T("Alt+Z"), _T("TrimTagData"));
+
 	// 並べ替え・絞り込み。"S" は src/Global.cpp の既定キー表にある実際の割り当て
 	// ("F:S=SortDlg") と同じ。Ctrl+M / Ctrl+U は既定キー表に対応する記載が無く
 	// (パスマスクはコンボボックス操作が前提で単独のキー割り当てが見当たらない)、

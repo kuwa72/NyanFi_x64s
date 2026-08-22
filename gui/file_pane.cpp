@@ -697,6 +697,14 @@ void FilePane::OnPaint(wxPaintEvent &)
 		}
 		dc.SetTextForeground(text_fg);
 
+		// 栞マークが付いていれば行の左端に細い帯を出す (VCL は行全体を
+		// col_bgMark で塗るが、こちらは選択色・一致色と重なるので帯にした)
+		if (is_bookmarked_ && is_bookmarked_(FullPathOf(itm))) {
+			dc.SetBrush(wxBrush(wxColour(0x30, 0xA0, 0xE0)));
+			dc.SetPen(*wxTRANSPARENT_PEN);
+			dc.DrawRectangle(0, y, std::max(2, char_width_ / 3), row_height_);
+		}
+
 		// 名前 (右端の桁に重ならないところで切る)。ワークリストで別名が
 		// 付いていればそちらを出す (MainFrm.cpp:10500)
 		const int name_cols = std::max(4, (size_col - char_width_) / char_width_);

@@ -15,6 +15,7 @@
 #ifndef NYANFI_GUI_FILE_PANE_H
 #define NYANFI_GUI_FILE_PANE_H
 
+#include <functional>
 #include <vector>
 
 #include <wx/wx.h>
@@ -97,6 +98,19 @@ public:
 
 	/// カーソル位置の項目のフルパス。項目が無いか ".." なら空
 	UnicodeString CurrentFullPath() const;
+
+	/**
+	 * @brief 栞マークが付いているかの問い合わせ先を渡す
+	 * @param fn フルパスを受け取って true/false を返すもの。空なら印を出さない
+	 * @details 栞の保存先 (`UsrIniFile`) は `MainFrame` が持っているので、
+	 *          ペインからは直接引けない。描画のたびに呼ばれるので
+	 *          **重い処理を渡さないこと** (実体は ini のメモリ上の索引を引くだけ)
+	 */
+	void SetBookmarkTest(const std::function<bool(const UnicodeString &)> &fn)
+	{
+		is_bookmarked_ = fn;
+		Refresh();
+	}
 
 	/// GetSelectedNames() と同じ対象選択 (マーク済み、無ければカーソル位置の
 	/// 1件) を FileItem (name/is_dir を含む) で返す。一括リネーム
@@ -237,6 +251,9 @@ private:
 	UnicodeString mask_;
 
 	DirHistory history_;  //!< このペインのディレクトリ履歴 (戻る/進む/一覧)
+
+	/// 栞マークが付いているかの問い合わせ先 (gui/bookmarks.h を持つ MainFrame が渡す)
+	std::function<bool(const UnicodeString &)> is_bookmarked_;
 };
 
 #endif  // NYANFI_GUI_FILE_PANE_H

@@ -206,6 +206,10 @@ MainFrame::MainFrame()
 
 		headers_[i] = new wxStaticText(root, wxID_ANY, wxEmptyString);
 		panes_[i] = new FilePane(root, wxID_ANY);
+		// 栞マークの有無はここ (ini を持つ MainFrame) からしか引けない
+		panes_[i]->SetBookmarkTest([this](const UnicodeString &path) {
+			return bookmarks::IsMarked(settings_.Ini(), path);
+		});
 
 		column->Add(headers_[i], wxSizerFlags().Expand().Border(wxLEFT | wxTOP, 4));
 		column->Add(panes_[i], wxSizerFlags(1).Expand().Border(wxALL, 2));
@@ -2549,6 +2553,51 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	else if (SameStr(command, _T("WorkItemMove")) || SameStr(command, _T("ItemTmpMove"))) {
 		CmdWorkItemMove(0);
 	}
+	//-- 栞マークとタグ (機能群15) --------------------------------------------
+	else if (SameStr(command, _T("Mark"))) {
+		// IM = メモを入力して付ける (VCL の ActionParam)
+		if (SameText(param, _T("IM"))) CmdMarkWithMemo(); else CmdMark();
+	}
+	else if (SameStr(command, _T("ClearMark"))) {
+		// AC = すべての栞を解除 (MainFrm.cpp:14215)
+		CmdClearMark(SameText(param, _T("AC")));
+	}
+	else if (SameStr(command, _T("NextMark"))) {
+		CmdJumpMark(1);
+	}
+	else if (SameStr(command, _T("PrevMark"))) {
+		CmdJumpMark(-1);
+	}
+	else if (SameStr(command, _T("SelMark"))) {
+		CmdSelMark();
+	}
+	else if (SameStr(command, _T("MarkMask"))) {
+		CmdMarkMask();
+	}
+	else if (SameStr(command, _T("MarkList"))) {
+		CmdMarkList();
+	}
+	else if (SameStr(command, _T("FindMark"))) {
+		CmdFindMark();
+	}
+	else if (SameStr(command, _T("SetTag"))) {
+		CmdSetTag(/*add=*/false);
+	}
+	else if (SameStr(command, _T("AddTag"))) {
+		CmdSetTag(/*add=*/true);
+	}
+	else if (SameStr(command, _T("DelTag"))) {
+		CmdDelTag();
+	}
+	else if (SameStr(command, _T("TagSelect"))) {
+		CmdTagSelect();
+	}
+	else if (SameStr(command, _T("FindTag"))) {
+		CmdFindTag();
+	}
+	else if (SameStr(command, _T("TrimTagData"))) {
+		CmdTrimTagData();
+	}
 	else if (SameStr(command, _T("KeyList"))) {
 		ShowKeyList();
 	}
@@ -3951,4 +4000,372 @@ void MainFrame::CmdDropMissingWorkItems()
 	work_list::RemoveMissing(work_items_);
 	work_changed_ = true;
 	ShowWorkListOn(work_pane_);
+}
+
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// 栞マークとタグ (機能群15)
+//
+// 保存先はどちらも移植済みのものをそのまま使う。**自前で書き直さない**。
+//   栞: UsrIniFile (src/UIniFile.cpp) の FileMark / IsMarked / MarkIdxList
+//   タグ: TagManager (src/usr_tag.cpp) の GetTags / SetTags / AddTags
+//
+// 「次の栞へ」「前の栞へ」の折り返しの規則だけは gui/bookmarks.h の純関数に
+// 切り出してテストで固定してある (規約8)。
+//
+// **栞の保存先は VCL 版と別の ini** (<exe名>_wx.ini)。VCL 版で付けた栞は
+// 見えない。ini を分けている理由は gui/settings.h の解説を参照
+//---------------------------------------------------------------------------
+TagManager *MainFrame::Tags()
+{
+	// TAGDATA.TXT の読み込みは初回に使うときまで遅らせる
+	// (タグを使わない人の起動を遅くしないため)。VCL は起動時に必ず読む
+	// (Global.cpp:1442) が、そこは合わせなくても挙動は変わらない
+	if (!tags_) {
+		tags_.reset(new TagManager(ExtractFilePath(Application->ExeName) + _T("TAGDATA.TXT")));
+	}
+	else {
+		tags_->Recycle();  // 他のプロセスが書き換えていたら読み直す (VCL と同じ)
+	}
+	return tags_.get();
+}
+
+//---------------------------------------------------------------------------
+std::vector<UnicodeString> MainFrame::TargetPaths()
+{
+	return ActivePane()->GetSelectedPaths();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdMark()
+{
+	FilePane *pane = ActivePane();
+	const UnicodeString path = pane->CurrentFullPath();
+	if (path.IsEmpty()) { SetStatusWarning(_T("対象がありません")); return; }
+
+	const bool now = bookmarks::Toggle(settings_.Ini(), path);
+	settings_.Ini().UpdateFile();
+	pane->Refresh();
+	SetStatusWarning((now? _T("栞を付けました: ") : _T("栞を外しました: ")) + ExtractFileName(path));
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdMarkWithMemo()
+{
+	FilePane *pane = ActivePane();
+	const UnicodeString path = pane->CurrentFullPath();
+	if (path.IsEmpty()) { SetStatusWarning(_T("対象がありません")); return; }
+
+	const UnicodeString cur = bookmarks::MemoOf(settings_.Ini(), path);
+	wxTextEntryDialog dlg(this, to_wx(_T("メモ")), to_wx(ExtractFileName(path)), to_wx(cur));
+	if (dlg.ShowModal() != wxID_OK) return;
+
+	// メモ付きは常に「付ける」(VCL も is_im なら is_nd を立てて解除しない)
+	settings_.Ini().FileMark(path, 1, to_us(dlg.GetValue()));
+	settings_.Ini().UpdateFile();
+	pane->Refresh();
+	SetStatusWarning(_T("栞を付けました: ") + ExtractFileName(path));
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdClearMark(bool all)
+{
+	if (all) {
+		if (wxMessageBox(to_wx(_T("すべての栞マークを解除しますか?")), to_wx(_T("栞マーク")),
+		                 wxYES_NO | wxICON_QUESTION, this) != wxYES) return;
+		settings_.Ini().ClearAllMark();
+		settings_.Ini().UpdateFile();
+		for (int i = 0; i < 2; ++i) panes_[i]->Refresh();
+		SetStatusWarning(_T("すべての栞を解除しました"));
+		return;
+	}
+
+	// 一覧に出ている項目の栞だけを外す (VCL も表示中の項目が対象)
+	FilePane *pane = ActivePane();
+	std::vector<UnicodeString> paths;
+	for (const FileItem &f : pane->VisibleItems()) {
+		if (f.is_parent || f.is_separator) continue;
+		paths.push_back(pane->FullPathOf(f));
+	}
+	const int n = bookmarks::ClearOf(settings_.Ini(), paths);
+	if (n > 0) settings_.Ini().UpdateFile();
+	pane->Refresh();
+	SetStatusWarning(UnicodeString().sprintf(_T("%d 件の栞を解除しました"), n));
+}
+
+//---------------------------------------------------------------------------
+/// 次 (direction>0) / 前 (direction<0) の栞へ。端で折り返す
+void MainFrame::CmdJumpMark(int direction)
+{
+	FilePane *pane = ActivePane();
+
+	std::vector<UnicodeString> paths;
+	for (const FileItem &f : pane->VisibleItems()) paths.push_back(pane->FullPathOf(f));
+	const std::vector<bool> flags = bookmarks::MarkedFlags(settings_.Ini(), paths);
+
+	const int to = (direction > 0)? bookmarks::FindNext(flags, pane->GetCursor())
+	                              : bookmarks::FindPrev(flags, pane->GetCursor());
+	if (to < 0) { SetStatusWarning(_T("栞マークがありません")); return; }
+
+	pane->MoveCursorTo(to);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdSelMark()
+{
+	FilePane *pane = ActivePane();
+	std::vector<FileItem> items = pane->VisibleItems();
+
+	int first = -1, hit = 0;
+	for (std::size_t i = 0; i < items.size(); ++i) {
+		if (items[i].is_parent || items[i].is_separator) continue;
+		const bool on = bookmarks::IsMarked(settings_.Ini(), pane->FullPathOf(items[i]));
+		items[i].marked = on;
+		if (on) { ++hit; if (first < 0) first = static_cast<int>(i); }
+	}
+	pane->ApplyMarks(items);
+
+	if (first < 0) { SetStatusWarning(_T("栞マークのある項目はありません")); return; }
+	pane->MoveCursorTo(first);
+	SetStatusWarning(UnicodeString().sprintf(_T("%d 件を選択しました"), hit));
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 栞の付いた項目だけを残す (MarkMask)
+ * @details VCL は SelMaskList で一覧そのものを絞るが、こちらはパスマスクの
+ *          仕組みしか無いので**名前を並べたマスクを組み立てて掛ける**。
+ *          1件も無ければマスクを解除する (VCL も m_cnt==0 なら何もしない)
+ */
+void MainFrame::CmdMarkMask()
+{
+	FilePane *pane = ActivePane();
+
+	UnicodeString mask;
+	int hit = 0;
+	for (const FileItem &f : pane->VisibleItems()) {
+		if (f.is_parent || f.is_separator) continue;
+		if (!bookmarks::IsMarked(settings_.Ini(), pane->FullPathOf(f))) continue;
+		if (!mask.IsEmpty()) mask += _T(";");
+		mask += f.name;
+		++hit;
+	}
+
+	if (hit == 0) {
+		pane->SetMask(EmptyStr);
+		SetStatusWarning(_T("栞マークがないのでマスクを解除しました"));
+		UpdateStatus();
+		return;
+	}
+	pane->SetMask(mask);
+	SetStatusWarning(UnicodeString().sprintf(_T("栞マークの %d 件だけを表示しています"), hit));
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdMarkList()
+{
+	const std::vector<bookmarks::Mark> marks = bookmarks::All(settings_.Ini());
+	if (marks.empty()) { SetStatusWarning(_T("栞マークがありません")); return; }
+
+	wxArrayString choices;
+	for (const bookmarks::Mark &m : marks) {
+		UnicodeString line = m.path;
+		if (!m.memo.IsEmpty()) line += _T("   [") + m.memo + _T("]");
+		choices.Add(to_wx(line));
+	}
+
+	const int sel = wxGetSingleChoiceIndex(to_wx(_T("飛び先を選んでください")),
+	                                        to_wx(_T("栞マーク一覧")), choices, this);
+	if (sel < 0) return;
+
+	const UnicodeString path = marks[static_cast<std::size_t>(sel)].path;
+	const UnicodeString dir = ExtractFilePath(path);
+	if (!dir_exists(dir)) { SetStatusWarning(_T("ディレクトリがありません: ") + dir); return; }
+
+	FilePane *pane = ActivePane();
+	pane->SetPath(dir);
+	// 目的のファイルにカーソルを合わせる
+	const std::vector<UnicodeString> names = pane->VisibleNames();
+	const UnicodeString want = ExtractFileName(path);
+	for (std::size_t i = 0; i < names.size(); ++i) {
+		if (SameText(names[i], want)) { pane->MoveCursorTo(static_cast<int>(i)); break; }
+	}
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 配下の栞を集めて結果リストに出す (FindMark)
+ * @details VCL は検索の仕組み (find_MARK) に載せるが、こちらは ini に
+ *          入っている栞のうち**カレント配下のもの**を拾って結果リストに出す
+ */
+void MainFrame::CmdFindMark()
+{
+	FilePane *pane = ActivePane();
+	const UnicodeString root = IncludeTrailingPathDelimiter(pane->GetPath());
+
+	std::vector<FileItem> items;
+	for (const bookmarks::Mark &m : bookmarks::All(settings_.Ini())) {
+		if (!StartsText(root, m.path)) continue;
+		if (!file_exists(m.path) && !dir_exists(m.path)) continue;
+
+		FileItem f;
+		f.name      = ExtractFileName(m.path);
+		f.full_path = m.path;
+		f.attr      = file_GetAttr(m.path);
+		f.is_dir    = (f.attr & faDirectory) != 0;
+		f.size      = f.is_dir? -1 : get_file_size(m.path);
+		f.stamp     = get_file_age(m.path);
+		f.alias     = m.memo;  // メモがあれば名前の代わりに出る
+		items.push_back(f);
+	}
+
+	if (items.empty()) { SetStatusWarning(_T("配下に栞マークがありません")); return; }
+
+	UnicodeString title;
+	title.sprintf(_T("栞マーク: %s  (%d 件)"), root.c_str(), static_cast<int>(items.size()));
+	pane->ShowResultList(title, items);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief タグを設定 / 追加 (SetTag / AddTag)
+ * @param add true なら今あるタグに足す、false なら置き換える
+ * @details 既定値は**対象すべてに共通のタグ**。食い違っていれば空にする
+ *          (VCL の SetTagActionExecute と同じ)
+ */
+void MainFrame::CmdSetTag(bool add)
+{
+	const std::vector<UnicodeString> paths = TargetPaths();
+	if (paths.empty()) { SetStatusWarning(_T("対象がありません")); return; }
+
+	TagManager *tm = Tags();
+
+	UnicodeString def;
+	if (!add) {
+		bool first = true;
+		for (const UnicodeString &p : paths) {
+			const UnicodeString t = tm->GetTags(p);
+			if (first) { def = t; first = false; }
+			else if (!SameText(def, t)) { def = EmptyStr; break; }
+		}
+	}
+
+	const UnicodeString title = add? _T("タグの追加") : _T("タグの設定");
+	wxTextEntryDialog dlg(this, to_wx(_T("タグ (空白区切り)")), to_wx(title), to_wx(def));
+	if (dlg.ShowModal() != wxID_OK) return;
+
+	const UnicodeString tags = to_us(dlg.GetValue());
+	// 追加のときは空を弾く (足すものが無い)。設定のときは空で「全部消す」
+	if (add && tags.IsEmpty()) return;
+
+	for (const UnicodeString &p : paths) {
+		if (add) tm->AddTags(p, tags); else tm->SetTags(p, tags);
+	}
+	tm->UpdateFile();
+	ActivePane()->Refresh();
+	SetStatusWarning(UnicodeString().sprintf(_T("%d 件のタグを更新しました"),
+	                                          static_cast<int>(paths.size())));
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdDelTag()
+{
+	const std::vector<UnicodeString> paths = TargetPaths();
+	if (paths.empty()) { SetStatusWarning(_T("対象がありません")); return; }
+
+	TagManager *tm = Tags();
+	int has = 0;
+	for (const UnicodeString &p : paths) {
+		if (tm->HasTag(p)) ++has;
+	}
+	if (has == 0) { SetStatusWarning(_T("タグの付いた項目がありません")); return; }
+
+	UnicodeString msg;
+	msg.sprintf(_T("%d 件のタグを削除しますか?"), has);
+	if (wxMessageBox(to_wx(msg), to_wx(_T("タグの削除")), wxYES_NO | wxICON_QUESTION, this) != wxYES) return;
+
+	for (const UnicodeString &p : paths) tm->DelItem(p);
+	tm->UpdateFile();
+	ActivePane()->Refresh();
+	SetStatusWarning(UnicodeString().sprintf(_T("%d 件のタグを削除しました"), has));
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdTagSelect()
+{
+	const wxString input = wxGetTextFromUser(to_wx(_T("タグ (空白区切り。すべて含むものを選びます)")),
+	                                          to_wx(_T("タグで選択")), wxEmptyString, this);
+	if (input.IsEmpty()) return;
+
+	TagManager *tm = Tags();
+	FilePane *pane = ActivePane();
+	std::vector<FileItem> items = pane->VisibleItems();
+
+	int first = -1, hit = 0;
+	for (std::size_t i = 0; i < items.size(); ++i) {
+		if (items[i].is_parent || items[i].is_separator) continue;
+		const bool on = tm->Match(pane->FullPathOf(items[i]), to_us(input), /*and_sw=*/true);
+		items[i].marked = on;
+		if (on) { ++hit; if (first < 0) first = static_cast<int>(i); }
+	}
+	pane->ApplyMarks(items);
+
+	if (first < 0) { SetStatusWarning(_T("一致する項目がありません")); return; }
+	pane->MoveCursorTo(first);
+	SetStatusWarning(UnicodeString().sprintf(_T("%d 件を選択しました"), hit));
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdFindTag()
+{
+	const wxString input = wxGetTextFromUser(to_wx(_T("タグ (空白区切り。すべて含むものを集めます)")),
+	                                          to_wx(_T("タグ検索")), wxEmptyString, this);
+	if (input.IsEmpty()) return;
+
+	std::unique_ptr<TStringList> hits(new TStringList());
+	const int n = Tags()->GetMatchList(to_us(input), /*and_sw=*/true, hits.get());
+	if (n == 0) { SetStatusWarning(_T("一致する項目がありません")); return; }
+
+	std::vector<FileItem> items;
+	int gone = 0;
+	for (int i = 0; i < hits->Count; ++i) {
+		const UnicodeString p = hits->Strings[i];
+		if (!file_exists(p) && !dir_exists(p)) { ++gone; continue; }
+
+		FileItem f;
+		f.name      = ExtractFileName(p);
+		f.full_path = p;
+		f.attr      = file_GetAttr(p);
+		f.is_dir    = (f.attr & faDirectory) != 0;
+		f.size      = f.is_dir? -1 : get_file_size(p);
+		f.stamp     = get_file_age(p);
+		items.push_back(f);
+	}
+	if (items.empty()) { SetStatusWarning(_T("一致した項目は実体がありません")); return; }
+
+	UnicodeString title;
+	title.sprintf(_T("タグ: %s  (%d 件"), to_us(input).c_str(), static_cast<int>(items.size()));
+	// 実体が消えていた分を黙って落とさない
+	if (gone > 0) title.cat_sprintf(_T(" / %d 件は実体なし"), gone);
+	title += _T(")");
+
+	ActivePane()->ShowResultList(title, items);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdTrimTagData()
+{
+	TagManager *tm = Tags();
+	const int n = tm->TrimData();
+	if (n == 0) { SetStatusWarning(_T("整理するものはありませんでした")); return; }
+
+	tm->UpdateFile();
+	SetStatusWarning(UnicodeString().sprintf(_T("%d 件のタグデータを整理しました"), n));
 }

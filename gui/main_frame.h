@@ -24,6 +24,7 @@
 
 #include <wx/wx.h>
 
+#include "gui/bookmarks.h"
 #include "gui/dir_info.h"
 #include "gui/external.h"
 #include "gui/misc_ops.h"
@@ -38,6 +39,7 @@
 #include "gui/tabs.h"
 #include "gui/text_viewer.h"
 #include "gui/work_list.h"
+#include "usr_tag.h"
 
 class TabBar;  // gui/main_frame.cpp の無名名前空間で定義する自前描画のタブバー
 
@@ -294,6 +296,33 @@ private:
 	bool ConfirmDiscardWorkList();
 	/// ヘッダに出す見出し ("<ワーク> 名前  n 件")
 	UnicodeString WorkListCaption() const;
+
+	//-- 栞マークとタグ (機能群15。gui/bookmarks.h) ----------------------------
+	//
+	// 保存先は移植済みの UsrIniFile (栞) と TagManager (タグ) をそのまま使う。
+	// ここに置くのは受け渡しだけで、「どこへ飛ぶか」は bookmarks:: の純関数が持つ
+	void CmdMark();            //!< カーソル位置に栞を付ける/外す (Mark)
+	void CmdMarkWithMemo();    //!< メモ付きで栞を付ける (Mark_IM)
+	void CmdClearMark(bool all);  //!< 一覧の栞を外す / 全部外す (ClearMark, ClearMark_AC)
+	void CmdJumpMark(int direction);  //!< 次 / 前の栞へ (NextMark / PrevMark)
+	void CmdSelMark();         //!< 栞の付いた項目を選択 (SelMark)
+	void CmdMarkMask();        //!< 栞の付いた項目だけを残す (MarkMask)
+	void CmdMarkList();        //!< 栞の一覧から選んで飛ぶ (MarkList)
+	void CmdFindMark();        //!< 配下の栞を集めて結果リストに出す (FindMark)
+
+	void CmdSetTag(bool add);  //!< タグを設定 / 追加 (SetTag / AddTag)
+	void CmdDelTag();          //!< タグを削除 (DelTag)
+	void CmdTagSelect();       //!< 指定タグを含む項目を選択 (TagSelect)
+	void CmdFindTag();         //!< 指定タグの項目を集めて結果リストに出す (FindTag)
+	void CmdTrimTagData();     //!< 実体の無い項目のタグを整理 (TrimTagData)
+
+	/// タグ管理。実体は移植済みの TagManager。初回に使うときだけ作る
+	/// (起動のたびに TAGDATA.TXT を読むのを避けるため)
+	TagManager *Tags();
+	/// アクティブペインの対象項目のフルパス (マーク済み、無ければカーソル位置)
+	std::vector<UnicodeString> TargetPaths();
+
+	std::unique_ptr<TagManager> tags_;
 
 	std::vector<work_list::WorkItem> work_items_;  //!< ワークリストの中身 (これが正)
 	UnicodeString work_name_;      //!< 保存先の .nwl。空なら無名 (未保存)
