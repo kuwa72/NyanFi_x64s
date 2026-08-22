@@ -1410,3 +1410,62 @@ API を「画面サイズを渡す」形から「現在の矩形を渡す」形�
 - `gui/main_frame.cpp` 側の受け渡しにテストは無い (wx 依存)。
   **透過表示・窓位置・フォントサイズの変化は実機で見ていない**
 - キー割り当ては全部推測
+
+---
+
+## 32. システム操作と外部連携 (Phase 3 機能群23)
+
+`EmptyTrash` / `Eject` / `EjectDrive` / `LockComputer` / `MonitorOff` /
+`MuteVolume` / `WebSearch` / `OpenADS` / `DeleteADS`。
+
+### 実測が想定をひっくり返した2点
+
+- **`WebSearch` のプレースホルダは `\S`** (`%s` ではない)。
+  `TURLEncoding` でエンコードしてから `ReplaceStr` で差し込む。
+  **検索語が空なら置換すらせず、`ShellExecute` も呼ばない**
+  (`exe_WebSearch`, UserFunc.cpp:1602)
+- **`WebMap` は地図サービスの URL を作っていなかった。** Leaflet を使う
+  HTML をその場で組み立てて一時ファイルに保存し、`file:///` で開く
+  (`OpenWebMaps`, Global.cpp:15569)。差し込み記号は `$Latitude$` /
+  `$Longitude$` / `$Zoom$` で URL エンコードは無し。ズームは 1〜18 に丸める。
+  担当が「地図の URL を作る」という私の想定を実測で訂正した
+
+### 代替データストリーム
+
+`FindFirstStreamW` / `FindNextStreamW` で列挙する。`cStreamName` は
+`:名前:$DATA` の形なので、末尾の `:$DATA` と先頭の `:` を落とすと素の名前になる。
+**既定ストリーム (`::$DATA`) はこの手順で空文字列になるので自然に除ける。**
+
+削除は `DeleteFile(path + ":" + name)`。**ストリーム名が空だと本体が消える**ので、
+そこは弾いてテストで固定してある。
+
+### 実装を簡略化したところ
+
+`EjectDrive` の本物 (`UserFunc.cpp:1427`) は SetupDi / CfgMgr32 で
+デバイスツリーを辿る経路を先に試す。**追加のリンクライブラリが要り、
+`CMakeLists.txt` は担当の対象外だった**ので、
+`FSCTL_LOCK_VOLUME` → `DISMOUNT_VOLUME` → `IOCTL_STORAGE_EJECT_MEDIA` の
+経路だけを実装してある。
+
+`mmdeviceapi.h` の GUID が mingw の `libuuid.a` に無かったため、
+`system_ops.cpp` の中で `#define INITGUID` して**この翻訳単位だけで実体化**
+させている (CMakeLists.txt を触らずに済ませる工夫)。
+
+### 入れなかったもの
+
+- **`PowerOff` / `Reboot`**: メンテナの方針で対象外
+- **`Calculator`**: VCL では Windows の電卓ではなく**内部のモーダルダイアログ**
+  (`TCalculator`)。システム操作でも外部連携でもないのでこの群から外した
+- `WebMap`: 実測の結果 HTML を組み立てる処理だと分かり、
+  `BuildMapUrl` として土台は作ったが**コマンドには繋いでいない**
+  (画像から GPS を取り出す経路がまだ無い)
+
+### 検証の範囲 (テストを書かなかったものを全部挙げる)
+
+- 21 ケース (core 全体: **939 ケース / 2,940 アサーション**)。
+  URL の組み立てと、一時ディレクトリでの ADS の作成・列挙・削除を含む
+- **次はテストしていない。実行すると本当に起きるため**:
+  `EmptyRecycleBin` (ごみ箱が空になる) / `LockComputer` (画面がロックされる) /
+  `TurnOffMonitor` / `ToggleMute` / `EjectTray` / `EjectDrive`
+- `EjectDrive` は簡略化した経路のため**実機でも未確認**
+- `gui/main_frame.cpp` 側の受け渡しにテストは無い (wx 依存)

@@ -2767,6 +2767,34 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	else if (SameStr(command, _T("SetSttBarFmt"))) {
 		CmdSetSttBarFmt();
 	}
+	//-- システム操作と外部連携 (機能群23) ------------------------------------
+	else if (SameStr(command, _T("EmptyTrash"))) {
+		CmdEmptyTrash();
+	}
+	else if (SameStr(command, _T("Eject"))) {
+		CmdEjectDrive(/*tray_only=*/true);
+	}
+	else if (SameStr(command, _T("EjectDrive"))) {
+		CmdEjectDrive(/*tray_only=*/false);
+	}
+	else if (SameStr(command, _T("LockComputer"))) {
+		CmdLockComputer();
+	}
+	else if (SameStr(command, _T("MonitorOff"))) {
+		CmdMonitorOff();
+	}
+	else if (SameStr(command, _T("MuteVolume"))) {
+		CmdMuteVolume();
+	}
+	else if (SameStr(command, _T("WebSearch"))) {
+		CmdWebSearch();
+	}
+	else if (SameStr(command, _T("OpenADS"))) {
+		CmdOpenADS();
+	}
+	else if (SameStr(command, _T("DeleteADS"))) {
+		CmdDeleteADS();
+	}
 	else if (SameStr(command, _T("KeyList"))) {
 		ShowKeyList();
 	}
@@ -5686,4 +5714,150 @@ void MainFrame::CmdSetSttBarFmt()
 	UpdateStatus();
 	SetStatusWarning(stt_bar_fmt_.IsEmpty()? _T("既定の表示に戻しました")
 	                                       : _T("書式を変えました"));
+}
+
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// システム操作と外部連携 (機能群23)
+//
+// 実処理は wx 非依存の gui/system_ops.h。ここは対象を選んで確認するだけ。
+//
+// **`PowerOff` / `Reboot` は方針により実装しない。**
+// `Calculator` は VCL では内部ダイアログなので、この群には含めない
+//---------------------------------------------------------------------------
+void MainFrame::CmdEmptyTrash()
+{
+	// **元に戻せない。**件数は数えられないので、はっきり書いて確認する
+	if (wxMessageBox(to_wx(_T("ごみ箱を空にしますか?\r\n\r\n中身は元に戻せません。")),
+	                 to_wx(_T("ごみ箱を空にする")),
+	                 wxYES_NO | wxNO_DEFAULT | wxICON_WARNING, this) != wxYES) return;
+
+	UnicodeString error;
+	if (system_ops::EmptyRecycleBin(error, static_cast<HWND>(GetHandle()))) {
+		log_.Add(log_win::LogStatus::Info, _T("ごみ箱を空にしました"), /*show_time=*/true);
+		SetStatusWarning(_T("ごみ箱を空にしました"));
+	}
+	else {
+		wxMessageBox(to_wx(error), to_wx(_T("ごみ箱を空にする")), wxOK | wxICON_ERROR, this);
+	}
+}
+
+//---------------------------------------------------------------------------
+/// tray_only なら CD/DVD のトレイを開くだけ (Eject)、そうでなければ取り外し (EjectDrive)
+void MainFrame::CmdEjectDrive(bool tray_only)
+{
+	const UnicodeString root = get_drive_str(ActivePane()->GetPath());
+	if (root.IsEmpty()) { SetStatusWarning(_T("ドライブを特定できません")); return; }
+
+	const UnicodeString verb = tray_only? _T("トレイを開く") : _T("ドライブの取り外し");
+	UnicodeString msg;
+	msg.sprintf(_T("%s に対して%sを実行しますか?"), root.c_str(), verb.c_str());
+	if (wxMessageBox(to_wx(msg), to_wx(verb), wxYES_NO | wxICON_QUESTION, this) != wxYES) return;
+
+	UnicodeString error;
+	const bool ok = tray_only? system_ops::EjectTray(root, error)
+	                         : system_ops::EjectDrive(root, error);
+	if (ok) SetStatusWarning(verb + _T("を実行しました: ") + root);
+	else wxMessageBox(to_wx(error), to_wx(verb), wxOK | wxICON_WARNING, this);
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdLockComputer()
+{
+	UnicodeString error;
+	if (!system_ops::LockComputer(error)) SetStatusWarning(error);
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdMonitorOff()
+{
+	if (!system_ops::TurnOffMonitor()) SetStatusWarning(_T("ディスプレイの電源を切れません"));
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdMuteVolume()
+{
+	if (!system_ops::ToggleMute()) SetStatusWarning(_T("音量を操作できません"));
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief Web で検索 (WebSearch)
+ * @details VCL のプレースホルダは **`\S`** (`%s` ではない。UserFunc.cpp:1602)。
+ *          既定のエンジンは Global.cpp:1513 のもの
+ */
+void MainFrame::CmdWebSearch()
+{
+	// カーソル位置の名前を既定の検索語にする
+	const FileItem *cur = ActivePane()->GetCurrentItem();
+	const UnicodeString def = (cur != nullptr && !cur->is_parent)? get_base_name(cur->name) : EmptyStr;
+
+	const wxString input = wxGetTextFromUser(to_wx(_T("検索する語")), to_wx(_T("Web で検索")),
+	                                          to_wx(def), this);
+	if (input.IsEmpty()) return;
+
+	const UnicodeString url = system_ops::BuildSearchUrl(
+		_T("https://www.google.com/search?q=\\S"), to_us(input));
+	if (url.IsEmpty()) { SetStatusWarning(_T("検索語が空です")); return; }
+
+	::ShellExecuteW(static_cast<HWND>(GetHandle()), L"open", url.c_str(), NULL, NULL, SW_SHOWNORMAL);
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdOpenADS()
+{
+	FilePane *pane = ActivePane();
+	const UnicodeString path = pane->CurrentFullPath();
+	if (path.IsEmpty()) { SetStatusWarning(_T("対象がありません")); return; }
+
+	const std::vector<system_ops::AdsEntry> streams = system_ops::ListStreams(path);
+	if (streams.empty()) {
+		SetStatusWarning(_T("代替データストリームはありません"));
+		return;
+	}
+
+	UnicodeString text = ExtractFileName(path) + _T("\r\n\r\n");
+	for (const system_ops::AdsEntry &e : streams) {
+		text.cat_sprintf(_T("%-32s %s\r\n"), e.name.c_str(),
+		                 get_size_str_B(e.size, 14).Trim().c_str());
+	}
+	wxMessageBox(to_wx(text), to_wx(_T("代替データストリーム")), wxOK | wxICON_INFORMATION, this);
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 代替データストリームを削除する (DeleteADS)
+ * @details **本体のデータは消さない。**消すストリームを選ばせてから確認する
+ */
+void MainFrame::CmdDeleteADS()
+{
+	FilePane *pane = ActivePane();
+	const UnicodeString path = pane->CurrentFullPath();
+	if (path.IsEmpty()) { SetStatusWarning(_T("対象がありません")); return; }
+
+	const std::vector<system_ops::AdsEntry> streams = system_ops::ListStreams(path);
+	if (streams.empty()) { SetStatusWarning(_T("代替データストリームはありません")); return; }
+
+	wxArrayString choices;
+	for (const system_ops::AdsEntry &e : streams) choices.Add(to_wx(e.name));
+	const int sel = wxGetSingleChoiceIndex(to_wx(_T("削除するストリーム")),
+	                                        to_wx(_T("代替データストリームの削除")), choices, this);
+	if (sel < 0) return;
+
+	const UnicodeString name = streams[static_cast<std::size_t>(sel)].name;
+	UnicodeString msg;
+	msg.sprintf(_T("%s のストリーム [%s] を削除しますか?\r\n\r\n(本体のデータは消えません)"),
+	            ExtractFileName(path).c_str(), name.c_str());
+	if (wxMessageBox(to_wx(msg), to_wx(_T("代替データストリームの削除")),
+	                 wxYES_NO | wxICON_WARNING, this) != wxYES) return;
+
+	UnicodeString error;
+	if (system_ops::DeleteStream(path, name, error)) {
+		log_.Add(log_win::LogStatus::Info,
+		         _T("ADS を削除: ") + path + _T(":") + name, /*show_time=*/true);
+		SetStatusWarning(_T("削除しました: ") + name);
+	}
+	else {
+		wxMessageBox(to_wx(error), to_wx(_T("代替データストリームの削除")), wxOK | wxICON_ERROR, this);
+	}
 }
