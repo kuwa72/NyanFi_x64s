@@ -1612,7 +1612,7 @@ UnicodeString get_WebSeaCaption(
 	if (!kwd.IsEmpty()) {
 		kwd = Trim(get_first_line(kwd));
 		kwd = ReplaceStr(kwd, "&", "&&");
-		if (kwd.Length()>20) kwd = kwd.SubString(1, 20) + "…";
+		if (kwd.Length()>20) kwd = kwd.SubString(1, 20) + _T("…");
 		if (!kwd.IsEmpty()) ret_str.sprintf(_T("「%s」を "), kwd.c_str());
 	}
 

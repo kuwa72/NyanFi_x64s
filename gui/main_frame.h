@@ -297,6 +297,17 @@ private:
 	/// ヘッダに出す見出し ("<ワーク> 名前  n 件")
 	UnicodeString WorkListCaption() const;
 
+	//-- 選択と絞り込みの拡張 (機能群16。判断は gui/selection.h) ----------------
+	void CmdMaskSelect();      //!< マスクに一致するファイルを選択 (MaskSelect)
+	void CmdSelByList();       //!< 名前を並べたファイルで選択 (SelByList)
+	void CmdSelEmptyDir(bool no_file);  //!< 空のディレクトリを選択 (SelEmptyDir)
+	void CmdDateSelect();      //!< 日付条件で選択 (DateSelect)
+	void CmdNextSameName();    //!< 名前主部が同じ次のファイルへ (NextSameName)
+	void CmdSelMask();         //!< 選択項目だけを残す (SelMask)
+	void CmdDelSelMask();      //!< 選択項目を一覧から隠す (DelSelMask)
+	void CmdMaskFind();        //!< マスクで配下を検索して結果リストへ (MaskFind)
+	void CmdInputPathMask();   //!< パスマスクを入力 (InputPathMask)
+
 	//-- 栞マークとタグ (機能群15。gui/bookmarks.h) ----------------------------
 	//
 	// 保存先は移植済みの UsrIniFile (栞) と TagManager (タグ) をそのまま使う。

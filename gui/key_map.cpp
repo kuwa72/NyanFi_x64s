@@ -295,6 +295,18 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Alt+R"), _T("FindTag"));
 	Assign(_T("Alt+Z"), _T("TrimTagData"));
 
+	// 選択と絞り込みの拡張。**VCL の既定表に1件も無いのですべて推測**
+	Assign(_T("Alt+W"), _T("MaskSelect"));
+	Assign(_T("Alt+B"), _T("SelByList"));
+	Assign(_T("Alt+E"), _T("SelEmptyDir"));
+	Assign(_T("Alt+Shift+E"), _T("SelEmptyDir_NF"));  // ファイルを含まないものまで
+	Assign(_T("Alt+Y"), _T("DateSelect"));
+	Assign(_T("Alt+X"), _T("NextSameName"));
+	Assign(_T("Alt+O"), _T("SelMask"));
+	Assign(_T("Alt+U"), _T("DelSelMask"));
+	Assign(_T("Alt+H"), _T("MaskFind"));
+	Assign(_T("Alt+J"), _T("InputPathMask"));
+
 	// 並べ替え・絞り込み。"S" は src/Global.cpp の既定キー表にある実際の割り当て
 	// ("F:S=SortDlg") と同じ。Ctrl+M / Ctrl+U は既定キー表に対応する記載が無く
 	// (パスマスクはコンボボックス操作が前提で単独のキー割り当てが見当たらない)、

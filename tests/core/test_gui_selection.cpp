@@ -278,3 +278,207 @@ TEST_CASE("MarkRange: 範囲外を渡しても落ちない")
 	CHECK(v[1].marked);
 	CHECK(v[4].marked);
 }
+
+//===========================================================================
+// マスク・一覧・日付による選択 (機能群16)
+//===========================================================================
+
+TEST_CASE("SelectByMask: 一致するものだけを選択し直す (追加ではない)")
+{
+	std::vector<FileItem> v = {
+		file_of(_T("a.txt")), file_of(_T("b.md")), file_of(_T("c.txt"))
+	};
+	v[1].marked = true;  // 事前の選択は残さない
+
+	CHECK(selection::SelectByMask(v, _T("*.txt")) == 2);
+	CHECK(v[0].marked == true);
+	CHECK(v[1].marked == false);
+	CHECK(v[2].marked == true);
+}
+
+TEST_CASE("SelectByMask: セミコロンで複数指定できる")
+{
+	std::vector<FileItem> v = {
+		file_of(_T("a.txt")), file_of(_T("b.md")), file_of(_T("c.ini"))
+	};
+	CHECK(selection::SelectByMask(v, _T("*.txt;*.md")) == 2);
+}
+
+TEST_CASE("SelectByMask: \"..\" は選択しない")
+{
+	std::vector<FileItem> v = {parent_item(), file_of(_T("a.txt"))};
+	CHECK(selection::SelectByMask(v, _T("*")) == 1);
+	CHECK(v[0].marked == false);
+}
+
+TEST_CASE("SelectByNames: 名前の一致で選ぶ (大文字小文字は区別しない)")
+{
+	std::vector<FileItem> v = {
+		file_of(_T("Alpha.txt")), file_of(_T("beta.txt")), file_of(_T("gamma.txt"))
+	};
+	std::vector<UnicodeString> names = {_T("alpha.txt"), _T("GAMMA.TXT"), _T("nothere.txt")};
+
+	CHECK(selection::SelectByNames(v, names) == 2);
+	CHECK(v[0].marked == true);
+	CHECK(v[1].marked == false);
+	CHECK(v[2].marked == true);
+}
+
+TEST_CASE("SelectByDateCondition: 書式が不正なら -1 と理由を返す")
+{
+	std::vector<FileItem> v = {file_of(_T("a.txt"))};
+	UnicodeString error;
+	CHECK(selection::SelectByDateCondition(v, _T("よくわからない"), Now(), error) == -1);
+	CHECK(!error.IsEmpty());
+}
+
+TEST_CASE("SelectByDateCondition: 絶対指定で古い側を選ぶ")
+{
+	std::vector<FileItem> v = {file_of(_T("old.txt")), file_of(_T("new.txt"))};
+	v[0].stamp = EncodeDate(2020, 1, 1);
+	v[1].stamp = EncodeDate(2030, 1, 1);
+
+	UnicodeString error;
+	CHECK(selection::SelectByDateCondition(v, _T("<2025/01/01"), Now(), error) == 1);
+	CHECK(v[0].marked == true);
+	CHECK(v[1].marked == false);
+}
+
+TEST_CASE("SelectByDateCondition: ディレクトリは常に非選択 (VCL と同じ)")
+{
+	std::vector<FileItem> v = {dir_of(_T("sub")), file_of(_T("old.txt"))};
+	v[0].stamp = EncodeDate(2020, 1, 1);
+	v[1].stamp = EncodeDate(2020, 1, 1);
+
+	UnicodeString error;
+	CHECK(selection::SelectByDateCondition(v, _T("<2025/01/01"), Now(), error) == 1);
+	CHECK(v[0].marked == false);
+	CHECK(v[1].marked == true);
+}
+
+TEST_CASE("FindNextSameName: 名前主部が同じ次のファイルへ")
+{
+	std::vector<FileItem> v = {
+		file_of(_T("doc.txt")), file_of(_T("other.md")),
+		file_of(_T("doc.pdf")), file_of(_T("doc.md"))
+	};
+	CHECK(selection::FindNextSameName(v, 0) == 2);
+	CHECK(selection::FindNextSameName(v, 2) == 3);
+}
+
+TEST_CASE("FindNextSameName: 後ろに無ければ先頭側へ折り返す")
+{
+	std::vector<FileItem> v = {
+		file_of(_T("doc.txt")), file_of(_T("other.md")), file_of(_T("doc.pdf"))
+	};
+	CHECK(selection::FindNextSameName(v, 2) == 0);
+}
+
+TEST_CASE("FindNextSameName: 他に無ければ -1 (その場に留まらせない)")
+{
+	std::vector<FileItem> v = {file_of(_T("only.txt")), file_of(_T("other.md"))};
+	CHECK(selection::FindNextSameName(v, 0) == -1);
+}
+
+TEST_CASE("FindNextSameName: カーソルがディレクトリなら何もしない")
+{
+	std::vector<FileItem> v = {dir_of(_T("doc")), file_of(_T("doc.txt"))};
+	CHECK(selection::FindNextSameName(v, 0) == -1);
+}
+
+TEST_CASE("MaskOfMarked: 選択項目の名前を ; で繋ぐ")
+{
+	std::vector<FileItem> v = {
+		file_of(_T("a.txt")), file_of(_T("b.txt")), file_of(_T("c.txt"))
+	};
+	v[0].marked = true;
+	v[2].marked = true;
+
+	CHECK(selection::MaskOfMarked(v) == UnicodeString(_T("a.txt;c.txt")));
+}
+
+TEST_CASE("MaskOfMarked: 選択が無ければ空 (呼び出し側がマスク解除に使う)")
+{
+	std::vector<FileItem> v = {file_of(_T("a.txt"))};
+	CHECK(selection::MaskOfMarked(v).IsEmpty());
+}
+
+TEST_CASE("MaskExcludingMarked: 選択されていない方を並べる")
+{
+	std::vector<FileItem> v = {
+		file_of(_T("a.txt")), file_of(_T("b.txt")), file_of(_T("c.txt"))
+	};
+	v[1].marked = true;
+
+	CHECK(selection::MaskExcludingMarked(v) == UnicodeString(_T("a.txt;c.txt")));
+}
+
+TEST_CASE("MaskExcludingMarked: 全部選択されていれば空 (隠すものが残らない)")
+{
+	std::vector<FileItem> v = {file_of(_T("a.txt"))};
+	v[0].marked = true;
+	CHECK(selection::MaskExcludingMarked(v).IsEmpty());
+}
+
+// get_DateCond (src/UserFunc.cpp:464) の書き写しなので、書式の分岐を一通り見る。
+// UserFunc.cpp はリンクできないため写してある (報告書 §24)
+TEST_CASE("SelectByDateCondition: 相対指定 (nD/nM/nY) を解釈する")
+{
+	std::vector<FileItem> v = {file_of(_T("old.txt")), file_of(_T("new.txt"))};
+	v[0].stamp = IncDay(Date(), -100);
+	v[1].stamp = Date();
+
+	UnicodeString error;
+	// "-30D" = 30日前より古いもの
+	CHECK(selection::SelectByDateCondition(v, _T("<-30D"), Now(), error) == 1);
+	CHECK(v[0].marked == true);
+	CHECK(v[1].marked == false);
+}
+
+TEST_CASE("SelectByDateCondition: TD は今日")
+{
+	std::vector<FileItem> v = {file_of(_T("today.txt")), file_of(_T("old.txt"))};
+	v[0].stamp = Now();
+	v[1].stamp = IncDay(Date(), -5);
+
+	UnicodeString error;
+	CHECK(selection::SelectByDateCondition(v, _T("TD"), Now(), error) == 1);
+	CHECK(v[0].marked == true);
+}
+
+TEST_CASE("SelectByDateCondition: CP はカーソル位置の日付")
+{
+	std::vector<FileItem> v = {file_of(_T("a.txt")), file_of(_T("b.txt"))};
+	const TDateTime pivot = EncodeDate(2024, 6, 15);
+	v[0].stamp = pivot;
+	v[1].stamp = EncodeDate(2024, 6, 16);
+
+	UnicodeString error;
+	CHECK(selection::SelectByDateCondition(v, _T("CP"), pivot, error) == 1);
+	CHECK(v[0].marked == true);
+	CHECK(v[1].marked == false);
+}
+
+TEST_CASE("SelectByDateCondition: 単位が D/M/Y 以外なら不正")
+{
+	std::vector<FileItem> v = {file_of(_T("a.txt"))};
+	UnicodeString error;
+	CHECK(selection::SelectByDateCondition(v, _T("<30W"), Now(), error) == -1);
+}
+
+TEST_CASE("SelectByDateCondition: <>= で始まらなければ不正")
+{
+	std::vector<FileItem> v = {file_of(_T("a.txt"))};
+	UnicodeString error;
+	CHECK(selection::SelectByDateCondition(v, _T("2024/01/01"), Now(), error) == -1);
+}
+
+TEST_CASE("SelectByDateCondition: 同じ日の比較は時刻を見ない")
+{
+	std::vector<FileItem> v = {file_of(_T("morning.txt")), file_of(_T("evening.txt"))};
+	v[0].stamp = EncodeDate(2024, 6, 15) + EncodeTime(1, 0, 0, 0);
+	v[1].stamp = EncodeDate(2024, 6, 15) + EncodeTime(23, 0, 0, 0);
+
+	UnicodeString error;
+	CHECK(selection::SelectByDateCondition(v, _T("=2024/06/15"), Now(), error) == 2);
+}

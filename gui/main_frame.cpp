@@ -2598,6 +2598,35 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	else if (SameStr(command, _T("TrimTagData"))) {
 		CmdTrimTagData();
 	}
+	//-- 選択と絞り込みの拡張 (機能群16) --------------------------------------
+	else if (SameStr(command, _T("MaskSelect"))) {
+		CmdMaskSelect();
+	}
+	else if (SameStr(command, _T("SelByList"))) {
+		CmdSelByList();
+	}
+	else if (SameStr(command, _T("SelEmptyDir"))) {
+		// NF = ファイルを1つも含まないディレクトリまで対象にする (VCL の ActionParam)
+		CmdSelEmptyDir(SameText(param, _T("NF")));
+	}
+	else if (SameStr(command, _T("DateSelect"))) {
+		CmdDateSelect();
+	}
+	else if (SameStr(command, _T("NextSameName"))) {
+		CmdNextSameName();
+	}
+	else if (SameStr(command, _T("SelMask"))) {
+		CmdSelMask();
+	}
+	else if (SameStr(command, _T("DelSelMask"))) {
+		CmdDelSelMask();
+	}
+	else if (SameStr(command, _T("MaskFind"))) {
+		CmdMaskFind();
+	}
+	else if (SameStr(command, _T("InputPathMask"))) {
+		CmdInputPathMask();
+	}
 	else if (SameStr(command, _T("KeyList"))) {
 		ShowKeyList();
 	}
@@ -4368,4 +4397,224 @@ void MainFrame::CmdTrimTagData()
 
 	tm->UpdateFile();
 	SetStatusWarning(UnicodeString().sprintf(_T("%d 件のタグデータを整理しました"), n));
+}
+
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// 選択と絞り込みの拡張 (機能群16)
+//
+// 判断はすべて gui/selection.h の純関数が持ち、ここは受け渡しだけ (規約8)。
+// 日付条件の解釈だけは移植済みの get_DateCond / test_DateCond
+// (src/UserFunc.cpp) をそのまま使う。書式が細かいので書き直さない
+//---------------------------------------------------------------------------
+void MainFrame::CmdMaskSelect()
+{
+	const wxString input = wxGetTextFromUser(
+		to_wx(_T("マスクを入力してください (例: *.txt;*.md)")),
+		to_wx(_T("マスクで選択")), to_wx(_T("*")), this);
+	if (input.IsEmpty()) return;
+
+	FilePane *pane = ActivePane();
+	std::vector<FileItem> items = pane->VisibleItems();
+	const int n = selection::SelectByMask(items, to_us(input));
+	pane->ApplyMarks(items);
+
+	if (n == 0) { SetStatusWarning(_T("一致する項目がありません")); return; }
+	SetStatusWarning(UnicodeString().sprintf(_T("%d 件を選択しました"), n));
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 名前を並べたテキストファイルで選択する (SelByList)
+ * @details VCL (MainFrm.cpp:24857) は正規表現・パス付き指定・左右同時・
+ *          選択マスクへの反映まで持つが、ここは**名前の単純一致だけ**。
+ *          未対応の部分は報告書 §24 に書いてある
+ */
+void MainFrame::CmdSelByList()
+{
+	wxFileDialog dlg(this, to_wx(_T("名前を並べたファイルを選んでください")),
+	                 to_wx(ActivePane()->GetPath()), wxEmptyString,
+	                 _T("テキスト (*.txt)|*.txt|すべて (*.*)|*.*"),
+	                 wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+	if (dlg.ShowModal() != wxID_OK) return;
+
+	const text_viewer_core::LoadResult r = text_viewer_core::LoadForView(to_us(dlg.GetPath()));
+	if (!r.ok || r.is_binary) { SetStatusWarning(_T("テキストとして読めません")); return; }
+
+	// 1行1名。";" で始まる行は読み飛ばし、TAB があれば手前だけを使う
+	// (VCL の split_pre_tab と同じ)
+	std::vector<UnicodeString> names;
+	for (const UnicodeString &line : r.lines) {
+		if (line.IsEmpty() || StartsStr(_T(";"), line)) continue;
+		UnicodeString rest = line;
+		UnicodeString name = split_tkn(rest, _T("\t"));
+		name = ExtractFileName(ExcludeTrailingPathDelimiter(Trim(name)));
+		if (!name.IsEmpty()) names.push_back(name);
+	}
+	if (names.empty()) { SetStatusWarning(_T("名前が1件もありません")); return; }
+
+	FilePane *pane = ActivePane();
+	std::vector<FileItem> items = pane->VisibleItems();
+	const int n = selection::SelectByNames(items, names);
+	pane->ApplyMarks(items);
+
+	UnicodeString msg;
+	msg.sprintf(_T("%d 件を選択しました (一覧は %d 件)"), n, static_cast<int>(names.size()));
+	SetStatusWarning(msg);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 空のディレクトリを選択する (SelEmptyDir)
+ * @param no_file true なら「ファイルを1つも含まない」まで見る (VCL の "NF")
+ * @details 判定は移植済みの `is_EmptyDir` (src/usr_file_ex.cpp)。
+ *          NF 付きは**配下を再帰的に見る**ので、大きな木では時間がかかる
+ */
+void MainFrame::CmdSelEmptyDir(bool no_file)
+{
+	FilePane *pane = ActivePane();
+	std::vector<FileItem> items = pane->VisibleItems();
+
+	::wxBeginBusyCursor();
+	int n = 0;
+	for (std::size_t i = 0; i < items.size(); ++i) {
+		FileItem &itm = items[i];
+		itm.marked = itm.is_dir && !itm.is_parent && !itm.is_separator
+		             && is_EmptyDir(pane->FullPathOf(itm), no_file);
+		if (itm.marked) ++n;
+	}
+	::wxEndBusyCursor();
+	pane->ApplyMarks(items);
+
+	if (n == 0) { SetStatusWarning(_T("空のディレクトリはありません")); return; }
+	SetStatusWarning(UnicodeString().sprintf(_T("空のディレクトリ %d 件を選択しました"), n));
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdDateSelect()
+{
+	const wxString input = wxGetTextFromUser(
+		to_wx(_T("日付条件 (<>= で始める。例: <30D  =TD  >2024/01/01)")),
+		to_wx(_T("日付で選択")), to_wx(_T("<30D")), this);
+	if (input.IsEmpty()) return;
+
+	FilePane *pane = ActivePane();
+	const FileItem *cur = pane->GetCurrentItem();
+	// "CP" (カーソル位置のファイルの日付) 用。カーソルが無ければ今日
+	const TDateTime base = (cur != nullptr)? cur->stamp : Now();
+
+	std::vector<FileItem> items = pane->VisibleItems();
+	UnicodeString error;
+	const int n = selection::SelectByDateCondition(items, to_us(input), base, error);
+	if (n < 0) { SetStatusWarning(error); return; }
+
+	pane->ApplyMarks(items);
+	if (n == 0) { SetStatusWarning(_T("一致する項目がありません")); return; }
+	SetStatusWarning(UnicodeString().sprintf(_T("%d 件を選択しました"), n));
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdNextSameName()
+{
+	FilePane *pane = ActivePane();
+	const int to = selection::FindNextSameName(pane->VisibleItems(), pane->GetCursor());
+	if (to < 0) { SetStatusWarning(_T("名前主部が同じファイルは他にありません")); return; }
+
+	pane->MoveCursorTo(to);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 選択項目だけを残す (SelMask)
+ * @details VCL は `SelMaskList` で一覧そのものを絞るが、こちらの絞り込みは
+ *          パスマスクしか無いので、選択項目の名前を並べたマスクを掛ける
+ */
+void MainFrame::CmdSelMask()
+{
+	FilePane *pane = ActivePane();
+	const UnicodeString mask = selection::MaskOfMarked(pane->VisibleItems());
+	if (mask.IsEmpty()) {
+		pane->SetMask(EmptyStr);
+		SetStatusWarning(_T("選択が無いのでマスクを解除しました"));
+		UpdateStatus();
+		return;
+	}
+	pane->SetMask(mask);
+	SetStatusWarning(_T("選択項目だけを表示しています (Ctrl+U で解除)"));
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdDelSelMask()
+{
+	FilePane *pane = ActivePane();
+	const std::vector<FileItem> items = pane->VisibleItems();
+	if (selection::MarkedCount(items) == 0) { SetStatusWarning(_T("選択がありません")); return; }
+
+	const UnicodeString mask = selection::MaskExcludingMarked(items);
+	if (mask.IsEmpty()) {
+		SetStatusWarning(_T("全部が選択されているので隠せません"));
+		return;
+	}
+	pane->SetMask(mask);
+	SetStatusWarning(_T("選択項目を隠しました (Ctrl+U で解除)"));
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief マスクで配下を検索して結果リストに出す (MaskFind)
+ * @details VCL は検索基盤 (FindFileCore) を使うが、こちらは既にある
+ *          `find_files::Search` (gui/find_files.h) に載せる。中身は同じ
+ *          「カレント配下を再帰的に走査して名前が一致するものを集める」
+ */
+void MainFrame::CmdMaskFind()
+{
+	const wxString input = wxGetTextFromUser(
+		to_wx(_T("マスクを入力してください (末尾が \\ ならディレクトリだけ)")),
+		to_wx(_T("マスクで検索")), to_wx(_T("*")), this);
+	if (input.IsEmpty()) return;
+
+	FilePane *pane = ActivePane();
+	UnicodeString mask = to_us(input);
+
+	find_files::Query q;
+	// VCL は末尾の "\" をディレクトリ指定として扱う (MainFrm.cpp:21919)
+	q.target = ends_PathDlmtr(mask)? find_files::Target::Directories : find_files::Target::Both;
+	q.mask = ExcludeTrailingPathDelimiter(mask);
+	if (q.mask.IsEmpty()) q.mask = _T("*");
+	q.recursive = true;
+	q.show_hidden = pane->GetShowHidden();
+	q.show_system = pane->GetShowSystem();
+
+	::wxBeginBusyCursor();
+	const find_files::Result r = find_files::Search(pane->GetPath(), q);
+	::wxEndBusyCursor();
+
+	if (r.items.empty()) {
+		SetStatusWarning(UnicodeString().sprintf(_T("見つかりませんでした (%d 件を走査)"), r.scanned));
+		return;
+	}
+
+	UnicodeString title;
+	title.sprintf(_T("マスク検索: %s  (%d 件"), q.mask.c_str(), static_cast<int>(r.items.size()));
+	if (r.truncated_hits) title += _T(" / 上限で打ち切り");
+	if (r.truncated_scan) title += _T(" / 走査を打ち切り");
+	title += _T(")");
+
+	pane->ShowResultList(title, r.items);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/// パスマスクを入力する (InputPathMask)。SetPathMask と同じ入り口だが、
+/// VCL では別コマンドなので綴りを合わせて両方受ける
+void MainFrame::CmdInputPathMask()
+{
+	ShowMaskDialog();
 }
