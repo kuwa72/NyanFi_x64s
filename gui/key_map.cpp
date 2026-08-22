@@ -328,6 +328,13 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Shift+Alt+6"), _T("DelJpgExif"));
 	Assign(_T("Shift+Alt+7"), _T("SetArcTime"));
 
+	// ログ。**VCL の既定表に1件も無いのですべて推測**
+	Assign(_T("Shift+Alt+L"), _T("ListLog"));
+	Assign(_T("Shift+Alt+V"), _T("ViewLog"));
+	Assign(_T("Shift+Alt+C"), _T("ClearLog"));
+	Assign(_T("Shift+Alt+I"), _T("LogFileInfo"));
+	Assign(_T("Shift+Alt+N"), _T("ListNyanFi"));
+
 	// 並べ替え・絞り込み。"S" は src/Global.cpp の既定キー表にある実際の割り当て
 	// ("F:S=SortDlg") と同じ。Ctrl+M / Ctrl+U は既定キー表に対応する記載が無く
 	// (パスマスクはコンボボックス操作が前提で単独のキー割り当てが見当たらない)、
