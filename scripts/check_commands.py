@@ -49,12 +49,16 @@ def gui_commands() -> dict:
 		for m in re.finditer(r'SameStr\(command, _T\("([A-Za-z0-9_]+)"\)\)', text):
 			line = text[: m.start()].count("\n") + 1
 			found.setdefault(m.group(1), f"{path.relative_to(ROOT)}:{line}")
-	# 既定の割り当て表が指しているコマンド名も対象にする
+	# 既定の割り当て表が指しているコマンド名も対象にする。
+	# 割り当て側は引数付き ("WorkList_OP" など) のことがある。VCL も同じ書式で、
+	# `_` の前がコマンド名、後ろが ActionParam (src/usr_cmdlist.h の get_CmdStr)。
+	# **VCL の表 464 個にコマンド名へ `_` を含むものは1つも無い**ので、
+	# 最初の `_` で切れば一意に決まる
 	km = ROOT / "gui" / "key_map.cpp"
 	text = km.read_text(encoding="utf-8")
 	for m in re.finditer(r'Assign\(_T\("[^"]*"\), _T\("([A-Za-z0-9_]+)"\)\)', text):
 		line = text[: m.start()].count("\n") + 1
-		found.setdefault(m.group(1), f"{km.relative_to(ROOT)}:{line}")
+		found.setdefault(m.group(1).split("_", 1)[0], f"{km.relative_to(ROOT)}:{line}")
 	return found
 
 

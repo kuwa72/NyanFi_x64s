@@ -37,6 +37,7 @@
 #include "gui/settings.h"
 #include "gui/tabs.h"
 #include "gui/text_viewer.h"
+#include "gui/work_list.h"
 
 class TabBar;  // gui/main_frame.cpp の無名名前空間で定義する自前描画のタブバー
 
@@ -47,8 +48,9 @@ class MainFrame : public wxFrame {
 public:
 	MainFrame();
 
-	/// コマンド名を実行する。未実装のコマンドなら false
-	bool Execute(const UnicodeString &command);
+	/// コマンド名を実行する。未実装のコマンドなら false。
+	/// `_` の後ろは引数として扱う (VCL と同じ。`WorkList_OP` など)
+	bool Execute(const UnicodeString &full_command);
 
 	FilePane *ActivePane() { return panes_[active_]; }
 	FilePane *OppositePane() { return panes_[1 - active_]; }
@@ -231,11 +233,73 @@ private:
 	 */
 	bool RejectOnResultList(const UnicodeString &verb);
 
+	/**
+	 * @brief 宛先が反対ペインになる操作を、反対側が結果リストのときに断る
+	 * @param verb 操作名 (メッセージに出す)
+	 * @return true なら断った
+	 * @details 結果リストのペインの `GetPath()` は「結果リストに入る直前に
+	 *          開いていたディレクトリ」でしかないので、宛先として使うと
+	 *          **見えていない場所へ書き込む**ことになる
+	 */
+	bool RejectIfOppositeIsResultList(const UnicodeString &verb);
+
 	//-- 検索と結果リスト -----------------------------------------------------
 	void CmdFindFiles(find_files::Target target);  //!< 名前で探して結果リストに出す
 	void CmdReturnList();                           //!< 通常の一覧に戻る (ReturnList)
 	void CmdFindDuplicates();                       //!< 重複ファイルを探す (FindDuplDlg)
 	void CmdSelSameDir();                           //!< 結果リストで同じディレクトリの項目を選択
+
+	//-- ワークリスト (gui/work_list.h) ---------------------------------------
+	//
+	// 「別々のディレクトリにあるファイルを集めて持ち歩く一覧」。中身は
+	// work_items_ が正で、ペインには ShowWorkListOn() で写す。並べ替えや
+	// 追加・削除の判断はすべて wx 非依存の work_list:: に置いてある (規約8)。
+	//
+	// VCL 版と同じく**左右のペインで1つを共有する** (Global.cpp の WorkList は
+	// グローバル1本)。表示中のペインは work_pane_ が持つ。
+	void CmdWorkList(bool opposite);   //!< 表示/解除を切り替える (WorkList)
+	void CmdHomeWorkList();            //!< ホームワークリストを開く (HomeWorkList)
+	void CmdNewWorkList();             //!< 新規作成 (NewWorkList)
+	void CmdLoadWorkList();            //!< ファイルから読み込む (LoadWorkList)
+	bool CmdSaveWorkList();            //!< 上書き保存 (SaveWorkList)。無名なら名前を付けて保存
+	bool CmdSaveAsWorkList(bool from_list);  //!< 名前を付けて保存 (SaveAsWorkList)。
+	                                         //!< from_list なら現在の一覧の内容を書き出す
+	void CmdSelWorkItem();             //!< 一覧のうちワークリストに登録済みの項目を選択 (SelWorkItem)
+	void CmdSetAlias();                //!< 項目に別名を付ける (SetAlias)
+	void CmdInsSeparator();            //!< 区切り行を挿入する (InsSeparator)
+	void CmdWorkItemMove(int direction);  //!< -1=上へ / +1=下へ / 0=カーソル位置へ
+	void CmdSendToWorkList();          //!< 選択項目をワークリストに登録する
+	void CmdRemoveWorkItems();         //!< ワークリストから外す (ワークリスト上の Delete)
+	void CmdDropMissingWorkItems();    //!< 実体の無い項目をまとめて外す (WorkList "DI")
+
+	/// work_items_ を index のペインに出し直す。ペインの選択状態は
+	/// 呼ぶ前に SyncWorkMarks() で取り込んでおくこと
+	void ShowWorkListOn(int index);
+	/// ペイン側の選択状態 (FileItem::marked) を work_items_ に取り込む。
+	/// **絞り込み中は何もしない** (添字が合わないので取り違える)
+	void SyncWorkMarks();
+	/// 絞り込み中のワークリストは中身を変えられない。変えようとしたら断る。
+	/// VCL も同じで、`WorkListFiltered` のとき `USTR_WorkFiltered` で中止する
+	/// (MainFrm.cpp:11004 ほか)。**添字がずれた状態で並べ替えると
+	/// 見えていない項目が動く**ため
+	bool RejectWhenWorkFiltered();
+	/// ワークリストを出しているペイン。出していなければ nullptr。
+	/// **ペイン側で一覧に戻された** (ESC・ディレクトリ移動・項目に入る) 場合も
+	/// ここで気付いて work_pane_ を落とす (取りこぼすと「もう出ていないのに
+	/// 出ている扱い」になり、Delete がファイル削除ではなく登録解除になる)
+	FilePane *WorkPane();
+	/// アクティブペインがワークリストか
+	bool IsWorkActive() { return WorkPane() != nullptr && work_pane_ == active_; }
+	/// 変更があれば「保存しますか?」と聞く。中止を選んだら false
+	bool ConfirmDiscardWorkList();
+	/// ヘッダに出す見出し ("<ワーク> 名前  n 件")
+	UnicodeString WorkListCaption() const;
+
+	std::vector<work_list::WorkItem> work_items_;  //!< ワークリストの中身 (これが正)
+	UnicodeString work_name_;      //!< 保存先の .nwl。空なら無名 (未保存)
+	UnicodeString work_home_;      //!< ホームワークリスト (HomeWorkList)
+	bool work_changed_ = false;    //!< 保存していない変更があるか
+	int work_pane_ = -1;           //!< 表示中のペイン。-1 なら出していない
 
 	DirStack dir_stack_;          //!< ディレクトリ・スタック (PushDir / PopDir)
 	bool sync_lr_ = false;        //!< 左右のディレクトリを同期させるか (SyncLR)

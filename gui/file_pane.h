@@ -118,8 +118,22 @@ public:
 	 */
 	void ShowResultList(const UnicodeString &title, const std::vector<FileItem> &items);
 
-	/// 結果リストを表示中か
+	/**
+	 * @brief 並び順を保ったまま一覧を表示する (ワークリスト)
+	 * @param title 見出し
+	 * @param items 表示する項目 (この順に出す)
+	 * @details `ShowResultList()` と同じく `Reload()` でディスクを読み直さないが、
+	 *          **並べ替えを掛けない**。ワークリストは項目を1つずつ動かせる
+	 *          (`WorkItemUP` / `WorkItemDown`) ので、並べ替えると操作の結果が
+	 *          その場で消えてしまうため。VCL も `NotSortWorkList` か
+	 *          区切り行があれば並べ替えない (`Global.cpp:4551`)
+	 */
+	void ShowOrderedList(const UnicodeString &title, const std::vector<FileItem> &items);
+
+	/// 結果リストを表示中か (ShowOrderedList で出したワークリストも含む)
 	bool IsResultList() const { return result_mode_; }
+	/// 並び順を保つ一覧 (ワークリスト) を表示中か
+	bool IsOrderKept() const { return keep_order_; }
 	/// 結果リストの見出し
 	UnicodeString ResultTitle() const { return result_title_; }
 	/// 通常の一覧に戻る (ReturnList)
@@ -200,6 +214,7 @@ private:
 
 	UnicodeString path_;
 	bool result_mode_ = false;      //!< 結果リストを表示中か
+	bool keep_order_ = false;       //!< 並べ替えを掛けないか (ワークリスト)
 	UnicodeString result_title_;    //!< 結果リストの見出し
 
 	bool show_hidden_ = false;      //!< 隠しファイルを出すか (ShowHideAtr)

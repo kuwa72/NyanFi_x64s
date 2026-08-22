@@ -217,6 +217,11 @@ endif()
 # tab_info (src/Global.h、実測) は左右ペイン共有の1本のタブバーだったため、
 # gui/tabs.h もそれに合わせた設計にしてある (詳細はそのファイルの解説を参照)。
 #
+# gui/work_list.cpp (ワークリストの .nwl 読み書き・並べ替え・追加削除) も同じ理由
+# (wx 非依存、tests/core/test_gui_work_list.cpp から直接テストする) でここに
+# 含める。並べ替えの規則は VCL の ItemTmpUp/Down/Move (src/MainFrm.cpp) を、
+# .nwl の書式は load_WorkList/save_WorkList (src/Global.cpp) を実測して合わせた。
+#
 # gui/rename.cpp (一括リネームのプレビュー計算・衝突判定・実行) も同じ理由
 # (wx 非依存、tests/core/test_gui_rename.cpp から直接テストする) でここに
 # 含める。正規表現置換は移植済みの TRegEx (compat/include/compat/regex.h)・
@@ -248,6 +253,7 @@ if(TARGET nyanfi_core)
 		gui/dir_info.cpp
 		gui/misc_ops.cpp
 		gui/find_files.cpp
+		gui/work_list.cpp
 	)
 	target_include_directories(nyanfi_gui_core PUBLIC ${PROJECT_SOURCE_DIR})
 	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core shell32 netapi32)

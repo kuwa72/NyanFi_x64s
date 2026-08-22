@@ -68,6 +68,11 @@ public:
 	UnicodeString LeftDir;   //!< 左ペインの最後に開いていたディレクトリ
 	UnicodeString RightDir;  //!< 右ペインの最後に開いていたディレクトリ
 
+	// ワークリスト (gui/work_list.h)。VCL も ini に同じ2つを持つ
+	// (`WorkListName` = MainFrm.cpp:1116、`U:HomeWorkList` = Global.cpp:1896)
+	UnicodeString WorkListName;  //!< 最後に開いていた .nwl。空なら無名
+	UnicodeString HomeWorkList;  //!< ホームワークリスト (HomeWorkList コマンドで開く)
+
 private:
 	std::unique_ptr<UsrIniFile> ini_;
 };

@@ -79,6 +79,7 @@ bool FilePane::SetPath(const UnicodeString &path, bool record_history)
 	// ディレクトリを移ったら結果リストは終わり。**ここで落とさないと
 	// Collect() が早期 return するので「移動したのに結果が出たまま」になる**
 	result_mode_ = false;
+	keep_order_ = false;
 	result_title_ = EmptyStr;
 
 	path_ = newpath;
@@ -170,6 +171,9 @@ void FilePane::ApplyFilterAndSort()
 			order_.push_back(i);
 		}
 	}
+
+	// ワークリストは並び順そのものが中身なので並べ替えない (ShowOrderedList)
+	if (keep_order_) return;
 
 	std::sort(order_.begin(), order_.end(), [this](std::size_t ia, std::size_t ib) {
 		return CompareFileItems(all_items_[ia], all_items_[ib], sort_key_, sort_descending_, dirs_first_) < 0;
@@ -286,16 +290,19 @@ int FilePane::GetMatchedCount() const
 
 std::vector<UnicodeString> FilePane::GetSelectedNames() const
 {
+	// ワークリストの区切り行と実体の無い項目は名前を持たない/開けないので
+	// **ファイル操作の対象に混ぜない** (空の名前でコピー・削除に入らせない)
 	std::vector<UnicodeString> names;
 	for (int i = 0; i < GetItemCount(); ++i) {
 		const FileItem &itm = ItemAt(i);
-		if (itm.marked && !itm.is_parent) names.push_back(itm.name);
+		if (itm.marked && !itm.is_parent && !itm.is_separator && !itm.missing) names.push_back(itm.name);
 	}
 
 	// マークが無ければカーソル位置の1件を対象にする (".." は対象外)
 	if (names.empty()) {
 		const FileItem *cur = GetCurrentItem();
-		if (cur != nullptr && !cur->is_parent) names.push_back(cur->name);
+		if (cur != nullptr && !cur->is_parent && !cur->is_separator && !cur->missing)
+			names.push_back(cur->name);
 	}
 	return names;
 }
@@ -334,15 +341,17 @@ void FilePane::ApplyMarks(const std::vector<FileItem> &items)
 
 std::vector<FileItem> FilePane::GetSelectedItems() const
 {
+	// GetSelectedNames() と同じ理由で区切り行と欠落項目は外す
 	std::vector<FileItem> items;
 	for (int i = 0; i < GetItemCount(); ++i) {
 		const FileItem &itm = ItemAt(i);
-		if (itm.marked && !itm.is_parent) items.push_back(itm);
+		if (itm.marked && !itm.is_parent && !itm.is_separator && !itm.missing) items.push_back(itm);
 	}
 
 	if (items.empty()) {
 		const FileItem *cur = GetCurrentItem();
-		if (cur != nullptr && !cur->is_parent) items.push_back(*cur);
+		if (cur != nullptr && !cur->is_parent && !cur->is_separator && !cur->missing)
+			items.push_back(*cur);
 	}
 	return items;
 }
@@ -375,7 +384,12 @@ bool FilePane::GoParent()
 bool FilePane::EnterCurrent()
 {
 	const FileItem *itm = GetCurrentItem();
-	if (itm == nullptr || !itm->is_dir) return false;
+	if (itm == nullptr) return false;
+	// 区切り行と実体の無い項目は開けない。ここで false を返すと呼び出し側が
+	// 「ディレクトリでなかった」とみなして関連付けで開こうとするので、
+	// **true を返して何もしない** (存在しないパスを ShellExecute しない)
+	if (itm->is_separator || itm->missing) return true;
+	if (!itm->is_dir) return false;
 
 	if (itm->is_parent) return GoParent();
 
@@ -385,6 +399,7 @@ bool FilePane::EnterCurrent()
 	if (result_mode_) {
 		const UnicodeString target = FullPathOf(*itm);
 		result_mode_ = false;
+		keep_order_ = false;
 		result_title_ = EmptyStr;
 		return SetPath(target);
 	}
@@ -392,9 +407,31 @@ bool FilePane::EnterCurrent()
 }
 
 //---------------------------------------------------------------------------
+void FilePane::ShowOrderedList(const UnicodeString &title, const std::vector<FileItem> &items)
+{
+	// 表示中のカーソル位置は呼び出し側 (ワークリストを持つ MainFrame) が
+	// 決めるので、ここでは 0 に戻さず現在位置を範囲内に収めるだけにする。
+	// 項目を1つ動かすたびに先頭へ飛ぶと操作にならないため
+	const int keep = cursor_;
+
+	result_mode_ = true;
+	keep_order_ = true;
+	result_title_ = title;
+
+	all_items_ = items;
+	ApplyFilterAndSort();
+
+	cursor_ = std::max(0, std::min(keep, GetItemCount() - 1));
+	top_ = std::min(top_, cursor_);
+	EnsureVisible();
+	Refresh();
+}
+
+//---------------------------------------------------------------------------
 void FilePane::ShowResultList(const UnicodeString &title, const std::vector<FileItem> &items)
 {
 	result_mode_ = true;
+	keep_order_ = false;
 	result_title_ = title;
 
 	all_items_ = items;
@@ -412,6 +449,7 @@ void FilePane::ReturnToList()
 	if (!result_mode_) return;
 	// 先に落とさないと Collect() が早期 return して一覧が戻らない
 	result_mode_ = false;
+	keep_order_ = false;
 	result_title_ = EmptyStr;
 	Reload();
 }
@@ -644,13 +682,33 @@ void FilePane::OnPaint(wxPaintEvent &)
 			dc.DrawRectangle(0, y, client.x, row_height_);
 		}
 
+		// ワークリストの区切り行は横線1本だけ。名前も日時も持たない
+		if (itm.is_separator) {
+			dc.SetPen(wxPen(hdr_fg));
+			const int mid = y + row_height_ / 2;
+			dc.DrawLine(char_width_ / 2, mid, client.x - char_width_ / 2, mid);
+			continue;
+		}
+
+		// 実体の無いワークリスト項目は薄く出す (VCL の faInvalid 相当)。
+		// **黙って消さない**: WorkList の "DI" で外すまで一覧に残す
+		if (itm.missing && !(on_cursor && active_)) {
+			text_fg = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT);
+		}
 		dc.SetTextForeground(text_fg);
 
-		// 名前 (右端の桁に重ならないところで切る)
+		// 名前 (右端の桁に重ならないところで切る)。ワークリストで別名が
+		// 付いていればそちらを出す (MainFrm.cpp:10500)
 		const int name_cols = std::max(4, (size_col - char_width_) / char_width_);
-		UnicodeString name = itm.name;
+		UnicodeString name = itm.alias.IsEmpty()? itm.name : itm.alias;
 		if (name.Length() > name_cols) name = name.SubString(1, name_cols - 1) + _T("…");
 		dc.DrawText(to_wx(name), char_width_ / 2, y + 1);
+
+		if (itm.missing) {
+			// サイズも日時も読めていないので、代わりに理由を出す
+			dc.DrawText(to_wx(_T("<欠落>")), size_col, y + 1);
+			continue;
+		}
 
 		// HideSizeTime のときはサイズと更新日時を出さない (MainFrm.cpp:19514)
 		if (!hide_size_time_) {

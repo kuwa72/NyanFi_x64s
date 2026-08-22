@@ -256,6 +256,25 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Ctrl+Alt+D"), _T("FindDuplDlg"));
 	Assign(_T("Ctrl+Alt+G"), _T("SelSameDir"));
 
+	// ワークリスト。"W" は src/Global.cpp:2096 の既定表にある実際の割り当て
+	// ("F:W=WorkList")。**それ以外は既定表に記載が無いので推測**。
+	// 引数付きのコマンド名 (`_` の後ろ) は VCL の ActionParam と同じ綴り
+	Assign(_T("W"), _T("WorkList"));
+	Assign(_T("Shift+W"), _T("WorkList_OP"));       // 反対側に出す
+	Assign(_T("Ctrl+Alt+W"), _T("SendToWorkList")); // 選択項目を登録
+	Assign(_T("Ctrl+Alt+X"), _T("WorkList_DI"));    // 存在しない項目を外す
+	Assign(_T("Ctrl+Alt+H"), _T("HomeWorkList"));
+	Assign(_T("Ctrl+Alt+O"), _T("LoadWorkList"));
+	Assign(_T("Ctrl+S"), _T("SaveWorkList"));
+	Assign(_T("Ctrl+Alt+U"), _T("SaveAsWorkList"));
+	Assign(_T("Ctrl+Alt+F"), _T("NewWorkList"));
+	Assign(_T("Ctrl+Alt+K"), _T("SelWorkItem"));
+	Assign(_T("Ctrl+Alt+B"), _T("SetAlias"));
+	Assign(_T("Ctrl+Alt+M"), _T("InsSeparator"));
+	Assign(_T("Ctrl+Up"), _T("WorkItemUP"));
+	Assign(_T("Ctrl+Down"), _T("WorkItemDown"));
+	Assign(_T("Ctrl+Alt+Enter"), _T("WorkItemMove"));
+
 	// 並べ替え・絞り込み。"S" は src/Global.cpp の既定キー表にある実際の割り当て
 	// ("F:S=SortDlg") と同じ。Ctrl+M / Ctrl+U は既定キー表に対応する記載が無く
 	// (パスマスクはコンボボックス操作が前提で単独のキー割り当てが見当たらない)、
