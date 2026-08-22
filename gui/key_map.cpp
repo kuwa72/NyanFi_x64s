@@ -341,6 +341,12 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Shift+Alt+W"), _T("ViewHistory"));
 	Assign(_T("Shift+Alt+K"), _T("CmdHistory"));
 
+	// 名前を付けた状態の保存と読み込み。**VCL の既定表に無いのですべて推測**
+	Assign(_T("Shift+Alt+T"), _T("SaveTabGroup"));
+	Assign(_T("Shift+Alt+G"), _T("LoadTabGroup"));
+	Assign(_T("Shift+Alt+R"), _T("SaveAsResultList"));
+	Assign(_T("Shift+Alt+O"), _T("LoadResultList"));
+
 	// 並べ替え・絞り込み。"S" は src/Global.cpp の既定キー表にある実際の割り当て
 	// ("F:S=SortDlg") と同じ。Ctrl+M / Ctrl+U は既定キー表に対応する記載が無く
 	// (パスマスクはコンボボックス操作が前提で単独のキー割り当てが見当たらない)、

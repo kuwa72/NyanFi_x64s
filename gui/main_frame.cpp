@@ -2726,6 +2726,22 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	else if (SameStr(command, _T("CmdHistory"))) {
 		CmdShowHistory(history::Kind::Command);
 	}
+	//-- 名前を付けた状態 (機能群21) ------------------------------------------
+	else if (SameStr(command, _T("SaveTabGroup"))) {
+		CmdSaveTabGroup(/*as_new=*/false);
+	}
+	else if (SameStr(command, _T("SaveAsTabGroup"))) {
+		CmdSaveTabGroup(/*as_new=*/true);
+	}
+	else if (SameStr(command, _T("LoadTabGroup"))) {
+		CmdLoadTabGroup();
+	}
+	else if (SameStr(command, _T("SaveAsResultList"))) {
+		CmdSaveResultList();
+	}
+	else if (SameStr(command, _T("LoadResultList"))) {
+		CmdLoadResultList();
+	}
 	else if (SameStr(command, _T("KeyList"))) {
 		ShowKeyList();
 	}
@@ -5385,5 +5401,137 @@ void MainFrame::CmdShowHistory(history::Kind kind)
 	for (std::size_t i = 0; i < names.size(); ++i) {
 		if (SameText(names[i], want)) { pane->MoveCursorTo(static_cast<int>(i)); break; }
 	}
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// 名前を付けた状態の保存と読み込み (機能群21)
+//
+// 書式の解釈と組み立ては wx 非依存の gui/named_state.h が持つ。
+// ここはダイアログとタブ/ペインへの当てはめだけ。
+//
+// **検索設定 (LoadFindSet / SaveAsFindSet) は入れていない。**
+// 読み書きの土台 (named_state::FindSet) は用意してあるが、Phase 2 に
+// 検索の設定を持つ仕組みがまだ無く、読み込んでも当てはめる先が無いため
+// (報告書 §30)
+//---------------------------------------------------------------------------
+void MainFrame::CmdSaveTabGroup(bool as_new)
+{
+	StoreCurrentTabState();
+
+	UnicodeString path = tab_group_path_;
+	if (as_new || path.IsEmpty()) {
+		wxFileDialog dlg(this, to_wx(_T("タブグループに名前を付けて保存")),
+		                 to_wx(ActivePane()->GetPath()), to_wx(_T("tabgroup")),
+		                 _T("タブグループ (*.ini)|*.ini"),
+		                 wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+		if (dlg.ShowModal() != wxID_OK) return;
+		path = to_us(dlg.GetPath());
+	}
+
+	std::vector<TabState> tabs;
+	for (int i = 0; i < tabs_.Count(); ++i) tabs.push_back(tabs_.At(i));
+
+	UnicodeString error;
+	if (!named_state::SaveTabGroup(path, tabs, tabs_.CurrentIndex(), error)) {
+		wxMessageBox(to_wx(error), to_wx(_T("タブグループ")), wxOK | wxICON_ERROR, this);
+		return;
+	}
+	tab_group_path_ = path;
+	SetStatusWarning(UnicodeString().sprintf(_T("%d 枚を保存しました: %s"),
+	                                          static_cast<int>(tabs.size()),
+	                                          ExtractFileName(path).c_str()));
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdLoadTabGroup()
+{
+	wxFileDialog dlg(this, to_wx(_T("タブグループを読み込む")),
+	                 to_wx(tab_group_path_.IsEmpty()? ActivePane()->GetPath()
+	                                                : ExtractFilePath(tab_group_path_)),
+	                 wxEmptyString, _T("タブグループ (*.ini)|*.ini"),
+	                 wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+	if (dlg.ShowModal() != wxID_OK) return;
+
+	const UnicodeString path = to_us(dlg.GetPath());
+	std::vector<TabState> tabs;
+	int current = 0;
+	UnicodeString error;
+	if (!named_state::LoadTabGroup(path, tabs, current, error) || tabs.empty()) {
+		wxMessageBox(to_wx(error.IsEmpty()? _T("タブが1枚もありません") : error),
+		             to_wx(_T("タブグループ")), wxOK | wxICON_WARNING, this);
+		return;
+	}
+
+	// **今開いているタブは全部入れ替わる**ので確認する
+	UnicodeString msg;
+	msg.sprintf(_T("今の %d 枚のタブを、読み込んだ %d 枚で置き換えますか?"),
+	            tabs_.Count(), static_cast<int>(tabs.size()));
+	if (wxMessageBox(to_wx(msg), to_wx(_T("タブグループ")), wxYES_NO | wxICON_QUESTION, this) != wxYES) return;
+
+	tabs_ = TabManager();
+	for (std::size_t i = 0; i < tabs.size(); ++i) {
+		if (i == 0) tabs_.MutableCurrent() = tabs[i];
+		else tabs_.AddTab(tabs[i]);
+	}
+	if (current >= 0 && current < tabs_.Count()) tabs_.SelectAt(current);
+
+	ApplyTabState(tabs_.Current());
+	RefreshTabBar();
+	tab_group_path_ = path;
+	SetStatusWarning(UnicodeString().sprintf(_T("%d 枚を読み込みました"), tabs_.Count()));
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdSaveResultList()
+{
+	FilePane *pane = ActivePane();
+	if (!pane->IsResultList()) { SetStatusWarning(_T("結果リストではありません")); return; }
+
+	const std::vector<FileItem> items = pane->VisibleItems();
+	if (items.empty()) { SetStatusWarning(_T("保存する項目がありません")); return; }
+
+	wxFileDialog dlg(this, to_wx(_T("結果リストに名前を付けて保存")),
+	                 to_wx(pane->GetPath()), to_wx(_T("result.txt")),
+	                 _T("結果リスト (*.txt)|*.txt"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+	if (dlg.ShowModal() != wxID_OK) return;
+
+	UnicodeString error;
+	if (!named_state::SaveResultList(to_us(dlg.GetPath()), pane->GetPath(), items, error)) {
+		wxMessageBox(to_wx(error), to_wx(_T("結果リスト")), wxOK | wxICON_ERROR, this);
+		return;
+	}
+	SetStatusWarning(UnicodeString().sprintf(_T("%d 件を保存しました"),
+	                                          static_cast<int>(items.size())));
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdLoadResultList()
+{
+	FilePane *pane = ActivePane();
+
+	wxFileDialog dlg(this, to_wx(_T("結果リストを読み込む")), to_wx(pane->GetPath()),
+	                 wxEmptyString, _T("結果リスト (*.txt)|*.txt"),
+	                 wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+	if (dlg.ShowModal() != wxID_OK) return;
+
+	const UnicodeString path = to_us(dlg.GetPath());
+	UnicodeString title;
+	std::vector<FileItem> items;
+	UnicodeString error;
+	if (!named_state::LoadResultList(path, title, items, error)) {
+		wxMessageBox(to_wx(error), to_wx(_T("結果リスト")), wxOK | wxICON_WARNING, this);
+		return;
+	}
+	if (items.empty()) {
+		SetStatusWarning(_T("実体のある項目が1件もありませんでした"));
+		return;
+	}
+
+	UnicodeString caption;
+	caption.sprintf(_T("結果リスト: %s  (%d 件)"), ExtractFileName(path).c_str(),
+	                static_cast<int>(items.size()));
+	pane->ShowResultList(caption, items);
 	UpdateStatus();
 }
