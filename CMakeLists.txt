@@ -217,6 +217,14 @@ endif()
 # tab_info (src/Global.h、実測) は左右ペイン共有の1本のタブバーだったため、
 # gui/tabs.h もそれに合わせた設計にしてある (詳細はそのファイルの解説を参照)。
 #
+# 以下は Phase 3 の機能群19〜23。いずれも wx 非依存で、tests/core/ から
+# 直接テストする:
+#   gui/log_win.cpp        ログの蓄積・整形・書き出し
+#   gui/history.cpp        最近使ったファイル等の履歴 (MRU)
+#   gui/named_state.cpp    タブグループ/結果リスト/検索設定の保存と読み込み
+#   gui/view_settings.cpp  表示の切り替え (フォントサイズ・窓位置・透過度など)
+#   gui/system_ops.cpp     システム操作と外部連携 (ごみ箱・ドライブ・URL 組み立て)
+#
 # gui/convert_ops.cpp (アイコン/埋め込み画像の抽出、文書・HTML・画像の変換、
 # Exif の操作) も同じ理由でここに含める。**中身の処理は自前で書かず**、
 # 移植済みの usr_exif / usr_id3 / usr_xd2tx / htmconv / usr_wic を呼ぶだけ。
@@ -274,6 +282,11 @@ if(TARGET nyanfi_core)
 		gui/clone_name.cpp
 		gui/file_ops2.cpp
 		gui/convert_ops.cpp
+		gui/log_win.cpp
+		gui/history.cpp
+		gui/named_state.cpp
+		gui/view_settings.cpp
+		gui/system_ops.cpp
 	)
 	target_include_directories(nyanfi_gui_core PUBLIC ${PROJECT_SOURCE_DIR})
 	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core shell32 netapi32)
