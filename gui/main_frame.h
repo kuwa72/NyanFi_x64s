@@ -26,6 +26,7 @@
 
 #include "gui/bookmarks.h"
 #include "gui/convert_ops.h"
+#include "gui/history.h"
 #include "gui/log_win.h"
 #include "gui/dir_info.h"
 #include "gui/external.h"
@@ -299,6 +300,21 @@ private:
 	bool ConfirmDiscardWorkList();
 	/// ヘッダに出す見出し ("<ワーク> 名前  n 件")
 	UnicodeString WorkListCaption() const;
+
+	//-- 履歴 (機能群20。判断は gui/history.h) --------------------------------
+	//
+	// 「最近使ったもの」の一覧。**VCL と持ち方が違うものがある**ので
+	// 報告書 §29 を参照のこと
+	void CmdShowHistory(history::Kind kind);  //!< 履歴の一覧から選んで開く
+	/// 履歴に積む。ファイルを開いた・編集したときに呼ぶ
+	void RecordHistory(history::Kind kind, const UnicodeString &entry);
+
+	history::HistoryList hist_edit_;    //!< 最近編集したファイル (EditHistory)
+	history::HistoryList hist_view_;    //!< 最近閲覧したファイル (ViewHistory)
+	history::HistoryList hist_recent_;  //!< 最近使ったファイル (RecentList)
+	history::HistoryList hist_cmd_;     //!< 実行したコマンド (CmdHistory)
+	/// 種類から対応する実体を引く
+	history::HistoryList &HistoryOf(history::Kind kind);
 
 	//-- ログ (機能群19。判断は gui/log_win.h) --------------------------------
 	//
