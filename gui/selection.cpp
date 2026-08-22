@@ -183,4 +183,191 @@ void MarkRange(std::vector<FileItem> &items, int from, int to)
 	}
 }
 
+//---------------------------------------------------------------------------
+int SelectByMask(std::vector<FileItem> &items, const UnicodeString &mask)
+{
+	int n = 0;
+	for (std::size_t i = 0; i < items.size(); ++i) {
+		FileItem &itm = items[i];
+		if (!is_selectable(itm) || itm.is_separator) continue;
+		itm.marked = MatchPathMask(mask, itm.name, itm.is_dir);
+		if (itm.marked) ++n;
+	}
+	return n;
+}
+
+//---------------------------------------------------------------------------
+int SelectByNames(std::vector<FileItem> &items, const std::vector<UnicodeString> &names)
+{
+	int n = 0;
+	for (std::size_t i = 0; i < items.size(); ++i) {
+		FileItem &itm = items[i];
+		if (!is_selectable(itm) || itm.is_separator) continue;
+
+		bool hit = false;
+		for (std::size_t j = 0; j < names.size() && !hit; ++j) {
+			hit = SameText(itm.name, names[j]);
+		}
+		itm.marked = hit;
+		if (hit) ++n;
+	}
+	return n;
+}
+
+//---------------------------------------------------------------------------
+namespace {
+
+/// `format_Date` (src/UserFunc.cpp:438) と同じ
+UnicodeString format_date(const TDateTime &dt)
+{
+	return FormatDateTime(_T("yyyy'/'mm'/'dd"), dt);
+}
+
+/**
+ * @brief 日付条件を解釈する
+ * @param prm 条件文字列
+ * @param dt [out] 境界の日付
+ * @param ct `CP` (カーソル位置) のときに使う日付
+ * @return 1 = より古い / 2 = 同じ日 / 3 = より新しい。条件なしは 0、エラーは -1
+ * @details **`get_DateCond` (src/UserFunc.cpp:464) の書き写し。**
+ *          `UserFunc.cpp` はコンパイルは通るがリンクできない
+ *          (VCL コントロールを触る関数が宣言のみのシムを呼ぶ。報告書 §24)
+ *          ので、必要な2つだけをここに写した。**中身は1行ずつ突き合わせてある。**
+ *          元を直したらこちらも直すこと
+ */
+int date_cond_of(UnicodeString prm, TDateTime &dt, const TDateTime &ct)
+{
+	int cnd = 0;
+	if (prm.IsEmpty()) return 0;
+
+	if      (SameText(prm, _T("TD"))) prm = _T("=") + format_date(Date());
+	else if (SameText(prm, _T("CP"))) prm = _T("=") + format_date(ct);
+
+	cnd = UnicodeString(_T("<=>")).Pos(prm[1]);
+	if (cnd <= 0) return -1;
+
+	prm.Delete(1, 1);
+	// 絶対指定 (yyyy/mm/dd)
+	if (TRegEx::IsMatch(prm, _T("^\\d{4}/\\d{2}/\\d{2}$"))) {
+		dt = str_to_DateTime(prm);
+		return cnd;
+	}
+
+	// 相対指定 (-30D / 6M / 1Y)
+	if (prm.IsEmpty()) return -1;
+	const UnicodeString unit = prm.SubString(prm.Length(), 1).UpperCase();
+	if (!ContainsText(_T("DMY"), unit)) return -1;
+	delete_end(prm);
+
+	dt = Date();
+	const int dn = prm.ToIntDef(0);
+	if (dn != 0) {
+		switch (idx_of_word_i(_T("D|M|Y"), unit)) {
+		case 0: dt = IncDay(dt, dn);   break;
+		case 1: dt = IncMonth(dt, dn); break;
+		case 2: dt = IncYear(dt, dn);  break;
+		}
+	}
+	return cnd;
+}
+
+/// `test_DateCond` (src/UserFunc.cpp:510) と同じ。**日付だけを比べる** (時刻は見ない)
+bool test_date_cond(int cnd, const TDateTime &dt, const TDateTime &dt_r)
+{
+	const TValueRelationship res = System::Dateutils::CompareDate(dt, dt_r);
+	switch (cnd) {
+	case 1: return res == LessThanValue;
+	case 2: return res == EqualsValue;
+	case 3: return res == GreaterThanValue;
+	}
+	return false;
+}
+
+}  // namespace
+
+//---------------------------------------------------------------------------
+int SelectByDateCondition(std::vector<FileItem> &items, const UnicodeString &cond,
+                          const TDateTime &cursor_time, UnicodeString &error)
+{
+	TDateTime border;
+	// 解釈は date_cond_of (get_DateCond の書き写し) に任せる。0 以下なら不正
+	const int how = date_cond_of(cond, border, cursor_time);
+	if (how <= 0) {
+		error = _T("日付条件が正しくありません");
+		return -1;
+	}
+
+	int n = 0;
+	for (std::size_t i = 0; i < items.size(); ++i) {
+		FileItem &itm = items[i];
+		if (!is_selectable(itm) || itm.is_separator) continue;
+		// VCL はディレクトリを常に非選択にする (MainFrm.cpp:16292)
+		itm.marked = !itm.is_dir && test_date_cond(how, itm.stamp, border);
+		if (itm.marked) ++n;
+	}
+	return n;
+}
+
+//---------------------------------------------------------------------------
+int FindNextSameName(const std::vector<FileItem> &items, int cursor)
+{
+	const int n = static_cast<int>(items.size());
+	if (cursor < 0 || cursor >= n) return -1;
+	if (items[static_cast<std::size_t>(cursor)].is_dir) return -1;
+
+	const UnicodeString base = get_base_name(items[static_cast<std::size_t>(cursor)].name);
+	int wrap = -1;
+
+	for (int i = 0; i < n; ++i) {
+		if (i <= cursor && wrap != -1) continue;
+		const FileItem &itm = items[static_cast<std::size_t>(i)];
+		if (itm.is_dir || itm.is_separator) continue;
+		if (!SameText(base, get_base_name(itm.name))) continue;
+		if (i <= cursor) wrap = i; else return i;
+	}
+	// 動かないなら「見つからなかった」と同じ扱いにする (VCL も
+	// new_idx==c_idx のときは SetActionAbort する)
+	return (wrap == cursor)? -1 : wrap;
+}
+
+//---------------------------------------------------------------------------
+namespace {
+
+/// 名前を ";" で繋いでマスクにする
+UnicodeString join_mask(const std::vector<UnicodeString> &names)
+{
+	UnicodeString mask;
+	for (std::size_t i = 0; i < names.size(); ++i) {
+		if (!mask.IsEmpty()) mask += _T(";");
+		mask += names[i];
+	}
+	return mask;
+}
+
+}  // namespace
+
+//---------------------------------------------------------------------------
+UnicodeString MaskOfMarked(const std::vector<FileItem> &items)
+{
+	std::vector<UnicodeString> names;
+	for (std::size_t i = 0; i < items.size(); ++i) {
+		const FileItem &itm = items[i];
+		if (!is_selectable(itm) || itm.is_separator || !itm.marked) continue;
+		names.push_back(itm.name);
+	}
+	return join_mask(names);
+}
+
+//---------------------------------------------------------------------------
+UnicodeString MaskExcludingMarked(const std::vector<FileItem> &items)
+{
+	std::vector<UnicodeString> names;
+	for (std::size_t i = 0; i < items.size(); ++i) {
+		const FileItem &itm = items[i];
+		if (!is_selectable(itm) || itm.is_separator || itm.marked) continue;
+		names.push_back(itm.name);
+	}
+	return join_mask(names);
+}
+
 }  // namespace selection

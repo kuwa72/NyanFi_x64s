@@ -980,3 +980,96 @@ wx にも ini にも依存しない純関数にしてテストで固定した (�
 - 栞の帯の描画も**目視していない** (GUI は5秒の起動維持のみ確認)
 - キー割り当ては**全部推測**。Ctrl+ と Ctrl+Shift+ の英字が埋まったので
   `Alt+` を使った (このウィンドウはメニューバーを持たないので衝突しない)
+
+---
+
+## 24. `src/UserFunc.cpp` は「コンパイルは通るがリンクできない」側だった
+
+日付条件の解析 (`get_DateCond` / `test_DateCond`) が欲しくて
+`src/UserFunc.cpp` (1,642行) をビルド対象に加えようとした。
+
+**一度は「通った」と判断したが、間違いだった。**
+
+### なぜ間違えたか
+
+`cmake/phase0_sources.cmake` に足してビルドし、テストも全部通った。
+しかしそれは**静的ライブラリの中の `UserFunc.cpp.obj` を誰も参照していなかった**
+から。アーカイブのメンバは**参照されて初めて取り出される**ので、
+参照が1つも無いオブジェクトの未定義シンボルはリンカに見えない。
+
+実際に `gui/selection.cpp` から `get_DateCond` を呼んだ瞬間、
+未定義参照が 40件以上出た:
+
+    TForm::ShowModal / TForm::GetMonitor / TPopupMenu::Popup
+    TControl::ClientToScreen / Clipboard() / TClipboard::HasFormat
+    THeaderSections::GetItem / TStatusPanels::GetItem / TMenuItem::GetItem
+    ImmGetContext / ImmGetOpenStatus / ImmReleaseContext (imm32 未リンク)
+    ... ほか
+
+`src/usr_shell.cpp` (§20) と同じ形で、原因も同じ「宣言のみの GUI スタブ
+(規約4)」。
+
+**「ビルドが通った」は「リンクできる」の証明にならない。**
+静的ライブラリに足したファイルは、**そのファイルの関数を実際に呼ぶコードを
+書いてから**判定すること。
+
+### どうしたか
+
+必要だったのは2つの関数だけだったので、`gui/selection.cpp` の無名名前空間へ
+**1行ずつ突き合わせて書き写した** (`date_cond_of` / `test_date_cond`)。
+元の場所 (`src/UserFunc.cpp:438,464,510`) をコメントに書いてある。
+
+書式の分岐 (絶対 `<2024/01/01` / 相対 `<-30D` / `TD` / `CP` / 不正) は
+`tests/core/test_gui_selection.cpp` の 9 ケースで固定した。
+
+### 副作用
+
+`src/UserFunc.cpp:1615` に `_T()` で包まれていない非 ASCII リテラル
+(`"…"`) が1件残っていた。ビルド対象に入れた時点で `check_literals.py` が
+検出したので変換した (規約1)。**ビルド対象に入っていないファイルは
+チェックの対象外**なので、こういう取りこぼしが他にもある。
+
+### もう1つの落とし穴: 古いビルドディレクトリ
+
+`phase0_sources.cmake` を足して戻したあと、同じビルドディレクトリで
+作り直した `nyanfi.exe` が**何も出さずに終了コード5で落ちた**。
+ソースを元に戻しても再現し、10分ほど原因を探した。
+**ビルドディレクトリを作り直したら直った。**
+
+`phase0_sources.cmake` を触ったら `BUILD_DIR` を分けるか
+`--clean` を付けること。中途半端な状態のアーカイブは、
+コンパイルもリンクも通ったうえで**起動しない実行ファイル**を作る。
+
+---
+
+## 25. 選択と絞り込みの拡張 (Phase 3 機能群16)
+
+`MaskSelect` / `SelByList` / `SelEmptyDir` / `DateSelect` / `NextSameName` /
+`SelMask` / `DelSelMask` / `MaskFind` / `InputPathMask` の 9 コマンド。
+
+### VCL と変えたところ (理由付き)
+
+| | VCL | ここ | 理由 |
+|---|---|---|---|
+| `SelMask` / `DelSelMask` | `SelMaskList` で一覧そのものを絞る | 名前を並べたパスマスクを掛ける | こちらの絞り込みはパスマスクしか無い。**名前に `;` を含むファイルは扱えない** (Windows では作れない) |
+| `MaskFind` | 検索基盤 (`FindFileCore`) | 既にある `find_files::Search` | 中身は同じ「配下を再帰的に走査して名前で照合」 |
+| `SelByList` | 正規表現・パス付き指定・左右同時・選択マスクへの反映 | **名前の単純一致だけ** | 残りは未実装 (下記) |
+
+### `SelByList` の未実装 (無言でスキップしない)
+
+VCL (`MainFrm.cpp:24857`) が持っていて**こちらに無いもの**:
+
+- `/正規表現/` 形式の指定
+- パス付きの指定 (フルパスで照合する経路)
+- `LR` (左右同時) / `OP` (反対側) / `CP` (カーソル位置のファイルを一覧として使う)
+- `SM` (選択ではなく選択マスクへ反映)
+
+### 検証の範囲
+
+- `gui/selection.cpp` の追加分は 21 ケースで固定した
+  (core 全体: 722 ケース / 2,285 アサーション)
+- `SelEmptyDir` は `is_EmptyDir` (移植済み) に任せているが、
+  **`NF` (ファイルを1つも含まない) は配下を再帰的に見る**ので大きな木では遅い。
+  実測はしていない
+- `gui/main_frame.cpp` 側の受け渡しにテストは無い (wx 依存)
+- キー割り当ては全部推測 (`Alt+` 系)

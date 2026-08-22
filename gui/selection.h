@@ -119,6 +119,80 @@ int FindNextMarked(const std::vector<FileItem> &items, int cursor, bool forward)
  */
 void MarkRange(std::vector<FileItem> &items, int from, int to);
 
+//---------------------------------------------------------------------------
+// マスク・一覧・日付による選択 (機能群16)
+//---------------------------------------------------------------------------
+/**
+ * @brief マスクに一致するファイルを選択する (MaskSelect)
+ * @param items 一覧
+ * @param mask セミコロン区切りのワイルドカード ("*.txt;*.md")
+ * @return 選択された件数
+ * @details 照合は `MatchPathMask` (gui/file_item.h) に任せる。
+ *          **一致するものだけを選択し直す** (追加ではない。VCL の
+ *          `SelectMask` も `fp->selected` に代入する)。`..` は対象外
+ */
+int SelectByMask(std::vector<FileItem> &items, const UnicodeString &mask);
+
+/**
+ * @brief 名前の一覧に載っているものを選択する (SelByList)
+ * @param items 一覧
+ * @param names 選びたい名前 (パスを含まない。大文字小文字は区別しない)
+ * @return 選択された件数
+ * @details VCL (MainFrm.cpp:24857) は正規表現・パス付き指定・左右同時・
+ *          選択マスクへの反映まで持つが、ここは**名前の単純一致だけ**に
+ *          絞ってある (未対応の部分は報告書 §24 に明記)
+ */
+int SelectByNames(std::vector<FileItem> &items, const std::vector<UnicodeString> &names);
+
+/**
+ * @brief 日付条件の文字列で選択する (DateSelect)
+ * @param items 一覧
+ * @param cond 条件。`<` `=` `>` で始まり、後ろは `2024/01/01` か `30D`/`6M`/`1Y`。
+ *        `TD` は今日、`CP` はカーソル位置のファイルの日付
+ * @param cursor_time `CP` のときに使う日付
+ * @param error 解釈できなかった理由
+ * @return 選択された件数。条件が不正なら -1
+ * @details 解釈と比較は**移植済みの `get_DateCond` / `test_DateCond`**
+ *          (src/UserFunc.cpp) をそのまま使う。書式が細かいので書き直さない。
+ *          VCL と同じく**ディレクトリは常に非選択**にする
+ */
+int SelectByDateCondition(std::vector<FileItem> &items, const UnicodeString &cond,
+                          const TDateTime &cursor_time, UnicodeString &error);
+
+//---------------------------------------------------------------------------
+// カーソル移動
+//---------------------------------------------------------------------------
+/**
+ * @brief ファイル名主部が同じ次のファイルの位置 (NextSameName)
+ * @param items 一覧
+ * @param cursor 現在位置
+ * @return 移動先。見つからない/動かないなら -1
+ * @details MainFrm.cpp:22410。後ろに無ければ**先頭側へ折り返す**
+ *          (`NextMark` と同じ形。gui/bookmarks.h の FindNext を参照)。
+ *          カーソルがディレクトリなら何もしない。移動先が現在位置と同じなら -1
+ */
+int FindNextSameName(const std::vector<FileItem> &items, int cursor);
+
+//---------------------------------------------------------------------------
+// 選択からマスクを組み立てる
+//---------------------------------------------------------------------------
+/**
+ * @brief 選択項目の名前を並べたマスクを作る (SelMask)
+ * @param items 一覧
+ * @return セミコロン区切りのマスク。選択が無ければ空
+ * @details VCL は `SelMaskList` という別の仕組みで一覧そのものを絞るが、
+ *          こちらの絞り込みはパスマスクしか無いので名前を並べる。
+ *          **名前に `;` を含むファイルは扱えない** (Windows では作れないので実害は無い)
+ */
+UnicodeString MaskOfMarked(const std::vector<FileItem> &items);
+
+/**
+ * @brief 選択項目を除いたマスクを作る (DelSelMask)
+ * @param items 一覧 (すでに絞り込まれた状態)
+ * @return セミコロン区切りのマスク。残りが無ければ空
+ */
+UnicodeString MaskExcludingMarked(const std::vector<FileItem> &items);
+
 }  // namespace selection
 
 #endif  // NYANFI_GUI_SELECTION_H
