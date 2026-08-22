@@ -306,6 +306,7 @@ RenameExecResult ExecutePlan(const UnicodeString &dir, const RenamePlan &plan)
 		const PreviewRow &row = plan.rows[ok_indices[0]];
 		if (rename_File(base_dir + row.old_name, base_dir + row.new_name)) {
 			result.success_count++;
+			result.applied.push_back(AppliedRename{row.old_name, row.new_name});
 		}
 		else {
 			result.failures.push_back(row.old_name + _T(" -> ") + row.new_name + _T(": 名前の変更に失敗しました"));
@@ -355,6 +356,7 @@ RenameExecResult ExecutePlan(const UnicodeString &dir, const RenamePlan &plan)
 		const PreviewRow &row = plan.rows[ok_indices[k]];
 		if (rename_File(base_dir + temp_names[k], base_dir + row.new_name)) {
 			result.success_count++;
+			result.applied.push_back(AppliedRename{row.old_name, row.new_name});
 		}
 		else {
 			// 最終名にできなかった。一時名のまま放置するとユーザーには

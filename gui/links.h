@@ -32,7 +32,7 @@ bool CanCreateHardLink(const UnicodeString &src_root, const UnicodeString &dst_r
 UnicodeString ShortcutNameFor(const UnicodeString &name);
 
 /// 作るリンクの種類
-enum class LinkKind { Shortcut, Hard, Symbolic };
+enum class LinkKind { Shortcut, Hard, Symbolic, Junction };
 
 /**
  * @brief リンクをまとめて作る

@@ -307,6 +307,16 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Alt+H"), _T("MaskFind"));
 	Assign(_T("Alt+J"), _T("InputPathMask"));
 
+	// ファイル操作の続き。**VCL の既定表に1件も無いのですべて推測**
+	Assign(_T("Alt+1"), _T("Clone"));
+	Assign(_T("Alt+2"), _T("CloneToCurr"));
+	Assign(_T("Alt+3"), _T("CopyDir"));
+	Assign(_T("Alt+4"), _T("CreateDirsDlg"));
+	Assign(_T("Alt+5"), _T("CreateJunction"));
+	Assign(_T("Alt+6"), _T("SwapName"));
+	Assign(_T("Alt+7"), _T("UndoRename"));
+	Assign(_T("Alt+8"), _T("CreateTestFile"));
+
 	// 並べ替え・絞り込み。"S" は src/Global.cpp の既定キー表にある実際の割り当て
 	// ("F:S=SortDlg") と同じ。Ctrl+M / Ctrl+U は既定キー表に対応する記載が無く
 	// (パスマスクはコンボボックス操作が前提で単独のキー割り当てが見当たらない)、

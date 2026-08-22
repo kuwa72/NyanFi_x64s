@@ -2627,6 +2627,31 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	else if (SameStr(command, _T("InputPathMask"))) {
 		CmdInputPathMask();
 	}
+	//-- ファイル操作の続き (機能群17) ----------------------------------------
+	else if (SameStr(command, _T("Clone"))) {
+		CmdClone(/*to_current=*/false);
+	}
+	else if (SameStr(command, _T("CloneToCurr"))) {
+		CmdClone(/*to_current=*/true);
+	}
+	else if (SameStr(command, _T("CopyDir"))) {
+		CmdCopyDir();
+	}
+	else if (SameStr(command, _T("CreateDirsDlg"))) {
+		CmdCreateDirsDlg();
+	}
+	else if (SameStr(command, _T("CreateJunction"))) {
+		CmdCreateLinks(links::LinkKind::Junction);
+	}
+	else if (SameStr(command, _T("SwapName"))) {
+		CmdSwapName();
+	}
+	else if (SameStr(command, _T("UndoRename"))) {
+		CmdUndoRename();
+	}
+	else if (SameStr(command, _T("CreateTestFile"))) {
+		CmdCreateTestFile();
+	}
 	else if (SameStr(command, _T("KeyList"))) {
 		ShowKeyList();
 	}
@@ -3230,7 +3255,20 @@ void MainFrame::CmdRenameDlg()
 		targets.push_back(t);
 	}
 
-	if (rename_dialog::Run(this, pane->GetPath(), targets)) pane->Reload();
+	std::vector<rename_core::AppliedRename> applied;
+	if (rename_dialog::Run(this, pane->GetPath(), targets, applied)) {
+		// 戻せるように改名ログを残す (UndoRename)
+		const UnicodeString base = IncludeTrailingPathDelimiter(pane->GetPath());
+		std::vector<file_ops2::RenameRecord> log;
+		for (const rename_core::AppliedRename &a : applied) {
+			file_ops2::RenameRecord rec;
+			rec.old_path = base + a.old_name;
+			rec.new_path = base + a.new_name;
+			log.push_back(rec);
+		}
+		RecordRenames(log);
+		pane->Reload();
+	}
 }
 
 //---------------------------------------------------------------------------
@@ -4617,4 +4655,215 @@ void MainFrame::CmdMaskFind()
 void MainFrame::CmdInputPathMask()
 {
 	ShowMaskDialog();
+}
+
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// ファイル操作の続き (機能群17)
+//
+// 判断は gui/file_ops2.h と gui/clone_name.h が持ち、ここは受け渡しと確認だけ。
+// **どれも破壊的なので、実行前に必ず確認ダイアログを出し、結果を必ず表示する**
+//---------------------------------------------------------------------------
+void MainFrame::CmdClone(bool to_current)
+{
+	FilePane *pane = ActivePane();
+	if (!to_current && RejectIfOppositeIsResultList(_T("クローン作成"))) return;
+
+	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
+	if (paths.empty()) { SetStatusWarning(_T("対象がありません")); return; }
+
+	const UnicodeString dst = to_current? pane->GetPath() : OppositePane()->GetPath();
+	const std::vector<UnicodeString> names = pane->GetSelectedNames();
+	if (!ConfirmItems(this, _T("クローン作成"), _T("クローンを作成"), names, dst)) return;
+
+	::wxBeginBusyCursor();
+	const file_ops::FileOpResult r = file_ops2::CloneItems(paths, dst, EmptyStr);
+	::wxEndBusyCursor();
+
+	pane->Reload();
+	if (!to_current) OppositePane()->Reload();
+	wxMessageBox(to_wx(file_ops::Summarize(r)), to_wx(_T("クローン作成の結果")),
+	             wxOK | wxICON_INFORMATION, this);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdCopyDir()
+{
+	if (RejectIfOppositeIsResultList(_T("ディレクトリ構造のコピー"))) return;
+
+	FilePane *pane = ActivePane();
+	std::vector<UnicodeString> dirs;
+	for (const UnicodeString &p : pane->GetSelectedPaths()) {
+		if (dir_exists(p)) dirs.push_back(p);
+	}
+	if (dirs.empty()) { SetStatusWarning(_T("対象のディレクトリがありません")); return; }
+
+	const UnicodeString dst = OppositePane()->GetPath();
+	const int r = wxMessageBox(
+		to_wx(UnicodeString().sprintf(
+			_T("%d 件のディレクトリ構造を\r\n%s\r\nに作ります。\r\n\r\n配下のサブディレクトリも作りますか?\r\n")
+			_T("(ファイルはコピーしません)"), static_cast<int>(dirs.size()), dst.c_str())),
+		to_wx(_T("ディレクトリ構造のコピー")), wxYES_NO | wxCANCEL | wxICON_QUESTION, this);
+	if (r == wxCANCEL) return;
+
+	::wxBeginBusyCursor();
+	const file_ops::FileOpResult res = file_ops2::CopyDirStructure(dirs, dst, r == wxYES);
+	::wxEndBusyCursor();
+
+	OppositePane()->Reload();
+	wxMessageBox(to_wx(file_ops::Summarize(res)), to_wx(_T("ディレクトリ構造のコピーの結果")),
+	             wxOK | wxICON_INFORMATION, this);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdCreateDirsDlg()
+{
+	if (RejectOnResultList(_T("ディレクトリの一括作成は"))) return;
+	FilePane *pane = ActivePane();
+
+	// VCL は複数行のメモ欄を持つダイアログ。ここは1行入力を "|" 区切りにした
+	// (複数行の入力欄を出す仕組みがまだ無いため。報告書 §26)
+	const wxString input = wxGetTextFromUser(
+		to_wx(_T("作るディレクトリ名を | で区切って入力してください (例: doc|img|src\\lib)")),
+		to_wx(_T("ディレクトリの一括作成")), wxEmptyString, this);
+	if (input.IsEmpty()) return;
+
+	std::vector<UnicodeString> names;
+	UnicodeString rest = to_us(input);
+	while (!rest.IsEmpty()) {
+		const UnicodeString one = split_tkn(rest, _T("|"));
+		if (!Trim(one).IsEmpty()) names.push_back(Trim(one));
+	}
+	if (names.empty()) return;
+
+	const file_ops::FileOpResult r = file_ops2::CreateDirs(names, pane->GetPath());
+	pane->Reload();
+	wxMessageBox(to_wx(file_ops::Summarize(r)), to_wx(_T("ディレクトリの一括作成の結果")),
+	             wxOK | wxICON_INFORMATION, this);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 選択2件の名前を入れ替える (SwapName)
+ * @details VCL は左右ペインをまたぐ "LR" も持つが、ここは**カレント内の2件**だけ。
+ *          拡張子はそれぞれ元のまま (gui/file_ops2.h を参照)
+ */
+void MainFrame::CmdSwapName()
+{
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
+	if (paths.size() != 2) {
+		SetStatusWarning(_T("入れ替える2件を選んでください"));
+		return;
+	}
+
+	UnicodeString msg;
+	msg.sprintf(_T("次の2件の名前を入れ替えますか?\r\n\r\n%s\r\n%s\r\n\r\n(拡張子はそれぞれ元のままです)"),
+	            ExtractFileName(paths[0]).c_str(), ExtractFileName(paths[1]).c_str());
+	if (wxMessageBox(to_wx(msg), to_wx(_T("名前の入れ替え")), wxYES_NO | wxICON_QUESTION, this) != wxYES) return;
+
+	UnicodeString error;
+	if (!file_ops2::SwapNames(paths[0], paths[1], error)) {
+		wxMessageBox(to_wx(error), to_wx(_T("名前の入れ替え")), wxOK | wxICON_WARNING, this);
+		return;
+	}
+
+	// 戻せるように改名ログを残す
+	std::vector<file_ops2::RenameRecord> log(2);
+	log[0].old_path = paths[0];
+	log[0].new_path = ChangeFileExt(paths[1], get_extension(paths[0]));
+	log[1].old_path = paths[1];
+	log[1].new_path = ChangeFileExt(paths[0], get_extension(paths[1]));
+	RecordRenames(log);
+
+	pane->Reload();
+	SetStatusWarning(_T("名前を入れ替えました"));
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::RecordRenames(const std::vector<file_ops2::RenameRecord> &records)
+{
+	if (records.empty()) return;
+	UnicodeString error;
+	// 書けなくても操作自体は成功しているので、警告だけ出して進む
+	if (!file_ops2::SaveRenameLog(records, error)) SetStatusWarning(error);
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdUndoRename()
+{
+	const std::vector<file_ops2::RenameRecord> records = file_ops2::LoadRenameLog();
+	if (records.empty()) {
+		SetStatusWarning(_T("戻せる改名の記録がありません"));
+		return;
+	}
+
+	UnicodeString msg;
+	msg.sprintf(_T("%d 件の改名を元に戻しますか?\r\n\r\n%s\r\n  ↓\r\n%s"),
+	            static_cast<int>(records.size()),
+	            ExtractFileName(records[0].new_path).c_str(),
+	            ExtractFileName(records[0].old_path).c_str());
+	if (records.size() > 1) msg += _T("\r\n(ほか)");
+	if (wxMessageBox(to_wx(msg), to_wx(_T("改名の取り消し")), wxYES_NO | wxICON_QUESTION, this) != wxYES) return;
+
+	::wxBeginBusyCursor();
+	const file_ops::FileOpResult r = file_ops2::UndoRenames(records);
+	::wxEndBusyCursor();
+
+	for (int i = 0; i < 2; ++i) panes_[i]->Reload();
+	wxMessageBox(to_wx(file_ops::Summarize(r)), to_wx(_T("改名の取り消しの結果")),
+	             wxOK | wxICON_INFORMATION, this);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdCreateTestFile()
+{
+	if (RejectOnResultList(_T("テストファイルの作成は"))) return;
+	FilePane *pane = ActivePane();
+
+	const wxString name = wxGetTextFromUser(to_wx(_T("ファイル名")),
+	                                         to_wx(_T("テストファイルの作成")),
+	                                         to_wx(_T("test.dat")), this);
+	if (name.IsEmpty()) return;
+
+	const wxString size_text = wxGetTextFromUser(to_wx(_T("サイズ (例: 1024 / 10K / 2M / 1G)")),
+	                                              to_wx(_T("テストファイルの作成")),
+	                                              to_wx(_T("1M")), this);
+	if (size_text.IsEmpty()) return;
+
+	const Int64 size = file_ops2::ParseSize(to_us(size_text));
+	if (size <= 0) {
+		wxMessageBox(to_wx(_T("サイズを解釈できません")), to_wx(_T("テストファイルの作成")),
+		             wxOK | wxICON_WARNING, this);
+		return;
+	}
+
+	const wxString count_text = wxGetTextFromUser(to_wx(_T("個数")),
+	                                               to_wx(_T("テストファイルの作成")),
+	                                               to_wx(_T("1")), this);
+	const int count = to_us(count_text).ToIntDef(0);
+	if (count <= 0) return;
+
+	// ディスクを埋めうるので、合計サイズを見せて確認する
+	UnicodeString msg;
+	msg.sprintf(_T("%d 個 × %s = 合計 %s を\r\n%s\r\nに作りますか?"),
+	            count, get_size_str_B(size, 14).Trim().c_str(),
+	            get_size_str_B(size * count, 14).Trim().c_str(), pane->GetPath().c_str());
+	if (wxMessageBox(to_wx(msg), to_wx(_T("テストファイルの作成")),
+	                 wxYES_NO | wxICON_QUESTION, this) != wxYES) return;
+
+	::wxBeginBusyCursor();
+	const file_ops::FileOpResult r =
+		file_ops2::CreateTestFiles(pane->GetPath(), to_us(name), size, count);
+	::wxEndBusyCursor();
+
+	pane->Reload();
+	wxMessageBox(to_wx(file_ops::Summarize(r)), to_wx(_T("テストファイルの作成の結果")),
+	             wxOK | wxICON_INFORMATION, this);
+	UpdateStatus();
 }

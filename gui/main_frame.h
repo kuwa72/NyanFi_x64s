@@ -29,6 +29,7 @@
 #include "gui/external.h"
 #include "gui/misc_ops.h"
 #include "gui/file_ops.h"
+#include "gui/file_ops2.h"
 #include "gui/find_files.h"
 #include "gui/links.h"
 #include "gui/file_pane.h"
@@ -296,6 +297,17 @@ private:
 	bool ConfirmDiscardWorkList();
 	/// ヘッダに出す見出し ("<ワーク> 名前  n 件")
 	UnicodeString WorkListCaption() const;
+
+	//-- ファイル操作の続き (機能群17。判断は gui/file_ops2.h) ------------------
+	void CmdClone(bool to_current);  //!< クローンを作る (Clone / CloneToCurr)
+	void CmdCopyDir();               //!< ディレクトリ構造だけを複製 (CopyDir)
+	void CmdCreateDirsDlg();         //!< ディレクトリを一括作成 (CreateDirsDlg)
+	void CmdSwapName();              //!< 選択2件の名前を入れ替える (SwapName)
+	void CmdUndoRename();            //!< 直前の改名を元に戻す (UndoRename)
+	void CmdCreateTestFile();        //!< テストファイルを作る (CreateTestFile)
+
+	/// 一括リネームなどのあとに改名ログを残す (UndoRename で戻せるようにする)
+	void RecordRenames(const std::vector<file_ops2::RenameRecord> &records);
 
 	//-- 選択と絞り込みの拡張 (機能群16。判断は gui/selection.h) ----------------
 	void CmdMaskSelect();      //!< マスクに一致するファイルを選択 (MaskSelect)

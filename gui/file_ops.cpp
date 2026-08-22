@@ -156,6 +156,12 @@ void MoveOneItem(const UnicodeString &src, const UnicodeString &dst, FileOpResul
 
 }  // namespace
 
+//---------------------------------------------------------------------------
+void CopyItemTo(const UnicodeString &src, const UnicodeString &dst, FileOpResult &result)
+{
+	CopyOneItem(ExcludeTrailingPathDelimiter(src), ExcludeTrailingPathDelimiter(dst), result);
+}
+
 /**
  * @brief コピー先がコピー元と同じか、その配下かを判定する
  * @details ディレクトリを自分自身の配下にコピーすると、作った先を再び走査して

@@ -1073,3 +1073,66 @@ VCL (`MainFrm.cpp:24857`) が持っていて**こちらに無いもの**:
   実測はしていない
 - `gui/main_frame.cpp` 側の受け渡しにテストは無い (wx 依存)
 - キー割り当ては全部推測 (`Alt+` 系)
+
+---
+
+## 26. ファイル操作の続き (Phase 3 機能群17)
+
+`Clone` / `CloneToCurr` / `CopyDir` / `CreateDirsDlg` / `CreateJunction` /
+`SwapName` / `UndoRename` / `CreateTestFile` の 8 コマンド。
+
+### 実測して合わせたところ
+
+| | VCL の該当 | 合わせた内容 |
+|---|---|---|
+| クローン名の書式 | `format_CloneName` (Global.cpp:3820) | `\N` `\SN(n)` `\DT(...)` `\TS(...)` `\-`。既定は `\N_\SN(1)` |
+| `\SN(n)` のゼロ詰め | 同上 | **`n` の桁数**で詰める (`\SN(001)` なら3桁)。値は `n + 連番` |
+| `\-` | 同上 | **1回目だけ後ろを捨てる** (連番なしで先に試す) |
+| ディレクトリの主部 | 同上 | 名前**全体**が主部で拡張子を付けない (`v1.2` を切らない) |
+| `SwapName` | MainFrm.cpp:26579 | **拡張子はそれぞれ元のまま**。入れ替わるのは主部だけ |
+| `SwapName` の手順 | 同上 | 両方を一時名 `$~NF000n.~TMP` へ退避 → 最終名。**失敗したら戻す** |
+| `UndoRename` | MainFrm.cpp:27335 | 新旧が交差していたら一時名を経由する |
+| 改名ログ | `save_RenLog` (Global.cpp:6409) | `renamelog.txt` に `旧 <TAB> 新`、UTF-8 + BOM。**VCL 版とも共用できる** |
+
+### テストで捕まえた設計の誤り
+
+`CloneItems` を最初「元の名前でコピーしてから改名する」と書いた。
+**同じディレクトリへのクローン (`CloneToCurr`) で必ず失敗する。**
+コピー先に元のファイル自身が居るので、`CopyItems` が
+「同名があるのでスキップ」と判断して1件も作らない。
+
+テストが `success_count == 0` で落ちて気づいた。`file_ops::CopyItemTo`
+(名前まで指定してコピーする版) を公開して、最初から目的の名前で作るように直した。
+
+### VCL と変えたところ (理由付き)
+
+| | VCL | ここ | 理由 |
+|---|---|---|---|
+| `Clone` / `Backup` の実行 | タスクスレッドに積む | **その場で同期実行** | タスク基盤が未移植。大量だと固まるので、忙しさをカーソルで示すに留めている |
+| `CreateDirsDlg` の入力 | 複数行のメモ欄 | 1行を `\|` で区切る | 複数行の入力欄を出す仕組みがまだ無い |
+| `CreateTestFile` | `fsutil file createnew` を起動 | `SetFilePointerEx` + `SetEndOfFile` | 外部コマンドに依存しない。**中身が未定義**なのは fsutil も同じ |
+| `SwapName` | 左右をまたぐ `LR` もある | カレント内の2件だけ | 左右対応は未実装 (下記) |
+| `CreateJunction` | `CreateLinkCore("JNC")` | `FSCTL_SET_REPARSE_POINT` を直接書く | Windows に専用 API が無い。`mklink /J` と同じ手順 |
+
+### 見送ったもの (無言でスキップしない)
+
+- **`Backup`** (MainFrm.cpp:13645) と **`DistributionDlg`**:
+  どちらもタスクスレッド (`CreTaskThread` / `TaskConfig`) が前提で、
+  ミラーリング・除外マスク・同期先の多重化まで持つ。基盤ごと移植が要る
+- **`CompleteDelete`** (完全削除): CLAUDE.md の方針で**実装しない**。
+  削除はゴミ箱送りのみ
+- `SwapName` の `LR` (左右をまたぐ入れ替え)
+
+### 検証の範囲
+
+- `gui/clone_name.cpp` と `gui/file_ops2.cpp` は 37 ケースで固定した
+  (core 全体: 759 ケース / 2,403 アサーション)。
+  **失敗時に元へ戻ること**を明示的に見ている:
+  - 一時ファイルが残っていたら手を付けずに断る
+  - 戻し先が塞がっていたら飛ばして元の場所に残す (上書きしない)
+  - 親子関係の入れ替えを断る
+- **`CreateJunction` にテストは無い。** 再解析ポイントの書き込みは
+  NTFS と権限に依存し、CI のランナーで確実に通せる自信が無かった。
+  **実機でも未確認**
+- `gui/main_frame.cpp` 側の受け渡しにテストは無い (wx 依存)
+- キー割り当ては全部推測 (`Alt+1`〜`Alt+8`)

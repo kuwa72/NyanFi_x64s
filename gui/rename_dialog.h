@@ -26,7 +26,13 @@ namespace rename_dialog {
  *        gui/main_frame.cpp 側で組み立てる)
  * @return true 1件以上実際に名前を変更した (呼び出し側で一覧の再読み込みが必要)
  */
-bool Run(wxWindow *parent, const UnicodeString &dir, const std::vector<rename_core::RenameTarget> &targets);
+/**
+ * @param applied_out 実際に名前が変わったものを受け取る。呼び出し側が
+ *        改名ログ (UndoRename 用) を書くために使う
+ */
+bool Run(wxWindow *parent, const UnicodeString &dir,
+         const std::vector<rename_core::RenameTarget> &targets,
+         std::vector<rename_core::AppliedRename> &applied_out);
 
 }  // namespace rename_dialog
 
