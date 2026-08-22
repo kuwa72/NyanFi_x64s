@@ -1917,6 +1917,66 @@ void MainFrame::CmdReturnList()
 }
 
 //---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+void MainFrame::CmdFindDuplicates()
+{
+	FilePane *pane = ActivePane();
+
+	wxArrayString choices;
+	choices.Add(to_wx(_T("内容で比べる (サイズで絞ってからハッシュ)")));
+	choices.Add(to_wx(_T("名前とサイズで比べる (速い)")));
+	const int sel = wxGetSingleChoiceIndex(to_wx(_T("重複の判定方法を選んでください")),
+	                                       to_wx(_T("重複ファイルの検索")), choices, this);
+	if (sel < 0) return;
+
+	const find_files::DuplicateBy how = (sel == 1)? find_files::DuplicateBy::NameSize
+	                                              : find_files::DuplicateBy::Content;
+
+	::wxBeginBusyCursor();
+	const find_files::DuplicateResult r =
+		find_files::FindDuplicates(pane->GetPath(), how, pane->GetShowHidden(),
+		                            pane->GetShowSystem());
+	::wxEndBusyCursor();
+
+	if (r.items.empty()) {
+		wxMessageBox(to_wx(_T("重複するファイルは見つかりませんでした")),
+		             to_wx(_T("重複ファイルの検索")), wxOK | wxICON_INFORMATION, this);
+		return;
+	}
+
+	UnicodeString title;
+	title.sprintf(_T("重複: %d 件 / %d グループ"), static_cast<int>(r.items.size()), r.groups);
+	if (r.truncated_scan) title += _T(" (走査を打ち切り)");
+
+	pane->ShowResultList(title, r.items);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdSelSameDir()
+{
+	FilePane *pane = ActivePane();
+	if (!pane->IsResultList()) { SetStatusWarning(_T("結果リストではありません")); return; }
+
+	const FileItem *cur = pane->GetCurrentItem();
+	if (cur == nullptr) return;
+
+	const UnicodeString dir = ExcludeTrailingPathDelimiter(
+		ExtractFilePath(pane->FullPathOf(*cur)));
+
+	std::vector<FileItem> items = pane->VisibleItems();
+	int n = 0;
+	for (FileItem &it : items) {
+		const UnicodeString d = ExcludeTrailingPathDelimiter(
+			ExtractFilePath(it.full_path.IsEmpty()? it.name : it.full_path));
+		it.marked = SameText(d, dir);
+		if (it.marked) n++;
+	}
+	pane->ApplyMarks(items);
+	SetStatusWarning(UnicodeString().sprintf(_T("同じディレクトリの %d 件を選択しました"), n));
+}
+
+//---------------------------------------------------------------------------
 void MainFrame::UpdateStatus()
 {
 	for (int i = 0; i < 2; ++i) {
@@ -2391,6 +2451,12 @@ bool MainFrame::Execute(const UnicodeString &command)
 	}
 	else if (SameStr(command, _T("ReturnList"))) {
 		CmdReturnList();
+	}
+	else if (SameStr(command, _T("FindDuplDlg"))) {
+		CmdFindDuplicates();
+	}
+	else if (SameStr(command, _T("SelSameDir"))) {
+		CmdSelSameDir();
 	}
 	else if (SameStr(command, _T("KeyList"))) {
 		ShowKeyList();
@@ -3180,7 +3246,34 @@ void MainFrame::CmdGrep()
 	FilePane *pane = ActivePane();
 
 	grep_core::GrepMatch selected;
-	if (!grep_dialog::Run(this, pane->GetPath(), pane->GetMask(), selected)) return;
+	std::vector<UnicodeString> matched_files;
+	const bool picked = grep_dialog::Run(this, pane->GetPath(), pane->GetMask(),
+	                                      selected, matched_files);
+
+	// **一致したファイルを結果リストに出す。** 選ばれずに閉じられた場合でも
+	// 出しておくと、そのまま一覧として操作できる (VCL の grep も結果リストに出す)
+	if (!matched_files.empty()) {
+		std::vector<FileItem> items;
+		for (const UnicodeString &f : matched_files) {
+			FileItem it;
+			it.name = ExtractFileName(f);
+			it.full_path = f;
+			TSearchRec sr;
+			if (FindFirst(f, faAnyFile, sr) == 0) {
+				it.attr = sr.Attr;
+				it.size = sr.Size;
+				it.stamp = sr.TimeStamp;
+				FindClose(sr);
+			}
+			items.push_back(it);
+		}
+		UnicodeString title;
+		title.sprintf(_T("GREP: %d ファイル"), static_cast<int>(items.size()));
+		pane->ShowResultList(title, items);
+		UpdateStatus();
+	}
+
+	if (!picked) return;
 
 	UnicodeString error;
 	if (!viewer_->LoadFile(selected.file, error)) {

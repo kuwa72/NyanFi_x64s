@@ -58,6 +58,37 @@ bool MatchesMask(const UnicodeString &name, const UnicodeString &mask);
  */
 Result Search(const UnicodeString &root, const Query &query);
 
+/// 重複の判定基準
+enum class DuplicateBy {
+	NameSize,   //!< 名前とサイズ (速い。中身は見ない)
+	Content,    //!< 内容 (サイズで絞ってからハッシュを取る)
+};
+
+/// 重複検索の結果
+struct DuplicateResult {
+	std::vector<FileItem> items;  //!< 重複しているファイル (グループごとに固まって並ぶ)
+	int groups = 0;               //!< 重複グループの数
+	int hashed = 0;               //!< ハッシュを計算したファイル数 (Content のときだけ)
+	bool truncated_scan = false;
+};
+
+/**
+ * @brief 重複しているファイルを探す (FindDuplDlg)
+ * @param root 起点
+ * @param how 判定基準
+ * @param show_hidden 隠しファイルも見るか
+ * @param show_system システムファイルも見るか
+ * @details `Content` でも**まずサイズで束ねてから**ハッシュを取る。
+ *          サイズが違えば内容も違うので、全ファイルのハッシュを計算する必要は無い
+ *          (`ToOppSameHash` と同じ枝刈り)。
+ *
+ *          **サイズ 0 のファイルは対象外**。空ファイルは互いに「同じ内容」に
+ *          なってしまい、重複として大量に並ぶだけで役に立たないため
+ *          (こちらの判断)
+ */
+DuplicateResult FindDuplicates(const UnicodeString &root, DuplicateBy how,
+                               bool show_hidden, bool show_system);
+
 }  // namespace find_files
 
 #endif  // NYANFI_GUI_FIND_FILES_H

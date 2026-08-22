@@ -250,8 +250,10 @@ private:
 
 //---------------------------------------------------------------------------
 bool Run(wxWindow *parent, const UnicodeString &dir, const UnicodeString &initial_mask,
-         grep_core::GrepMatch &selected)
+         grep_core::GrepMatch &selected, std::vector<UnicodeString> &matched_files_out)
 {
+	matched_files_out.clear();
+
 	GrepInputDialog input(parent, dir, initial_mask);
 	if (input.ShowModal() != wxID_OK) return false;
 
@@ -288,6 +290,18 @@ bool Run(wxWindow *parent, const UnicodeString &dir, const UnicodeString &initia
 		if (result.cancelled) msg = _T("中断しました (一致する行はありませんでした)");
 		wxMessageBox(to_wx(msg), to_wx(_T("文字列検索 (GREP)")), wxOK | wxICON_INFORMATION, parent);
 		return false;
+	}
+
+	// 一致したファイルを重複を除いて集める (結果リストに出すため)。
+	// 選ばれずに閉じられてもここは埋めておく
+	for (const grep_core::GrepMatch &m : result.matches) {
+		if (matched_files_out.empty() || !SameText(matched_files_out.back(), m.file)) {
+			bool dup = false;
+			for (const UnicodeString &f : matched_files_out) {
+				if (SameText(f, m.file)) { dup = true; break; }
+			}
+			if (!dup) matched_files_out.push_back(m.file);
+		}
 	}
 
 	GrepResultsDialog results(parent, dir, result);

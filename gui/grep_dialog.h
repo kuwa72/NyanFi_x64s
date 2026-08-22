@@ -10,6 +10,8 @@
 #ifndef NYANFI_GUI_GREP_DIALOG_H
 #define NYANFI_GUI_GREP_DIALOG_H
 
+#include <vector>
+
 #include <wx/wx.h>
 
 #include "gui/grep.h"
@@ -25,8 +27,16 @@ namespace grep_dialog {
  * @return true 結果を選んで「開く」を選択した (selected が有効)。
  *         入力をキャンセルした・一致が無かった・選ばずに閉じた場合は false
  */
+/**
+ * @brief GREP の入力・実行・結果表示をまとめて行う
+ * @param selected 選ばれたマッチ (ダブルクリック/Enter で選ばれたもの)
+ * @param matched_files_out **一致したファイルのフルパス** (重複を除き、
+ *        見つかった順)。結果リストに出すために返す。
+ *        選ばれずに閉じた場合も、検索自体が成功していればここは埋まる
+ * @return マッチが選ばれたら true
+ */
 bool Run(wxWindow *parent, const UnicodeString &dir, const UnicodeString &initial_mask,
-         grep_core::GrepMatch &selected);
+         grep_core::GrepMatch &selected, std::vector<UnicodeString> &matched_files_out);
 
 }  // namespace grep_dialog
 

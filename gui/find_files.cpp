@@ -4,7 +4,10 @@
  */
 #include "gui/find_files.h"
 
+#include <map>
+
 #include "gui/view_state.h"
+#include "usr_file_inf.h"
 #include "usr_file_ex.h"
 #include "usr_str.h"
 
@@ -111,6 +114,61 @@ Result Search(const UnicodeString &root, const Query &query)
 	int budget = kMaxScanFiles;
 	walk(root, query, out, budget);
 	out.truncated_scan = (budget <= 0);
+	return out;
+}
+
+//---------------------------------------------------------------------------
+DuplicateResult FindDuplicates(const UnicodeString &root, DuplicateBy how,
+                               bool show_hidden, bool show_system)
+{
+	DuplicateResult out;
+
+	// まず全ファイルを集める
+	Query q;
+	q.target = Target::Files;
+	q.recursive = true;
+	q.show_hidden = show_hidden;
+	q.show_system = show_system;
+	const Result all = Search(root, q);
+	out.truncated_scan = all.truncated_scan;
+
+	// サイズで束ねる。サイズが違えば内容も違うので、ここで落とせる分は落とす
+	std::map<Int64, std::vector<FileItem>> by_size;
+	for (const FileItem &it : all.items) {
+		if (it.size <= 0) continue;  // 空ファイルは対象外 (互いに「同じ」になってしまう)
+		by_size[it.size].push_back(it);
+	}
+
+	for (auto &kv : by_size) {
+		std::vector<FileItem> &group = kv.second;
+		if (group.size() < 2) continue;
+
+		if (how == DuplicateBy::NameSize) {
+			// 名前も同じものだけを重複とする
+			std::map<UnicodeString, std::vector<FileItem>> by_name;
+			for (const FileItem &it : group) by_name[it.name.UpperCase()].push_back(it);
+			for (auto &nk : by_name) {
+				if (nk.second.size() < 2) continue;
+				out.groups++;
+				for (const FileItem &it : nk.second) out.items.push_back(it);
+			}
+			continue;
+		}
+
+		// 内容で比べる。ここまで来たものだけハッシュを取る
+		std::map<UnicodeString, std::vector<FileItem>> by_hash;
+		for (const FileItem &it : group) {
+			const UnicodeString h = get_HashStr(it.full_path, _T("MD5"));
+			out.hashed++;
+			if (h.IsEmpty()) continue;  // 読めないものは重複判定から外す
+			by_hash[h].push_back(it);
+		}
+		for (auto &hk : by_hash) {
+			if (hk.second.size() < 2) continue;
+			out.groups++;
+			for (const FileItem &it : hk.second) out.items.push_back(it);
+		}
+	}
 	return out;
 }
 
