@@ -61,6 +61,28 @@ FilePane::FilePane(wxWindow *parent, wxWindowID id)
 }
 
 //---------------------------------------------------------------------------
+int FilePane::GetFontSize() const
+{
+	return font_.IsOk()? font_.GetPointSize() : 10;
+}
+
+//---------------------------------------------------------------------------
+void FilePane::SetFontSize(int points)
+{
+	if (points <= 0 || points == GetFontSize()) return;
+
+	// 等幅は保つ。ファイル名の桁揃えが崩れると2画面ファイラとして使えない
+	wxFont next = wxFont(wxFontInfo(points).FaceName("Consolas").Family(wxFONTFAMILY_TELETYPE));
+	if (!next.IsOk()) next = wxFont(wxFontInfo(points).Family(wxFONTFAMILY_TELETYPE));
+	if (!next.IsOk()) return;
+
+	font_ = next;
+	UpdateMetrics();  // 行の高さと1文字幅を測り直す
+	EnsureVisible();
+	Refresh();
+}
+
+//---------------------------------------------------------------------------
 void FilePane::UpdateMetrics()
 {
 	wxClientDC dc(this);

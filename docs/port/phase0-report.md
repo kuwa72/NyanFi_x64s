@@ -1359,3 +1359,54 @@ VCL の `TabList` は CSV だが、`gui/tabs.h` の `TabState` は VCL の `tab_
   単純な存在確認だけにしてある
 - `gui/main_frame.cpp` 側の受け渡しにテストは無い (wx 依存)
 - キー割り当ては全部推測
+
+---
+
+## 31. 表示の切り替え (Phase 3 機能群22)
+
+`SetFontSize` / `ZoomIn` / `ZoomOut` / `ZoomReset` / `AlphaBlend` /
+`WinPos` / `FileListOnly` / `SetSttBarFmt`。
+
+### 実測して分かった値
+
+| | 実測結果 | 出どころ |
+|---|---|---|
+| フォントサイズの範囲 | **2〜72**、既定 10 | `MIN_FNTZOOM_SZ` / `MAX_FNTZOOM_SZ` (Global.h)、`MainFrm.cpp:521` |
+| ZoomIn/Out の刻み | 指定値を**まず ±12 に丸めてから**加算する | MainFrm.cpp:5240 |
+| `SetFontSize` の `^` | 「その値にする。ただし**現在値と同じなら既定に戻す**」トグル | MainFrm.cpp:5238 |
+| 透過度 | **64〜255**。`^` は「指定値にするが既に有効なら 255 に戻す」。`+`/`-` は相対 | MainFrm.cpp:13458 |
+| `WinPos` の書式 | `L100;T50;R+20;B-10` の `;` 区切り。**`%` 指定は存在しない** | MainFrm.cpp:27700 |
+| `SetToggleAction` | `ActionParam` を `;` で割り、`ON`/`OFF` があれば明示、無ければ反転 | MainFrm.cpp:12651 |
+| ステータスバー書式 | `$P` `$B` `$S` `$HS` `$Z` `$T` `$PR(field,prefix,suffix)` ほか。**`$PR` の区切りは `,`** (`;` ではない) | MainFrm.cpp:25720 |
+
+担当が当初「`%` 指定があるはず」と想定した `WinPos` は、**実測したら存在しなかった**。
+API を「画面サイズを渡す」形から「現在の矩形を渡す」形に変えている。
+
+### 繋いでいないコマンド (部品そのものが無い)
+
+`ShowToolBar` / `MenuBar` / `ShowFKeyBar` / `ShowIcon` / `ShowPreview` /
+`SetSubSize` は、**隠したり出したりする部品がこちらに存在しない**ので
+繋いでいない。押しても何も起きないコマンドを増やさないため。
+
+`FileListOnly` だけは、こちらに有るタブバーとステータスバーを隠す形で実装した。
+
+### 入れなかったもの
+
+- 「引数が空なら起動時の ini 設定に戻す」(`WinPos` / `SetFontSize` / `AlphaBlend`):
+  ini と `IsPrimary` の実行時状態に依存する
+- フォントサイズの DPI 変換 (`MulDiv`): 画面情報が要る
+- `ShowFileInfo`: `SetToggleAction` を通っておらず、ディレクトリ容量計算まで含む
+
+### 既存の癖をそのまま残した
+
+`WinPos` の数値解釈は `ToIntDef(-1)` で、`L--1` のような二重符号を
+誤って受け付けうる。**直さずコメントに記録した** (規約6)。
+
+### 検証の範囲
+
+- `gui/view_settings.cpp` は 45 ケース / 138 アサーション
+  (core 全体: 919 ケース / 2,900 アサーション)
+- `$PR` の引用符付き CSV は未検証 (単純な値だけテストしている)
+- `gui/main_frame.cpp` 側の受け渡しにテストは無い (wx 依存)。
+  **透過表示・窓位置・フォントサイズの変化は実機で見ていない**
+- キー割り当ては全部推測

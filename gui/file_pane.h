@@ -205,6 +205,13 @@ public:
 	/// マスクを設定する (空文字列で解除)。ApplyFilterAndSort() を呼び直す
 	void SetMask(const UnicodeString &mask);
 
+	//-- フォントサイズ (ZoomIn / ZoomOut / SetFontSize) ------------------------
+	/// 一覧のフォントサイズ (ポイント)。値の範囲の判断は
+	/// gui/view_settings.h の ClampFontSize が持つ (規約8)
+	int GetFontSize() const;
+	/// フォントサイズを変えて行の高さを測り直す。等幅は保つ
+	void SetFontSize(int points);
+
 private:
 	void OnPaint(wxPaintEvent &event);
 	void OnSize(wxSizeEvent &event);

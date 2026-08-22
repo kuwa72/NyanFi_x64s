@@ -28,6 +28,7 @@
 #include "gui/convert_ops.h"
 #include "gui/history.h"
 #include "gui/named_state.h"
+#include "gui/view_settings.h"
 #include "gui/log_win.h"
 #include "gui/dir_info.h"
 #include "gui/external.h"
@@ -301,6 +302,22 @@ private:
 	bool ConfirmDiscardWorkList();
 	/// ヘッダに出す見出し ("<ワーク> 名前  n 件")
 	UnicodeString WorkListCaption() const;
+
+	//-- 表示の切り替え (機能群22。判断は gui/view_settings.h) ------------------
+	//
+	// **引数の解釈と値の計算は gui/view_settings.h が持つ** (規約8)。
+	// ここは実際にウィンドウやペインへ当てはめるだけ
+	void CmdSetFontSize(const UnicodeString &param);  //!< フォントサイズ (SetFontSize)
+	void CmdZoom(int delta);        //!< 大きく/小さく (ZoomIn / ZoomOut)。0 なら既定へ戻す
+	void CmdAlphaBlend(const UnicodeString &param);   //!< 透過表示 (AlphaBlend)
+	void CmdWinPos(const UnicodeString &param);       //!< ウィンドウの四辺 (WinPos)
+	void CmdFileListOnly(const UnicodeString &param); //!< 一覧だけにする (FileListOnly)
+	void CmdSetSttBarFmt();         //!< ステータスバーの書式 (SetSttBarFmt)
+
+	int alpha_value_ = view_settings::kMaxAlpha;  //!< 現在の不透明度
+	bool alpha_enabled_ = false;                  //!< 透過を効かせているか
+	bool file_list_only_ = false;                 //!< タブバー・ステータスを隠しているか
+	UnicodeString stt_bar_fmt_;                   //!< ステータスバーの書式 (空なら既定)
 
 	//-- 名前を付けた状態の保存と読み込み (機能群21。判断は gui/named_state.h) --
 	void CmdSaveTabGroup(bool as_new);  //!< タブグループを保存 (SaveTabGroup / SaveAsTabGroup)
