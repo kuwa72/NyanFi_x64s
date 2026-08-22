@@ -26,6 +26,7 @@
 
 #include "gui/bookmarks.h"
 #include "gui/convert_ops.h"
+#include "gui/log_win.h"
 #include "gui/dir_info.h"
 #include "gui/external.h"
 #include "gui/misc_ops.h"
@@ -298,6 +299,23 @@ private:
 	bool ConfirmDiscardWorkList();
 	/// ヘッダに出す見出し ("<ワーク> 名前  n 件")
 	UnicodeString WorkListCaption() const;
+
+	//-- ログ (機能群19。判断は gui/log_win.h) --------------------------------
+	//
+	// VCL のログウィンドウはまだ無いので、**溜めることと見せることだけ**を実装する。
+	// スクロールやフォーカス移動 (ScrollUpLog / ToLog) はウィンドウが要るので
+	// このPRでは入れていない (報告書 §28)
+	void CmdClearLog();     //!< ログを消す (ClearLog)
+	void CmdListLog();      //!< ログを一覧で見せる (ListLog / ShowLogWin)
+	void CmdViewLog();      //!< ログをテキストビューアで開く (ViewLog)
+	void CmdLogFileInfo();  //!< 選択項目のファイル情報をログへ (LogFileInfo)
+	void CmdListNyanFi();   //!< NyanFi 自身の情報をログへ (ListNyanFi)
+
+	/// 操作の結果をログに残す。**破壊的な操作の後は必ず呼ぶ**
+	/// (画面のダイアログは閉じると消えるが、ログは残るので後から追える)
+	void LogResult(const UnicodeString &verb, const file_ops::FileOpResult &result);
+
+	log_win::LogBuffer log_;  //!< ログの中身
 
 	//-- 抽出と変換 (機能群18。実処理は gui/convert_ops.h が移植済みコードへ委ねる) --
 	void CmdSetExifTime();      //!< タイムスタンプを Exif 撮影日時に (SetExifTime)

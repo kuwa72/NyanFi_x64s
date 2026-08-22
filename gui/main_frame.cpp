@@ -2680,6 +2680,24 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	else if (SameStr(command, _T("ConvertImage"))) {
 		CmdConvertImage();
 	}
+	//-- ログ (機能群19) ------------------------------------------------------
+	else if (SameStr(command, _T("ClearLog"))) {
+		CmdClearLog();
+	}
+	// ShowLogWin はログ専用ウィンドウの表示だが、そのウィンドウがまだ無いので
+	// 一覧表示 (ListLog) と同じ動きにしてある (報告書 §28)
+	else if (SameStr(command, _T("ListLog")) || SameStr(command, _T("ShowLogWin"))) {
+		CmdListLog();
+	}
+	else if (SameStr(command, _T("ViewLog"))) {
+		CmdViewLog();
+	}
+	else if (SameStr(command, _T("LogFileInfo"))) {
+		CmdLogFileInfo();
+	}
+	else if (SameStr(command, _T("ListNyanFi"))) {
+		CmdListNyanFi();
+	}
 	else if (SameStr(command, _T("KeyList"))) {
 		ShowKeyList();
 	}
@@ -3139,6 +3157,7 @@ void MainFrame::CmdCopy()
 	pane->Reload();
 	dst_pane->Reload();
 
+	LogResult(_T("コピー"), result);
 	wxMessageBox(to_wx(file_ops::Summarize(result)), to_wx(_T("コピーの結果")), wxOK | wxICON_INFORMATION, this);
 }
 
@@ -3173,6 +3192,7 @@ void MainFrame::CmdMove()
 	pane->Reload();
 	dst_pane->Reload();
 
+	LogResult(_T("移動"), result);
 	wxMessageBox(to_wx(file_ops::Summarize(result)), to_wx(_T("移動の結果")), wxOK | wxICON_INFORMATION, this);
 }
 
@@ -3203,6 +3223,13 @@ void MainFrame::CmdDelete()
 	const bool ok = file_ops::SendToTrash(paths, error, static_cast<HWND>(GetHandle()));
 
 	pane->Reload();
+
+	// **消したものは後から確認できないので、必ずログに残す**
+	file_ops::FileOpResult log_entry;
+	if (ok) log_entry.success_count = static_cast<int>(paths.size());
+	else log_entry.failures.push_back(error);
+	LogResult(_T("ゴミ箱へ送る"), log_entry);
+	for (const UnicodeString &p : paths) log_.Add(log_win::LogStatus::Info, p);
 
 	if (ok) {
 		UnicodeString msg;
@@ -5129,4 +5156,115 @@ void MainFrame::CmdConvertImage()
 	wxMessageBox(to_wx(file_ops::Summarize(r)), to_wx(_T("画像の変換の結果")),
 	             wxOK | wxICON_INFORMATION, this);
 	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// ログ (機能群19)
+//
+// VCL はログ専用のウィンドウを持つが、まだ移植していない。ここでは
+// **溜めること**と**見せること**だけを実装する。判断 (行の書式・上限・
+// 件数の要約) は wx 非依存の gui/log_win.h が持つ (規約8)。
+//
+// ログが役に立つのは「ダイアログを閉じたあとで結果を追える」ことなので、
+// 破壊的な操作の結果は LogResult() で必ず残す
+//---------------------------------------------------------------------------
+void MainFrame::LogResult(const UnicodeString &verb, const file_ops::FileOpResult &result)
+{
+	const bool failed = !result.failures.empty();
+	log_.Add(failed? log_win::LogStatus::Error : log_win::LogStatus::Info,
+	         verb + _T("  ") + log_win::FormatResultCount(result.success_count,
+	                                                       static_cast<int>(result.failures.size()),
+	                                                       result.skipped_existing),
+	         /*show_time=*/true);
+	// 失敗の内訳も残す (要約だけだと何が失敗したか分からない)
+	for (std::size_t i = 0; i < result.failures.size(); ++i) {
+		log_.Add(log_win::LogStatus::Error, result.failures[i]);
+	}
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdClearLog()
+{
+	const int n = log_.Count();
+	if (n == 0) { SetStatusWarning(_T("ログは空です")); return; }
+
+	UnicodeString msg;
+	msg.sprintf(_T("%d 行のログを消しますか?"), n);
+	if (wxMessageBox(to_wx(msg), to_wx(_T("ログ")), wxYES_NO | wxICON_QUESTION, this) != wxYES) return;
+
+	log_.Clear();
+	SetStatusWarning(_T("ログを消しました"));
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdListLog()
+{
+	const std::vector<log_win::LogLine> &lines = log_.Lines();
+	if (lines.empty()) { SetStatusWarning(_T("ログは空です")); return; }
+
+	// 新しいものから見たいので逆順に出す。長すぎると表示できないので上限を設ける
+	UnicodeString text;
+	int shown = 0;
+	for (std::size_t i = lines.size(); i-- > 0;) {
+		if (shown++ >= 300) { text += _T("...\r\n(以下省略)\r\n"); break; }
+		text += log_win::FormatLine(lines[i]) + _T("\r\n");
+	}
+
+	UnicodeString title;
+	title.sprintf(_T("ログ (%d 行 / 上限 %d 行)"), log_.Count(), log_.MaxLines());
+	wxMessageBox(to_wx(text), to_wx(title), wxOK | wxICON_INFORMATION, this);
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief ログをテキストビューアで開く (ViewLog)
+ * @details 一時ファイルに書き出してから既存のビューアに渡す。
+ *          **一時ファイルは消さない** (ビューアが読んでいる間に消せないため)。
+ *          置き場所は Windows の一時ディレクトリなので、いずれ OS が片付ける
+ */
+void MainFrame::CmdViewLog()
+{
+	if (log_.Count() == 0) { SetStatusWarning(_T("ログは空です")); return; }
+
+	wchar_t tmp_dir[MAX_PATH] = {};
+	if (::GetTempPathW(MAX_PATH, tmp_dir) == 0) {
+		SetStatusWarning(_T("一時ディレクトリを取得できません"));
+		return;
+	}
+	const UnicodeString path = UnicodeString(tmp_dir) + _T("nyanfi_log.txt");
+
+	UnicodeString error;
+	if (!log_win::SaveTo(path, log_.Lines(), error)) {
+		wxMessageBox(to_wx(error), to_wx(_T("ログ")), wxOK | wxICON_ERROR, this);
+		return;
+	}
+	if (!viewer_->LoadFile(path, error)) {
+		wxMessageBox(to_wx(error), to_wx(_T("ログ")), wxOK | wxICON_ERROR, this);
+		return;
+	}
+	ShowViewer(true);
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdLogFileInfo()
+{
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
+	if (paths.empty()) { SetStatusWarning(_T("対象がありません")); return; }
+
+	for (const UnicodeString &p : paths) {
+		log_.AddBlankIfNeeded();
+		for (const UnicodeString &line : log_win::FormatFileInfo(p)) log_.AddRaw(line);
+	}
+	SetStatusWarning(UnicodeString().sprintf(_T("%d 件の情報をログに出しました"),
+	                                          static_cast<int>(paths.size())));
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdListNyanFi()
+{
+	log_.AddBlankIfNeeded();
+	for (const UnicodeString &line : log_win::FormatAboutLines()) log_.AddRaw(line);
+	CmdListLog();
 }
