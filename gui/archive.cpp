@@ -156,4 +156,27 @@ bool Create(const UnicodeString &archive_path, const UnicodeString &src_dir,
 	return true;
 }
 
+//---------------------------------------------------------------------------
+bool SetArchiveTime(const UnicodeString &archive_path, UnicodeString &error_out)
+{
+	const int arc_t = unit()->GetArcType(archive_path);
+	if (arc_t < 0) {
+		error_out = _T("対応していない書庫形式です");
+		return false;
+	}
+	if (!unit()->IsAvailable(arc_t)) {
+		error_out = unit()->ErrMsg.IsEmpty()
+			? _T("書庫を扱う DLL が見つかりません (7-zip32.dll など)")
+			: unit()->ErrMsg;
+		return false;
+	}
+	// 第2引数は VCL の ForceDel (読み取り専用でも強制する) に相当。
+	// 勝手に属性を外さない方が安全なので false で呼ぶ
+	if (!unit()->SetArcTime(archive_path, false)) {
+		error_out = unit()->ErrMsg.IsEmpty()? _T("タイムスタンプを設定できません") : unit()->ErrMsg;
+		return false;
+	}
+	return true;
+}
+
 }  // namespace archive
