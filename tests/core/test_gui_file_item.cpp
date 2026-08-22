@@ -174,3 +174,43 @@ TEST_CASE("MatchPathMask: 末尾 \\ はディレクトリ専用マスク (ファ
 	CHECK(MatchPathMask("work*\\", "other_dir", true) == false);
 	CHECK(MatchPathMask("work*\\", "anything.txt", false) == true);
 }
+
+//---------------------------------------------------------------------------
+// FullPathOfItem
+//
+// 結果リスト (検索結果・grep 結果・ワークリスト) の項目は、一覧が開いている
+// ディレクトリとは別の場所にある。ここを `dir + name` で組み立てると
+// **別のファイルを指す** (実際に Copy/Move/Delete がそうなっていた。
+// docs/port/phase0-report.md §21)
+//---------------------------------------------------------------------------
+TEST_CASE("FullPathOfItem: full_path があればそちらを使う (結果リスト)")
+{
+	FileItem itm;
+	itm.name = _T("memo.txt");
+	itm.full_path = _T("D:\\other\\deep\\memo.txt");
+
+	// 一覧のディレクトリに同名のファイルがあっても、そちらを指してはいけない
+	CHECK(FullPathOfItem(_T("C:\\here\\"), itm) == UnicodeString(_T("D:\\other\\deep\\memo.txt")));
+}
+
+TEST_CASE("FullPathOfItem: full_path が無ければ一覧のディレクトリと繋ぐ")
+{
+	FileItem itm;
+	itm.name = _T("memo.txt");
+
+	CHECK(FullPathOfItem(_T("C:\\here\\"), itm) == UnicodeString(_T("C:\\here\\memo.txt")));
+}
+
+TEST_CASE("FullPathOfItem: ディレクトリ側の末尾区切りは有っても無くてもよい")
+{
+	FileItem itm;
+	itm.name = _T("memo.txt");
+
+	CHECK(FullPathOfItem(_T("C:\\here"), itm) == UnicodeString(_T("C:\\here\\memo.txt")));
+}
+
+TEST_CASE("FullPathOfItem: 名前が空なら空を返す (区切り行を操作対象にしない)")
+{
+	FileItem sep;
+	CHECK(FullPathOfItem(_T("C:\\here\\"), sep).IsEmpty());
+}

@@ -6,7 +6,16 @@
 
 #include <vector>
 
+#include "usr_file_ex.h"
 #include "usr_str.h"
+
+//---------------------------------------------------------------------------
+UnicodeString FullPathOfItem(const UnicodeString &dir, const FileItem &item)
+{
+	if (!item.full_path.IsEmpty()) return item.full_path;
+	if (item.name.IsEmpty()) return EmptyStr;
+	return IncludeTrailingPathDelimiter(dir) + item.name;
+}
 
 namespace {
 

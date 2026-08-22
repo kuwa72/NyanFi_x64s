@@ -29,6 +29,18 @@ struct FileItem {
 	                       //!< (表示のハイライトにのみ使う一時的な状態。gui/navigation.h を参照)
 };
 
+/**
+ * @brief 項目のフルパスを組み立てる
+ * @param dir 一覧が開いているディレクトリ (末尾の区切り文字は有っても無くてもよい)
+ * @param item 対象
+ * @return フルパス
+ * @details `FileItem::full_path` が入っていれば**そちらを使う**。
+ *          結果リスト (検索結果・grep 結果・ワークリスト) の項目は
+ *          一覧のディレクトリとは別の場所にあるので、`dir + name` で
+ *          組み立てると**別のファイルを指してしまう**
+ */
+UnicodeString FullPathOfItem(const UnicodeString &dir, const FileItem &item);
+
 /// 並べ替えキー。SrtModDlg (ソートダイアログ) の並び (名前/拡張子/更新日時/サイズ/属性) に合わせてある
 enum class SortKey { Name, Ext, Date, Size, Attr };
 

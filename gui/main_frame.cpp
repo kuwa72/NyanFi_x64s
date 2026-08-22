@@ -743,8 +743,9 @@ void MainFrame::CmdCopyMoveTo(bool move)
 
 	// 自分自身や配下への操作を弾く (規約: 破壊的な機能を足すとき)。
 	// file_ops 側でも見るが、確認ダイアログを出す前に落としたい
-	for (const UnicodeString &name : names) {
-		if (file_ops::IsSameOrInside(pane->GetPath() + name, dst)) {
+	for (const UnicodeString &src : pane->GetSelectedPaths()) {
+		if (file_ops::IsSameOrInside(src, dst)) {
+			const UnicodeString name = ExtractFileName(src);
 			wxMessageBox(to_wx(_T("自分自身または配下のディレクトリへは") + verb + _T("できません: ") + name),
 			             to_wx(verb), wxOK | wxICON_WARNING, this);
 			return;
@@ -753,8 +754,9 @@ void MainFrame::CmdCopyMoveTo(bool move)
 
 	if (!ConfirmItems(this, verb, verb, names, dst)) return;
 
-	std::vector<UnicodeString> paths;
-	for (const UnicodeString &name : names) paths.push_back(pane->GetPath() + name);
+	// 結果リストの項目は一覧のディレクトリの外にあるので、名前ではなく
+	// フルパスで取る (GetPath() + 名前 だと別のファイルを指す)
+	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
 
 	const file_ops::FileOpResult result = move? file_ops::MoveItems(paths, dst)
 	                                          : file_ops::CopyItems(paths, dst);
@@ -790,8 +792,9 @@ void MainFrame::CmdCopyFileName(bool full_path)
 	const std::vector<UnicodeString> names = pane->GetSelectedNames();
 	if (names.empty()) { SetStatusWarning(_T("対象がありません")); return; }
 
-	std::vector<UnicodeString> paths;
-	for (const UnicodeString &name : names) paths.push_back(pane->GetPath() + name);
+	// 結果リストの項目は一覧のディレクトリの外にあるので、名前ではなく
+	// フルパスで取る (GetPath() + 名前 だと別のファイルを指す)
+	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
 
 	const UnicodeString text = file_ops::FormatFileNames(paths, full_path);
 	if (wxTheClipboard->Open()) {
@@ -808,6 +811,7 @@ void MainFrame::CmdCopyFileName(bool full_path)
 //---------------------------------------------------------------------------
 void MainFrame::CmdNewFile()
 {
+	if (RejectOnResultList(_T("ファイルの作成は"))) return;
 	FilePane *pane = ActivePane();
 	const wxString input = wxGetTextFromUser(to_wx(_T("作成するファイル名を入力してください")),
 	                                          to_wx(_T("新規ファイルの作成")), wxEmptyString, this);
@@ -896,8 +900,9 @@ void MainFrame::CmdFilesToClip(bool cut)
 	const std::vector<UnicodeString> names = pane->GetSelectedNames();
 	if (names.empty()) { SetStatusWarning(_T("対象がありません")); return; }
 
-	std::vector<UnicodeString> paths;
-	for (const UnicodeString &name : names) paths.push_back(pane->GetPath() + name);
+	// 結果リストの項目は一覧のディレクトリの外にあるので、名前ではなく
+	// フルパスで取る (GetPath() + 名前 だと別のファイルを指す)
+	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
 
 	if (!::OpenClipboard(static_cast<HWND>(GetHandle()))) {
 		SetStatusWarning(_T("クリップボードを開けません"));
@@ -921,6 +926,7 @@ void MainFrame::CmdFilesToClip(bool cut)
 //---------------------------------------------------------------------------
 void MainFrame::CmdPaste()
 {
+	if (RejectOnResultList(_T("貼り付けは"))) return;
 	if (!::IsClipboardFormatAvailable(CF_HDROP)) {
 		SetStatusWarning(_T("クリップボードにファイルがありません"));
 		return;
@@ -1011,8 +1017,9 @@ void MainFrame::CmdCreateLinks(links::LinkKind kind)
 
 	if (!ConfirmItems(this, verb + _T("の作成"), verb + _T("を作成")   , names, dst)) return;
 
-	std::vector<UnicodeString> paths;
-	for (const UnicodeString &name : names) paths.push_back(pane->GetPath() + name);
+	// 結果リストの項目は一覧のディレクトリの外にあるので、名前ではなく
+	// フルパスで取る (GetPath() + 名前 だと別のファイルを指す)
+	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
 
 	const file_ops::FileOpResult result = links::CreateLinks(paths, dst, kind);
 	OppositePane()->Reload();
@@ -1028,8 +1035,7 @@ void MainFrame::CmdSetDirTime()
 	const std::vector<UnicodeString> names = pane->GetSelectedNames();
 
 	std::vector<UnicodeString> dirs;
-	for (const UnicodeString &name : names) {
-		const UnicodeString p = pane->GetPath() + name;
+	for (const UnicodeString &p : pane->GetSelectedPaths()) {
 		if (dir_exists(p)) dirs.push_back(p);
 	}
 	if (dirs.empty()) { SetStatusWarning(_T("対象のディレクトリがありません")); return; }
@@ -1063,7 +1069,7 @@ void MainFrame::CmdListArchive()
 	const FileItem *itm = pane->GetCurrentItem();
 	if (itm == nullptr || itm->is_dir) { SetStatusWarning(_T("カーソル位置が書庫ではありません")); return; }
 
-	const UnicodeString path = pane->GetPath() + itm->name;
+	const UnicodeString path = pane->FullPathOf(*itm);
 	std::vector<archive::Entry> entries;
 	UnicodeString error;
 	if (!archive::ListEntries(path, entries, error)) {
@@ -1089,7 +1095,7 @@ void MainFrame::CmdTestArchive()
 	if (itm == nullptr || itm->is_dir) { SetStatusWarning(_T("カーソル位置が書庫ではありません")); return; }
 
 	UnicodeString error;
-	if (archive::TestArchive(pane->GetPath() + itm->name, error)) {
+	if (archive::TestArchive(pane->FullPathOf(*itm), error)) {
 		wxMessageBox(to_wx(_T("問題は見つかりませんでした")), to_wx(_T("書庫の検査")),
 		             wxOK | wxICON_INFORMATION, this);
 	}
@@ -1111,10 +1117,10 @@ void MainFrame::CmdUnPack(bool to_current)
 
 	int ok = 0;
 	std::vector<UnicodeString> failures;
-	for (const UnicodeString &name : names) {
+	for (const UnicodeString &src : pane->GetSelectedPaths()) {
 		UnicodeString error;
-		if (archive::Extract(pane->GetPath() + name, dst, error)) ok++;
-		else failures.push_back(name + _T(": ") + error);
+		if (archive::Extract(src, dst, error)) ok++;
+		else failures.push_back(ExtractFileName(src) + _T(": ") + error);
 	}
 
 	panes_[0]->Reload();
@@ -1181,11 +1187,10 @@ void MainFrame::CmdGetHash()
 	if (names.empty()) { SetStatusWarning(_T("対象がありません")); return; }
 
 	UnicodeString text;
-	for (const UnicodeString &name : names) {
-		const UnicodeString p = pane->GetPath() + name;
+	for (const UnicodeString &p : pane->GetSelectedPaths()) {
 		if (dir_exists(p)) continue;  // ディレクトリは対象外
 		const UnicodeString h = get_HashStr(p, UnicodeString(kDefaultHashId));
-		text += name + _T("\r\n  ") + (h.IsEmpty()? _T("(取得できません)") : h) + _T("\r\n");
+		text += ExtractFileName(p) + _T("\r\n  ") + (h.IsEmpty()? _T("(取得できません)") : h) + _T("\r\n");
 	}
 	if (text.IsEmpty()) { SetStatusWarning(_T("対象のファイルがありません")); return; }
 
@@ -1200,7 +1205,7 @@ void MainFrame::CmdCompareHash()
 	const FileItem *itm = pane->GetCurrentItem();
 	if (itm == nullptr || itm->is_dir) { SetStatusWarning(_T("カーソル位置がファイルではありません")); return; }
 
-	const UnicodeString here = pane->GetPath() + itm->name;
+	const UnicodeString here = pane->FullPathOf(*itm);
 	const UnicodeString there = OppositePane()->GetPath() + itm->name;
 	if (!file_exists(there)) {
 		wxMessageBox(to_wx(_T("反対側に同名のファイルがありません: ") + itm->name),
@@ -1244,7 +1249,7 @@ void MainFrame::CmdToOppSameHash()
 	const FileItem *itm = pane->GetCurrentItem();
 	if (itm == nullptr || itm->is_dir) { SetStatusWarning(_T("カーソル位置がファイルではありません")); return; }
 
-	const UnicodeString target = get_HashStr(pane->GetPath() + itm->name,
+	const UnicodeString target = get_HashStr(pane->FullPathOf(*itm),
 	                                          UnicodeString(kDefaultHashId));
 	if (target.IsEmpty()) { SetStatusWarning(_T("ハッシュ値を取得できません")); return; }
 
@@ -1255,7 +1260,7 @@ void MainFrame::CmdToOppSameHash()
 		// サイズが違えば計算するまでもない (大きな一覧で全部計算しないための枝刈り)
 		if (items[i].size != itm->size) continue;
 
-		const UnicodeString h = get_HashStr(opp->GetPath() + items[i].name,
+		const UnicodeString h = get_HashStr(opp->FullPathOf(items[i]),
 		                                     UnicodeString(kDefaultHashId));
 		if (SameText(h, target)) {
 			opp->MoveCursorTo(static_cast<int>(i));
@@ -1302,9 +1307,9 @@ void MainFrame::CmdCountLines()
 	int t_total = 0, t_blank = 0;
 	int counted = 0;
 
-	for (const UnicodeString &name : names) {
-		const UnicodeString p = pane->GetPath() + name;
+	for (const UnicodeString &p : pane->GetSelectedPaths()) {
 		if (dir_exists(p)) continue;
+		const UnicodeString name = ExtractFileName(p);
 
 		const text_viewer_core::LoadResult r = text_viewer_core::LoadForView(p);
 		if (!r.ok || r.is_binary) {
@@ -1331,6 +1336,8 @@ void MainFrame::CmdCountLines()
 //---------------------------------------------------------------------------
 void MainFrame::CmdJoinText()
 {
+	// 出力先を「このペインのディレクトリ」に作るので、結果リストでは断る
+	if (RejectOnResultList(_T("テキストの結合は"))) return;
 	FilePane *pane = ActivePane();
 	const std::vector<UnicodeString> names = pane->GetSelectedNames();
 	if (names.size() < 2) { SetStatusWarning(_T("2件以上を選んでください")); return; }
@@ -1343,8 +1350,9 @@ void MainFrame::CmdJoinText()
 	const UnicodeString out = IncludeTrailingPathDelimiter(pane->GetPath()) + to_us(input);
 	if (!ConfirmItems(this, _T("テキストの結合"), _T("結合"), names, out)) return;
 
-	std::vector<UnicodeString> paths;
-	for (const UnicodeString &name : names) paths.push_back(pane->GetPath() + name);
+	// 結果リストの項目は一覧のディレクトリの外にあるので、名前ではなく
+	// フルパスで取る (GetPath() + 名前 だと別のファイルを指す)
+	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
 
 	const text_ops::JoinResult r = text_ops::JoinTextFiles(paths, out);
 	pane->Reload();
@@ -1379,12 +1387,11 @@ void MainFrame::CmdConvertTextEnc()
 
 	int ok = 0;
 	std::vector<UnicodeString> failures;
-	for (const UnicodeString &name : names) {
-		const UnicodeString p = pane->GetPath() + name;
+	for (const UnicodeString &p : pane->GetSelectedPaths()) {
 		if (dir_exists(p)) continue;
 		UnicodeString error;
 		if (text_ops::ConvertEncoding(p, cp, bom, error)) ok++;
-		else failures.push_back(name + _T(": ") + error);
+		else failures.push_back(ExtractFileName(p) + _T(": ") + error);
 	}
 
 	pane->Reload();
@@ -1448,7 +1455,7 @@ void MainFrame::CmdOpenByExplorer()
 
 	// カーソルが有効ならその項目を選択した状態で、そうでなければカレントを開く
 	const bool has_item = (itm != nullptr && !itm->is_parent);
-	const UnicodeString path = has_item? (pane->GetPath() + itm->name) : pane->GetPath();
+	const UnicodeString path = has_item? pane->FullPathOf(*itm) : pane->GetPath();
 	const external::LaunchSpec spec =
 		external::ExplorerLaunchSpec(path, has_item? itm->is_dir : true);
 
@@ -1606,16 +1613,17 @@ void MainFrame::CmdCalcDirSize(bool all)
 {
 	FilePane *pane = ActivePane();
 
+	// 結果リストの項目は別のディレクトリにあるのでフルパスで持つ
 	std::vector<UnicodeString> targets;
 	if (all) {
 		// 一覧にあるディレクトリを全部
 		for (const FileItem &it : pane->VisibleItems()) {
-			if (it.is_dir && !it.is_parent) targets.push_back(it.name);
+			if (it.is_dir && !it.is_parent) targets.push_back(pane->FullPathOf(it));
 		}
 	}
 	else {
-		for (const UnicodeString &n : pane->GetSelectedNames()) {
-			if (dir_exists(pane->GetPath() + n)) targets.push_back(n);
+		for (const UnicodeString &p : pane->GetSelectedPaths()) {
+			if (dir_exists(p)) targets.push_back(p);
 		}
 	}
 	if (targets.empty()) { SetStatusWarning(_T("対象のディレクトリがありません")); return; }
@@ -1623,13 +1631,12 @@ void MainFrame::CmdCalcDirSize(bool all)
 	UnicodeString text;
 	Int64 grand = 0;
 	bool any_truncated = false;
-	for (const UnicodeString &n : targets) {
-		const dir_info::DirSize r = dir_info::CalcDirSize(pane->GetPath() + n,
-		                                                   pane->GetShowHidden(),
+	for (const UnicodeString &p : targets) {
+		const dir_info::DirSize r = dir_info::CalcDirSize(p, pane->GetShowHidden(),
 		                                                   pane->GetShowSystem());
 		grand += r.bytes;
 		any_truncated = any_truncated || r.truncated;
-		text.cat_sprintf(_T("%-28s %14s  (%d ファイル)\r\n"), n.c_str(),
+		text.cat_sprintf(_T("%-28s %14s  (%d ファイル)\r\n"), ExtractFileName(p).c_str(),
 		                 get_size_str_B(r.bytes, 14).Trim().c_str(), r.files);
 	}
 	text.cat_sprintf(_T("\r\n合計 %s\r\n"), get_size_str_B(grand, 14).Trim().c_str());
@@ -1768,8 +1775,9 @@ void MainFrame::CmdNameFromClip()
 	msg.sprintf(_T("%s\r\n  ↓\r\n%s\r\n\r\n名前を変更しますか?"), itm->name.c_str(), name.c_str());
 	if (wxMessageBox(to_wx(msg), to_wx(_T("名前の変更")), wxYES_NO | wxICON_QUESTION, this) != wxYES) return;
 
+	// 結果リストの項目は別のディレクトリにあるので、その項目自身の場所で改名する
 	UnicodeString err2;
-	if (!file_ops::RenameItem(pane->GetPath(), itm->name, name, err2)) {
+	if (!file_ops::RenameItem(ExtractFilePath(pane->FullPathOf(*itm)), itm->name, name, err2)) {
 		wxMessageBox(to_wx(err2), to_wx(_T("名前の変更")), wxOK | wxICON_WARNING, this);
 		return;
 	}
@@ -2900,8 +2908,9 @@ void MainFrame::CmdCopy()
 	const UnicodeString dst_dir = dst_pane->GetPath();
 	if (!ConfirmItems(this, _T("コピー"), _T("コピー"), names, dst_dir)) return;
 
-	std::vector<UnicodeString> paths;
-	for (const UnicodeString &name : names) paths.push_back(pane->GetPath() + name);
+	// 結果リストの項目は一覧のディレクトリの外にあるので、名前ではなく
+	// フルパスで取る (GetPath() + 名前 だと別のファイルを指す)
+	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
 
 	const file_ops::FileOpResult result = file_ops::CopyItems(paths, dst_dir);
 
@@ -2931,8 +2940,9 @@ void MainFrame::CmdMove()
 	const UnicodeString dst_dir = dst_pane->GetPath();
 	if (!ConfirmItems(this, _T("移動"), _T("移動"), names, dst_dir)) return;
 
-	std::vector<UnicodeString> paths;
-	for (const UnicodeString &name : names) paths.push_back(pane->GetPath() + name);
+	// 結果リストの項目は一覧のディレクトリの外にあるので、名前ではなく
+	// フルパスで取る (GetPath() + 名前 だと別のファイルを指す)
+	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
 
 	const file_ops::FileOpResult result = file_ops::MoveItems(paths, dst_dir);
 
@@ -2961,8 +2971,9 @@ void MainFrame::CmdDelete()
 
 	if (!ConfirmItems(this, _T("削除"), _T("ゴミ箱へ移動"), names, EmptyStr)) return;
 
-	std::vector<UnicodeString> paths;
-	for (const UnicodeString &name : names) paths.push_back(pane->GetPath() + name);
+	// 結果リストの項目は一覧のディレクトリの外にあるので、名前ではなく
+	// フルパスで取る (GetPath() + 名前 だと別のファイルを指す)
+	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
 
 	UnicodeString error;
 	const bool ok = file_ops::SendToTrash(paths, error, static_cast<HWND>(GetHandle()));
@@ -2981,8 +2992,18 @@ void MainFrame::CmdDelete()
 
 //---------------------------------------------------------------------------
 /// ディレクトリの作成 (K)
+bool MainFrame::RejectOnResultList(const UnicodeString &verb)
+{
+	if (!ActivePane()->IsResultList()) return false;
+	wxMessageBox(to_wx(_T("結果リストの上では") + verb + _T("できません (ESC で一覧に戻れます)")),
+	             to_wx(verb), wxOK | wxICON_WARNING, this);
+	return true;
+}
+
+//---------------------------------------------------------------------------
 void MainFrame::CmdCreateDir()
 {
+	if (RejectOnResultList(_T("ディレクトリの作成は"))) return;
 	FilePane *pane = ActivePane();
 
 	wxTextEntryDialog dlg(this, to_wx(_T("作成するディレクトリ名")), to_wx(_T("ディレクトリの作成")));
@@ -3008,6 +3029,10 @@ void MainFrame::CmdCreateDir()
  */
 void MainFrame::CmdRenameDlg()
 {
+	// 一括リネームは「対象が同一ディレクトリにある」前提の作り
+	// (gui/rename_dialog.h)。結果リストは別々のディレクトリの寄せ集めなので
+	// そのまま渡すと**別のディレクトリの同名ファイルを改名してしまう**
+	if (RejectOnResultList(_T("一括リネームは"))) return;
 	FilePane *pane = ActivePane();
 
 	const std::vector<FileItem> items = pane->GetSelectedItems();
@@ -3042,7 +3067,7 @@ void MainFrame::CmdOpenStandard()
 	const FileItem *itm = pane->GetCurrentItem();
 	if (itm == nullptr || itm->is_parent || itm->is_dir) return;
 
-	const UnicodeString full_path = pane->GetPath() + itm->name;
+	const UnicodeString full_path = pane->FullPathOf(*itm);
 	if (test_ExeExt(get_extension(full_path)) && !ConfirmExecute(this, full_path)) return;
 
 	UnicodeString error;
@@ -3059,7 +3084,7 @@ void MainFrame::CmdOpenByApp()
 	const FileItem *itm = pane->GetCurrentItem();
 	if (itm == nullptr || itm->is_parent) return;
 
-	const UnicodeString full_path = pane->GetPath() + itm->name;
+	const UnicodeString full_path = pane->FullPathOf(*itm);
 
 	UnicodeString error;
 	if (!file_open::OpenWithDialog(full_path, error, static_cast<HWND>(GetHandle())) && !error.IsEmpty()) {
@@ -3079,7 +3104,7 @@ void MainFrame::CmdPropertyDlg()
 	const FileItem *itm = pane->GetCurrentItem();
 	if (itm == nullptr || itm->is_parent) return;
 
-	const UnicodeString full_path = pane->GetPath() + itm->name;
+	const UnicodeString full_path = pane->FullPathOf(*itm);
 	ShowFileInfoDialog(this, full_path, *itm);
 }
 
@@ -3095,7 +3120,7 @@ void MainFrame::CmdTextViewer()
 	const FileItem *itm = pane->GetCurrentItem();
 	if (itm == nullptr || itm->is_parent || itm->is_dir) return;
 
-	const UnicodeString full_path = pane->GetPath() + itm->name;
+	const UnicodeString full_path = pane->FullPathOf(*itm);
 
 	UnicodeString error;
 	if (!viewer_->LoadFile(full_path, error)) {
@@ -3151,7 +3176,7 @@ void MainFrame::CmdImageViewer()
 
 	BuildImageNavList(itm->name);
 
-	const UnicodeString full_path = pane->GetPath() + itm->name;
+	const UnicodeString full_path = pane->FullPathOf(*itm);
 	image_viewer_->LoadFile(full_path);
 	ShowImageViewer(true);
 }
