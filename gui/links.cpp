@@ -7,6 +7,10 @@
 #include <objbase.h>
 #include <shlobj.h>
 
+#include <cstddef>
+#include <cstring>
+#include <vector>
+
 #include "gui/view_state.h"
 #include "usr_file_ex.h"
 
@@ -28,6 +32,82 @@ UnicodeString ShortcutNameFor(const UnicodeString &name)
 }
 
 namespace {
+
+/**
+ * @brief ジャンクション (ディレクトリの再解析ポイント) を作る
+ * @param src リンク先の実ディレクトリ
+ * @param dst 作るジャンクションのパス
+ * @param error_out 失敗した理由
+ * @return 作れたら true
+ * @details Windows に「ジャンクションを作る API」は無く、**空のディレクトリを
+ *          作ってから `FSCTL_SET_REPARSE_POINT` を書き込む**のが正攻法
+ *          (`mklink /J` も同じことをしている)。
+ *          再解析ポイントの構造体は mingw のヘッダに無いので、ここで必要分だけ
+ *          定義する (`compat/mingw_patch.h` と同じ扱い)。
+ *          失敗したら作った空ディレクトリを消す
+ */
+bool make_junction(const UnicodeString &src, const UnicodeString &dst, UnicodeString &error_out)
+{
+	// mingw の winnt.h に REPARSE_DATA_BUFFER が無いので必要分だけ定義する
+	struct NyanfiReparseMountPoint {
+		DWORD  ReparseTag;
+		WORD   ReparseDataLength;
+		WORD   Reserved;
+		WORD   SubstituteNameOffset;
+		WORD   SubstituteNameLength;
+		WORD   PrintNameOffset;
+		WORD   PrintNameLength;
+		WCHAR  PathBuffer[1];
+	};
+
+	// リンク先は "\??\" 付きの絶対パスで書く (mklink /J と同じ)
+	const UnicodeString target = _T("\\??\\") + ExcludeTrailingPathDelimiter(src);
+	const UnicodeString print = ExcludeTrailingPathDelimiter(src);
+
+	const std::size_t sub_bytes = static_cast<std::size_t>(target.Length()) * sizeof(WCHAR);
+	const std::size_t print_bytes = static_cast<std::size_t>(print.Length()) * sizeof(WCHAR);
+	// SubstituteName + NUL + PrintName + NUL
+	const std::size_t path_bytes = sub_bytes + sizeof(WCHAR) + print_bytes + sizeof(WCHAR);
+	const std::size_t header = offsetof(NyanfiReparseMountPoint, PathBuffer);
+	const std::size_t total = header + path_bytes;
+
+	if (!::CreateDirectoryW(dst.c_str(), NULL)) {
+		error_out = _T("ジャンクション用のディレクトリを作れません");
+		return false;
+	}
+
+	std::vector<char> buf(total, 0);
+	NyanfiReparseMountPoint *rp = reinterpret_cast<NyanfiReparseMountPoint *>(buf.data());
+	rp->ReparseTag = IO_REPARSE_TAG_MOUNT_POINT;
+	rp->ReparseDataLength = static_cast<WORD>(path_bytes + 8);  // 4つの WORD 分を含む
+	rp->SubstituteNameOffset = 0;
+	rp->SubstituteNameLength = static_cast<WORD>(sub_bytes);
+	rp->PrintNameOffset = static_cast<WORD>(sub_bytes + sizeof(WCHAR));
+	rp->PrintNameLength = static_cast<WORD>(print_bytes);
+	::memcpy(rp->PathBuffer, target.c_str(), sub_bytes);
+	::memcpy(reinterpret_cast<char *>(rp->PathBuffer) + rp->PrintNameOffset,
+	         print.c_str(), print_bytes);
+
+	HANDLE h = ::CreateFileW(dst.c_str(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING,
+	                         FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OPEN_REPARSE_POINT, NULL);
+	if (h == INVALID_HANDLE_VALUE) {
+		::RemoveDirectoryW(dst.c_str());
+		error_out = _T("ジャンクションを開けません");
+		return false;
+	}
+
+	DWORD returned = 0;
+	const bool ok = (::DeviceIoControl(h, FSCTL_SET_REPARSE_POINT, buf.data(),
+	                                   static_cast<DWORD>(total), NULL, 0, &returned, NULL) != 0);
+	::CloseHandle(h);
+
+	if (!ok) {
+		// **作った空ディレクトリを残さない**
+		::RemoveDirectoryW(dst.c_str());
+		error_out = _T("ジャンクションを作成できません (NTFS 上である必要があります)");
+	}
+	return ok;
+}
 
 /// COM を必要な間だけ初期化する。
 /// **既に初期化済みなら何もしない** (wx の GUI スレッドは OLE を初期化済み)。
@@ -131,6 +211,13 @@ file_ops::FileOpResult CreateLinks(const std::vector<UnicodeString> &paths,
 			if (!ok) error = _T("シンボリックリンクを作成できません (管理者権限か開発者モードが要ります)");
 			break;
 		}
+
+		case LinkKind::Junction:
+			// ジャンクションはディレクトリ専用。**シンボリックリンクと違って
+			// 管理者権限が要らない**ので、権限が無い環境ではこちらが使える
+			if (!is_dir) { error = _T("ジャンクションはディレクトリにしか張れません"); break; }
+			ok = make_junction(src, dst, error);
+			break;
 		}
 
 		if (ok) result.success_count++;

@@ -64,6 +64,17 @@ UnicodeString Summarize(const FileOpResult &result);
 FileOpResult CopyItems(const std::vector<UnicodeString> &items, const UnicodeString &dst_dir);
 
 /**
+ * @brief 1件を**名前まで指定して**コピーする
+ * @param src 元のフルパス
+ * @param dst 作る先のフルパス (ディレクトリではなく、作りたい名前そのもの)
+ * @param result 結果を足し込む先
+ * @details `CopyItems()` は「元の名前のまま別のディレクトリへ」しかできないので、
+ *          名前を変えながら複製したいとき (クローン作成) はこちらを使う。
+ *          自分自身や配下への複製の防止・ディレクトリの再帰は同じ経路を通る
+ */
+void CopyItemTo(const UnicodeString &src, const UnicodeString &dst, FileOpResult &result);
+
+/**
  * @brief 複数項目を移動する
  * @param items 移動元のフルパスの一覧 (ファイルまたはディレクトリ)
  * @param dst_dir 移動先ディレクトリ (末尾の "\\" は無くてよい)

@@ -157,10 +157,19 @@ void ResolveConflicts(RenamePlan &plan, const UnicodeString &dir,
 
 //---------------------------------------------------------------------------
 /// 実行結果
+/// 実際に改名された1件 (取り消し用の記録に使う)
+struct AppliedRename {
+	UnicodeString old_name;  //!< 元の名前 (パスを含まない)
+	UnicodeString new_name;  //!< 変更後の名前 (同上)
+};
+
 struct RenameExecResult {
 	int success_count = 0;                  //!< 成功した件数
 	int skipped_count = 0;                  //!< 変更なし、または不正/衝突のためスキップした件数
 	std::vector<UnicodeString> failures;    //!< 失敗した項目の説明 ("元 -> 新: 理由")
+	/// **実際に名前が変わったものだけ**。`UndoRename` の記録に使う
+	/// (失敗して元に戻した分は入らない)
+	std::vector<AppliedRename> applied;
 };
 
 /**

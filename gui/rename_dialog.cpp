@@ -312,6 +312,7 @@ public:
 
 	/// 実行の結果、1件以上成功したか (呼び出し側の Reload 要否)
 	bool AnyRenamed() const { return any_renamed_; }
+	const std::vector<rename_core::AppliedRename> &Applied() const { return applied_; }
 
 private:
 	void OnModeChanged(wxCommandEvent &event)
@@ -387,6 +388,7 @@ private:
 
 		const rename_core::RenameExecResult result = rename_core::ExecutePlan(dir_, current_plan_);
 		any_renamed_ = (result.success_count > 0);
+		applied_ = result.applied;
 
 		UnicodeString msg;
 		msg.sprintf(_T("成功 %d 件 / スキップ %d 件"), result.success_count, result.skipped_count);
@@ -407,6 +409,7 @@ private:
 	std::vector<rename_core::RenameTarget> targets_;
 	rename_core::RenamePlan current_plan_;
 	bool any_renamed_ = false;
+	std::vector<rename_core::AppliedRename> applied_;  //!< 実際に変わったもの (取り消し用)
 
 	wxChoice *mode_choice_ = nullptr;
 	wxSimplebook *book_ = nullptr;
@@ -421,12 +424,16 @@ private:
 }  // namespace
 
 //---------------------------------------------------------------------------
-bool Run(wxWindow *parent, const UnicodeString &dir, const std::vector<rename_core::RenameTarget> &targets)
+bool Run(wxWindow *parent, const UnicodeString &dir,
+         const std::vector<rename_core::RenameTarget> &targets,
+         std::vector<rename_core::AppliedRename> &applied_out)
 {
+	applied_out.clear();
 	if (targets.empty()) return false;
 
 	RenameDialog dlg(parent, dir, targets);
 	dlg.ShowModal();
+	applied_out = dlg.Applied();
 	return dlg.AnyRenamed();
 }
 

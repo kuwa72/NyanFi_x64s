@@ -217,6 +217,12 @@ endif()
 # tab_info (src/Global.h、実測) は左右ペイン共有の1本のタブバーだったため、
 # gui/tabs.h もそれに合わせた設計にしてある (詳細はそのファイルの解説を参照)。
 #
+# gui/clone_name.cpp (クローン名の書式展開) と gui/file_ops2.cpp
+# (クローン作成・構造コピー・名前の入れ替え・改名の取り消し) も同じ理由で
+# ここに含める。書式の規則は src/Global.cpp の format_CloneName を、
+# 入れ替えと取り消しの手順は src/MainFrm.cpp の SwapName / UndoRename を
+# 実測して合わせた (どちらもビルド対象外のファイルなので書き写してある)。
+#
 # gui/bookmarks.cpp (栞マーク) も同じ理由でここに含める。保存先は移植済みの
 # UsrIniFile (src/UIniFile.cpp) をそのまま使い、「次/前の栞へどう折り返すか」
 # だけを純関数として持つ (tests/core/test_gui_bookmarks.cpp)。
@@ -259,6 +265,8 @@ if(TARGET nyanfi_core)
 		gui/find_files.cpp
 		gui/work_list.cpp
 		gui/bookmarks.cpp
+		gui/clone_name.cpp
+		gui/file_ops2.cpp
 	)
 	target_include_directories(nyanfi_gui_core PUBLIC ${PROJECT_SOURCE_DIR})
 	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core shell32 netapi32)
