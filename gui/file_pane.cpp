@@ -300,6 +300,22 @@ std::vector<UnicodeString> FilePane::GetSelectedNames() const
 	return names;
 }
 
+//---------------------------------------------------------------------------
+std::vector<UnicodeString> FilePane::GetSelectedPaths() const
+{
+	std::vector<UnicodeString> paths;
+	for (const FileItem &itm : GetSelectedItems()) paths.push_back(FullPathOf(itm));
+	return paths;
+}
+
+//---------------------------------------------------------------------------
+UnicodeString FilePane::CurrentFullPath() const
+{
+	const FileItem *cur = GetCurrentItem();
+	if (cur == nullptr || cur->is_parent) return EmptyStr;
+	return FullPathOf(*cur);
+}
+
 std::vector<FileItem> FilePane::VisibleItems() const
 {
 	std::vector<FileItem> items;

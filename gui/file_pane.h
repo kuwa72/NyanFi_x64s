@@ -83,9 +83,20 @@ public:
 	/// ハイライト中 (matched) の項目数
 	int GetMatchedCount() const;
 
-	/// ファイル操作 (Copy/Move/Delete) の対象名を返す。マーク済みがあれば
-	/// それら (".." を除く)、無ければカーソル位置の1件 (".." なら空)
+	/// 表示用の対象名を返す。マーク済みがあればそれら (".." を除く)、
+	/// 無ければカーソル位置の1件 (".." なら空)。
+	/// **ファイル操作の対象には使わないこと** (結果リストでは名前だけでは
+	/// 場所が決まらない)。確認ダイアログの表示にだけ使う
 	std::vector<UnicodeString> GetSelectedNames() const;
+
+	/// ファイル操作 (Copy/Move/Delete 等) の対象を**フルパス**で返す。
+	/// 対象の選び方は GetSelectedNames() と同じ。
+	/// 結果リストの項目は一覧のディレクトリとは別の場所にあるので、
+	/// `GetPath() + 名前` で組み立てると別のファイルを指してしまう
+	std::vector<UnicodeString> GetSelectedPaths() const;
+
+	/// カーソル位置の項目のフルパス。項目が無いか ".." なら空
+	UnicodeString CurrentFullPath() const;
 
 	/// GetSelectedNames() と同じ対象選択 (マーク済み、無ければカーソル位置の
 	/// 1件) を FileItem (name/is_dir を含む) で返す。一括リネーム
@@ -115,10 +126,8 @@ public:
 	void ReturnToList();
 
 	/// 項目のフルパスを返す。結果リストなら full_path、通常なら path_ + name
-	UnicodeString FullPathOf(const FileItem &item) const
-	{
-		return item.full_path.IsEmpty()? (path_ + item.name) : item.full_path;
-	}
+	/// (判断は wx 非依存の FullPathOfItem が持つ。gui/file_item.h)
+	UnicodeString FullPathOf(const FileItem &item) const { return FullPathOfItem(path_, item); }
 
 	/// `VisibleItems()` で取り出したものの選択状態を書き戻す。
 	/// **並び順が変わっていないことが前提**なので、取り出してから

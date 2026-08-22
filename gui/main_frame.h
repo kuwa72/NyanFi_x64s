@@ -220,6 +220,17 @@ private:
 	void CmdListClipboard();      //!< クリップボードの内容を表示
 	void CmdRestart();            //!< 再起動
 
+	/**
+	 * @brief 「このペインのディレクトリ」が要る操作を結果リスト上で断る
+	 * @param verb 操作名 (メッセージに出す)
+	 * @return true なら断った (呼び出し側は何もせず戻る)
+	 * @details 結果リストの項目は**別々のディレクトリにある**ので、
+	 *          `GetPath()` は最後に開いていたディレクトリを指すだけで
+	 *          操作の宛先にならない。VCL も結果リストの上では
+	 *          この種の操作を `USTR_CantOperate` で断る
+	 */
+	bool RejectOnResultList(const UnicodeString &verb);
+
 	//-- 検索と結果リスト -----------------------------------------------------
 	void CmdFindFiles(find_files::Target target);  //!< 名前で探して結果リストに出す
 	void CmdReturnList();                           //!< 通常の一覧に戻る (ReturnList)
