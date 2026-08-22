@@ -173,3 +173,95 @@ TEST_CASE("Search: 存在しないディレクトリでも落ちない")
 	CHECK(r.items.empty());
 	CHECK(r.scanned == 0);
 }
+
+//===========================================================================
+// FindDuplicates
+//===========================================================================
+
+namespace {
+
+void mkfile_data(const UnicodeString &path, const char *data)
+{
+	HANDLE h = ::CreateFileW(path.c_str(), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
+	                         FILE_ATTRIBUTE_NORMAL, NULL);
+	REQUIRE(h != INVALID_HANDLE_VALUE);
+	DWORD written = 0;
+	::WriteFile(h, data, static_cast<DWORD>(::strlen(data)), &written, NULL);
+	::CloseHandle(h);
+}
+
+}  // namespace
+
+TEST_CASE("FindDuplicates: 内容が同じものを見つける")
+{
+	TempDir tmp;
+	mkdir_(tmp.file(_T("sub")));
+	mkfile_data(tmp.file(_T("a.txt")), "same content");
+	mkfile_data(tmp.file(_T("sub\\b.txt")), "same content");   // 名前は違うが中身が同じ
+	mkfile_data(tmp.file(_T("c.txt")), "different");
+
+	const auto r = find_files::FindDuplicates(tmp.path, find_files::DuplicateBy::Content,
+	                                           false, false);
+	CHECK(r.groups == 1);
+	CHECK(r.items.size() == 2);
+	CHECK(contains(r.items, _T("a.txt")));
+	CHECK(contains(r.items, _T("b.txt")));
+	CHECK_FALSE(contains(r.items, _T("c.txt")));
+}
+
+TEST_CASE("FindDuplicates: サイズで枝刈りするのでハッシュ計算は最小限")
+{
+	// サイズが違うファイルはハッシュを取らない (ToOppSameHash と同じ枝刈り)
+	TempDir tmp;
+	mkfile_data(tmp.file(_T("a.txt")), "aaa");
+	mkfile_data(tmp.file(_T("b.txt")), "bbb");    // 同じサイズ → 計算する
+	mkfile_data(tmp.file(_T("c.txt")), "cccccc"); // サイズが違う → 計算しない
+
+	const auto r = find_files::FindDuplicates(tmp.path, find_files::DuplicateBy::Content,
+	                                           false, false);
+	CHECK(r.groups == 0);
+	CHECK(r.hashed == 2);  // c.txt は計算していない
+}
+
+TEST_CASE("FindDuplicates: 名前とサイズでの判定")
+{
+	TempDir tmp;
+	mkdir_(tmp.file(_T("s1")));
+	mkdir_(tmp.file(_T("s2")));
+	mkfile_data(tmp.file(_T("s1\\same.txt")), "xxx");
+	mkfile_data(tmp.file(_T("s2\\same.txt")), "yyy");  // 中身は違うが名前とサイズが同じ
+
+	const auto by_name = find_files::FindDuplicates(tmp.path, find_files::DuplicateBy::NameSize,
+	                                                 false, false);
+	CHECK(by_name.groups == 1);
+	CHECK(by_name.items.size() == 2);
+
+	// 内容で見れば重複ではない
+	const auto by_content = find_files::FindDuplicates(tmp.path, find_files::DuplicateBy::Content,
+	                                                    false, false);
+	CHECK(by_content.groups == 0);
+}
+
+TEST_CASE("FindDuplicates: 空ファイルは対象外")
+{
+	// 互いに「同じ内容」になってしまい、大量に並ぶだけで役に立たない
+	TempDir tmp;
+	mkfile(tmp.file(_T("e1.txt")));
+	mkfile(tmp.file(_T("e2.txt")));
+
+	const auto r = find_files::FindDuplicates(tmp.path, find_files::DuplicateBy::Content,
+	                                           false, false);
+	CHECK(r.groups == 0);
+	CHECK(r.items.empty());
+}
+
+TEST_CASE("FindDuplicates: 重複が無ければ空")
+{
+	TempDir tmp;
+	mkfile_data(tmp.file(_T("a.txt")), "one");
+	mkfile_data(tmp.file(_T("b.txt")), "two2");
+
+	const auto r = find_files::FindDuplicates(tmp.path, find_files::DuplicateBy::Content,
+	                                           false, false);
+	CHECK(r.items.empty());
+}

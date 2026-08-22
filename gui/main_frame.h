@@ -223,6 +223,8 @@ private:
 	//-- 検索と結果リスト -----------------------------------------------------
 	void CmdFindFiles(find_files::Target target);  //!< 名前で探して結果リストに出す
 	void CmdReturnList();                           //!< 通常の一覧に戻る (ReturnList)
+	void CmdFindDuplicates();                       //!< 重複ファイルを探す (FindDuplDlg)
+	void CmdSelSameDir();                           //!< 結果リストで同じディレクトリの項目を選択
 
 	DirStack dir_stack_;          //!< ディレクトリ・スタック (PushDir / PopDir)
 	bool sync_lr_ = false;        //!< 左右のディレクトリを同期させるか (SyncLR)

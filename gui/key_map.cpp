@@ -253,6 +253,8 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Shift+F3"), _T("FindDirDlg"));
 	Assign(_T("Ctrl+F3"), _T("FindFileDirDlg"));
 	Assign(_T("ESC"), _T("ReturnList"));
+	Assign(_T("Ctrl+Alt+D"), _T("FindDuplDlg"));
+	Assign(_T("Ctrl+Alt+G"), _T("SelSameDir"));
 
 	// 並べ替え・絞り込み。"S" は src/Global.cpp の既定キー表にある実際の割り当て
 	// ("F:S=SortDlg") と同じ。Ctrl+M / Ctrl+U は既定キー表に対応する記載が無く
