@@ -28,6 +28,7 @@
 #include "gui/convert_ops.h"
 #include "gui/history.h"
 #include "gui/named_state.h"
+#include "gui/system_ops.h"
 #include "gui/view_settings.h"
 #include "gui/log_win.h"
 #include "gui/dir_info.h"
@@ -302,6 +303,16 @@ private:
 	bool ConfirmDiscardWorkList();
 	/// ヘッダに出す見出し ("<ワーク> 名前  n 件")
 	UnicodeString WorkListCaption() const;
+
+	//-- システム操作と外部連携 (機能群23。判断は gui/system_ops.h) -------------
+	void CmdEmptyTrash();      //!< ごみ箱を空にする (EmptyTrash。破壊的)
+	void CmdEjectDrive(bool tray_only);  //!< トレイを開く / ドライブを取り外す
+	void CmdLockComputer();    //!< 画面をロック (LockComputer)
+	void CmdMonitorOff();      //!< ディスプレイの電源を切る (MonitorOff)
+	void CmdMuteVolume();      //!< 音量ミュート (MuteVolume)
+	void CmdWebSearch();       //!< Web で検索 (WebSearch)
+	void CmdOpenADS();         //!< 代替データストリームを一覧 (OpenADS)
+	void CmdDeleteADS();       //!< 代替データストリームを削除 (DeleteADS。破壊的)
 
 	//-- 表示の切り替え (機能群22。判断は gui/view_settings.h) ------------------
 	//

@@ -358,6 +358,19 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Shift+Alt+Z"), _T("FileListOnly"));
 	Assign(_T("Shift+Alt+B"), _T("SetSttBarFmt"));
 
+	// システム操作と外部連携。**VCL の既定表に無いのですべて推測**。
+	// 取り返しのつかないもの (ごみ箱を空にする・ドライブの取り外し) は
+	// 押し間違えにくいよう修飾キーを重ねてある
+	Assign(_T("Shift+Alt+S"), _T("WebSearch"));
+	Assign(_T("Shift+Alt+D"), _T("OpenADS"));
+	Assign(_T("Shift+Alt+X"), _T("DeleteADS"));
+	Assign(_T("Shift+Alt+Q"), _T("EmptyTrash"));
+	Assign(_T("Shift+Alt+8"), _T("Eject"));
+	Assign(_T("Shift+Alt+9"), _T("EjectDrive"));
+	Assign(_T("Shift+Alt+0"), _T("LockComputer"));
+	Assign(_T("Shift+Alt+M"), _T("MuteVolume"));
+	Assign(_T("Shift+Alt+Y"), _T("MonitorOff"));
+
 	// 並べ替え・絞り込み。"S" は src/Global.cpp の既定キー表にある実際の割り当て
 	// ("F:S=SortDlg") と同じ。Ctrl+M / Ctrl+U は既定キー表に対応する記載が無く
 	// (パスマスクはコンボボックス操作が前提で単独のキー割り当てが見当たらない)、
