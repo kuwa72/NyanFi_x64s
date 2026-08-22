@@ -25,6 +25,7 @@
 #include <wx/wx.h>
 
 #include "gui/bookmarks.h"
+#include "gui/convert_ops.h"
 #include "gui/dir_info.h"
 #include "gui/external.h"
 #include "gui/misc_ops.h"
@@ -297,6 +298,19 @@ private:
 	bool ConfirmDiscardWorkList();
 	/// ヘッダに出す見出し ("<ワーク> 名前  n 件")
 	UnicodeString WorkListCaption() const;
+
+	//-- 抽出と変換 (機能群18。実処理は gui/convert_ops.h が移植済みコードへ委ねる) --
+	void CmdSetExifTime();      //!< タイムスタンプを Exif 撮影日時に (SetExifTime)
+	void CmdSetArcTime();       //!< 書庫のタイムスタンプを中身の最新に (SetArcTime)
+	void CmdDelJpgExif();       //!< Jpeg の Exif を削除して反対側へ (DelJpgExif)
+	void CmdExtractEmbedded();  //!< MP3/FLAC の埋め込み画像を抽出 (ExtractImage)
+	void CmdExtractIcon();      //!< アイコンを抽出 (ExtractIcon)
+	void CmdConvertDoc2Txt();   //!< バイナリ文書→テキスト (ConvertDoc2Txt)
+	void CmdConvertHtm2Txt(bool to_markdown);  //!< HTML→テキスト/Markdown
+	void CmdConvertImage();     //!< 画像形式の変換 (ConvertImage)
+
+	/// 抽出・変換の宛先 (反対ペインのディレクトリ)。使えないなら空を返して警告する
+	UnicodeString OutputDirOrWarn(const UnicodeString &verb);
 
 	//-- ファイル操作の続き (機能群17。判断は gui/file_ops2.h) ------------------
 	void CmdClone(bool to_current);  //!< クローンを作る (Clone / CloneToCurr)

@@ -1136,3 +1136,82 @@ VCL (`MainFrm.cpp:24857`) が持っていて**こちらに無いもの**:
   **実機でも未確認**
 - `gui/main_frame.cpp` 側の受け渡しにテストは無い (wx 依存)
 - キー割り当ては全部推測 (`Alt+1`〜`Alt+8`)
+
+---
+
+## 27. 抽出と変換 (Phase 3 機能群18)
+
+`ExtractIcon` / `ExtractImage` (= `ExtractMp3Img`) / `ConvertDoc2Txt` /
+`ConvertHtm2Txt` / `ConvertImage` / `SetExifTime` / `DelJpgExif` /
+`SetArcTime` の 8 コマンド。
+
+### 中身の処理は1行も書いていない
+
+| 機能 | 呼ぶ移植済みコード |
+|---|---|
+| Exif 撮影日時 → タイムスタンプ | `EXIF_SetExifTime` (src/usr_exif.cpp) |
+| Jpeg の Exif 削除 | `EXIF_DelJpgExif` (同上) |
+| MP3 / FLAC の埋め込み画像 | `ID3_GetImage` / `get_FlacImage` |
+| バイナリ文書 → テキスト | `xd2tx_Extract` (src/usr_xd2tx.cpp) |
+| HTML → テキスト / Markdown | `HtmConv` (src/htmconv.cpp) |
+| 画像形式の変換 | `WIC_load_image` / `WIC_save_image` (src/usr_wic.cpp) |
+| 書庫のタイムスタンプ | `UserArcUnit::SetArcTime` (src/usr_arc.cpp) |
+
+`gui/convert_ops.h` が持つのは「対象を選ぶ・出力名を決める・結果を数える」だけ。
+
+### 例外: .ico の書き出しは自分で書いた
+
+`ExtractIcon` は `::ExtractIconExW` で `HICON` を取るところまでは Win32 だが、
+保存に使う `Graphics::TIcon::SaveToFile` が**宣言のみのシム** (§20) で使えない。
+
+そこで `GetIconInfo` → `GetDIBits` (32bpp のカラー面 + 1bpp の AND マスク) →
+`ICONDIR` + `ICONDIRENTRY` + `BITMAPINFOHEADER` + ピクセルの順に書く実装を足した。
+**`BITMAPINFOHEADER::biHeight` に「カラー面 + マスク面」の合計 (高さの2倍) を
+書く**のが .ico の決まりで、ここを間違えると Windows がアイコンとして開けない。
+
+テストは `%SystemRoot%\System32\shell32.dll` から実際に取り出して、
+ヘッダの各フィールド (type=1 / count=1 / bitCount=32 / offset=22 /
+biHeight = 高さ×2) を確かめている。**ファイルが無い環境では
+`MESSAGE` を残して飛ばす** (規約7 と同じで、黙って消さない)。
+
+### §24 の教訓を仕組みにした
+
+`gui/convert_ops.cpp` は移植済みの重い依存 (xdoc2txt / WIC / ID3) を呼ぶので、
+**「ビルドは通るがリンクできない」に一番なりやすい**。
+`tests/core/test_gui_convert_ops.cpp` から各関数を実際に呼ぶようにしてあり、
+CI が毎回リンクを確かめる。テストファイルの冒頭にその意図を書いた。
+
+### VCL と変えたところ (理由付き)
+
+| | VCL | ここ | 理由 |
+|---|---|---|---|
+| 実行 | タスクスレッド | その場で同期実行 | タスク基盤が未移植 |
+| テキストの保存 | `saveto_TextFile` (Global.cpp) | 自前の `save_lines` | Global.cpp はビルド対象外。**UTF-8/UTF-16 では BOM を付ける**ところまで合わせた |
+| HTML の読み込み | `load_text_ex` (Global.cpp) | `text_viewer_core::LoadForView` | 同上。文字コード判定は同じ `get_MemoryCodePage` を通る |
+| `ConvertImage` の入力 | クリップボード (`CB`) も可 | ファイルのみ | クリップボードの画像を扱う経路が未移植 |
+
+### 元を壊さないためにした判断
+
+- `DelJpgExif` と `ConvertImage` は**出力先が元と同じなら断る**。
+  VCL はタスク側で別ディレクトリを前提にしているが、こちらは
+  同期実行なので誤って元を上書きしうる
+- どちらも出力先に同名があれば**上書きせずスキップ**
+- `save_lines` と `save_hicon_as_ico` は失敗したら**書きかけを消す**
+
+### 見送ったもの (無言でスキップしない)
+
+- **`ExtractGifBmp`** (アニメ GIF のフレーム抽出): VCL は `TGIFImage` の
+  フレーム配列を使う。これはシムに実体が無く、WIC 側もフレーム単位で
+  取り出す経路を `usr_wic.cpp` が持っていない (`WIC_load_image` は1枚だけ)
+- **`ExtractChmSrc`** (CHM からソース抽出): タスクスレッドの
+  `Task_EXTCHM` が `hh.exe` を起動する形。基盤が要る
+
+### 検証の範囲
+
+- 24 ケース (core 全体: 783 ケース / 2,481 アサーション)
+- **変換の中身は環境依存**。`ConvertDocToText` は xdoc2txt.dll が
+  無い環境では「1件も触らず理由を返す」ことだけを見ている。
+  `ConvertImages` も「読めないものを失敗として報告し、書きかけを残さない」
+  までで、**実際に形式が変わることは未検証**
+- `gui/main_frame.cpp` 側の受け渡しにテストは無い (wx 依存)
+- キー割り当ては全部推測 (`Alt+9` / `Alt+0` / `Shift+Alt+1`〜`7`)

@@ -2652,6 +2652,34 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	else if (SameStr(command, _T("CreateTestFile"))) {
 		CmdCreateTestFile();
 	}
+	//-- 抽出と変換 (機能群18) ------------------------------------------------
+	else if (SameStr(command, _T("SetExifTime"))) {
+		CmdSetExifTime();
+	}
+	else if (SameStr(command, _T("SetArcTime"))) {
+		CmdSetArcTime();
+	}
+	else if (SameStr(command, _T("DelJpgExif"))) {
+		CmdDelJpgExif();
+	}
+	// ExtractImage は ExtractMp3Img の新しい綴り。VCL も同じ処理に振る
+	// (MainFrm.cpp:12325)
+	else if (SameStr(command, _T("ExtractImage")) || SameStr(command, _T("ExtractMp3Img"))) {
+		CmdExtractEmbedded();
+	}
+	else if (SameStr(command, _T("ExtractIcon"))) {
+		CmdExtractIcon();
+	}
+	else if (SameStr(command, _T("ConvertDoc2Txt"))) {
+		CmdConvertDoc2Txt();
+	}
+	else if (SameStr(command, _T("ConvertHtm2Txt"))) {
+		// MD = Markdown / TX = テキスト (VCL の ActionParam。MainFrm.cpp:29234)
+		CmdConvertHtm2Txt(SameText(param, _T("MD")));
+	}
+	else if (SameStr(command, _T("ConvertImage"))) {
+		CmdConvertImage();
+	}
 	else if (SameStr(command, _T("KeyList"))) {
 		ShowKeyList();
 	}
@@ -4864,6 +4892,241 @@ void MainFrame::CmdCreateTestFile()
 
 	pane->Reload();
 	wxMessageBox(to_wx(file_ops::Summarize(r)), to_wx(_T("テストファイルの作成の結果")),
+	             wxOK | wxICON_INFORMATION, this);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// 抽出と変換 (機能群18)
+//
+// **実処理は1行も書いていない。**移植済みの usr_exif / usr_id3 / usr_xd2tx /
+// htmconv / usr_wic / usr_arc を gui/convert_ops.h が呼ぶ。ここは対象を渡して
+// 結果を見せるだけ。
+//
+// VCL と同じく、出力先は**反対側のペインのディレクトリ**にする
+// (MainFrm.cpp:29159 ほか)
+//---------------------------------------------------------------------------
+UnicodeString MainFrame::OutputDirOrWarn(const UnicodeString &verb)
+{
+	if (RejectIfOppositeIsResultList(verb)) return EmptyStr;
+	return OppositePane()->GetPath();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdSetExifTime()
+{
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
+	if (paths.empty()) { SetStatusWarning(_T("対象がありません")); return; }
+
+	// **その場で書き換える**ので確認する
+	const std::vector<UnicodeString> names = pane->GetSelectedNames();
+	if (!ConfirmItems(this, _T("Exif 撮影日時に設定"), _T("タイムスタンプを変更"),
+	                  names, pane->GetPath())) return;
+
+	::wxBeginBusyCursor();
+	const file_ops::FileOpResult r = convert_ops::SetExifTime(paths);
+	::wxEndBusyCursor();
+
+	pane->Reload();
+	wxMessageBox(to_wx(file_ops::Summarize(r)), to_wx(_T("Exif 撮影日時に設定")),
+	             wxOK | wxICON_INFORMATION, this);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdSetArcTime()
+{
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
+	if (paths.empty()) { SetStatusWarning(_T("対象がありません")); return; }
+
+	const std::vector<UnicodeString> names = pane->GetSelectedNames();
+	if (!ConfirmItems(this, _T("書庫のタイムスタンプ"), _T("中身の最新に合わせ"),
+	                  names, pane->GetPath())) return;
+
+	::wxBeginBusyCursor();
+	int ok = 0;
+	std::vector<UnicodeString> failures;
+	for (const UnicodeString &p : paths) {
+		UnicodeString error;
+		if (archive::SetArchiveTime(p, error)) ok++;
+		else failures.push_back(ExtractFileName(p) + _T(": ") + error);
+	}
+	::wxEndBusyCursor();
+
+	pane->Reload();
+	UnicodeString msg;
+	msg.sprintf(_T("%d 件のタイムスタンプを設定しました"), ok);
+	for (std::size_t i = 0; i < failures.size() && i < 8; ++i) msg += _T("\r\n・") + failures[i];
+	wxMessageBox(to_wx(msg), to_wx(_T("書庫のタイムスタンプ")), wxOK | wxICON_INFORMATION, this);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdDelJpgExif()
+{
+	const UnicodeString dst = OutputDirOrWarn(_T("Exif の削除"));
+	if (dst.IsEmpty()) return;
+
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
+	if (paths.empty()) { SetStatusWarning(_T("対象がありません")); return; }
+
+	const std::vector<UnicodeString> names = pane->GetSelectedNames();
+	if (!ConfirmItems(this, _T("Exif の削除"), _T("Exif を除いたものを作成"), names, dst)) return;
+
+	::wxBeginBusyCursor();
+	const file_ops::FileOpResult r = convert_ops::DeleteJpegExif(paths, dst, /*keep_time=*/true);
+	::wxEndBusyCursor();
+
+	OppositePane()->Reload();
+	wxMessageBox(to_wx(file_ops::Summarize(r)), to_wx(_T("Exif の削除の結果")),
+	             wxOK | wxICON_INFORMATION, this);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdExtractEmbedded()
+{
+	const UnicodeString dst = OutputDirOrWarn(_T("埋め込み画像の抽出"));
+	if (dst.IsEmpty()) return;
+
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
+	if (paths.empty()) { SetStatusWarning(_T("対象がありません")); return; }
+
+	::wxBeginBusyCursor();
+	const file_ops::FileOpResult r = convert_ops::ExtractEmbeddedImages(paths, dst);
+	::wxEndBusyCursor();
+
+	OppositePane()->Reload();
+	if (r.success_count == 0) {
+		SetStatusWarning(_T("埋め込み画像を持つファイルがありませんでした"));
+		return;
+	}
+	wxMessageBox(to_wx(file_ops::Summarize(r)), to_wx(_T("埋め込み画像の抽出")),
+	             wxOK | wxICON_INFORMATION, this);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdExtractIcon()
+{
+	const UnicodeString dst = OutputDirOrWarn(_T("アイコンの抽出"));
+	if (dst.IsEmpty()) return;
+
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
+	if (paths.empty()) { SetStatusWarning(_T("対象がありません")); return; }
+
+	::wxBeginBusyCursor();
+	const file_ops::FileOpResult r = convert_ops::ExtractIcons(paths, dst, /*index=*/-1);
+	::wxEndBusyCursor();
+
+	OppositePane()->Reload();
+	if (r.success_count == 0 && r.failures.empty()) {
+		SetStatusWarning(_T("アイコンを持つファイルがありませんでした"));
+		return;
+	}
+	wxMessageBox(to_wx(file_ops::Summarize(r)), to_wx(_T("アイコンの抽出")),
+	             wxOK | wxICON_INFORMATION, this);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdConvertDoc2Txt()
+{
+	const UnicodeString dst = OutputDirOrWarn(_T("文書→テキスト変換"));
+	if (dst.IsEmpty()) return;
+
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
+	if (paths.empty()) { SetStatusWarning(_T("対象がありません")); return; }
+
+	wxArrayString choices;
+	choices.Add(to_wx(_T("Shift_JIS (VCL の既定)")));
+	choices.Add(to_wx(_T("UTF-8")));
+	const int sel = wxGetSingleChoiceIndex(to_wx(_T("出力の文字コード")),
+	                                        to_wx(_T("文書→テキスト変換")), choices, this);
+	if (sel < 0) return;
+	const int cp = (sel == 1)? CP_UTF8 : 932;
+
+	::wxBeginBusyCursor();
+	UnicodeString error;
+	const file_ops::FileOpResult r = convert_ops::ConvertDocToText(paths, dst, cp, error);
+	::wxEndBusyCursor();
+
+	if (!error.IsEmpty()) {
+		wxMessageBox(to_wx(error), to_wx(_T("文書→テキスト変換")), wxOK | wxICON_WARNING, this);
+		return;
+	}
+	OppositePane()->Reload();
+	wxMessageBox(to_wx(file_ops::Summarize(r)), to_wx(_T("文書→テキスト変換の結果")),
+	             wxOK | wxICON_INFORMATION, this);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdConvertHtm2Txt(bool to_markdown)
+{
+	const UnicodeString dst = OutputDirOrWarn(_T("HTML の変換"));
+	if (dst.IsEmpty()) return;
+
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
+	if (paths.empty()) { SetStatusWarning(_T("対象がありません")); return; }
+
+	::wxBeginBusyCursor();
+	const file_ops::FileOpResult r = convert_ops::ConvertHtmlToText(paths, dst, to_markdown);
+	::wxEndBusyCursor();
+
+	OppositePane()->Reload();
+	wxMessageBox(to_wx(file_ops::Summarize(r)),
+	             to_wx(to_markdown? _T("HTML→Markdown の結果") : _T("HTML→テキストの結果")),
+	             wxOK | wxICON_INFORMATION, this);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdConvertImage()
+{
+	const UnicodeString dst = OutputDirOrWarn(_T("画像の変換"));
+	if (dst.IsEmpty()) return;
+
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
+	if (paths.empty()) { SetStatusWarning(_T("対象がありません")); return; }
+
+	wxArrayString choices;
+	choices.Add("PNG");
+	choices.Add("JPEG");
+	choices.Add("BMP");
+	choices.Add("TIFF");
+	choices.Add("GIF");
+	const int sel = wxGetSingleChoiceIndex(to_wx(_T("変換先の形式")),
+	                                        to_wx(_T("画像の変換")), choices, this);
+	if (sel < 0) return;
+
+	static const wchar_t *const kExt[] = {L".png", L".jpg", L".bmp", L".tif", L".gif"};
+	const UnicodeString ext = UnicodeString(kExt[sel]);
+
+	int quality = 100;
+	if (sel == 1) {
+		const wxString q = wxGetTextFromUser(to_wx(_T("JPEG の画質 (0〜100)")),
+		                                      to_wx(_T("画像の変換")), to_wx(_T("90")), this);
+		if (q.IsEmpty()) return;
+		quality = to_us(q).ToIntDef(90);
+		if (quality < 0 || quality > 100) quality = 90;
+	}
+
+	::wxBeginBusyCursor();
+	const file_ops::FileOpResult r = convert_ops::ConvertImages(paths, dst, ext, quality);
+	::wxEndBusyCursor();
+
+	OppositePane()->Reload();
+	wxMessageBox(to_wx(file_ops::Summarize(r)), to_wx(_T("画像の変換の結果")),
 	             wxOK | wxICON_INFORMATION, this);
 	UpdateStatus();
 }

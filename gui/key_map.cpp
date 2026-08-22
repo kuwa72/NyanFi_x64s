@@ -317,6 +317,17 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Alt+7"), _T("UndoRename"));
 	Assign(_T("Alt+8"), _T("CreateTestFile"));
 
+	// 抽出と変換。**VCL の既定表に1件も無いのですべて推測**
+	Assign(_T("Alt+9"), _T("ExtractIcon"));
+	Assign(_T("Alt+0"), _T("ExtractImage"));
+	Assign(_T("Shift+Alt+1"), _T("ConvertDoc2Txt"));
+	Assign(_T("Shift+Alt+2"), _T("ConvertHtm2Txt"));
+	Assign(_T("Shift+Alt+3"), _T("ConvertHtm2Txt_MD"));
+	Assign(_T("Shift+Alt+4"), _T("ConvertImage"));
+	Assign(_T("Shift+Alt+5"), _T("SetExifTime"));
+	Assign(_T("Shift+Alt+6"), _T("DelJpgExif"));
+	Assign(_T("Shift+Alt+7"), _T("SetArcTime"));
+
 	// 並べ替え・絞り込み。"S" は src/Global.cpp の既定キー表にある実際の割り当て
 	// ("F:S=SortDlg") と同じ。Ctrl+M / Ctrl+U は既定キー表に対応する記載が無く
 	// (パスマスクはコンボボックス操作が前提で単独のキー割り当てが見当たらない)、

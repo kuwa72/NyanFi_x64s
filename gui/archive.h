@@ -76,6 +76,16 @@ bool Extract(const UnicodeString &archive_path, const UnicodeString &dst_dir,
 bool Create(const UnicodeString &archive_path, const UnicodeString &src_dir,
             const std::vector<UnicodeString> &names, UnicodeString &error_out);
 
+/**
+ * @brief 書庫のタイムスタンプを中身の最新に合わせる (SetArcTime)
+ * @param archive_path 対象の書庫
+ * @param error_out 失敗した理由 (書庫 DLL が無い場合を含む)
+ * @return 設定できたら true
+ * @details 実体は移植済みの `UserArcUnit::SetArcTime` (src/usr_arc.cpp:253)。
+ *          **書庫そのものを書き換える**ので、呼び出し側は確認を取ること
+ */
+bool SetArchiveTime(const UnicodeString &archive_path, UnicodeString &error_out);
+
 }  // namespace archive
 
 #endif  // NYANFI_GUI_ARCHIVE_H

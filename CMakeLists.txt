@@ -217,6 +217,12 @@ endif()
 # tab_info (src/Global.h、実測) は左右ペイン共有の1本のタブバーだったため、
 # gui/tabs.h もそれに合わせた設計にしてある (詳細はそのファイルの解説を参照)。
 #
+# gui/convert_ops.cpp (アイコン/埋め込み画像の抽出、文書・HTML・画像の変換、
+# Exif の操作) も同じ理由でここに含める。**中身の処理は自前で書かず**、
+# 移植済みの usr_exif / usr_id3 / usr_xd2tx / htmconv / usr_wic を呼ぶだけ。
+# 例外は .ico の書き出しで、Graphics::TIcon::SaveToFile が宣言のみのシム
+# (報告書 §20) のため自分で書いている。
+#
 # gui/clone_name.cpp (クローン名の書式展開) と gui/file_ops2.cpp
 # (クローン作成・構造コピー・名前の入れ替え・改名の取り消し) も同じ理由で
 # ここに含める。書式の規則は src/Global.cpp の format_CloneName を、
@@ -267,6 +273,7 @@ if(TARGET nyanfi_core)
 		gui/bookmarks.cpp
 		gui/clone_name.cpp
 		gui/file_ops2.cpp
+		gui/convert_ops.cpp
 	)
 	target_include_directories(nyanfi_gui_core PUBLIC ${PROJECT_SOURCE_DIR})
 	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core shell32 netapi32)
