@@ -289,6 +289,7 @@ if(TARGET nyanfi_core)
 		gui/named_state.cpp
 		gui/view_settings.cpp
 		gui/system_ops.cpp
+		gui/workers.cpp
 	)
 	target_include_directories(nyanfi_gui_core PUBLIC ${PROJECT_SOURCE_DIR})
 	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core shell32 netapi32)
