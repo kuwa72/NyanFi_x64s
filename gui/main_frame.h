@@ -132,6 +132,12 @@ private:
 	void BuildImageNavList(const UnicodeString &current_name);
 	/// Left/Right (前後の画像へ) が押されたときに呼ばれる (ImageViewer::SetOnNavigate)
 	void CmdImageNavigate(int direction);
+	/// 先頭/末尾の画像へ移動する (I:TopFile/I:EndFile 相当)
+	void CmdImageTopEnd(bool to_top);
+	/// 指定インデックスの画像へ移動する (I:JumpIndex 相当)
+	void CmdImageJumpIndex(const UnicodeString &param);
+	/// 全画面表示を切り替える (I:FullScreen 相当。param ON/OFF/空=トグル)
+	void CmdImageFullScreen(const UnicodeString &param);
 
 	// 文字列検索 (gui/grep_dialog.h)。"FV:Grep" (usr_cmdlist.cpp のコマンド表)
 	// に既定キーの記載が無かったため、キー割り当ては推測 (gui/key_map.cpp 参照)

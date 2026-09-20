@@ -264,6 +264,7 @@ if(TARGET nyanfi_core)
 		gui/navigation.cpp
 		gui/grep.cpp
 		gui/image_load.cpp
+		gui/image_view_ops.cpp
 		gui/tabs.cpp
 		gui/rename.cpp
 		gui/selection.cpp

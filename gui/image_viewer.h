@@ -29,6 +29,7 @@
 #include <wx/wx.h>
 
 #include "gui/image_load.h"
+#include "gui/image_view_ops.h"
 
 /**
  * @brief 画像ビューア
@@ -65,6 +66,37 @@ public:
 	 */
 	bool HandleKey(wxKeyEvent &event);
 
+	/// フィット表示にする (I:FittedSize 相当。VCL は常にON方向の1方向アクション)
+	void SetFittedSize();
+	/// 等倍(100%)表示にする (I:EqualSize 相当。VCL の EqualSizeActionExecute と同じ)
+	void SetEqualSize();
+	/// +1:ズームイン/-1:ズームアウト (FVI:ZoomIn/ZoomOut のIモード時相当)
+	void ZoomStep(int direction);
+
+	/// 回転・反転 (VCL の I:RotateRight/RotateLeft/FlipHorz/FlipVert 相当。
+	/// src/MainFrm.cpp は ROTATION 要求を絶対値で上書きするが、ここでは
+	/// Exif 由来の初期回転を失わないよう合成する。推測・要検証の改善点)
+	void RotateRight();
+	void RotateLeft();
+	void FlipHorz();
+	void FlipVert();
+
+	/// グレースケール表示の切替 (VCL の I:GrayScale 相当)
+	void ToggleGrayscale();
+	bool IsGrayscale() const { return grayscale_; }
+
+	/// 画像分割グリッド表示の切替 (VCL の I:ShowGrid 相当)
+	void ToggleGrid();
+	bool IsGridShown() const { return show_grid_; }
+
+	/**
+	 * @brief 表示効果 (グレー・グリッド) を消す
+	 * @details VCL の CloseI (src/MainFrm.cpp) が GRAY 要求を消すのと同じ。
+	 * MainFrame::CmdImageViewer (新規オープン時) から呼ぶ。ファイル移動
+	 * (CmdImageNavigate) では維持する
+	 */
+	void ResetEffects();
+
 private:
 	void OnPaint(wxPaintEvent &event);
 	void OnSize(wxSizeEvent &event);
@@ -72,15 +104,15 @@ private:
 	void OnMiddleDown(wxMouseEvent &event);
 
 	void ToggleFitted();        //!< フィット表示のON/OFF切替 (F、推測のキー)
-	void SetEqualSize();        //!< 等倍(100%)表示にする (I:EqualSize相当。キー "0"、推測)
-	void ZoomStep(int direction);  //!< +1:ズームイン/-1:ズームアウト。src/Global.cpp の
-	                                //!< ZoomRatioList既定値 (10/25/50/75/100/150/200/300/400%)
-	                                //!< を段階として使う (src/MainFrm.cpp の
-	                                //!< ZoomInIActionExecute/ZoomOutIActionExecute と同じ探索)
 
 	double ComputeFitRatio() const;  //!< フィット時の倍率 (等倍を超えて自動拡大はしない)
 	double EffectiveRatio() const;   //!< 現在実際に表示している倍率 (fitted_ なら ComputeFitRatio())
 	void RebuildScaledBitmap();      //!< 表示用のスケール済み wxBitmap を作り直す (キャッシュ付き)
+
+	/// 回転・反転・グレーを適用した表示用バッファを作る (RebuildScaledBitmap 用)
+	image_view_ops::PixelBuf BuildDisplayBuffer() const;
+	/// 回転・反転を考慮した表示サイズ
+	image_view_ops::ImageSize DisplaySize() const;
 
 	int HeaderHeight() const { return GetCharHeight() + 6; }
 	UnicodeString HeaderText() const;
@@ -95,9 +127,15 @@ private:
 	bool fitted_ = true;      //!< フィット表示 (VCL 版 imgv_thread.cpp コンストラクタの既定値と同じ)
 	int zoom_percent_ = 100;  //!< 手動ズーム時の倍率(%)
 
+	image_view_ops::Transform transform_;  //!< 回転・反転状態 (LoadFile で Exif から初期化)
+	bool grayscale_ = false;   //!< グレースケール表示 (VCL の ImgViewThread->GrayScaled 相当)
+	bool show_grid_ = false;   //!< 分割グリッド表示 (VCL の ImgViewThread->ShowGrid 相当)
+
 	wxBitmap scaled_bitmap_;                      //!< 表示用にスケール済みのビットマップ (キャッシュ)
 	int scaled_for_w_ = -1, scaled_for_h_ = -1;   //!< scaled_bitmap_ を作った時のクライアントサイズ
 	double scaled_ratio_ = 0.0;                   //!< scaled_bitmap_ を作った時の倍率
+	unsigned int effects_rev_ = 0;                //!< 回転・反転・グレーの変更回数 (キャッシュキー用)
+	unsigned int scaled_effects_rev_ = 0;         //!< scaled_bitmap_ を作った時の effects_rev_
 
 	std::function<void()> on_close_;
 	std::function<void(int)> on_navigate_;
