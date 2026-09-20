@@ -29,9 +29,12 @@
 #include "gui/text_ops.h"
 #include "gui/text_viewer_core.h"
 #include "gui/file_ops.h"
+#include "gui/dupl_dialog.h"
+#include "gui/find_dialog.h"
 #include "gui/grep_dialog.h"
 #include "gui/image_load.h"
 #include "gui/image_view_ops.h"
+#include "gui/mask_dialog.h"
 #include "gui/rename_dialog.h"
 #include "gui/selection.h"
 #include "gui/list_search.h"
@@ -449,14 +452,23 @@ void MainFrame::MarkBetween(FilePane *pane, int from, int to)
 //---------------------------------------------------------------------------
 void MainFrame::CmdMatchSelect()
 {
-	const wxString word = wxGetTextFromUser(
-		to_wx(_T("名前に含む文字列を入力してください")), to_wx(_T("指定文字列を含むファイルを選択")),
-		wxEmptyString, this);
-	if (word.IsEmpty()) return;
+	// 入力は gui/mask_dialog.h (VCL の TMaskSelectDlg の入力部分。
+	// `;` 区切り複数可、`/～/` は正規表現という仕様も VCL と同じ)
+	UnicodeString ptn;
+	if (!mask_dialog::Run(this, mask_dialog::Mode::Match, ptn)) return;
+
+	// `\N` はカーソル位置のファイル名主部に置き換える (VCL MatchSelectActionExecute と同じ)
+	if (ContainsText(ptn, _T("\\N"))) {
+		FilePane *pane0 = ActivePane();
+		const FileItem *cur = pane0->GetCurrentItem();
+		const UnicodeString base = (cur != nullptr && !cur->is_parent)
+			? get_base_name(cur->name) : EmptyStr;
+		ptn = ReplaceStr(ptn, _T("\\N"), base);
+	}
 
 	FilePane *pane = ActivePane();
 	std::vector<FileItem> items = pane->VisibleItems();
-	const int n = selection::SelectMatching(items, to_us(word));
+	const int n = selection::SelectByMatchString(items, ptn);
 	pane->ApplyMarks(items);
 
 	if (n == 0) SetStatusWarning(_T("一致する項目がありません"));
@@ -2238,20 +2250,16 @@ void MainFrame::CmdFindFiles(find_files::Target target)
 {
 	FilePane *pane = ActivePane();
 
-	const UnicodeString what = (target == find_files::Target::Directories)? _T("ディレクトリ名")
-	                         : (target == find_files::Target::Both)?        _T("名前")
-	                                                                      : _T("ファイル名");
-	const wxString input = wxGetTextFromUser(
-		to_wx(what + _T(" のマスクを入力してください (例: *.txt;*.md)")),
-		to_wx(what + _T("の検索")), to_wx(_T("*")), this);
-	if (input.IsEmpty()) return;
-
+	// 条件の入力は gui/find_dialog.h (VCL の TFindFileDlg の基本条件部)。
+	// 呼び出し元のコマンドで対象の初期値が決まるが、ダイアログ内でも変えられる
 	find_files::Query q;
-	q.mask = to_us(input);
-	q.target = target;
-	q.recursive = true;
+	if (!find_dialog::Run(this, target, _T("*"), q)) return;
 	q.show_hidden = pane->GetShowHidden();
 	q.show_system = pane->GetShowSystem();
+
+	const UnicodeString what = (q.target == find_files::Target::Directories)? _T("ディレクトリ名")
+	                         : (q.target == find_files::Target::Both)?        _T("名前")
+	                                                                      : _T("ファイル名");
 
 	::wxBeginBusyCursor();
 	const find_files::Result r = find_files::Search(pane->GetPath(), q);
@@ -2264,7 +2272,9 @@ void MainFrame::CmdFindFiles(find_files::Target target)
 	}
 
 	UnicodeString title;
-	title.sprintf(_T("検索: %s  (%d 件"), q.mask.c_str(), static_cast<int>(r.items.size()));
+	title.sprintf(_T("検索: %s"), q.mask.c_str());
+	if (!q.keyword.IsEmpty()) title.cat_sprintf(_T(" : %s"), q.keyword.c_str());
+	title.cat_sprintf(_T("  (%d 件"), static_cast<int>(r.items.size()));
 	// 打ち切ったら黙っていない
 	if (r.truncated_hits) title += _T(" / 上限で打ち切り");
 	if (r.truncated_scan) title += _T(" / 走査を打ち切り");
@@ -2291,19 +2301,13 @@ void MainFrame::CmdFindDuplicates()
 {
 	FilePane *pane = ActivePane();
 
-	wxArrayString choices;
-	choices.Add(to_wx(_T("内容で比べる (サイズで絞ってからハッシュ)")));
-	choices.Add(to_wx(_T("名前とサイズで比べる (速い)")));
-	const int sel = wxGetSingleChoiceIndex(to_wx(_T("重複の判定方法を選んでください")),
-	                                       to_wx(_T("重複ファイルの検索")), choices, this);
-	if (sel < 0) return;
-
-	const find_files::DuplicateBy how = (sel == 1)? find_files::DuplicateBy::NameSize
-	                                              : find_files::DuplicateBy::Content;
+	// 条件の入力は gui/dupl_dialog.h (VCL の TFindDuplDlg の移植可能な部分)
+	find_files::DuplicateOptions opt;
+	if (!dupl_dialog::Run(this, opt)) return;
 
 	::wxBeginBusyCursor();
 	const find_files::DuplicateResult r =
-		find_files::FindDuplicates(pane->GetPath(), how, pane->GetShowHidden(),
+		find_files::FindDuplicates(pane->GetPath(), opt, pane->GetShowHidden(),
 		                            pane->GetShowSystem());
 	::wxEndBusyCursor();
 
@@ -5444,14 +5448,13 @@ void MainFrame::CmdTrimTagData()
 //---------------------------------------------------------------------------
 void MainFrame::CmdMaskSelect()
 {
-	const wxString input = wxGetTextFromUser(
-		to_wx(_T("マスクを入力してください (例: *.txt;*.md)")),
-		to_wx(_T("マスクで選択")), to_wx(_T("*")), this);
-	if (input.IsEmpty()) return;
+	// 入力は gui/mask_dialog.h (VCL の TMaskSelectDlg の入力部分)
+	UnicodeString mask;
+	if (!mask_dialog::Run(this, mask_dialog::Mode::Mask, mask, _T("*"))) return;
 
 	FilePane *pane = ActivePane();
 	std::vector<FileItem> items = pane->VisibleItems();
-	const int n = selection::SelectByMask(items, to_us(input));
+	const int n = selection::SelectByMask(items, mask);
 	pane->ApplyMarks(items);
 
 	if (n == 0) { SetStatusWarning(_T("一致する項目がありません")); return; }

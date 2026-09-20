@@ -63,7 +63,8 @@ void walk(const UnicodeString &dir, const Query &q, Result &out, int &budget)
 		const bool want = (q.target == Target::Both)
 			|| (is_dir? (q.target == Target::Directories) : (q.target == Target::Files));
 
-		if (want && MatchesMask(sr.Name, q.mask)) {
+		if (want && MatchesMask(sr.Name, q.mask)
+			&& MatchesQuery(sr.Name, sr.TimeStamp, is_dir ? 0 : sr.Size, sr.Attr, is_dir, q)) {
 			if (static_cast<int>(out.items.size()) >= kMaxResults) {
 				out.truncated_hits = true;
 			}
@@ -108,6 +109,64 @@ bool MatchesMask(const UnicodeString &name, const UnicodeString &mask)
 }
 
 //---------------------------------------------------------------------------
+bool MatchesQuery(const UnicodeString &name, TDateTime stamp, Int64 size, int attr,
+                  bool is_dir, const Query &query)
+{
+	//キーワード (src/Global.cpp check_file_std と同じ順序・同じ意味)
+	if (!query.keyword.IsEmpty()) {
+		UnicodeString kwd = query.keyword;
+		bool is_regex = query.use_regex;
+		//ダブルクォーテーションで囲まれていたら空白を含む語として正規表現で
+		if (is_quot(kwd)) {
+			kwd = TRegEx::Escape(exclude_quot(kwd));
+			if (ContainsStr(kwd, " ")) kwd = ReplaceStr(kwd, " ", "\\s");
+			is_regex = true;
+		}
+		if (is_regex) {
+			try {
+				TRegExOptions opt;
+				if (!query.case_sensitive) opt << roIgnoreCase;
+				if (!TRegEx::IsMatch(name, kwd, opt)) return false;
+			}
+			catch (...) {
+				return false;  // VCL は事前チェックで弾く。ここでは念のため偽
+			}
+		}
+		else {
+			if (!find_mlt(kwd, name, query.match_all, false, query.case_sensitive)) return false;
+		}
+	}
+	//タイムスタンプ (日付だけ見て時刻は見ない)
+	if (query.date_mode != DateMode::None) {
+		const TValueRelationship res = System::Dateutils::CompareDate(stamp, query.date_value);
+		switch (query.date_mode) {
+		case DateMode::Same:   if (res != EqualsValue) return false; break;
+		case DateMode::Before: if (res != EqualsValue && res != LessThanValue) return false; break;
+		case DateMode::After:  if (res != EqualsValue && res != GreaterThanValue) return false; break;
+		default: break;
+		}
+	}
+	//サイズ (VCL と同じくディレクトリは対象外)
+	if (!is_dir && query.size_mode != SizeMode::None) {
+		switch (query.size_mode) {
+		case SizeMode::AtMost:  if (!(size <= query.size_value)) return false; break;
+		case SizeMode::AtLeast: if (!(size >= query.size_value)) return false; break;
+		default: break;
+		}
+	}
+	//属性
+	if (query.attr_mode != AttrMode::None) {
+		switch (query.attr_mode) {
+		case AttrMode::HasAny:  if (!(attr & query.attr_bits)) return false; break;
+		case AttrMode::HasNone: if ((attr & query.attr_bits)) return false; break;
+		default: break;
+		}
+	}
+
+	return true;
+}
+
+//---------------------------------------------------------------------------
 Result Search(const UnicodeString &root, const Query &query)
 {
 	Result out;
@@ -118,7 +177,7 @@ Result Search(const UnicodeString &root, const Query &query)
 }
 
 //---------------------------------------------------------------------------
-DuplicateResult FindDuplicates(const UnicodeString &root, DuplicateBy how,
+DuplicateResult FindDuplicates(const UnicodeString &root, const DuplicateOptions &opt,
                                bool show_hidden, bool show_system)
 {
 	DuplicateResult out;
@@ -126,7 +185,8 @@ DuplicateResult FindDuplicates(const UnicodeString &root, DuplicateBy how,
 	// まず全ファイルを集める
 	Query q;
 	q.target = Target::Files;
-	q.recursive = true;
+	q.recursive = opt.recursive;
+	q.mask = opt.mask;
 	q.show_hidden = show_hidden;
 	q.show_system = show_system;
 	const Result all = Search(root, q);
@@ -143,7 +203,7 @@ DuplicateResult FindDuplicates(const UnicodeString &root, DuplicateBy how,
 		std::vector<FileItem> &group = kv.second;
 		if (group.size() < 2) continue;
 
-		if (how == DuplicateBy::NameSize) {
+		if (opt.how == DuplicateBy::NameSize) {
 			// 名前も同じものだけを重複とする
 			std::map<UnicodeString, std::vector<FileItem>> by_name;
 			for (const FileItem &it : group) by_name[it.name.UpperCase()].push_back(it);
