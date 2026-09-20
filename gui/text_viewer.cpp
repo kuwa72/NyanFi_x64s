@@ -12,6 +12,7 @@
 #include <wx/textdlg.h>
 
 #include "usr_str.h"
+#include "usr_cmdlist.h"
 
 namespace {
 
@@ -83,6 +84,10 @@ bool TextViewer::LoadFile(const UnicodeString &path, UnicodeString &error)
 	top_row_ = 0;
 	h_offset_chars_ = 0;
 	wrap_ = false;
+	marks_.clear();
+	last_search_ = EmptyStr;
+	last_error_ = EmptyStr;
+	forced_code_page_ = 0;
 
 	UpdateLineNoCols();
 	RebuildWrap();
@@ -232,21 +237,312 @@ void TextViewer::PromptSearch()
 
 bool TextViewer::SearchForward(const UnicodeString &kwd, int from_line)
 {
-	const int n = static_cast<int>(doc_.lines.size());
-	if (n == 0) return false;
+	const int found = text_viewer_core::FindNextLine(doc_.lines, kwd, from_line, true);
+	if (found == -1) return false;
+	current_line_ = found;
+	EnsureCursorVisible();
+	Refresh();
+	return true;
+}
 
-	// 大小文字を区別しない (VCL 版の isCase 切替は非対応。要検証・簡略化)。
-	// 次の行から探し、末尾まで行ったら先頭へ折り返す
-	for (int step = 1; step <= n; ++step) {
-		const int i = (from_line + step) % n;
-		if (ContainsText(doc_.lines[static_cast<std::size_t>(i)], kwd)) {
-			current_line_ = i;
-			EnsureCursorVisible();
-			Refresh();
-			return true;
+bool TextViewer::SearchBackward(const UnicodeString &kwd, int from_line)
+{
+	const int found = text_viewer_core::FindNextLine(doc_.lines, kwd, from_line, false);
+	if (found == -1) return false;
+	current_line_ = found;
+	EnsureCursorVisible();
+	Refresh();
+	return true;
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @details VCL 版 (TTxtViewer::ExeCommand / TNyanFiForm::ExeCommandV) の頻度上位
+ *          コマンドを行単位ビューア向けに単純化したもの。選択系 (Sel系)・
+ *          バイナリ/CSV/画像プレビュー系 (ChangeViewMode/BitmapView等)・
+ *          外部連携系 (TagJump/OpenURL/WebSearch等) は対象外
+ */
+bool TextViewer::Execute(const UnicodeString &full_command)
+{
+	const UnicodeString command = get_CmdStr(full_command);
+	const UnicodeString param = get_PrmStr(full_command);
+	last_error_ = EmptyStr;
+
+	if (SameStr(command, _T("CursorUp"))) {
+		CmdCursorUp(param);
+	}
+	else if (SameStr(command, _T("CursorDown"))) {
+		CmdCursorDown(param);
+	}
+	else if (SameStr(command, _T("PageUp"))) {
+		CmdPageUp();
+	}
+	else if (SameStr(command, _T("PageDown"))) {
+		CmdPageDown();
+	}
+	else if (SameStr(command, _T("TextTop"))) {
+		CmdTextTop();
+	}
+	else if (SameStr(command, _T("TextEnd"))) {
+		CmdTextEnd();
+	}
+	else if (SameStr(command, _T("LineTop"))) {
+		CmdLineTop();
+	}
+	else if (SameStr(command, _T("LineEnd"))) {
+		CmdLineEnd();
+	}
+	else if (SameStr(command, _T("CursorLeft"))) {
+		CmdCursorLeft(param);
+	}
+	else if (SameStr(command, _T("CursorRight"))) {
+		CmdCursorRight(param);
+	}
+	else if (SameStr(command, _T("FindText"))) {
+		CmdFindText(param);
+	}
+	else if (SameStr(command, _T("FindDown"))) {
+		if (!CmdFindDown(param) && param.IsEmpty() && last_search_.IsEmpty()) {
+			last_error_ = _T("検索文字列がありません");
 		}
 	}
-	return false;
+	else if (SameStr(command, _T("FindUp"))) {
+		if (!CmdFindUp(param) && param.IsEmpty() && last_search_.IsEmpty()) {
+			last_error_ = _T("検索文字列がありません");
+		}
+	}
+	else if (SameStr(command, _T("JumpLine"))) {
+		if (!CmdJumpLine(param)) last_error_ = _T("行番号が範囲外です");
+	}
+	else if (SameStr(command, _T("Mark"))) {
+		CmdMark();
+	}
+	else if (SameStr(command, _T("ClearMark"))) {
+		CmdClearMark();
+	}
+	else if (SameStr(command, _T("FindMarkDown"))) {
+		if (!CmdFindMarkDown()) last_error_ = _T("下方向にマークがありません");
+	}
+	else if (SameStr(command, _T("FindMarkUp"))) {
+		if (!CmdFindMarkUp()) last_error_ = _T("上方向にマークがありません");
+	}
+	else if (SameStr(command, _T("ChangeCodePage"))) {
+		CmdChangeCodePage(param);
+	}
+	else if (SameStr(command, _T("ReloadFile"))) {
+		CmdReload();
+	}
+	else if (SameStr(command, _T("Close"))) {
+		CmdClose();
+	}
+	else {
+		return false;  // 未実装
+	}
+	return true;
+}
+
+//---------------------------------------------------------------------------
+void TextViewer::CmdCursorUp(const UnicodeString &param)
+{
+	if (doc_.lines.empty() || doc_.is_binary) return;
+	current_line_ = text_viewer_core::StepLine(
+		current_line_, -text_viewer_core::ParseMoveCount(param, VisibleRows()),
+		static_cast<int>(doc_.lines.size()));
+	EnsureCursorVisible();
+	Refresh();
+}
+
+void TextViewer::CmdCursorDown(const UnicodeString &param)
+{
+	if (doc_.lines.empty() || doc_.is_binary) return;
+	current_line_ = text_viewer_core::StepLine(
+		current_line_, text_viewer_core::ParseMoveCount(param, VisibleRows()),
+		static_cast<int>(doc_.lines.size()));
+	EnsureCursorVisible();
+	Refresh();
+}
+
+void TextViewer::CmdPageUp()
+{
+	if (doc_.lines.empty() || doc_.is_binary) return;
+	MoveCursor(-text_viewer_core::PageStepLines(VisibleRows()));
+}
+
+void TextViewer::CmdPageDown()
+{
+	if (doc_.lines.empty() || doc_.is_binary) return;
+	MoveCursor(text_viewer_core::PageStepLines(VisibleRows()));
+}
+
+void TextViewer::CmdTextTop()
+{
+	GotoTop();
+}
+
+void TextViewer::CmdTextEnd()
+{
+	GotoEnd();
+}
+
+void TextViewer::CmdLineTop()
+{
+	if (doc_.is_binary) return;
+	h_offset_chars_ = 0;
+	Refresh();
+}
+
+void TextViewer::CmdLineEnd()
+{
+	if (doc_.is_binary || wrap_) return;
+	int max_len = 0;
+	for (const auto &ln : doc_.lines) max_len = std::max(max_len, ln.Length());
+	h_offset_chars_ = std::max(0, max_len - TextAreaCols() + 1);
+	Refresh();
+}
+
+void TextViewer::CmdCursorLeft(const UnicodeString &param)
+{
+	ScrollHorizontal(param.IsEmpty() ? -4 : -text_viewer_core::ParseMoveCount(param, VisibleRows()));
+}
+
+void TextViewer::CmdCursorRight(const UnicodeString &param)
+{
+	ScrollHorizontal(param.IsEmpty() ? 4 : text_viewer_core::ParseMoveCount(param, VisibleRows()));
+}
+
+void TextViewer::CmdFindText(const UnicodeString &param)
+{
+	if (doc_.is_binary) return;
+	if (param.IsEmpty()) {
+		PromptSearch();
+		return;
+	}
+	last_search_ = param;
+	if (!SearchForward(last_search_, current_line_)) {
+		wxMessageBox(to_wx(_T("見つかりませんでした")), to_wx(_T("検索")), wxOK | wxICON_INFORMATION, this);
+	}
+}
+
+bool TextViewer::CmdFindDown(const UnicodeString &param)
+{
+	if (doc_.is_binary) return false;
+	if (!param.IsEmpty()) last_search_ = param;
+	if (last_search_.IsEmpty()) return false;
+	if (!SearchForward(last_search_, current_line_)) {
+		wxMessageBox(to_wx(_T("見つかりませんでした")), to_wx(_T("検索")), wxOK | wxICON_INFORMATION, this);
+		return false;
+	}
+	return true;
+}
+
+bool TextViewer::CmdFindUp(const UnicodeString &param)
+{
+	if (doc_.is_binary) return false;
+	if (!param.IsEmpty()) last_search_ = param;
+	if (last_search_.IsEmpty()) return false;
+	if (!SearchBackward(last_search_, current_line_)) {
+		wxMessageBox(to_wx(_T("見つかりませんでした")), to_wx(_T("検索")), wxOK | wxICON_INFORMATION, this);
+		return false;
+	}
+	return true;
+}
+
+bool TextViewer::CmdJumpLine(const UnicodeString &param)
+{
+	if (doc_.is_binary || doc_.lines.empty()) return false;
+	if (param.IsEmpty()) {
+		UnicodeString cap;
+		cap.cat_sprintf(_T("行番号 (1～%d)"), static_cast<int>(doc_.lines.size()));
+		wxTextEntryDialog dlg(this, to_wx(cap), to_wx(_T("指定行へ移動")));
+		if (dlg.ShowModal() != wxID_OK) return true;  // キャンセルは処理済み扱い
+		const int target = text_viewer_core::ParseJumpLine(
+			to_us(dlg.GetValue()), current_line_, static_cast<int>(doc_.lines.size()));
+		if (target == -1) return false;
+		GotoLine(target);
+		return true;
+	}
+	const int target = text_viewer_core::ParseJumpLine(
+		param, current_line_, static_cast<int>(doc_.lines.size()));
+	if (target == -1) return false;
+	GotoLine(target);
+	return true;
+}
+
+void TextViewer::CmdMark()
+{
+	if (doc_.is_binary || doc_.lines.empty()) return;
+	marks_ = text_viewer_core::ToggleMark(marks_, current_line_);
+	Refresh();
+}
+
+void TextViewer::CmdClearMark()
+{
+	marks_ = text_viewer_core::ClearMarkList(marks_);
+	Refresh();
+}
+
+bool TextViewer::CmdFindMarkDown()
+{
+	const int found = text_viewer_core::FindMarkNext(marks_, current_line_, true);
+	if (found == -1) return false;
+	GotoLine(found);
+	return true;
+}
+
+bool TextViewer::CmdFindMarkUp()
+{
+	const int found = text_viewer_core::FindMarkNext(marks_, current_line_, false);
+	if (found == -1) return false;
+	GotoLine(found);
+	return true;
+}
+
+void TextViewer::CmdChangeCodePage(const UnicodeString &param)
+{
+	if (path_.IsEmpty() || doc_.is_binary) return;
+	int cp;
+	if (param.IsEmpty()) {
+		cp = text_viewer_core::NextCodePage(doc_.code_page);
+	}
+	else {
+		cp = text_viewer_core::ParseCodePageParam(param, doc_.code_page);
+		if (cp == 0) {
+			last_error_ = _T("対応していない文字コードです: ") + param;
+			wxMessageBox(to_wx(last_error_), to_wx(_T("文字コード変更")),
+				wxOK | wxICON_INFORMATION, this);
+			return;
+		}
+	}
+	forced_code_page_ = cp;
+	CmdReload();
+}
+
+void TextViewer::CmdReload()
+{
+	if (path_.IsEmpty()) return;
+	UnicodeString error;
+	text_viewer_core::LoadResult r =
+		text_viewer_core::LoadForView(path_, text_viewer_core::kMaxViewBytes, forced_code_page_);
+	if (!r.ok) {
+		wxMessageBox(to_wx(r.error), to_wx(_T("開けませんでした")), wxOK | wxICON_ERROR, this);
+		return;
+	}
+	const int keep = current_line_;
+	doc_ = std::move(r);
+	current_line_ = std::clamp(keep, 0, std::max(0, static_cast<int>(doc_.lines.size()) - 1));
+	// マークは再読込で行数が変わるとずれるため、範囲外だけ落とす
+	marks_.erase(std::remove_if(marks_.begin(), marks_.end(), [&](int m) {
+		return m < 0 || m >= static_cast<int>(doc_.lines.size());
+	}), marks_.end());
+	UpdateLineNoCols();
+	RebuildWrap();
+	EnsureCursorVisible();
+	Refresh();
+}
+
+void TextViewer::CmdClose()
+{
+	if (on_close_) on_close_();
 }
 
 //---------------------------------------------------------------------------
@@ -257,6 +553,9 @@ bool TextViewer::SearchForward(const UnicodeString &kwd, int from_line)
  * (バイナリ/CSV/画像プレビュー切替等) のため対応せず、代わりに
  * W (折り返し切替) を独自に割り当てた (推測・要検証。既定キー表に
  * 折り返し専用のキーが見当たらなかったため)。
+ * G/M/N/P/R/C/J は Execute と同じ処理へのショートカット (推測のキー。
+ * 既定キー表に記載が無いため。J=JumpLine、GはVCLのGrepと紛らわしいが
+ * ビューア表示中はGrepに回さない)。
  */
 bool TextViewer::HandleKey(wxKeyEvent &event)
 {
@@ -284,6 +583,12 @@ bool TextViewer::HandleKey(wxKeyEvent &event)
 	case WXK_END:      GotoEnd(); return true;
 	case 'W':          ToggleWrap(); return true;
 	case 'F':          PromptSearch(); return true;
+	case 'M':          CmdMark(); return true;
+	case 'N':          CmdFindDown(EmptyStr); return true;
+	case 'P':          CmdFindUp(EmptyStr); return true;
+	case 'J':          CmdJumpLine(EmptyStr); return true;
+	case 'R':          CmdReload(); return true;
+	case 'C':          CmdChangeCodePage(EmptyStr); return true;
 	default:           break;
 	}
 	return false;
@@ -303,6 +608,8 @@ UnicodeString TextViewer::GetStatusSummary() const
 	s += _T("  ") + get_NameOfCodePage(doc_.code_page, false, doc_.has_bom);
 	s.cat_sprintf(_T("  %d/%d 行"), current_line_ + 1, static_cast<int>(doc_.lines.size()));
 	s += wrap_ ? _T("  折返:ON") : _T("  折返:OFF");
+	if (!marks_.empty()) s.cat_sprintf(_T("  栞:%d"), static_cast<int>(marks_.size()));
+	if (!last_error_.IsEmpty()) s += _T("  ") + last_error_;
 	if (doc_.truncated) s += _T("  (先頭のみ表示 - サイズ制限)");
 	return s;
 }

@@ -20,7 +20,17 @@
 
 using nyanfi_test::TempDir;
 using text_viewer_core::CharDisplayWidth;
+using text_viewer_core::ClearMarkList;
+using text_viewer_core::FindMarkNext;
+using text_viewer_core::FindNextLine;
 using text_viewer_core::LoadForView;
+using text_viewer_core::NextCodePage;
+using text_viewer_core::PageStepLines;
+using text_viewer_core::ParseCodePageParam;
+using text_viewer_core::ParseJumpLine;
+using text_viewer_core::ParseMoveCount;
+using text_viewer_core::StepLine;
+using text_viewer_core::ToggleMark;
 using text_viewer_core::WrapLine;
 
 namespace {
@@ -227,4 +237,106 @@ TEST_CASE("WrapLine: 1文字だけで幅を超える場合でも無限ループ�
 	CHECK(r[0] == _T("あ"));
 	CHECK(r[1] == _T("あ"));
 	CHECK(r[2] == _T("あ"));
+}
+
+//===========================================================================
+// Vモード操作の純関数 (TxtViewer.cpp 由来。行単位に単純化)
+//===========================================================================
+TEST_CASE("StepLine: カーソル上下は範囲内に収まる (CursorDown/CursorUp相当)")
+{
+	// TxtViewer::CursorDown/CursorUp は CurPos.y を 0..MaxDispLine-1 に収める。
+	// 行単位ビューアでは current_line_ を 0..count-1 に収めるのと同値
+	CHECK(StepLine(0, 1, 5) == 1);
+	CHECK(StepLine(4, 1, 5) == 4);   // 末尾では留まる
+	CHECK(StepLine(0, -1, 5) == 0);  // 先頭では留まる
+	CHECK(StepLine(1, 3, 5) == 4);   // 飛び越えは末尾で止まる
+	CHECK(StepLine(0, 1, 0) == 0);   // 空ファイルでは動かない
+}
+
+TEST_CASE("PageStepLines: 1ページは表示行-1 (MovePage相当)")
+{
+	// TxtViewer::MovePage は LineCount+1 行進む。表示行-1と同値
+	CHECK(PageStepLines(20) == 19);
+	CHECK(PageStepLines(1) == 1);
+	CHECK(PageStepLines(0) == 1);
+}
+
+TEST_CASE("FindNextLine: 次の行から探して折り返す (SearchDown/SearchUp相当)")
+{
+	const std::vector<UnicodeString> lines = {_T("aaa"), _T("bbb"), _T("ccc bbb")};
+	// 大小文字を区別しない (TextViewer::SearchForward と同じ簡略化)
+	CHECK(FindNextLine(lines, _T("BBB"), 0, true) == 1);
+	CHECK(FindNextLine(lines, _T("bbb"), 1, true) == 2);  // 自行を飛ばして次へ
+	CHECK(FindNextLine(lines, _T("bbb"), 2, true) == 1);  // 末尾から先頭へ折り返す
+	CHECK(FindNextLine(lines, _T("bbb"), 2, false) == 1);  // 上方向
+	CHECK(FindNextLine(lines, _T("bbb"), 0, false) == 2);  // 上方向も折り返す
+	CHECK(FindNextLine(lines, _T("zzz"), 0, true) == -1);
+	CHECK(FindNextLine(lines, _T(""), 0, true) == -1);
+}
+
+TEST_CASE("ToggleMark/ClearMarkList/FindMarkNext: 栞マーク (Mark/MarkLine相当)")
+{
+	// TxtViewer::MarkLine は "lno;" 形式の文字列でトグルする。ここでは
+	// 0ベース行番号のvectorで同じトグル・検索を行う
+	std::vector<int> marks;
+	marks = ToggleMark(marks, 3);
+	REQUIRE(marks.size() == 1);
+	marks = ToggleMark(marks, 1);
+	CHECK(marks.size() == 2);
+	// 同じ行でもう一度呼ぶと解除される
+	marks = ToggleMark(marks, 3);
+	REQUIRE(marks.size() == 1);
+	CHECK(marks[0] == 1);
+
+	marks = ToggleMark(marks, 5);
+	// 下方向: 現在行より大きい最小のマークへ (FindMarkDown相当)
+	CHECK(FindMarkNext(marks, 0, true) == 1);
+	CHECK(FindMarkNext(marks, 1, true) == 5);
+	CHECK(FindMarkNext(marks, 5, true) == -1);  // これより下には無い
+	// 上方向: 現在行より小さい最大のマークへ (FindMarkUp相当)
+	CHECK(FindMarkNext(marks, 6, false) == 5);
+	CHECK(FindMarkNext(marks, 5, false) == 1);
+	CHECK(FindMarkNext(marks, 0, false) == -1);
+
+	CHECK(ClearMarkList(marks).empty());
+}
+
+TEST_CASE("ParseJumpLine: 行番号ジャンプ (JumpLine相当)")
+{
+	// テキスト表示の JumpLine は1ベース絶対指定のみ ("+|=" を含むとAbort)。
+	// ここでは "+n/-n" の相対指定も受け付ける (バイナリ表示の ToAddrA と同じ考え方)
+	CHECK(ParseJumpLine(_T("5"), 0, 10) == 4);
+	CHECK(ParseJumpLine(_T("1"), 0, 10) == 0);
+	CHECK(ParseJumpLine(_T("10"), 0, 10) == 9);
+	CHECK(ParseJumpLine(_T("+3"), 1, 10) == 4);
+	CHECK(ParseJumpLine(_T("-2"), 5, 10) == 3);
+	CHECK(ParseJumpLine(_T("0"), 0, 10) == -1);   // 範囲外は無効
+	CHECK(ParseJumpLine(_T("11"), 0, 10) == -1);
+	CHECK(ParseJumpLine(_T(""), 0, 10) == -1);
+	CHECK(ParseJumpLine(_T("abc"), 0, 10) == -1);
+	CHECK(ParseJumpLine(_T("+99"), 0, 10) == -1);  // 相対の行き過ぎも無効
+}
+
+TEST_CASE("NextCodePage/ParseCodePageParam: 文字コード切替 (change_CodePage相当)")
+{
+	// TxtViewer::change_CodePage の循環表 (932→50220→20932→1252→65001→1200→932)
+	CHECK(NextCodePage(932) == 50220);
+	CHECK(NextCodePage(50220) == 20932);
+	CHECK(NextCodePage(20932) == 1252);
+	CHECK(NextCodePage(1252) == 65001);
+	CHECK(NextCodePage(65001) == 1200);
+	CHECK(NextCodePage(1200) == 932);
+	CHECK(NextCodePage(9999) == 932);  // 不明値は932へ
+	// パラメータ指定は表にある値だけ有効。空なら次へ進む
+	CHECK(ParseCodePageParam(_T("65001"), 932) == 65001);
+	CHECK(ParseCodePageParam(_T("9999"), 932) == 0);
+	CHECK(ParseCodePageParam(_T(""), 932) == 50220);
+}
+
+TEST_CASE("ParseMoveCount: 移動行数 (get_MovePrmの数値部分相当)")
+{
+	CHECK(ParseMoveCount(_T(""), 7) == 1);
+	CHECK(ParseMoveCount(_T("3"), 7) == 3);
+	CHECK(ParseMoveCount(_T("0"), 7) == 1);
+	CHECK(ParseMoveCount(_T("abc"), 7) == 1);
 }

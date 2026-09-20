@@ -53,6 +53,57 @@ public:
 	/// gui/grep_dialog.cpp から呼ばれる)
 	void GotoLine(int line);
 
+	/**
+	 * @brief Vモードコマンドを実行する
+	 * @details src/TxtViewer.cpp::ExeCommand / src/MainFrm.cpp::ExeCommandV の
+	 *          頻度上位コマンドを行単位ビューア向けに単純化したもの。
+	 *          判断 (範囲計算・検索・マーク・ジャンプ先・コードページ) は
+	 *          gui/text_viewer_core.h の純関数が持ち、ここは受け渡しだけにする
+	 * @return true 処理済み (MainFrame::Execute は他のモードへ回さない)
+	 */
+	bool Execute(const UnicodeString &full_command);
+
+	/// V:CursorUp / V:CursorDown (param 数値=行数、空=1)
+	void CmdCursorUp(const UnicodeString &param);
+	void CmdCursorDown(const UnicodeString &param);
+	/// V:PageUp / V:PageDown
+	void CmdPageUp();
+	void CmdPageDown();
+	/// V:TextTop / V:TextEnd (先頭/末尾ジャンプ)
+	void CmdTextTop();
+	void CmdTextEnd();
+	/// V:LineTop / V:LineEnd (行単位ビューアでは水平スクロールの端へ。
+	/// VCL 版は文字カーソルを行頭/行末へ動かすが、ここに桁カーソルは無い)
+	void CmdLineTop();
+	void CmdLineEnd();
+	/// V:CursorLeft / V:CursorRight (param 数値=文字数、空=4)
+	void CmdCursorLeft(const UnicodeString &param);
+	void CmdCursorRight(const UnicodeString &param);
+	/// V:FindText (param 空=ダイアログ表示、非空=その語で検索)
+	void CmdFindText(const UnicodeString &param);
+	/// V:FindDown / V:FindUp (param 非空=検索語を更新して検索)
+	bool CmdFindDown(const UnicodeString &param);
+	bool CmdFindUp(const UnicodeString &param);
+	/// V:JumpLine (param 行番号。空=ダイアログ表示)
+	bool CmdJumpLine(const UnicodeString &param);
+	/// V:Mark (トグル) / V:ClearMark (全解除)
+	void CmdMark();
+	void CmdClearMark();
+	/// V:FindMarkDown / V:FindMarkUp。移動したら true
+	bool CmdFindMarkDown();
+	bool CmdFindMarkUp();
+	/// V:ChangeCodePage (param 空=循環切替、非空=指定)。無効値は無視する
+	void CmdChangeCodePage(const UnicodeString &param);
+	/// V:ReloadFile (現在行・マークを保って再読込)
+	void CmdReload();
+	/// V:Close (閉じる。SetOnClose 経由)
+	void CmdClose();
+
+	/// 現在の栞マーク (0ベース、昇順)。ステータス表示・テスト用
+	const std::vector<int> &Marks() const { return marks_; }
+	/// 直前の検索語 (FindDown/FindUp が使う)
+	const UnicodeString &LastSearch() const { return last_search_; }
+
 private:
 	void OnPaint(wxPaintEvent &event);
 	void OnSize(wxSizeEvent &event);
@@ -81,6 +132,7 @@ private:
 
 	void PromptSearch();
 	bool SearchForward(const UnicodeString &kwd, int from_line);
+	bool SearchBackward(const UnicodeString &kwd, int from_line);
 
 	text_viewer_core::LoadResult doc_;
 	UnicodeString path_;
@@ -94,6 +146,9 @@ private:
 	int h_offset_chars_ = 0;           //!< 折り返し無効時の水平スクロール(文字単位)
 
 	UnicodeString last_search_;        //!< 直前の検索語 (次回のダイアログ初期値)
+	UnicodeString last_error_;         //!< 直前の Execute 系エラーメッセージ (無ければ空)
+	std::vector<int> marks_;           //!< 栞マーク (0ベース、昇順。V:Mark 系)
+	int forced_code_page_ = 0;         //!< ChangeCodePage による強制コードページ (0=自動判定)
 
 	wxFont font_;
 	int row_height_ = 16;
