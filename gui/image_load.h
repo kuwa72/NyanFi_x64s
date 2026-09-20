@@ -79,6 +79,16 @@ bool IsSupportedExt(const UnicodeString &fnam);
  */
 LoadResult LoadForView(const UnicodeString &path);
 
+/**
+ * @brief Exif Orientation 値 (1〜8) を取得する
+ * @details src/SubView.cpp の get_ExifInfStr(fnam, &ori) と同じく
+ * EXIF_GetInf → タグ "274" を読む (src/usr_exif.cpp:920 と同じ)。
+ * Exif を持たない・読めない・範囲外の値のときは 0 を返す。
+ * @param path ファイルパス
+ * @return 0 (なし) または 1〜8
+ */
+int GetExifOrientation(const UnicodeString &path);
+
 }  // namespace image_load
 
 #endif  // NYANFI_GUI_IMAGE_LOAD_H

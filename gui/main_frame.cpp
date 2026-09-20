@@ -29,6 +29,7 @@
 #include "gui/file_ops.h"
 #include "gui/grep_dialog.h"
 #include "gui/image_load.h"
+#include "gui/image_view_ops.h"
 #include "gui/rename_dialog.h"
 #include "gui/selection.h"
 #include "gui/list_search.h"
@@ -2755,10 +2756,12 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		CmdSetFontSize(param);
 	}
 	else if (SameStr(command, _T("ZoomIn"))) {
-		CmdZoom(param.IsEmpty()? 1 : param.ToIntDef(1));
+		if (image_viewer_ != nullptr && image_viewer_->IsShown()) image_viewer_->ZoomStep(1);
+		else CmdZoom(param.IsEmpty()? 1 : param.ToIntDef(1));
 	}
 	else if (SameStr(command, _T("ZoomOut"))) {
-		CmdZoom(-(param.IsEmpty()? 1 : param.ToIntDef(1)));
+		if (image_viewer_ != nullptr && image_viewer_->IsShown()) image_viewer_->ZoomStep(-1);
+		else CmdZoom(-(param.IsEmpty()? 1 : param.ToIntDef(1)));
 	}
 	else if (SameStr(command, _T("ZoomReset"))) {
 		CmdZoom(0);
@@ -2841,6 +2844,70 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	}
 	else if (SameStr(command, _T("ImageViewer"))) {
 		CmdImageViewer();
+	}
+	//-- I モード (画像ビューア表示中の操作。判断は gui/image_view_ops.h) --
+	// VCL 版は ExeCommandI (src/MainFrm.cpp) でモード別に振り分けるが、ここは
+	// ビューア表示中だけ受け付ける CommandI 相当の分岐にしてある。非表示時は
+	// false (未実装扱い) にして他のモードの同名コマンドと衝突させない
+	else if (SameStr(command, _T("EqualSize"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		image_viewer_->SetEqualSize();
+	}
+	else if (SameStr(command, _T("FittedSize"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		image_viewer_->SetFittedSize();
+	}
+	else if (SameStr(command, _T("RotateRight"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		image_viewer_->RotateRight();
+	}
+	else if (SameStr(command, _T("RotateLeft"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		image_viewer_->RotateLeft();
+	}
+	else if (SameStr(command, _T("FlipHorz"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		image_viewer_->FlipHorz();
+	}
+	else if (SameStr(command, _T("FlipVert"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		image_viewer_->FlipVert();
+	}
+	else if (SameStr(command, _T("NextFile"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		CmdImageNavigate(1);
+	}
+	else if (SameStr(command, _T("PrevFile"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		CmdImageNavigate(-1);
+	}
+	else if (SameStr(command, _T("TopFile"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		CmdImageTopEnd(true);
+	}
+	else if (SameStr(command, _T("EndFile"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		CmdImageTopEnd(false);
+	}
+	else if (SameStr(command, _T("JumpIndex"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		CmdImageJumpIndex(param);
+	}
+	else if (SameStr(command, _T("FullScreen"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		CmdImageFullScreen(param);
+	}
+	else if (SameStr(command, _T("GrayScale"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		image_viewer_->ToggleGrayscale();
+	}
+	else if (SameStr(command, _T("ShowGrid"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		image_viewer_->ToggleGrid();
+	}
+	else if (SameStr(command, _T("Close"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		ShowImageViewer(false);
 	}
 	else if (SameStr(command, _T("Grep"))) {
 		CmdGrep();
@@ -3768,6 +3835,9 @@ void MainFrame::CmdImageViewer()
 
 	BuildImageNavList(itm->name);
 
+	// VCL の CloseI が GRAY 要求を消すのと同じく、新規オープン時は前回の
+	// 表示効果 (グレー・グリッド) を消す。ファイル移動では維持する
+	image_viewer_->ResetEffects();
 	const UnicodeString full_path = pane->FullPathOf(*itm);
 	image_viewer_->LoadFile(full_path);
 	ShowImageViewer(true);
@@ -3815,12 +3885,75 @@ void MainFrame::CmdImageNavigate(int direction)
 {
 	if (image_nav_list_.empty() || image_nav_index_ == -1) return;
 
-	const int next = image_nav_index_ + direction;
-	if (next < 0 || next >= static_cast<int>(image_nav_list_.size())) return;
+	// 失敗ファイルのスキップは VCL の NextPrevFileICore と同じ考え方だが、
+	// ここは読み込み失敗を記録していないため全件有効として扱う
+	// (image_load::LoadForView は失敗してもビューアを閉じない。要件7)。
+	// 周回はしない (src/Global.cpp の既定値 LoopFilerCursor=false と同じ)
+	const std::vector<char> failed(image_nav_list_.size(), 0);
+	const int next = image_view_ops::NextPrevIndex(
+		static_cast<int>(image_nav_list_.size()), image_nav_index_, direction, failed, false);
+	if (next == image_nav_index_) return;
 
 	image_nav_index_ = next;
 	const UnicodeString full_path = image_nav_dir_ + image_nav_list_[static_cast<std::size_t>(next)];
 	image_viewer_->LoadFile(full_path);
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 先頭/末尾の画像へ移動する (I:TopFile/I:EndFile 相当)
+ * @details VCL (src/MainFrm.cpp::TopFile/EndFileActionExecute) は失敗ファイル
+ * を飛ばすが、ここは CmdImageNavigate と同じく全件有効として扱う (上記参照)
+ */
+void MainFrame::CmdImageTopEnd(bool to_top)
+{
+	if (image_nav_list_.empty()) return;
+
+	const std::vector<char> failed(image_nav_list_.size(), 0);
+	const int next = to_top ? image_view_ops::FirstValidIndex(failed)
+	                        : image_view_ops::LastValidIndex(failed);
+	if (next == -1) return;
+
+	image_nav_index_ = next;
+	const UnicodeString full_path = image_nav_dir_ + image_nav_list_[static_cast<std::size_t>(next)];
+	image_viewer_->LoadFile(full_path);
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 指定インデックスの画像へ移動する (I:JumpIndex 相当)
+ * @details パラメータの解釈は image_view_ops::ParseJumpIndex
+ * (src/MainFrm.cpp::JumpIndexActionExecute と同じ。空・0・非数値は無視)。
+ * VCL は ViewFileList 全体への移動だが、ここは画像のみの一覧
+ * (image_nav_list_) への移動に単純化してある (推測・要検証)
+ */
+void MainFrame::CmdImageJumpIndex(const UnicodeString &param)
+{
+	if (image_nav_list_.empty() || image_nav_index_ == -1) return;
+
+	const auto next = image_view_ops::ParseJumpIndex(
+		param, static_cast<int>(image_nav_list_.size()), image_nav_index_);
+	if (!next.has_value()) return;
+
+	image_nav_index_ = *next;
+	const UnicodeString full_path = image_nav_dir_ + image_nav_list_[static_cast<std::size_t>(*next)];
+	image_viewer_->LoadFile(full_path);
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 全画面表示を切り替える (I:FullScreen 相当)
+ * @details VCL (src/MainFrm.cpp::SetFullScreen) は枠なし化・ツールバー類の
+ * 退避まで行うが、ここでは wxFrame::ShowFullScreen の切替に単純化してある
+ * (推測・要検証)。param が "ON"/"OFF" ならその方向、空ならトグルする点は
+ * VCL の FullScreenActionExecute と同じ
+ */
+void MainFrame::CmdImageFullScreen(const UnicodeString &param)
+{
+	const bool to_full = SameText(param, _T("ON"))    ? true
+	                     : SameText(param, _T("OFF")) ? false
+	                                                  : !IsFullScreen();
+	ShowFullScreen(to_full);
 }
 
 //---------------------------------------------------------------------------

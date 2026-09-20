@@ -6,6 +6,7 @@
 
 #include <memory>
 
+#include "usr_exif.h"
 #include "usr_file_ex.h"
 #include "usr_file_inf.h"
 #include "usr_wic.h"
@@ -85,6 +86,23 @@ LoadResult LoadForView(const UnicodeString &path)
 	r.width = static_cast<unsigned int>(w);
 	r.height = static_cast<unsigned int>(h);
 	return r;
+}
+
+//---------------------------------------------------------------------------
+int GetExifOrientation(const UnicodeString &path)
+{
+	// src/SubView.cpp の get_ExifInfStr(fnam, &ori) 相当。EXIF_GetInf は
+	// 例外を投げうるので、ここでは catch して 0 (なし) 扱いにする
+	try {
+		if (!test_ExifExt(get_extension(path))) return 0;
+		std::unique_ptr<TStringList> lst(new TStringList());
+		if (!EXIF_GetInf(path, lst.get())) return 0;
+		const int ori = get_ListIntVal(lst.get(), _T("274"));
+		return (ori >= 1 && ori <= 8) ? ori : 0;
+	}
+	catch (...) {
+		return 0;
+	}
 }
 
 }  // namespace image_load
