@@ -2130,6 +2130,119 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 
 	FilePane *pane = ActivePane();
 
+	//-- V モード (テキストビューア表示中の操作。判断は gui/text_viewer_core.h) --
+	// VCL 版は ExeCommandV (src/MainFrm.cpp:32789) で TxtViewer->ExeCommand
+	// (src/TxtViewer.cpp:5010) に振り分けるが、ここはビューア表示中だけ
+	// 先に横取りする。非表示時は素通りし、下の F モード等の分岐に任せる
+	// (CursorUp/Down/PageUp/PageDown/Close は F/I モードと同名のため、
+	// 下の else-if に置くと到達不能になる。選択系・特殊表示系・外部連携系は対象外)
+	if (viewer_ != nullptr && viewer_->IsShown()) {
+		if (SameStr(command, _T("CursorUp"))) {
+			viewer_->CmdCursorUp(param);
+			UpdateStatus();
+			return true;
+		}
+		if (SameStr(command, _T("CursorDown"))) {
+			viewer_->CmdCursorDown(param);
+			UpdateStatus();
+			return true;
+		}
+		if (SameStr(command, _T("PageUp"))) {
+			viewer_->CmdPageUp();
+			UpdateStatus();
+			return true;
+		}
+		if (SameStr(command, _T("PageDown"))) {
+			viewer_->CmdPageDown();
+			UpdateStatus();
+			return true;
+		}
+		if (SameStr(command, _T("TextTop"))) {
+			viewer_->CmdTextTop();
+			UpdateStatus();
+			return true;
+		}
+		if (SameStr(command, _T("TextEnd"))) {
+			viewer_->CmdTextEnd();
+			UpdateStatus();
+			return true;
+		}
+		if (SameStr(command, _T("LineTop"))) {
+			viewer_->CmdLineTop();
+			UpdateStatus();
+			return true;
+		}
+		if (SameStr(command, _T("LineEnd"))) {
+			viewer_->CmdLineEnd();
+			UpdateStatus();
+			return true;
+		}
+		if (SameStr(command, _T("CursorLeft"))) {
+			viewer_->CmdCursorLeft(param);
+			UpdateStatus();
+			return true;
+		}
+		if (SameStr(command, _T("CursorRight"))) {
+			viewer_->CmdCursorRight(param);
+			UpdateStatus();
+			return true;
+		}
+		if (SameStr(command, _T("FindText"))) {
+			viewer_->CmdFindText(param);
+			UpdateStatus();
+			return true;
+		}
+		if (SameStr(command, _T("FindDown"))) {
+			viewer_->CmdFindDown(param);
+			UpdateStatus();
+			return true;
+		}
+		if (SameStr(command, _T("FindUp"))) {
+			viewer_->CmdFindUp(param);
+			UpdateStatus();
+			return true;
+		}
+		if (SameStr(command, _T("JumpLine"))) {
+			viewer_->CmdJumpLine(param);
+			UpdateStatus();
+			return true;
+		}
+		if (SameStr(command, _T("Mark"))) {
+			viewer_->CmdMark();
+			UpdateStatus();
+			return true;
+		}
+		if (SameStr(command, _T("ClearMark"))) {
+			viewer_->CmdClearMark();
+			UpdateStatus();
+			return true;
+		}
+		if (SameStr(command, _T("FindMarkDown"))) {
+			viewer_->CmdFindMarkDown();
+			UpdateStatus();
+			return true;
+		}
+		if (SameStr(command, _T("FindMarkUp"))) {
+			viewer_->CmdFindMarkUp();
+			UpdateStatus();
+			return true;
+		}
+		if (SameStr(command, _T("ChangeCodePage"))) {
+			viewer_->CmdChangeCodePage(param);
+			UpdateStatus();
+			return true;
+		}
+		if (SameStr(command, _T("ReloadFile"))) {
+			viewer_->CmdReload();
+			UpdateStatus();
+			return true;
+		}
+		if (SameStr(command, _T("Close"))) {
+			viewer_->CmdClose();
+			return true;
+		}
+	}
+
 	if (SameStr(command, _T("CursorUp"))) {
 		pane->MoveCursor(-1);
 	}

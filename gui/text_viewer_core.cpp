@@ -27,7 +27,7 @@ int BomSkipBytes(int code_page, bool has_bom)
 }  // namespace
 
 //---------------------------------------------------------------------------
-LoadResult LoadForView(const UnicodeString &path, Int64 max_bytes)
+LoadResult LoadForView(const UnicodeString &path, Int64 max_bytes, int forced_code_page)
 {
 	LoadResult r;
 
@@ -53,7 +53,13 @@ LoadResult LoadForView(const UnicodeString &path, Int64 max_bytes)
 		int code_page = get_MemoryCodePage(ms.get(), &has_bom);
 		r.has_bom = has_bom;
 
-		if (code_page < 0) {
+		if (forced_code_page > 0) {
+			// ChangeCodePage による強制再読込。バイナリ判定を上書きして
+			// テキストとしてデコードする (OpenTxtViewer 強制テキスト相当)
+			r.is_binary = false;
+			code_page = forced_code_page;
+		}
+		else if (code_page < 0) {
 			// バイナリ判定。テキストとしては展開しない (呼び出し側が案内を出す)
 			r.is_binary = true;
 			r.code_page = code_page;
@@ -154,6 +160,119 @@ std::vector<UnicodeString> WrapLine(const UnicodeString &line, int width_cols, i
 	}
 	out.push_back(line.SubString(seg_start, len - seg_start + 1));
 	return out;
+}
+
+//---------------------------------------------------------------------------
+int StepLine(int cur, int delta, int count)
+{
+	if (count <= 0) return 0;
+	return std::clamp(cur + delta, 0, count - 1);
+}
+
+//---------------------------------------------------------------------------
+int PageStepLines(int visible_rows)
+{
+	return std::max(1, visible_rows - 1);
+}
+
+//---------------------------------------------------------------------------
+int FindNextLine(const std::vector<UnicodeString> &lines, const UnicodeString &kwd,
+                 int from_line, bool down)
+{
+	const int n = static_cast<int>(lines.size());
+	if (n == 0 || kwd.IsEmpty()) return -1;
+	for (int step = 1; step <= n; ++step) {
+		const int i = down ? (from_line + step) % n
+		                   : (from_line - step + n * 2) % n;
+		if (ContainsText(lines[static_cast<std::size_t>(i)], kwd)) return i;
+	}
+	return -1;
+}
+
+//---------------------------------------------------------------------------
+std::vector<int> ToggleMark(const std::vector<int> &marks, int line)
+{
+	std::vector<int> out = marks;
+	const auto it = std::find(out.begin(), out.end(), line);
+	if (it == out.end()) {
+		out.push_back(line);
+		std::sort(out.begin(), out.end());
+	}
+	else {
+		out.erase(it);
+	}
+	return out;
+}
+
+//---------------------------------------------------------------------------
+std::vector<int> ClearMarkList(const std::vector<int> & /*marks*/)
+{
+	return {};
+}
+
+//---------------------------------------------------------------------------
+int FindMarkNext(const std::vector<int> &marks, int cur_line, bool down)
+{
+	int found = -1;
+	for (int m : marks) {
+		if (down) {
+			if (m > cur_line && (found == -1 || m < found)) found = m;
+		}
+		else {
+			if (m < cur_line && (found == -1 || m > found)) found = m;
+		}
+	}
+	return found;
+}
+
+//---------------------------------------------------------------------------
+int ParseJumpLine(const UnicodeString &param, int cur_0based, int count)
+{
+	if (count <= 0 || param.IsEmpty()) return -1;
+	// 相対指定 "+n/-n" (バイナリ表示の ToAddrA と同じ考え方)
+	if (param[1] == L'+' || param[1] == L'-') {
+		const int rel = param.SubString(2).ToIntDef(-1);
+		if (rel < 0) return -1;
+		const int target = cur_0based + (param[1] == L'+' ? rel : -rel);
+		if (target < 0 || target >= count) return -1;
+		return target;
+	}
+	// 絶対指定 "n" (1ベース。テキスト表示の JumpLine と同じ)
+	const int abs_no = param.ToIntDef(-1);
+	if (abs_no <= 0 || abs_no > count) return -1;
+	return abs_no - 1;
+}
+
+//---------------------------------------------------------------------------
+int NextCodePage(int cur_code_page)
+{
+	static const int kCycle[] = {932, 50220, 20932, 1252, 65001, 1200};
+	for (std::size_t i = 0; i < sizeof(kCycle) / sizeof(kCycle[0]); ++i) {
+		if (kCycle[i] == cur_code_page) {
+			return kCycle[(i + 1) % (sizeof(kCycle) / sizeof(kCycle[0]))];
+		}
+	}
+	return 932;
+}
+
+//---------------------------------------------------------------------------
+int ParseCodePageParam(const UnicodeString &param, int cur_code_page)
+{
+	if (param.IsEmpty()) return NextCodePage(cur_code_page);
+	static const int kKnown[] = {932, 50220, 20932, 1252, 65001, 1200};
+	const int cp = param.ToIntDef(0);
+	for (int k : kKnown) {
+		if (k == cp) return cp;
+	}
+	return 0;
+}
+
+//---------------------------------------------------------------------------
+int ParseMoveCount(const UnicodeString &param, int /*visible_rows*/)
+{
+	if (param.IsEmpty()) return 1;
+	const int n = param.ToIntDef(1);
+	return n >= 1 ? n : 1;
 }
 
 }  // namespace text_viewer_core
