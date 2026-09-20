@@ -170,6 +170,18 @@ public:
 	/// 前のタブへ切り替える (周回。VCL 版の PrevTabActionExecute と同じ)
 	void PrevTab();
 
+	/**
+	 * @brief タブへのパス変更を固定する/解除する (F:FixTabPath)
+	 * @details VCL 版 (MainFrm.cpp:19176) は `ListStt[].is_TabFixed`
+	 *          を立て、解除時に待避 (TabBuff) からパスを戻す。
+	 *          タブバーを切り替えてもディレクトリが追従しなくなる、という
+	 *          判断の置き場所としてここに状態だけを持つ。
+	 *          待避・復帰の受け渡しは呼び出し側 (gui/main_frame.cpp) が行い、
+	 *          ini には保存しない (一時的な表示の固定のため)
+	 */
+	void SetFixed(bool fixed) { fixed_ = fixed; }
+	bool IsFixed() const { return fixed_; }
+
 	/// index 番目のタブへ切り替える (F:ToTab / F:PopupTab で選ばれた番号)
 	/// @return index が範囲外なら false (何もしない)
 	bool SelectAt(int index);
@@ -196,6 +208,7 @@ public:
 private:
 	std::vector<TabState> tabs_;
 	int current_ = 0;
+	bool fixed_ = false;  //!< タブへのパス変更を固定中か (F:FixTabPath)
 };
 
 #endif  // NYANFI_GUI_TABS_H

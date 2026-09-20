@@ -62,4 +62,12 @@ bool OpenWithDialog(const UnicodeString &full_path, UnicodeString &error_out, HW
 	return false;
 }
 
+//---------------------------------------------------------------------------
+UnicodeString ResolveOpenTarget(const UnicodeString &action_param,
+                                const UnicodeString &cursor_path)
+{
+	if (!Trim(action_param).IsEmpty()) return action_param;
+	return cursor_path;
+}
+
 }  // namespace file_open

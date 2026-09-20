@@ -24,6 +24,8 @@
 #include "gui/archive.h"
 #include "gui/clipboard_files.h"
 #include "gui/compare.h"
+#include "gui/file_info.h"
+#include "gui/file_narrow.h"
 #include "gui/text_ops.h"
 #include "gui/text_viewer_core.h"
 #include "gui/file_ops.h"
@@ -462,6 +464,47 @@ void MainFrame::CmdMatchSelect()
 }
 
 //---------------------------------------------------------------------------
+void MainFrame::CmdFilter(const UnicodeString &param)
+{
+	// VCL のパラメータは "CA" (選択マスク解除) / "CS" (大小文字区別) / "FZ"
+	// (あいまい)。"CA" は選択マスク (SelMask、別機能) の解除なのでここでは
+	// 扱わない (MainFrm.cpp:17753)
+	FilePane *pane = ActivePane();
+	const file_narrow::FilterOptions opt{ContainsText(param, _T("CS")), ContainsText(param, _T("FZ"))};
+
+	const wxString input = wxGetTextFromUser(
+		to_wx(_T("絞り込むキーワードを入力してください (空で解除。半角スペース区切りはAND、`|` はOR)")),
+		to_wx(_T("絞り込み")), to_wx(pane->GetFilter()), this);
+	// キャンセルと空入力の区別は付かない。どちらも解除として扱う
+	// (VCL も空で絞り込み解除になる。MainFrm.cpp:17780 付近)
+	pane->SetFilter(to_us(input), opt.case_sensitive, opt.fuzzy);
+
+	if (!pane->HasFilter()) {
+		SetStatusWarning(_T("絞り込みを解除しました"));
+		return;
+	}
+	const int n = pane->GetItemCount();
+	if (n == 0) SetStatusWarning(_T("一致する項目がありません"));
+	else SetStatusWarning(UnicodeString().sprintf(_T("%d 件に絞り込みました"), n));
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdSimilarSort()
+{
+	// VCL は作業リスト・重複検索・比較リストの上では断る (MainFrm.cpp:26179)。
+	// こちらは結果リスト (ワークリスト・検索結果) の上で断る
+	if (RejectOnResultList(_T("類似性ソートは"))) return;
+	FilePane *pane = ActivePane();
+	if (pane->GetCurrentItem() == nullptr) { SetStatusWarning(_T("項目がありません")); return; }
+	if (!pane->ApplySimilarSort()) {
+		SetStatusWarning(_T("並べ替えられませんでした"));
+		return;
+	}
+	SetStatusWarning(_T("名前の類似性で並べ替えました"));
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 // 表示の切り替え (判断は gui/view_state.h の純関数が持つ。規約8)
 //---------------------------------------------------------------------------
@@ -679,6 +722,44 @@ void MainFrame::CmdToTab()
 }
 
 //---------------------------------------------------------------------------
+void MainFrame::CmdFixTabPath(const UnicodeString &param)
+{
+	// VCL はパラメータ無しで固定/解除を切り替え、"ON"/"OFF" で明示する
+	// (MainFrm.cpp:19176)。解除時のパス復帰 (TabBuff) は持たない簡略版で、
+	// 固定中はタブ切り替えでディレクトリが追従しなくなる (ApplyTabState 参照)
+	if (SameText(param, _T("ON"))) tabs_.SetFixed(true);
+	else if (SameText(param, _T("OFF"))) tabs_.SetFixed(false);
+	else tabs_.SetFixed(!tabs_.IsFixed());
+
+	SetStatusWarning(tabs_.IsFixed()? _T("タブへのパス変更を固定しました")
+	                                : _T("タブへのパス変更の固定を解除しました"));
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdToNextOnRight()
+{
+	// VCL は右ペインにいれば次の NyanFi をアクティブにする (MainFrm.cpp:27264)。
+	// 複数起動の連携は無いので、左にいれば右へ移るだけ。右にいれば何もしない
+	if (active_ == 1) {
+		SetStatusWarning(_T("既に右ペインにいます"));
+		return;
+	}
+	SetActivePane(1);
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdToPrevOnLeft()
+{
+	// VCL は左ペインにいれば前の NyanFi をアクティブにする (MainFrm.cpp:27257)。
+	// 複数起動の連携は無いので、右にいれば左へ移るだけ。左にいれば何もしない
+	if (active_ == 0) {
+		SetStatusWarning(_T("既に左ペインにいます"));
+		return;
+	}
+	SetActivePane(0);
+}
+
+//---------------------------------------------------------------------------
 void MainFrame::CmdSubDirList()
 {
 	FilePane *pane = ActivePane();
@@ -749,6 +830,75 @@ void MainFrame::CmdSpecialDirList()
 	                                       to_wx(_T("特殊フォルダ一覧")), choices, this);
 	if (sel < 0) return;
 	ActivePane()->SetPath(paths[static_cast<std::size_t>(sel)]);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdChangeDir(bool opposite)
+{
+	// VCL はパラメータ必須 (MainFrm.cpp:14102/14138)。こちらは入力欄に
+	// 現在のパスを入れて訊く。環境変数・相対パスの解決は移植済みの
+	// ResolveDirectoryInput (gui/navigation.h) が持つ。
+	// ファイルを指していればそのディレクトリを開いてカーソルを合わせる
+	// (VCL の UpdateCurPath(dnam, fnam) と同じ)
+	FilePane *pane = opposite? OppositePane() : ActivePane();
+	const UnicodeString title = opposite? _T("反対側のディレクトリを変更") : _T("ディレクトリを変更");
+
+	const wxString input = wxGetTextFromUser(to_wx(_T("移動先のディレクトリを入力してください")),
+	                                         to_wx(title), to_wx(pane->GetPath()), this);
+	if (input.IsEmpty()) return;
+
+	UnicodeString resolved;
+	if (!ResolveDirectoryInput(to_us(input), pane->GetPath(), resolved)) {
+		wxMessageBox(to_wx(_T("ディレクトリが見つかりません: ") + to_us(input)),
+		             to_wx(title), wxOK | wxICON_WARNING, this);
+		return;
+	}
+
+	if (file_exists(resolved) && !dir_exists(resolved)) {
+		const UnicodeString dir = ExtractFilePath(resolved);
+		const UnicodeString name = ExtractFileName(resolved);
+		if (!pane->SetPath(dir)) {
+			SetStatusWarning(_T("ディレクトリを開けません: ") + dir);
+			return;
+		}
+		const std::vector<UnicodeString> names = pane->VisibleNames();
+		for (std::size_t i = 0; i < names.size(); ++i) {
+			if (SameText(names[i], name)) { pane->MoveCursorTo(static_cast<int>(i)); break; }
+		}
+	}
+	else if (!pane->SetPath(resolved)) {
+		SetStatusWarning(_T("ディレクトリを開けません: ") + resolved);
+		return;
+	}
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdChangeDrive()
+{
+	// VCL はパラメータ (ドライブ文字) 必須 (MainFrm.cpp:14087)。こちらは
+	// 利用可能なドライブを一覧して選ぶ (CmdCycleDrive と同じ取得経路)
+	std::unique_ptr<TStringList> drives(new TStringList());
+	get_available_drive_list(drives.get());
+
+	wxArrayString choices;
+	std::vector<UnicodeString> paths;
+	for (int i = 0; i < drives->Count; ++i) {
+		paths.push_back(drives->Strings[i]);
+		choices.Add(to_wx(drives->Strings[i]));
+	}
+	if (paths.empty()) { SetStatusWarning(_T("利用可能なドライブがありません")); return; }
+
+	const int sel = wxGetSingleChoiceIndex(to_wx(_T("移動先を選んでください")),
+	                                       to_wx(_T("ドライブの変更")), choices, this);
+	if (sel < 0) return;
+
+	FilePane *pane = ActivePane();
+	if (!pane->SetPath(paths[static_cast<std::size_t>(sel)])) {
+		SetStatusWarning(_T("ドライブを開けません: ") + paths[static_cast<std::size_t>(sel)]);
+		return;
+	}
 	UpdateStatus();
 }
 
@@ -836,6 +986,70 @@ void MainFrame::CmdCopyFileName(bool full_path)
 		wxTheClipboard->Close();
 		SetStatusWarning(UnicodeString().sprintf(_T("%d 件の名前をコピーしました"),
 		                                         static_cast<int>(names.size())));
+	}
+	else {
+		SetStatusWarning(_T("クリップボードを開けません"));
+	}
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdCompleteDelete()
+{
+	// VCL は書庫・ワークリスト・FTP の上では断り、2段階の確認を出す
+	// (MainFrm.cpp:29076)。こちらも結果リスト (書庫相当の一覧) の上では断り、
+	// 2回聞く (2回目は VCL の SureCmpDel 相当の固定確認)
+	if (RejectOnResultList(_T("完全削除は"))) return;
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> names = pane->GetSelectedNames();
+	if (names.empty()) { SetStatusWarning(_T("削除対象がありません")); return; }
+
+	// 結果リストの項目は一覧のディレクトリの外にあるので、名前ではなく
+	// フルパスで取る (GetPath() + 名前 だと別のファイルを指す)
+	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
+
+	if (!ConfirmItems(this, _T("完全削除"), _T("完全に削除"), names, EmptyStr)) return;
+	if (wxMessageBox(to_wx(_T("ゴミ箱には入りません。本当に完全削除してよいですか?")),
+	                 to_wx(_T("完全削除")), wxYES_NO | wxICON_WARNING, this) != wxYES) return;
+
+	const file_ops::FileOpResult result = file_ops::DeleteItemsPermanently(paths);
+	panes_[0]->Reload();
+	panes_[1]->Reload();
+	wxMessageBox(to_wx(file_ops::Summarize(result)), to_wx(_T("完全削除の結果")),
+	             wxOK | wxICON_INFORMATION, this);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdCopyFileInfo()
+{
+	// VCL はカーソル位置のファイル情報をクリップボードにコピーする
+	// (FVI:CopyFileInfo)。組み立ては gui/file_info.h の純関数が持つ
+	FilePane *pane = ActivePane();
+	const FileItem *itm = pane->GetCurrentItem();
+	if (itm == nullptr || itm->is_parent) { SetStatusWarning(_T("対象がありません")); return; }
+
+	std::unique_ptr<TStringList> lst(new TStringList());
+	try {
+		BuildFileInfoLines(pane->FullPathOf(*itm), *itm, lst.get());
+	}
+	catch (const Exception &e) {
+		lst->Add(_T("エラー: ") + UnicodeString(e.Message));
+	}
+	catch (const std::exception &) {
+		lst->Add(_T("エラー: 情報の取得中に例外が発生しました"));
+	}
+
+	UnicodeString text;
+	for (int i = 0; i < lst->Count; ++i) {
+		if (!text.IsEmpty()) text += _T("\r\n");
+		text += lst->Strings[i];
+	}
+	if (text.IsEmpty()) { SetStatusWarning(_T("ファイル情報を取得できません")); return; }
+
+	if (wxTheClipboard->Open()) {
+		wxTheClipboard->SetData(new wxTextDataObject(to_wx(text)));
+		wxTheClipboard->Close();
+		SetStatusWarning(_T("ファイル情報をコピーしました"));
 	}
 	else {
 		SetStatusWarning(_T("クリップボードを開けません"));
@@ -1498,6 +1712,116 @@ void MainFrame::CmdOpenByExplorer()
 
 	if (!launch(spec, static_cast<HWND>(GetHandle()))) {
 		SetStatusWarning(_T("エクスプローラを開けません"));
+	}
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdCalculator()
+{
+	const external::LaunchSpec spec = external::CalculatorSpec();
+	if (!launch(spec, static_cast<HWND>(GetHandle()))) {
+		SetStatusWarning(_T("電卓を起動できません: ") + spec.file);
+	}
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdExeCommandLine()
+{
+	const wxString input = wxGetTextFromUser(
+		to_wx(_T("実行するコマンドラインを入力してください")),
+		to_wx(_T("コマンドラインの実行")), wxEmptyString, this);
+	if (input.IsEmpty()) return;
+
+	const external::LaunchSpec spec =
+		external::CommandLineSpec(to_us(input), ActivePane()->GetPath());
+	if (!launch(spec, static_cast<HWND>(GetHandle()))) {
+		SetStatusWarning(_T("実行できません: ") + to_us(input));
+	}
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdOpenByWin(const UnicodeString &param)
+{
+	// VCL は ADS/FTP の上では断る (MainFrm.cpp:22639)。結果リストは通常の
+	// ファイルなので通す
+	FilePane *pane = ActivePane();
+	const FileItem *itm = pane->GetCurrentItem();
+	const UnicodeString cursor =
+		(itm != nullptr && !itm->is_parent)? pane->FullPathOf(*itm) : EmptyStr;
+
+	const UnicodeString target = file_open::ResolveOpenTarget(param, cursor);
+	if (target.IsEmpty()) { SetStatusWarning(_T("開く対象がありません")); return; }
+	if (test_ExeExt(get_extension(target)) && !ConfirmExecute(this, target)) return;
+	if (file_exists(target) || dir_exists(target)) RecordHistory(history::Kind::Recent, target);
+
+	UnicodeString error;
+	if (!file_open::OpenStandard(target, error, static_cast<HWND>(GetHandle()))
+	    && !error.IsEmpty()) {
+		wxMessageBox(to_wx(error), to_wx(_T("開けませんでした")), wxOK | wxICON_ERROR, this);
+	}
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdInputCommands()
+{
+	// VCL は専用ダイアログで受けて別名・コマンドファイルも実行する
+	// (MainFrm.cpp:19834)。こちらは文字列を受けて Execute へ回す簡略版。
+	// 履歴への追加は Execute の先頭で済んでいる
+	const std::vector<UnicodeString> &hist = hist_cmd_.Entries();
+	const wxString def = hist.empty()? wxEmptyString : to_wx(hist.front());
+
+	const wxString input = wxGetTextFromUser(
+		to_wx(_T("実行するコマンドを入力してください (例: SortDlg)")),
+		to_wx(_T("コマンドの入力")), def, this);
+	if (input.IsEmpty()) return;
+
+	if (!Execute(to_us(input))) {
+		SetStatusWarning(_T("不明なコマンドです: ") + to_us(input));
+	}
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdCopyCmdName()
+{
+	// VCL はコマンド入力ダイアログから選んでコピーする (MainFrm.cpp:19821)。
+	// こちらは VCL と同じコマンド表 (set_CmdList) から選ぶ。キーワードがあれば
+	// S モードと同じ照合 (list_search::FilterKeywordHistory) で絞る
+	std::unique_ptr<TStringList> cmds(new TStringList());
+	std::unique_ptr<TStringList> ids(new TStringList());
+	set_CmdList(cmds.get(), ids.get());
+
+	const wxString keyword = wxGetTextFromUser(
+		to_wx(_T("絞り込むキーワードを入力してください (空ですべて)")),
+		to_wx(_T("コマンド名のコピー")), wxEmptyString, this);
+	// キャンセルと空入力の区別は付かない。どちらも全件から選ぶ
+
+	std::vector<UnicodeString> entries;
+	for (int i = 0; i < cmds->Count; ++i) entries.push_back(cmds->Strings[i]);
+	if (!to_us(keyword).IsEmpty()) {
+		entries = list_search::FilterKeywordHistory(entries, entries);
+	}
+	if (entries.empty()) { SetStatusWarning(_T("一致するコマンドがありません")); return; }
+
+	wxArrayString choices;
+	for (const UnicodeString &e : entries) choices.Add(to_wx(e));
+	const int sel = wxGetSingleChoiceIndex(to_wx(_T("コピーするコマンドを選んでください")),
+	                                       to_wx(_T("コマンド名のコピー")), choices, this);
+	if (sel < 0) return;
+
+	// 表の書式は "F:名前=説明"。コピーするのは名前だけ
+	const UnicodeString entry = entries[static_cast<std::size_t>(sel)];
+	const int colon = entry.Pos(_T(":"));
+	const int eq = entry.Pos(_T("="));
+	const UnicodeString name =
+		(colon > 0 && eq > colon)? entry.SubString(colon + 1, eq - colon - 1) : entry;
+
+	if (wxTheClipboard->Open()) {
+		wxTheClipboard->SetData(new wxTextDataObject(to_wx(name)));
+		wxTheClipboard->Close();
+		SetStatusWarning(_T("コマンド名をコピーしました: ") + name);
+	}
+	else {
+		SetStatusWarning(_T("クリップボードを開けません"));
 	}
 }
 
@@ -3090,6 +3414,56 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	else if (SameStr(command, _T("PopupTab"))) {
 		ShowTabListDialog();
 	}
+	//-- Fモード残コマンド (issue #36) ------------------------------------------
+	// ソート/フィルタ/コピー・移動/タブ/外部実行の優先群から15件。
+	// 判断は wx 非依存の純関数 (gui/file_narrow.h・file_ops・tabs・external・
+	// file_open) が持ち、ここは受け渡しだけ。未実装は下の else で false を返す
+	// 契約 (キー通常処理へ) を維持する
+	else if (SameStr(command, _T("Filter"))) {
+		CmdFilter(param);
+	}
+	else if (SameStr(command, _T("SimilarSort"))) {
+		CmdSimilarSort();
+	}
+	else if (SameStr(command, _T("ChangeDir"))) {
+		CmdChangeDir(false);
+	}
+	else if (SameStr(command, _T("ChangeOppDir"))) {
+		CmdChangeDir(true);
+	}
+	else if (SameStr(command, _T("ChangeDrive"))) {
+		CmdChangeDrive();
+	}
+	else if (SameStr(command, _T("CompleteDelete"))) {
+		CmdCompleteDelete();
+	}
+	else if (SameStr(command, _T("FixTabPath"))) {
+		CmdFixTabPath(param);
+	}
+	else if (SameStr(command, _T("ToNextOnRight"))) {
+		CmdToNextOnRight();
+	}
+	else if (SameStr(command, _T("ToPrevOnLeft"))) {
+		CmdToPrevOnLeft();
+	}
+	else if (SameStr(command, _T("Calculator"))) {
+		CmdCalculator();
+	}
+	else if (SameStr(command, _T("ExeCommandLine"))) {
+		CmdExeCommandLine();
+	}
+	else if (SameStr(command, _T("OpenByWin"))) {
+		CmdOpenByWin(param);
+	}
+	else if (SameStr(command, _T("InputCommands"))) {
+		CmdInputCommands();
+	}
+	else if (SameStr(command, _T("CopyCmdName"))) {
+		CmdCopyCmdName();
+	}
+	else if (SameStr(command, _T("CopyFileInfo"))) {
+		CmdCopyFileInfo();
+	}
 	else if (SameStr(command, _T("Exit"))) {
 		Close(true);
 	}
@@ -4263,6 +4637,9 @@ void MainFrame::ApplyTabState(const TabState &state)
 		const PaneTabState &pane_state = state.panes[i];
 		panes_[i]->SetSortSettings(pane_state.sort_key, pane_state.sort_descending, pane_state.dirs_first);
 
+		// 固定中 (F:FixTabPath) はディレクトリを追従させない (VCL の
+		// ListStt[].is_TabFixed と同じ意図)。並べ替え設定は適用する
+		if (tabs_.IsFixed()) continue;
 		if (!pane_state.directory.IsEmpty() && !SameText(pane_state.directory, panes_[i]->GetPath())
 		    && dir_exists(pane_state.directory)) {
 			panes_[i]->SetPath(pane_state.directory, /*record_history=*/false);

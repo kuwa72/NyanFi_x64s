@@ -1535,3 +1535,67 @@ S モードの移動・選択は `FilePane::VisibleNames()` / `VisibleItems()` �
   「5秒間プロセスが生きていること」だけなので、キー操作自体は未検証)。
   `NextErr` / `PrevErr` の表示と `KeywordHistory` のダイアログは
   **実機でも未確認**
+
+## 34. Fモード残コマンド (Phase 3 issue #36)
+
+Fモード優先群 (ソート/フィルタ/コピー・移動/タブ/外部実行) から15件。
+`Filter` / `SimilarSort` / `ChangeDir` / `ChangeOppDir` / `ChangeDrive` /
+`CompleteDelete` / `FixTabPath` / `ToNextOnRight` / `ToPrevOnLeft` /
+`Calculator` / `ExeCommandLine` / `OpenByWin` / `InputCommands` /
+`CopyCmdName` / `CopyFileInfo`。
+判断は新規の `gui/file_narrow.h/.cpp` (wx 非依存) と既存モジュールへの
+純関数追加 (`file_ops::DeleteItemsPermanently` / `TabManager::固定状態` /
+`external::CalculatorSpec`・`CommandLineSpec` /
+`file_open::ResolveOpenTarget`) に置き、
+`gui/main_frame.cpp::Execute` に配線した。配線数は 276 → **291**。
+
+### 実測で決めた点
+
+- **Filter は語照合で狭める** (`contains_word_and_or` /
+  `contains_fuzzy_word` をそのまま使う、MainFrm.cpp:17790)。
+  パラメータは "CS" (大小文字区別) / "FZ" (あいまい) だけを見て、
+  "CA" (選択マスク解除) は別機能のため扱わない。空で解除する点は VCL 版と同じ。
+  マスク (`SetMask`) とは独立 (両方あれば両方で絞る)。
+- **SimilarSort は距離順の順位だけを純関数が返す**
+  (`get_NrmLevenshteinDistance`、カーソル=-1・親=1000 は VCL と同じ値域、
+  MainFrm.cpp:26176)。VCL の "IA/IX/IC/IN/IF" のうち名前しか持たない
+  骨格で意味のある大小文字・数字・全半角の無視だけに対応。
+  作業リスト等では断る点も VCL 版と同じ (結果リストで断る)。
+- **ChangeDir/ChangeOppDir は入力欄に現在のパスを入れて訊く**
+  (VCL はパラメータ必須、MainFrm.cpp:14102/14138)。
+  ファイルを指していればそのディレクトリを開いてカーソルを合わせる
+  (VCL の `UpdateCurPath(dnam, fnam)` と同じ)。
+- **ChangeDrive は一覧から選ぶ** (VCL はパラメータ必須、MainFrm.cpp:14087)。
+  取得経路は `CmdCycleDrive` と同じ `get_available_drive_list`。
+- **CompleteDelete は直接削除の簡略版** (VCL はタスク経由 CMPDEL、
+  MainFrm.cpp:29076)。2回聞く点 (2回目はゴミ箱に入らない旨の固定確認) は
+  VCL の `SureCmpDel` 相当。シンボリックリンクはたどらずリンク自体を消す。
+- **FixTabPath は固定中タブ切り替えでディレクトリを追従させない**
+  (VCL の `is_TabFixed` と同じ意図、MainFrm.cpp:19176)。
+  解除時のパス復帰 (TabBuff) は持たない。ini には保存しない。
+- **ToNextOnRight/ToPrevOnLeft は反対ペインへ移るだけ**
+  (VCL は他側にいれば別 NyanFi をアクティブ化するが、複数起動の連携は無い、
+  MainFrm.cpp:27257/27264)。
+- **Calculator は Windows 付属の電卓を起動する** (VCL は自前の電卓フォーム、
+  MainFrm.cpp:14039)。計算式の受け渡しは対象外。
+- **ExeCommandLine は `cmd.exe /k` で残るウィンドウに任せる**
+  (VCL は `Execute_cmdln` で標準出力の取り込み等を選べる、MainFrm.cpp:17039)。
+- **OpenByWin は関連付けで開く** (`file_open::OpenStandard` を再利用)。
+  管理者からの降格実行 (DM) は対象外。実行可能ファイルの確認は
+  `CmdOpenStandard` と同じく出す。
+- **InputCommands は文字列を受けて Execute へ回す** (VCL は専用ダイアログで
+  別名・コマンドファイルも実行、MainFrm.cpp:19834)。履歴への追加は
+  `Execute` の先頭で済んでいる。既定値は直前のコマンド。
+- **CopyCmdName は VCL と同じコマンド表から選ぶ** (`set_CmdList`、
+  MainFrm.cpp:19821)。キーワードがあれば S モードと同じ照合で絞る。
+
+### 検証の範囲 (テストを書かなかったものを全部挙げる)
+
+- 18 ケース追加 (core 全体: **993 ケース / 3,156 アサーション**)。
+  語照合・類似度順位・完全削除 (一時ディレクトリ)・タブ固定状態・
+  電卓/コマンドラインの起動内容・開く対象の決定を含む
+- **次はテストしていない**:
+  `gui/main_frame.cpp` 側の受け渡しと `gui/file_pane.cpp` の表示
+  (wx 依存)。各ダイアログの操作は**実機でも未確認**。
+  キー割り当て (`gui/key_map.cpp`) は変えていない
+  (重複割り当てを避けるため。必要なら別途割り当てること)

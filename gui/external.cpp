@@ -54,4 +54,22 @@ LaunchSpec ExplorerLaunchSpec(const UnicodeString &path, bool is_dir)
 	return spec;
 }
 
+//---------------------------------------------------------------------------
+LaunchSpec CalculatorSpec()
+{
+	LaunchSpec spec;
+	spec.file = _T("calc.exe");
+	return spec;
+}
+
+//---------------------------------------------------------------------------
+LaunchSpec CommandLineSpec(const UnicodeString &cmdline, const UnicodeString &directory)
+{
+	LaunchSpec spec;
+	spec.file = _T("cmd.exe");
+	if (!Trim(cmdline).IsEmpty()) spec.parameters = _T("/k ") + Trim(cmdline);
+	spec.directory = ExcludeTrailingPathDelimiter(directory);
+	return spec;
+}
+
 }  // namespace external

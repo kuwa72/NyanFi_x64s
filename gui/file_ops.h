@@ -111,6 +111,18 @@ bool MakeDirectory(const UnicodeString &dir, const UnicodeString &name, UnicodeS
  */
 bool SendToTrash(const std::vector<UnicodeString> &paths, UnicodeString &error_out, HWND owner = NULL);
 
+/**
+ * @brief 複数項目を完全に削除する (ゴミ箱には送らない)
+ * @param paths 削除対象のフルパスの一覧 (ファイルまたはディレクトリ)
+ * @details VCL 版の `CompleteDelete` (MainFrm.cpp:29076) はタスク経由
+ *          (CMPDEL) で消す。こちらはその場で直接消す簡略版。
+ *          ディレクトリは再帰的に消すが、シンボリックリンク/ジャンクションは
+ *          **たどらずリンク自体を消す** (中身を消してしまう事故を防ぐ)。
+ *          読み取り専用は書き込み可に戻してから消す (VCL の force 相当の
+ *          最低限)。件数は最上位の項目数 (配下は数えない)。
+ */
+FileOpResult DeleteItemsPermanently(const std::vector<UnicodeString> &paths);
+
 
 /**
  * @brief コピー/移動先が元と同じか、その配下かを判定する
