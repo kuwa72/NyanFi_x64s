@@ -278,6 +278,7 @@ if(TARGET nyanfi_core)
 		gui/misc_ops.cpp
 		gui/find_files.cpp
 		gui/work_list.cpp
+		gui/list_search.cpp
 		gui/bookmarks.cpp
 		gui/clone_name.cpp
 		gui/file_ops2.cpp
