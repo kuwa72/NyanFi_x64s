@@ -31,6 +31,7 @@
 #include "gui/image_load.h"
 #include "gui/rename_dialog.h"
 #include "gui/selection.h"
+#include "gui/list_search.h"
 #include "gui/view_state.h"
 #include "usr_cmdlist.h"
 #include "usr_file_ex.h"
@@ -2707,6 +2708,13 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	else if (SameStr(command, _T("ViewLog"))) {
 		CmdViewLog();
 	}
+	//-- L モード (ログのエラー移動。判断は gui/list_search.h) ----------------
+	else if (SameStr(command, _T("NextErr"))) {
+		CmdNextErr(true);
+	}
+	else if (SameStr(command, _T("PrevErr"))) {
+		CmdNextErr(false);
+	}
 	else if (SameStr(command, _T("LogFileInfo"))) {
 		CmdLogFileInfo();
 	}
@@ -2839,6 +2847,38 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	}
 	else if (SameStr(command, _T("IncSearch"))) {
 		StartIncSearch();
+	}
+	//-- S モード (インクリメンタルサーチ中の操作。判断は gui/list_search.h) --
+	else if (SameStr(command, _T("IncSearchDown"))) {
+		CmdIncSearchStep(true);
+	}
+	else if (SameStr(command, _T("IncSearchUp"))) {
+		CmdIncSearchStep(false);
+	}
+	else if (SameStr(command, _T("IncSearchTop"))) {
+		CmdIncSearchTop();
+	}
+	else if (SameStr(command, _T("IncSearchExit"))) {
+		if (!incsearch_.IsActive()) { SetStatusWarning(_T("サーチ中ではありません")); }
+		else ExitIncSearch();
+	}
+	else if (SameStr(command, _T("ClearIncKeyword"))) {
+		CmdClearIncKeyword();
+	}
+	else if (SameStr(command, _T("SelectDown"))) {
+		CmdSelectDown();
+	}
+	else if (SameStr(command, _T("IncMatchSelect"))) {
+		CmdIncMatchSelect();
+	}
+	else if (SameStr(command, _T("KeywordHistory"))) {
+		CmdKeywordHistory();
+	}
+	else if (SameStr(command, _T("MigemoMode"))) {
+		CmdMigemoMode(false);
+	}
+	else if (SameStr(command, _T("NormalMode"))) {
+		CmdMigemoMode(true);
 	}
 	else if (SameStr(command, _T("BackDirHist"))) {
 		pane->GoBackDirHistory();  // 履歴が無ければ何もしない (VCL 版はアクション自体が無効化される)
@@ -3033,17 +3073,29 @@ void MainFrame::HandleIncSearchKey(wxKeyEvent &event)
 		return;
 	}
 	if (SameText(key_str, _T("UP"))) {
-		const std::vector<UnicodeString> names = ActivePane()->VisibleNames();
-		const int idx = FindIncrementalSearchMatch(names, incsearch_.Word(), ActivePane()->GetCursor(), false);
-		if (idx != -1) ActivePane()->MoveCursorTo(idx);
-		UpdateStatus();
+		CmdIncSearchStep(false);
 		return;
 	}
 	if (SameText(key_str, _T("DOWN"))) {
-		const std::vector<UnicodeString> names = ActivePane()->VisibleNames();
-		const int idx = FindIncrementalSearchMatch(names, incsearch_.Word(), ActivePane()->GetCursor(), true);
-		if (idx != -1) ActivePane()->MoveCursorTo(idx);
-		UpdateStatus();
+		CmdIncSearchStep(true);
+		return;
+	}
+	// S モードのコマンド割り当て (VCL 版の KeyFuncList["S:"+keystr] 相当)。
+	// F モードのコマンドがサーチ中に誤発しないよう、S モードのコマンドだけを通す。
+	// VCL の既定表に S モードのキー割り当ては "S:Enter=IncSearchExit" しか無く
+	// (Global.cpp:2128)、それ以外は使う人が ini で足す想定のため、既定の
+	// key_map.cpp には足さない (足すと F モードとキーが衝突しかねない)
+	const UnicodeString s_cmd = get_CmdStr(keymap_.Lookup(key_str));
+	if (!s_cmd.IsEmpty() && contained_wd_i("IncSearchDown|IncSearchUp|IncSearchTop|IncSearchExit|"
+		"ClearIncKeyword|Select|SelectDown|ClearAll|IncMatchSelect|"
+		"KeywordHistory|MigemoMode|NormalMode", s_cmd)) {
+		// S:Select はその場で反転するだけ (F:Select の「反転して進む」とは違う。
+		// MainFrm.cpp:12072 の contained_wd_i("Select|SelectDown") と同じ)
+		if (SameText(s_cmd, _T("Select"))) {
+			ActivePane()->ToggleMarkNoMove();
+			UpdateStatus();
+		}
+		else Execute(s_cmd);
 		return;
 	}
 
@@ -3058,7 +3110,9 @@ void MainFrame::HandleIncSearchKey(wxKeyEvent &event)
 /// サーチモードを抜ける (Esc/Enter。VCL 版の ExitIncSearch 相当)
 void MainFrame::ExitIncSearch()
 {
+	RecordIncSearchHistory();
 	incsearch_.Exit();
+	incsearch_migemo_ = false;
 	ActivePane()->ClearIncSearchHighlight();
 	UpdateStatus();
 }
@@ -3109,6 +3163,171 @@ void MainFrame::JumpToNearestIncSearchMatch()
 	// カーソル自身も候補に含めたいので、開始位置を1つ手前にする
 	const int idx = FindIncrementalSearchMatch(names, incsearch_.Word(), pane->GetCursor() - 1, true);
 	if (idx != -1) pane->MoveCursorTo(idx);
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 一致項目へ移動する (S:IncSearchDown / S:IncSearchUp)
+ * @param forward true なら下方向、false なら上方向
+ * @details VCL 版 (MainFrm.cpp::FileListIncSearch、12158行の csr_up/csr_down)
+ *          と同じく、結果リスト上でも動く (VisibleNames は結果リストの項目を
+ *          そのまま返すため、find_files/grep/work_list の出力上での絞り込みに
+ *          使える)。サーチ中でなければ警告する
+ */
+void MainFrame::CmdIncSearchStep(bool forward)
+{
+	if (!incsearch_.IsActive()) { SetStatusWarning(_T("サーチ中ではありません")); return; }
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> names = pane->VisibleNames();
+	const int idx = FindIncrementalSearchMatch(names, incsearch_.Word(), pane->GetCursor(), forward);
+	if (idx == -1) { SetStatusWarning(_T("一致する項目がありません")); return; }
+	pane->MoveCursorTo(idx);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 先頭から探し直す (S:IncSearchTop)
+ * @details VCL 版 (MainFrm.cpp:12160 の csr_top) と同じ。判断は
+ *          list_search::FindFromTop が持つ
+ */
+void MainFrame::CmdIncSearchTop()
+{
+	if (!incsearch_.IsActive()) { SetStatusWarning(_T("サーチ中ではありません")); return; }
+	FilePane *pane = ActivePane();
+	const int idx = list_search::FindFromTop(pane->VisibleNames(), incsearch_.Word());
+	if (idx == -1) { SetStatusWarning(_T("一致する項目がありません")); return; }
+	pane->MoveCursorTo(idx);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief キーワードをクリアする (S:ClearIncKeyword)
+ * @details VCL 版 (MainFrm.cpp:12059) と同じくキーワードだけを空にして
+ *          サーチモード自体は続ける。一致表示も消える
+ */
+void MainFrame::CmdClearIncKeyword()
+{
+	if (!incsearch_.IsActive()) { SetStatusWarning(_T("サーチ中ではありません")); return; }
+	while (incsearch_.Backspace()) {}
+	ActivePane()->ApplyIncSearchHighlight(incsearch_.Word());
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 選択/解除して下へ移動する (S:SelectDown)
+ * @details VCL 版 (MainFrm.cpp:12072) と同じ順序。「今の位置を反転してから
+ *          下の一致へ動く」なので、動いた先は反転されない。".." は
+ *          ToggleMarkNoMove が弾く
+ */
+void MainFrame::CmdSelectDown()
+{
+	if (!incsearch_.IsActive()) { SetStatusWarning(_T("サーチ中ではありません")); return; }
+	ActivePane()->ToggleMarkNoMove();
+	CmdIncSearchStep(true);
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief マッチ項目をすべて選択する (S:IncMatchSelect)
+ * @details VCL 版は set_IncSeaStt(true) で一致項目を選択・不一致項目の選択を
+ *          外す (MainFrm.cpp:11945)。対象決めは list_search::CollectMatchedIndices
+ *          が持ち、ここは FilePane への受け渡しだけにする (規約8)
+ */
+void MainFrame::CmdIncMatchSelect()
+{
+	if (!incsearch_.IsActive()) { SetStatusWarning(_T("サーチ中ではありません")); return; }
+	FilePane *pane = ActivePane();
+	std::vector<FileItem> items = pane->VisibleItems();
+	if (items.empty()) { SetStatusWarning(_T("項目がありません")); return; }
+	std::vector<bool> matched;
+	matched.reserve(items.size());
+	for (const FileItem &itm : items) matched.push_back(itm.matched);
+	const std::vector<int> targets = list_search::CollectMatchedIndices(matched);
+	if (targets.empty()) { SetStatusWarning(_T("一致する項目がありません")); return; }
+	for (FileItem &itm : items) itm.marked = itm.matched;
+	pane->ApplyMarks(items);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief キーワード履歴から選ぶ (S:KeywordHistory)
+ * @details VCL 版 (MainFrm.cpp:12097) は一覧に一致可能な履歴だけを抽出して
+ *          ポップアップメニューに出す。抽出は list_search::FilterKeywordHistory
+ *          が持ち、ここは選択ダイアログの表示とキーワードの差し替えだけにする。
+ *          候補が無ければ警告する (VCL 版の Abort→beep_Warn 相当)
+ */
+void MainFrame::CmdKeywordHistory()
+{
+	if (!incsearch_.IsActive()) { SetStatusWarning(_T("サーチ中ではありません")); return; }
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> candidates =
+		list_search::FilterKeywordHistory(incsearch_history_, pane->VisibleNames());
+	if (candidates.empty()) { SetStatusWarning(_T("使える履歴がありません")); wxBell(); return; }
+
+	wxArrayString choices;
+	for (const UnicodeString &kwd : candidates) choices.Add(to_wx(kwd));
+	const int sel = wxGetSingleChoiceIndex(to_wx(_T("キーワードを選んでください")),
+	                                       to_wx(_T("キーワード履歴")), choices, this);
+	if (sel < 0) return;
+
+	while (incsearch_.Backspace()) {}
+	const UnicodeString chosen = candidates[static_cast<std::size_t>(sel)];
+	for (int i = 1; i <= chosen.Length(); ++i) incsearch_.Append(chosen[i]);
+	pane->ApplyIncSearchHighlight(incsearch_.Word());
+	if (pane->GetMatchedCount() > 0) JumpToNearestIncSearchMatch();
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief Migemo モードの切り替え・通常モードへ戻す (S:MigemoMode / S:NormalMode)
+ * @param normal true なら無条件で OFF (NormalMode)、false なら反転 (MigemoMode)
+ * @details 切り替えの判断は list_search::ToggleMigemoMode が持つ。VCL 版
+ *          (MainFrm.cpp:12066) と同じく切り替え後はキーワードを空にする。
+ *          辞書 (usr_migemo) は移植済みだが migemo.dll の有無で有効化される
+ *          仕組みの GUI 側統合は未対応のため、dict_ready は常に false
+ *          (要検証事項として報告に明記)。辞書無しで ON にしようとしたら断る
+ */
+void MainFrame::CmdMigemoMode(bool normal)
+{
+	if (!incsearch_.IsActive()) { SetStatusWarning(_T("サーチ中ではありません")); return; }
+	// 辞書 (usr_migemo) の GUI 側統合は未対応のため dict_ready は false。
+	// 判断式自体は VCL 版と同じものを list_search 経由で通す
+	const bool next = normal ? list_search::SetNormalMode(incsearch_migemo_)
+	                         : list_search::ToggleMigemoMode(incsearch_migemo_, false);
+	if (!normal && !next && !incsearch_migemo_) {
+		SetStatusWarning(_T("Migemo辞書が無いため使えません"));
+		return;
+	}
+	incsearch_migemo_ = next;
+	while (incsearch_.Backspace()) {}
+	ActivePane()->ApplyIncSearchHighlight(incsearch_.Word());
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief サーチ終了時にキーワードを履歴へ記録する
+ * @details VCL 版の ExitIncSearch (MainFrm.cpp:19802) と同じ規則:
+ *          Migemo 中は積まない、3文字以上だけを対象にする、重複は消して
+ *          先頭に入れる。上限 50 (ini 既定値 IncSeaHistory=50) を超えたら
+ *          古いものから捨てる
+ */
+void MainFrame::RecordIncSearchHistory()
+{
+	const UnicodeString word = incsearch_.Word();
+	if (incsearch_migemo_ || word.Length() <= 2) return;
+	for (auto it = incsearch_history_.begin(); it != incsearch_history_.end();) {
+		if (SameText(*it, word)) it = incsearch_history_.erase(it);
+		else ++it;
+	}
+	incsearch_history_.insert(incsearch_history_.begin(), word);
+	static constexpr std::size_t kMaxIncSearchHistory = 50;
+	while (incsearch_history_.size() > kMaxIncSearchHistory) incsearch_history_.pop_back();
 }
 
 //---------------------------------------------------------------------------
@@ -5294,7 +5513,38 @@ void MainFrame::CmdClearLog()
 	if (wxMessageBox(to_wx(msg), to_wx(_T("ログ")), wxYES_NO | wxICON_QUESTION, this) != wxYES) return;
 
 	log_.Clear();
+	log_err_index_ = -1;
 	SetStatusWarning(_T("ログを消しました"));
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 次/前のエラー位置へ移動する (L:NextErr / L:PrevErr)
+ * @param forward true なら次、false なら前
+ * @details VCL 版 (MainFrm.cpp::ExeCommandL、13377行) と同じく、ログ行を
+ *          下 (または上) へ探して最初のエラー行へ飛ぶ。**折り返さない**ので
+ *          無ければ警告する。対象の判定は list_search::FindNextError が持つ
+ *          (規約8)。VCL 版は LogListBox のカーソルを動かすが、一覧表示の
+ *          ログウィンドウがまだ無いため、ここでは見つけた行をステータスに
+ *          出して位置 (log_err_index_) だけを進める簡略版にした
+ */
+void MainFrame::CmdNextErr(bool forward)
+{
+	const std::vector<log_win::LogLine> &stored = log_.Lines();
+	if (stored.empty()) { SetStatusWarning(_T("ログは空です")); return; }
+
+	std::vector<UnicodeString> lines;
+	lines.reserve(stored.size());
+	for (const log_win::LogLine &line : stored) lines.push_back(log_win::FormatLine(line));
+
+	if (log_err_index_ >= static_cast<int>(lines.size())) log_err_index_ = -1;
+	const int idx = list_search::FindNextError(lines, log_err_index_, forward);
+	if (idx == -1) { SetStatusWarning(_T("エラー位置がありません")); wxBell(); return; }
+
+	log_err_index_ = idx;
+	UnicodeString msg;
+	msg.sprintf(_T("%d/%d: "), idx + 1, static_cast<int>(lines.size()));
+	SetStatusWarning(msg + lines[static_cast<std::size_t>(idx)]);
 }
 
 //---------------------------------------------------------------------------

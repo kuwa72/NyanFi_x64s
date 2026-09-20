@@ -85,6 +85,18 @@ private:
 	void HandleIncSearchBackspace();              //!< 1文字削除 (BackSpace)
 	void JumpToNearestIncSearchMatch();           //!< 現在位置から最も近い一致へ移動する
 
+	//-- L/S モードと結果リスト (判断は gui/list_search.h の純関数が持つ) ------
+	void CmdNextErr(bool forward);       //!< 次/前のエラー位置へ (NextErr / PrevErr)
+	void CmdIncSearchStep(bool forward); //!< 一致項目へ移動 (IncSearchDown / IncSearchUp)
+	void CmdIncSearchTop();              //!< 先頭から探し直す (IncSearchTop)
+	void CmdClearIncKeyword();           //!< キーワードをクリア (ClearIncKeyword)
+	void CmdSelectDown();                //!< 選択/解除して下へ (SelectDown)
+	void CmdIncMatchSelect();            //!< マッチ項目をすべて選択 (IncMatchSelect)
+	void CmdKeywordHistory();            //!< キーワード履歴から選ぶ (KeywordHistory)
+	void CmdMigemoMode(bool normal);     //!< Migemo 切替/通常へ (MigemoMode / NormalMode)
+	/// サーチ終了時にキーワードを履歴へ記録する (VCL 版の ExitIncSearch 相当)
+	void RecordIncSearchHistory();
+
 	// ディレクトリ履歴・ドライブ一覧・パス直接入力 (gui/navigation.h)
 	void ShowDirHistoryDialog();  //!< ディレクトリ履歴の一覧から選ぶ (H)
 	void ShowDriveListDialog();   //!< ドライブの一覧から選ぶ (L)
@@ -477,6 +489,9 @@ private:
 	KeyMap keymap_;
 	Settings settings_{Settings::DefaultIniPath()};
 	IncrementalSearch incsearch_;  //!< インクリメンタルサーチの状態 (gui/navigation.h)
+	bool incsearch_migemo_ = false;  //!< サーチ中の Migemo 状態 (辞書が無い環境では常に false)
+	std::vector<UnicodeString> incsearch_history_;  //!< キーワード履歴 (上限 50、VCL の IncSeaHistory)
+	int log_err_index_ = -1;  //!< 最後に見つけたエラー行の位置 (NextErr / PrevErr 用)
 
 	TabManager tabs_;       //!< タブの状態 (gui/tabs.h)。左右ペイン共有の1本のタブバー
 	TabBar *tab_bar_ = nullptr;  //!< タブの見た目 (自前描画。gui/main_frame.cpp を参照)

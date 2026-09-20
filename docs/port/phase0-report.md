@@ -1469,3 +1469,69 @@ API を「画面サイズを渡す」形から「現在の矩形を渡す」形�
   `TurnOffMonitor` / `ToggleMute` / `EjectTray` / `EjectDrive`
 - `EjectDrive` は簡略化した経路のため**実機でも未確認**
 - `gui/main_frame.cpp` 側の受け渡しにテストは無い (wx 依存)
+
+## 33. L/S モードと結果リスト (Phase 3 機能群)
+
+L モード 18・S モード 15 のうち頻度上位 12 件。
+`NextErr` / `PrevErr` (ログのエラー移動) と、インクリメンタルサーチの
+`IncSearchDown` / `IncSearchUp` / `IncSearchTop` / `IncSearchExit` /
+`ClearIncKeyword` / `SelectDown` / `IncMatchSelect` / `KeywordHistory` /
+`MigemoMode` / `NormalMode`。
+判断は新規の `gui/list_search.h/.cpp` (wx 非依存) に置き、
+`gui/main_frame.cpp::Execute` に配線した。配線数は 235 → **247**。
+
+### 実測で決めた点
+
+- **L モードはログウィンドウ専用** (`ExeCommandL` は `LogListBox` 専用、
+  MainFrm.cpp:13352)。`CancelAllTask` / `PauseAllTask` / `Suspend` /
+  `TaskMan` はタスクスレッド (未移植) が前提のため対象外。
+  `ClipCopy` (VIL) は画像ビューアの管轄で L モードの管轄ではないため対象外。
+- **エラー行のパターンはそのまま使えた。** `^.>([ECW]|(     [45]\\d{2})) .*`
+  (MainFrm.cpp:13383)。`gui/log_win.cpp` の `FormatLine` は
+  `" >" + 時刻 + 状態文字 + 本文` の形なので、先頭の `" >"` が `^.>` に、
+  状態文字が `[ECW]` に一致する。
+- **S モードの既定キー割り当ては `S:Enter=IncSearchExit` しか無い**
+  (Global.cpp:2128)。そのため既定の `key_map.cpp` には足さず、
+  サーチ中に S モードのコマンドだけを通す振り分け
+  (`HandleIncSearchKey` のホワイトリスト) にした。
+  F モードとキーが衝突しかねないため。
+- `S:Select` はその場で反転するだけ (F:Select の「反転して進む」とは違う。
+  MainFrm.cpp:12072)。
+- 終了時に履歴へ積む規則 (`ExitIncSearch`、MainFrm.cpp:19802) も再現した:
+  Migemo 中は積まない、3文字以上だけ、重複は消して先頭へ、上限 50
+  (`IncSeaHistory=50`)。
+
+### find_files / grep / work_list との接続
+
+S モードの移動・選択は `FilePane::VisibleNames()` / `VisibleItems()` 経由で
+動くため、**結果リスト上でもそのまま動く**
+(結果リストの項目も同じ一覧に入っている)。
+`ReturnList` で通常の一覧に戻る経路は移植済みのため触っていない。
+
+### 実装を簡略化したところ
+
+- VCL 版は LogListBox のカーソルを動かすが、一覧表示のログウィンドウが
+  まだ無いため、`NextErr` / `PrevErr` は見つけた行をステータスに出して
+  位置だけを進める簡略版にした。**折り返さない**点は VCL 版と同じ。
+- `KeywordHistory` の照合は `IncrementalSearchMatch`
+  (AND/OR・大小文字を区別しない) の簡略版にした。VCL 版は
+  `IncSeaFuzzy` / `IncSeaCaseSens` の設定で照合を変えるが、
+  設定の参照は呼び出し側の役割と判断した。
+- `IncSearchTop` は「先頭を含めて最初の一致」を返す単純化
+  (VCL 版は `s_idx=0` から `find_NextIncSea`。ループする実装のため等価)。
+- `MigemoMode` は辞書 (`usr_migemo`) の GUI 側統合が未対応のため、
+  `dict_ready=false` で判断式だけを通す。ON にしようとすると断る。
+  **実機でも未確認**。
+- 照合は名前 (`FileItem::name`) だけを見る。VCL 版は別名・タグ列も見るが、
+  `FilePane::ApplyIncSearchHighlight` の既存の簡略化を踏襲した。
+
+### 検証の範囲 (テストを書かなかったものを全部挙げる)
+
+- 14 ケース (core 全体: **953 ケース / 2,978 アサーション**)。
+  エラー行の判定・前後移動 (折り返し無し)・Migemo 切り替えのガード・
+  履歴の抽出・一致位置の収集・先頭からの再検索を含む
+- **次はテストしていない**:
+  `gui/main_frame.cpp` 側の受け渡し (wx 依存。CI の GUI 確認は
+  「5秒間プロセスが生きていること」だけなので、キー操作自体は未検証)。
+  `NextErr` / `PrevErr` の表示と `KeywordHistory` のダイアログは
+  **実機でも未確認**
