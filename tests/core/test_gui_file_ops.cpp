@@ -444,3 +444,32 @@ TEST_CASE("RenameItem: 大文字小文字だけの変更ができる")
 	CHECK(error.IsEmpty());
 	CHECK(file_exists(dir.file(_T("MIXED.txt"))));
 }
+
+//===========================================================================
+// CompleteDelete: DeleteItemsPermanently (MainFrm.cpp:29076)
+//===========================================================================
+
+TEST_CASE("DeleteItemsPermanently: ファイルとディレクトリを完全に削除する")
+{
+	// VCL はタスク経由 (CMPDEL)。こちらは直接削除し、ゴミ箱には送らない
+	TempDir dir;
+	write_text(dir.file(_T("a.txt")), "a");
+	CHECK(create_Dir(dir.file(_T("sub"))));
+	write_text(dir.file(_T("sub\\b.txt")), "b");
+
+	const std::vector<UnicodeString> paths = {dir.file(_T("a.txt")), dir.file(_T("sub"))};
+	const file_ops::FileOpResult r = file_ops::DeleteItemsPermanently(paths);
+	CHECK(r.success_count == 2);
+	CHECK(r.failures.empty());
+	CHECK_FALSE(file_exists(dir.file(_T("a.txt"))));
+	CHECK_FALSE(dir_exists(dir.file(_T("sub"))));
+}
+
+TEST_CASE("DeleteItemsPermanently: 存在しない項目は失敗に数える")
+{
+	TempDir dir;
+	const file_ops::FileOpResult r =
+		file_ops::DeleteItemsPermanently({dir.file(_T("nosuch.txt"))});
+	CHECK(r.success_count == 0);
+	CHECK(r.failures.size() == 1);
+}

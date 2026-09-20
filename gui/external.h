@@ -46,6 +46,25 @@ LaunchSpec ShellLaunchSpec(ShellKind kind, const UnicodeString &directory);
  */
 LaunchSpec ExplorerLaunchSpec(const UnicodeString &path, bool is_dir);
 
+/**
+ * @brief 電卓を起動するための内容を作る (F:Calculator)
+ * @details 実測 (MainFrm.cpp:14039): VCL は自前の電卓フォーム (TCalculator)
+ *          を開く。wx への移植では Windows 付属の電卓を起動する簡略版にした。
+ *          計算式の受け渡し (CB パラメータ等) は対象外
+ */
+LaunchSpec CalculatorSpec();
+
+/**
+ * @brief コマンドラインを実行するための内容を作る (F:ExeCommandLine)
+ * @param cmdline 実行するコマンドライン (空なら parameters も空)
+ * @param directory 作業ディレクトリ
+ * @details 実測 (MainFrm.cpp:17039): VCL はダイアログで受けて
+ *          `Execute_cmdln` で実行し、標準出力の取り込み等を選べる。
+ *          こちらは `cmd.exe /k` で残るウィンドウに任せる簡略版
+ *          (閉じると消える実行では結果を見落とすため)
+ */
+LaunchSpec CommandLineSpec(const UnicodeString &cmdline, const UnicodeString &directory);
+
 }  // namespace external
 
 #endif  // NYANFI_GUI_EXTERNAL_H

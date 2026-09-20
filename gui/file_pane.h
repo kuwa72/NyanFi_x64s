@@ -205,6 +205,30 @@ public:
 	/// マスクを設定する (空文字列で解除)。ApplyFilterAndSort() を呼び直す
 	void SetMask(const UnicodeString &mask);
 
+	//-- キーワード絞り込み (F:Filter) ------------------------------------------
+	// VCL の Filter (MainFrm.cpp:17751) は語照合で一覧を狭める。
+	// 照合自体は gui/file_narrow.h の純関数が持ち、ここは保持と再適用だけ。
+	// マスク (SetMask) とは独立 (両方あれば両方で絞る)。
+	UnicodeString GetFilter() const { return filter_; }
+	bool HasFilter() const { return !filter_.IsEmpty(); }
+
+	/// キーワードで絞り込む。空文字列で解除。カーソルは名前で復元する
+	void SetFilter(const UnicodeString &keyword, bool case_sensitive, bool fuzzy);
+
+	/// 類似度順 (F:SimilarSort) を適用する。order は all_items_ への添字の順列
+	/// (gui/file_narrow.h::RankBySimilarity の戻りを想定)。
+	/// サイズが合わない・範囲外があれば何もせず false を返す。
+	/// 再読み込み・マスク・並べ替えの変更で通常の順序に戻る
+	bool ApplySimilarityOrder(const std::vector<std::size_t> &order);
+
+	/**
+	 * @brief カーソル項目との名前の類似性で並べ替える (F:SimilarSort)
+	 * @return 並べ替えたら true。項目が無ければ false
+	 * @details 順位の判断は gui/file_narrow.h の純関数が持ち、
+	 *          ここは all_items_ の収集と適用だけ (受け渡し)
+	 */
+	bool ApplySimilarSort();
+
 	//-- フォントサイズ (ZoomIn / ZoomOut / SetFontSize) ------------------------
 	/// 一覧のフォントサイズ (ポイント)。値の範囲の判断は
 	/// gui/view_settings.h の ClampFontSize が持つ (規約8)
@@ -256,6 +280,10 @@ private:
 	bool sort_descending_ = false;
 	bool dirs_first_ = true;
 	UnicodeString mask_;
+
+	UnicodeString filter_;   //!< 絞り込みキーワード (F:Filter。空なら絞らない)
+	bool filter_case_ = false;  //!< 大小文字を区別するか (VCL の "CS")
+	bool filter_fuzzy_ = false;  //!< あいまい一致にするか (VCL の "FZ")
 
 	DirHistory history_;  //!< このペインのディレクトリ履歴 (戻る/進む/一覧)
 

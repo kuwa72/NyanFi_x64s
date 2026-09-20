@@ -433,3 +433,24 @@ TEST_CASE("SelectByParam: 数値でなければキャプションで探す")
 	CHECK_FALSE(tm.SelectByParam(_T("nosuch")));
 	CHECK_FALSE(tm.SelectByParam(EmptyStr));
 }
+
+//===========================================================================
+// FixTabPath: タブへのパス固定 (MainFrm.cpp:19176)
+//===========================================================================
+
+TEST_CASE("TabFixed: 既定は固定されていない")
+{
+	TabManager tm;
+	CHECK_FALSE(tm.IsFixed());
+}
+
+TEST_CASE("TabFixed: 付け外しできる (ON/OFF パラメータに相当)")
+{
+	// VCL は ListStt[].is_TabFixed。反対側を外す等の画面側の処理は
+	// 呼び出し側 (gui/main_frame.cpp) の役割で、ここでは状態だけを持つ
+	TabManager tm;
+	tm.SetFixed(true);
+	CHECK(tm.IsFixed());
+	tm.SetFixed(false);
+	CHECK_FALSE(tm.IsFixed());
+}

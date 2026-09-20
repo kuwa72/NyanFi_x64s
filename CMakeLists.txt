@@ -275,7 +275,7 @@ if(TARGET nyanfi_core)
 		gui/compare.cpp
 		gui/text_ops.cpp
 		gui/external.cpp
-		gui/dir_info.cpp
+		gui/file_narrow.cpp		gui/dir_info.cpp
 		gui/misc_ops.cpp
 		gui/find_files.cpp
 		gui/work_list.cpp

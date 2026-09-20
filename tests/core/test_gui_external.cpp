@@ -64,3 +64,29 @@ TEST_CASE("ExplorerLaunchSpec: 空白を含むパスが引用符で囲まれる"
 	const auto s = external::ExplorerLaunchSpec(_T("C:\\Program Files\\x.txt"), false);
 	CHECK(ContainsStr(s.parameters, _T("\"C:\\Program Files\\x.txt\"")));
 }
+
+TEST_CASE("CalculatorSpec: 電卓を起動する内容になる")
+{
+	// MainFrm.cpp:14039 は TCalculator (自前の電卓フォーム) を開くが、
+	// wx への移植では Windows 付属の電卓を起動する簡略版にした
+	const auto s = external::CalculatorSpec();
+	CHECK(s.file == UnicodeString(_T("calc.exe")));
+	CHECK(s.parameters.IsEmpty());
+}
+
+TEST_CASE("CommandLineSpec: コマンドラインをコンソールで実行する内容になる")
+{
+	// MainFrm.cpp:17039 は ExeCmdDlg で受けて Execute_cmdln で実行する。
+	// こちらは cmd.exe /k で残るウィンドウに任せる簡略版 (出力を閉じると消える
+	// 実行では結果を見落とすため)
+	const auto s = external::CommandLineSpec(_T("dir /b"), _T("C:\\work\\"));
+	CHECK(s.file == UnicodeString(_T("cmd.exe")));
+	CHECK(s.parameters == UnicodeString(_T("/k dir /b")));
+	CHECK(s.directory == UnicodeString(_T("C:\\work")));
+}
+
+TEST_CASE("CommandLineSpec: 空のコマンドラインは空のまま (呼び出し側が止める)")
+{
+	const auto s = external::CommandLineSpec(EmptyStr, _T("C:\\work\\"));
+	CHECK(s.parameters.IsEmpty());
+}

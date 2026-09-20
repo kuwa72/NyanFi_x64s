@@ -181,6 +181,8 @@ private:
 	void CmdPushDir();
 	void CmdPopDir();
 	void CmdShowDirStack();
+	void CmdChangeDir(bool opposite);  //!< 入力したディレクトリへ移動 (ChangeDir / ChangeOppDir)
+	void CmdChangeDrive();             //!< 一覧から選んでドライブを変更 (ChangeDrive)
 
 	//-- タブ操作 (機能群4) ---------------------------------------------------
 	void CmdMoveTab(int direction);  //!< タブの位置を移動 (MoveTab)
@@ -189,6 +191,9 @@ private:
 	void CmdToTab();                 //!< 番号/キャプションでタブを選ぶ (ToTab)
 	void CmdSubDirList();            //!< サブディレクトリ一覧から選んで移動
 	void CmdSpecialDirList();        //!< 特殊フォルダ一覧から選んで移動
+	void CmdFixTabPath(const UnicodeString &param);  //!< タブへのパス変更を固定/解除 (FixTabPath)
+	void CmdToNextOnRight();         //!< 右ペインへ (ToNextOnRight)
+	void CmdToPrevOnLeft();          //!< 左ペインへ (ToPrevOnLeft)
 
 	//-- ファイル操作 (機能群5) -----------------------------------------------
 	/// 入力したディレクトリへコピー/移動する (CopyTo / MoveTo)
@@ -197,6 +202,8 @@ private:
 	void CmdChangeNameCase(file_ops::NameCase how);
 	/// ファイル名をクリップボードへ (CopyFileName)
 	void CmdCopyFileName(bool full_path);
+	/// 完全に削除する (CompleteDelete。ゴミ箱に送らない。破壊的)
+	void CmdCompleteDelete();
 	/// 空のファイルを作る (NewFile)
 	void CmdNewFile();
 
@@ -234,12 +241,18 @@ private:
 	void CmdOpenTrash();       //!< ごみ箱を開く
 	void CmdFileRun();         //!< 「ファイル名を指定して実行」
 	void CmdOpenCtrlPanel();   //!< コントロールパネルを開く
+	void CmdCalculator();      //!< 電卓を開く (Calculator)
+	void CmdExeCommandLine();  //!< コマンドラインを入力して実行 (ExeCommandLine)
+	void CmdOpenByWin(const UnicodeString &param);  //!< 関連付けで開く (OpenByWin)
+	void CmdInputCommands();   //!< コマンドを入力して実行 (InputCommands)
+	void CmdCopyCmdName();     //!< コマンド名を選んでクリップボードへ (CopyCmdName)
 
 	//-- 情報系 (機能群11/12) -------------------------------------------------
 	void CmdCalcDirSize(bool all);  //!< ディレクトリ容量を計算 (CalcDirSize / All)
 	void CmdFileExtList();          //!< 拡張子別の一覧
 	void CmdListTree();             //!< ディレクトリ構造のツリー
 	void CmdAbout();                //!< バージョン情報
+	void CmdCopyFileInfo();         //!< カーソル位置のファイル情報をクリップボードへ (CopyFileInfo)
 
 	//-- 設定・その他 (機能群13) ----------------------------------------------
 	void CmdIniFile(bool edit);   //!< ini を編集 / 閲覧する
@@ -422,6 +435,8 @@ private:
 	void CmdDelSelMask();      //!< 選択項目を一覧から隠す (DelSelMask)
 	void CmdMaskFind();        //!< マスクで配下を検索して結果リストへ (MaskFind)
 	void CmdInputPathMask();   //!< パスマスクを入力 (InputPathMask)
+	void CmdFilter(const UnicodeString &param);  //!< キーワードで一覧を絞り込む (Filter)
+	void CmdSimilarSort();     //!< カーソル項目との名前の類似性で並べ替える (SimilarSort)
 
 	//-- 栞マークとタグ (機能群15。gui/bookmarks.h) ----------------------------
 	//

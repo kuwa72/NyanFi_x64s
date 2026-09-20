@@ -4,6 +4,7 @@
  */
 #include "gui/file_pane.h"
 
+#include "gui/file_narrow.h"
 #include "gui/view_state.h"
 
 #include <wx/dcbuffer.h>
@@ -188,10 +189,15 @@ void FilePane::ApplyFilterAndSort()
 
 	for (std::size_t i = 0; i < all_items_.size(); ++i) {
 		const FileItem &itm = all_items_[i];
-		// ".." はマスクに関わらず常に表示する
-		if (itm.is_parent || !HasMask() || MatchPathMask(mask_, itm.name, itm.is_dir)) {
-			order_.push_back(i);
+		// ".." はマスク・絞り込みに関わらず常に表示する
+		if (!itm.is_parent) {
+			if (HasMask() && !MatchPathMask(mask_, itm.name, itm.is_dir)) continue;
+			if (HasFilter()) {
+				const file_narrow::FilterOptions opt{filter_case_, filter_fuzzy_};
+				if (!file_narrow::MatchFilter(itm.name, filter_, opt)) continue;
+			}
 		}
+		order_.push_back(i);
 	}
 
 	// ワークリストは並び順そのものが中身なので並べ替えない (ShowOrderedList)
@@ -561,6 +567,56 @@ void FilePane::SetMask(const UnicodeString &mask)
 	RestoreCursorByName(cur);
 	MoveCursorTo(cursor_);
 	Refresh();
+}
+
+//---------------------------------------------------------------------------
+void FilePane::SetFilter(const UnicodeString &keyword, bool case_sensitive, bool fuzzy)
+{
+	const UnicodeString cur = (GetCurrentItem() != nullptr) ? GetCurrentItem()->name : UnicodeString();
+
+	filter_ = keyword;
+	filter_case_ = case_sensitive;
+	filter_fuzzy_ = fuzzy;
+	ApplyFilterAndSort();
+
+	RestoreCursorByName(cur);
+	MoveCursorTo(cursor_);
+	Refresh();
+}
+
+//---------------------------------------------------------------------------
+bool FilePane::ApplySimilarityOrder(const std::vector<std::size_t> &order)
+{
+	if (order.size() != all_items_.size()) return false;
+	for (std::size_t i : order) {
+		if (i >= all_items_.size()) return false;
+	}
+
+	const UnicodeString cur = (GetCurrentItem() != nullptr) ? GetCurrentItem()->name : UnicodeString();
+	order_ = order;
+	RestoreCursorByName(cur);
+	MoveCursorTo(cursor_);
+	Refresh();
+	return true;
+}
+
+//---------------------------------------------------------------------------
+bool FilePane::ApplySimilarSort()
+{
+	if (all_items_.empty() || cursor_ < 0 || cursor_ >= GetItemCount()) return false;
+
+	std::vector<UnicodeString> names;
+	std::vector<bool> parents;
+	names.reserve(all_items_.size());
+	parents.reserve(all_items_.size());
+	for (const FileItem &itm : all_items_) {
+		names.push_back(itm.name);
+		parents.push_back(itm.is_parent);
+	}
+
+	// cursor_ は表示順 (order_) の添字なので実体の添字に戻す
+	const std::size_t ref = order_[static_cast<std::size_t>(cursor_)];
+	return ApplySimilarityOrder(file_narrow::RankBySimilarity(ref, names, parents));
 }
 
 //---------------------------------------------------------------------------

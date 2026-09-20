@@ -50,6 +50,21 @@ bool OpenStandard(const UnicodeString &full_path, UnicodeString &error_out, HWND
  */
 bool OpenWithDialog(const UnicodeString &full_path, UnicodeString &error_out, HWND owner = NULL);
 
+/**
+ * @brief Windows の関連付けで開く対象を決める (F:OpenByWin)
+ * @param action_param コマンドのパラメータ (URL またはファイル名。空もある)
+ * @param cursor_path カーソル位置のフルパス (無ければ空)
+ * @return 開く対象。どちらも空なら空 (呼び出し側が警告を出す)
+ * @details 実測 (MainFrm.cpp:22631): パラメータが URL/`mailto:` ならそのまま、
+ *          そうでなければパラメータのファイル名、無ければカーソル位置。
+ *          いずれも「書かれているものをそのまま開く」なので、ここでは
+ *          「空でない方を選ぶ」だけにし、URL かどうかの区別はしない
+ *          (ShellExecute の "open" はどちらも開ける)。
+ *          管理者からの降格実行 (DM パラメータ) は対象外
+ */
+UnicodeString ResolveOpenTarget(const UnicodeString &action_param,
+                                const UnicodeString &cursor_path);
+
 }  // namespace file_open
 
 #endif  // NYANFI_GUI_FILE_OPEN_H

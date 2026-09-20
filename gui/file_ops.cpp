@@ -318,6 +318,73 @@ bool SendToTrash(const std::vector<UnicodeString> &paths, UnicodeString &error_o
 
 
 //---------------------------------------------------------------------------
+namespace {
+
+/// 読み取り専用でも消せるよう書き込み可に戻してから消す (VCL の force の最低限)
+bool DeleteFileForce(const UnicodeString &fnam)
+{
+	if (::DeleteFileW(fnam.c_str()) != 0) return true;
+	set_FileWritable(fnam);
+	return ::DeleteFileW(fnam.c_str()) != 0;
+}
+
+/// ディレクトリ1件を再帰的に完全に削除する (リンクはたどらない)
+bool DeleteDirRecursive(const UnicodeString &dir)
+{
+	// シンボリックリンク/ジャンクションは中身ではなくリンク自体を消す。
+	// たどって消すとリンク先の実体まで消してしまう
+	if (is_SymLink(dir)) {
+		if (::RemoveDirectoryW(dir.c_str()) != 0) return true;
+		return DeleteFileForce(dir);
+	}
+
+	const UnicodeString prefix = IncludeTrailingPathDelimiter(dir);
+	bool ok = true;
+	TSearchRec sr;
+	if (FindFirst(prefix + _T("*"), faAnyFile, sr) == 0) {
+		do {
+			if (SameStr(sr.Name, _T(".")) || SameStr(sr.Name, _T(".."))) continue;
+			const UnicodeString p = prefix + sr.Name;
+			if ((sr.Attr & faDirectory) != 0) {
+				if (!DeleteDirRecursive(p)) ok = false;
+			}
+			else if (!DeleteFileForce(p)) {
+				ok = false;
+			}
+		} while (FindNext(sr) == 0);
+		FindClose(sr);
+	}
+	if (!ok) return false;
+
+	if (::RemoveDirectoryW(dir.c_str()) != 0) return true;
+	set_FileWritable(dir);
+	return ::RemoveDirectoryW(dir.c_str()) != 0;
+}
+
+}  // namespace
+
+//---------------------------------------------------------------------------
+FileOpResult DeleteItemsPermanently(const std::vector<UnicodeString> &paths)
+{
+	FileOpResult result;
+	for (const UnicodeString &p : paths) {
+		const UnicodeString path = ExcludeTrailingPathDelimiter(p);
+		bool ok = false;
+		if (dir_exists(path) && !is_SymLink(path)) {
+			ok = DeleteDirRecursive(path);
+		}
+		else if (file_exists(path) || is_SymLink(path)) {
+			// ディレクトリへのリンクは RemoveDirectoryW で外す (DeleteFileW では外れない)
+			if (is_SymLink(path) && ::RemoveDirectoryW(path.c_str()) != 0) ok = true;
+			else ok = DeleteFileForce(path);
+		}
+		if (ok) result.success_count++;
+		else result.failures.push_back(LastPathElement(path) + _T(": 削除できません"));
+	}
+	return result;
+}
+
+//---------------------------------------------------------------------------
 UnicodeString ApplyNameCase(const UnicodeString &name, NameCase how)
 {
 	// VCL は名前全体を変換する (MainFrm.cpp:22212)。拡張子だけ残したりしない
