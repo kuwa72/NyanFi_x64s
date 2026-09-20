@@ -482,3 +482,50 @@ TEST_CASE("SelectByDateCondition: 同じ日の比較は時刻を見ない")
 	UnicodeString error;
 	CHECK(selection::SelectByDateCondition(v, _T("=2024/06/15"), Now(), error) == 2);
 }
+
+//===========================================================================
+// SelectByMatchString (VCL MatchSelectActionExecute / ptn_match_str に相当)
+//===========================================================================
+
+TEST_CASE("SelectByMatchString: 部分一致 (大小文字を区別しない、ディレクトリも対象)")
+{
+	std::vector<FileItem> v = {file_of(_T("Report.txt")), file_of(_T("memo.txt")),
+	                            dir_of(_T("reports"))};
+	CHECK(selection::SelectByMatchString(v, _T("rep")) == 2);
+	CHECK(v[0].marked == true);
+	CHECK(v[1].marked == false);
+	CHECK(v[2].marked == true);
+}
+
+TEST_CASE("SelectByMatchString: ; 区切りで複数指定")
+{
+	std::vector<FileItem> v = {file_of(_T("alpha.txt")), file_of(_T("beta.dat")),
+	                            file_of(_T("gamma.bin"))};
+	CHECK(selection::SelectByMatchString(v, _T("alpha;beta")) == 2);
+	CHECK(v[0].marked == true);
+	CHECK(v[1].marked == true);
+	CHECK(v[2].marked == false);
+}
+
+TEST_CASE("SelectByMatchString: /～/ は正規表現 (大小文字を区別しない)")
+{
+	std::vector<FileItem> v = {file_of(_T("rep12.txt")), file_of(_T("memo.txt"))};
+	CHECK(selection::SelectByMatchString(v, _T("/rep\\d+/")) == 1);
+	CHECK(v[0].marked == true);
+	CHECK(v[1].marked == false);
+}
+
+TEST_CASE("SelectByMatchString: 一致しないものは選択し直し (追加ではない)")
+{
+	std::vector<FileItem> v = {file_of(_T("a.txt"), true), file_of(_T("b.txt"), true)};
+	CHECK(selection::SelectByMatchString(v, _T("a")) == 1);
+	CHECK(v[0].marked == true);
+	CHECK(v[1].marked == false);
+}
+
+TEST_CASE("SelectByMatchString: 空なら0件で何も変えない (VCL は SkipAbort)")
+{
+	std::vector<FileItem> v = {file_of(_T("a.txt"), true)};
+	CHECK(selection::SelectByMatchString(v, EmptyStr) == 0);
+	CHECK(v[0].marked == true);
+}

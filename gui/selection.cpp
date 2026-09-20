@@ -131,6 +131,20 @@ int SelectMatching(std::vector<FileItem> &items, const UnicodeString &word)
 }
 
 //---------------------------------------------------------------------------
+int SelectByMatchString(std::vector<FileItem> &items, const UnicodeString &ptn)
+{
+	if (ptn.IsEmpty()) return 0;
+
+	int n = 0;
+	for (FileItem &it : items) {
+		if (!is_selectable(it)) continue;
+		it.marked = !ptn_match_str(ptn, it.name).IsEmpty();
+		if (it.marked) n++;
+	}
+	return n;
+}
+
+//---------------------------------------------------------------------------
 int SelectByDate(std::vector<FileItem> &items, const TDateTime &border, DateCompare how)
 {
 	int n = 0;

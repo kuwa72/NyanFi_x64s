@@ -86,6 +86,21 @@ bool SelectSameName(std::vector<FileItem> &items, int cursor);
  */
 int SelectMatching(std::vector<FileItem> &items, const UnicodeString &word);
 
+/**
+ * @brief 指定文字列を名前に含むファイルを選択する (MatchSelect)
+ * @param items 一覧
+ * @param ptn 指定文字列。`;` で区切って複数指定でき、`/～/` は正規表現
+ *        (いずれも大文字小文字を区別しない)
+ * @return 選択された件数
+ * @details VCL の `MatchSelectActionExecute` (MainFrm.cpp:21989) は
+ *          `ptn_match_str(ptn, fp->n_name)` で判定する。ここでは移植済みの
+ *          `ptn_match_str` (src/usr_str.cpp) をそのまま使う。
+ *          空なら何も変えず 0 を返す (VCL の `SkipAbort` と同じ)。
+ *          一致するものだけを選択し直す (追加ではない)。`..` は対象外。
+ *          なお `\N` (カーソル位置の名前への置換) は呼び出し側で展開する
+ */
+int SelectByMatchString(std::vector<FileItem> &items, const UnicodeString &ptn);
+
 /// 日付の比較方法 (MainFrm.cpp の DateSelect が受け付ける 3種)
 enum class DateCompare { Before, Same, After };
 

@@ -265,3 +265,190 @@ TEST_CASE("FindDuplicates: 重複が無ければ空")
 	                                           false, false);
 	CHECK(r.items.empty());
 }
+
+//===========================================================================
+// MatchesQuery (src/Global.cpp check_file_std の基本条件部に相当)
+//===========================================================================
+
+TEST_CASE("MatchesQuery: 条件が無ければ常に真")
+{
+	find_files::Query q;
+	CHECK(find_files::MatchesQuery(_T("a.txt"), Now(), 10, faArchive, false, q));
+}
+
+TEST_CASE("MatchesQuery: キーワードのリテラル一致 (OR)")
+{
+	find_files::Query q;
+	q.keyword = _T("rep log");
+	// 空白区切りは OR (find_mlt、VCL MainFrm.cpp:18054 付近と同等)
+	CHECK(find_files::MatchesQuery(_T("report.txt"), Now(), 10, faArchive, false, q));
+	CHECK(find_files::MatchesQuery(_T("catalog.txt"), Now(), 10, faArchive, false, q));
+	CHECK_FALSE(find_files::MatchesQuery(_T("memo.txt"), Now(), 10, faArchive, false, q));
+}
+
+TEST_CASE("MatchesQuery: キーワードの AND")
+{
+	find_files::Query q;
+	q.keyword = _T("rep txt");
+	q.match_all = true;
+	CHECK(find_files::MatchesQuery(_T("report.txt"), Now(), 10, faArchive, false, q));
+	CHECK_FALSE(find_files::MatchesQuery(_T("report.dat"), Now(), 10, faArchive, false, q));
+	CHECK_FALSE(find_files::MatchesQuery(_T("memo.txt"), Now(), 10, faArchive, false, q));
+}
+
+TEST_CASE("MatchesQuery: キーワードの大小文字区別")
+{
+	find_files::Query q;
+	q.keyword = _T("REP");
+	CHECK(find_files::MatchesQuery(_T("report.txt"), Now(), 10, faArchive, false, q));
+	q.case_sensitive = true;
+	CHECK_FALSE(find_files::MatchesQuery(_T("report.txt"), Now(), 10, faArchive, false, q));
+	CHECK(find_files::MatchesQuery(_T("REPORT.txt"), Now(), 10, faArchive, false, q));
+}
+
+TEST_CASE("MatchesQuery: キーワードの正規表現")
+{
+	find_files::Query q;
+	q.keyword = _T("rep.*\\.txt");
+	q.use_regex = true;
+	CHECK(find_files::MatchesQuery(_T("report.txt"), Now(), 10, faArchive, false, q));
+	CHECK_FALSE(find_files::MatchesQuery(_T("report.dat"), Now(), 10, faArchive, false, q));
+}
+
+TEST_CASE("MatchesQuery: 不正な正規表現は偽 (VCL は事前チェックで弾く)")
+{
+	find_files::Query q;
+	q.keyword = _T("(unclosed");
+	q.use_regex = true;
+	CHECK_FALSE(find_files::MatchesQuery(_T("(unclosed"), Now(), 10, faArchive, false, q));
+}
+
+TEST_CASE("MatchesQuery: 日付 (同じ日/以前/以後、日付だけ見て時刻は見ない)")
+{
+	find_files::Query q;
+	const TDateTime pivot = EncodeDate(2024, 6, 15);
+	q.date_value = pivot;
+
+	q.date_mode = find_files::DateMode::Same;
+	CHECK(find_files::MatchesQuery(_T("a"), pivot + EncodeTime(23, 0, 0, 0), 1, 0, false, q));
+	CHECK_FALSE(find_files::MatchesQuery(_T("a"), pivot + 1, 1, 0, false, q));
+
+	q.date_mode = find_files::DateMode::Before;  // 以前 (当日を含む、VCL mode=2)
+	CHECK(find_files::MatchesQuery(_T("a"), pivot, 1, 0, false, q));
+	CHECK(find_files::MatchesQuery(_T("a"), pivot - 30, 1, 0, false, q));
+	CHECK_FALSE(find_files::MatchesQuery(_T("a"), pivot + 1, 1, 0, false, q));
+
+	q.date_mode = find_files::DateMode::After;  // 以後 (当日を含む、VCL mode=3)
+	CHECK(find_files::MatchesQuery(_T("a"), pivot, 1, 0, false, q));
+	CHECK(find_files::MatchesQuery(_T("a"), pivot + 30, 1, 0, false, q));
+	CHECK_FALSE(find_files::MatchesQuery(_T("a"), pivot - 1, 1, 0, false, q));
+}
+
+TEST_CASE("MatchesQuery: サイズ (以下/以上、ディレクトリは対象外)")
+{
+	find_files::Query q;
+	q.size_value = 100;
+
+	q.size_mode = find_files::SizeMode::AtMost;
+	CHECK(find_files::MatchesQuery(_T("a"), Now(), 100, 0, false, q));
+	CHECK(find_files::MatchesQuery(_T("a"), Now(), 50, 0, false, q));
+	CHECK_FALSE(find_files::MatchesQuery(_T("a"), Now(), 101, 0, false, q));
+
+	q.size_mode = find_files::SizeMode::AtLeast;
+	CHECK(find_files::MatchesQuery(_T("a"), Now(), 100, 0, false, q));
+	CHECK(find_files::MatchesQuery(_T("a"), Now(), 200, 0, false, q));
+	CHECK_FALSE(find_files::MatchesQuery(_T("a"), Now(), 99, 0, false, q));
+
+	// VCL (check_file_std) と同じくディレクトリはサイズ条件の対象外
+	CHECK(find_files::MatchesQuery(_T("d"), Now(), -1, faDirectory, true, q));
+}
+
+TEST_CASE("MatchesQuery: 属性 (いずれかを含む/いずれも含まない)")
+{
+	find_files::Query q;
+	q.attr_bits = faHidden | faSysFile;
+
+	q.attr_mode = find_files::AttrMode::HasAny;
+	CHECK(find_files::MatchesQuery(_T("a"), Now(), 1, faHidden, false, q));
+	CHECK_FALSE(find_files::MatchesQuery(_T("a"), Now(), 1, faArchive, false, q));
+
+	q.attr_mode = find_files::AttrMode::HasNone;
+	CHECK(find_files::MatchesQuery(_T("a"), Now(), 1, faArchive, false, q));
+	CHECK_FALSE(find_files::MatchesQuery(_T("a"), Now(), 1, faHidden, false, q));
+}
+
+TEST_CASE("Search: キーワードで絞り込む (マスクとの組み合わせ)")
+{
+	TempDir tmp;
+	mkfile(tmp.file(_T("report.txt")));
+	mkfile(tmp.file(_T("memo.txt")));
+	mkfile(tmp.file(_T("report.dat")));
+
+	find_files::Query q;
+	q.mask = _T("*.txt");
+	q.keyword = _T("rep");
+	const find_files::Result r = find_files::Search(tmp.path, q);
+
+	CHECK(r.items.size() == 1);
+	CHECK(contains(r.items, _T("report.txt")));
+}
+
+TEST_CASE("Search: サイズ条件で絞り込む")
+{
+	TempDir tmp;
+	mkfile_data(tmp.file(_T("small.txt")), "12345");
+	mkfile_data(tmp.file(_T("big.txt")), "123456789012345678901234567890");
+
+	find_files::Query q;
+	q.size_mode = find_files::SizeMode::AtMost;
+	q.size_value = 10;
+	const find_files::Result r = find_files::Search(tmp.path, q);
+
+	CHECK(r.items.size() == 1);
+	CHECK(contains(r.items, _T("small.txt")));
+}
+
+//===========================================================================
+// FindDuplicates (DuplicateOptions)
+//===========================================================================
+
+TEST_CASE("FindDuplicates: マスクで対象を絞り込む")
+{
+	TempDir tmp;
+	mkfile_data(tmp.file(_T("a.txt")), "same content");
+	mkfile_data(tmp.file(_T("b.txt")), "same content");
+	mkfile_data(tmp.file(_T("a.dat")), "same content");
+
+	find_files::DuplicateOptions opt;
+	opt.mask = _T("*.txt");
+	const auto r = find_files::FindDuplicates(tmp.path, opt);
+	CHECK(r.groups == 1);
+	CHECK(r.items.size() == 2);
+	CHECK_FALSE(contains(r.items, _T("a.dat")));
+}
+
+TEST_CASE("FindDuplicates: 非再帰では直下だけ")
+{
+	TempDir tmp;
+	mkdir_(tmp.file(_T("sub")));
+	mkfile_data(tmp.file(_T("a.txt")), "same content");
+	mkfile_data(tmp.file(_T("sub\\b.txt")), "same content");
+
+	find_files::DuplicateOptions opt;
+	opt.recursive = false;
+	const auto r = find_files::FindDuplicates(tmp.path, opt);
+	CHECK(r.groups == 0);
+	CHECK(r.items.empty());
+}
+
+TEST_CASE("FindDuplicates: 旧4引数呼び出しは内容比較・再帰のまま")
+{
+	TempDir tmp;
+	mkdir_(tmp.file(_T("sub")));
+	mkfile_data(tmp.file(_T("a.txt")), "same content");
+	mkfile_data(tmp.file(_T("sub\\b.txt")), "same content");
+
+	const auto r = find_files::FindDuplicates(tmp.path, find_files::DuplicateBy::Content,
+	                                           false, false);
+	CHECK(r.groups == 1);
+}

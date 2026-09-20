@@ -1599,3 +1599,56 @@ Fモード優先群 (ソート/フィルタ/コピー・移動/タブ/外部実�
   (wx 依存)。各ダイアログの操作は**実機でも未確認**。
   キー割り当て (`gui/key_map.cpp`) は変えていない
   (重複割り当てを避けるため。必要なら別途割り当てること)
+
+## 35. 主要ダイアログ バッチ1 (Phase 3 issue #40)
+
+`FindFileDlg` / `FindDirDlg` / `FindFileDirDlg` / `FindDuplDlg` /
+`MaskSelect` / `MatchSelect` の6コマンド。いずれも従来は一行入力
+(`wxGetTextFromUser` / `wxGetSingleChoiceIndex`) だったものを、
+VCL 版 (`src/FindDlg.cpp` / `src/DuplDlg.cpp` / `src/MaskSelDlg.cpp`) の
+実測に基づく wx ダイアログにした。`RenameDlg` は既に移植済み
+(`gui/rename.h` / `gui/rename_dialog.h`、§16 参照) のため対象外。
+判断は wx 非依存の純関数に置き (`find_files::Query` の拡張と
+`MatchesQuery` / `DuplicateOptions` / `selection::SelectByMatchString`)、
+`gui/find_dialog.h/.cpp`・`gui/dupl_dialog.h/.cpp`・
+`gui/mask_dialog.h/.cpp` の薄い wxDialog から使う
+(`gui/grep_dialog.h` と同じ作り)。配線数は 291 のまま
+(新規コマンドは無い)。
+
+### 実測で決めた点
+
+- **検索語・日付・サイズ・属性は `check_file_std` と同じ意味**
+  (Global.cpp:5648)。キーワードは正規表現 (`find_RegEx`、
+  不正なら VCL と同じくダイアログ側の事前検証で弾く) か
+  `find_mlt` (空白区切り OR/AND・大小文字区別) のどちらか。
+  `"..."` で囲んだ空白を含む1語の扱いも VCL と同じ。
+  日付は当日を含む以前/以後・時刻を見ない点も VCL と同じ。
+  サイズは以下/以上で、VCL と同じくディレクトリは対象外。
+  属性は指定ビットの「いずれかを含む/いずれも含まない」。
+- **重複検索は判定方法・再帰・マスクだけ** (`TFindDuplDlg` のうち
+  移植可能な部分)。ハッシュ算法の選択・最大サイズ・左右比較・
+  シンボリックリンク除外・リンク解決は未移植のため扱わない。
+  旧4引数呼び出しは既定 (内容比較・再帰・マスク無し) の互換層として残した。
+- **マッチ選択は `ptn_match_str` をそのまま使う** (`;` 区切り複数可、
+  `/～/` は正規表現で大小文字を区別しない、MainFrm.cpp:21989)。
+  `\N` (カーソル位置のファイル名主部への置換) も VCL と同じく
+  呼び出し側で展開する。空なら何も変えない (VCL の `SkipAbort` と同じ)。
+- **拡張条件部 (`check_file_ex`: Exif・動画・画像・テキスト内容等) は
+  未移植のため扱わない**。未実装扱いのまま検索自体は落とさない
+  (issue #40 の受け入れ条件どおり)。
+- ダイアログの履歴永続化 (ini の `FindHistory` 等) は持たない。
+  初期値は固定 (`*`) で、VCL の前回値復元は対象外。
+
+### 検証の範囲 (テストを書かなかったものを全部挙げる)
+
+- 19 ケース追加 (core 全体: **1,012 ケース / 3,226 アサーション**)。
+  検索語 (OR/AND・大小文字・正規表現・不正正規表現)・日付3種・
+  サイズ2種 (+ディレクトリ除外)・属性2種・検索の絞り込み・
+  重複のマスク/非再帰・マッチ選択 (複数・正規表現・空) を含む
+- **次はテストしていない**:
+  新規3ダイアログの操作と `gui/main_frame.cpp` 側の受け渡し
+  (wx 依存)。新規ダイアログのコンパイルは Linux からの
+  mingw-w64 クロス + wx 3.3.3 で確認した (main_frame.cpp 全体は
+  wx 3.3 固有の既存エラーで止まるため、新規分だけ個別に確認)。
+  実機での操作は未確認。
+  キー割り当て (`gui/key_map.cpp`) は変えていない
