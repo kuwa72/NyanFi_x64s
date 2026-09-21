@@ -3461,6 +3461,70 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
 		image_viewer_->ToggleGrid();
 	}
+	else if (SameStr(command, _T("ScrollUp"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		image_viewer_->ScrollVert(-1);
+	}
+	else if (SameStr(command, _T("ScrollDown"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		image_viewer_->ScrollVert(1);
+	}
+	else if (SameStr(command, _T("ScrollLeft"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		image_viewer_->ScrollHorz(-1);
+	}
+	else if (SameStr(command, _T("ScrollRight"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		image_viewer_->ScrollHorz(1);
+	}
+	else if (SameStr(command, _T("NextPage"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		CmdImagePageMove(1);
+	}
+	else if (SameStr(command, _T("PrevPage"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		CmdImagePageMove(-1);
+	}
+	else if (SameStr(command, _T("DoublePage"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		image_viewer_->ToggleDoublePage(param);
+		SetStatusWarning(image_viewer_->IsDoublePage() ? _T("見開き表示ON") : _T("見開き表示OFF"));
+	}
+	else if (SameStr(command, _T("PageBind"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		image_viewer_->SetPageBind(param);
+		SetStatusWarning(image_viewer_->IsRightBind() ? _T("右綴じ") : _T("左綴じ"));
+	}
+	else if (SameStr(command, _T("Thumbnail"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		image_viewer_->ToggleThumbnail(param);
+		SetStatusWarning(image_viewer_->IsThumbnailShown() ? _T("サムネイル表示ON") : _T("サムネイル表示OFF"));
+	}
+	else if (SameStr(command, _T("ThumbnailEx"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		image_viewer_->ToggleThumbnailEx(param);
+		SetStatusWarning(image_viewer_->IsThumbExtended() ? _T("サムネイル全面表示ON") : _T("サムネイル全面表示OFF"));
+	}
+	else if (SameStr(command, _T("Histogram"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		image_viewer_->ToggleHistogram(param);
+		SetStatusWarning(image_viewer_->IsHistogramShown() ? _T("ヒストグラム表示ON") : _T("ヒストグラム表示OFF"));
+	}
+	else if (SameStr(command, _T("Loupe"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		image_viewer_->ToggleLoupe(param);
+		SetStatusWarning(image_viewer_->IsLoupeShown() ? _T("ルーペ表示ON") : _T("ルーペ表示OFF"));
+	}
+	else if (SameStr(command, _T("WarnHighlight"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		image_viewer_->ToggleWarnHighlight(param);
+		SetStatusWarning(image_viewer_->IsWarnHighlight() ? _T("白飛び警告ON") : _T("白飛び警告OFF"));
+	}
+	else if (SameStr(command, _T("ShowSeekBar"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		image_viewer_->ToggleShowSeekBar(param);
+		SetStatusWarning(image_viewer_->IsSeekBarShown() ? _T("シークバー表示ON") : _T("シークバー表示OFF"));
+	}
 	else if (SameStr(command, _T("Close"))) {
 		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
 		ShowImageViewer(false);
@@ -4555,8 +4619,37 @@ void MainFrame::CmdImageNavigate(int direction)
 	// (image_load::LoadForView は失敗してもビューアを閉じない。要件7)。
 	// 周回はしない (src/Global.cpp の既定値 LoopFilerCursor=false と同じ)
 	const std::vector<char> failed(image_nav_list_.size(), 0);
-	const int next = image_view_ops::NextPrevIndex(
-		static_cast<int>(image_nav_list_.size()), image_nav_index_, direction, failed, false);
+	const int size = static_cast<int>(image_nav_list_.size());
+	int next;
+	// 見開き表示中は2件ずつ進む (VCL の IsDoubleStep 分岐と同じ。失敗の
+	// スキップはしない点も VCL と同じ。メタ/アイコン判定は Phase 3 の対象外)
+	if (image_viewer_ != nullptr && image_viewer_->IsDoublePage()) {
+		next = image_view_ops::DoubleStepIndex(size, image_nav_index_, direction);
+	}
+	else {
+		next = image_view_ops::NextPrevIndex(size, image_nav_index_, direction, failed, false);
+	}
+	if (next == image_nav_index_) return;
+
+	image_nav_index_ = next;
+	const UnicodeString full_path = image_nav_dir_ + image_nav_list_[static_cast<std::size_t>(next)];
+	image_viewer_->LoadFile(full_path);
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief サムネイルの次/前ページに移動する (I:NextPage/I:PrevPage 相当)
+ * @details VCL (src/MainFrm.cpp::NextPage/PrevPageActionExecute) は
+ * サムネイルグリッドの表示件数分だけ進めるが、グリッド自体が Phase 3 の
+ * 対象外のため 10 件ずつに単純化してある (推測・要検証)。範囲外は clamp
+ * (image_view_ops::PageStepIndex。VCL の SetThumbnailIndex と同じ)
+ */
+void MainFrame::CmdImagePageMove(int direction)
+{
+	if (image_nav_list_.empty() || image_nav_index_ == -1) return;
+
+	const int next = image_view_ops::PageStepIndex(
+		image_nav_index_, static_cast<int>(image_nav_list_.size()), 10, direction);
 	if (next == image_nav_index_) return;
 
 	image_nav_index_ = next;

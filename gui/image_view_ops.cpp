@@ -192,4 +192,59 @@ std::optional<int> ParseJumpIndex(const UnicodeString &param, int count, int cur
 	return std::clamp(idx - 1, 0, max_idx);
 }
 
+//---------------------------------------------------------------------------
+int ScrollStepPos(int pos, int lo, int hi, int step, int dir)
+{
+	// src/MainFrm.cpp の ScrollUpI/ScrollDownI/ScrollLeft/ScrollRight と同じ
+	// (VCL の TControlScrollBar が範囲外を clamp するのと同値)
+	if (step <= 0 || lo >= hi) return (pos < lo) ? lo : (pos > hi) ? hi : pos;
+	return std::clamp(pos + ((dir >= 0) ? step : -step), lo, hi);
+}
+
+//---------------------------------------------------------------------------
+int PageStepIndex(int cur, int count, int page, int dir)
+{
+	// src/MainFrm.cpp の NextPage/PrevPage (グリッド表示件数分だけ進める) と
+	// PageUpI/PageDownI (全面表示の1ページ分) の共通部分。SetThumbnailIndex
+	// の clamp (0〜count-1) と同値
+	if (count <= 0 || page <= 0) return cur;
+	return std::clamp(cur + ((dir >= 0) ? page : -page), 0, count - 1);
+}
+
+//---------------------------------------------------------------------------
+int DoubleStepIndex(int count, int cur, int dir)
+{
+	// src/MainFrm.cpp::NextPrevFileICore の IsDoubleStep 分岐と同じ。
+	// -1 (REDRAW のみで留まる) の代わりに cur を返す
+	if (count <= 0) return cur;
+	if (dir >= 0) {
+		if (cur >= count - 1) return cur;
+		const int max_idx = count - 2;
+		if (cur < max_idx) return cur + 2;
+		if (cur == max_idx) return cur;
+		return max_idx;
+	}
+	if (cur >= 2) return cur - 2;
+	if (cur == 0) return cur;
+	return 0;
+}
+
+//---------------------------------------------------------------------------
+bool ToggleViewFlag(bool cur, const UnicodeString &param)
+{
+	// src/MainFrm.cpp:12651 の SetToggleAction と同じ
+	if (SameText(param, _T("ON"))) return true;
+	if (SameText(param, _T("OFF"))) return false;
+	return !cur;
+}
+
+//---------------------------------------------------------------------------
+bool NextPageBind(bool right_bind, const UnicodeString &param)
+{
+	// src/MainFrm.cpp::PageBindActionExecute と同じ
+	if (SameText(param, _T("R"))) return true;
+	if (SameText(param, _T("L"))) return false;
+	return !right_bind;
+}
+
 }  // namespace image_view_ops
