@@ -289,6 +289,7 @@ if(TARGET nyanfi_core)
 		gui/history.cpp
 		gui/named_state.cpp
 		gui/view_settings.cpp
+		gui/panel_state.cpp
 		gui/system_ops.cpp
 		gui/workers.cpp
 		gui/git_ftp.cpp
