@@ -361,6 +361,15 @@ private:
 	bool file_list_only_ = false;                 //!< タブバー・ステータスを隠しているか
 	UnicodeString stt_bar_fmt_;                   //!< ステータスバーの書式 (空なら既定)
 
+	//-- テキスト表示設定・プレビュー操作 (機能群追加バッチ2。判断は gui/text_display.h)
+	//
+	// VCL の DelUseTrash 既定は false (完全削除) だが、こちらは CmdDelete が
+	// 従来ゴミ箱送りだったため true (ゴミ箱) を既定にし、破壊を避ける
+	void CmdViewTail(const UnicodeString &param);  //!< 末尾を閲覧 (ViewTail)
+	void CmdToText();                              //!< テキストプレビューへ (ToText)
+
+	bool use_trash_ = true;  //!< true なら削除はゴミ箱送り (UseTrash)
+
 	//-- 名前を付けた状態の保存と読み込み (機能群21。判断は gui/named_state.h) --
 	void CmdSaveTabGroup(bool as_new);  //!< タブグループを保存 (SaveTabGroup / SaveAsTabGroup)
 	void CmdLoadTabGroup();             //!< タブグループを読み込む (LoadTabGroup)

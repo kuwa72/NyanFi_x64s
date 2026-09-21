@@ -13,6 +13,7 @@
 
 #include "usr_str.h"
 #include "usr_cmdlist.h"
+#include "gui/text_display.h"
 
 namespace {
 
@@ -98,12 +99,16 @@ bool TextViewer::LoadFile(const UnicodeString &path, UnicodeString &error)
 //---------------------------------------------------------------------------
 int TextViewer::GutterWidth() const
 {
+	if (!show_line_no_) return 0;
 	return (line_no_cols_ + 1) * char_width_;
 }
 
 int TextViewer::TextAreaCols() const
 {
-	return std::max(1, (GetClientSize().x - GutterWidth()) / char_width_);
+	// SetWidth で折り返し幅が指定されていればウィンドウ幅ではなくそれを使う
+	// (VCL の ViewFoldFitWin=false + ViewFoldWidth と同じ)
+	if (fold_width_ > 0) return fold_width_;
+	return std::max(1, (GetClientSize().x - GutterWidth() - left_margin_) / char_width_);
 }
 
 int TextViewer::VisibleRows() const
@@ -120,7 +125,7 @@ void TextViewer::RebuildWrap()
 	if (wrap_) {
 		const int width = TextAreaCols();
 		for (int i = 0; i < n; ++i) {
-			const std::size_t rows = text_viewer_core::WrapLine(doc_.lines[static_cast<std::size_t>(i)], width).size();
+			const std::size_t rows = text_viewer_core::WrapLine(doc_.lines[static_cast<std::size_t>(i)], width, tab_width_).size();
 			wrap_rows_[static_cast<std::size_t>(i)] = std::max<int>(1, static_cast<int>(rows));
 		}
 	}
@@ -331,6 +336,27 @@ bool TextViewer::Execute(const UnicodeString &full_command)
 	}
 	else if (SameStr(command, _T("ReloadFile"))) {
 		CmdReload();
+	}
+	else if (SameStr(command, _T("ShowLineNo"))) {
+		CmdShowLineNo(param);
+	}
+	else if (SameStr(command, _T("ShowRuler"))) {
+		CmdShowRuler(param);
+	}
+	else if (SameStr(command, _T("ShowTAB"))) {
+		CmdShowTAB(param);
+	}
+	else if (SameStr(command, _T("ShowCR"))) {
+		CmdShowCR(param);
+	}
+	else if (SameStr(command, _T("SetTab"))) {
+		CmdSetTab(param);
+	}
+	else if (SameStr(command, _T("SetWidth"))) {
+		CmdSetWidth(param);
+	}
+	else if (SameStr(command, _T("SetMargin"))) {
+		CmdSetMargin(param);
 	}
 	else if (SameStr(command, _T("Close"))) {
 		CmdClose();
@@ -546,6 +572,58 @@ void TextViewer::CmdClose()
 }
 
 //---------------------------------------------------------------------------
+void TextViewer::CmdShowLineNo(const UnicodeString &param)
+{
+	show_line_no_ = text_display::ToggleValue(show_line_no_, param);
+	Refresh();
+}
+
+void TextViewer::CmdShowRuler(const UnicodeString &param)
+{
+	show_ruler_ = text_display::ToggleValue(show_ruler_, param);
+	Refresh();
+}
+
+void TextViewer::CmdShowTAB(const UnicodeString &param)
+{
+	show_tab_ = text_display::ToggleValue(show_tab_, param);
+	Refresh();
+}
+
+void TextViewer::CmdShowCR(const UnicodeString &param)
+{
+	show_cr_ = text_display::ToggleValue(show_cr_, param);
+	Refresh();
+}
+
+void TextViewer::CmdSetTab(const UnicodeString &param)
+{
+	// VCL は空で入力ボックスを出す。ここに入力UIは無いので無視する
+	if (param.IsEmpty()) return;
+	tab_width_ = text_display::ParseTabWidth(param, tab_width_);
+	RebuildWrap();
+	Refresh();
+}
+
+void TextViewer::CmdSetWidth(const UnicodeString &param)
+{
+	// VCL は空で入力ボックスを出す。ここに入力UIは無いので無視する
+	if (param.IsEmpty()) return;
+	fold_width_ = text_display::ParseFoldWidth(param, fold_width_);
+	RebuildWrap();
+	Refresh();
+}
+
+void TextViewer::CmdSetMargin(const UnicodeString &param)
+{
+	// VCL は空で SetActionAbort (何もしない)。同じく無視する
+	if (param.IsEmpty()) return;
+	left_margin_ = text_display::ParseMargin(param, left_margin_);
+	RebuildWrap();
+	Refresh();
+}
+
+//---------------------------------------------------------------------------
 /**
  * @details コマンド名とキーは src/Global.cpp の既定キー表 (ScrModeIdStr "V")
  * に極力合わせた。実装済み: Q=Close (閉じる)、F=FindText (検索)。
@@ -608,6 +686,7 @@ UnicodeString TextViewer::GetStatusSummary() const
 	s += _T("  ") + get_NameOfCodePage(doc_.code_page, false, doc_.has_bom);
 	s.cat_sprintf(_T("  %d/%d 行"), current_line_ + 1, static_cast<int>(doc_.lines.size()));
 	s += wrap_ ? _T("  折返:ON") : _T("  折返:OFF");
+	if (!show_line_no_) s += _T("  行番:OFF");
 	if (!marks_.empty()) s.cat_sprintf(_T("  栞:%d"), static_cast<int>(marks_.size()));
 	if (!last_error_.IsEmpty()) s += _T("  ") + last_error_;
 	if (doc_.truncated) s += _T("  (先頭のみ表示 - サイズ制限)");
@@ -668,9 +747,12 @@ void TextViewer::OnPaint(wxPaintEvent &)
 	}
 
 	const int gutter_w = GutterWidth();
-	dc.SetBrush(wxBrush(gutter_bg));
-	dc.SetPen(*wxTRANSPARENT_PEN);
-	dc.DrawRectangle(0, HeaderHeight(), gutter_w, client.y - HeaderHeight());
+	const int text_x = gutter_w + left_margin_;
+	if (gutter_w > 0) {
+		dc.SetBrush(wxBrush(gutter_bg));
+		dc.SetPen(*wxTRANSPARENT_PEN);
+		dc.DrawRectangle(0, HeaderHeight(), gutter_w, client.y - HeaderHeight());
+	}
 
 	const int rows = VisibleRows();
 	const int n = static_cast<int>(doc_.lines.size());
@@ -693,8 +775,9 @@ void TextViewer::OnPaint(wxPaintEvent &)
 			dc.DrawRectangle(0, y, client.x, row_height_);
 		}
 
-		// 行番号 (折り返しの継続行は空欄にする、一般的なエディタと同じ表現)
-		if (sub == 0) {
+		// 行番号 (折り返しの継続行は空欄にする、一般的なエディタと同じ表現。
+		// ShowLineNo=OFF では欄自体を描かない)
+		if (sub == 0 && gutter_w > 0) {
 			dc.SetTextForeground(on_cursor ? cursor_fg : gutter_fg);
 			UnicodeString num;
 			num.sprintf(_T("%*d"), line_no_cols_, line + 1);
@@ -707,7 +790,7 @@ void TextViewer::OnPaint(wxPaintEvent &)
 		UnicodeString text;
 		if (wrap_) {
 			const std::vector<UnicodeString> segs =
-				text_viewer_core::WrapLine(doc_.lines[static_cast<std::size_t>(line)], TextAreaCols());
+				text_viewer_core::WrapLine(doc_.lines[static_cast<std::size_t>(line)], TextAreaCols(), tab_width_);
 			if (sub >= 0 && sub < static_cast<int>(segs.size())) text = segs[static_cast<std::size_t>(sub)];
 		}
 		else {
@@ -715,6 +798,6 @@ void TextViewer::OnPaint(wxPaintEvent &)
 			if (h_offset_chars_ < full.Length()) text = full.SubString(h_offset_chars_ + 1);
 		}
 
-		dc.DrawText(to_wx(text), gutter_w, y + 1);
+		dc.DrawText(to_wx(text), text_x, y + 1);
 	}
 }
