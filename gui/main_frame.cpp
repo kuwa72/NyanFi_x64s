@@ -21,6 +21,7 @@
 
 #include "gui/file_info_panel.h"
 #include "gui/file_open.h"
+#include "gui/panel_state.h"
 #include "gui/archive.h"
 #include "gui/clipboard_files.h"
 #include "gui/compare.h"
@@ -3647,6 +3648,55 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	else if (SameStr(command, _T("CopyFileInfo"))) {
 		CmdCopyFileInfo();
 	}
+	//-- Fモード残コマンド バッチ3 (issue #36) ---------------------------------
+	// パネル表示切替・ログスクロール・一覧表示の13件。判断は wx 非依存の純関数
+	// (gui/view_settings.h・panel_state.h・text_display.h) が持ち、ここは
+	// 受け渡しだけ。対応する部品が無いものは状態保持 + ステータス表示のみ。
+	// 未実装は下の else で false を返す契約 (キー通常処理へ) を維持する
+	else if (SameStr(command, _T("ShowPreview"))) {
+		show_preview_ = view_settings::ApplyToggle(show_preview_, view_settings::ParseToggle(param));
+		SetStatusWarning(show_preview_ ? _T("プレビューを表示します") : _T("プレビューを隠します"));
+	}
+	else if (SameStr(command, _T("ShowProperty"))) {
+		show_property_ = view_settings::ApplyToggle(show_property_, view_settings::ParseToggle(param));
+		SetStatusWarning(show_property_ ? _T("ファイル情報を表示します") : _T("ファイル情報を隠します"));
+	}
+	else if (SameStr(command, _T("ShowFKeyBar"))) {
+		show_fkeybar_ = view_settings::ApplyToggle(show_fkeybar_, view_settings::ParseToggle(param));
+		SetStatusWarning(show_fkeybar_ ? _T("ファンクションキーバーを表示します") : _T("ファンクションキーバーを隠します"));
+	}
+	else if (SameStr(command, _T("ShowToolBar"))) {
+		show_toolbar_ = view_settings::ApplyToggle(show_toolbar_, view_settings::ParseToggle(param));
+		SetStatusWarning(show_toolbar_ ? _T("ツールバーを表示します") : _T("ツールバーを隠します"));
+	}
+	else if (SameStr(command, _T("MenuBar"))) {
+		show_menubar_ = view_settings::ApplyToggle(show_menubar_, view_settings::ParseToggle(param));
+		SetStatusWarning(show_menubar_ ? _T("メニューバーを表示します") : _T("メニューバーを隠します"));
+	}
+	else if (SameStr(command, _T("ShowIcon"))) {
+		CmdShowIcon(param);
+	}
+	else if (SameStr(command, _T("SetSubSize"))) {
+		CmdSetSubSize(param);
+	}
+	else if (SameStr(command, _T("ScrollUpLog"))) {
+		CmdScrollLog(/*down=*/false, param);
+	}
+	else if (SameStr(command, _T("ScrollDownLog"))) {
+		CmdScrollLog(/*down=*/true, param);
+	}
+	else if (SameStr(command, _T("ToLog"))) {
+		CmdToLog();
+	}
+	else if (SameStr(command, _T("ToExViewer"))) {
+		CmdToExViewer();
+	}
+	else if (SameStr(command, _T("ListText"))) {
+		CmdListText(param);
+	}
+	else if (SameStr(command, _T("ListTail"))) {
+		CmdListTail(param);
+	}
 	else if (SameStr(command, _T("Exit"))) {
 		Close(true);
 	}
@@ -4517,6 +4567,76 @@ void MainFrame::CmdViewTail(const UnicodeString &param)
 	const int n = viewer_->LineCount();
 	viewer_->GotoLine(std::max(0, n - tp.limit_lines));
 	if (tp.reverse) SetStatusWarning(_T("逆順表示は未対応のため末尾から表示します"));
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 別ウィンドウのテキストビューアへ (F:ToExViewer。MainFrm.cpp:26970 と同じ判断)
+ * @details VCL は外部ビューアの一覧から選んでフォーカスを移す
+ *          (1件ならそのまま、複数ならポップアップで選択)。
+ *          こちらに外部ビューアは無いので、開いている内蔵ビューア
+ *          (テキスト優先、無ければ画像) にフォーカスを移す簡略版にした。
+ *          どちらも開いていなければ警告するだけ (false にはしない)
+ */
+void MainFrame::CmdToExViewer()
+{
+	if (viewer_ != nullptr && viewer_->IsShown()) {
+		viewer_->SetFocus();
+		return;
+	}
+	if (image_viewer_ != nullptr && image_viewer_->IsShown()) {
+		image_viewer_->SetFocus();
+		return;
+	}
+	SetStatusWarning(_T("ビューアは開いていません"));
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief テキストファイルを一覧で表示 (F:ListText。MainFrm.cpp:21246 と同じ判断)
+ * @details VCL は ListTextCore(false) で GeneralInfoDlg に全文を出す
+ *          (FF=絞り込み表示、EO=エラーのみ等の見出し指定付き)。
+ *          見出しパターン・絞り込み表示は未対応のため、内蔵ビューアで
+ *          開くだけの簡略版にした。引数があればそのパス (アクティブペイン
+ *          基準の相対可)、無ければカーソル位置のファイルを開く
+ */
+void MainFrame::CmdListText(const UnicodeString &param)
+{
+	UnicodeString full_path;
+	if (param.IsEmpty()) {
+		FilePane *pane = ActivePane();
+		const FileItem *itm = pane->GetCurrentItem();
+		if (itm == nullptr || itm->is_parent || itm->is_dir) return;
+		full_path = pane->FullPathOf(*itm);
+	}
+	else {
+		full_path = to_absolute_name(param, ActivePane()->GetPath());
+		if (!file_exists(full_path)) {
+			SetStatusWarning(_T("見つかりません: ") + param);
+			return;
+		}
+	}
+
+	UnicodeString error;
+	if (!viewer_->LoadFile(full_path, error)) {
+		wxMessageBox(to_wx(error), to_wx(_T("開けませんでした")), wxOK | wxICON_ERROR, this);
+		return;
+	}
+	RecordHistory(history::Kind::View, full_path);
+	ShowViewer(true);
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief テキストファイルの末尾を一覧で表示 (F:ListTail。MainFrm.cpp:21239 と同じ判断)
+ * @details VCL は ListTextCore(true) で末尾 N 行を出す (R=逆順、TE=末尾固定、
+ *          FF=絞り込み表示等の指定付き)。TE/FF/見出しパターンは未対応のため、
+ *          末尾 N 行へ移動するだけの簡略版にした。引数の解釈
+ *          (R で逆順・数値で行数) は ViewTail と同じ (gui/text_display.h)
+ */
+void MainFrame::CmdListTail(const UnicodeString &param)
+{
+	CmdViewTail(param);
 }
 
 //---------------------------------------------------------------------------
@@ -6407,6 +6527,7 @@ void MainFrame::CmdClearLog()
 
 	log_.Clear();
 	log_err_index_ = -1;
+	log_view_index_ = -1;
 	SetStatusWarning(_T("ログを消しました"));
 }
 
@@ -6509,6 +6630,41 @@ void MainFrame::CmdListNyanFi()
 {
 	log_.AddBlankIfNeeded();
 	for (const UnicodeString &line : log_win::FormatAboutLines()) log_.AddRaw(line);
+	CmdListLog();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief ログをスクロール (F:ScrollUpLog/ScrollDownLog。MainFrm.cpp:24774-24792)
+ * @details VCL は `ActionParam` 空で `ListWheelScrLn`、非空でその行数
+ *          (ScrollUpText と同じ形)。引数の解釈は gui/text_display.h
+ *          (ParseScrollLines)。ログ専用ウィンドウが無いため、
+ *          注目行 (log_view_index_) を動かしてその行をステータスに出す
+ *          簡略版にした。位置の計算は gui/panel_state.h
+ */
+void MainFrame::CmdScrollLog(bool down, const UnicodeString &param)
+{
+	if (log_.Count() == 0) { SetStatusWarning(_T("ログは空です")); return; }
+
+	const int lines = text_display::ParseScrollLines(param);
+	log_view_index_ = panel_state::ScrollLogIndex(log_view_index_, log_.Count(), lines, down);
+
+	const std::vector<log_win::LogLine> &stored = log_.Lines();
+	UnicodeString msg;
+	msg.sprintf(_T("%d/%d: "), log_view_index_ + 1, static_cast<int>(stored.size()));
+	SetStatusWarning(msg + log_win::FormatLine(stored[static_cast<std::size_t>(log_view_index_)]));
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief ログウィンドウへ (F:ToLog。MainFrm.cpp:27014 と同じ判断)
+ * @details VCL はサブパネルとログ欄が見えているときだけフォーカスを移す。
+ *          こちらにログ欄は無いので、一覧表示 (ListLog) と同じ動きにする
+ *          (ShowLogWin を ListLog と同じにしたのと同じ考え方)
+ */
+void MainFrame::CmdToLog()
+{
+	if (log_.Count() == 0) { SetStatusWarning(_T("ログは空です")); return; }
 	CmdListLog();
 }
 
@@ -6857,6 +7013,70 @@ void MainFrame::CmdSetSttBarFmt()
 	UpdateStatus();
 	SetStatusWarning(stt_bar_fmt_.IsEmpty()? _T("既定の表示に戻しました")
 	                                       : _T("書式を変えました"));
+}
+
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// パネル表示切替・サブサイズ (F バッチ3)
+//
+// VCL 版の該当は `src/MainFrm.cpp` の ShowIcon (26006行) と
+// SetSubSize (25729行)。ShowPreview/ShowProperty/ShowFKeyBar/ShowToolBar/
+// MenuBar は Execute 側で view_settings::ParseToggle/ApplyToggle を直接使う
+// (SetToggleAction 相当) ため、ここには置かない。
+//
+// **部品が無いものは状態保持のみ**: プレビュー欄・情報欄・ツールバー等の
+// 部品そのものが未実装なので、フラグとステータス表示だけを変える
+// (報告書の「状態保持のみ」と同じ扱い)
+//---------------------------------------------------------------------------
+/**
+ * @brief アイコン表示の切替 (F:ShowIcon)
+ * @details VCL は "AC" でキャッシュ消去、"FD" で 0→1→2→1 の循環、
+ *          それ以外で ON/OFF/反転 (MainFrm.cpp:26006-26027)。
+ *          キャッシュ機構は無いので "AC" は受けて断るだけにする。
+ *          一覧の幅・再描画 (SetFlItemWidth/InvalidateFileList) は
+ *          ペイン側にその仕組みが無いため行わない (状態保持のみ)
+ */
+void MainFrame::CmdShowIcon(const UnicodeString &param)
+{
+	if (panel_state::HasToken(param, _T("AC"))) {
+		SetStatusWarning(_T("アイコンキャッシュはありません"));
+		return;
+	}
+	if (panel_state::HasToken(param, _T("FD"))) {
+		icon_mode_ = panel_state::NextIconModeFD(icon_mode_);
+	}
+	else {
+		icon_mode_ = panel_state::ToggleIconMode(icon_mode_, view_settings::ParseToggle(param));
+	}
+	SetStatusWarning(icon_mode_ == 0 ? _T("アイコンを隠します")
+	                 : icon_mode_ == 1 ? _T("アイコンを表示します")
+	                                   : _T("アイコンの詳細を表示します"));
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief サブ表示の大きさ (F:SetSubSize)
+ * @details VCL は ActionParam を数値 ("100") または相対 ("+50"/"-50") で受け、
+ *          一覧が狭くなりすぎる指定は丸ごと無視する (MainFrm.cpp:25729-25746)。
+ *          引数の解釈・適用は gui/view_settings.h。サブパネルが無いため
+ *          大きさの保持 + ステータス表示だけにする
+ */
+void MainFrame::CmdSetSubSize(const UnicodeString &param)
+{
+	int requested = 0;
+	bool relative = false;
+	if (!view_settings::ParseSubSize(param, requested, relative)) {
+		SetStatusWarning(_T("サイズを指定してください (例 SetSubSize_200)"));
+		return;
+	}
+	const int next = view_settings::ResolveSubSize(requested, relative, sub_size_,
+	                                               GetClientSize().y, 100);
+	if (next == sub_size_) {
+		SetStatusWarning(_T("その指定では一覧が狭くなりすぎます"));
+		return;
+	}
+	sub_size_ = next;
+	SetStatusWarning(UnicodeString().sprintf(_T("サブ表示の大きさ %d"), sub_size_));
 }
 
 //---------------------------------------------------------------------------

@@ -363,12 +363,20 @@ private:
 	bool file_list_only_ = false;                 //!< タブバー・ステータスを隠しているか
 	UnicodeString stt_bar_fmt_;                   //!< ステータスバーの書式 (空なら既定)
 
+	//-- パネル表示切替・サブサイズ (F バッチ3。判断は gui/panel_state.h と
+	//   gui/view_settings.h。部品が無いものは状態保持 + ステータス表示のみ) --
+	void CmdShowIcon(const UnicodeString &param);  //!< アイコン表示の切替 (ShowIcon)
+	void CmdSetSubSize(const UnicodeString &param);  //!< サブ表示の大きさ (SetSubSize)
+
 	//-- テキスト表示設定・プレビュー操作 (機能群追加バッチ2。判断は gui/text_display.h)
 	//
 	// VCL の DelUseTrash 既定は false (完全削除) だが、こちらは CmdDelete が
 	// 従来ゴミ箱送りだったため true (ゴミ箱) を既定にし、破壊を避ける
 	void CmdViewTail(const UnicodeString &param);  //!< 末尾を閲覧 (ViewTail)
 	void CmdToText();                              //!< テキストプレビューへ (ToText)
+	void CmdToExViewer();                          //!< 別ウィンドウのビューアへ (ToExViewer)
+	void CmdListText(const UnicodeString &param);  //!< テキストを一覧表示 (ListText)
+	void CmdListTail(const UnicodeString &param);  //!< 末尾を一覧表示 (ListTail)
 
 	bool use_trash_ = true;  //!< true なら削除はゴミ箱送り (UseTrash)
 
@@ -401,6 +409,8 @@ private:
 	// スクロールやフォーカス移動 (ScrollUpLog / ToLog) はウィンドウが要るので
 	// このPRでは入れていない (報告書 §28)
 	void CmdClearLog();     //!< ログを消す (ClearLog)
+	void CmdScrollLog(bool down, const UnicodeString &param);  //!< ログをスクロール (ScrollUpLog/ScrollDownLog)
+	void CmdToLog();        //!< ログウィンドウへ (ToLog)
 	void CmdListLog();      //!< ログを一覧で見せる (ListLog / ShowLogWin)
 	void CmdViewLog();      //!< ログをテキストビューアで開く (ViewLog)
 	void CmdLogFileInfo();  //!< 選択項目のファイル情報をログへ (LogFileInfo)
@@ -411,6 +421,19 @@ private:
 	void LogResult(const UnicodeString &verb, const file_ops::FileOpResult &result);
 
 	log_win::LogBuffer log_;  //!< ログの中身
+	int log_view_index_ = -1;  //!< ログスクロールの注目位置 (ScrollUpLog/DownLog 用)
+
+	//-- パネル表示の状態 (F バッチ3。VCL の既定は Global.cpp のオプション表) --
+	// ShowImgPreview/ShowProperty/ShowMainMenu=true、ShowFKeyBar/ShowToolBar=false、
+	// IconMode=0。対応する部品 (プレビュー欄・情報欄・各種バー) は未実装のため
+	// 状態保持 + ステータス表示のみ (報告書の「状態保持のみ」と同じ扱い)
+	bool show_preview_ = true;   //!< 画像プレビューを表示するか (ShowPreview)
+	bool show_property_ = true;  //!< ファイル情報を表示するか (ShowProperty)
+	bool show_fkeybar_ = false;  //!< ファンクションキーバーを表示するか (ShowFKeyBar)
+	bool show_toolbar_ = false;  //!< ツールバーを表示するか (ShowToolBar)
+	bool show_menubar_ = true;   //!< メニューバーを表示するか (MenuBar)
+	int icon_mode_ = 0;          //!< アイコン表示 (0=隠す、1=表示、2=詳細。ShowIcon)
+	int sub_size_ = 150;         //!< サブ表示の大きさ (SetSubSize。サブパネルが無いため保持のみ)
 
 	//-- 抽出と変換 (機能群18。実処理は gui/convert_ops.h が移植済みコードへ委ねる) --
 	void CmdSetExifTime();      //!< タイムスタンプを Exif 撮影日時に (SetExifTime)
