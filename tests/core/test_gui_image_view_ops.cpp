@@ -221,16 +221,66 @@ TEST_CASE("FirstValidIndex and LastValidIndex")
 	CHECK(FirstValidIndex({}) == -1);
 }
 
-// JumpIndex (空・0は中止、+-は相対、1-based 絶対、範囲外は clamp)
-TEST_CASE("ParseJumpIndex handles absolute and relative")
+// 画像スクロール (VCL は ImgScrollBox の ScrollBar Position ±= Increment。
+// src/MainFrm.cpp::ScrollUpI/ScrollDownI/ScrollLeft/ScrollRightActionExecute)
+TEST_CASE("ScrollStepPos moves by step and clamps")
 {
-	CHECK(ParseJumpIndex(_T("3"), 5, 0) == 2);
-	CHECK(ParseJumpIndex(_T("+2"), 5, 1) == 3);
-	CHECK(ParseJumpIndex(_T("-1"), 5, 4) == 3);
-	CHECK(ParseJumpIndex(_T("99"), 5, 0) == 4);
-	CHECK(ParseJumpIndex(_T("+99"), 5, 0) == 4);
-	CHECK(ParseJumpIndex(_T("-99"), 5, 4) == 0);
-	CHECK_FALSE(ParseJumpIndex(_T(""), 5, 0).has_value());
-	CHECK_FALSE(ParseJumpIndex(_T("0"), 5, 0).has_value());
-	CHECK_FALSE(ParseJumpIndex(_T("abc"), 5, 0).has_value());
+	CHECK(ScrollStepPos(50, 0, 200, 20, 1) == 70);
+	CHECK(ScrollStepPos(50, 0, 200, 20, -1) == 30);
+	CHECK(ScrollStepPos(190, 0, 200, 20, 1) == 200);  // 上端で clamp
+	CHECK(ScrollStepPos(10, 0, 200, 20, -1) == 0);    // 下端で clamp
+	CHECK(ScrollStepPos(0, 0, 0, 20, 1) == 0);        // 動けない範囲
+	CHECK(ScrollStepPos(50, 0, 200, 0, 1) == 50);     // 刻み0は動かない
+}
+
+// サムネイルのページ移動 (VCL の NextPage/PrevPage/PageUpI/PageDownI は
+// グリッドの表示件数分だけ進めて SetThumbnailIndex で clamp する)
+TEST_CASE("PageStepIndex moves by page and clamps")
+{
+	CHECK(PageStepIndex(5, 20, 10, 1) == 15);
+	CHECK(PageStepIndex(15, 20, 10, -1) == 5);
+	CHECK(PageStepIndex(15, 20, 10, 1) == 19);  // 末尾で clamp
+	CHECK(PageStepIndex(5, 20, 10, -1) == 0);   // 先頭で clamp
+	CHECK(PageStepIndex(0, 1, 10, 1) == 0);
+	CHECK(PageStepIndex(3, 0, 10, 1) == 3);  // 空は動かない
+	CHECK(PageStepIndex(5, 20, 0, 1) == 5);  // ページ0は動かない
+}
+
+// 見開き時の2件ずつ移動 (src/MainFrm.cpp::NextPrevFileICore の IsDoubleStep 分岐。
+// 端では留まる = cur を返す)
+TEST_CASE("DoubleStepIndex moves by 2 and stays at ends")
+{
+	CHECK(DoubleStepIndex(7, 1, 1) == 3);
+	CHECK(DoubleStepIndex(7, 3, -1) == 1);
+	CHECK(DoubleStepIndex(7, 5, 1) == 5);   // max(=count-2) では留まる
+	CHECK(DoubleStepIndex(7, 6, 1) == 6);   // 末尾では留まる
+	CHECK(DoubleStepIndex(7, 1, -1) == 0);  // 先頭付近 (1) では先頭へ
+	CHECK(DoubleStepIndex(7, 0, -1) == 0);  // 先頭では留まる
+	CHECK(DoubleStepIndex(1, 0, 1) == 0);
+	CHECK(DoubleStepIndex(0, 0, 1) == 0);
+}
+
+// 表示トグル (VCL の SetToggleAction: src/MainFrm.cpp:12651。ON で true、
+// OFF で false、それ以外は反転。Histogram/Loupe/Thumbnail/ThumbnailEx/
+// DoublePage/WarnHighlight/ShowSeekBar/Sidebar の共通動作)
+TEST_CASE("ToggleViewFlag follows SetToggleAction")
+{
+	CHECK(ToggleViewFlag(false, _T("")) == true);
+	CHECK(ToggleViewFlag(true, _T("")) == false);
+	CHECK(ToggleViewFlag(false, _T("ON")) == true);
+	CHECK(ToggleViewFlag(true, _T("ON")) == true);
+	CHECK(ToggleViewFlag(true, _T("OFF")) == false);
+	CHECK(ToggleViewFlag(false, _T("OFF")) == false);
+}
+
+// 見開きの綴じ方向 (src/MainFrm.cpp::PageBindActionExecute。"R" で右綴じ、
+// "L" で左綴じ、それ以外は反転)
+TEST_CASE("NextPageBind follows PageBindActionExecute")
+{
+	CHECK(NextPageBind(false, _T("")) == true);
+	CHECK(NextPageBind(true, _T("")) == false);
+	CHECK(NextPageBind(false, _T("R")) == true);
+	CHECK(NextPageBind(true, _T("R")) == true);
+	CHECK(NextPageBind(true, _T("L")) == false);
+	CHECK(NextPageBind(false, _T("L")) == false);
 }

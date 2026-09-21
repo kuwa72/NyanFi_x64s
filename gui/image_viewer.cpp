@@ -25,6 +25,10 @@ inline bool is_identity(const image_view_ops::Transform &t)
 	return t.rot_cw % 4 == 0 && !t.flip_h && !t.flip_v;
 }
 
+/// スクロールの1刻み (px)。VCL の ScrollBar Increment 既定に相当する固定値
+/// ではなく、Phase 3 の簡略値 (推測・要検証)
+constexpr int kScrollStepPx = 32;
+
 }  // namespace
 
 //---------------------------------------------------------------------------
@@ -50,6 +54,7 @@ void ImageViewer::LoadFile(const UnicodeString &path)
 	path_ = path;
 	fitted_ = true;
 	zoom_percent_ = 100;
+	scroll_x_ = scroll_y_ = 0;
 	transform_ = image_view_ops::Transform();
 	scaled_for_w_ = scaled_for_h_ = -1;
 	scaled_bitmap_ = wxBitmap();
@@ -160,6 +165,8 @@ void ImageViewer::RebuildScaledBitmap()
 	}
 
 	scaled_bitmap_ = wxBitmap(img);
+	last_scaled_w_ = tw;
+	last_scaled_h_ = th;
 	scaled_for_w_ = client.x;
 	scaled_for_h_ = client.y;
 	scaled_ratio_ = ratio;
@@ -291,6 +298,113 @@ void ImageViewer::ResetEffects()
 
 //---------------------------------------------------------------------------
 /**
+ * @details 画像がクライアントより大きい分だけ動ける (小さいときは 0 に留まる)。
+ * 範囲の判断は image_view_ops::ScrollStepPos (VCL の ScrollBar clamp と同値)
+ */
+void ImageViewer::ScrollVert(int dir)
+{
+	if (!has_image_) return;
+
+	const wxSize client = GetClientSize();
+	const int max_y = std::max(0, last_scaled_h_ - std::max(0, client.y - HeaderHeight()));
+	const int next = image_view_ops::ScrollStepPos(scroll_y_, 0, max_y, kScrollStepPx, dir);
+	if (next == scroll_y_) return;
+	scroll_y_ = next;
+	Refresh();
+}
+
+//---------------------------------------------------------------------------
+void ImageViewer::ScrollHorz(int dir)
+{
+	if (!has_image_) return;
+
+	const wxSize client = GetClientSize();
+	const int max_x = std::max(0, last_scaled_w_ - std::max(1, client.x));
+	const int next = image_view_ops::ScrollStepPos(scroll_x_, 0, max_x, kScrollStepPx, dir);
+	if (next == scroll_x_) return;
+	scroll_x_ = next;
+	Refresh();
+}
+
+//---------------------------------------------------------------------------
+/// 見開き表示のON/OFF切替 (I:DoublePage 相当。VCL も SetToggleAction のトグル)
+void ImageViewer::ToggleDoublePage(const UnicodeString &param)
+{
+	if (!has_image_) return;
+	double_page_ = image_view_ops::ToggleViewFlag(double_page_, param);
+	Refresh();
+}
+
+//---------------------------------------------------------------------------
+/// 見開きの綴じ方向 (I:PageBind 相当。VCL の PageBindActionExecute と同じ)
+void ImageViewer::SetPageBind(const UnicodeString &param)
+{
+	if (!has_image_) return;
+	right_bind_ = image_view_ops::NextPageBind(right_bind_, param);
+	Refresh();
+}
+
+//---------------------------------------------------------------------------
+/// ヒストグラム表示の切替 (I:Histogram 相当。VCL の HistogramActionExecute と
+/// 同じくトグル。フォーム自体は Phase 3 の対象外のため状態保持のみ)
+void ImageViewer::ToggleHistogram(const UnicodeString &param)
+{
+	if (!has_image_) return;
+	show_histogram_ = image_view_ops::ToggleViewFlag(show_histogram_, param);
+	Refresh();
+}
+
+//---------------------------------------------------------------------------
+/// ルーペ表示の切替 (I:Loupe 相当。Histogram と同じく状態保持のみ)
+void ImageViewer::ToggleLoupe(const UnicodeString &param)
+{
+	if (!has_image_) return;
+	show_loupe_ = image_view_ops::ToggleViewFlag(show_loupe_, param);
+	Refresh();
+}
+
+//---------------------------------------------------------------------------
+/// サムネイル表示の切替 (I:Thumbnail 相当。VCL の ThumbnailActionExecute と
+/// 同じくトグル。一覧パネル自体は Phase 3 の対象外のため状態保持のみ)
+void ImageViewer::ToggleThumbnail(const UnicodeString &param)
+{
+	if (!has_image_) return;
+	show_thumbnail_ = image_view_ops::ToggleViewFlag(show_thumbnail_, param);
+	Refresh();
+}
+
+//---------------------------------------------------------------------------
+/// サムネイル全面表示の切替 (I:ThumbnailEx 相当。VCL の ThumbnailExActionExecute
+/// と同じくトグル。状態保持のみ)
+void ImageViewer::ToggleThumbnailEx(const UnicodeString &param)
+{
+	if (!has_image_) return;
+	thumb_extended_ = image_view_ops::ToggleViewFlag(thumb_extended_, param);
+	Refresh();
+}
+
+//---------------------------------------------------------------------------
+/// 白飛び警告の切替 (I:WarnHighlight 相当。VCL の WarnHighlightActionExecute
+/// と同じくトグル。点滅描画は Phase 3 の対象外のため状態保持のみ)
+void ImageViewer::ToggleWarnHighlight(const UnicodeString &param)
+{
+	if (!has_image_) return;
+	warn_highlight_ = image_view_ops::ToggleViewFlag(warn_highlight_, param);
+	Refresh();
+}
+
+//---------------------------------------------------------------------------
+/// シークバー表示の切替 (I:ShowSeekBar 相当。VCL の ShowSeekBarActionExecute
+/// と同じくトグル。バー自体は Phase 3 の対象外のため状態保持のみ)
+void ImageViewer::ToggleShowSeekBar(const UnicodeString &param)
+{
+	if (!has_image_) return;
+	show_seekbar_ = image_view_ops::ToggleViewFlag(show_seekbar_, param);
+	Refresh();
+}
+
+//---------------------------------------------------------------------------
+/**
  * @details イメージビューア中のキーは VCL 版 (src/MainFrm.cpp::FormKeyDown の
  * SCMD_IVIEW 分岐) でもほぼ全て消費されるが、ここは gui/text_viewer.cpp の
  * 慣習に合わせ、認識したキーだけ true を返す
@@ -313,6 +427,12 @@ bool ImageViewer::HandleKey(wxKeyEvent &event)
 		return true;
 	case WXK_RIGHT:
 		if (on_navigate_) on_navigate_(1);
+		return true;
+	case WXK_UP:
+		ScrollVert(-1);
+		return true;
+	case WXK_DOWN:
+		ScrollVert(1);
 		return true;
 	case 'F':
 		ToggleFitted();
@@ -410,8 +530,10 @@ void ImageViewer::OnPaint(wxPaintEvent &)
 	RebuildScaledBitmap();
 	if (!scaled_bitmap_.IsOk()) return;
 
-	const int x = (client.x - scaled_bitmap_.GetWidth()) / 2;
-	const int y = header_h + std::max(0, (client.y - header_h - scaled_bitmap_.GetHeight()) / 2);
+	// 中央基準からスクロール分だけずらす (I:ScrollUp/Down/Left/Right 相当。
+	// 画像がクライアントより小さいとき scroll_* は 0 のままなので中央表示)
+	const int x = (client.x - scaled_bitmap_.GetWidth()) / 2 - scroll_x_;
+	const int y = header_h + std::max(0, (client.y - header_h - scaled_bitmap_.GetHeight()) / 2) - scroll_y_;
 	const int bx = std::max(0, x);
 	dc.DrawBitmap(scaled_bitmap_, bx, y);
 

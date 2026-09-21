@@ -127,6 +127,43 @@ int LastValidIndex(const std::vector<char> &failed);
  */
 std::optional<int> ParseJumpIndex(const UnicodeString &param, int count, int cur);
 
+/**
+ * @brief スクロール位置を1刻み進める (端では clamp して留まる)
+ * @details src/MainFrm.cpp の ScrollUpI/ScrollDownI/ScrollLeft/ScrollRight
+ * ActionExecute は `ScrollBar->Position ±= Increment` で、範囲外は VCL が
+ * clamp する。ここではその clamp を明示化した
+ * @param pos 現在位置、lo/hi 位置の範囲、step 刻み幅、dir +1/-1
+ */
+int ScrollStepPos(int pos, int lo, int hi, int step, int dir);
+
+/**
+ * @brief サムネイルのページ移動 (page 件ずつ進めて範囲外は clamp)
+ * @details src/MainFrm.cpp の NextPage/PrevPage/PageUpI/PageDownI は
+ * グリッドの表示件数分だけ進めて SetThumbnailIndex で clamp するのと同じ
+ */
+int PageStepIndex(int cur, int count, int page, int dir);
+
+/**
+ * @brief 見開き表示の2件ずつ移動 (端では cur のまま留まる)
+ * @details src/MainFrm.cpp::NextPrevFileICore の IsDoubleStep 分岐と同じ。
+ * 次: 末尾とその手前では留まる。前: 先頭では留まる、先頭付近 (1) は先頭へ
+ */
+int DoubleStepIndex(int count, int cur, int dir);
+
+/**
+ * @brief 表示トグルの次状態 (VCL の SetToggleAction と同じ)
+ * @details src/MainFrm.cpp:12651。param が "ON" なら true、"OFF" なら
+ * false、それ以外 (空の通常起動を含む) は反転する
+ */
+bool ToggleViewFlag(bool cur, const UnicodeString &param);
+
+/**
+ * @brief 見開きの綴じ方向の次状態 (右綴じ=true)
+ * @details src/MainFrm.cpp::PageBindActionExecute と同じ。"R" なら右綴じ、
+ * "L" なら左綴じ、それ以外は反転する
+ */
+bool NextPageBind(bool right_bind, const UnicodeString &param);
+
 }  // namespace image_view_ops
 
 #endif  // NYANFI_GUI_IMAGE_VIEW_OPS_H
