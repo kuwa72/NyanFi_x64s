@@ -132,6 +132,8 @@ private:
 	void BuildImageNavList(const UnicodeString &current_name);
 	/// Left/Right (前後の画像へ) が押されたときに呼ばれる (ImageViewer::SetOnNavigate)
 	void CmdImageNavigate(int direction);
+	/// サムネイルの次/前ページへ移動する (I:NextPage/I:PrevPage 相当)
+	void CmdImagePageMove(int direction);
 	/// 先頭/末尾の画像へ移動する (I:TopFile/I:EndFile 相当)
 	void CmdImageTopEnd(bool to_top);
 	/// 指定インデックスの画像へ移動する (I:JumpIndex 相当)

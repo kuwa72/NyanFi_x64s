@@ -90,6 +90,40 @@ public:
 	bool IsGridShown() const { return show_grid_; }
 
 	/**
+	 * @brief 画像のスクロール (VCL の I:ScrollUp/Down/Left/Right 相当)
+	 * @details src/MainFrm.cpp の ScrollUpI/ScrollDownI/ScrollLeft/
+	 * ScrollRightActionExecute と同じくスクロール位置を1刻み進める。
+	 * 刻み幅と clamp は image_view_ops::ScrollStepPos が持つ。
+	 * @param dir +1:下/右 / -1:上/左
+	 */
+	void ScrollVert(int dir);
+	void ScrollHorz(int dir);
+
+	/**
+	 * @brief Iモードの表示トグル群 (param は VCL の ActionParam と同じ
+	 * "ON"/"OFF"/空=反転。判断は image_view_ops::ToggleViewFlag)
+	 * @details VCL 版は Histogram/Loupe/Thumbnail 用の別フォーム・パネルを
+	 * 開くが、ここは Phase 3 の範囲として開閉状態だけを保持する (推測・
+	 * 要検証の簡略化)。見た目への反映 (重ねて描く等) は対象外
+	 */
+	void ToggleDoublePage(const UnicodeString &param);  //!< I:DoublePage 見開き表示
+	bool IsDoublePage() const { return double_page_; }
+	void SetPageBind(const UnicodeString &param);       //!< I:PageBind 綴じ方向 ("R"/"L"/空=反転)
+	bool IsRightBind() const { return right_bind_; }
+	void ToggleHistogram(const UnicodeString &param);   //!< I:Histogram
+	bool IsHistogramShown() const { return show_histogram_; }
+	void ToggleLoupe(const UnicodeString &param);       //!< I:Loupe
+	bool IsLoupeShown() const { return show_loupe_; }
+	void ToggleThumbnail(const UnicodeString &param);   //!< I:Thumbnail
+	bool IsThumbnailShown() const { return show_thumbnail_; }
+	void ToggleThumbnailEx(const UnicodeString &param);  //!< I:ThumbnailEx 全面表示
+	bool IsThumbExtended() const { return thumb_extended_; }
+	void ToggleWarnHighlight(const UnicodeString &param);  //!< I:WarnHighlight 白飛び警告
+	bool IsWarnHighlight() const { return warn_highlight_; }
+	void ToggleShowSeekBar(const UnicodeString &param);  //!< I:ShowSeekBar
+	bool IsSeekBarShown() const { return show_seekbar_; }
+
+	/**
 	 * @brief 表示効果 (グレー・グリッド) を消す
 	 * @details VCL の CloseI (src/MainFrm.cpp) が GRAY 要求を消すのと同じ。
 	 * MainFrame::CmdImageViewer (新規オープン時) から呼ぶ。ファイル移動
@@ -127,9 +161,24 @@ private:
 	bool fitted_ = true;      //!< フィット表示 (VCL 版 imgv_thread.cpp コンストラクタの既定値と同じ)
 	int zoom_percent_ = 100;  //!< 手動ズーム時の倍率(%)
 
+	// スクロール位置 (拡大で画像がはみ出した分だけ動ける。範囲は
+	// RebuildScaledBitmap が覚えた表示サイズとクライアントサイズで決まる)
+	int scroll_x_ = 0, scroll_y_ = 0;
+	int last_scaled_w_ = 0, last_scaled_h_ = 0;  //!< 直近の表示サイズ (スクロール範囲用)
+
 	image_view_ops::Transform transform_;  //!< 回転・反転状態 (LoadFile で Exif から初期化)
 	bool grayscale_ = false;   //!< グレースケール表示 (VCL の ImgViewThread->GrayScaled 相当)
 	bool show_grid_ = false;   //!< 分割グリッド表示 (VCL の ImgViewThread->ShowGrid 相当)
+
+	// Iモードの表示トグル群 (VCL の同名グローバルに対応。開閉状態の保持のみ)
+	bool double_page_ = false;     //!< 見開き表示 (VCL の DoublePage)
+	bool right_bind_ = true;       //!< 見開きの綴じ方向・右綴じ (VCL の RightBind 既定値)
+	bool show_histogram_ = false;  //!< ヒストグラム (VCL の HistForm->Visible)
+	bool show_loupe_ = false;      //!< ルーペ (VCL の LoupeForm->Visible)
+	bool show_thumbnail_ = false;  //!< サムネイル (VCL の ThumbnailPanel->Visible)
+	bool thumb_extended_ = false;  //!< サムネイル全面表示 (VCL の ThumbExtended)
+	bool warn_highlight_ = false;  //!< 白飛び警告 (VCL の WarnHighlight)
+	bool show_seekbar_ = false;    //!< シークバー (VCL の ShowSeekBar)
 
 	wxBitmap scaled_bitmap_;                      //!< 表示用にスケール済みのビットマップ (キャッシュ)
 	int scaled_for_w_ = -1, scaled_for_h_ = -1;   //!< scaled_bitmap_ を作った時のクライアントサイズ
