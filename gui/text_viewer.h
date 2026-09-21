@@ -98,6 +98,36 @@ public:
 	void CmdReload();
 	/// V:Close (閉じる。SetOnClose 経由)
 	void CmdClose();
+	/**
+	 * @brief FV:ShowLineNo / ShowRuler / ShowTAB / ShowCR (param 空=反転、ON/OFF)
+	 * @details VCL 版 (MainFrm.cpp:33701〜) は TVIEW表示中は TxtViewer に委ね、
+	 *          FLIST では既定フラグを反転する。ここは常駐1面なので状態を直接持つ。
+	 *          ShowRuler/ShowTAB/ShowCR は状態の保持とステータス表示までで、
+	 *          ルーラ行・タブ記号・改行記号の描画は未対応 (TODO)
+	 */
+	void CmdShowLineNo(const UnicodeString &param);
+	void CmdShowRuler(const UnicodeString &param);
+	void CmdShowTAB(const UnicodeString &param);
+	void CmdShowCR(const UnicodeString &param);
+	/**
+	 * @brief FV:SetTab / SetWidth / SetMargin
+	 * @details VCL 版 (SetTabActionExecute:34185、SetWidth/SetMargin) と同じ解釈
+	 *          (gui/text_display.h)。空は入力ボックスを出すので無視する
+	 */
+	void CmdSetTab(const UnicodeString &param);
+	void CmdSetWidth(const UnicodeString &param);
+	void CmdSetMargin(const UnicodeString &param);
+
+	/// 行数 (ViewTail の移動先計算用)
+	int LineCount() const { return static_cast<int>(doc_.lines.size()); }
+	/// 表示設定の現在値 (Fモード配線の状態表示・テスト用)
+	bool ShowLineNo() const { return show_line_no_; }
+	bool ShowRuler() const { return show_ruler_; }
+	bool ShowTAB() const { return show_tab_; }
+	bool ShowCR() const { return show_cr_; }
+	int TabWidth() const { return tab_width_; }
+	int FoldWidth() const { return fold_width_; }
+	int LeftMargin() const { return left_margin_; }
 
 	/// 現在の栞マーク (0ベース、昇順)。ステータス表示・テスト用
 	const std::vector<int> &Marks() const { return marks_; }
@@ -144,6 +174,16 @@ private:
 	int current_line_ = 0;            //!< カーソル行 (0ベース、行単位)
 	Int64 top_row_ = 0;                //!< 先頭に表示する表示行番号
 	int h_offset_chars_ = 0;           //!< 折り返し無効時の水平スクロール(文字単位)
+
+	//-- テキスト表示設定 (F:ShowLineNo/SetTab/SetWidth/SetMargin 等) -----------
+	// VCL の既定値 (src/Global.cpp のオプション表) と同じ初期値
+	bool show_line_no_ = true;        //!< 行番号を表示する (ShowLineNo)
+	bool show_ruler_ = true;          //!< ルーラ情報を保持する (ShowTextRuler。描画はTODO)
+	bool show_tab_ = true;            //!< タブ記号の表示設定を保持する (描画はTODO)
+	bool show_cr_ = true;             //!< 改行記号の表示設定を保持する (描画はTODO)
+	int tab_width_ = 8;               //!< タブ幅 (SetTab。特殊拡張子は2固定だったが単純化)
+	int fold_width_ = 0;              //!< 折り返し幅(半角換算)。0はウィンドウ幅追従 (SetWidth)
+	int left_margin_ = 10;            //!< 左余白(px。ViewLeftMargin。SetMargin)
 
 	UnicodeString last_search_;        //!< 直前の検索語 (次回のダイアログ初期値)
 	UnicodeString last_error_;         //!< 直前の Execute 系エラーメッセージ (無ければ空)

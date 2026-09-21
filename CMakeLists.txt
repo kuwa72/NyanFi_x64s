@@ -276,6 +276,7 @@ if(TARGET nyanfi_core)
 		gui/text_ops.cpp
 		gui/external.cpp
 		gui/file_narrow.cpp		gui/dir_info.cpp
+		gui/text_display.cpp
 		gui/misc_ops.cpp
 		gui/find_files.cpp
 		gui/work_list.cpp

@@ -27,6 +27,7 @@
 #include "gui/file_info.h"
 #include "gui/file_narrow.h"
 #include "gui/text_ops.h"
+#include "gui/text_display.h"
 #include "gui/text_viewer_core.h"
 #include "gui/file_ops.h"
 #include "gui/dupl_dialog.h"
@@ -2565,6 +2566,56 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 			UpdateStatus();
 			return true;
 		}
+		//-- テキスト表示設定 (F:ShowLineNo/SetTab/SetWidth/SetMargin 等。
+		// VCL は TVIEW表示中は TxtViewer に委ねる (MainFrm.cpp:33701〜)) --
+		if (SameStr(command, _T("ShowLineNo"))) {
+			viewer_->CmdShowLineNo(param);
+			UpdateStatus();
+			return true;
+		}
+		if (SameStr(command, _T("ShowRuler"))) {
+			viewer_->CmdShowRuler(param);
+			UpdateStatus();
+			return true;
+		}
+		if (SameStr(command, _T("ShowTAB"))) {
+			viewer_->CmdShowTAB(param);
+			UpdateStatus();
+			return true;
+		}
+		if (SameStr(command, _T("ShowCR"))) {
+			viewer_->CmdShowCR(param);
+			UpdateStatus();
+			return true;
+		}
+		if (SameStr(command, _T("SetTab"))) {
+			viewer_->CmdSetTab(param);
+			UpdateStatus();
+			return true;
+		}
+		if (SameStr(command, _T("SetWidth"))) {
+			viewer_->CmdSetWidth(param);
+			UpdateStatus();
+			return true;
+		}
+		if (SameStr(command, _T("SetMargin"))) {
+			viewer_->CmdSetMargin(param);
+			UpdateStatus();
+			return true;
+		}
+		//-- テキストプレビューのスクロール (F:ScrollUpText/ScrollDownText。
+		// VCL はプレビュー欄を ListWheelScrLn 行動かす (MainFrm.cpp:24808)。
+		// ここに欄は無いので表示中のビューアのカーソルを動かす) --
+		if (SameStr(command, _T("ScrollUpText"))) {
+			viewer_->CmdCursorUp(IntToStr(text_display::ParseScrollLines(param)));
+			UpdateStatus();
+			return true;
+		}
+		if (SameStr(command, _T("ScrollDownText"))) {
+			viewer_->CmdCursorDown(IntToStr(text_display::ParseScrollLines(param)));
+			UpdateStatus();
+			return true;
+		}
 		if (SameStr(command, _T("Close"))) {
 			viewer_->CmdClose();
 			return true;
@@ -3285,6 +3336,70 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	}
 	else if (SameStr(command, _T("ImageViewer"))) {
 		CmdImageViewer();
+	}
+	//-- テキスト表示設定 (F:ShowLineNo/SetTab/SetWidth/SetMargin 等) -----------
+	// VCL は FLIST 上では既定フラグを反転し、次に開くビューアに反映する
+	// (MainFrm.cpp:33701〜)。ここはビューアが常駐1面なので状態を直接変える。
+	// 非表示でも変えておき、次に開いたときに効く。判断は gui/text_display.h
+	else if (SameStr(command, _T("ShowLineNo"))) {
+		viewer_->CmdShowLineNo(param);
+		SetStatusWarning(viewer_->ShowLineNo() ? _T("行番号を表示します") : _T("行番号を隠します"));
+	}
+	else if (SameStr(command, _T("ShowRuler"))) {
+		viewer_->CmdShowRuler(param);
+		SetStatusWarning(viewer_->ShowRuler() ? _T("ルーラを表示します") : _T("ルーラを隠します"));
+	}
+	else if (SameStr(command, _T("ShowTAB"))) {
+		viewer_->CmdShowTAB(param);
+		SetStatusWarning(viewer_->ShowTAB() ? _T("タブ記号を表示します") : _T("タブ記号を隠します"));
+	}
+	else if (SameStr(command, _T("ShowCR"))) {
+		viewer_->CmdShowCR(param);
+		SetStatusWarning(viewer_->ShowCR() ? _T("改行記号を表示します") : _T("改行記号を隠します"));
+	}
+	else if (SameStr(command, _T("SetTab"))) {
+		if (param.IsEmpty()) { SetStatusWarning(_T("タブ幅を指定してください (例 SetTab_4)")); }
+		else {
+			viewer_->CmdSetTab(param);
+			SetStatusWarning(UnicodeString().sprintf(_T("タブ幅 %d"), viewer_->TabWidth()));
+		}
+	}
+	else if (SameStr(command, _T("SetWidth"))) {
+		if (param.IsEmpty()) { SetStatusWarning(_T("折り返し幅を指定してください (0でウィンドウ幅)")); }
+		else {
+			viewer_->CmdSetWidth(param);
+			const int w = viewer_->FoldWidth();
+			SetStatusWarning(w == 0 ? UnicodeString(_T("折り返し幅: ウィンドウ幅"))
+			                        : UnicodeString().sprintf(_T("折り返し幅 %d"), w));
+		}
+	}
+	else if (SameStr(command, _T("SetMargin"))) {
+		if (param.IsEmpty()) { SetStatusWarning(_T("左余白を指定してください")); }
+		else {
+			viewer_->CmdSetMargin(param);
+			SetStatusWarning(UnicodeString().sprintf(_T("左余白 %d"), viewer_->LeftMargin()));
+		}
+	}
+	else if (SameStr(command, _T("ScrollUpText")) || SameStr(command, _T("ScrollDownText"))) {
+		// V モード表示中は上の分岐で処理済み。ここはプレビュー欄が無いので断る
+		SetStatusWarning(_T("テキストプレビューがありません"));
+	}
+	else if (SameStr(command, _T("ToText"))) {
+		CmdToText();
+	}
+	else if (SameStr(command, _T("ViewTail"))) {
+		CmdViewTail(param);
+	}
+	else if (SameStr(command, _T("ShowFileInfo"))) {
+		// VCL は情報欄への表示を強制する (FVI:ShowFileInfo)。情報欄はまだ無いので
+		// ファイル情報ダイアログ (PropertyDlg と同じもの) を出す
+		CmdPropertyDlg();
+	}
+	else if (SameStr(command, _T("UseTrash"))) {
+		// VCL は DelUseTrash を反転する (MainFrm.cpp:27558)。既定 false と違うが、
+		// こちらは従来ゴミ箱送りだったため true 始まりにし、破壊側へ倒さない
+		use_trash_ = text_display::ToggleValue(use_trash_, param);
+		SetStatusWarning(use_trash_ ? _T("削除はゴミ箱を使います") : _T("削除は完全削除になります"));
 	}
 	//-- I モード (画像ビューア表示中の操作。判断は gui/image_view_ops.h) --
 	// VCL 版は ExeCommandI (src/MainFrm.cpp) でモード別に振り分けるが、ここは
@@ -4087,11 +4202,25 @@ void MainFrame::CmdDelete()
 		return;
 	}
 
-	if (!ConfirmItems(this, _T("削除"), _T("ゴミ箱へ移動"), names, EmptyStr)) return;
+	if (!ConfirmItems(this, _T("削除"), use_trash_ ? _T("ゴミ箱へ移動") : _T("完全に削除"), names, EmptyStr)) return;
 
 	// 結果リストの項目は一覧のディレクトリの外にあるので、名前ではなく
 	// フルパスで取る (GetPath() + 名前 だと別のファイルを指す)
 	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
+
+	// UseTrash=OFF (F:UseTrash) なら VCL の DelUseTrash=false と同じく完全削除。
+	// 消したら戻せないので2回聞く (CmdCompleteDelete と同じ文面)
+	if (!use_trash_) {
+		if (wxMessageBox(to_wx(_T("ゴミ箱には入りません。本当に完全削除してよいですか?")),
+		                 to_wx(_T("削除")), wxYES_NO | wxICON_WARNING, this) != wxYES) return;
+		UnicodeString error;
+		const file_ops::FileOpResult result = file_ops::DeleteItemsPermanently(paths);
+		pane->Reload();
+		LogResult(_T("削除 (完全)"), result);
+		wxMessageBox(to_wx(file_ops::Summarize(result)), to_wx(_T("削除の結果")),
+		             wxOK | wxICON_INFORMATION, this);
+		return;
+	}
 
 	UnicodeString error;
 	const bool ok = file_ops::SendToTrash(paths, error, static_cast<HWND>(GetHandle()));
@@ -4279,6 +4408,51 @@ void MainFrame::CmdTextViewer()
 	RecordHistory(history::Kind::View, full_path);
 
 	ShowViewer(true);
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief テキストプレビューへ (F:ToText。MainFrm.cpp:27307 と同じ)
+ * @details VCL はプレビュー欄にフォーカスを移す。ここに欄は無いので、
+ *          ビューア表示中はフォーカスを移し、非表示なら開く
+ */
+void MainFrame::CmdToText()
+{
+	if (viewer_ != nullptr && viewer_->IsShown()) {
+		viewer_->SetFocus();
+		return;
+	}
+	CmdTextViewer();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 末尾を閲覧 (F:ViewTail。MainFrm.cpp:27615 と同じ判断)
+ * @details VCL は OpenTxtViewerTail で末尾 N 行だけを開く (R で逆順)。
+ *          ここは全文を開いて末尾側へ移動する簡略化 (逆順表示は未対応で
+ *          状態に残す)。引数の解釈は gui/text_display.h
+ */
+void MainFrame::CmdViewTail(const UnicodeString &param)
+{
+	FilePane *pane = ActivePane();
+	const FileItem *itm = pane->GetCurrentItem();
+	if (itm == nullptr || itm->is_parent || itm->is_dir) return;
+
+	const UnicodeString full_path = pane->FullPathOf(*itm);
+
+	UnicodeString error;
+	if (!viewer_->LoadFile(full_path, error)) {
+		wxMessageBox(to_wx(error), to_wx(_T("開けませんでした")), wxOK | wxICON_ERROR, this);
+		return;
+	}
+	RecordHistory(history::Kind::View, full_path);
+
+	ShowViewer(true);
+
+	const text_display::TailParam tp = text_display::ParseTailParam(param);
+	const int n = viewer_->LineCount();
+	viewer_->GotoLine(std::max(0, n - tp.limit_lines));
+	if (tp.reverse) SetStatusWarning(_T("逆順表示は未対応のため末尾から表示します"));
 }
 
 //---------------------------------------------------------------------------
