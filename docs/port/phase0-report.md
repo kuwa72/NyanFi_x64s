@@ -1652,3 +1652,70 @@ VCL 版 (`src/FindDlg.cpp` / `src/DuplDlg.cpp` / `src/MaskSelDlg.cpp`) の
   wx 3.3 固有の既存エラーで止まるため、新規分だけ個別に確認)。
   実機での操作は未確認。
   キー割り当て (`gui/key_map.cpp`) は変えていない
+
+## 36. 主要ダイアログ バッチ2: 登録・タブ系 (Phase 3 issue #40)
+
+`TabDlg` / `RegDirDlg` / `ChangeRegDir` / `ChangeOppRegDir` の4コマンド
+(配線数 331→335)。巨大な `OptDlg` (設定) は対象外。
+`SyncDlg` / `AppDlg` 等の大物は後続バッチに残す。
+
+- **タブの設定**: 判断は `gui/tab_settings.*` に純関数として切り出し
+  (`TabList` CSV 9項目のうち [2..7] の読み書き。
+  `TTabSetDlg::FormShow` / `OkButtonClick` を実測。
+  パス [0],[1] と同期 [8] は触らない)。
+  入力は `gui/tab_dialog.*` の wxDialog
+  (キャプション・アイコン・左右ホーム・ワークリスト3択・
+  「現在のディレクトリを設定」・参照ボタン。
+  `SelectDirEx` / `PrepareOpenDlg`+`OpenDlgToEdit` は
+  wxDirDialog / wxFileDialog に置き換え)。
+  `TabState` に caption/icon/work_mode/work_list を追加し、
+  `CaptionAt` はカスタムキャプション優先
+  (VCL の `SetTabStr` の `def_if_empty` と同じ)、
+  ini (`WxGuiTabs`) に新キーで保存する (旧 ini も既定値で読める)。
+- **登録ディレクトリ**: 判断は `gui/regdir.*` に純関数として切り出し
+  (`RegDirList` CSV 4項目の読み書き・`is_separator`・
+  セパレータをまたがない `move_top_RegDirItem`・
+  `SameText` によるキー照合・`contains_upper` 規則のフィルタ。
+  `TRegDirDlg` / `get_RegDirItem` / `RegDirListBoxKeyPress` を実測)。
+  一覧は `WxGuiRegDir` セクションに ini 永続化する
+  (`ReadString` の `del_quot` 既定 true では CSV の外側クォートが
+  剥がれて壊れるため false で読む)。
+  入力は `gui/regdir_dialog.*` の wxDialog
+  (一覧・フィルタ+AND・1文字キーで一致1件なら確定・複数なら
+  最後の一致へ移動・追加・削除・使用後の先頭移動)。
+  `ChangeRegDir` / `ChangeOppRegDir` はパラメータの1文字目を
+  アクセスキーとして直接移動する
+  (`ActionParam[1]` を実測。接続ユーザ名は未移植のため使わない)。
+
+### 実測で決めた点
+
+- **VCL のタブは左右共有の1本** (`gui/tabs.h` 冒頭の実測どおり)。
+  `TabDlg` はその共有タブの両ホーム等を編集する。
+  確定後のワークリスト読み込み (`SetWorkList`) は未移植のため
+  設定値の保持だけ行う。
+- **`ChangeOppRegDir` は反対側へ開く**。VCL の当該箇所は
+  `UpdateCurPath` 呼びに見えるが、コマンド名どおり反対ペインへ
+  適用する (Phase 2 骨格の `ChangeOppDir` と同じ考え方)。
+- **`RegDirPopup` (ポップアップメニュー) は未配線**。
+  メニュー UI が無く、一覧ダイアログ (`RegDirDlg`) で代用できるため。
+- **項目の編集・上下移動・環境変数表示・特殊フォルダ合成一覧・
+  アイコンプレビュー・Migemo・ダイアログ位置の永続化は未移植**。
+  未実装扱いのまま落とさない (issue #40 の受け入れ条件どおり)。
+
+### 検証の範囲 (テストを書かなかったものを全部挙げる)
+
+- 24 ケース追加 (core 全体: **1,104 ケース / 3,562 アサーション**)。
+  タブ設定の読み書き (モード正規化・[7] の扱い・[0],[1],[8] 保存)・
+  登録の往復・セパレータ・先頭移動 (グループ内)・キー照合・
+  フィルタ (OR/AND・大小文字規則)・両 Store の ini 往復と旧 ini 互換・
+  カスタムキャプション優先を含む。
+- **次はテストしていない**:
+  新規2ダイアログの操作と `gui/main_frame.cpp` 側の受け渡し
+  (wx 依存)。新規ダイアログを含む GUI 全体のコンパイル・リンクは
+  Linux からの mingw-w64 クロス + wx 3.3.3 で確認した
+  (`/tmp/gui-check` で `nyanfi.exe` までリンク。
+  main_frame.cpp の wx 3.3 固有の既存エラー
+  (`wxEmptyString` の三項演算子) だけ一時回避して確認後に revert)。
+  実機での操作は未確認 (CI の起動確認に委ねる)。
+  キー割り当て (`gui/key_map.cpp`) は変えていない。
+  `check_commands.py`・`check_literals.py` は通過。

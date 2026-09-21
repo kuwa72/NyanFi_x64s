@@ -42,7 +42,9 @@
 #include "gui/image_viewer.h"
 #include "gui/key_map.h"
 #include "gui/navigation.h"
+#include "gui/regdir.h"
 #include "gui/settings.h"
+#include "gui/tab_settings.h"
 #include "gui/tabs.h"
 #include "gui/text_viewer.h"
 #include "gui/work_list.h"
@@ -191,6 +193,9 @@ private:
 	void CmdSoloTab();               //!< 他のタブをすべて閉じる (SoloTab)
 	void CmdTabHome(bool all);       //!< タブをホームへ戻す (TabHome)
 	void CmdToTab();                 //!< 番号/キャプションでタブを選ぶ (ToTab)
+	void CmdTabDlg();                //!< タブの設定ダイアログ (TabDlg)
+	void CmdRegDirDlg();             //!< 登録ディレクトリダイアログ (RegDirDlg)
+	void CmdChangeRegDir(bool opposite, const UnicodeString &param);  //!< 登録を開く (ChangeRegDir/ChangeOppRegDir)
 	void CmdSubDirList();            //!< サブディレクトリ一覧から選んで移動
 	void CmdSpecialDirList();        //!< 特殊フォルダ一覧から選んで移動
 	void CmdFixTabPath(const UnicodeString &param);  //!< タブへのパス変更を固定/解除 (FixTabPath)
@@ -550,6 +555,7 @@ private:
 
 	TabManager tabs_;       //!< タブの状態 (gui/tabs.h)。左右ペイン共有の1本のタブバー
 	TabBar *tab_bar_ = nullptr;  //!< タブの見た目 (自前描画。gui/main_frame.cpp を参照)
+	regdir::RegDirStore regdirs_;  //!< 登録ディレクトリ (gui/regdir.h。WxGuiRegDir)
 };
 
 #endif  // NYANFI_GUI_MAIN_FRAME_H

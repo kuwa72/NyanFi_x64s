@@ -92,11 +92,14 @@ UnicodeString TabManager::CaptionAt(int index) const
 {
 	if (index < 0 || index >= static_cast<int>(tabs_.size())) return EmptyStr;
 
+	// カスタムキャプションがあればそれを使う (VCL 版 SetTabStr の
+	// `def_if_empty(itm_buf[2], get_DirNwlName(itm_buf[0]))` と同じ)
+	const TabState &tab = tabs_[static_cast<std::size_t>(index)];
+	if (!tab.caption.IsEmpty()) return tab.caption;
+
 	// 左ペインのディレクトリ末尾要素名を使う (VCL 版 SetTabStr の
-	// `def_if_empty(itm_buf[2], get_DirNwlName(itm_buf[0]))` の簡易版。
-	// Phase 2 骨格はカスタムキャプション (itm_buf[2] 相当) を持たないため
-	// 常にディレクトリ名から作る)
-	const UnicodeString dir = tabs_[static_cast<std::size_t>(index)].panes[0].directory;
+	// `get_DirNwlName(itm_buf[0])` の簡易版)
+	const UnicodeString dir = tab.panes[0].directory;
 	if (dir.IsEmpty()) return _T("(無題)");
 
 	const UnicodeString leaf = ExtractFileName(ExcludeTrailingPathDelimiter(dir));
@@ -122,6 +125,11 @@ void TabManager::SaveToIni(UsrIniFile &ini) const
 		const TabState &tab = tabs_[static_cast<std::size_t>(i)];
 		UnicodeString prefix;
 		prefix.sprintf(_T("Tab%02d_"), i);
+
+		ini.WriteString(kSection, prefix + _T("Caption"), tab.caption);
+		ini.WriteString(kSection, prefix + _T("Icon"), tab.icon);
+		ini.WriteInteger(kSection, prefix + _T("WorkMode"), tab.work_mode);
+		ini.WriteString(kSection, prefix + _T("WorkList"), tab.work_list);
 
 		for (int p = 0; p < 2; ++p) {
 			const PaneTabState &pane = tab.panes[p];
@@ -149,6 +157,12 @@ void TabManager::LoadFromIni(UsrIniFile &ini)
 		TabState tab;
 		UnicodeString prefix;
 		prefix.sprintf(_T("Tab%02d_"), i);
+
+		// 旧版の ini (この4キーが無い) でも既定値で読める
+		tab.caption = ini.ReadString(kSection, prefix + _T("Caption"), EmptyStr);
+		tab.icon = ini.ReadString(kSection, prefix + _T("Icon"), EmptyStr);
+		tab.work_mode = ini.ReadInteger(kSection, prefix + _T("WorkMode"), 0);
+		tab.work_list = ini.ReadString(kSection, prefix + _T("WorkList"), EmptyStr);
 
 		for (int p = 0; p < 2; ++p) {
 			PaneTabState &pane = tab.panes[p];
