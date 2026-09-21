@@ -34,6 +34,8 @@
 #include "gui/dupl_dialog.h"
 #include "gui/find_dialog.h"
 #include "gui/grep_dialog.h"
+#include "gui/regdir_dialog.h"
+#include "gui/tab_dialog.h"
 #include "gui/image_load.h"
 #include "gui/image_view_ops.h"
 #include "gui/mask_dialog.h"
@@ -313,6 +315,7 @@ void MainFrame::LoadSettings()
 	const UnicodeString start = initial_path();
 
 	tabs_.LoadFromIni(settings_.Ini());
+	regdirs_.LoadFromIni(settings_.Ini());
 	if (tabs_.Count() == 0) {
 		// 通常は起こらない (TabManager は常に1本以上持つ) が、念のため
 		TabState fallback;
@@ -373,6 +376,7 @@ void MainFrame::SaveSettings()
 {
 	StoreCurrentTabState();
 	tabs_.SaveToIni(settings_.Ini());
+	regdirs_.SaveToIni(settings_.Ini());
 
 	// 後方互換 (本機能より前の _wx.ini を読む古いビルドとの橋渡し)。
 	// タブが無い/未対応のビルドでも最後に開いていたディレクトリだけは復元できる
@@ -747,6 +751,85 @@ void MainFrame::CmdFixTabPath(const UnicodeString &param)
 
 	SetStatusWarning(tabs_.IsFixed()? _T("タブへのパス変更を固定しました")
 	                                : _T("タブへのパス変更の固定を解除しました"));
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdTabDlg()
+{
+	// VCL は TTabSetDlg (src/TabDlg.cpp)。TabList の CSV のうち [2..7] を
+	// 編集する (判断は gui/tab_settings.h)。現在のタブの記録へ書き戻す
+	StoreCurrentTabState();
+	TabState &tab = tabs_.MutableCurrent();
+
+	tab_settings::TabSettings s;
+	s.caption = tab.caption;
+	s.icon = tab.icon;
+	s.home0 = tab.panes[0].home;
+	s.home1 = tab.panes[1].home;
+	s.work_mode = tab.work_mode;
+	s.work_list = tab.work_list;
+
+	if (!tab_dialog::Run(this, s, panes_[0]->GetPath(), panes_[1]->GetPath())) return;
+
+	tab.caption = s.caption;
+	tab.icon = s.icon;
+	tab.panes[0].home = s.home0;
+	tab.panes[1].home = s.home1;
+	tab.work_mode = s.work_mode;
+	tab.work_list = s.work_list;
+	// アイコンの表示とワークリストの読み込み自体は未移植のため保持のみ
+	// (gui/tab_settings.h の説明を参照)
+	RefreshTabBar();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdRegDirDlg()
+{
+	// VCL は TRegDirDlg (src/DirDlg.cpp の通常モード)。一覧の表示・選択・
+	// 追加・削除・使用後の先頭移動だけを移植した (判断は gui/regdir.h、
+	// 入力は gui/regdir_dialog.h)。選ばれたらその場で移動する
+	// (VCL は CmdStr を ExeCommandAction に渡すが、通常選択は UpdateCurPath
+	// への直行なので等価)
+	std::vector<regdir::RegDirItem> &items = regdirs_.MutableItems();
+	if (items.empty()) {
+		SetStatusWarning(_T("登録ディレクトリがありません (一覧で追加してください)"));
+	}
+	int sel = -1;
+	if (!regdir_dialog::Run(this, items, ActivePane()->GetPath(), sel)) return;
+
+	// 追加・削除・先頭移動を保存する
+	regdirs_.SaveToIni(settings_.Ini());
+	settings_.Save();
+
+	const regdir::RegDirItem &item =
+		items[static_cast<std::size_t>(sel)];
+	ActivePane()->SetPath(item.path);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdChangeRegDir(bool opposite, const UnicodeString &param)
+{
+	// VCL は ChangeRegDir/ChangeOppRegDir (MainFrm.cpp:14162/14176)。
+	// ActionParam の1文字目が登録のアクセスキー。接続ユーザ名 (FTP) は
+	// 未移植のため使わない (未実装扱い)
+	if (param.IsEmpty()) { SetStatusWarning(_T("パラメータがありません")); return; }
+
+	const std::vector<int> hit =
+		regdir::KeyMatches(regdirs_.Items(), param.SubString(1, 1));
+	if (hit.empty()) {
+		SetStatusWarning(_T("該当する登録がありません: ") + param.SubString(1, 1));
+		return;
+	}
+	const regdir::RegDirItem &item =
+		regdirs_.Items()[static_cast<std::size_t>(hit[0])];
+	const UnicodeString dnam = regdir::SelectablePath(item);
+	if (dnam.IsEmpty() || !dir_exists(dnam)) {
+		SetStatusWarning(_T("開けません: ") + dnam);
+		return;
+	}
+	(opposite ? OppositePane() : ActivePane())->SetPath(dnam);
+	UpdateStatus();
 }
 
 //---------------------------------------------------------------------------
@@ -2838,6 +2921,9 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	else if (SameStr(command, _T("ToTab"))) {
 		CmdToTab();
 	}
+	else if (SameStr(command, _T("TabDlg"))) {
+		CmdTabDlg();
+	}
 	else if (SameStr(command, _T("SubDirList"))) {
 		CmdSubDirList();
 	}
@@ -3614,6 +3700,15 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	}
 	else if (SameStr(command, _T("ChangeOppDir"))) {
 		CmdChangeDir(true);
+	}
+	else if (SameStr(command, _T("RegDirDlg"))) {
+		CmdRegDirDlg();
+	}
+	else if (SameStr(command, _T("ChangeRegDir"))) {
+		CmdChangeRegDir(false, param);
+	}
+	else if (SameStr(command, _T("ChangeOppRegDir"))) {
+		CmdChangeRegDir(true, param);
 	}
 	else if (SameStr(command, _T("ChangeDrive"))) {
 		CmdChangeDrive();

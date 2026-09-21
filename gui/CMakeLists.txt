@@ -88,6 +88,8 @@ add_executable(nyanfi
 	find_dialog.cpp
 	dupl_dialog.cpp
 	mask_dialog.cpp
+	tab_dialog.cpp
+	regdir_dialog.cpp
 	key_map_wx.cpp
 	vcl_gui_bridge.cpp
 )

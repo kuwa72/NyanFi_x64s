@@ -454,3 +454,72 @@ TEST_CASE("TabFixed: 付け外しできる (ON/OFF パラメータに相当)")
 	tm.SetFixed(false);
 	CHECK_FALSE(tm.IsFixed());
 }
+
+//===========================================================================
+// タブの設定 (F:TabDlg。gui/tab_settings.* で編集する項目の保持)
+//===========================================================================
+
+TEST_CASE("CaptionAt: カスタムキャプションがあればそれを使う")
+{
+	// VCL 版 SetTabStr の def_if_empty(itm_buf[2], get_DirNwlName(itm_buf[0])) と同じ
+	TabManager tm;
+	tm.MutableCurrent().panes[0].directory = _T("C:\\alpha\\");
+	CHECK(tm.CaptionAt(0) == UnicodeString(_T("alpha")));
+
+	tm.MutableCurrent().caption = _T("作業用");
+	CHECK(tm.CaptionAt(0) == UnicodeString(_T("作業用")));
+}
+
+TEST_CASE("SaveToIni/LoadFromIni: タブの設定も往復する")
+{
+	TempDir dir;
+	const UnicodeString ini_path = dir.file(_T("nyanfi_wx.ini"));
+
+	{
+		TabManager tabs;
+		tabs.MutableCurrent().panes[0].directory = _T("C:\\A\\");
+		tabs.MutableCurrent().caption = _T("作業用");
+		tabs.MutableCurrent().icon = _T("C:\\a.ico");
+		tabs.MutableCurrent().work_mode = 2;
+		tabs.MutableCurrent().work_list = _T("F:\\w.nwl");
+
+		std::unique_ptr<UsrIniFile> ini(new UsrIniFile(ini_path));
+		tabs.SaveToIni(*ini);
+		CHECK(ini->UpdateFile());
+	}
+
+	std::unique_ptr<UsrIniFile> ini(new UsrIniFile(ini_path));
+	TabManager reloaded;
+	reloaded.LoadFromIni(*ini);
+
+	CHECK(reloaded.At(0).caption == UnicodeString(_T("作業用")));
+	CHECK(reloaded.At(0).icon == UnicodeString(_T("C:\\a.ico")));
+	CHECK(reloaded.At(0).work_mode == 2);
+	CHECK(reloaded.At(0).work_list == UnicodeString(_T("F:\\w.nwl")));
+	CHECK(reloaded.CaptionAt(0) == UnicodeString(_T("作業用")));
+}
+
+TEST_CASE("LoadFromIni: 旧版の ini (設定キー無し) でも既定値で読める")
+{
+	TempDir dir;
+	const UnicodeString ini_path = dir.file(_T("nyanfi_wx.ini"));
+
+	// 新キー (Caption/Icon/WorkMode/WorkList) の無い旧版の書式
+	{
+		std::unique_ptr<TStringList> buf(new TStringList());
+		buf->Text = _T("[WxGuiTabs]\r\nCount=1\r\nCurrent=0\r\n"
+		               _T("Tab00_Dir0=C:\\A\\\r\nTab00_Dir1=D:\\A\\\r\n"));
+		buf->SaveToFile(ini_path);
+	}
+
+	std::unique_ptr<UsrIniFile> ini(new UsrIniFile(ini_path));
+	TabManager reloaded;
+	reloaded.LoadFromIni(*ini);
+
+	REQUIRE(reloaded.Count() == 1);
+	CHECK(reloaded.At(0).panes[0].directory == UnicodeString(_T("C:\\A\\")));
+	CHECK(reloaded.At(0).caption.IsEmpty());
+	CHECK(reloaded.At(0).icon.IsEmpty());
+	CHECK(reloaded.At(0).work_mode == 0);
+	CHECK(reloaded.At(0).work_list.IsEmpty());
+}
