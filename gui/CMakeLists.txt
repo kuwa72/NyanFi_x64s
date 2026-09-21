@@ -92,6 +92,7 @@ add_executable(nyanfi
 	regdir_dialog.cpp
 	key_map_wx.cpp
 	vcl_gui_bridge.cpp
+	worker_thread.cpp
 )
 
 # 既定は GUI サブシステム。診断時だけコンソールにして wxLog を端末で読む

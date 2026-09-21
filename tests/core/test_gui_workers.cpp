@@ -246,3 +246,62 @@ TEST_CASE("ProcessBatched: CancelFlag と組み合わせて中断できる")
 	CHECK(r.cancelled);
 	CHECK(r.processed == 3);
 }
+
+//===========================================================================
+// worker_thread 契約 (Issue #41 batch2): wxThread 自体は単体テスト不可のため
+// ここでは Entry が依存する純粋部の契約だけを固定する。スレッド起動/中断の
+// 統合確認は MSYS2 CI (GUI ビルド) に委ねる
+//===========================================================================
+TEST_CASE("ProcessBatched: totalが0以下なら何もせず打ち切りなし")
+{
+	int progress_calls = 0;
+	const auto r0 = workers::ProcessBatched(
+		0, nullptr, [&](int, int) { ++progress_calls; });
+	CHECK(!r0.cancelled);
+	CHECK(r0.processed == 0);
+	const auto rn = workers::ProcessBatched(
+		-5, nullptr, [&](int, int) { ++progress_calls; });
+	CHECK(!rn.cancelled);
+	CHECK(rn.processed == 0);
+	CHECK(progress_calls == 0);
+}
+
+TEST_CASE("ProcessBatched: 進捗は単調増加でtotalは一定 (worker進捗イベントの元)")
+{
+	std::vector<std::pair<int, int>> calls;
+	const auto r = workers::ProcessBatched(
+		4, nullptr,
+		[&](int processed, int total) { calls.emplace_back(processed, total); });
+	CHECK(!r.cancelled);
+	CHECK(r.processed == 4);
+	REQUIRE(calls.size() == 4);
+	for (std::size_t i = 0; i < calls.size(); ++i) {
+		CHECK(calls[i].first == static_cast<int>(i) + 1);
+		CHECK(calls[i].second == 4);
+	}
+}
+
+TEST_CASE("CancelFlag: Reset後は次の仕事を完走できる (worker再利用の契約)")
+{
+	CancelFlag flag;
+	flag.RequestCancel();
+	flag.Reset();
+	int progress_calls = 0;
+	const auto r = workers::ProcessBatched(
+		3,
+		[&flag]() { return flag.IsCancelled(); },
+		[&](int, int) { ++progress_calls; });
+	CHECK(!r.cancelled);
+	CHECK(r.processed == 3);
+	CHECK(progress_calls == 3);
+}
+
+TEST_CASE("ShouldReportGrepProgress: 20件ごとに通知 (dialog/worker共有)")
+{
+	CHECK(!workers::ShouldReportGrepProgress(0));
+	CHECK(!workers::ShouldReportGrepProgress(1));
+	CHECK(!workers::ShouldReportGrepProgress(19));
+	CHECK(workers::ShouldReportGrepProgress(20));
+	CHECK(!workers::ShouldReportGrepProgress(21));
+	CHECK(workers::ShouldReportGrepProgress(40));
+}

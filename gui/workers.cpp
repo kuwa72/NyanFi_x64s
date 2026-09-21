@@ -123,6 +123,13 @@ bool ShouldNotify(int now_ms, int last_ms, int pending)
 	return pending > 0 && (now_ms - last_ms) > 200;
 }
 
+bool ShouldReportGrepProgress(int files_scanned)
+{
+	// gui/grep_dialog.cpp の Pulse 間引き (files % 20) と同じ規則。
+	// worker_thread の進捗イベント間引きと共有する
+	return files_scanned > 0 && (files_scanned % 20) == 0;
+}
+
 BatchResult ProcessBatched(int total, const BatchCancelCallback &cancel_cb,
                            const BatchProgressCallback &progress_cb)
 {

@@ -15,6 +15,7 @@
 #include <wx/textctrl.h>
 
 #include "usr_str.h"
+#include "gui/workers.h"
 
 namespace grep_dialog {
 
@@ -269,7 +270,8 @@ bool Run(wxWindow *parent, const UnicodeString &dir, const UnicodeString &initia
 
 	// 進捗表示の repaint 自体が重いため、一定件数ごとにだけ更新する
 	grep_core::GrepProgressCallback progress_cb = [&progress](int files, int found) {
-		if (files % 20 != 0) return;
+		// 間引き規則は gui/worker_thread.cpp と共有 (workers.h を参照)
+		if (!workers::ShouldReportGrepProgress(files)) return;
 		UnicodeString msg;
 		msg.sprintf(_T("%d ファイルを検索 (%d 件一致)"), files, found);
 		progress.Pulse(to_wx(msg));

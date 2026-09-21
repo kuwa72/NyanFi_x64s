@@ -143,6 +143,14 @@ std::vector<int> IconPendingIndices(const std::vector<char> &has_icon);
  */
 bool ShouldNotify(int now_ms, int last_ms, int pending);
 
+/**
+ * @brief grep 進捗を間引くか (20件ごと)。
+ * @details gui/grep_dialog.cpp が repaint の重さ避けに `files % 20` で間引いて
+ *          いたものを、gui/worker_thread.cpp (GrepWorkerThread::Entry) と共有する
+ *          ために切り出した純関数。0件・端数は通知しない。
+ */
+bool ShouldReportGrepProgress(int files_scanned);
+
 //-----------------------------------------------------------------------
 // grep/task/thumb/icon 共通: wxWorker の1チャンク実行の契約
 //-----------------------------------------------------------------------
