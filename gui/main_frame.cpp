@@ -20,6 +20,7 @@
 #include <wx/settings.h>
 #include <wx/statline.h>
 #include <wx/textdlg.h>
+#include <wx/utils.h>
 
 #include "gui/file_info_panel.h"
 #include "gui/file_open.h"
@@ -4014,6 +4015,45 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	}
 	else if (SameStr(command, _T("WatchTail"))) {
 		CmdWatchTail(param);
+	}
+	else if (SameStr(command, _T("BgImgMode"))) {
+		CmdBgImgMode(param);
+	}
+	else if (SameStr(command, _T("Library"))) {
+		CmdLibrary(param);
+	}
+	else if (SameStr(command, _T("JsonViewer"))) {
+		CmdJsonViewer(param);
+	}
+	else if (SameStr(command, _T("XmlViewer"))) {
+		CmdXmlViewer();
+	}
+	else if (SameStr(command, _T("LoadFindSet"))) {
+		CmdLoadFindSet(param);
+	}
+	else if (SameStr(command, _T("SaveAsFindSet"))) {
+		CmdSaveAsFindSet();
+	}
+	else if (SameStr(command, _T("LockTextPreview"))) {
+		CmdLockTextPreview(param);
+	}
+	else if (SameStr(command, _T("ShowIndent"))) {
+		CmdShowIndent(param);
+	}
+	else if (SameStr(command, _T("FindTagName"))) {
+		CmdFindTagName(param);
+	}
+	else if (SameStr(command, _T("Grep2"))) {
+		CmdGrep2();
+	}
+	else if (SameStr(command, _T("ExPopupMenu"))) {
+		CmdExPopupMenu(param);
+	}
+	else if (SameStr(command, _T("WebMap"))) {
+		CmdWebMap(param);
+	}
+	else if (SameStr(command, _T("PlayList"))) {
+		CmdPlayList(param);
 	}
 	else if (SameStr(command, _T("Exit"))) {
 		Close(true);
@@ -8372,4 +8412,318 @@ void MainFrame::CmdWatchTail(const UnicodeString &param)
 	else SetStatusWarning(_T("監視を開始しました (タイマーは未対応): ") + cur->name);
 	watch_tail_.push_back(fnam);
 	log_.Add(log_win::LogStatus::Info, _T("監視開始  ") + fnam, /*show_time=*/true);
+}
+
+//---------------------------------------------------------------------------
+// Fモード残 batch6 (判断は gui/f_batch6_ops.h。専用ビューア・MCI・tags 等の
+// 重い実体が要るものは確認+ログ+最小UIの簡略版)
+//---------------------------------------------------------------------------
+
+/**
+ * @brief 背景画像の表示切替 (BgImgMode)
+ * @details VCL (MainFrm.cpp:13784) の OFF/1〜3・`^` 反転は ResolveBgImgMode。
+ *          背景画像の描画 (UpdateBgImage) は未移植のため状態保持のみ
+ */
+void MainFrame::CmdBgImgMode(const UnicodeString &param)
+{
+	const f_batch6_ops::BgImgModePlan plan =
+		f_batch6_ops::ResolveBgImgMode(bg_img_mode_, param);
+	if (plan.abort) {
+		SetStatusWarning(_T("パラメータが不正です"));
+		return;
+	}
+	bg_img_mode_ = plan.mode;
+	SetStatusWarning(bg_img_mode_ == 0 ? UnicodeString(_T("背景画像OFF"))
+	                                   : UnicodeString().sprintf(_T("背景画像モード%d (描画は未対応)"),
+	                                                             bg_img_mode_));
+}
+
+/**
+ * @brief ライブラリを開く (Library)
+ * @details VCL (MainFrm.cpp:20595) の SD/名前付き/既定は ResolveLibraryMode。
+ *          共有ダイアログと既定パス (LibraryPath) は未移植のため警告のみ。
+ *          名前付きは実在すれば実移動する
+ */
+void MainFrame::CmdLibrary(const UnicodeString &param)
+{
+	const f_batch6_ops::LibraryMode mode = f_batch6_ops::ResolveLibraryMode(param);
+	if (mode == f_batch6_ops::LibraryMode::ShareDlg) {
+		SetStatusWarning(_T("共有のライブラリ選択は未対応です"));
+		return;
+	}
+	if (mode == f_batch6_ops::LibraryMode::OpenDefault) {
+		SetStatusWarning(_T("既定のライブラリは未対応です"));
+		return;
+	}
+	if (!dir_exists(param)) {
+		SetStatusWarning(_T("ディレクトリが見つかりません: ") + param);
+		return;
+	}
+	FilePane *pane = ActivePane();
+	if (!pane->SetPath(param)) {
+		SetStatusWarning(_T("移動できませんでした: ") + param);
+		return;
+	}
+	UpdateStatus();
+}
+
+/**
+ * @brief JSON/XML の簡易表示 (JsonViewer / XmlViewer)
+ * @details VCL (MainFrm.cpp:20266/27874) の CB・dummy/dir/無効ガードは
+ *          IsClipboardViewer/CanViewFile に従う。専用ツリービューアは未移植の
+ *          ため、対象ファイルをテキストビューアで開く簡略版
+ */
+void MainFrame::CmdJsonViewer(const UnicodeString &param)
+{
+	if (f_batch6_ops::IsClipboardViewer(param)) {
+		SetStatusWarning(_T("クリップボードのJSON表示は未対応です"));
+		return;
+	}
+	FilePane *pane = ActivePane();
+	const FileItem *cur = pane->GetCurrentItem();
+	const bool has = cur != nullptr && !cur->is_parent;
+	// FileItem に dummy 行は無い (親 ".." を除く)。faInvalid 相当は missing
+	if (!f_batch6_ops::CanViewFile(has, /*is_dummy=*/false,
+	                               has ? cur->is_dir : true,
+	                               has ? cur->missing : true)) {
+		SetStatusWarning(_T("対象がありません"));
+		return;
+	}
+	const UnicodeString fnam = pane->FullPathOf(*cur);
+	UnicodeString error;
+	if (!viewer_->LoadFile(fnam, error)) {
+		SetStatusWarning(error);
+		return;
+	}
+	RecordHistory(history::Kind::View, fnam);
+	ShowViewer(true);
+	SetStatusWarning(_T("JSONツリー表示は未対応のためテキストで開きました"));
+}
+
+void MainFrame::CmdXmlViewer()
+{
+	FilePane *pane = ActivePane();
+	const FileItem *cur = pane->GetCurrentItem();
+	const bool has = cur != nullptr && !cur->is_parent;
+	if (!f_batch6_ops::CanViewFile(has, /*is_dummy=*/false,
+	                               has ? cur->is_dir : true,
+	                               has ? cur->missing : true)) {
+		SetStatusWarning(_T("対象がありません"));
+		return;
+	}
+	const UnicodeString fnam = pane->FullPathOf(*cur);
+	UnicodeString error;
+	if (!viewer_->LoadFile(fnam, error)) {
+		SetStatusWarning(error);
+		return;
+	}
+	RecordHistory(history::Kind::View, fnam);
+	ShowViewer(true);
+	SetStatusWarning(_T("XMLツリー表示は未対応のためテキストで開きました"));
+}
+
+/**
+ * @brief 検索設定の読み込み (LoadFindSet)
+ * @details VCL (MainFrm.cpp:21402) の `*`/名前付き/ダイアログは
+ *          ResolveLoadFindSetSrc。共有ダイアログと FindFileCore による適用は
+ *          未移植のため、指定の確認とログ記録のみ
+ */
+void MainFrame::CmdLoadFindSet(const UnicodeString &param)
+{
+	const f_batch6_ops::LoadFindSetSrc src = f_batch6_ops::ResolveLoadFindSetSrc(param);
+	if (src == f_batch6_ops::LoadFindSetSrc::Star) {
+		SetStatusWarning(_T("共有の検索設定選択は未対応です"));
+		return;
+	}
+	UnicodeString fnam;
+	if (src == f_batch6_ops::LoadFindSetSrc::Named) {
+		fnam = param;
+	}
+	else {
+		wxFileDialog dlg(this, to_wx(_T("検索設定を読み込む")),
+		                 to_wx(ActivePane()->GetPath()),
+		                 wxEmptyString, _T("検索設定 (*.ini)|*.ini|すべて (*.*)|*.*"),
+		                 wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+		if (dlg.ShowModal() != wxID_OK) return;
+		fnam = to_us(dlg.GetPath());
+	}
+	if (!file_exists(fnam)) {
+		SetStatusWarning(_T("見つかりません: ") + fnam);
+		return;
+	}
+	log_.Add(log_win::LogStatus::Info, _T("検索設定の指定: ") + fnam,
+	         /*show_time=*/true);
+	SetStatusWarning(_T("検索設定の適用は未対応です (指定をログに記録しました)"));
+}
+
+/**
+ * @brief 検索設定の保存 (SaveAsFindSet)
+ * @details VCL (MainFrm.cpp:24523) は find_DUPL 中は不可 (CanSaveFindSet)。
+ *          保存ダイアログまでは出すが、save_FindSettings の実体は未移植のため
+ *          警告のみ (Execute false 契約のため true で返す)
+ */
+void MainFrame::CmdSaveAsFindSet()
+{
+	if (!f_batch6_ops::CanSaveFindSet(/*find_dupl=*/false)) {
+		SetStatusWarning(_T("この一覧では保存できません"));
+		return;
+	}
+	wxFileDialog dlg(this, to_wx(_T("検索設定に名前を付けて保存")),
+	                 to_wx(ActivePane()->GetPath()),
+	                 to_wx(_T("FINDSET.ini")),
+	                 _T("検索設定 (*.ini)|*.ini"),
+	                 wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+	if (dlg.ShowModal() != wxID_OK) return;
+	SetStatusWarning(_T("検索設定の保存は未対応です"));
+}
+
+/**
+ * @brief テキストプレビューのロック/解除 (LockTextPreview)
+ * @details VCL (MainFrm.cpp:21697) の SetToggleAction は ResolveToggle。
+ *          プレビュー欄 (LockTxtPanel) は未移植のため状態保持のみ
+ */
+void MainFrame::CmdLockTextPreview(const UnicodeString &param)
+{
+	lock_txt_prv_ = f_batch6_ops::ResolveToggle(lock_txt_prv_, param);
+	SetStatusWarning(lock_txt_prv_ ? _T("テキストプレビューをロックしました (欄は未対応)")
+	                               : _T("テキストプレビューのロックを解除しました"));
+}
+
+/**
+ * @brief インデント表示の切替 (ShowIndent)
+ * @details VCL (MainFrm.cpp:33735) は TVIEW 中はビューアへ委譲。
+ *          そうでなければ反転/ON/OFF (ResolveShowIndent)。実表示は未移植の
+ *          ため状態保持のみ
+ */
+void MainFrame::CmdShowIndent(const UnicodeString &param)
+{
+	if (viewer_ != nullptr && viewer_->IsShown()) {
+		const f_batch6_ops::ShowIndentPlan plan =
+			f_batch6_ops::ResolveShowIndent(/*is_tview=*/true, show_indent_, param);
+		if (plan.delegate_to_viewer && !viewer_->Execute(_T("ShowIndent") + param))
+			SetStatusWarning(_T("ビューア表示中のインデント表示は未対応です"));
+		return;
+	}
+	const f_batch6_ops::ShowIndentPlan plan =
+		f_batch6_ops::ResolveShowIndent(/*is_tview=*/false, show_indent_, param);
+	show_indent_ = plan.new_value;
+	SetStatusWarning(show_indent_ ? _T("インデント表示ON") : _T("インデント表示OFF"));
+}
+
+/**
+ * @brief タグ名の検索 (FindTagName)
+ * @details VCL (MainFrm.cpp:19142) の EJ/CO は ResolveFindTagPlan。
+ *          tags ファイルの探索とジャンプ (DirectTagJumpCore) は未移植のため
+ *          警告のみ
+ */
+void MainFrame::CmdFindTagName(const UnicodeString &param)
+{
+	const bool is_tview = viewer_ != nullptr && viewer_->IsShown();
+	const f_batch6_ops::FindTagPlan plan = f_batch6_ops::ResolveFindTagPlan(param, is_tview);
+	UnicodeString msg = UnicodeString(_T("タグ検索は未対応です (")) + plan.tag_cmd;
+	if (plan.use_current_file) msg += _T(", 当該ファイル対象");
+	msg += _T(")");
+	SetStatusWarning(msg);
+}
+
+/**
+ * @brief 外部 grep で検索 (Grep2)
+ * @details VCL (MainFrm.cpp:19407) の書庫/FTP・検索Dir・grep.exe ガードは
+ *          ValidateGrep2。grep.exe のパス設定は未移植のため、常に
+ *          「設定されていません」の警告になる。設定があれば CmdGrep へ回す
+ */
+void MainFrame::CmdGrep2()
+{
+	UnicodeString error;
+	// 書庫/FTP・検索Dir の状態は未移植のため false。grep.exe のパス設定も
+	// 未移植のため false (VCL と同じメッセージで警告する)
+	if (!f_batch6_ops::ValidateGrep2(/*is_arc=*/false, /*is_ftp=*/false,
+	                                 /*is_find=*/false, /*find_dir=*/false,
+	                                 /*grep_exists=*/false, error)) {
+		SetStatusWarning(error);
+		return;
+	}
+	CmdGrep();
+}
+
+/**
+ * @brief 拡張ポップアップメニュー (ExPopupMenu)
+ * @details VCL (MainFrm.cpp:17223) の MN/TL/両方は ResolveExPopupTarget。
+ *          拡張メニュー・外部ツールの一覧と表示 (ShowExPopupMenu) は未移植の
+ *          ため警告のみ
+ */
+void MainFrame::CmdExPopupMenu(const UnicodeString &param)
+{
+	const f_batch6_ops::ExPopupTarget target = f_batch6_ops::ResolveExPopupTarget(param);
+	UnicodeString what;
+	if (target.menu) what += _T("メニュー");
+	if (target.tool) {
+		if (!what.IsEmpty()) what += _T("・");
+		what += _T("ツール");
+	}
+	SetStatusWarning(_T("拡張ポップアップ (") + what + _T(") は未対応です"));
+}
+
+/**
+ * @brief 地図表示 (WebMap)
+ * @details VCL (MainFrm.cpp:34302) の `M<n>`/`Z<n>` は ParseWebMapParams、
+ *          緯度経度の入力は ParseLatLng。画像の位置情報 (EXIF) と地図番号別
+ *          プロバイダは未移植のため常に入力ボックスで受け、Google マップの
+ *          URL を既定ブラウザで開く
+ */
+void MainFrame::CmdWebMap(const UnicodeString &param)
+{
+	const f_batch6_ops::WebMapPlan plan = f_batch6_ops::ParseWebMapParams(param);
+	if (!plan.ok) {
+		SetStatusWarning(plan.error);
+		return;
+	}
+	wxTextEntryDialog dlg(this, to_wx(_T("緯度,経度 (例: 35.68,139.69)")),
+	                      to_wx(_T("マップの表示地点")));
+	if (dlg.ShowModal() != wxID_OK) return;
+	double lat = 0.0, lng = 0.0;
+	if (!f_batch6_ops::ParseLatLng(to_us(dlg.GetValue()), lat, lng)) {
+		SetStatusWarning(_T("パラメータが不正です"));
+		return;
+	}
+	const UnicodeString url = f_batch6_ops::BuildMapUrl(lat, lng, plan.zoom);
+	log_.Add(log_win::LogStatus::Info, _T("地図を開く  ") + url, /*show_time=*/true);
+	if (!wxLaunchDefaultBrowser(to_wx(url)))
+		SetStatusWarning(_T("ブラウザを起動できませんでした: ") + url);
+}
+
+/**
+ * @brief プレイリスト (PlayList)
+ * @details VCL (MainFrm.cpp:23604) の NX/PR/PS/RS/PP/CA/FI/設定は
+ *          ResolvePlayListSub。MCI による再生と設定ダイアログは未移植のため
+ *          警告のみ
+ */
+void MainFrame::CmdPlayList(const UnicodeString &param)
+{
+	switch (f_batch6_ops::ResolvePlayListSub(param)) {
+	case f_batch6_ops::PlayListSub::Next:
+		SetStatusWarning(_T("プレイリストの再生は未対応です (次)"));
+		break;
+	case f_batch6_ops::PlayListSub::Prev:
+		SetStatusWarning(_T("プレイリストの再生は未対応です (前)"));
+		break;
+	case f_batch6_ops::PlayListSub::Pause:
+		SetStatusWarning(_T("プレイリストの再生は未対応です (一時停止)"));
+		break;
+	case f_batch6_ops::PlayListSub::Resume:
+		SetStatusWarning(_T("プレイリストの再生は未対応です (再開)"));
+		break;
+	case f_batch6_ops::PlayListSub::PlayPause:
+		SetStatusWarning(_T("プレイリストの再生は未対応です (再生/一時停止)"));
+		break;
+	case f_batch6_ops::PlayListSub::ClearAll:
+		SetStatusWarning(_T("プレイリストの再生は未対応です (停止・クリア)"));
+		break;
+	case f_batch6_ops::PlayListSub::FileInfo:
+		SetStatusWarning(_T("プレイリストの再生は未対応です (ファイル情報)"));
+		break;
+	case f_batch6_ops::PlayListSub::Setup:
+		SetStatusWarning(_T("プレイリスト設定は未対応です"));
+		break;
+	}
 }
