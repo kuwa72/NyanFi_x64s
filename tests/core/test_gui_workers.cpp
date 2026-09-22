@@ -305,3 +305,52 @@ TEST_CASE("ShouldReportGrepProgress: 20件ごとに通知 (dialog/worker共有)"
 	CHECK(!workers::ShouldReportGrepProgress(21));
 	CHECK(workers::ShouldReportGrepProgress(40));
 }
+
+//===========================================================================
+// GrepAsyncState: grep_dialog 非同期化の状態機械 (Issue #41 batch3)
+//===========================================================================
+// GrepWorkerThread が QueueEvent する wxEVT_GREP_PROGRESS (Int=files,
+// ExtraLong=found) / wxEVT_GREP_DONE (Int=0/1) を grep_dialog がどう畳むかの
+// 契約。wx イベント自体は単体テスト不可のため、畳み込みだけを純関数化する。
+// スレッド起動/中断の統合確認は MSYS2 CI (GUI ビルド) に委ねる
+TEST_CASE("GrepAsyncState: 初期状態は未完了・0件")
+{
+	workers::GrepAsyncState st;
+	CHECK(st.files_scanned == 0);
+	CHECK(st.matches_found == 0);
+	CHECK(!st.done);
+	CHECK(!st.cancelled);
+}
+
+TEST_CASE("GrepAsyncState: OnProgressで最新を保持 (未完了のまま)")
+{
+	workers::GrepAsyncState st;
+	st.OnProgress(20, 3);
+	CHECK(st.files_scanned == 20);
+	CHECK(st.matches_found == 3);
+	CHECK(!st.done);
+	st.OnProgress(40, 5);
+	CHECK(st.files_scanned == 40);
+	CHECK(st.matches_found == 5);
+	CHECK(!st.done);
+}
+
+TEST_CASE("GrepAsyncState: OnDone(false)で完了・中断なし")
+{
+	workers::GrepAsyncState st;
+	st.OnProgress(40, 5);
+	st.OnDone(false);
+	CHECK(st.done);
+	CHECK(!st.cancelled);
+	CHECK(st.files_scanned == 40);
+	CHECK(st.matches_found == 5);
+}
+
+TEST_CASE("GrepAsyncState: OnDone(true)で完了・中断あり")
+{
+	workers::GrepAsyncState st;
+	st.OnProgress(20, 1);
+	st.OnDone(true);
+	CHECK(st.done);
+	CHECK(st.cancelled);
+}

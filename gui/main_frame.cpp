@@ -5284,8 +5284,8 @@ void MainFrame::ShowImageViewer(bool show)
  * @details アクティブペインの現在のディレクトリを対象にする (要件1)。
  * 検索条件の入力・進捗表示・結果一覧からの選択は gui/grep_dialog.h に
  * まとめてあり、ここは選ばれたマッチをテキストビューアで開くだけ。
- * grep_thread.cpp のような別スレッドは使っておらず、grep_dialog::Run が
- * 同期的に走査する (wxProgressDialog でユーザーの中断を受け付ける)
+ * 走査自体は GrepWorkerThread (gui/worker_thread.h) の別スレッドで回り、
+ * GUI スレッドは進捗表示と中断の受付だけを行う (Issue #41 batch3)
  */
 void MainFrame::CmdGrep()
 {

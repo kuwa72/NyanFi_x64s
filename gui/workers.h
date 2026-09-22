@@ -152,6 +152,31 @@ bool ShouldNotify(int now_ms, int last_ms, int pending);
 bool ShouldReportGrepProgress(int files_scanned);
 
 //-----------------------------------------------------------------------
+// grep 非同期 (grep_dialog + GrepWorkerThread の接続、Issue #41 batch3)
+//-----------------------------------------------------------------------
+
+/**
+ * @brief 非同期 grep の進捗・完了の畳み込み (wx 非依存の状態機械)
+ * @details GrepWorkerThread が QueueEvent する2種のイベントの畳み方:
+ *   - wxEVT_GREP_PROGRESS (SetInt=files_scanned、SetExtraLong=matches_found)
+ *     → OnProgress で最新の件数を保持する (未完了のまま)
+ *   - wxEVT_GREP_DONE (SetInt=中断なら1) → OnDone で完了・中断を記録する
+ *   wx イベント自体は単体テスト不可のため、ここでは畳み込みだけを持ち、
+ *   イベントの受け渡し (Bind/QueueEvent) は grep_dialog 側の仕事。
+ */
+struct GrepAsyncState {
+	int files_scanned = 0;  ///< 最後に受けた進捗の走査ファイル数
+	int matches_found = 0;  ///< 最後に受けた進捗の一致件数
+	bool done = false;      ///< DONE を受けたか
+	bool cancelled = false;  ///< 中断で終わったか (OnDone の引いを記録)
+
+	/// 進捗を受けて最新の件数に更新する
+	void OnProgress(int files, int found);
+	/// 完了を受けて完了・中断を記録する
+	void OnDone(bool was_cancelled);
+};
+
+//-----------------------------------------------------------------------
 // grep/task/thumb/icon 共通: wxWorker の1チャンク実行の契約
 //-----------------------------------------------------------------------
 
