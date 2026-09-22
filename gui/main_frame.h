@@ -26,6 +26,7 @@
 
 #include "gui/bookmarks.h"
 #include "gui/convert_ops.h"
+#include "gui/f_misc_ops.h"
 #include "gui/history.h"
 #include "gui/named_state.h"
 #include "gui/system_ops.h"
@@ -351,6 +352,26 @@ private:
 	void CmdWebSearch();       //!< Web で検索 (WebSearch)
 	void CmdOpenADS();         //!< 代替データストリームを一覧 (OpenADS)
 	void CmdDeleteADS();       //!< 代替データストリームを削除 (DeleteADS。破壊的)
+
+	//-- Fモード残 batch4 (判断は gui/f_misc_ops.h。実コピー・実検索コアなど
+	//   重い実体が要るものは確認+ログ+最小UIの簡略版。詳細は各 Cmd を参照) --
+	void CmdBackup(const UnicodeString &param);       //!< 反対側へバックアップ予約 (Backup)
+	void CmdCompressDir(const UnicodeString &param);  //!< ディレクトリのNTFS圧縮予約 (CompressDir)
+	void CmdCompareDlg(const UnicodeString &param);   //!< 同名ファイルの比較選択 (CompareDlg)
+	void CmdFindHardLink(const UnicodeString &param); //!< ハードリンクを列挙 (FindHardLink)
+	void CmdLinkToOpp();                              //!< リンク先を反対側に開く (LinkToOpp)
+	void CmdSetFolderIcon(const UnicodeString &param);//!< フォルダアイコンの設定 (SetFolderIcon)
+	void CmdFindFolderIcon();                         //!< フォルダアイコン検索 (FindFolderIcon)
+	void CmdJumpTo(const UnicodeString &param);       //!< 指定したファイル位置へ (JumpTo)
+	void CmdTaskMan();                                //!< タスクマネージャ (TaskMan)
+	void CmdSuspend(const UnicodeString &param);      //!< 予約項目の保留/解除 (Suspend)
+	void CmdPauseAllTask(const UnicodeString &param); //!< 全タスクの一旦停止/再開 (PauseAllTask)
+	void CmdCancelAllTask();                          //!< 全タスクの中断 (CancelAllTask)
+	void CmdDriveGraph(const UnicodeString &param);   //!< ドライブ使用率 (DriveGraph)
+
+	bool rsv_suspended_ = false;       //!< 予約の保留状態 (VCL RsvSuspended 相当)
+	std::vector<bool> task_paused_;    //!< タスクの一旦停止状態 (実スレッドは未移植のため空)
+	UnicodeString folder_icon_def_;    //!< 既定のフォルダアイコン (VCL DefFldIcoName 相当)
 
 	//-- 表示の切り替え (機能群22。判断は gui/view_settings.h) ------------------
 	//

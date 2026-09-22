@@ -14,6 +14,7 @@
 
 #include <wx/choicdlg.h>
 #include <wx/dcbuffer.h>
+#include <wx/filedlg.h>
 #include <wx/radiobox.h>
 #include <wx/settings.h>
 #include <wx/statline.h>
@@ -90,6 +91,40 @@ bool ConfirmExecute(wxWindow *parent, const UnicodeString &full_path)
 {
 	const UnicodeString text = _T("実行可能ファイルです。開いてもよろしいですか?\n\n") + full_path;
 	return wxMessageBox(to_wx(text), to_wx(_T("実行の確認")), wxYES_NO | wxICON_WARNING, parent) == wxYES;
+}
+
+/// ハードリンクの一覧を Windows API で列挙する (VCL Global.cpp の
+/// get_HardLinkList は fsutil を呼ぶが、Global.cpp は phase0 対象外で
+/// リンクできないため FindFirstFileNameW で直接取る)
+std::vector<UnicodeString> ListHardLinks(const UnicodeString &path)
+{
+	std::vector<UnicodeString> out;
+	DWORD len = 0;
+	// 長さ取得 (ERROR_MORE_DATA が正常系。len に要る文字数が返る)
+	HANDLE fh = ::FindFirstFileNameW(path.c_str(), 0, &len, nullptr);
+	if (fh != INVALID_HANDLE_VALUE) { ::FindClose(fh); return out; }
+	if (::GetLastError() != ERROR_MORE_DATA || len == 0) return out;
+	std::vector<wchar_t> buf(static_cast<std::size_t>(len) + 1);
+	fh = ::FindFirstFileNameW(path.c_str(), 0, &len, buf.data());
+	if (fh == INVALID_HANDLE_VALUE) return out;
+	wchar_t vbuf[MAX_PATH];
+	const bool has_vol = (::GetVolumePathNameW(path.c_str(), vbuf, MAX_PATH) != FALSE);
+	do {
+		UnicodeString link = UnicodeString(buf.data());
+		// 返るのは "\path\to\file" 形式 (ボリューム相対)。ボリュームを付けて戻す
+		if (has_vol) {
+			UnicodeString full = IncludeTrailingPathDelimiter(
+				ExcludeTrailingPathDelimiter(UnicodeString(vbuf)))
+				+ link.SubString(2, link.Length() - 1);
+			out.push_back(full);
+		}
+		else {
+			out.push_back(link);
+		}
+		len = static_cast<DWORD>(buf.size());
+	} while (::FindNextFileNameW(fh, &len, buf.data()));
+	::FindClose(fh);
+	return out;
 }
 
 }  // namespace
@@ -3792,6 +3827,45 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	else if (SameStr(command, _T("ListTail"))) {
 		CmdListTail(param);
 	}
+	else if (SameStr(command, _T("Backup"))) {
+		CmdBackup(param);
+	}
+	else if (SameStr(command, _T("CompressDir"))) {
+		CmdCompressDir(param);
+	}
+	else if (SameStr(command, _T("CompareDlg"))) {
+		CmdCompareDlg(param);
+	}
+	else if (SameStr(command, _T("FindHardLink"))) {
+		CmdFindHardLink(param);
+	}
+	else if (SameStr(command, _T("LinkToOpp"))) {
+		CmdLinkToOpp();
+	}
+	else if (SameStr(command, _T("SetFolderIcon"))) {
+		CmdSetFolderIcon(param);
+	}
+	else if (SameStr(command, _T("FindFolderIcon"))) {
+		CmdFindFolderIcon();
+	}
+	else if (SameStr(command, _T("JumpTo"))) {
+		CmdJumpTo(param);
+	}
+	else if (SameStr(command, _T("TaskMan"))) {
+		CmdTaskMan();
+	}
+	else if (SameStr(command, _T("Suspend"))) {
+		CmdSuspend(param);
+	}
+	else if (SameStr(command, _T("PauseAllTask"))) {
+		CmdPauseAllTask(param);
+	}
+	else if (SameStr(command, _T("CancelAllTask"))) {
+		CmdCancelAllTask();
+	}
+	else if (SameStr(command, _T("DriveGraph"))) {
+		CmdDriveGraph(param);
+	}
 	else if (SameStr(command, _T("Exit"))) {
 		Close(true);
 	}
@@ -7318,4 +7392,483 @@ void MainFrame::CmdDeleteADS()
 	else {
 		wxMessageBox(to_wx(error), to_wx(_T("代替データストリームの削除")), wxOK | wxICON_ERROR, this);
 	}
+}
+
+//---------------------------------------------------------------------------
+// Fモード残 batch4 (判断は gui/f_misc_ops.h)
+//---------------------------------------------------------------------------
+
+/**
+ * @brief 反対側へバックアップ予約 (Backup)
+ * @details VCL (MainFrm.cpp:13645) は BACKUP タスクを発行するが、実コピーの
+ *          スレッドは未移植のため、経路の検証 (ValidateBackupPaths) と
+ *          確認のうえログへ予約を記録する簡略版にした。**コピーは行わない**
+ */
+void MainFrame::CmdBackup(const UnicodeString &param)
+{
+	(void)param;  // VCL は設定名を受けて即時実行する分岐があるが、設定表が無いため常に確認する
+	FilePane *pane = ActivePane();
+	FilePane *opp = OppositePane();
+	if (pane->IsResultList() || opp->IsResultList()) {
+		SetStatusWarning(_T("結果リスト上では操作できません"));
+		return;
+	}
+	UnicodeString error;
+	if (!f_misc_ops::ValidateBackupPaths(pane->GetPath(), opp->GetPath(), error)) {
+		SetStatusWarning(error);
+		return;
+	}
+	UnicodeString msg;
+	msg.sprintf(_T("バックアップを予約しますか?\r\n\r\nバックアップ元: %s\r\nバックアップ先: %s"),
+	            pane->GetPath().c_str(), opp->GetPath().c_str());
+	if (wxMessageBox(to_wx(msg), to_wx(_T("バックアップ")),
+	                 wxYES_NO | wxICON_QUESTION, this) != wxYES) return;
+	log_.Add(log_win::LogStatus::Info,
+	         _T("バックアップ予約: ") + pane->GetPath() + _T(" ---> ") + opp->GetPath(),
+	         /*show_time=*/true);
+	SetStatusWarning(_T("バックアップを予約しました (実コピーは未対応)"));
+}
+
+/**
+ * @brief ディレクトリのNTFS圧縮予約 (CompressDir)
+ * @details VCL (MainFrm.cpp:14987) は DCOMP タスクを発行するが、同上により
+ *          対象の選び方 (CompressTargetIndices) と確認・ログの簡略版にした。
+ *          UN/AL パラメータは受け付けるが圧縮方向の実体が無いため表示のみ
+ */
+void MainFrame::CmdCompressDir(const UnicodeString &param)
+{
+	FilePane *pane = ActivePane();
+	if (pane->IsResultList()) {
+		SetStatusWarning(_T("結果リスト上では操作できません"));
+		return;
+	}
+	const std::vector<FileItem> items = pane->VisibleItems();
+	std::vector<bool> selected, is_dir;
+	for (const FileItem &it : items) {
+		if (it.is_parent) { selected.push_back(false); is_dir.push_back(false); continue; }
+		selected.push_back(it.marked);
+		is_dir.push_back(it.is_dir);
+	}
+	std::vector<int> idx = f_misc_ops::CompressTargetIndices(selected, is_dir);
+	std::vector<UnicodeString> targets;
+	for (int i : idx) targets.push_back(pane->FullPathOf(items[static_cast<std::size_t>(i)]));
+	if (targets.empty()) {
+		const FileItem *cur = pane->GetCurrentItem();
+		if (cur == nullptr || cur->is_parent
+		    || !f_misc_ops::CursorCompressTarget(cur->is_dir)) {
+			SetStatusWarning(_T("対象がありません (ディレクトリを選んでください)"));
+			return;
+		}
+		targets.push_back(pane->FullPathOf(*cur));
+	}
+	const bool uncomp = f_misc_ops::HasParamToken(param, _T("UN"));
+	UnicodeString verb = uncomp ? UnicodeString(_T("展開")) : UnicodeString(_T("圧縮"));
+	if (!ConfirmItems(this, _T("ディレクトリの圧縮"), verb, targets, UnicodeString())) return;
+	for (const UnicodeString &t : targets) {
+		log_.Add(log_win::LogStatus::Info,
+		         verb + _T("予約: ") + t, /*show_time=*/true);
+	}
+	SetStatusWarning(UnicodeString().sprintf(_T("%d 件を%s予約しました (実処理は未対応)"),
+	                                         static_cast<int>(targets.size()), verb.c_str()));
+}
+
+/**
+ * @brief 同名ファイルの比較選択 (CompareDlg)
+ * @details VCL (MainFrm.cpp:14464) は FileCompDlg で条件を選ぶが、ここでは
+ *          最小UI (wxSingleChoice で比べ方を選択) で名前突き合わせを行い、
+ *          一致項目を選択する。NC相当の動作。CS パラメータで大小区別
+ */
+void MainFrame::CmdCompareDlg(const UnicodeString &param)
+{
+	FilePane *pane = ActivePane();
+	FilePane *opp = OppositePane();
+	if (SameText(pane->GetPath(), opp->GetPath())) {
+		SetStatusWarning(_T("左右が同じディレクトリです"));
+		return;
+	}
+	const bool cs_sw = f_misc_ops::HasParamToken(param, _T("CS"));
+	compare::MatchBy how = compare::MatchBy::Name;
+	if (!f_misc_ops::HasParamToken(param, _T("NC"))) {
+		wxArrayString choices;
+		choices.Add(to_wx(_T("名前のみ")));
+		choices.Add(to_wx(_T("名前とサイズ")));
+		choices.Add(to_wx(_T("名前と更新日時")));
+		const int sel = wxGetSingleChoiceIndex(
+			to_wx(cs_sw ? _T("比べ方 (大文字・小文字を区別)") : _T("比べ方")),
+			to_wx(_T("同名ファイルの比較")), choices, this);
+		if (sel < 0) return;
+		how = (sel == 1) ? compare::MatchBy::NameSize
+			: (sel == 2) ? compare::MatchBy::NameTime
+			: compare::MatchBy::Name;
+	}
+	std::vector<FileItem> here = pane->VisibleItems();
+	const std::vector<FileItem> there = opp->VisibleItems();
+	// CS 指定時は大小区別で突き合わせる (compare::IsSameItem は大小無視のため自前で絞る)
+	std::vector<int> hit;
+	if (cs_sw && how == compare::MatchBy::Name) {
+		for (std::size_t i = 0; i < here.size(); i++) {
+			if (here[i].is_parent || here[i].is_dir) continue;
+			for (const FileItem &o : there) {
+				if (o.is_parent || o.is_dir) continue;
+				if (f_misc_ops::MatchFileNames(here[i].name, o.name, /*case_sensitive=*/true)) {
+					hit.push_back(static_cast<int>(i));
+					break;
+				}
+			}
+		}
+	}
+	else {
+		// 既存の突き合わせ (大小無視) で「反対側に無いもの」を求め、裏返して一致を得る
+		const std::vector<int> only = compare::IndicesOnlyHere(here, there, how);
+		std::vector<bool> is_only(here.size(), false);
+		for (int i : only) is_only[static_cast<std::size_t>(i)] = true;
+		for (std::size_t i = 0; i < here.size(); i++) {
+			if (!is_only[i] && !here[i].is_parent && !here[i].is_dir) hit.push_back(static_cast<int>(i));
+		}
+	}
+	for (FileItem &it : here) it.marked = false;
+	for (int i : hit) here[static_cast<std::size_t>(i)].marked = true;
+	pane->ApplyMarks(here);
+	log_.Add(log_win::LogStatus::Info,
+	         UnicodeString().sprintf(_T("比較終了  HIT: %u/%u"),
+	                                 static_cast<unsigned>(hit.size()),
+	                                 static_cast<unsigned>(here.size())),
+	         /*show_time=*/true);
+	SetStatusWarning(UnicodeString().sprintf(_T("%d 件が一致しました"), static_cast<int>(hit.size())));
+}
+
+/**
+ * @brief ハードリンクを列挙 (FindHardLink)
+ * @details VCL (MainFrm.cpp:18868) は結果リストへ出すが、検索コア
+ *          (FindHardLinkCore) は未移植のため、一覧をダイアログ表示する
+ *          簡略版にした。OP 指定時は最初の1件の場所を反対側に開く
+ */
+void MainFrame::CmdFindHardLink(const UnicodeString &param)
+{
+	FilePane *pane = ActivePane();
+	if (pane->IsResultList()) {
+		SetStatusWarning(_T("結果リスト上では操作できません"));
+		return;
+	}
+	const FileItem *cur = pane->GetCurrentItem();
+	if (cur == nullptr || cur->is_parent) { SetStatusWarning(_T("対象がありません")); return; }
+	const UnicodeString path = pane->FullPathOf(*cur);
+	UnicodeString error;
+	if (!f_misc_ops::CanFindHardLink(/*is_arc=*/false, /*is_ads=*/false, /*is_ftp=*/false,
+	                                 /*is_unc=*/false, cur->is_dir,
+	                                 get_HardLinkCount(path), error)) {
+		SetStatusWarning(error);
+		return;
+	}
+	std::unique_ptr<TStringList> hlst(new TStringList());
+	const std::vector<UnicodeString> links = ListHardLinks(path);
+	for (const UnicodeString &s : links) hlst->Add(s);
+	if (hlst->Count <= 0) {
+		SetStatusWarning(_T("ハードリンクではありません。"));
+		return;
+	}
+	UnicodeString text;
+	for (int i = 0; i < hlst->Count; i++) text += hlst->Strings[i] + _T("\r\n");
+	if (f_misc_ops::HasParamToken(param, _T("OP"))) {
+		for (int i = 0; i < hlst->Count; i++) {
+			if (SameText(path, hlst->Strings[i])) continue;
+			const UnicodeString dir = ExtractFilePath(hlst->Strings[i]);
+			if (!dir.IsEmpty() && dir_exists(dir)) {
+				OppositePane()->SetPath(dir);
+				UpdateStatus();
+				break;
+			}
+		}
+	}
+	wxMessageBox(to_wx(text), to_wx(_T("ハードリンク")), wxOK | wxICON_INFORMATION, this);
+}
+
+/**
+ * @brief リンク先を反対側に開く (LinkToOpp)
+ * @details VCL (MainFrm.cpp:20622) は sym/lnk/hard を解決する。
+ *          sym 判定・lnk 解決の部品 (usr_SH 未移植) が無いため、ここでは
+ *          ディレクトリ→反対側に開く、ファイル→ハードリンク候補から
+ *          反対側優先で選ぶ (PickOppHardLink) 簡略版にした
+ */
+void MainFrame::CmdLinkToOpp()
+{
+	FilePane *pane = ActivePane();
+	const FileItem *cur = pane->GetCurrentItem();
+	if (cur == nullptr || cur->is_parent) { SetStatusWarning(_T("対象がありません")); return; }
+	const UnicodeString path = pane->FullPathOf(*cur);
+	UnicodeString fnam;
+	if (cur->is_dir) {
+		fnam = path;
+	}
+	else if (SameText(ExtractFileExt(path), _T(".lnk"))) {
+		// ショートカットの解決は usr_SH (UserShell、未移植) が要るため未対応
+		// (gui/file_info.h の「GUI 依存で使わなかった関数」と同じ扱い)
+		SetStatusWarning(_T("ショートカットの解決は未対応です"));
+		return;
+	}
+	else {
+		if (get_HardLinkCount(path) < 2) { SetStatusWarning(_T("リンクではありません")); return; }
+		std::unique_ptr<TStringList> hlst(new TStringList());
+		const std::vector<UnicodeString> links = ListHardLinks(path);
+		for (const UnicodeString &s : links) hlst->Add(s);
+		if (hlst->Count <= 0) {
+			SetStatusWarning(_T("リンク先が取得できません"));
+			return;
+		}
+		std::vector<UnicodeString> cands, opp_files;
+		for (int i = 0; i < hlst->Count; i++) cands.push_back(hlst->Strings[i]);
+		for (const FileItem &it : OppositePane()->VisibleItems()) {
+			if (!it.is_parent) opp_files.push_back(OppositePane()->FullPathOf(it));
+		}
+		fnam = f_misc_ops::PickOppHardLink(path, cands, opp_files);
+		if (fnam.IsEmpty()) { SetStatusWarning(_T("リンク先が取得できません")); return; }
+	}
+	if (!file_exists(fnam) && !dir_exists(fnam)) {
+		SetStatusWarning(_T("見つかりません"));
+		return;
+	}
+	FilePane *opp = OppositePane();
+	if (dir_exists(fnam)) {
+		opp->SetPath(fnam);
+	}
+	else {
+		const UnicodeString dir = ExtractFilePath(fnam);
+		if (!dir.IsEmpty()) opp->SetPath(dir);
+		// カーソル合わせは JumpTo と同じく名前で探す
+		const UnicodeString base = ExtractFileName(fnam);
+		const std::vector<FileItem> items = opp->VisibleItems();
+		for (std::size_t i = 0; i < items.size(); i++) {
+			if (SameText(items[i].name, base)) { opp->MoveCursorTo(static_cast<int>(i)); break; }
+		}
+	}
+	UpdateStatus();
+}
+
+/**
+ * @brief フォルダアイコンの設定 (SetFolderIcon)
+ * @details VCL (MainFrm.cpp:25594) の RD/SD/RS/ND 分岐 (ParseFolderIconParam)
+ *          に従う。実設定 (set_FolderIcon) は Global.cpp の FolderIconList
+ *          (phase0 対象外でリンクできない) が要るため、既定アイコンの保持と
+ *          個別設定のログ記録のみの簡略版にした。**desktop.ini は書かない**
+ */
+void MainFrame::CmdSetFolderIcon(const UnicodeString &param)
+{
+	const f_misc_ops::FolderIconCmd cmd = f_misc_ops::ParseFolderIconParam(param);
+	if (cmd == f_misc_ops::FolderIconCmd::ClearDefault) {
+		folder_icon_def_ = EmptyStr;
+		SetStatusWarning(_T("デフォルトアイコンを標準に戻しました"));
+		return;
+	}
+	if (cmd == f_misc_ops::FolderIconCmd::SelectDefault) {
+		wxFileDialog dlg(this, to_wx(_T("デフォルトのフォルダアイコンを選択")),
+		                 wxEmptyString, wxEmptyString, to_wx(_T("アイコン (*.ico)|*.ico")),
+		                 wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+		if (dlg.ShowModal() != wxID_OK) return;
+		folder_icon_def_ = UnicodeString(dlg.GetPath().wc_str());
+		SetStatusWarning(_T("デフォルトアイコンを設定しました"));
+		return;
+	}
+	FilePane *pane = ActivePane();
+	if (pane->IsResultList()) {
+		SetStatusWarning(_T("結果リスト上では操作できません"));
+		return;
+	}
+	UnicodeString inam;
+	if (cmd == f_misc_ops::FolderIconCmd::Menu) {
+		wxArrayString choices;
+		if (!folder_icon_def_.IsEmpty())
+			choices.Add(to_wx(_T("既定: ") + folder_icon_def_));
+		choices.Add(to_wx(_T("(アイコンファイルを選択)")));
+		choices.Add(to_wx(_T("(デフォルトアイコンに戻す)")));
+		const int sel = wxGetSingleChoiceIndex(to_wx(_T("フォルダアイコン")),
+		                                       to_wx(_T("フォルダアイコンの設定")), choices, this);
+		if (sel < 0) return;
+		if (!folder_icon_def_.IsEmpty() && sel == 0) inam = folder_icon_def_;
+		else if (sel == static_cast<int>(choices.size()) - 1) {
+			for (const UnicodeString &t : pane->GetSelectedPaths()) {
+				if (dir_exists(t))
+					log_.Add(log_win::LogStatus::Info,
+					         _T("フォルダアイコン解除: ") + t, /*show_time=*/true);
+			}
+			pane->Reload();
+			SetStatusWarning(_T("フォルダアイコン解除を記録しました (実処理は未対応)"));
+			return;
+		}
+		// 「選択」は下のファイル選択へ進む
+	}
+	else if (cmd == f_misc_ops::FolderIconCmd::ResetToDefault) {
+		for (const UnicodeString &t : pane->GetSelectedPaths()) {
+			if (dir_exists(t))
+				log_.Add(log_win::LogStatus::Info,
+				         _T("フォルダアイコン解除: ") + t, /*show_time=*/true);
+		}
+		pane->Reload();
+		SetStatusWarning(_T("フォルダアイコン解除を記録しました (実処理は未対応)"));
+		return;
+	}
+	else if (cmd == f_misc_ops::FolderIconCmd::SetFile) {
+		inam = param;
+	}
+	if (inam.IsEmpty()) {
+		wxFileDialog dlg(this, to_wx(_T("フォルダアイコンの指定")),
+		                 wxEmptyString, wxEmptyString, to_wx(_T("アイコン (*.ico)|*.ico")),
+		                 wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+		if (dlg.ShowModal() != wxID_OK) return;
+		inam = UnicodeString(dlg.GetPath().wc_str());
+	}
+	const std::vector<UnicodeString> targets = pane->GetSelectedPaths();
+	if (targets.empty()) { SetStatusWarning(_T("対象がありません")); return; }
+	if (!ConfirmItems(this, _T("フォルダアイコンの設定"), _T("設定"), targets, inam)) return;
+	for (const UnicodeString &t : targets) {
+		if (dir_exists(t))
+			log_.Add(log_win::LogStatus::Info,
+			         _T("フォルダアイコン設定: ") + t + _T(" <- ") + inam,
+			         /*show_time=*/true);
+	}
+	pane->Reload();
+	SetStatusWarning(_T("フォルダアイコン設定を記録しました (実処理は未対応)"));
+}
+
+/**
+ * @brief フォルダアイコン検索 (FindFolderIcon)
+ * @details VCL (MainFrm.cpp:18152) は TagManDlg で選ばせるが、ここでは
+ *          最小UI (wxTextEntryDialog でアイコン名の一部を入力) を受け、
+ *          実検索コア (FindFolderIconCore) は未移植のためログに残す
+ *          簡略版にした
+ */
+void MainFrame::CmdFindFolderIcon()
+{
+	const wxString kw = wxGetTextFromUser(to_wx(_T("探すアイコン名 (一部)")),
+	                                      to_wx(_T("フォルダアイコン検索")), wxEmptyString, this);
+	if (kw.IsEmpty()) return;
+	UnicodeString error;
+	const UnicodeString path = ActivePane()->GetPath();
+	if (!f_misc_ops::ValidateFolderIconSearch(path, /*icons_empty=*/false, error)) {
+		SetStatusWarning(error);
+		return;
+	}
+	log_.Add(log_win::LogStatus::Info,
+	         _T("フォルダアイコン検索: ") + path + _T(" [") + UnicodeString(kw.wc_str()) + _T("] (実検索は未対応)"),
+	         /*show_time=*/true);
+	SetStatusWarning(_T("フォルダアイコン検索は未対応です (条件をログに記録しました)"));
+}
+
+/**
+ * @brief 指定したファイル位置へ (JumpTo)
+ * @details VCL (MainFrm.cpp:20433) の def_if_empty + 絶対化
+ *          (ResolveJumpTarget) に従う。書庫内ジャンプ (JumpToArcR) は
+ *          未移植のため通常パスのみ。存在すれば移動し、無ければ警告する
+ */
+void MainFrame::CmdJumpTo(const UnicodeString &param)
+{
+	FilePane *pane = ActivePane();
+	UnicodeString error;
+	const UnicodeString cur = pane->CurrentFullPath();
+	const UnicodeString target = f_misc_ops::ResolveJumpTarget(param, cur, pane->GetPath(), error);
+	if (target.IsEmpty()) { SetStatusWarning(error); return; }
+	if (dir_exists(target)) {
+		pane->SetPath(target);
+		UpdateStatus();
+		return;
+	}
+	if (file_exists(target)) {
+		const UnicodeString dir = ExtractFilePath(target);
+		if (!dir.IsEmpty() && !SameText(dir, pane->GetPath())) pane->SetPath(dir);
+		const UnicodeString base = ExtractFileName(target);
+		const std::vector<FileItem> items = pane->VisibleItems();
+		for (std::size_t i = 0; i < items.size(); i++) {
+			if (SameText(items[i].name, base)) {
+				pane->MoveCursorTo(static_cast<int>(i));
+				UpdateStatus();
+				return;
+			}
+		}
+		SetStatusWarning(_T("一覧にありません: ") + base);
+		return;
+	}
+	SetStatusWarning(_T("見つかりません: ") + target);
+}
+
+/**
+ * @brief タスクマネージャ (TaskMan)
+ * @details VCL (MainFrm.cpp:26801) は TTaskManDlg を出すが、実スレッドは
+ *          未移植のため件数要約 (FormatTaskSummary) の表示のみ
+ */
+void MainFrame::CmdTaskMan()
+{
+	const int busy = static_cast<int>(task_paused_.size());
+	int paused = 0;
+	for (bool p : task_paused_) if (p) paused++;
+	wxMessageBox(to_wx(f_misc_ops::FormatTaskSummary(busy, paused)),
+	             to_wx(_T("タスクマネージャ")), wxOK | wxICON_INFORMATION, this);
+}
+
+/**
+ * @brief 予約項目の保留/解除 (Suspend)
+ * @details VCL (MainFrm.cpp:26516) の SetToggleAction(RsvSuspended) に従う。
+ *          解除時の StartReserve() 相当の実体は無いため状態保持のみ
+ */
+void MainFrame::CmdSuspend(const UnicodeString &param)
+{
+	rsv_suspended_ = f_misc_ops::ToggleFlagValue(rsv_suspended_, param);
+	SetStatusWarning(f_misc_ops::SuspendCaption(rsv_suspended_));
+}
+
+/**
+ * @brief 全タスクの一旦停止/再開 (PauseAllTask)
+ * @details VCL (MainFrm.cpp:23570) の any(TaskPause)→反転に従う。
+ *          実スレッドは未移植のため task_paused_ の状態保持のみ
+ */
+void MainFrame::CmdPauseAllTask(const UnicodeString &param)
+{
+	const bool target = f_misc_ops::DecidePauseAllTarget(
+		f_misc_ops::AnyPaused(task_paused_), param);
+	// vector<bool> の要素はプロキシ参照のため bool& に束縛できない。fill で書く
+	std::fill(task_paused_.begin(), task_paused_.end(), target);
+	SetStatusWarning(f_misc_ops::PauseAllCaption(target ? 1 : 0));
+}
+
+/**
+ * @brief 全タスクの中断 (CancelAllTask)
+ * @details VCL (MainFrm.cpp:14070) は全スレッド取消+予約全消去。
+ *          実体が無いため件数があれば消去扱い (ログ記録) の簡略版
+ */
+void MainFrame::CmdCancelAllTask()
+{
+	if (!f_misc_ops::CanCancelTasks(static_cast<int>(task_paused_.size()))) {
+		SetStatusWarning(_T("実行中のタスクはありません"));
+		return;
+	}
+	task_paused_.clear();
+	log_.Add(log_win::LogStatus::Info, _T("すべてのタスクを中断しました"), /*show_time=*/true);
+	SetStatusWarning(_T("すべてのタスクを中断しました"));
+}
+
+/**
+ * @brief ドライブ使用率 (DriveGraph)
+ * @details VCL (MainFrm.cpp:16832) は TDriveGraph を出すが、ここでは
+ *          最小UI (使用率のメッセージボックス) にした。ドライブ名の解決は
+ *          ResolveDriveName に従う。UNC・到達不可は断る
+ */
+void MainFrame::CmdDriveGraph(const UnicodeString &param)
+{
+	const UnicodeString dnam = f_misc_ops::ResolveDriveName(param, ActivePane()->GetPath());
+	if (dnam.IsEmpty() || !is_drive_accessible(dnam)) {
+		SetStatusWarning(_T("ドライブを開けません"));
+		return;
+	}
+	ULARGE_INTEGER free_avail{}, total{}, free_total{};
+	if (!::GetDiskFreeSpaceExW(dnam.c_str(), &free_avail, &total, &free_total) || total.QuadPart == 0) {
+		SetStatusWarning(_T("容量を取得できません: ") + dnam);
+		return;
+	}
+	const double used_ratio = 1.0 - static_cast<double>(free_total.QuadPart)
+	                                  / static_cast<double>(total.QuadPart);
+	UnicodeString msg;
+	msg.sprintf(_T("%s\r\n\r\n合計: %s\r\n空き: %s\r\n使用率: %.1f%%"),
+	            dnam.c_str(),
+	            get_size_str_B(static_cast<__int64>(total.QuadPart), 14).Trim().c_str(),
+	            get_size_str_B(static_cast<__int64>(free_total.QuadPart), 14).Trim().c_str(),
+	            used_ratio * 100.0);
+	wxMessageBox(to_wx(msg), to_wx(_T("ドライブ使用率")), wxOK | wxICON_INFORMATION, this);
 }
