@@ -27,6 +27,7 @@
 #include "gui/bookmarks.h"
 #include "gui/convert_ops.h"
 #include "gui/f_misc_ops.h"
+#include "gui/f_batch5_ops.h"
 #include "gui/history.h"
 #include "gui/named_state.h"
 #include "gui/system_ops.h"
@@ -368,6 +369,29 @@ private:
 	void CmdPauseAllTask(const UnicodeString &param); //!< 全タスクの一旦停止/再開 (PauseAllTask)
 	void CmdCancelAllTask();                          //!< 全タスクの中断 (CancelAllTask)
 	void CmdDriveGraph(const UnicodeString &param);   //!< ドライブ使用率 (DriveGraph)
+
+	//-- Fモード残 batch5 (判断は gui/f_batch5_ops.h。外部一覧・実タイマーなど
+	//   重い実体が要るものは確認+ログ+最小UIの簡略版。詳細は各 Cmd を参照) --
+	void CmdExeExtMenu(const UnicodeString &param); //!< 追加メニューの実行 (ExeExtMenu)
+	void CmdExeExtTool(const UnicodeString &param); //!< 外部ツールの実行 (ExeExtTool)
+	void CmdRegDirPopup(const UnicodeString &param);//!< 登録ディレクトリのポップアップ (RegDirPopup)
+	void CmdPathMaskDlg(const UnicodeString &param);//!< パスマスクダイアログ (PathMaskDlg)
+	void CmdBinaryEdit();                           //!< バイナリ編集 (BinaryEdit)
+	void CmdEditHighlight();                        //!< 構文強調定義の編集 (EditHighlight)
+	void CmdFixedLen(const UnicodeString &param);   //!< 固定長表示の切替 (FixedLen)
+	void CmdHtmlToText(const UnicodeString &param); //!< HTML→テキスト変換表示 (HtmlToText)
+	void CmdSetColor(const UnicodeString &param);   //!< 配色の変更 (SetColor)
+	void CmdShowRuby(const UnicodeString &param);   //!< ルビ表示の切替 (ShowRuby)
+	void CmdListDuration();                         //!< 再生時間の一覧 (ListDuration)
+	void CmdListExpFunc(const UnicodeString &param);//!< エクスポート関数一覧 (ListExpFunc)
+	void CmdWatchTail(const UnicodeString &param);  //!< 追加更新の監視 (WatchTail)
+
+	bool fixed_len_ = false;      //!< 固定長表示か (VCL TxtViewer->isFixedLen 相当)
+	int fixed_limit_ = 0;         //!< 固定長表示の上限 (数値指定があれば。無ければ 0)
+	bool htm2txt_ = false;        //!< HTML→テキスト変換表示か (isHtm2Txt 相当)
+	f_batch5_ops::MarkdownMode md_mode_ = f_batch5_ops::MarkdownMode::Keep;
+	bool show_ruby_ = true;       //!< ルビ表示か (VCL 既定 true。TxtViewer->ShowRuby 相当)
+	std::vector<UnicodeString> watch_tail_;  //!< 監視中のファイル (VCL WatchTailList 相当)
 
 	bool rsv_suspended_ = false;       //!< 予約の保留状態 (VCL RsvSuspended 相当)
 	std::vector<bool> task_paused_;    //!< タスクの一旦停止状態 (実スレッドは未移植のため空)
