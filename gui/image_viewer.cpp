@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <cmath>
 
+#include <wx/clipbrd.h>
 #include <wx/dcbuffer.h>
 #include <wx/image.h>
 #include <wx/settings.h>
@@ -161,7 +162,14 @@ void ImageViewer::RebuildScaledBitmap()
 	}
 
 	if (tw != static_cast<int>(ds.w) || th != static_cast<int>(ds.h)) {
-		img = img.Scale(tw, th, wxIMAGE_QUALITY_BILINEAR);
+		// VCL の WicScaleOpt (src/imgv_thread.cpp:222-223) と同じく補間を
+		// 切り替える。"N" (Nearest) だけ NEAREST、それ以外は BILINEAR
+		// (wx にあるのは NEAREST/BILINEAR/BOX/BICUBIC のため、L/C/F/H/X の
+		// 差異は Phase 3 の対象外。推測・要検証)
+		const wxImageResizeQuality quality = (interpolation_ == 0)
+		                                         ? wxIMAGE_QUALITY_NEAREST
+		                                         : wxIMAGE_QUALITY_BILINEAR;
+		img = img.Scale(tw, th, quality);
 	}
 
 	scaled_bitmap_ = wxBitmap(img);
@@ -394,6 +402,7 @@ void ImageViewer::ToggleWarnHighlight(const UnicodeString &param)
 }
 
 //---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 /// シークバー表示の切替 (I:ShowSeekBar 相当。VCL の ShowSeekBarActionExecute
 /// と同じくトグル。バー自体は Phase 3 の対象外のため状態保持のみ)
 void ImageViewer::ToggleShowSeekBar(const UnicodeString &param)
@@ -401,6 +410,59 @@ void ImageViewer::ToggleShowSeekBar(const UnicodeString &param)
 	if (!has_image_) return;
 	show_seekbar_ = image_view_ops::ToggleViewFlag(show_seekbar_, param);
 	Refresh();
+}
+
+//---------------------------------------------------------------------------
+/// 補間アルゴリズムの切替 (FI:SetInterpolation 相当)
+void ImageViewer::CycleInterpolation(const UnicodeString &param)
+{
+	if (!has_image_) return;
+	const auto next = image_view_ops::NextInterpolation(interpolation_, param);
+	if (!next.has_value()) return;
+	if (*next == interpolation_) return;
+	interpolation_ = *next;
+	// キャッシュを作り直す (補間は RebuildScaledBitmap の Scale 時に効く)
+	scaled_bitmap_ = wxBitmap();
+	Refresh();
+}
+
+//---------------------------------------------------------------------------
+/// サイドバー表示の切替 (I:Sidebar 相当。VCL も SetToggleAction のトグル)
+void ImageViewer::ToggleSidebar(const UnicodeString &param)
+{
+	if (!has_image_) return;
+	sidebar_shown_ = image_view_ops::ToggleViewFlag(sidebar_shown_, param);
+	Refresh();
+}
+
+//---------------------------------------------------------------------------
+/// サブビューア表示の切替 (FI:SubViewer 相当。フォーム自体は Phase 3 の
+/// 対象外のため状態保持のみ)
+void ImageViewer::ToggleSubViewer(const UnicodeString &param)
+{
+	if (image_view_ops::ShouldHideSubViewer(subviewer_shown_, param)) {
+		subviewer_shown_ = false;
+	}
+	else {
+		subviewer_shown_ = image_view_ops::ToggleViewFlag(subviewer_shown_, param);
+	}
+	Refresh();
+}
+
+//---------------------------------------------------------------------------
+/// 表示中の画像をクリップボードにコピーする (I:ClipCopy 相当)
+bool ImageViewer::CopyToClipboard()
+{
+	// VCL は AGif/メタファイル/"VI" 指定で別経路を使うが、いずれも Phase 3
+	// の対象外のため、通常の画像バッファ転送だけに対応する
+	if (!has_image_ || !scaled_bitmap_.IsOk()) {
+		RebuildScaledBitmap();
+		if (!scaled_bitmap_.IsOk()) return false;
+	}
+	if (!wxTheClipboard->Open()) return false;
+	wxTheClipboard->SetData(new wxBitmapDataObject(scaled_bitmap_));
+	wxTheClipboard->Close();
+	return true;
 }
 
 //---------------------------------------------------------------------------

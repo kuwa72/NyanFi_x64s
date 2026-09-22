@@ -85,6 +85,29 @@ public:
 	void ToggleGrayscale();
 	bool IsGrayscale() const { return grayscale_; }
 
+	/// 補間アルゴリズムの切替 (VCL の FI:SetInterpolation 相当。
+	/// param は "NLCFHX" の絞り込み。判断は
+	/// image_view_ops::NextInterpolation。不正な param では何もしない)
+	void CycleInterpolation(const UnicodeString &param);
+	/// 補間アルゴリズム (VCL の WicScaleOpt と同値。0=N/1=L/2=C/3=F/4=H/5=X)
+	int Interpolation() const { return interpolation_; }
+
+	/// サイドバー表示の切替 (VCL の I:Sidebar 相当。SetToggleAction と同じ)
+	void ToggleSidebar(const UnicodeString &param);
+	bool IsSidebarShown() const { return sidebar_shown_; }
+
+	/// サブビューア表示の切替 (VCL の FI:SubViewer 相当。回転・ロック等の
+	/// 別フォーム自体は Phase 3 の対象外のため開閉状態の保持のみ)
+	void ToggleSubViewer(const UnicodeString &param);
+	bool IsSubViewerShown() const { return subviewer_shown_; }
+
+	/**
+	 * @brief 表示中の画像をクリップボードにコピーする (VCL の I:ClipCopy 相当)
+	 * @return false 画像がない ("VI" 指定のビューア内容転送も Phase 3 の
+	 * 対象外のため false。呼び出し側は警告を出す)
+	 */
+	bool CopyToClipboard();
+
 	/// 画像分割グリッド表示の切替 (VCL の I:ShowGrid 相当)
 	void ToggleGrid();
 	bool IsGridShown() const { return show_grid_; }
@@ -169,6 +192,7 @@ private:
 	image_view_ops::Transform transform_;  //!< 回転・反転状態 (LoadFile で Exif から初期化)
 	bool grayscale_ = false;   //!< グレースケール表示 (VCL の ImgViewThread->GrayScaled 相当)
 	bool show_grid_ = false;   //!< 分割グリッド表示 (VCL の ImgViewThread->ShowGrid 相当)
+	int interpolation_ = 3;    //!< 補間アルゴリズム (VCL の WicScaleOpt 既定値と同じ。"NLCFHX" の添字)
 
 	// Iモードの表示トグル群 (VCL の同名グローバルに対応。開閉状態の保持のみ)
 	bool double_page_ = false;     //!< 見開き表示 (VCL の DoublePage)
@@ -179,6 +203,8 @@ private:
 	bool thumb_extended_ = false;  //!< サムネイル全面表示 (VCL の ThumbExtended)
 	bool warn_highlight_ = false;  //!< 白飛び警告 (VCL の WarnHighlight)
 	bool show_seekbar_ = false;    //!< シークバー (VCL の ShowSeekBar)
+	bool sidebar_shown_ = false;   //!< サイドバー (VCL の ShowImgSidebar 既定値と同じ)
+	bool subviewer_shown_ = false; //!< サブビューア (VCL の ShowSubViewer 既定値と同じ)
 
 	wxBitmap scaled_bitmap_;                      //!< 表示用にスケール済みのビットマップ (キャッシュ)
 	int scaled_for_w_ = -1, scaled_for_h_ = -1;   //!< scaled_bitmap_ を作った時のクライアントサイズ

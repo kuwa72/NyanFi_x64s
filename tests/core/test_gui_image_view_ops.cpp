@@ -284,3 +284,121 @@ TEST_CASE("NextPageBind follows PageBindActionExecute")
 	CHECK(NextPageBind(true, _T("L")) == false);
 	CHECK(NextPageBind(false, _T("L")) == false);
 }
+
+// アクションパラメータのトークン有無 (VCL の TestActionParam と同じ。
+// ";" 区切りの完全一致・大文字小文字を区別しない)
+TEST_CASE("HasActionToken matches TestActionParam")
+{
+	CHECK(HasActionToken(_T("DN"), _T("DN")));
+	CHECK(HasActionToken(_T("dn"), _T("DN")));
+	CHECK(HasActionToken(_T("CB;RL"), _T("RL")));
+	CHECK_FALSE(HasActionToken(_T(""), _T("DN")));
+	CHECK_FALSE(HasActionToken(_T("D"), _T("DN")));
+	CHECK_FALSE(HasActionToken(_T("DNA"), _T("DN")));
+}
+
+// 補間アルゴリズムの切替 (src/MainFrm.cpp::SetInterpolationActionExecute と同じ。
+// idstr="NLCFHX" の中を param で絞った順に進め、端では先頭へ周回。
+// param 空・不正は nullopt = VCL の UserAbort 相当)
+TEST_CASE("NextInterpolation cycles within param filter")
+{
+	CHECK(NextInterpolation(3, _T("NLCFHX")) == 4);
+	CHECK(NextInterpolation(5, _T("NLCFHX")) == 0);  // 端では先頭へ
+	CHECK(NextInterpolation(0, _T("NC")) == 2);      // "N" の次は "C"
+	CHECK(NextInterpolation(2, _T("NC")) == 0);      // "C" は末尾なので先頭へ
+	CHECK(NextInterpolation(3, _T("NC")) == 0);      // 現在値が候補外なら先頭へ
+	CHECK_FALSE(NextInterpolation(3, _T("")).has_value());
+	CHECK_FALSE(NextInterpolation(3, _T("Z")).has_value());
+}
+
+// 壁紙パス (src/MainFrm.cpp::LoadBgImageActionExecute と同じ。指定があれば
+// それ、無ければカーソル位置。どちらも無ければ空)
+TEST_CASE("ResolveBgImagePath prefers param over cursor")
+{
+	CHECK(ResolveBgImagePath(_T("wall.jpg"), _T("cur.jpg")) == _T("wall.jpg"));
+	CHECK(ResolveBgImagePath(_T(""), _T("cur.jpg")) == _T("cur.jpg"));
+	CHECK(ResolveBgImagePath(_T(""), _T("")).IsEmpty());
+}
+
+// サブビューアの表示切替 (src/MainFrm.cpp::SubViewerActionExecute と同じ。
+// 表示中かつ OFF/空なら隠す)
+TEST_CASE("ShouldHideSubViewer hides only when visible")
+{
+	CHECK(ShouldHideSubViewer(true, _T("")) == true);
+	CHECK(ShouldHideSubViewer(true, _T("OFF")) == true);
+	CHECK(ShouldHideSubViewer(true, _T("RL")) == false);
+	CHECK(ShouldHideSubViewer(false, _T("")) == false);
+	CHECK(ShouldHideSubViewer(false, _T("OFF")) == false);
+}
+
+// サブビューアの回転操作 (同・RL→3/RR→1/FH→4/FV→5、それ以外は 0)
+TEST_CASE("SubViewerRotateCode follows rotate params")
+{
+	CHECK(SubViewerRotateCode(_T("RL")) == 3);
+	CHECK(SubViewerRotateCode(_T("RR")) == 1);
+	CHECK(SubViewerRotateCode(_T("FH")) == 4);
+	CHECK(SubViewerRotateCode(_T("FV")) == 5);
+	CHECK(SubViewerRotateCode(_T("")) == 0);
+	CHECK(SubViewerRotateCode(_T("CB")) == 0);
+}
+
+// 別インスタンス起動の複製要求 (src/MainFrm.cpp::NextNyanFiActionExecute の
+// "DN" 分岐と同じ)
+TEST_CASE("ShouldDuplicateOnNext detects DN token")
+{
+	CHECK(ShouldDuplicateOnNext(_T("DN")) == true);
+	CHECK(ShouldDuplicateOnNext(_T("")) == false);
+	CHECK(ShouldDuplicateOnNext(_T("XX")) == false);
+}
+
+// 類似画像ソートのサイズ (src/MainFrm.cpp::SimilarImageActionExecute と同じ。
+// 既定 32、範囲外 4..120 は nullopt = VCL の UserAbort 相当。CB 等の
+// トークンは無視する)
+TEST_CASE("ParseSimilarImageSize validates 4..120")
+{
+	CHECK(ParseSimilarImageSize(_T("")) == 32);
+	CHECK(ParseSimilarImageSize(_T("64")) == 64);
+	CHECK(ParseSimilarImageSize(_T("64;CC")) == 64);
+	CHECK(ParseSimilarImageSize(_T("CB")) == 32);
+	CHECK_FALSE(ParseSimilarImageSize(_T("3")).has_value());
+	CHECK_FALSE(ParseSimilarImageSize(_T("121")).has_value());
+	CHECK_FALSE(ParseSimilarImageSize(_T("abc")).has_value());
+}
+
+// クリップボード転送元 (src/MainFrm.cpp::ClipCopyActionExecute と同じ。
+// 画像なしは None、"VI" 指定は Viewer、それ以外は Image)
+TEST_CASE("ResolveClipCopySource selects image or viewer")
+{
+	CHECK(ResolveClipCopySource(false, _T("")) == ClipCopySrc::None);
+	CHECK(ResolveClipCopySource(true, _T("")) == ClipCopySrc::Image);
+	CHECK(ResolveClipCopySource(true, _T("VI")) == ClipCopySrc::Viewer);
+	CHECK(ResolveClipCopySource(false, _T("VI")) == ClipCopySrc::None);
+}
+
+// 編集対象パス (VCL の FileEdit は指定があればそれ、無ければカーソル位置)
+TEST_CASE("ResolveFileEditPath prefers param over cursor")
+{
+	CHECK(ResolveFileEditPath(_T("a.txt"), _T("b.txt")) == _T("a.txt"));
+	CHECK(ResolveFileEditPath(_T(""), _T("b.txt")) == _T("b.txt"));
+	CHECK(ResolveFileEditPath(_T(""), _T("")).IsEmpty());
+}
+
+// コマンドファイル一覧のフィルタ付き表示
+// (src/MainFrm.cpp::CmdFileListActionExecute の "FF" 分岐と同じ)
+TEST_CASE("ShouldShowCmdFileFilter detects FF token")
+{
+	CHECK(ShouldShowCmdFileFilter(_T("FF")) == true);
+	CHECK(ShouldShowCmdFileFilter(_T("")) == false);
+}
+
+// メインメニューポップアップの対象 (src/MainFrm.cpp::
+// PopupMainMenuActionExecute と同じ。空は全体(-1)、先頭1文字を
+// "FESVVVLTOH" で探す。見つからなければ -1)
+TEST_CASE("PopupMenuIndex follows FESVVVLTOH lookup")
+{
+	CHECK(PopupMenuIndex(_T("")) == -1);
+	CHECK(PopupMenuIndex(_T("F")) == 0);
+	CHECK(PopupMenuIndex(_T("V")) == 3);
+	CHECK(PopupMenuIndex(_T("H")) == 9);
+	CHECK(PopupMenuIndex(_T("Z")) == -1);
+}
