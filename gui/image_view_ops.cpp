@@ -247,4 +247,143 @@ bool NextPageBind(bool right_bind, const UnicodeString &param)
 	return !right_bind;
 }
 
+//---------------------------------------------------------------------------
+bool HasActionToken(const UnicodeString &param, const UnicodeString &token)
+{
+	// src/MainFrm.cpp::TestActionParam と同じ (";" 区切りの完全一致)
+	if (param.IsEmpty() || token.IsEmpty()) return false;
+	UnicodeString rest = param;
+	while (!rest.IsEmpty()) {
+		const int p = rest.Pos(_T(";"));
+		const UnicodeString cur = (p == 0) ? rest : rest.SubString(1, p - 1);
+		if (SameText(cur, token)) return true;
+		if (p == 0) break;
+		rest.Delete(1, p);
+	}
+	return false;
+}
+
+//---------------------------------------------------------------------------
+std::optional<int> NextInterpolation(int cur, const UnicodeString &param)
+{
+	// src/MainFrm.cpp::SetInterpolationActionExecute と同じ。
+	// idstr="NLCFHX" の中を param で絞った順に進める
+	static const char kIds[] = "NLCFHX";
+	if (param.IsEmpty()) return std::nullopt;
+	const UnicodeString ids(kIds);
+	UnicodeString cur_ch;
+	if (cur >= 0 && cur < 6) {
+		cur_ch = ids.SubString(cur + 1, 1);
+	}
+	const int p = param.Pos(cur_ch.IsEmpty() ? UnicodeString(_T("\x01")) : cur_ch);
+	int next_idx;
+	if (p == 0 || p >= param.Length()) {
+		next_idx = 1;
+	}
+	else {
+		next_idx = p + 1;
+	}
+	const UnicodeString next_ch = param.SubString(next_idx, 1);
+	const int id_pos = ids.Pos(next_ch);
+	if (id_pos == 0) return std::nullopt;
+	return id_pos - 1;
+}
+
+//---------------------------------------------------------------------------
+UnicodeString ResolveBgImagePath(const UnicodeString &param, const UnicodeString &cursor)
+{
+	// src/MainFrm.cpp::LoadBgImageActionExecute と同じ (指定優先)
+	if (!param.IsEmpty()) return param;
+	return cursor;
+}
+
+//---------------------------------------------------------------------------
+bool ShouldHideSubViewer(bool visible, const UnicodeString &param)
+{
+	// src/MainFrm.cpp::SubViewerActionExecute の表示中分岐と同じ
+	if (!visible) return false;
+	return param.IsEmpty() || HasActionToken(param, _T("OFF"));
+}
+
+//---------------------------------------------------------------------------
+int SubViewerRotateCode(const UnicodeString &param)
+{
+	// src/MainFrm.cpp::SubViewerActionExecute の回転分岐と同じ順序
+	if (HasActionToken(param, _T("RL"))) return 3;
+	if (HasActionToken(param, _T("RR"))) return 1;
+	if (HasActionToken(param, _T("FH"))) return 4;
+	if (HasActionToken(param, _T("FV"))) return 5;
+	return 0;
+}
+
+//---------------------------------------------------------------------------
+bool ShouldDuplicateOnNext(const UnicodeString &param)
+{
+	// src/MainFrm.cpp::NextNyanFiActionExecute の "DN" 分岐と同じ
+	return HasActionToken(param, _T("DN"));
+}
+
+//---------------------------------------------------------------------------
+std::optional<int> ParseSimilarImageSize(const UnicodeString &param)
+{
+	// src/MainFrm.cpp::SimilarImageActionExecute と同じ (既定 32、4..120)。
+	// CB/HG/DH/AH/PH/CC トークンを除いた残りを数値として読む
+	static const wchar_t *kTokens[] = {_T("CB"), _T("HG"), _T("DH"), _T("AH"), _T("PH"), _T("CC")};
+	UnicodeString rest = param;
+	UnicodeString num;
+	while (!rest.IsEmpty()) {
+		const int p = rest.Pos(_T(";"));
+		const UnicodeString cur = (p == 0) ? rest : rest.SubString(1, p - 1);
+		bool is_token = false;
+		for (const wchar_t *t : kTokens) {
+			if (SameText(cur, t)) {
+				is_token = true;
+				break;
+			}
+		}
+		if (!is_token && num.IsEmpty()) num = cur;
+		if (p == 0) break;
+		rest.Delete(1, p);
+	}
+	if (num.IsEmpty()) return 32;
+	const int sz = num.ToIntDef(-1);
+	if (sz < 4 || sz > 120) return std::nullopt;
+	return sz;
+}
+
+//---------------------------------------------------------------------------
+ClipCopySrc ResolveClipCopySource(bool has_image, const UnicodeString &param)
+{
+	// src/MainFrm.cpp::ClipCopyActionExecute の分岐と同じ (AGif/メタファイル/
+	// アイコンは Phase 3 の対象外のため、画像の有無と "VI" 指定だけで決める)
+	if (!has_image) return ClipCopySrc::None;
+	if (HasActionToken(param, _T("VI"))) return ClipCopySrc::Viewer;
+	return ClipCopySrc::Image;
+}
+
+//---------------------------------------------------------------------------
+UnicodeString ResolveFileEditPath(const UnicodeString &param, const UnicodeString &cursor)
+{
+	// VCL の FileEdit は指定があればそれ、無ければカーソル位置
+	if (!param.IsEmpty()) return param;
+	return cursor;
+}
+
+//---------------------------------------------------------------------------
+bool ShouldShowCmdFileFilter(const UnicodeString &param)
+{
+	// src/MainFrm.cpp::CmdFileListActionExecute の "FF" 分岐と同じ
+	return HasActionToken(param, _T("FF"));
+}
+
+//---------------------------------------------------------------------------
+int PopupMenuIndex(const UnicodeString &param)
+{
+	// src/MainFrm.cpp::PopupMainMenuActionExecute と同じ
+	if (param.IsEmpty()) return -1;
+	static const UnicodeString kKinds = _T("FESVVVLTOH");
+	const int p = kKinds.Pos(param.SubString(1, 1).UpperCase());
+	return p - 1;
+}
+
 }  // namespace image_view_ops

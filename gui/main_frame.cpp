@@ -3648,9 +3648,118 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		image_viewer_->ToggleShowSeekBar(param);
 		SetStatusWarning(image_viewer_->IsSeekBarShown() ? _T("シークバー表示ON") : _T("シークバー表示OFF"));
 	}
+	else if (SameStr(command, _T("ClipCopy"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		const auto src = image_view_ops::ResolveClipCopySource(true, param);
+		if (src == image_view_ops::ClipCopySrc::Viewer) {
+			SetStatusWarning(_T("ビューア内容の転送は未対応です"));
+		}
+		else if (image_viewer_->CopyToClipboard()) {
+			SetStatusWarning(_T("画像をクリップボードにコピーしました"));
+		}
+		else {
+			SetStatusWarning(_T("コピーできる画像がありません"));
+		}
+	}
+	else if (SameStr(command, _T("Sidebar"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		image_viewer_->ToggleSidebar(param);
+		SetStatusWarning(image_viewer_->IsSidebarShown() ? _T("サイドバー表示ON") : _T("サイドバー表示OFF"));
+	}
+	else if (SameStr(command, _T("SimilarImage"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		const auto size = image_view_ops::ParseSimilarImageSize(param);
+		if (!size.has_value()) {
+			SetStatusWarning(_T("パラメータが不正です (4〜120)"));
+		}
+		else {
+			SetStatusWarning(_T("類似画像ソートは未対応です"));
+		}
+	}
 	else if (SameStr(command, _T("Close"))) {
 		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
 		ShowImageViewer(false);
+	}
+	//-- FI/FVI モードでも使える画像関連コマンド (ビューア非表示でも受け付ける) --
+	else if (SameStr(command, _T("SetInterpolation"))) {
+		const auto next = image_view_ops::NextInterpolation(
+			image_viewer_ != nullptr ? image_viewer_->Interpolation() : 3, param);
+		if (!next.has_value()) {
+			SetStatusWarning(_T("パラメータが不正です (例 SetInterpolation_NLCFHX)"));
+		}
+		else {
+			if (image_viewer_ != nullptr) image_viewer_->CycleInterpolation(param);
+			static const wchar_t *kNames[] = {
+				_T("Nearest"), _T("Linear"), _T("Cubic"), _T("Fant"), _T("HighQuality"), _T("X")};
+			const int idx = *next;
+			SetStatusWarning(UnicodeString(_T("補間アルゴリズム: ")) +
+			                 (idx >= 0 && idx < 6 ? UnicodeString(kNames[idx]) : UnicodeString(_T("?"))));
+		}
+	}
+	else if (SameStr(command, _T("SubViewer"))) {
+		if (image_viewer_ != nullptr) image_viewer_->ToggleSubViewer(param);
+		SetStatusWarning((image_viewer_ != nullptr && image_viewer_->IsSubViewerShown())
+		                     ? _T("サブビューア表示ON")
+		                     : _T("サブビューア表示OFF"));
+	}
+	else if (SameStr(command, _T("LoadBgImage"))) {
+		FilePane *pane = ActivePane();
+		const FileItem *itm = pane->GetCurrentItem();
+		const UnicodeString cursor =
+			(itm != nullptr && !itm->is_parent && !itm->is_dir) ? pane->FullPathOf(*itm) : EmptyStr;
+		const UnicodeString path = image_view_ops::ResolveBgImagePath(param, cursor);
+		if (path.IsEmpty()) {
+			SetStatusWarning(_T("背景画像を指定してください"));
+		}
+		else {
+			SetStatusWarning(UnicodeString(_T("背景画像の表示は未対応です: ")) + path);
+		}
+	}
+	else if (SameStr(command, _T("NextNyanFi"))) {
+		if (image_view_ops::ShouldDuplicateOnNext(param)) {
+			SetStatusWarning(_T("多重起動は未対応です"));
+		}
+		else {
+			SetStatusWarning(_T("別インスタンスの切り替えは未対応です"));
+		}
+	}
+	else if (SameStr(command, _T("PrevNyanFi"))) {
+		SetStatusWarning(_T("別インスタンスの切り替えは未対応です"));
+	}
+	else if (SameStr(command, _T("ListFileInfo"))) {
+		// VCL は ShowFileInfo/SD に読み替える (src/MainFrm.cpp:12328)。
+		// ShowFileInfo と同じくファイル情報ダイアログを出す
+		CmdPropertyDlg();
+	}
+	else if (SameStr(command, _T("FileEdit"))) {
+		FilePane *pane = ActivePane();
+		const FileItem *itm = pane->GetCurrentItem();
+		const UnicodeString cursor =
+			(itm != nullptr && !itm->is_parent && !itm->is_dir) ? pane->FullPathOf(*itm) : EmptyStr;
+		const UnicodeString path = image_view_ops::ResolveFileEditPath(param, cursor);
+		if (path.IsEmpty()) {
+			SetStatusWarning(_T("編集するファイルがありません"));
+		}
+		else {
+			// VCL は TextEditor/ImageEditor で開く。こちらは関連付けで開く
+			UnicodeString error;
+			if (!file_open::OpenStandard(path, error, static_cast<HWND>(GetHandle()))
+			    && !error.IsEmpty()) {
+				wxMessageBox(to_wx(error), to_wx(_T("開けませんでした")), wxOK | wxICON_ERROR, this);
+			}
+		}
+	}
+	else if (SameStr(command, _T("PopupMainMenu"))) {
+		const int idx = image_view_ops::PopupMenuIndex(param);
+		(void)idx;
+		SetStatusWarning(_T("メインメニューのポップアップは未対応です"));
+	}
+	else if (SameStr(command, _T("CmdFileList"))) {
+		// VCL は CmdFileListDlg を開くが、ダイアログ自体が Phase 3 の対象外
+		// のため警告のみ ("FF" の有無は image_view_ops::ShouldShowCmdFileFilter
+		// で判定できることをテストで保証する)
+		(void)image_view_ops::ShouldShowCmdFileFilter(param);
+		SetStatusWarning(_T("コマンドファイル一覧は未対応です"));
 	}
 	else if (SameStr(command, _T("Grep"))) {
 		CmdGrep();

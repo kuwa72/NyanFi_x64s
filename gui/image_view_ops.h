@@ -164,6 +164,83 @@ bool ToggleViewFlag(bool cur, const UnicodeString &param);
  */
 bool NextPageBind(bool right_bind, const UnicodeString &param);
 
+/**
+ * @brief アクションパラメータに指定トークンが含まれるか
+ * @details src/MainFrm.cpp::TestActionParam と同じ (";" 区切りの完全一致・
+ * 大文字小文字を区別しない)
+ */
+bool HasActionToken(const UnicodeString &param, const UnicodeString &token);
+
+/**
+ * @brief 補間アルゴリズムの次状態 (VCL の SetInterpolation と同じ)
+ * @details src/MainFrm.cpp::SetInterpolationActionExecute と同じ。
+ * idstr="NLCFHX" の中を param で絞った順に進め、端では先頭へ周回する
+ * (VCL の imgv_thread.cpp:245 の表示とも対応)。param が空・候補なしは
+ * nullopt (VCL の UserAbort 相当)
+ */
+std::optional<int> NextInterpolation(int cur, const UnicodeString &param);
+
+/**
+ * @brief 壁紙に使うパス (VCL の LoadBgImage と同じ。指定があればそれ、
+ * 無ければカーソル位置。どちらも無ければ空)
+ */
+UnicodeString ResolveBgImagePath(const UnicodeString &param, const UnicodeString &cursor);
+
+/**
+ * @brief サブビューアを隠すべきか (VCL の SubViewerActionExecute と同じ。
+ * 表示中かつ OFF/空なら隠す)
+ */
+bool ShouldHideSubViewer(bool visible, const UnicodeString &param);
+
+/**
+ * @brief サブビューアの回転操作コード (同。RL→3/RR→1/FH→4/FV→5。
+ * SubView.cpp の RotateImage 引数と同値。それ以外は 0=回転なし)
+ */
+int SubViewerRotateCode(const UnicodeString &param);
+
+/**
+ * @brief 別インスタンス起動時に複製すべきか (VCL の NextNyanFi の "DN" 分岐)
+ */
+bool ShouldDuplicateOnNext(const UnicodeString &param);
+
+/**
+ * @brief 類似画像ソートの基準サイズ (VCL の SimilarImage と同じ。既定 32、
+ * 範囲外は nullopt = UserAbort 相当。CB 等のトークンは無視する)
+ */
+std::optional<int> ParseSimilarImageSize(const UnicodeString &param);
+
+/** @brief クリップボード転送元 (VCL の ClipCopyActionExecute と同じ区分) */
+enum class ClipCopySrc {
+	None,   //!< 転送できる画像がない
+	Image,  //!< 表示中の画像バッファ (ImgBuff 相当)
+	Viewer, //!< ビューア表示内容 ("VI" 指定。別途描画が必要なため警告扱い)
+};
+
+/**
+ * @brief クリップボード転送元を決める (画像なしは None、"VI" 指定は Viewer、
+ * それ以外は Image)
+ */
+ClipCopySrc ResolveClipCopySource(bool has_image, const UnicodeString &param);
+
+/**
+ * @brief 編集対象パス (VCL の FileEdit と同じ。指定があればそれ、
+ * 無ければカーソル位置。どちらも無ければ空)
+ */
+UnicodeString ResolveFileEditPath(const UnicodeString &param, const UnicodeString &cursor);
+
+/**
+ * @brief コマンドファイル一覧をフィルタ付きで開くか
+ * (VCL の CmdFileList の "FF" 分岐)
+ */
+bool ShouldShowCmdFileFilter(const UnicodeString &param);
+
+/**
+ * @brief メインメニューポップアップの対象インデックス
+ * @details src/MainFrm.cpp::PopupMainMenuActionExecute と同じ。空は全体
+ * (-1)、先頭1文字を "FESVVVLTOH" で探す。見つからなければ -1
+ */
+int PopupMenuIndex(const UnicodeString &param);
+
 }  // namespace image_view_ops
 
 #endif  // NYANFI_GUI_IMAGE_VIEW_OPS_H
