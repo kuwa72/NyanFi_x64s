@@ -47,6 +47,7 @@
 #include "gui/navigation.h"
 #include "gui/regdir.h"
 #include "gui/settings.h"
+#include "gui/sync_dirs.h"
 #include "gui/tab_settings.h"
 #include "gui/tabs.h"
 #include "gui/text_viewer.h"
@@ -198,6 +199,7 @@ private:
 	void CmdToTab();                 //!< 番号/キャプションでタブを選ぶ (ToTab)
 	void CmdTabDlg();                //!< タブの設定ダイアログ (TabDlg)
 	void CmdRegDirDlg();             //!< 登録ディレクトリダイアログ (RegDirDlg)
+	void CmdRegSyncDlg();            //!< 同期コピー設定ダイアログ (RegSyncDlg)
 	void CmdChangeRegDir(bool opposite, const UnicodeString &param);  //!< 登録を開く (ChangeRegDir/ChangeOppRegDir)
 	void CmdSubDirList();            //!< サブディレクトリ一覧から選んで移動
 	void CmdSpecialDirList();        //!< 特殊フォルダ一覧から選んで移動
@@ -622,6 +624,7 @@ private:
 	TabManager tabs_;       //!< タブの状態 (gui/tabs.h)。左右ペイン共有の1本のタブバー
 	TabBar *tab_bar_ = nullptr;  //!< タブの見た目 (自前描画。gui/main_frame.cpp を参照)
 	regdir::RegDirStore regdirs_;  //!< 登録ディレクトリ (gui/regdir.h。WxGuiRegDir)
+	sync_dirs::SyncDirStore syncdirs_;  //!< 同期コピー設定 (gui/sync_dirs.h。WxGuiSyncDirs)
 };
 
 #endif  // NYANFI_GUI_MAIN_FRAME_H

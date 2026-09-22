@@ -38,6 +38,7 @@
 #include "gui/find_dialog.h"
 #include "gui/grep_dialog.h"
 #include "gui/regdir_dialog.h"
+#include "gui/sync_dialog.h"
 #include "gui/tab_dialog.h"
 #include "gui/image_load.h"
 #include "gui/image_view_ops.h"
@@ -353,6 +354,7 @@ void MainFrame::LoadSettings()
 
 	tabs_.LoadFromIni(settings_.Ini());
 	regdirs_.LoadFromIni(settings_.Ini());
+	syncdirs_.LoadFromIni(settings_.Ini());
 	if (tabs_.Count() == 0) {
 		// 通常は起こらない (TabManager は常に1本以上持つ) が、念のため
 		TabState fallback;
@@ -414,6 +416,7 @@ void MainFrame::SaveSettings()
 	StoreCurrentTabState();
 	tabs_.SaveToIni(settings_.Ini());
 	regdirs_.SaveToIni(settings_.Ini());
+	syncdirs_.SaveToIni(settings_.Ini());
 
 	// 後方互換 (本機能より前の _wx.ini を読む古いビルドとの橋渡し)。
 	// タブが無い/未対応のビルドでも最後に開いていたディレクトリだけは復元できる
@@ -841,6 +844,21 @@ void MainFrame::CmdRegDirDlg()
 	const regdir::RegDirItem &item =
 		items[static_cast<std::size_t>(sel)];
 	ActivePane()->SetPath(item.path);
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdRegSyncDlg()
+{
+	// VCL は TRegSyncDlg (src/SyncDlg.cpp)。登録の追加・変更・削除と
+	// ディレクトリの追加・削除・クリア、有効チェック、確定時の正規化だけを
+	// 移植した (判断は gui/sync_dirs.h、入力は gui/sync_dialog.h)。
+	// フォルダ参照 UI とドラッグ並べ替えは未移植 (未実装扱い)
+	std::vector<sync_dirs::SyncEntry> &items = syncdirs_.MutableItems();
+	if (!sync_dialog::Run(this, items, ActivePane()->GetPath())) return;
+
+	syncdirs_.SaveToIni(settings_.Ini());
+	settings_.Save();
 	UpdateStatus();
 }
 
@@ -3849,6 +3867,9 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	}
 	else if (SameStr(command, _T("RegDirDlg"))) {
 		CmdRegDirDlg();
+	}
+	else if (SameStr(command, _T("RegSyncDlg"))) {
+		CmdRegSyncDlg();
 	}
 	else if (SameStr(command, _T("ChangeRegDir"))) {
 		CmdChangeRegDir(false, param);
