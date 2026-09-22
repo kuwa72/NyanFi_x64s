@@ -2,10 +2,11 @@
  * @file gui/grep_dialog.h
  * @brief ファイル内容検索 (grep) のダイアログ (wx 依存)
  *
- * @details 検索条件の入力 → wxProgressDialog を出しながら gui/grep.h
- * (wx 非依存のロジック層) で走査 → 結果一覧から選んで開く、の3段を
- * 1つの関数にまとめてある (gui/file_info_panel.h の ShowFileInfoDialog と
- * 同じ「薄い wxDialog を関数で公開する」作り)。
+ * @details 検索条件の入力 → worker_thread::GrepWorkerThread で別スレッド走査
+ * (進捗・完了は wxThreadEvent で受け、GUI スレッドは進捗表示と中断受付だけを
+ * 行う。wx 非依存の畳み込みは gui/workers.h の GrepAsyncState) → 結果一覧から
+ * 選んで開く、の3段を 1つの関数にまとめてある (gui/file_info_panel.h の
+ * ShowFileInfoDialog と同じ「薄い wxDialog を関数で公開する」作り)。
  */
 #ifndef NYANFI_GUI_GREP_DIALOG_H
 #define NYANFI_GUI_GREP_DIALOG_H

@@ -147,4 +147,16 @@ BatchResult ProcessBatched(int total, const BatchCancelCallback &cancel_cb,
 	return r;
 }
 
+void GrepAsyncState::OnProgress(int files, int found)
+{
+	files_scanned = files;
+	matches_found = found;
+}
+
+void GrepAsyncState::OnDone(bool was_cancelled)
+{
+	done = true;
+	cancelled = was_cancelled;
+}
+
 }  // namespace workers

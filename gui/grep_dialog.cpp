@@ -13,8 +13,10 @@
 #include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
+#include <wx/utils.h>
 
 #include "usr_str.h"
+#include "gui/worker_thread.h"
 #include "gui/workers.h"
 
 namespace grep_dialog {
@@ -250,6 +252,37 @@ private:
 }  // namespace
 
 //---------------------------------------------------------------------------
+/**
+ * @brief GrepWorkerThread のイベント受け口 (Issue #41 batch3)
+ * @details worker_thread::GrepWorkerThread が QueueEvent する
+ *   wxEVT_GREP_PROGRESS (Int=走査ファイル数、ExtraLong=一致件数) と
+ *   wxEVT_GREP_DONE (Int=中断なら1) を workers::GrepAsyncState に畳む。
+ *   イベントの受け渡し (Bind/QueueEvent) だけがここの仕事で、畳み込みの
+ *   契約自体は tests/core/test_gui_workers.cpp で担保する
+ */
+class GrepSearchSession : public wxEvtHandler {
+public:
+	GrepSearchSession()
+	{
+		Bind(wxEVT_GREP_PROGRESS, &GrepSearchSession::OnProgress, this);
+		Bind(wxEVT_GREP_DONE, &GrepSearchSession::OnDone, this);
+	}
+
+	const workers::GrepAsyncState &State() const { return state_; }
+	bool IsDone() const { return state_.done; }
+
+private:
+	void OnProgress(wxThreadEvent &event)
+	{
+		state_.OnProgress(event.GetInt(), static_cast<int>(event.GetExtraLong()));
+	}
+
+	void OnDone(wxThreadEvent &event) { state_.OnDone(event.GetInt() != 0); }
+
+	workers::GrepAsyncState state_;
+};
+
+//---------------------------------------------------------------------------
 bool Run(wxWindow *parent, const UnicodeString &dir, const UnicodeString &initial_mask,
          grep_core::GrepMatch &selected, std::vector<UnicodeString> &matched_files_out)
 {
@@ -260,27 +293,40 @@ bool Run(wxWindow *parent, const UnicodeString &dir, const UnicodeString &initia
 
 	const grep_core::GrepOptions opt = input.Options();
 
-	// 進捗表示と中断。総ファイル数は事前に数えないため (それ自体に時間が
-	// かかり、走査を二度行うことになる)、確定的な進捗率ではなく Pulse
-	// (不定進捗) で「動いている」ことと途中経過の件数だけを示す
-	wxProgressDialog progress(to_wx(_T("検索中")), to_wx(_T("検索しています...")), 100, parent,
-	                           wxPD_APP_MODAL | wxPD_CAN_ABORT | wxPD_AUTO_HIDE | wxPD_ELAPSED_TIME);
+	// 非同期検索 (Issue #41 batch3)。GrepWorkerThread で走査し、GUI スレッドは
+	// 進捗表示の更新と中断の受付だけを行う。総ファイル数は事前に数えないため
+	// (それ自体に時間がかかり、走査を二度行うことになる)、確定的な進捗率では
+	// なく Pulse (不定進捗) で「動いている」ことと途中経過の件数だけを示す
+	workers::CancelFlag cancel_flag;
+	GrepSearchSession session;
+	worker_thread::GrepWorkerThread *thread =
+		new worker_thread::GrepWorkerThread(&session, dir, opt, grep_core::GrepLimits(), &cancel_flag);
 
-	grep_core::GrepCancelCallback cancel_cb = [&progress]() { return progress.WasCancelled(); };
-
-	// 進捗表示の repaint 自体が重いため、一定件数ごとにだけ更新する
-	grep_core::GrepProgressCallback progress_cb = [&progress](int files, int found) {
-		// 間引き規則は gui/worker_thread.cpp と共有 (workers.h を参照)
-		if (!workers::ShouldReportGrepProgress(files)) return;
-		UnicodeString msg;
-		msg.sprintf(_T("%d ファイルを検索 (%d 件一致)"), files, found);
-		progress.Pulse(to_wx(msg));
-	};
-
-	const grep_core::GrepResult result =
-		grep_core::SearchDirectory(dir, opt, grep_core::GrepLimits(), cancel_cb, progress_cb);
-
-	progress.Hide();
+	grep_core::GrepResult result;
+	if (thread->Run() != wxTHREAD_NO_ERROR) {
+		// スレッド起動に失敗したときだけ同期実行に fallback する (稀な経路)。
+		// 結果の扱いは非同期の場合と同じ
+		delete thread;
+		grep_core::GrepCancelCallback no_cancel = []() { return false; };
+		result = grep_core::SearchDirectory(dir, opt, grep_core::GrepLimits(), no_cancel, nullptr);
+	}
+	else {
+		wxProgressDialog progress(to_wx(_T("検索中")), to_wx(_T("検索しています...")), 100, parent,
+		                           wxPD_APP_MODAL | wxPD_CAN_ABORT | wxPD_AUTO_HIDE | wxPD_ELAPSED_TIME);
+		while (!session.IsDone()) {
+			UnicodeString msg;
+			msg.sprintf(_T("%d ファイルを検索 (%d 件一致)"), session.State().files_scanned,
+			            session.State().matches_found);
+			// Pulse は内部でイベントを配送するため、ワーカーからの
+			// wxEVT_GREP_PROGRESS/DONE はこの待ちの間に届く
+			if (!progress.Pulse(to_wx(msg))) cancel_flag.RequestCancel();
+			if (progress.WasCancelled()) cancel_flag.RequestCancel();
+			wxMilliSleep(20);
+		}
+		thread->Wait();
+		result = thread->Result();
+		delete thread;
+	}
 
 	if (!result.error.IsEmpty()) {
 		wxMessageBox(to_wx(result.error), to_wx(_T("文字列検索 (GREP)")), wxOK | wxICON_ERROR, parent);
