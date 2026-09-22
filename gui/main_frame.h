@@ -28,6 +28,7 @@
 #include "gui/convert_ops.h"
 #include "gui/f_misc_ops.h"
 #include "gui/f_batch5_ops.h"
+#include "gui/f_batch6_ops.h"
 #include "gui/history.h"
 #include "gui/named_state.h"
 #include "gui/system_ops.h"
@@ -385,6 +386,26 @@ private:
 	void CmdListDuration();                         //!< 再生時間の一覧 (ListDuration)
 	void CmdListExpFunc(const UnicodeString &param);//!< エクスポート関数一覧 (ListExpFunc)
 	void CmdWatchTail(const UnicodeString &param);  //!< 追加更新の監視 (WatchTail)
+
+	//-- Fモード残 batch6 (判断は gui/f_batch6_ops.h。専用ビューア・MCI・tags 等の
+	//   重い実体が要るものは確認+ログ+最小UIの簡略版。詳細は各 Cmd を参照) --
+	void CmdBgImgMode(const UnicodeString &param);  //!< 背景画像の表示切替 (BgImgMode)
+	void CmdLibrary(const UnicodeString &param);    //!< ライブラリを開く (Library)
+	void CmdJsonViewer(const UnicodeString &param); //!< JSONビューア (JsonViewer)
+	void CmdXmlViewer();                            //!< XMLビューア (XmlViewer)
+	void CmdLoadFindSet(const UnicodeString &param);//!< 検索設定の読み込み (LoadFindSet)
+	void CmdSaveAsFindSet();                        //!< 検索設定の保存 (SaveAsFindSet)
+	void CmdLockTextPreview(const UnicodeString &param); //!< テキストプレビューのロック (LockTextPreview)
+	void CmdShowIndent(const UnicodeString &param); //!< インデント表示の切替 (ShowIndent)
+	void CmdFindTagName(const UnicodeString &param);//!< タグ名の検索 (FindTagName)
+	void CmdGrep2();                                //!< 外部grepで検索 (Grep2)
+	void CmdExPopupMenu(const UnicodeString &param);//!< 拡張ポップアップメニュー (ExPopupMenu)
+	void CmdWebMap(const UnicodeString &param);     //!< 地図表示 (WebMap)
+	void CmdPlayList(const UnicodeString &param);   //!< プレイリスト (PlayList)
+
+	int bg_img_mode_ = 0;         //!< 背景画像の表示形式 (VCL BgImgMode 相当。0=OFF、1〜3)
+	bool lock_txt_prv_ = false;   //!< テキストプレビューをロック中か (VCL LockTxtPrv 相当)
+	bool show_indent_ = false;    //!< インデント表示か (VCL ShowIndent 相当)
 
 	bool fixed_len_ = false;      //!< 固定長表示か (VCL TxtViewer->isFixedLen 相当)
 	int fixed_limit_ = 0;         //!< 固定長表示の上限 (数値指定があれば。無ければ 0)
