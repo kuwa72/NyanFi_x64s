@@ -295,6 +295,7 @@ if(TARGET nyanfi_core)
 		gui/git_ftp.cpp
 		gui/tab_settings.cpp
 		gui/regdir.cpp
+		gui/f_misc_ops.cpp
 	)
 	target_include_directories(nyanfi_gui_core PUBLIC ${PROJECT_SOURCE_DIR})
 	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core shell32 netapi32)
