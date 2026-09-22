@@ -13,6 +13,7 @@
 #include <vector>
 
 #include <wx/choicdlg.h>
+#include <wx/colordlg.h>
 #include <wx/dcbuffer.h>
 #include <wx/filedlg.h>
 #include <wx/radiobox.h>
@@ -3865,6 +3866,45 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	}
 	else if (SameStr(command, _T("DriveGraph"))) {
 		CmdDriveGraph(param);
+	}
+	else if (SameStr(command, _T("ExeExtMenu"))) {
+		CmdExeExtMenu(param);
+	}
+	else if (SameStr(command, _T("ExeExtTool"))) {
+		CmdExeExtTool(param);
+	}
+	else if (SameStr(command, _T("RegDirPopup"))) {
+		CmdRegDirPopup(param);
+	}
+	else if (SameStr(command, _T("PathMaskDlg"))) {
+		CmdPathMaskDlg(param);
+	}
+	else if (SameStr(command, _T("BinaryEdit"))) {
+		CmdBinaryEdit();
+	}
+	else if (SameStr(command, _T("EditHighlight"))) {
+		CmdEditHighlight();
+	}
+	else if (SameStr(command, _T("FixedLen"))) {
+		CmdFixedLen(param);
+	}
+	else if (SameStr(command, _T("HtmlToText"))) {
+		CmdHtmlToText(param);
+	}
+	else if (SameStr(command, _T("SetColor"))) {
+		CmdSetColor(param);
+	}
+	else if (SameStr(command, _T("ShowRuby"))) {
+		CmdShowRuby(param);
+	}
+	else if (SameStr(command, _T("ListDuration"))) {
+		CmdListDuration();
+	}
+	else if (SameStr(command, _T("ListExpFunc"))) {
+		CmdListExpFunc(param);
+	}
+	else if (SameStr(command, _T("WatchTail"))) {
+		CmdWatchTail(param);
 	}
 	else if (SameStr(command, _T("Exit"))) {
 		Close(true);
@@ -7871,4 +7911,356 @@ void MainFrame::CmdDriveGraph(const UnicodeString &param)
 	            get_size_str_B(static_cast<__int64>(free_total.QuadPart), 14).Trim().c_str(),
 	            used_ratio * 100.0);
 	wxMessageBox(to_wx(msg), to_wx(_T("ドライブ使用率")), wxOK | wxICON_INFORMATION, this);
+}
+
+//---------------------------------------------------------------------------
+// Fモード残 batch5 (判断は gui/f_batch5_ops.h)
+//---------------------------------------------------------------------------
+
+/**
+ * @brief 追加メニューの実行 (ExeExtMenu)
+ * @details VCL (MainFrm.cpp:17125) は ActionParam をアクセスキーで解決する
+ *          (ResolveAccKeyIndex)。追加メニューの一覧 (ExtMenuList) は未移植の
+ *         ため解決は常に -1 で、該当なしとして警告する
+ */
+void MainFrame::CmdExeExtMenu(const UnicodeString &param)
+{
+	const std::vector<UnicodeString> empty;
+	if (f_batch5_ops::ResolveAccKeyIndex(empty, param) == -1) {
+		SetStatusWarning(_T("追加メニューは未登録です (一覧は未移植)"));
+		return;
+	}
+}
+
+/**
+ * @brief 外部ツールの実行 (ExeExtTool)
+ * @details VCL (MainFrm.cpp:17150) は ExeExtMenu と同じ解決をする
+ *          (ExtToolList 側)。一覧は未移植のため同じく警告する
+ */
+void MainFrame::CmdExeExtTool(const UnicodeString &param)
+{
+	const std::vector<UnicodeString> empty;
+	if (f_batch5_ops::ResolveAccKeyIndex(empty, param) == -1) {
+		SetStatusWarning(_T("外部ツールは未登録です (一覧は未移植)"));
+		return;
+	}
+}
+
+/**
+ * @brief 登録ディレクトリのポップアップ (RegDirPopup)
+ * @details VCL (MainFrm.cpp:24167) の OP/既定の切り替え
+ *          (ResolveRegDirPopupTarget) に従う。OP なら反対側、
+ *          そうでなければ現側のペインを移動する
+ */
+void MainFrame::CmdRegDirPopup(const UnicodeString &param)
+{
+	const UnicodeString target = f_batch5_ops::ResolveRegDirPopupTarget(param);
+	const std::vector<regdir::RegDirItem> &items = regdirs_.Items();
+	if (items.empty()) { SetStatusWarning(_T("登録ディレクトリがありません")); return; }
+
+	wxArrayString choices;
+	std::vector<std::size_t> rows;
+	for (std::size_t i = 0; i < items.size(); i++) {
+		if (items[i].title == _T("-")) continue;  // セパレータは選べない
+		choices.Add(to_wx(items[i].title + _T("  [") + items[i].path + _T("]")));
+		rows.push_back(i);
+	}
+	if (choices.IsEmpty()) { SetStatusWarning(_T("登録ディレクトリがありません")); return; }
+
+	wxSingleChoiceDialog dlg(this, to_wx(_T("登録ディレクトリ (") + target + _T(")")),
+	                         to_wx(_T("登録ディレクトリ")), choices);
+	if (dlg.ShowModal() != wxID_OK) return;
+	const int sel = dlg.GetSelection();
+	if (sel < 0 || static_cast<std::size_t>(sel) >= rows.size()) return;
+
+	const UnicodeString dnam = regdir::SelectablePath(items[rows[static_cast<std::size_t>(sel)]]);
+	if (dnam.IsEmpty() || !dir_exists(dnam)) {
+		SetStatusWarning(_T("開けません: ") + dnam);
+		return;
+	}
+	(target == _T("OppDir") ? OppositePane() : ActivePane())->SetPath(dnam);
+	UpdateStatus();
+}
+
+/**
+ * @brief パスマスクダイアログ (PathMaskDlg)
+ * @details VCL (MainFrm.cpp:23553) の Find/Work ガードと ND 分岐
+ *          (ResolvePathMaskMode) に従う。ポップアップ側の登録表
+ *          (PathMask) は未移植のため、どちらもマスク入力を開く簡略版
+ */
+void MainFrame::CmdPathMaskDlg(const UnicodeString &param)
+{
+	FilePane *pane = ActivePane();
+	const f_batch5_ops::PathMaskMode mode = f_batch5_ops::ResolvePathMaskMode(
+		param, pane->IsResultList(), IsWorkActive());
+	if (mode == f_batch5_ops::PathMaskMode::Denied) {
+		SetStatusWarning(_T("操作できません"));
+		return;
+	}
+	if (mode == f_batch5_ops::PathMaskMode::Popup)
+		SetStatusWarning(_T("パスマスクの一覧は未対応のため入力を開きます"));
+	ShowMaskDialog();
+}
+
+/**
+ * @brief バイナリ編集 (BinaryEdit)
+ * @details VCL (MainFrm.cpp:13799) は選択優先・無ければカーソル位置
+ *          (ResolveBinaryEditTarget) で、BinaryEditor の実在が必須。
+ *          編集プログラムの指定 (BinaryEditor) は未移植のため、
+ *          対象の解決まで行い警告する
+ */
+void MainFrame::CmdBinaryEdit()
+{
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> sel = pane->GetSelectedPaths();
+	const UnicodeString target = f_batch5_ops::ResolveBinaryEditTarget(
+		!sel.empty(), sel.empty() ? EmptyStr : sel[0], pane->CurrentFullPath());
+	if (target.IsEmpty()) { SetStatusWarning(_T("対象がありません")); return; }
+	UnicodeString error;
+	if (!f_batch5_ops::ValidateBinaryEditor(EmptyStr, error)) {
+		// 編集プログラムの指定は未移植。対象だけログに残す
+		log_.Add(log_win::LogStatus::Info, _T("バイナリ編集の対象: ") + target,
+		         /*show_time=*/true);
+		SetStatusWarning(_T("バイナリエディタが未設定です (BinaryEditor 未移植)"));
+		return;
+	}
+}
+
+/**
+ * @brief 構文強調定義の編集 (EditHighlight)
+ * @details VCL (MainFrm.cpp:16892) は `FileEdit_"定義"` を実行する
+ *          (BuildEditHighlightCommand)。定義ファイルの場所
+ *          (UserHighlight) は未移植のため警告する
+ */
+void MainFrame::CmdEditHighlight()
+{
+	log_.Add(log_win::LogStatus::Info,
+	         _T("構文強調定義の編集: ") +
+	             f_batch5_ops::BuildEditHighlightCommand(_T("(定義ファイル未移植)")),
+	         /*show_time=*/true);
+	SetStatusWarning(_T("構文強調定義の編集は未対応です (UserHighlight 未移植)"));
+}
+
+/**
+ * @brief 固定長表示の切替 (FixedLen)
+ * @details VCL (MainFrm.cpp:33660) は TVIEW 中はビューアへ委譲。
+ *          そうでなければ数値指定の上限化か反転 (ResolveFixedLen)。
+ *          ビューア側の実表示は未移植のため状態保持のみ
+ */
+void MainFrame::CmdFixedLen(const UnicodeString &param)
+{
+	if (viewer_ != nullptr && viewer_->IsShown()) {
+		const f_batch5_ops::FixedLenPlan plan =
+			f_batch5_ops::ResolveFixedLen(/*is_tview=*/true, fixed_len_, param);
+		if (plan.delegate_to_viewer && !viewer_->Execute(_T("FixedLen") + param))
+			SetStatusWarning(_T("ビューア表示中の固定長表示は未対応です"));
+		return;
+	}
+	const f_batch5_ops::FixedLenPlan plan =
+		f_batch5_ops::ResolveFixedLen(/*is_tview=*/false, fixed_len_, param);
+	fixed_len_ = plan.new_enabled;
+	if (plan.limit > 0) fixed_limit_ = plan.limit;
+	UnicodeString msg = fixed_len_ ? UnicodeString(_T("固定長表示ON"))
+	                               : UnicodeString(_T("固定長表示OFF"));
+	if (fixed_len_ && fixed_limit_ > 0) msg.cat_sprintf(_T(" (上限%d)"), fixed_limit_);
+	SetStatusWarning(msg);
+}
+
+/**
+ * @brief HTML→テキスト変換表示 (HtmlToText)
+ * @details VCL (MainFrm.cpp:33643) は TVIEW 中はビューアへ委譲。
+ *          そうでなければ SetHtmlToText (ParseHtmlToText)。
+ *          変換の実体は未移植のため状態保持のみ
+ */
+void MainFrame::CmdHtmlToText(const UnicodeString &param)
+{
+	if (viewer_ != nullptr && viewer_->IsShown()) {
+		const f_batch5_ops::HtmlToTextPlan plan =
+			f_batch5_ops::ParseHtmlToText(param, /*is_tview=*/true);
+		if (plan.delegate_to_viewer && !viewer_->Execute(_T("HtmlToText") + param))
+			SetStatusWarning(_T("ビューア表示中の変換表示は未対応です"));
+		return;
+	}
+	const f_batch5_ops::HtmlToTextPlan plan =
+		f_batch5_ops::ParseHtmlToText(param, /*is_tview=*/false);
+	if (!plan.toggle_param.IsEmpty())
+		htm2txt_ = SameText(plan.toggle_param, _T("ON"));
+	else
+		htm2txt_ = !htm2txt_;
+	md_mode_ = plan.markdown;
+	SetStatusWarning(htm2txt_ ? _T("HTML→テキスト変換表示ON") : _T("HTML→テキスト変換表示OFF"));
+}
+
+/**
+ * @brief 配色の変更 (SetColor)
+ * @details VCL (MainFrm.cpp:34202) はパラメータ有りなら配色ファイル指定、
+ *          空なら配色ダイアログ (ResolveSetColorMode)。
+ *          ビューアの実配色は未移植のため、指定があれば記録し、
+ *          空なら色選択だけ受け付ける簡略版
+ */
+void MainFrame::CmdSetColor(const UnicodeString &param)
+{
+	if (f_batch5_ops::ResolveSetColorMode(param)
+	    == f_batch5_ops::SetColorMode::FromFile) {
+		if (!file_exists(param)) {
+			SetStatusWarning(_T("配色ファイルが見つかりません: ") + param);
+			return;
+		}
+		log_.Add(log_win::LogStatus::Info, _T("配色ファイルの指定: ") + param,
+		         /*show_time=*/true);
+		SetStatusWarning(_T("配色の適用は未対応です (指定をログに記録しました)"));
+		return;
+	}
+	wxColourDialog dlg(this);
+	if (dlg.ShowModal() != wxID_OK) return;
+	const wxColour col = dlg.GetColourData().GetColour();
+	UnicodeString msg;
+	msg.sprintf(_T("配色の選択: #%02X%02X%02X (適用は未対応)"), col.Red(), col.Green(),
+	            col.Blue());
+	SetStatusWarning(msg);
+}
+
+/**
+ * @brief ルビ表示の切替 (ShowRuby)
+ * @details VCL (MainFrm.cpp:33786) は TVIEW 中はビューアへ委譲。
+ *          そうでなければ反転 (ToggleEnabled)。実表示は未移植のため状態保持のみ
+ */
+void MainFrame::CmdShowRuby(const UnicodeString &param)
+{
+	if (viewer_ != nullptr && viewer_->IsShown()) {
+		if (f_batch5_ops::IsShowRubyViewerDelegate(/*is_tview=*/true)
+		    && !viewer_->Execute(_T("ShowRuby") + param))
+			SetStatusWarning(_T("ビューア表示中のルビ表示は未対応です"));
+		return;
+	}
+	show_ruby_ = f_batch5_ops::ToggleEnabled(show_ruby_, param);
+	SetStatusWarning(show_ruby_ ? _T("ルビ表示ON") : _T("ルビ表示OFF"));
+}
+
+/**
+ * @brief 再生時間の一覧 (ListDuration)
+ * @details VCL (MainFrm.cpp:20722) の書庫/FTP ガードと選択必須
+ *          (ValidateListDuration) に従う。時間の取得は移植済みの
+ *          get_duration() (src/usr_file_inf.h) を使い、行書式は
+ *          FormatDurationRow/Total で整えてログへ出す
+ */
+void MainFrame::CmdListDuration()
+{
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> sel = pane->GetSelectedPaths();
+	UnicodeString error;
+	// 書庫/FTP の状態は未移植のため false (通常の一覧だけが対象)
+	if (!f_batch5_ops::ValidateListDuration(/*is_arc=*/false, /*is_ftp=*/false,
+	                                        static_cast<int>(sel.size()), error)) {
+		SetStatusWarning(error);
+		return;
+	}
+	log_.AddRaw(pane->GetPath());
+	int total = 0;
+	int err_cnt = 0;
+	for (const UnicodeString &fnam : sel) {
+		int t = -1;
+		try {
+			t = get_duration(fnam);
+		}
+		catch (...) {
+			t = -1;  // プロパティ経由 (usr_SH) は未移植のため取得失敗扱い
+		}
+		if (t >= 0) {
+			total += t;
+			log_.AddRaw(f_batch5_ops::FormatDurationRow(ExtractFileName(fnam),
+			                                            static_cast<unsigned int>(t), true));
+		}
+		else {
+			err_cnt++;
+			log_.AddRaw(ExtractFileName(fnam) + UnicodeString(_T("\t ??:??:??.??  E")));
+		}
+	}
+	log_.AddRaw(f_batch5_ops::FormatDurationTotal(static_cast<unsigned int>(total), true,
+	                                              static_cast<int>(sel.size()), err_cnt));
+	CmdListLog();
+}
+
+/**
+ * @brief エクスポート関数一覧 (ListExpFunc)
+ * @details VCL (MainFrm.cpp:20837) の SI/SR/SN ソートと .csv/.tsv 形式
+ *          (ParseExpFuncSort/ParseExpFuncListMode) に従う。一覧の取得は
+ *          移植済みの get_DllExpFunc() (src/usr_file_inf.h) を使い、
+ *          ログへ出す。FTP 上は VCL と同じく断るが、FTP の状態は
+ *          未移植のため通常の一覧だけが対象
+ */
+void MainFrame::CmdListExpFunc(const UnicodeString &param)
+{
+	FilePane *pane = ActivePane();
+	const FileItem *cur = pane->GetCurrentItem();
+	if (cur == nullptr || cur->is_parent || cur->is_dir) {
+		SetStatusWarning(_T("対象がありません"));
+		return;
+	}
+	const UnicodeString full_path = pane->FullPathOf(*cur);
+	const int sort_mode = f_batch5_ops::ParseExpFuncSort(param);
+	const int list_mode = f_batch5_ops::ParseExpFuncListMode(param);
+
+	std::unique_ptr<TStringList> r_lst(new TStringList());
+	bool ok = false;
+	try {
+		ok = get_DllExpFunc(AnsiString(full_path), r_lst.get(), sort_mode, list_mode);
+	}
+	catch (...) {
+		ok = false;
+	}
+	if (!ok) {
+		SetStatusWarning(_T("エクスポート関数を取得できません: ") + cur->name);
+		return;
+	}
+	log_.AddRaw(_T("エクスポート関数一覧: ") + full_path);
+	for (int i = 0; i < r_lst->Count; i++) log_.AddRaw(r_lst->Strings[i]);
+	CmdListLog();
+}
+
+/**
+ * @brief 追加更新の監視 (WatchTail)
+ * @details VCL (MainFrm.cpp:34217) の AC/ST/CC 分岐
+ *          (ParseWatchTailSubCmd) に従う。監視タイマー (WatchTailTimer)
+ *          は未移植のため、登録・解除とログ表示だけの簡略版
+ */
+void MainFrame::CmdWatchTail(const UnicodeString &param)
+{
+	const f_batch5_ops::WatchTailSubCmd sub = f_batch5_ops::ParseWatchTailSubCmd(param);
+	if (sub == f_batch5_ops::WatchTailSubCmd::AllCancel) {
+		if (watch_tail_.empty()) { SetStatusWarning(_T("監視中のファイルはありません")); return; }
+		watch_tail_.clear();
+		log_.Add(log_win::LogStatus::Info, _T("監視終了"), /*show_time=*/true);
+		return;
+	}
+	if (sub == f_batch5_ops::WatchTailSubCmd::Status) {
+		if (watch_tail_.empty()) { SetStatusWarning(_T("監視中のファイルはありません")); return; }
+		log_.Add(log_win::LogStatus::Info, _T("監視中"), /*show_time=*/true);
+		for (const UnicodeString &fnam : watch_tail_) log_.AddRaw(fnam);
+		CmdListLog();
+		return;
+	}
+	FilePane *pane = ActivePane();
+	const FileItem *cur = pane->GetCurrentItem();
+	if (cur == nullptr || cur->is_parent || cur->is_dir) {
+		SetStatusWarning(_T("対象がありません"));
+		return;
+	}
+	const UnicodeString fnam = pane->FullPathOf(*cur);
+	// 既存を削除 (VCL と同じく登録済みなら外す)
+	bool found = false;
+	for (auto it = watch_tail_.begin(); it != watch_tail_.end();) {
+		if (SameText(*it, fnam)) { it = watch_tail_.erase(it); found = true; }
+		else ++it;
+	}
+	if (sub == f_batch5_ops::WatchTailSubCmd::CancelOne) {
+		if (found) log_.Add(log_win::LogStatus::Info, _T("監視終了  ") + fnam,
+		                    /*show_time=*/true);
+		else SetStatusWarning(_T("監視していません: ") + cur->name);
+		return;
+	}
+	if (found) SetStatusWarning(_T("監視を更新しました (タイマーは未対応): ") + cur->name);
+	else SetStatusWarning(_T("監視を開始しました (タイマーは未対応): ") + cur->name);
+	watch_tail_.push_back(fnam);
+	log_.Add(log_win::LogStatus::Info, _T("監視開始  ") + fnam, /*show_time=*/true);
 }
