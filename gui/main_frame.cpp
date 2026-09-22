@@ -4076,6 +4076,45 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	else if (SameStr(command, _T("PlayList"))) {
 		CmdPlayList(param);
 	}
+	else if (SameStr(command, _T("AppList"))) {
+		CmdAppList(param);
+	}
+	else if (SameStr(command, _T("DebugCmdFile"))) {
+		CmdDebugCmdFile(param);
+	}
+	else if (SameStr(command, _T("DistributionDlg"))) {
+		CmdDistributionDlg(param);
+	}
+	else if (SameStr(command, _T("DotNyanDlg"))) {
+		CmdDotNyanDlg(param);
+	}
+	else if (SameStr(command, _T("ExeCommands"))) {
+		CmdExeCommands(param);
+	}
+	else if (SameStr(command, _T("ExeMenuFile"))) {
+		CmdExeMenuFile(param);
+	}
+	else if (SameStr(command, _T("ExeToolBtn"))) {
+		CmdExeToolBtn(param);
+	}
+	else if (SameStr(command, _T("ExtractChmSrc"))) {
+		CmdExtractChmSrc();
+	}
+	else if (SameStr(command, _T("ExtractGifBmp"))) {
+		CmdExtractGifBmp();
+	}
+	else if (SameStr(command, _T("LockKeyMouse"))) {
+		CmdLockKeyMouse(param);
+	}
+	else if (SameStr(command, _T("RegExChecker"))) {
+		CmdRegExChecker(param);
+	}
+	else if (SameStr(command, _T("ToolBarDlg"))) {
+		CmdToolBarDlg();
+	}
+	else if (SameStr(command, _T("UpdateFromArc"))) {
+		CmdUpdateFromArc(param);
+	}
 	else if (SameStr(command, _T("Exit"))) {
 		Close(true);
 	}
@@ -8745,6 +8784,293 @@ void MainFrame::CmdPlayList(const UnicodeString &param)
 		break;
 	case f_batch6_ops::PlayListSub::Setup:
 		SetStatusWarning(_T("プレイリスト設定は未対応です"));
+		break;
+	}
+}
+
+//---------------------------------------------------------------------------
+// Fモード残 batch7 (判断は gui/f_batch7_ops.h)
+//---------------------------------------------------------------------------
+
+/**
+ * @brief アプリケーション一覧 (AppList)
+ * @details VCL (MainFrm.cpp:13499) の AO/LO/LI/FA/FL/FI/FZ/AS は
+ *          ParseAppListOpts。一覧ダイアログ (AppListDlg) は未移植のため
+ *          解決結果をログに残し警告する
+ */
+void MainFrame::CmdAppList(const UnicodeString &param)
+{
+	const f_batch7_ops::AppListOpts o = f_batch7_ops::ParseAppListOpts(param);
+	UnicodeString desc;
+	if (o.only_app) desc += _T("一覧のみ ");
+	if (o.only_launcher) desc += _T("ランチャーのみ ");
+	if (o.to_app) desc += _T("一覧へ ");
+	if (o.to_launcher) desc += _T("ランチャーへ ");
+	if (o.to_incsea) desc += _T("検索へ ");
+	if (o.fuzzy) desc += _T("あいまい ");
+	if (o.add_start) desc += _T("開始メニュー追加 ");
+	if (desc.IsEmpty()) desc = _T("(既定表示) ");
+	log_.Add(log_win::LogStatus::Info, _T("アプリケーション一覧: ") + desc,
+	         /*show_time=*/true);
+	SetStatusWarning(_T("アプリケーション一覧は未対応です"));
+}
+
+/**
+ * @brief コマンドファイルのデバッグ実行 (DebugCmdFile)
+ * @details VCL (MainFrm.cpp:16308) は非空パラメータ優先 (@除去・絶対パス化)、
+ *          空なら FLIST 中の .nbt カーソル。デバッグ実行の実体
+ *          (ExeCommandsCore) は未移植のため対象の解決まで行い警告する
+ */
+void MainFrame::CmdDebugCmdFile(const UnicodeString &param)
+{
+	FilePane *pane = ActivePane();
+	const FileItem *cur = pane->GetCurrentItem();
+	const bool has = cur != nullptr && !cur->is_parent;
+	const f_batch7_ops::DebugCmdSrc src = f_batch7_ops::ResolveDebugCmdSrc(
+		!param.IsEmpty(), /*is_flist=*/true, has,
+		has ? test_NbtExt(get_extension(cur->name)) : false);
+	if (src == f_batch7_ops::DebugCmdSrc::None) {
+		SetStatusWarning(_T("対象がありません"));
+		return;
+	}
+	const UnicodeString fnam = (src == f_batch7_ops::DebugCmdSrc::Param)
+	                               ? param
+	                               : pane->FullPathOf(*cur);
+	if (!file_exists(fnam)) {
+		SetStatusWarning(_T("ファイルが見つかりません: ") + fnam);
+		return;
+	}
+	log_.Add(log_win::LogStatus::Info, _T("デバッグ実行の対象: ") + fnam,
+	         /*show_time=*/true);
+	SetStatusWarning(_T("コマンドファイルのデバッグ実行は未対応です"));
+}
+
+/**
+ * @brief 振り分けダイアログ (DistributionDlg)
+ * @details VCL (MainFrm.cpp:16369) の XC/XM/SN は ResolveDistributionMode、
+ *          書庫/ADS/Work/FTP ガードは CanUseDistributionDlg。
+ *          振り分けダイアログとコピー/移動タスクは未移植のため警告のみ。
+ *          .ini 指定は IsDistrIniFile で検出してログに残す
+ */
+void MainFrame::CmdDistributionDlg(const UnicodeString &param)
+{
+	// 特殊リストの状態は未移植のため false (通常の一覧として扱う)
+	if (!f_batch7_ops::CanUseDistributionDlg(/*is_arc=*/false, /*is_ads=*/false,
+	                                         /*is_work=*/false, /*is_ftp=*/false)) {
+		SetStatusWarning(_T("操作できません"));
+		return;
+	}
+	if (f_batch7_ops::IsDistrIniFile(param))
+		log_.Add(log_win::LogStatus::Info,
+		         _T("振り分け登録ファイル: ") + param, /*show_time=*/true);
+	switch (f_batch7_ops::ResolveDistributionMode(param)) {
+	case f_batch7_ops::DistributionMode::ImmediateCopy:
+		SetStatusWarning(_T("振り分けの即時コピーは未対応です"));
+		break;
+	case f_batch7_ops::DistributionMode::ImmediateMove:
+		SetStatusWarning(_T("振り分けの即時移動は未対応です"));
+		break;
+	case f_batch7_ops::DistributionMode::SetMask:
+		SetStatusWarning(_T("振り分けのマスク設定は未対応です"));
+		break;
+	case f_batch7_ops::DistributionMode::Dialog:
+		SetStatusWarning(_T("振り分けダイアログは未対応です"));
+		break;
+	}
+}
+
+/**
+ * @brief .nyanfi ファイルの設定 (DotNyanDlg)
+ * @details VCL (MainFrm.cpp:16792) は FLIST 外は不可、RS なら再適用、
+ *          そうでなければ設定ダイアログ。適用の実体 (ApplyDotNyan) と
+ *          ダイアログは未移植のため分岐の解決まで行い警告する
+ */
+void MainFrame::CmdDotNyanDlg(const UnicodeString &param)
+{
+	const bool is_flist = viewer_ == nullptr || !viewer_->IsShown();
+	switch (f_batch7_ops::ResolveDotNyanMode(is_flist, param)) {
+	case f_batch7_ops::DotNyanMode::Reapply:
+		SetStatusWarning(_T(".nyanfi の再適用は未対応です"));
+		break;
+	case f_batch7_ops::DotNyanMode::Dialog:
+		SetStatusWarning(_T(".nyanfi の設定は未対応です"));
+		break;
+	case f_batch7_ops::DotNyanMode::Denied:
+		SetStatusWarning(_T("操作できません"));
+		break;
+	}
+}
+
+/**
+ * @brief 指定したコマンドを実行 (ExeCommands)
+ * @details VCL (MainFrm.cpp:17118) は ExeAliasOrCommands(ActionParam)。
+ *          空は失敗。エイリアス解決は未移植のため Execute にそのまま渡す
+ */
+void MainFrame::CmdExeCommands(const UnicodeString &param)
+{
+	if (!f_batch7_ops::CanExeCommands(param)) {
+		SetStatusWarning(_T("パラメータが不正です"));
+		return;
+	}
+	if (!Execute(param)) SetStatusWarning(_T("実行できません: ") + param);
+}
+
+/**
+ * @brief メニューファイルの実行 (ExeMenuFile)
+ * @details VCL (MainFrm.cpp:24017) は load_MenuFile できれば ExePopMenuList。
+ *          メニューファイルの読み込みは未移植のため対象の確認まで行い警告する
+ */
+void MainFrame::CmdExeMenuFile(const UnicodeString &param)
+{
+	if (!f_batch7_ops::CanExeMenuFile(param)) {
+		SetStatusWarning(_T("ファイルを開けません"));
+		return;
+	}
+	if (!file_exists(param)) {
+		SetStatusWarning(_T("ファイルが見つかりません: ") + param);
+		return;
+	}
+	log_.Add(log_win::LogStatus::Info, _T("メニューファイルの対象: ") + param,
+	         /*show_time=*/true);
+	SetStatusWarning(_T("メニューファイルの実行は未対応です"));
+}
+
+/**
+ * @brief ツールボタンの実行 (ExeToolBtn)
+ * @details VCL (MainFrm.cpp:17175) は 1 始まりの番号で一覧から引く
+ *          (ResolveToolBtnIndex)。ツールボタンの一覧は未移植のため
+ *          解決は常に -1 で、該当なしとして警告する
+ */
+void MainFrame::CmdExeToolBtn(const UnicodeString &param)
+{
+	// ツールボタンの一覧は未移植のため 0 件として解決する
+	if (f_batch7_ops::ResolveToolBtnIndex(param, 0) == -1) {
+		SetStatusWarning(_T("ツールボタンは未登録です (一覧は未移植)"));
+		return;
+	}
+}
+
+/**
+ * @brief CHMからソースを抽出 (ExtractChmSrc)
+ * @details VCL (MainFrm.cpp:17254) の ADS/FTP・反対側・カーソル・.chm・
+ *          仮想の一時展開・空白名は ValidateExtractChmSrc。
+ *          抽出タスク (EXTCHM) は未移植のため対象の解決まで行い警告する
+ */
+void MainFrame::CmdExtractChmSrc()
+{
+	FilePane *pane = ActivePane();
+	const FileItem *cur = pane->GetCurrentItem();
+	const bool has = cur != nullptr && !cur->is_parent;
+	const UnicodeString fnam = has ? pane->FullPathOf(*cur) : EmptyStr;
+	UnicodeString error;
+	// ADS/仮想の状態は未移植のため false。反対側は通常の一覧として扱う
+	if (!f_batch7_ops::ValidateExtractChmSrc(
+	        /*is_ads=*/false, /*is_ftp=*/false, /*is_opp_flist=*/true, has,
+	        has ? cur->is_dir : true,
+	        has ? get_extension(cur->name) : EmptyStr,
+	        /*is_virtual=*/false, /*tmp_ok=*/true,
+	        ContainsStr(fnam, _T(" ")),
+	        ContainsStr(OppositePane()->GetPath(), _T(" ")), error)) {
+		SetStatusWarning(error);
+		return;
+	}
+	log_.Add(log_win::LogStatus::Info, _T("CHM抽出の対象: ") + fnam,
+	         /*show_time=*/true);
+	SetStatusWarning(_T("CHMからの抽出は未対応です"));
+}
+
+/**
+ * @brief アニメGIFからビットマップを抽出 (ExtractGifBmp)
+ * @details VCL (MainFrm.cpp:17290) は選択優先・無ければカーソル位置で
+ *          .gif 必須 (ValidateExtractGif)。変換の実体は未移植のため
+ *          対象の解決まで行い警告する
+ */
+void MainFrame::CmdExtractGifBmp()
+{
+	FilePane *pane = ActivePane();
+	const std::vector<UnicodeString> sel = pane->GetSelectedPaths();
+	const FileItem *cur = pane->GetCurrentItem();
+	const bool has = cur != nullptr && !cur->is_parent;
+	bool all_gif = true;
+	for (const UnicodeString &p : sel) {
+		if (!test_GifExt(get_extension(p))) { all_gif = false; break; }
+	}
+	UnicodeString error;
+	if (!f_batch7_ops::ValidateExtractGif(
+	        !sel.empty(), all_gif,
+	        has ? test_GifExt(get_extension(cur->name)) : false, error)) {
+		SetStatusWarning(error);
+		return;
+	}
+	log_.Add(log_win::LogStatus::Info, _T("GIF抽出の対象を確認しました"),
+	         /*show_time=*/true);
+	SetStatusWarning(_T("GIFからの抽出は未対応です"));
+}
+
+/**
+ * @brief キーボード/マウスのロック (LockKeyMouse)
+ * @details VCL (MainFrm.cpp:21668) は非空パラメータに英数字のみを許す
+ *          (ValidateLockWord)。フックと全画面覆いは Windows 専用のため
+ *          検証まで行い警告する
+ */
+void MainFrame::CmdLockKeyMouse(const UnicodeString &param)
+{
+	UnicodeString error;
+	if (!f_batch7_ops::ValidateLockWord(param, error)) {
+		SetStatusWarning(error);
+		return;
+	}
+	SetStatusWarning(_T("キーボード/マウスのロックは未対応です"));
+}
+
+/**
+ * @brief 正規表現チェッカー (RegExChecker)
+ * @details VCL (MainFrm.cpp:24175) は非表示のときだけ PatternStr に
+ *          ActionParam を入れて開く (ShouldShowRegExChecker)。
+ *          チェッカー画面は未移植のためパターン入力の簡略版
+ */
+void MainFrame::CmdRegExChecker(const UnicodeString &param)
+{
+	// チェッカー画面は未移植のため常に非表示として扱う
+	if (!f_batch7_ops::ShouldShowRegExChecker(/*visible=*/false)) return;
+	wxTextEntryDialog dlg(this, to_wx(_T("正規表現パターン")),
+	                      to_wx(_T("正規表現チェッカー (簡略版)")), to_wx(param));
+	if (dlg.ShowModal() != wxID_OK) return;
+	log_.Add(log_win::LogStatus::Info,
+	         _T("正規表現パターン: ") + to_us(dlg.GetValue()),
+	         /*show_time=*/true);
+	SetStatusWarning(_T("正規表現チェッカーは未対応です"));
+}
+
+/**
+ * @brief ツールバーの設定 (ToolBarDlg)
+ * @details VCL (MainFrm.cpp:36789) は一覧系かつプライマリのときだけ有効
+ *          (IsToolBarDlgEnabled)。設定ダイアログは未移植のため警告のみ
+ */
+void MainFrame::CmdToolBarDlg()
+{
+	const bool is_list_view = viewer_ == nullptr || !viewer_->IsShown();
+	// プライマリ判定は未移植のため true (単独起動として扱う)
+	if (!f_batch7_ops::IsToolBarDlgEnabled(is_list_view, /*is_primary=*/true)) {
+		SetStatusWarning(_T("操作できません"));
+		return;
+	}
+	SetStatusWarning(_T("ツールバーの設定は未対応です"));
+}
+
+/**
+ * @brief アーカイブから更新 (UpdateFromArc)
+ * @details VCL (MainFrm.cpp:30205) の UN/選択は ResolveUpdateFromArcSrc。
+ *          他プロセス終了・解凍・更新バッチは Windows 専用のため警告のみ
+ */
+void MainFrame::CmdUpdateFromArc(const UnicodeString &param)
+{
+	switch (f_batch7_ops::ResolveUpdateFromArcSrc(param)) {
+	case f_batch7_ops::UpdateFromArcSrc::Newest:
+		SetStatusWarning(_T("最新アーカイブからの更新は未対応です"));
+		break;
+	case f_batch7_ops::UpdateFromArcSrc::Dialog:
+		SetStatusWarning(_T("アーカイブからの更新は未対応です"));
 		break;
 	}
 }

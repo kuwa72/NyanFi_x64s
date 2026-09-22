@@ -29,6 +29,7 @@
 #include "gui/f_misc_ops.h"
 #include "gui/f_batch5_ops.h"
 #include "gui/f_batch6_ops.h"
+#include "gui/f_batch7_ops.h"
 #include "gui/history.h"
 #include "gui/named_state.h"
 #include "gui/system_ops.h"
@@ -404,6 +405,22 @@ private:
 	void CmdExPopupMenu(const UnicodeString &param);//!< 拡張ポップアップメニュー (ExPopupMenu)
 	void CmdWebMap(const UnicodeString &param);     //!< 地図表示 (WebMap)
 	void CmdPlayList(const UnicodeString &param);   //!< プレイリスト (PlayList)
+
+	//-- Fモード残 batch7 (判断は gui/f_batch7_ops.h。専用ダイアログ・実タスク等の
+	//   重い実体が要るものは確認+ログ+最小UIの簡略版。詳細は各 Cmd を参照) --
+	void CmdAppList(const UnicodeString &param);        //!< アプリケーション一覧 (AppList)
+	void CmdDebugCmdFile(const UnicodeString &param);   //!< コマンドファイルのデバッグ実行 (DebugCmdFile)
+	void CmdDistributionDlg(const UnicodeString &param);//!< 振り分けダイアログ (DistributionDlg)
+	void CmdDotNyanDlg(const UnicodeString &param);     //!< .nyanfi ファイルの設定 (DotNyanDlg)
+	void CmdExeCommands(const UnicodeString &param);    //!< 指定したコマンドを実行 (ExeCommands)
+	void CmdExeMenuFile(const UnicodeString &param);    //!< メニューファイルの実行 (ExeMenuFile)
+	void CmdExeToolBtn(const UnicodeString &param);     //!< ツールボタンの実行 (ExeToolBtn)
+	void CmdExtractChmSrc();                            //!< CHMからソースを抽出 (ExtractChmSrc)
+	void CmdExtractGifBmp();                            //!< アニメGIFからビットマップを抽出 (ExtractGifBmp)
+	void CmdLockKeyMouse(const UnicodeString &param);   //!< キーボード/マウスのロック (LockKeyMouse)
+	void CmdRegExChecker(const UnicodeString &param);   //!< 正規表現チェッカー (RegExChecker)
+	void CmdToolBarDlg();                               //!< ツールバーの設定 (ToolBarDlg)
+	void CmdUpdateFromArc(const UnicodeString &param);  //!< アーカイブから更新 (UpdateFromArc)
 
 	int bg_img_mode_ = 0;         //!< 背景画像の表示形式 (VCL BgImgMode 相当。0=OFF、1〜3)
 	bool lock_txt_prv_ = false;   //!< テキストプレビューをロック中か (VCL LockTxtPrv 相当)
