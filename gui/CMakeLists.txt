@@ -90,6 +90,7 @@ add_executable(nyanfi
 	mask_dialog.cpp
 	tab_dialog.cpp
 	regdir_dialog.cpp
+	sync_dialog.cpp
 	key_map_wx.cpp
 	vcl_gui_bridge.cpp
 	worker_thread.cpp
