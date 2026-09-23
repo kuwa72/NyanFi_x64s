@@ -178,4 +178,146 @@ std::vector<FileItem> FilterDiffItems(const std::vector<FileItem> &items,
 	return out;
 }
 
+//---------------------------------------------------------------------------
+// 同名ファイルの比較 (TFileCompDlg / src/CompDlg.cpp)
+//---------------------------------------------------------------------------
+
+/// VCL の `TimeTolerance` 既定値 (2000ms) に相当する許容誤差 (日単位)
+const double kCompTimeToleranceSec = 2.0 / (24.0 * 60.0 * 60.0);
+
+CompEnable ResolveCompEnabled(const CompOptions &o, bool all_dir_has_size, bool ftp_either,
+                              bool arc_either, bool sel_mask_available)
+{
+	// VCL (TFileCompDlg::OkActionUpdate) と同じ組合せ
+	CompEnable en;
+	en.size = !o.cmp_dir || all_dir_has_size;
+	en.hash = !o.cmp_dir && o.size_mode == CompSizeMode::Equal && !ftp_either;
+	en.alg = en.hash;
+	en.id = !o.cmp_dir && (o.size_mode == CompSizeMode::Ignore
+	                       || o.size_mode == CompSizeMode::Equal)
+	        && !arc_either && !ftp_either;
+	en.cmp_arc = o.cmp_dir;
+	en.sel_mask = sel_mask_available;
+	return en;
+}
+
+//---------------------------------------------------------------------------
+CompOptions ApplyExclusiveOpt(CompOptions o, bool hash_clicked)
+{
+	// VCL (TFileCompDlg::OptRadioGroupClick): 選んだ側 (>0) 以外を「無視」にする
+	if (hash_clicked) {
+		if (o.hash_mode != CompHashMode::Ignore) o.id_mode = CompIdMode::Ignore;
+	}
+	else {
+		if (o.id_mode != CompIdMode::Ignore) o.hash_mode = CompHashMode::Ignore;
+	}
+	return o;
+}
+
+//---------------------------------------------------------------------------
+bool CompSizeMet(CompSizeMode mode, Int64 left, Int64 right)
+{
+	switch (mode) {
+	case CompSizeMode::Ignore:  return true;
+	case CompSizeMode::Unequal: return left != right;
+	case CompSizeMode::Equal:   return left == right;
+	case CompSizeMode::Greater: return left > right;
+	case CompSizeMode::Less:    return left < right;
+	}
+	return true;
+}
+
+//---------------------------------------------------------------------------
+bool CompTimeMet(CompTimeMode mode, double left_stamp, double right_stamp)
+{
+	// VCL: WithinPastMilliSeconds で 2秒の許容誤差を付けてから大小を見る
+	const bool same = std::abs(left_stamp - right_stamp) < kCompTimeToleranceSec;
+	switch (mode) {
+	case CompTimeMode::Ignore:  return true;
+	case CompTimeMode::Unequal: return !same;
+	case CompTimeMode::Equal:   return same;
+	case CompTimeMode::Newer:   return !same && left_stamp > right_stamp;
+	case CompTimeMode::Older:   return !same && left_stamp < right_stamp;
+	}
+	return true;
+}
+
+//---------------------------------------------------------------------------
+namespace {
+
+/// 比較対象か (親 (..) は対象外。ディレクトリは cmp_dir のときだけ)
+bool IsCompTarget(const FileItem &it, bool cmp_dir)
+{
+	if (it.is_parent) return false;
+	if (it.is_dir && !cmp_dir) return false;
+	return true;
+}
+
+/// 名前の照合 (CS 指定時は大小を区別)
+bool CompSameName(const FileItem &a, const FileItem &b, bool case_sensitive)
+{
+	return case_sensitive? SameStr(a.name, b.name) : SameText(a.name, b.name);
+}
+
+}  // namespace
+
+//---------------------------------------------------------------------------
+CompResult CompareSameNames(const std::vector<FileItem> &left,
+                            const std::vector<FileItem> &right, const CompOptions &o,
+                            const CompProbes &probes)
+{
+	CompResult res;
+	for (std::size_t i = 0; i < left.size(); ++i) {
+		const FileItem &l = left[i];
+		if (!IsCompTarget(l, o.cmp_dir)) continue;
+		res.left_count++;
+
+		for (std::size_t j = 0; j < right.size(); ++j) {
+			const FileItem &r = right[j];
+			if (!IsCompTarget(r, o.cmp_dir)) continue;
+			// ディレクトリ比較で無いときはディレクトリとファイルを突き合わせない
+			if (!o.cmp_dir && l.is_dir != r.is_dir) continue;
+			if (!CompSameName(l, r, o.case_sensitive)) continue;
+
+			// 条件は AND 結合 (VCL と同じ)
+			if (!CompTimeMet(o.time_mode, static_cast<double>(l.stamp),
+			                 static_cast<double>(r.stamp))) continue;
+			if (!CompSizeMet(o.size_mode, l.size, r.size)) continue;
+			// ハッシュはサイズが同じ組でのみ計算する (VCL と同じ前置き)。
+			// 一致/不一致の判定は指定した条件方向で行う
+			if (o.hash_mode != CompHashMode::Ignore && l.size == r.size) {
+				if (!probes.hash_equal) continue;  // 判定出来なければ非一致扱い
+				const bool eq = probes.hash_equal(l, r);
+				if (o.hash_mode == CompHashMode::Equal && !eq) continue;
+				if (o.hash_mode == CompHashMode::Unequal && eq) continue;
+			}
+			if (o.id_mode != CompIdMode::Ignore) {
+				if (!probes.identity_equal) continue;  // 判定出来なければ非一致扱い
+				const bool eq = probes.identity_equal(l, r);
+				if (o.id_mode == CompIdMode::Equal && !eq) continue;
+				if (o.id_mode == CompIdMode::Unequal && eq) continue;
+			}
+
+			res.left_hits.push_back(static_cast<int>(i));
+			if (o.sel_opp) res.right_hits.push_back(static_cast<int>(j));
+		}
+	}
+	return res;
+}
+
+//---------------------------------------------------------------------------
+std::vector<bool> ReverseCompareSelection(const std::vector<FileItem> &items,
+                                          std::vector<bool> selected, bool cmp_dir)
+{
+	// VCL (MainFrm.cpp:14710付近): 比較対象になった項目だけを反転する
+	const std::size_t n = selected.size() < items.size()? selected.size() : items.size();
+	for (std::size_t i = 0; i < n; ++i) {
+		// .. は常に対象外。ディレクトリは cmp_dir のときだけ
+		if (items[i].is_parent) continue;
+		if (items[i].is_dir && !cmp_dir) continue;
+		selected[i] = !selected[i];
+	}
+	return selected;
+}
+
 }  // namespace compare

@@ -42,6 +42,7 @@
 #include "gui/regdir_dialog.h"
 #include "gui/sync_dialog.h"
 #include "gui/color_dialog.h"
+#include "gui/comp_dialog.h"
 #include "gui/tab_dialog.h"
 #include "gui/image_load.h"
 #include "gui/image_view_ops.h"
@@ -7777,11 +7778,59 @@ void MainFrame::CmdCompressDir(const UnicodeString &param)
 	                                         static_cast<int>(targets.size()), verb.c_str()));
 }
 
+namespace {
+
+/// 選択状態を Vector<bool> として取り出す
+std::vector<bool> MarksOf(const std::vector<FileItem> &items)
+{
+	std::vector<bool> marks(items.size(), false);
+	for (std::size_t i = 0; i < items.size(); ++i) marks[i] = items[i].marked;
+	return marks;
+}
+
+/// 添字リストを選択状態にする
+void MarkIndices(std::vector<FileItem> &items, const std::vector<int> &indices)
+{
+	for (FileItem &it : items) it.marked = false;
+	for (int i : indices) {
+		if (i < 0 || static_cast<std::size_t>(i) >= items.size()) continue;
+		items[static_cast<std::size_t>(i)].marked = true;
+	}
+}
+
+/// 選択状態を FileItem に書き戻す
+void ApplyMarkList(std::vector<FileItem> &items, const std::vector<bool> &marks)
+{
+	for (std::size_t i = 0; i < items.size(); ++i) {
+		items[i].marked = (i < marks.size()) ? marks[i] : false;
+	}
+}
+
+/// 比較対象の全ディレクトリがサイズ取得済みか (VCL CompareDlgActionExecute と同じ判定)
+bool AllCompDirsHaveSize(const std::vector<FileItem> &a, const std::vector<FileItem> &b)
+{
+	for (const std::vector<FileItem> *lst : {&a, &b}) {
+		for (const FileItem &it : *lst) {
+			if (it.is_parent) continue;
+			if (it.is_dir && it.size == -1) return false;
+		}
+	}
+	return true;
+}
+
+}  // namespace
+
 /**
  * @brief 同名ファイルの比較選択 (CompareDlg)
- * @details VCL (MainFrm.cpp:14464) は FileCompDlg で条件を選ぶが、ここでは
- *          最小UI (wxSingleChoice で比べ方を選択) で名前突き合わせを行い、
- *          一致項目を選択する。NC相当の動作。CS パラメータで大小区別
+ * @details VCL (MainFrm.cpp:14464) は FileCompDlg (src/CompDlg.cpp) で
+ *          タイムスタンプ・サイズ・ハッシュ・同一性の条件を選んでから
+ *          左右を突き合わせ、HIT をログに残す。移植済みの判断
+ *          (`gui/compare.h` の CompOptions/CompareSameNames) と
+ *          入力 (`gui/comp_dialog.h`) に分けたのは他ダイアログと同じ作り。
+ *          ハッシュは移植済みの get_HashStr、同一性は is_IdenticalFile を使う。
+ *          NC 指定は名前のみの即時比較 (ダイアログ無し) のまま。
+ *          未移植 (未実装扱い): 進捗表示と ESC 中断、ハッシュの二段構え、
+ *          書庫内ファイルとの突き合わせ、選択マスクの実行
  */
 void MainFrame::CmdCompareDlg(const UnicodeString &param)
 {
@@ -7792,54 +7841,117 @@ void MainFrame::CmdCompareDlg(const UnicodeString &param)
 		return;
 	}
 	const bool cs_sw = f_misc_ops::HasParamToken(param, _T("CS"));
-	compare::MatchBy how = compare::MatchBy::Name;
-	if (!f_misc_ops::HasParamToken(param, _T("NC"))) {
-		wxArrayString choices;
-		choices.Add(to_wx(_T("名前のみ")));
-		choices.Add(to_wx(_T("名前とサイズ")));
-		choices.Add(to_wx(_T("名前と更新日時")));
-		const int sel = wxGetSingleChoiceIndex(
-			to_wx(cs_sw ? _T("比べ方 (大文字・小文字を区別)") : _T("比べ方")),
-			to_wx(_T("同名ファイルの比較")), choices, this);
-		if (sel < 0) return;
-		how = (sel == 1) ? compare::MatchBy::NameSize
-			: (sel == 2) ? compare::MatchBy::NameTime
-			: compare::MatchBy::Name;
-	}
 	std::vector<FileItem> here = pane->VisibleItems();
 	const std::vector<FileItem> there = opp->VisibleItems();
-	// CS 指定時は大小区別で突き合わせる (compare::IsSameItem は大小無視のため自前で絞る)
-	std::vector<int> hit;
-	if (cs_sw && how == compare::MatchBy::Name) {
+
+	//-- NC: ダイアログを出さず名前のみ比較 (VCL の TestActionParam("NC") 相当) ---
+	if (f_misc_ops::HasParamToken(param, _T("NC"))) {
+		std::vector<int> hit;
 		for (std::size_t i = 0; i < here.size(); i++) {
 			if (here[i].is_parent || here[i].is_dir) continue;
 			for (const FileItem &o : there) {
 				if (o.is_parent || o.is_dir) continue;
-				if (f_misc_ops::MatchFileNames(here[i].name, o.name, /*case_sensitive=*/true)) {
+				// CS 指定時は大小区別 (f_misc_ops::MatchFileNames)
+				if (f_misc_ops::MatchFileNames(here[i].name, o.name, cs_sw)) {
 					hit.push_back(static_cast<int>(i));
 					break;
 				}
 			}
 		}
+		MarkIndices(here, hit);
+		pane->ApplyMarks(here);
+		log_.Add(log_win::LogStatus::Info,
+		         UnicodeString().sprintf(_T("比較終了  HIT: %u/%u"),
+		                                 static_cast<unsigned>(hit.size()),
+		                                 static_cast<unsigned>(here.size())),
+		         /*show_time=*/true);
+		SetStatusWarning(UnicodeString().sprintf(_T("%d 件が一致しました"),
+		                                         static_cast<int>(hit.size())));
+		return;
 	}
-	else {
-		// 既存の突き合わせ (大小無視) で「反対側に無いもの」を求め、裏返して一致を得る
-		const std::vector<int> only = compare::IndicesOnlyHere(here, there, how);
-		std::vector<bool> is_only(here.size(), false);
-		for (int i : only) is_only[static_cast<std::size_t>(i)] = true;
-		for (std::size_t i = 0; i < here.size(); i++) {
-			if (!is_only[i] && !here[i].is_parent && !here[i].is_dir) hit.push_back(static_cast<int>(i));
+
+	//-- ダイアログで条件を指定 (VCL の FileCompDlg 相当) --------------------
+	// 初期値は ini の保存値 (TFileCompDlg::FormShow と同じキー)
+	compare::CompOptions opt;
+	opt.case_sensitive = cs_sw;
+	opt.time_mode = static_cast<compare::CompTimeMode>(settings_.Ini().ReadIntGen(_T("CompModeT")));
+	opt.size_mode = static_cast<compare::CompSizeMode>(settings_.Ini().ReadIntGen(_T("CompModeS")));
+	opt.hash_mode = static_cast<compare::CompHashMode>(settings_.Ini().ReadIntGen(_T("CompModeH")));
+	opt.alg_index = settings_.Ini().ReadIntGen(_T("CompAlg"));
+	opt.id_mode = static_cast<compare::CompIdMode>(settings_.Ini().ReadIntGen(_T("CompID")));
+	opt.cmp_dir = settings_.Ini().ReadBoolGen(_T("CompDir"));
+	opt.cmp_arc = settings_.Ini().ReadBoolGen(_T("CompArc"));
+	opt.sel_opp = settings_.Ini().ReadBoolGen(_T("CompSelOpp"));
+	opt.sel_rev = settings_.Ini().ReadBoolGen(_T("CompReverse"));
+	opt.sel_msk = settings_.Ini().ReadBoolGen(_T("CompSelMask"));
+	// 排他を保つ (保存値が両方に残っていても片方は無視)
+	opt = compare::ApplyExclusiveOpt(opt, opt.hash_mode != compare::CompHashMode::Ignore);
+
+	comp_dialog::Context ctx;
+	ctx.case_sensitive = cs_sw;
+	ctx.all_dir_has_size = AllCompDirsHaveSize(here, there);
+	ctx.ftp_either = false;  // FTP/Git 連携は移植していないため常に false
+	ctx.arc_either = false;  // 書庫一覧は未移植 (gui/git_ftp.h 参照)
+	ctx.sel_mask_available = !pane->IsResultList();  // ファイル一覧 or 書庫
+	if (!comp_dialog::Run(this, opt, ctx)) return;
+
+	// 確定したら保存 (TFileCompDlg::FormClose と同じキー)
+	settings_.Ini().WriteIntGen(_T("CompModeT"), static_cast<int>(opt.time_mode));
+	settings_.Ini().WriteIntGen(_T("CompModeS"), static_cast<int>(opt.size_mode));
+	settings_.Ini().WriteIntGen(_T("CompModeH"), static_cast<int>(opt.hash_mode));
+	settings_.Ini().WriteIntGen(_T("CompAlg"), opt.alg_index);
+	settings_.Ini().WriteIntGen(_T("CompID"), static_cast<int>(opt.id_mode));
+	settings_.Ini().WriteBoolGen(_T("CompDir"), opt.cmp_dir);
+	settings_.Ini().WriteBoolGen(_T("CompArc"), opt.cmp_arc);
+	settings_.Ini().WriteBoolGen(_T("CompSelOpp"), opt.sel_opp);
+	settings_.Ini().WriteBoolGen(_T("CompReverse"), opt.sel_rev);
+	settings_.Ini().WriteBoolGen(_T("CompSelMask"), opt.sel_msk);
+	settings_.Save();
+
+	// ハッシュ/同一性の判定は実処理なので、移植済みの関数を引き渡す
+	compare::CompProbes probes;
+	const UnicodeString alg_id = get_word_i_idx(HASH_ID_STR, opt.alg_index);
+	probes.hash_equal = [&pane, &opp, &alg_id](const FileItem &a, const FileItem &b) {
+		const UnicodeString ha = get_HashStr(pane->FullPathOf(a), alg_id);
+		const UnicodeString hb = get_HashStr(opp->FullPathOf(b), alg_id);
+		return !ha.IsEmpty() && SameStr(ha, hb);
+	};
+	probes.identity_equal = [&pane, &opp](const FileItem &a, const FileItem &b) {
+		return is_IdenticalFile(pane->FullPathOf(a), opp->FullPathOf(b));
+	};
+
+	const compare::CompResult r = compare::CompareSameNames(here, there, opt, probes);
+
+	// 選択の反映
+	std::vector<FileItem> other;
+	if (opt.sel_opp) other = opp->VisibleItems();
+	MarkIndices(here, r.left_hits);
+	MarkIndices(other, r.right_hits);
+	if (opt.sel_rev) {
+		// VCL: 比較対象になった項目だけ選択を反転する
+		ApplyMarkList(here, compare::ReverseCompareSelection(here, MarksOf(here), opt.cmp_dir));
+		if (opt.sel_opp) {
+			ApplyMarkList(other, compare::ReverseCompareSelection(other, MarksOf(other),
+			                                                opt.cmp_dir));
 		}
 	}
-	for (FileItem &it : here) it.marked = false;
-	for (int i : hit) here[static_cast<std::size_t>(i)].marked = true;
 	pane->ApplyMarks(here);
-	log_.Add(log_win::LogStatus::Info,
-	         UnicodeString().sprintf(_T("比較終了  HIT: %u/%u"),
-	                                 static_cast<unsigned>(hit.size()),
-	                                 static_cast<unsigned>(here.size())),
-	         /*show_time=*/true);
-	SetStatusWarning(UnicodeString().sprintf(_T("%d 件が一致しました"), static_cast<int>(hit.size())));
+	if (opt.sel_opp) opp->ApplyMarks(other);
+
+	// VCL と同じログ (HIT/対象数。反転した時はその旨を付ける)
+	UnicodeString msg = UnicodeString().sprintf(_T("比較終了  HIT: %u/%u"),
+	                                            static_cast<unsigned>(r.left_hits.size()),
+	                                            static_cast<unsigned>(r.left_count));
+	if (opt.sel_rev) msg += _T("  (反転)");
+	log_.Add(log_win::LogStatus::Info, msg, /*show_time=*/true);
+
+	if (opt.sel_msk) {
+		SetStatusWarning(_T("選択項目の残し方は未移植 (一致した項目だけ選択しました)"));
+	}
+	else {
+		SetStatusWarning(UnicodeString().sprintf(_T("%d 件が一致しました"),
+		                                         static_cast<int>(r.left_hits.size())));
+	}
 }
 
 /**
