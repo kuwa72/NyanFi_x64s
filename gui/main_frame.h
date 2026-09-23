@@ -490,6 +490,7 @@ private:
 	// 「最近使ったもの」の一覧。**VCL と持ち方が違うものがある**ので
 	// 報告書 §29 を参照のこと
 	void CmdShowHistory(history::Kind kind);  //!< 履歴の一覧から選んで開く
+	void CmdCmdHistory(const UnicodeString &param);  //!< 汎用一覧でコマンド履歴を表示 (CmdHistory)
 	/// 履歴に積む。ファイルを開いた・編集したときに呼ぶ
 	void RecordHistory(history::Kind kind, const UnicodeString &entry);
 
