@@ -535,7 +535,7 @@ private:
 	void CmdExtractIcon();      //!< アイコンを抽出 (ExtractIcon)
 	void CmdConvertDoc2Txt();   //!< バイナリ文書→テキスト (ConvertDoc2Txt)
 	void CmdConvertHtm2Txt(bool to_markdown);  //!< HTML→テキスト/Markdown
-	void CmdConvertImage();     //!< 画像形式の変換 (ConvertImage)
+	void CmdConvertImage(bool from_clipboard);  //!< 画像形式の変換 (ConvertImage、CB=クリップボード)
 
 	/// 抽出・変換の宛先 (反対ペインのディレクトリ)。使えないなら空を返して警告する
 	UnicodeString OutputDirOrWarn(const UnicodeString &verb);

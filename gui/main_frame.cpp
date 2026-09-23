@@ -43,6 +43,8 @@
 #include "gui/sync_dialog.h"
 #include "gui/color_dialog.h"
 #include "gui/comp_dialog.h"
+#include "gui/cv_img_dialog.h"
+#include "gui/cre_dirs_dialog.h"
 #include "gui/tab_dialog.h"
 #include "gui/image_load.h"
 #include "gui/image_view_ops.h"
@@ -3388,7 +3390,8 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		CmdConvertHtm2Txt(SameText(param, _T("MD")));
 	}
 	else if (SameStr(command, _T("ConvertImage"))) {
-		CmdConvertImage();
+		// usr_cmdlist.cpp:668 の CB パラメータだけを受け取る
+		CmdConvertImage(SameText(param, _T("CB")));
 	}
 	//-- ログ (機能群19) ------------------------------------------------------
 	else if (SameStr(command, _T("ClearLog"))) {
@@ -5345,6 +5348,8 @@ void MainFrame::ShowImageViewer(bool show)
  * まとめてあり、ここは選ばれたマッチをテキストビューアで開くだけ。
  * 走査自体は GrepWorkerThread (gui/worker_thread.h) の別スレッドで回り、
  * GUI スレッドは進捗表示と中断の受付だけを行う (Issue #41 batch3)
+ * TGrepExOptDlg は VCL の GrepOptionAction (MainFrm.cpp:30891) 専用で、
+ * usr_cmdlist.cpp:316-317 に独立コマンド名がないため Execute 分岐は作らない。
  */
 void MainFrame::CmdGrep()
 {
@@ -6584,27 +6589,46 @@ void MainFrame::CmdCopyDir()
 //---------------------------------------------------------------------------
 void MainFrame::CmdCreateDirsDlg()
 {
+	// VCL は MainFrm.cpp:15665-15697 で複数行メモの値を直接作成する。
+	// 入力/変換は cre_dirs_dialog、判定は cre_dirs、実作成は既存
+	// file_ops2::CreateDirs に分けた。
 	if (RejectOnResultList(_T("ディレクトリの一括作成は"))) return;
 	FilePane *pane = ActivePane();
 
-	// VCL は複数行のメモ欄を持つダイアログ。ここは1行入力を "|" 区切りにした
-	// (複数行の入力欄を出す仕組みがまだ無いため。報告書 §26)
-	const wxString input = wxGetTextFromUser(
-		to_wx(_T("作るディレクトリ名を | で区切って入力してください (例: doc|img|src\\lib)")),
-		to_wx(_T("ディレクトリの一括作成")), wxEmptyString, this);
-	if (input.IsEmpty()) return;
+	cre_dirs::DialogState state;
+	// VCL の設定保存 (CreDirsDlg.cpp:28-73) と同じ項目を wx 専用 ini に残す。
+	UsrIniFile &ini = settings_.Ini();
+	state.serial_start = ini.ReadInteger(_T("WxGuiCreDirs"), _T("Start"), 1);
+	state.serial_increment = ini.ReadInteger(_T("WxGuiCreDirs"), _T("Inc"), 1);
+	state.serial_before = ini.ReadInteger(_T("WxGuiCreDirs"), _T("SerMod"), 1) != 0;
+	state.text = ini.ReadString(_T("WxGuiCreDirs"), _T("Str"), EmptyStr);
+	state.text_before = ini.ReadInteger(_T("WxGuiCreDirs"), _T("StrMod"), 1) != 0;
+	state.date_format = ini.ReadString(_T("WxGuiCreDirs"), _T("DtFmt"), _T("yyyy/mm/dd"));
+	state.date_text = ini.ReadString(_T("WxGuiCreDirs"), _T("Date"), EmptyStr);
+	state.date_before = ini.ReadInteger(_T("WxGuiCreDirs"), _T("DateMod"), 1) != 0;
 
-	std::vector<UnicodeString> names;
-	UnicodeString rest = to_us(input);
-	while (!rest.IsEmpty()) {
-		const UnicodeString one = split_tkn(rest, _T("|"));
-		if (!Trim(one).IsEmpty()) names.push_back(Trim(one));
+	if (!cre_dirs_dialog::Run(this, state)) return;
+
+	ini.WriteInteger(_T("WxGuiCreDirs"), _T("Start"), state.serial_start);
+	ini.WriteInteger(_T("WxGuiCreDirs"), _T("Inc"), state.serial_increment);
+	ini.WriteInteger(_T("WxGuiCreDirs"), _T("SerMod"), state.serial_before ? 1 : 0);
+	ini.WriteString(_T("WxGuiCreDirs"), _T("Str"), state.text);
+	ini.WriteInteger(_T("WxGuiCreDirs"), _T("StrMod"), state.text_before ? 1 : 0);
+	ini.WriteString(_T("WxGuiCreDirs"), _T("DtFmt"), state.date_format);
+	ini.WriteString(_T("WxGuiCreDirs"), _T("Date"), state.date_text);
+	ini.WriteInteger(_T("WxGuiCreDirs"), _T("DateMod"), state.date_before ? 1 : 0);
+	settings_.Save();
+
+	const std::vector<UnicodeString> names = cre_dirs::CreatableEntries(state.entries);
+	if (names.empty()) {
+		SetStatusWarning(_T("作成する項目がありません"));
+		return;
 	}
-	if (names.empty()) return;
-
+	::wxBeginBusyCursor();
 	const file_ops::FileOpResult r = file_ops2::CreateDirs(names, pane->GetPath());
+	::wxEndBusyCursor();
 	pane->Reload();
-	wxMessageBox(to_wx(file_ops::Summarize(r)), to_wx(_T("ディレクトリの一括作成の結果")),
+	wxMessageBox(to_wx(file_ops::Summarize(r)), to_wx(_T("ディレクトリ一括作成の結果")),
 	             wxOK | wxICON_INFORMATION, this);
 	UpdateStatus();
 }
@@ -6926,39 +6950,91 @@ void MainFrame::CmdConvertHtm2Txt(bool to_markdown)
 }
 
 //---------------------------------------------------------------------------
-void MainFrame::CmdConvertImage()
+void MainFrame::CmdConvertImage(bool from_clipboard)
 {
-	const UnicodeString dst = OutputDirOrWarn(_T("画像の変換"));
+	// VCL の実測: MainFrm.cpp:29289-29373。usr_cmdlist.cpp:47/668 の
+	// ConvertImage と CB だけを受け取る。wx の core はファイル変換だけ
+	// 実装済みなので、クリップボードはダイアログで条件を受け取った後も
+	// 未実装として明示して実行しない。
+	if (from_clipboard) {
+		if (RejectOnResultList(_T("クリップボード画像の変換は"))) return;
+	}
+	else if (RejectIfOppositeIsResultList(_T("画像の変換"))) {
+		return;
+	}
+
+	const UnicodeString dst = from_clipboard ? ActivePane()->GetPath() : OppositePane()->GetPath();
 	if (dst.IsEmpty()) return;
 
 	FilePane *pane = ActivePane();
-	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
-	if (paths.empty()) { SetStatusWarning(_T("対象がありません")); return; }
+	std::vector<UnicodeString> paths;
+	UnicodeString title_info;
+	if (!from_clipboard) {
+		paths = pane->GetSelectedPaths();
+		if (paths.empty()) {
+			SetStatusWarning(_T("対象がありません"));
+			return;
+		}
+		const std::vector<UnicodeString> names = pane->GetSelectedNames();
+		if (names.size() > 1) title_info.sprintf(_T(" - 選択 %u"), static_cast<unsigned int>(names.size()));
+		else if (!names.empty()) title_info = _T(" - ") + names.front();
+	}
 
-	wxArrayString choices;
-	choices.Add("PNG");
-	choices.Add("JPEG");
-	choices.Add("BMP");
-	choices.Add("TIFF");
-	choices.Add("GIF");
-	const int sel = wxGetSingleChoiceIndex(to_wx(_T("変換先の形式")),
-	                                        to_wx(_T("画像の変換")), choices, this);
-	if (sel < 0) return;
+	cv_img::Options opt;
+	UsrIniFile &ini = settings_.Ini();
+	opt.format = cv_img::FormatFromIndex(ini.ReadInteger(_T("WxGuiCvImg"), _T("Format"), 2));
+	opt.quality = ini.ReadInteger(_T("WxGuiCvImg"), _T("JpgQuality"), 80);
+	opt.ycrcb = ini.ReadInteger(_T("WxGuiCvImg"), _T("JpgYCrCb"), 1);
+	opt.compression = ini.ReadInteger(_T("WxGuiCvImg"), _T("TifCmpMode"), 0);
+	opt.grayscale = ini.ReadBool(_T("WxGuiCvImg"), _T("GrayScale"), false);
+	opt.scale_mode = static_cast<cv_img::ScaleMode>(ini.ReadInteger(_T("WxGuiCvImg"), _T("ScaleMode"), 0));
+	opt.scale_param1 = ini.ReadInteger(_T("WxGuiCvImg"), _T("ScalePrm1"), 100);
+	opt.scale_param2 = ini.ReadInteger(_T("WxGuiCvImg"), _T("ScalePrm2"), 100);
+	opt.interpolation = ini.ReadInteger(_T("WxGuiCvImg"), _T("ScaleOpt"), 0);
+	opt.margin_color = static_cast<unsigned int>(ini.ReadInteger(_T("WxGuiCvImg"), _T("MgnColor"), 0));
+	opt.name_mode = static_cast<cv_img::NameMode>(ini.ReadInteger(_T("WxGuiCvImg"), _T("ChgNameMode"), 1));
+	opt.name_text = ini.ReadString(_T("WxGuiCvImg"), _T("ChgNameStr"), EmptyStr);
+	opt.keep_time = ini.ReadBool(_T("WxGuiCvImg"), _T("KeepTime"), false);
+	opt.not_use_preview = ini.ReadBool(_T("WxGuiCvImg"), _T("NotUsePreview"), false);
+	opt = cv_img::Normalize(opt);
+	opt.from_clipboard = from_clipboard;
 
-	static const wchar_t *const kExt[] = {L".png", L".jpg", L".bmp", L".tif", L".gif"};
-	const UnicodeString ext = UnicodeString(kExt[sel]);
+	if (!cv_img_dialog::Run(this, opt, from_clipboard, title_info)) return;
 
-	int quality = 100;
-	if (sel == 1) {
-		const wxString q = wxGetTextFromUser(to_wx(_T("JPEG の画質 (0〜100)")),
-		                                      to_wx(_T("画像の変換")), to_wx(_T("90")), this);
-		if (q.IsEmpty()) return;
-		quality = to_us(q).ToIntDef(90);
-		if (quality < 0 || quality > 100) quality = 90;
+	ini.WriteInteger(_T("WxGuiCvImg"), _T("Format"), static_cast<int>(opt.format));
+	ini.WriteInteger(_T("WxGuiCvImg"), _T("JpgQuality"), opt.quality);
+	ini.WriteInteger(_T("WxGuiCvImg"), _T("JpgYCrCb"), opt.ycrcb);
+	ini.WriteInteger(_T("WxGuiCvImg"), _T("TifCmpMode"), opt.compression);
+	ini.WriteBool(_T("WxGuiCvImg"), _T("GrayScale"), opt.grayscale);
+	ini.WriteInteger(_T("WxGuiCvImg"), _T("ScaleMode"), static_cast<int>(opt.scale_mode));
+	ini.WriteInteger(_T("WxGuiCvImg"), _T("ScalePrm1"), opt.scale_param1);
+	ini.WriteInteger(_T("WxGuiCvImg"), _T("ScalePrm2"), opt.scale_param2);
+	ini.WriteInteger(_T("WxGuiCvImg"), _T("ScaleOpt"), opt.interpolation);
+	ini.WriteInteger(_T("WxGuiCvImg"), _T("MgnColor"), static_cast<int>(opt.margin_color));
+	ini.WriteInteger(_T("WxGuiCvImg"), _T("ChgNameMode"), static_cast<int>(opt.name_mode));
+	ini.WriteString(_T("WxGuiCvImg"), _T("ChgNameStr"), opt.name_text);
+	ini.WriteBool(_T("WxGuiCvImg"), _T("KeepTime"), opt.keep_time);
+	ini.WriteBool(_T("WxGuiCvImg"), _T("NotUsePreview"), opt.not_use_preview);
+	settings_.Save();
+
+	if (from_clipboard) {
+		// クリップボード画像の実処理は既存の ConvertImages にない。
+		SetStatusWarning(_T("クリップボード画像の変換/保存は未実装です (条件は保存しました)"));
+		return;
+	}
+	if (opt.format == cv_img::Format::Hdp) {
+		SetStatusWarning(_T("HDP の保存は未実装です"));
+		return;
+	}
+	if (cv_img::HasUnsupportedRuntimeOptions(opt)) {
+		wxMessageBox(to_wx(_T("形式・JPEG品質以外は既存 core では未実装のため適用されません。\n"
+		                       _T("指定は wx 専用 ini に保存しました。"))), to_wx(_T("画像の変換")),
+		             wxOK | wxICON_WARNING, this);
 	}
 
 	::wxBeginBusyCursor();
-	const file_ops::FileOpResult r = convert_ops::ConvertImages(paths, dst, ext, quality);
+	const file_ops::FileOpResult r = convert_ops::ConvertImages(
+		paths, dst, cv_img::Extension(opt.format), opt.quality);
 	::wxEndBusyCursor();
 
 	OppositePane()->Reload();
