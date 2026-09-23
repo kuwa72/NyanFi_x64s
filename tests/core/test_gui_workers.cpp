@@ -247,6 +247,27 @@ TEST_CASE("ProcessBatched: CancelFlag と組み合わせて中断できる")
 	CHECK(r.processed == 3);
 }
 
+TEST_CASE("ProcessBatched: item callback is called before progress")
+{
+	std::vector<int> order;
+	const auto r = workers::ProcessBatched(
+		3, nullptr,
+		[&order](int processed, int total) {
+			(void)total;
+			order.push_back(processed * 10);
+		},
+		[&order](int index) { order.push_back(index); });
+	REQUIRE(order.size() == 6);
+	CHECK(order[0] == 0);
+	CHECK(order[1] == 10);
+	CHECK(order[2] == 1);
+	CHECK(order[3] == 20);
+	CHECK(order[4] == 2);
+	CHECK(order[5] == 30);
+	CHECK(!r.cancelled);
+	CHECK(r.processed == 3);
+}
+
 //===========================================================================
 // worker_thread 契約 (Issue #41 batch2): wxThread 自体は単体テスト不可のため
 // ここでは Entry が依存する純粋部の契約だけを固定する。スレッド起動/中断の
@@ -353,4 +374,65 @@ TEST_CASE("GrepAsyncState: OnDone(true)で完了・中断あり")
 	st.OnDone(true);
 	CHECK(st.done);
 	CHECK(st.cancelled);
+}
+
+//===========================================================================
+// wxWorker 接続で使う合成純関数 (Issue #41 phase3-workers)
+//===========================================================================
+TEST_CASE("CalculateTaskProgress: 進捗率・速度・残り時間をまとめて計算")
+{
+	const auto p = workers::CalculateTaskProgress(1000, 400, 200, 100);
+	CHECK(p.ratio == doctest::Approx(0.4));
+	CHECK(p.speed_bytes_per_ms == 2);
+	CHECK(p.remaining_ms == 300);
+}
+
+TEST_CASE("CalculateTaskProgress: 全体量不明は-1、速度なしは残り0")
+{
+	const auto unknown = workers::CalculateTaskProgress(0, 10, 100, 100);
+	CHECK(unknown.ratio == doctest::Approx(-1.0));
+	CHECK(unknown.remaining_ms == 0);
+	const auto no_speed = workers::CalculateTaskProgress(1000, 400, 0, 100);
+	CHECK(no_speed.speed_bytes_per_ms == 0);
+	CHECK(no_speed.remaining_ms == 0);
+}
+
+TEST_CASE("ShouldReportProgress: 1件目は必ず、最終件は必ず通知")
+{
+	CHECK(workers::ShouldReportProgress(1, 10, 20));
+	CHECK(!workers::ShouldReportProgress(2, 10, 20));
+	CHECK(workers::ShouldReportProgress(10, 10, 20));
+	CHECK(!workers::ShouldReportProgress(0, 10, 20));
+}
+
+TEST_CASE("ThumbCandidates: ThumbOrder の順序と上限を一緒に適用")
+{
+	const auto candidates = workers::ThumbCandidates(5, 2, 3);
+	REQUIRE(candidates.size() == 3);
+	CHECK(candidates[0] == 2);
+	CHECK(candidates[1] == 3);
+	CHECK(candidates[2] == 1);
+	CHECK(workers::ThumbCandidates(5, 2, 0).empty());
+	CHECK(workers::ThumbCandidates(5, 2, -1).size() == 5);
+}
+
+TEST_CASE("IconBatchPlan: 破棄・未取得添字・通知判定を合成")
+{
+	const std::vector<char> has = {1, 0, 1, 0};
+	const auto plan = workers::PlanIconBatch(6, 4, has, 1000, 700);
+	CHECK(plan.evict_count == 2);
+	REQUIRE(plan.pending_indices.size() == 2);
+	CHECK(plan.pending_indices[0] == 1);
+	CHECK(plan.pending_indices[1] == 3);
+	CHECK(plan.notify);
+}
+
+TEST_CASE("IconBatchPlan: 上限内・通知間隔内なら破棄/通知なし")
+{
+	const std::vector<char> has = {1, 1, 0};
+	const auto plan = workers::PlanIconBatch(3, 4, has, 800, 700);
+	CHECK(plan.evict_count == 0);
+	REQUIRE(plan.pending_indices.size() == 1);
+	CHECK(plan.pending_indices[0] == 2);
+	CHECK(!plan.notify);
 }
