@@ -33,6 +33,7 @@
 #include "gui/file_info.h"
 #include "gui/file_ext.h"
 #include "gui/file_ext_dialog.h"
+#include "gui/gen_info_dialog.h"
 #include "gui/file_narrow.h"
 #include "gui/text_ops.h"
 #include "gui/text_display.h"
@@ -3902,7 +3903,9 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		CmdShowHistory(history::Kind::Recent);
 	}
 	else if (SameStr(command, _T("CmdHistory"))) {
-		CmdShowHistory(history::Kind::Command);
+		// VCL は GeneralInfoDlg を isCmdHistory=true で開く
+		// (src/MainFrm.cpp:14440-14443)。wx は汎用一覧ダイアログを使う。
+		CmdCmdHistory(param);
 	}
 	//-- 名前を付けた状態 (機能群21) ------------------------------------------
 	else if (SameStr(command, _T("SaveTabGroup"))) {
@@ -7884,6 +7887,33 @@ void MainFrame::RecordHistory(history::Kind kind, const UnicodeString &entry)
 	if (kind != history::Kind::Recent && kind != history::Kind::Command) {
 		hist_recent_.Add(entry);
 	}
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 汎用一覧ダイアログでコマンド履歴を表示する (CmdHistory)
+ * @details VCL の CmdHistoryActionExecute は GeneralInfoDlg を
+ *          isCmdHistory=true で開く (src/MainFrm.cpp:14440-14443)。FF パラメータは
+ *          VCL と同じくフィルタ欄を初期フォーカスする。
+ */
+void MainFrame::CmdCmdHistory(const UnicodeString &param)
+{
+	const std::vector<UnicodeString> &entries = hist_cmd_.Entries();
+	if (entries.empty()) { SetStatusWarning(_T("コマンド履歴がありません")); return; }
+
+	gen_info_dialog::Input input;
+	input.title = _T("コマンド履歴");
+	input.lines = entries;
+	input.kind = gen_info::Kind::CommandHistory;
+	input.focus_filter = SameText(param, _T("FF"));
+	input.clear_source = [this]() {
+		hist_cmd_.Clear();
+		settings_.Save();
+	};
+
+	gen_info_dialog::Result result;
+	if (!gen_info_dialog::Run(this, input, result) || result.primary.IsEmpty()) return;
+	if (!Execute(result.primary)) SetStatusWarning(_T("実行できません: ") + result.primary);
 }
 
 //---------------------------------------------------------------------------

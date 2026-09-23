@@ -312,6 +312,7 @@ if(TARGET nyanfi_core)
 		gui/cre_dirs.cpp
 		gui/tag.cpp
 		gui/file_ext.cpp
+		gui/gen_info.cpp
 	)
 	target_include_directories(nyanfi_gui_core PUBLIC ${PROJECT_SOURCE_DIR})
 	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core shell32 netapi32)
