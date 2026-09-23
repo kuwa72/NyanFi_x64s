@@ -17,6 +17,7 @@
 #include <wx/colordlg.h>
 #include <wx/dcbuffer.h>
 #include <wx/filedlg.h>
+#include <wx/progdlg.h>
 #include <wx/radiobox.h>
 #include <wx/settings.h>
 #include <wx/statline.h>
@@ -38,6 +39,7 @@
 #include "gui/file_ext.h"
 #include "gui/file_ext_dialog.h"
 #include "gui/gen_info_dialog.h"
+#include "gui/edit_hist_dialog.h"
 #include "gui/file_narrow.h"
 #include "gui/text_ops.h"
 #include "gui/text_display.h"
@@ -81,6 +83,7 @@
 #include "gui/net_share_dialog.h"
 #include "gui/print_image.h"
 #include "gui/print_image_dialog.h"
+#include "gui/worker_thread.h"
 #include "gui/mask_dialog.h"
 #include "gui/rename_dialog.h"
 #include "gui/selection.h"
@@ -134,6 +137,43 @@ bool ConfirmExecute(wxWindow *parent, const UnicodeString &full_path)
 	const UnicodeString text = _T("実行可能ファイルです。開いてもよろしいですか?\n\n") + full_path;
 	return wxMessageBox(to_wx(text), to_wx(_T("実行の確認")), wxYES_NO | wxICON_WARNING, parent) == wxYES;
 }
+
+/**
+ * @brief wxWorker の進捗/完了イベントを一時的に受けるだけのセッション
+ * @details wxProgressDialog::Pulse() のネストループでイベントを配送し、
+ *          CmdGetHash は GUI スレッドで結果を読む。vector は Result() 側で受け取る。
+ */
+class WorkerEventSession : public wxEvtHandler {
+public:
+	WorkerEventSession()
+	{
+		Bind(wxEVT_WORKER_PROGRESS, &WorkerEventSession::OnProgress, this);
+		Bind(wxEVT_WORKER_DONE, &WorkerEventSession::OnDone, this);
+	}
+
+	bool IsDone() const { return done_; }
+	int Processed() const { return processed_; }
+	int Total() const { return total_; }
+	bool Cancelled() const { return cancelled_; }
+
+private:
+	void OnProgress(wxThreadEvent &event)
+	{
+		processed_ = event.GetInt();
+		total_ = static_cast<int>(event.GetExtraLong());
+	}
+
+	void OnDone(wxThreadEvent &event)
+	{
+		done_ = true;
+		cancelled_ = event.GetInt() != 0;
+	}
+
+	bool done_ = false;
+	bool cancelled_ = false;
+	int processed_ = 0;
+	int total_ = 0;
+};
 
 enum class SameNameAction { Proceed, Cancelled, Unimplemented };
 
@@ -598,6 +638,22 @@ void MainFrame::SaveSettings()
 	}
 
 	settings_.Save();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::RequestCancelActiveWorkers()
+{
+	for (worker_thread::CancelableWorkerThread *worker : active_workers_) {
+		if (worker != nullptr) worker->RequestCancel();
+	}
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::ForgetActiveWorker(worker_thread::CancelableWorkerThread *worker)
+{
+	active_workers_.erase(
+		std::remove(active_workers_.begin(), active_workers_.end(), worker),
+		active_workers_.end());
 }
 
 //---------------------------------------------------------------------------
@@ -1893,16 +1949,72 @@ void MainFrame::CmdGetHash()
 	const std::vector<UnicodeString> names = pane->GetSelectedNames();
 	if (names.empty()) { SetStatusWarning(_T("対象がありません")); return; }
 
-	UnicodeString text;
-	for (const UnicodeString &p : pane->GetSelectedPaths()) {
-		if (dir_exists(p)) continue;  // ディレクトリは対象外
-		const UnicodeString h = get_HashStr(p, UnicodeString(kDefaultHashId));
-		text += ExtractFileName(p) + _T("\r\n  ") + (h.IsEmpty()? _T("(取得できません)") : h) + _T("\r\n");
+	// VCL では Task_CPY などの進捗コールバックで中断するが、 wx 版には
+	// 実コピー task がない。ここでは複数ファイルのハッシュ計算を汎用
+	// BatchedWorkerThread に載せ、CmdCancelAllTask からも同じ flag を止める。
+	std::vector<UnicodeString> paths;
+	for (const UnicodeString &path : pane->GetSelectedPaths()) {
+		if (!dir_exists(path)) paths.push_back(path);  // ディレクトリは対象外
 	}
+	if (paths.empty()) { SetStatusWarning(_T("対象のファイルがありません")); return; }
+
+	std::vector<UnicodeString> hashes(paths.size());
+	workers::CancelFlag cancel_flag;
+	WorkerEventSession session;
+	worker_thread::BatchedWorkerThread *thread = new worker_thread::BatchedWorkerThread(
+		&session, static_cast<int>(paths.size()),
+		[&hashes, &paths](int index) {
+			if (index < 0 || index >= static_cast<int>(paths.size())) return;
+			hashes[static_cast<std::size_t>(index)] =
+				get_HashStr(paths[static_cast<std::size_t>(index)], UnicodeString(kDefaultHashId));
+		},
+		&cancel_flag);
+
+	workers::BatchResult batch;
+	const int run_result = thread->Run();
+	if (run_result != wxTHREAD_NO_ERROR) {
+		// 起動失敗時だけ同期 fallback。実接続は通常この経路を通らない。
+		delete thread;
+		for (std::size_t i = 0; i < paths.size(); ++i) {
+			hashes[i] = get_HashStr(paths[i], UnicodeString(kDefaultHashId));
+		}
+		batch.processed = static_cast<int>(paths.size());
+	}
+	else {
+		active_workers_.push_back(thread);
+		wxProgressDialog progress(to_wx(_T("ハッシュ計算中")),
+		                          to_wx(_T("ファイルを選択中...")),
+		                          static_cast<int>(paths.size()), this,
+		                          wxPD_APP_MODAL | wxPD_CAN_ABORT | wxPD_AUTO_HIDE |
+		                              wxPD_ELAPSED_TIME);
+		while (!session.IsDone()) {
+			UnicodeString message;
+			message.sprintf(_T("%d / %d ファイル"),
+			                session.Processed(), static_cast<int>(paths.size()));
+			// Pulse が false を返したら中断。CmdCancelAllTask も同じ flag を使う。
+			if (!progress.Pulse(to_wx(message))) cancel_flag.RequestCancel();
+			if (progress.WasCancelled()) cancel_flag.RequestCancel();
+			wxMilliSleep(10);
+		}
+		thread->Wait();
+		batch = thread->Result();
+		ForgetActiveWorker(thread);
+		delete thread;
+	}
+
+	UnicodeString text;
+	for (std::size_t i = 0; i < paths.size(); ++i) {
+		const UnicodeString &hash = hashes[i];
+		const bool attempted = static_cast<int>(i) < batch.processed;
+		text += ExtractFileName(paths[i]) + _T("\r\n  ") +
+		        (hash.IsEmpty() ? (attempted ? _T("(取得できません)") : _T("(未処理)")) : hash) +
+		        _T("\r\n");
+	}
+	if (batch.cancelled) text += _T("\r\n中断しました (途中経過)\r\n");
 	if (text.IsEmpty()) { SetStatusWarning(_T("対象のファイルがありません")); return; }
 
 	wxMessageBox(to_wx(text), to_wx(UnicodeString(kDefaultHashId) + _T(" ハッシュ値")),
-	             wxOK | wxICON_INFORMATION, this);
+	             batch.cancelled ? (wxOK | wxICON_WARNING) : (wxOK | wxICON_INFORMATION), this);
 }
 
 //---------------------------------------------------------------------------
@@ -3250,6 +3362,17 @@ void MainFrame::OnCharHook(wxKeyEvent &event)
 //---------------------------------------------------------------------------
 void MainFrame::OnClose(wxCloseEvent &event)
 {
+	// 終了時は先に実行中ワーカーを中断し、完了イベントを GUI 側で処理できる
+	// まで閉じるのを延期する。Wait/delete の二重化を避ける。
+	if (!active_workers_.empty()) {
+		RequestCancelActiveWorkers();
+		SetStatusWarning(_T("実行中のワーカーを中断しています"));
+		if (event.CanVeto()) {
+			event.Veto();
+			return;
+		}
+	}
+
 	// ワークリストの未保存の変更を黙って捨てない (VCL も終了時に聞く。
 	// MainFrm.cpp:977)。「中止」なら閉じるのをやめる
 	SyncWorkMarks();
@@ -4092,7 +4215,9 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	}
 	//-- 履歴 (機能群20) ------------------------------------------------------
 	else if (SameStr(command, _T("EditHistory"))) {
-		CmdShowHistory(history::Kind::Edit);
+		// VCL は EditHistoryActionExecute (src/MainFrm.cpp:16908-16942) から
+		// TEditHistoryDlg を開く。FF/AC は同じ入口の TestActionParam。
+		CmdEditHistory(param);
 	}
 	else if (SameStr(command, _T("ViewHistory"))) {
 		CmdShowHistory(history::Kind::View);
@@ -8516,6 +8641,86 @@ void MainFrame::CmdCmdHistory(const UnicodeString &param)
 
 //---------------------------------------------------------------------------
 /**
+ * @brief EditHistory を wx の編集履歴ダイアログへ渡す
+ * @details VCL の入口は `EditHistoryActionExecute`
+ *          (src/MainFrm.cpp:16908-16942)。`FF` は入力欄へフォーカスし、
+ *          `AC` は VCL と同様にダイアログを開かずに全消去する。
+ *          判定と設定の ini 往復は gui/edit_hist.h、表示/入力は
+ *          gui/edit_hist_dialog.h が担当する。
+ */
+void MainFrame::CmdEditHistory(const UnicodeString &param)
+{
+	const edit_hist::Request request = edit_hist::ParseRequest(param);
+	if (request.clear_all) {
+		if (hist_edit_.Entries().empty()) {
+			SetStatusWarning(_T("編集履歴がありません"));
+			return;
+		}
+		if (wxMessageBox(to_wx(_T("編集履歴をすべて削除しますか?")),
+		                 to_wx(_T("編集履歴の削除")), wxYES_NO | wxICON_QUESTION, this) != wxYES) {
+			return;
+		}
+		hist_edit_.Clear();
+		settings_.Save();
+		SetStatusWarning(_T("編集履歴を消去しました"));
+		return;
+	}
+
+	// VCL の FormShow にある実体ファイルの整理を、表示前にも行う。
+	const int dropped = hist_edit_.DropMissingFiles();
+	if (dropped > 0) {
+		SetStatusWarning(UnicodeString().sprintf(_T("%d 件は実体が無いので外しました"), dropped));
+	}
+
+	edit_hist::Preferences preferences;
+	edit_hist::LoadPreferences(settings_.Ini(), preferences);
+
+	edit_hist_dialog::Input input;
+	input.current_path = ActivePane()->GetPath();
+	input.preferences = preferences;
+	input.focus_filter = request.focus_filter;
+
+	edit_hist_dialog::Result result;
+	const bool accepted = edit_hist_dialog::Run(this, hist_edit_, input, result);
+	edit_hist::SavePreferences(settings_.Ini(), result.preferences);
+	// 設定はCancel時も VCL FormClose と同じよう保存する。履歴の削除が空でも
+	// 画面設定を維持するため、ダイアログを閉じた時点で保存する。
+	settings_.Save();
+	if (!accepted || result.path.IsEmpty()) return;
+
+	if (result.action == edit_hist_dialog::Action::Open) {
+		// VCL は数値キー/FileEdit でテキストエディタを開く (MainFrm.cpp:16923-16931)。
+		if (!Execute(_T("FileEdit_") + result.path)) {
+			SetStatusWarning(_T("編集履歴のファイルを開けません: ") + result.path);
+		}
+		return;
+	}
+
+	if (result.action != edit_hist_dialog::Action::Move) return;
+	const UnicodeString directory = ExtractFilePath(result.path);
+	if (!dir_exists(directory)) {
+		SetStatusWarning(_T("ディレクトリがありません: ") + directory);
+		return;
+	}
+
+	FilePane *pane = ActivePane();
+	if (!pane->SetPath(directory)) {
+		SetStatusWarning(_T("移動できませんでした: ") + directory);
+		return;
+	}
+	const std::vector<UnicodeString> names = pane->VisibleNames();
+	const UnicodeString wanted = ExtractFileName(result.path);
+	for (std::size_t i = 0; i < names.size(); ++i) {
+		if (SameText(names[i], wanted)) {
+			pane->MoveCursorTo(static_cast<int>(i));
+			break;
+		}
+	}
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/**
  * @brief 履歴の一覧から選んで開く
  * @details ファイルの履歴は選ぶとそのディレクトリへ移ってカーソルを合わせる。
  *          コマンドの履歴は選ぶとそのコマンドをもう一度実行する
@@ -9628,12 +9833,12 @@ void MainFrame::CmdJumpTo(const UnicodeString &param)
 
 /**
  * @brief タスクマネージャ (TaskMan)
- * @details VCL (MainFrm.cpp:26801) は TTaskManDlg を出すが、実スレッドは
- *          未移植のため件数要約 (FormatTaskSummary) の表示のみ
+ * @details VCL (MainFrm.cpp:26801) は TTaskManDlg を出す。wx では実在の
+ *          wxWorker 件数と旧状態保持を合算し、項目の要約だけを表示する。
  */
 void MainFrame::CmdTaskMan()
 {
-	const int busy = static_cast<int>(task_paused_.size());
+	const int busy = static_cast<int>(task_paused_.size() + active_workers_.size());
 	int paused = 0;
 	for (bool p : task_paused_) if (p) paused++;
 	wxMessageBox(to_wx(f_misc_ops::FormatTaskSummary(busy, paused)),
@@ -9654,7 +9859,8 @@ void MainFrame::CmdSuspend(const UnicodeString &param)
 /**
  * @brief 全タスクの一旦停止/再開 (PauseAllTask)
  * @details VCL (MainFrm.cpp:23570) の any(TaskPause)→反転に従う。
- *          実スレッドは未移植のため task_paused_ の状態保持のみ
+ *          task_paused_ は状態保持のみ。実在の wxWorker は Pause ではなく
+ *          CancelFlag による中断はこの PR の接続範囲とする。
  */
 void MainFrame::CmdPauseAllTask(const UnicodeString &param)
 {
@@ -9667,15 +9873,18 @@ void MainFrame::CmdPauseAllTask(const UnicodeString &param)
 
 /**
  * @brief 全タスクの中断 (CancelAllTask)
- * @details VCL (MainFrm.cpp:14070) は全スレッド取消+予約全消去。
- *          実体が無いため件数があれば消去扱い (ログ記録) の簡略版
+ * @details VCL (MainFrm.cpp:14070) は全スレッド取消+予約全消去。wx 移植では
+ *          MainFrame 管理下の Batched/Thumb/Icon worker にも CancelFlag を立てる。
+ *          task_paused_ は旧 UI の状態保持として残し、実 worker の数と合算する。
  */
 void MainFrame::CmdCancelAllTask()
 {
-	if (!f_misc_ops::CanCancelTasks(static_cast<int>(task_paused_.size()))) {
+	const int busy = static_cast<int>(task_paused_.size() + active_workers_.size());
+	if (!f_misc_ops::CanCancelTasks(busy)) {
 		SetStatusWarning(_T("実行中のタスクはありません"));
 		return;
 	}
+	RequestCancelActiveWorkers();
 	task_paused_.clear();
 	log_.Add(log_win::LogStatus::Info, _T("すべてのタスクを中断しました"), /*show_time=*/true);
 	SetStatusWarning(_T("すべてのタスクを中断しました"));

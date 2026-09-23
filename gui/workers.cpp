@@ -1,6 +1,10 @@
 /**
  * @file gui/workers.cpp
  * @brief gui/workers.h の実装 (wx 非依存)
+ *
+ * @details VCL の task ProgressCore 169-213行、thumb FitSize 73-92行 /
+ *          Execute 234-297行、icon Execute 40-96行から、判定と進行だけを
+ *          移植する。wx/画像/アイコンの実処理は含めない。
  */
 #include "gui/workers.h"
 
@@ -36,6 +40,16 @@ int RemainingMs(long long total, long long transferred, int speed_bytes_per_ms)
 	const long long rest = total - transferred;
 	if (rest <= 0) return 0;
 	return static_cast<int>(rest / speed_bytes_per_ms);
+}
+
+TaskProgressSnapshot CalculateTaskProgress(long long total, long long transferred,
+                                           long long sampled_bytes, int elapsed_ms)
+{
+	TaskProgressSnapshot result;
+	result.ratio = ProgressRatio(total, transferred);
+	result.speed_bytes_per_ms = TransferSpeed(sampled_bytes, elapsed_ms);
+	result.remaining_ms = RemainingMs(total, transferred, result.speed_bytes_per_ms);
+	return result;
 }
 
 ThumbFit FitThumb(int w, int h, int max_size)
@@ -100,6 +114,15 @@ std::vector<int> ThumbOrder(int count, int start)
 	return order;
 }
 
+std::vector<int> ThumbCandidates(int count, int start, int max_count)
+{
+	std::vector<int> order = ThumbOrder(count, start);
+	if (max_count >= 0 && order.size() > static_cast<std::size_t>(max_count)) {
+		order.resize(static_cast<std::size_t>(max_count));
+	}
+	return order;
+}
+
 int IconEvictCount(int count, int limit)
 {
 	// src/icon_thread.cpp Execute 44-48行: 上限を超えた先頭分を捨てる
@@ -123,6 +146,25 @@ bool ShouldNotify(int now_ms, int last_ms, int pending)
 	return pending > 0 && (now_ms - last_ms) > 200;
 }
 
+IconBatchPlan PlanIconBatch(int cache_count, int cache_limit,
+                            const std::vector<char> &has_icon,
+                            int now_ms, int last_ms)
+{
+	IconBatchPlan plan;
+	plan.evict_count = IconEvictCount(cache_count, cache_limit);
+	plan.pending_indices = IconPendingIndices(has_icon);
+	plan.notify = ShouldNotify(now_ms, last_ms,
+	                           static_cast<int>(plan.pending_indices.size()));
+	return plan;
+}
+
+bool ShouldReportProgress(int processed, int total, int interval)
+{
+	if (processed <= 0 || total <= 0) return false;
+	if (interval <= 0) interval = 1;
+	return processed == 1 || processed == total || (processed % interval) == 0;
+}
+
 bool ShouldReportGrepProgress(int files_scanned)
 {
 	// gui/grep_dialog.cpp の Pulse 間引き (files % 20) と同じ規則。
@@ -131,7 +173,8 @@ bool ShouldReportGrepProgress(int files_scanned)
 }
 
 BatchResult ProcessBatched(int total, const BatchCancelCallback &cancel_cb,
-                           const BatchProgressCallback &progress_cb)
+                           const BatchProgressCallback &progress_cb,
+                           const BatchItemCallback &item_cb)
 {
 	BatchResult r;
 	if (total <= 0) return r;
@@ -141,6 +184,7 @@ BatchResult ProcessBatched(int total, const BatchCancelCallback &cancel_cb,
 			r.cancelled = true;
 			break;
 		}
+		if (item_cb) item_cb(i);
 		++r.processed;
 		if (progress_cb) progress_cb(r.processed, total);
 	}
