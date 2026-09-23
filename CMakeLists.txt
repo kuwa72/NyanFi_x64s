@@ -312,6 +312,9 @@ if(TARGET nyanfi_core)
 		gui/cre_dirs.cpp
 		gui/tag.cpp
 		gui/file_ext.cpp
+		# 電卓の式評価と .nyanfi 設定の入出力 (wx 非依存)
+		gui/calc.cpp
+		gui/dot_nyan.cpp
 	)
 	target_include_directories(nyanfi_gui_core PUBLIC ${PROJECT_SOURCE_DIR})
 	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core shell32 netapi32)
