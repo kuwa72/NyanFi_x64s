@@ -53,6 +53,7 @@ void scan(const UnicodeString &dir, bool show_hidden, bool show_system, int &bud
 			st.ext = ext_key(sr.Name);
 			st.count++;
 			st.bytes += sr.Size;
+			st.files.push_back(base + sr.Name);
 		}
 	} while (FindNext(sr) == 0);
 	FindClose(sr);
@@ -130,6 +131,7 @@ std::vector<ExtStat> CalcExtStats(const UnicodeString &dir, bool recursive,
 				st.ext = ext_key(sr.Name);
 				st.count++;
 				st.bytes += sr.Size;
+				st.files.push_back(base + sr.Name);
 			} while (FindNext(sr) == 0);
 			FindClose(sr);
 		}

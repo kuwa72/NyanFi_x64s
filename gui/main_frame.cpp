@@ -22,7 +22,7 @@
 #include <wx/textdlg.h>
 #include <wx/utils.h>
 
-#include "gui/file_info_panel.h"
+#include "gui/file_info_dialog.h"
 #include "gui/file_open.h"
 #include "gui/panel_state.h"
 #include "gui/archive.h"
@@ -30,6 +30,8 @@
 #include "gui/compare.h"
 #include "gui/diff_dialog.h"
 #include "gui/file_info.h"
+#include "gui/file_ext.h"
+#include "gui/file_ext_dialog.h"
 #include "gui/file_narrow.h"
 #include "gui/text_ops.h"
 #include "gui/text_display.h"
@@ -46,6 +48,8 @@
 #include "gui/cv_img_dialog.h"
 #include "gui/cre_dirs_dialog.h"
 #include "gui/tab_dialog.h"
+#include "gui/tag.h"
+#include "gui/tag_dialog.h"
 #include "gui/image_load.h"
 #include "gui/image_view_ops.h"
 #include "gui/mask_dialog.h"
@@ -2224,22 +2228,36 @@ void MainFrame::CmdCalcDirSize(bool all)
 }
 
 //---------------------------------------------------------------------------
-void MainFrame::CmdFileExtList()
+void MainFrame::CmdFileExtList(const UnicodeString &param)
 {
 	FilePane *pane = ActivePane();
-	bool truncated = false;
-	const auto stats = dir_info::CalcExtStats(pane->GetPath(), false, pane->GetShowHidden(),
-	                                           pane->GetShowSystem(), truncated);
-	if (stats.empty()) { SetStatusWarning(_T("ファイルがありません")); return; }
+	const FileItem *itm = pane->GetCurrentItem();
+	const UnicodeString cursor_path = itm != nullptr && !itm->is_parent
+		? pane->FullPathOf(*itm) : EmptyStr;
+	UnicodeString error;
+	const UnicodeString path = file_ext::ResolveTargetPath(
+		param, pane->GetPath(), cursor_path,
+		itm != nullptr && itm->is_dir, itm != nullptr && itm->is_parent, error);
+	if (path.IsEmpty()) { SetStatusWarning(error); return; }
 
-	UnicodeString text = _T("拡張子            件数           容量\r\n");
-	for (const dir_info::ExtStat &st : stats) {
-		text.cat_sprintf(_T("%-16s %6d %14s\r\n"), st.ext.c_str(), st.count,
-		                 get_size_str_B(st.bytes, 14).Trim().c_str());
+	file_ext_dialog::Context ctx;
+	ctx.show_hidden = pane->GetShowHidden();
+	ctx.show_system = pane->GetShowSystem();
+	ctx.log_output = [this](const std::vector<UnicodeString> &lines) {
+		for (const UnicodeString &line : lines) {
+			log_.Add(log_win::LogStatus::Info, line, /*show_time=*/false);
+		}
+	};
+
+	// VCL は MainFrm.cpp:17650-17679 で FileExtensionDlg を出し、
+	// FextMask なら MaskFind、FileName なら JumpTo を実行する。
+	const file_ext_dialog::Result result = file_ext_dialog::Run(this, path, ctx);
+	if (result.outcome == file_ext_dialog::Outcome::FindMask) {
+		CmdMaskFind(result.mask);
 	}
-	if (truncated) text += _T("\r\n※ 上限に達して打ち切りました");
-
-	wxMessageBox(to_wx(text), to_wx(_T("拡張子別一覧")), wxOK | wxICON_INFORMATION, this);
+	else if (result.outcome == file_ext_dialog::Outcome::OpenFile) {
+		CmdJumpTo(result.path);
+	}
 }
 
 //---------------------------------------------------------------------------
@@ -2761,6 +2779,12 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 			UpdateStatus();
 			return true;
 		}
+		// V:CsvCalc (usr_cmdlist.cpp:424)。wx の行 viewer では列カーソンが
+		// 無いので、数値列の自動解決は gui/file_info.h へ委ねる。
+		if (SameStr(command, _T("CsvCalc"))) {
+			CmdCsvCalc();
+			return true;
+		}
 		if (SameStr(command, _T("ReloadFile"))) {
 			viewer_->CmdReload();
 			UpdateStatus();
@@ -3168,7 +3192,7 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		CmdCalcDirSize(true);
 	}
 	else if (SameStr(command, _T("FileExtList"))) {
-		CmdFileExtList();
+		CmdFileExtList(param);
 	}
 	else if (SameStr(command, _T("ListTree"))) {
 		CmdListTree();
@@ -3293,19 +3317,19 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		CmdFindMark();
 	}
 	else if (SameStr(command, _T("SetTag"))) {
-		CmdSetTag(/*add=*/false);
+		CmdSetTag(/*add=*/false, param);
 	}
 	else if (SameStr(command, _T("AddTag"))) {
-		CmdSetTag(/*add=*/true);
+		CmdSetTag(/*add=*/true, param);
 	}
 	else if (SameStr(command, _T("DelTag"))) {
 		CmdDelTag();
 	}
 	else if (SameStr(command, _T("TagSelect"))) {
-		CmdTagSelect();
+		CmdTagSelect(param);
 	}
 	else if (SameStr(command, _T("FindTag"))) {
-		CmdFindTag();
+		CmdFindTag(param);
 	}
 	else if (SameStr(command, _T("TrimTagData"))) {
 		CmdTrimTagData();
@@ -3334,7 +3358,7 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		CmdDelSelMask();
 	}
 	else if (SameStr(command, _T("MaskFind"))) {
-		CmdMaskFind();
+		CmdMaskFind(param);
 	}
 	else if (SameStr(command, _T("InputPathMask"))) {
 		CmdInputPathMask();
@@ -4977,7 +5001,30 @@ void MainFrame::CmdPropertyDlg()
 	if (itm == nullptr || itm->is_parent) return;
 
 	const UnicodeString full_path = pane->FullPathOf(*itm);
-	ShowFileInfoDialog(this, full_path, *itm);
+	const file_info_dialog::Result result = file_info_dialog::Run(this, full_path, *itm);
+	if (result.outcome == file_info_dialog::Outcome::OpenLocation) {
+		CmdJumpTo(result.path);
+	}
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief CSV/TSV 項目の集計ダイアログ (CsvCalc)
+ * @details VCL は MainFrm.cpp:33828-33834 で FileInfoDlg に TxtViewer の
+ *          DataList/TopIsHeader/CsvCol を渡す。wx の行単位ビューアには列カーソルが
+ *          無いので、未移植 (未実装扱い) として最初の数値列を自動選択する。
+ */
+void MainFrame::CmdCsvCalc()
+{
+	if (viewer_ == nullptr || !viewer_->IsShown() || viewer_->IsBinary()) {
+		SetStatusWarning(_T("CSV/TSV の集計はテキストビューア表示中だけ実行できます"));
+		return;
+	}
+
+	const std::vector<UnicodeString> &rows = viewer_->DocumentLines();
+	const int column = file_info::ResolveNumericColumn(rows, -1, /*top_is_header=*/false);
+	const file_info::ColumnStats stats = file_info::AnalyzeColumn(rows, column, false);
+	file_info_dialog::Run(this, stats);
 }
 
 //---------------------------------------------------------------------------
@@ -6175,31 +6222,38 @@ void MainFrame::CmdFindMark()
  * @details 既定値は**対象すべてに共通のタグ**。食い違っていれば空にする
  *          (VCL の SetTagActionExecute と同じ)
  */
-void MainFrame::CmdSetTag(bool add)
+void MainFrame::CmdSetTag(bool add, const UnicodeString &param)
 {
 	const std::vector<UnicodeString> paths = TargetPaths();
 	if (paths.empty()) { SetStatusWarning(_T("対象がありません")); return; }
 
 	TagManager *tm = Tags();
 
-	UnicodeString def;
+	UnicodeString initial;
 	if (!add) {
 		bool first = true;
 		for (const UnicodeString &p : paths) {
-			const UnicodeString t = tm->GetTags(p);
-			if (first) { def = t; first = false; }
-			else if (!SameText(def, t)) { def = EmptyStr; break; }
+			const UnicodeString current = tm->GetTags(p);
+			if (first) { initial = current; first = false; }
+			else if (!SameText(initial, current)) { initial = EmptyStr; break; }
 		}
 	}
 
-	const UnicodeString title = add? _T("タグの追加") : _T("タグの設定");
-	wxTextEntryDialog dlg(this, to_wx(_T("タグ (空白区切り)")), to_wx(title), to_wx(def));
-	if (dlg.ShowModal() != wxID_OK) return;
+	const tag::Mode mode = add? tag::Mode::Add : tag::Mode::Set;
+	tag::InputPlan plan = tag::ResolveInput(mode, param, initial);
+	if (plan.show_dialog) {
+		tag::Options options;
+		options.mode = mode;
+		options.tags = plan.tags;
+		options.and_match = plan.and_match;
+		if (!tag_dialog::Run(this, *tm, options)) return;
+		plan.tags = options.tags;
+	}
 
-	const UnicodeString tags = to_us(dlg.GetValue());
-	// 追加のときは空を弾く (足すものが無い)。設定のときは空で「全部消す」
+	// VCL は入力無しで TagManDlg、それ以外は ActionParam をそのまま使う
+	// (MainFrm.cpp:13422-13448 / 25804-25850)。
+	const UnicodeString tags = tm->NormTags(plan.tags, /*sw_add=*/true);
 	if (add && tags.IsEmpty()) return;
-
 	for (const UnicodeString &p : paths) {
 		if (add) tm->AddTags(p, tags); else tm->SetTags(p, tags);
 	}
@@ -6233,41 +6287,91 @@ void MainFrame::CmdDelTag()
 }
 
 //---------------------------------------------------------------------------
-void MainFrame::CmdTagSelect()
+void MainFrame::CmdTagSelect(const UnicodeString &param)
 {
-	const wxString input = wxGetTextFromUser(to_wx(_T("タグ (空白区切り。すべて含むものを選びます)")),
-	                                          to_wx(_T("タグで選択")), wxEmptyString, this);
-	if (input.IsEmpty()) return;
-
 	TagManager *tm = Tags();
+	tag::InputPlan plan = tag::ResolveInput(tag::Mode::Select, param, EmptyStr);
+	bool select_mask = false;
+	if (plan.show_dialog) {
+		tag::Options options;
+		options.mode = tag::Mode::Select;
+		options.tags = plan.tags;
+		options.and_match = plan.and_match;
+		if (!tag_dialog::Run(this, *tm, options)) return;
+		plan.tags = options.tags;
+		plan.and_match = options.and_match;
+		select_mask = options.select_mask;
+	}
+
+	const UnicodeString tags = tm->NormTags(plan.tags, /*sw_add=*/false);
+	if (!plan.match_all && tags.IsEmpty()) return;
+
+	// VCL は MainFrm.cpp:26729-26780 で dialog/ActionParam を分岐し、
+	// SelMask 指定時だけ一致項目以外を一覧から隠す。
 	FilePane *pane = ActivePane();
 	std::vector<FileItem> items = pane->VisibleItems();
-
-	int first = -1, hit = 0;
+	int first = -1;
+	int hit = 0;
+	UnicodeString mask;
 	for (std::size_t i = 0; i < items.size(); ++i) {
 		if (items[i].is_parent || items[i].is_separator) continue;
-		const bool on = tm->Match(pane->FullPathOf(items[i]), to_us(input), /*and_sw=*/true);
+		const UnicodeString path = pane->FullPathOf(items[i]);
+		const bool on = plan.match_all? tm->HasTag(path) : tm->Match(path, tags, plan.and_match);
 		items[i].marked = on;
-		if (on) { ++hit; if (first < 0) first = static_cast<int>(i); }
+		if (on) {
+			++hit;
+			if (first < 0) first = static_cast<int>(i);
+			if (select_mask) {
+				if (!mask.IsEmpty()) mask += _T(";");
+				mask += items[i].name;
+			}
+		}
 	}
 	pane->ApplyMarks(items);
-
-	if (first < 0) { SetStatusWarning(_T("一致する項目がありません")); return; }
+	if (first == -1) { SetStatusWarning(_T("一致する項目がありません")); return; }
+	if (select_mask) pane->SetMask(mask);
 	pane->MoveCursorTo(first);
 	SetStatusWarning(UnicodeString().sprintf(_T("%d 件を選択しました"), hit));
 	UpdateStatus();
 }
 
 //---------------------------------------------------------------------------
-void MainFrame::CmdFindTag()
+void MainFrame::CmdFindTag(const UnicodeString &param)
 {
-	const wxString input = wxGetTextFromUser(to_wx(_T("タグ (空白区切り。すべて含むものを集めます)")),
-	                                          to_wx(_T("タグ検索")), wxEmptyString, this);
-	if (input.IsEmpty()) return;
+	TagManager *tm = Tags();
+	tag::InputPlan plan = tag::ResolveInput(tag::Mode::Find, param, EmptyStr);
+	bool resolve_links = false;
+	if (plan.show_dialog) {
+		tag::Options options;
+		options.mode = tag::Mode::Find;
+		options.tags = plan.tags;
+		options.and_match = plan.and_match;
+		if (!tag_dialog::Run(this, *tm, options)) return;
+		plan.tags = options.tags;
+		plan.and_match = options.and_match;
+		resolve_links = options.resolve_links;
+	}
+	if (resolve_links) {
+		SetStatusWarning(_T("リソースリンクの解決は未移植ですが、指定されたタグの検索を実行します"));
+	}
 
+	const UnicodeString tags = tm->NormTags(plan.tags, /*sw_add=*/false);
+	if (!plan.match_all && tags.IsEmpty()) return;
+
+	// VCL は MainFrm.cpp:19087-19129 で dialog/ActionParam を分岐する。
+	// wx 側にも「*」の全タグ一致の解決処理を gui/tag.h へ置いている。
 	std::unique_ptr<TStringList> hits(new TStringList());
-	const int n = Tags()->GetMatchList(to_us(input), /*and_sw=*/true, hits.get());
-	if (n == 0) { SetStatusWarning(_T("一致する項目がありません")); return; }
+	int hit_count = 0;
+	if (plan.match_all) {
+		std::unique_ptr<TStringList> all(new TStringList());
+		tm->GetAllList(all.get());
+		for (int i = 0; i < all->Count; ++i) hits->Add(get_pre_tab(all->Strings[i]));
+		hit_count = hits->Count;
+	}
+	else {
+		hit_count = tm->GetMatchList(tags, plan.and_match, hits.get());
+	}
+	if (hit_count == 0) { SetStatusWarning(_T("一致する項目がありません")); return; }
 
 	std::vector<FileItem> items;
 	int gone = 0;
@@ -6287,7 +6391,8 @@ void MainFrame::CmdFindTag()
 	if (items.empty()) { SetStatusWarning(_T("一致した項目は実体がありません")); return; }
 
 	UnicodeString title;
-	title.sprintf(_T("タグ: %s  (%d 件"), to_us(input).c_str(), static_cast<int>(items.size()));
+	title.sprintf(_T("タグ%s: %s  (%d 件"), plan.and_match? _T("(AND)") : _T("(OR)"),
+	              tags.c_str(), static_cast<int>(items.size()));
 	// 実体が消えていた分を黙って落とさない
 	if (gone > 0) title.cat_sprintf(_T(" / %d 件は実体なし"), gone);
 	title += _T(")");
@@ -6480,11 +6585,17 @@ void MainFrame::CmdDelSelMask()
  *          `find_files::Search` (gui/find_files.h) に載せる。中身は同じ
  *          「カレント配下を再帰的に走査して名前が一致するものを集める」
  */
-void MainFrame::CmdMaskFind()
+void MainFrame::CmdMaskFind(const UnicodeString &param)
 {
-	const wxString input = wxGetTextFromUser(
-		to_wx(_T("マスクを入力してください (末尾が \\ ならディレクトリだけ)")),
-		to_wx(_T("マスクで検索")), to_wx(_T("*")), this);
+	wxString input;
+	if (param.IsEmpty()) {
+		input = wxGetTextFromUser(
+			to_wx(_T("マスクを入力してください (末尾が \\ ならディレクトリだけ)")),
+			to_wx(_T("マスクで検索")), to_wx(_T("*")), this);
+	}
+	else {
+		input = to_wx(param);
+	}
 	if (input.IsEmpty()) return;
 
 	FilePane *pane = ActivePane();
@@ -8226,26 +8337,40 @@ void MainFrame::CmdSetFolderIcon(const UnicodeString &param)
 
 /**
  * @brief フォルダアイコン検索 (FindFolderIcon)
- * @details VCL (MainFrm.cpp:18152) は TagManDlg で選ばせるが、ここでは
- *          最小UI (wxTextEntryDialog でアイコン名の一部を入力) を受け、
- *          実検索コア (FindFolderIconCore) は未移植のためログに残す
- *          簡略版にした
+ * @details VCL (MainFrm.cpp:18152-18172) は TagManDlg でアイコンを選ぶ。
+ *          移植ダイアログは FolderIcon.INI の実定義を読み、選択結果と
+ *          リソースリンク指定をログへ残す。実検索コアは未移植 (未実装扱い)。
  */
 void MainFrame::CmdFindFolderIcon()
 {
-	const wxString kw = wxGetTextFromUser(to_wx(_T("探すアイコン名 (一部)")),
-	                                      to_wx(_T("フォルダアイコン検索")), wxEmptyString, this);
-	if (kw.IsEmpty()) return;
+	const UnicodeString ini_path = ExtractFilePath(Application->ExeName) + _T("FolderIcon.INI");
+	const std::vector<UnicodeString> icons = tag::LoadFolderIcons(ini_path);
+	if (icons.empty()) {
+		SetStatusWarning(_T("FolderIcon.INI にアイコンが登録されていません"));
+		return;
+	}
+
+	tag::Options options;
+	options.mode = tag::Mode::FolderIcon;
+	if (!tag_dialog::Run(this, *Tags(), options, icons)) return;
+
 	UnicodeString error;
 	const UnicodeString path = ActivePane()->GetPath();
-	if (!f_misc_ops::ValidateFolderIconSearch(path, /*icons_empty=*/false, error)) {
+	if (!f_misc_ops::ValidateFolderIconSearch(path, options.tags.IsEmpty(), error)) {
 		SetStatusWarning(error);
 		return;
 	}
+	// VCL は MainFrm.cpp:18152-18172 で選択結果から FindFolderIconCore を呼ぶ。
+	// 未移植 (未実装扱い): FindFolderIconCore。条件は黙って捨てずログへ残す。
 	log_.Add(log_win::LogStatus::Info,
-	         _T("フォルダアイコン検索: ") + path + _T(" [") + UnicodeString(kw.wc_str()) + _T("] (実検索は未対応)"),
+	         _T("フォルダアイコン検索: ") + path + _T(" [") + options.tags + _T("] (実検索は未移植)"),
 	         /*show_time=*/true);
-	SetStatusWarning(_T("フォルダアイコン検索は未対応です (条件をログに記録しました)"));
+	if (options.resolve_links) {
+		SetStatusWarning(_T("リソースリンクの解決と実検索は未移植です (条件をログに記録しました)"));
+	}
+	else {
+		SetStatusWarning(_T("フォルダアイコン検索は未移植です (条件をログに記録しました)"));
+	}
 }
 
 /**

@@ -118,10 +118,11 @@ private:
 	void CmdCreateDir();  //!< アクティブペインにディレクトリを作成する (K)
 	void CmdRenameDlg();  //!< 選択項目 (マーク済み、無ければカーソル位置) の一括リネーム (R)
 
-	// ファイルを開く (gui/file_open.h) とファイル情報 (gui/file_info_panel.h)
+	// ファイルを開く (gui/file_open.h) とファイル情報 (gui/file_info_dialog.h)
 	void CmdOpenStandard();  //!< 関連付けで開く (ENTER)。ディレクトリなら入る
 	void CmdOpenByApp();     //!< アプリケーションから開く (Ctrl+Enter)
 	void CmdPropertyDlg();   //!< ファイル情報ダイアログ (Alt+Enter、推測のキー)
+	void CmdCsvCalc();       //!< CSV/TSV 項目集計ダイアログ (CsvCalc)
 
 	// テキストビューア (gui/text_viewer.h)。"V" (src/Global.cpp の既定キー表
 	// "F:V=TextViewer" と同じ) で開く。開いている間はキー入力を丸ごと
@@ -263,7 +264,7 @@ private:
 
 	//-- 情報系 (機能群11/12) -------------------------------------------------
 	void CmdCalcDirSize(bool all);  //!< ディレクトリ容量を計算 (CalcDirSize / All)
-	void CmdFileExtList();          //!< 拡張子別の一覧
+	void CmdFileExtList(const UnicodeString &param); //!< 拡張子別の一覧 (FileExtList)
 	void CmdListTree();             //!< ディレクトリ構造のツリー
 	void CmdAbout();                //!< バージョン情報
 	void CmdCopyFileInfo();         //!< カーソル位置のファイル情報をクリップボードへ (CopyFileInfo)
@@ -559,7 +560,7 @@ private:
 	void CmdNextSameName();    //!< 名前主部が同じ次のファイルへ (NextSameName)
 	void CmdSelMask();         //!< 選択項目だけを残す (SelMask)
 	void CmdDelSelMask();      //!< 選択項目を一覧から隠す (DelSelMask)
-	void CmdMaskFind();        //!< マスクで配下を検索して結果リストへ (MaskFind)
+	void CmdMaskFind(const UnicodeString &param = EmptyStr); //!< マスクで配下を検索 (MaskFind)
 	void CmdInputPathMask();   //!< パスマスクを入力 (InputPathMask)
 	void CmdFilter(const UnicodeString &param);  //!< キーワードで一覧を絞り込む (Filter)
 	void CmdSimilarSort();     //!< カーソル項目との名前の類似性で並べ替える (SimilarSort)
@@ -577,10 +578,10 @@ private:
 	void CmdMarkList();        //!< 栞の一覧から選んで飛ぶ (MarkList)
 	void CmdFindMark();        //!< 配下の栞を集めて結果リストに出す (FindMark)
 
-	void CmdSetTag(bool add);  //!< タグを設定 / 追加 (SetTag / AddTag)
-	void CmdDelTag();          //!< タグを削除 (DelTag)
-	void CmdTagSelect();       //!< 指定タグを含む項目を選択 (TagSelect)
-	void CmdFindTag();         //!< 指定タグの項目を集めて結果リストに出す (FindTag)
+	void CmdSetTag(bool add, const UnicodeString &param); //!< タグを設定 / 追加
+	void CmdDelTag();          //!< タグを削除 (DelTag、VCL と同じく直接処理)
+	void CmdTagSelect(const UnicodeString &param); //!< 指定タグを含む項目を選択
+	void CmdFindTag(const UnicodeString &param);   //!< 指定タグの項目を集めて結果表示
 	void CmdTrimTagData();     //!< 実体の無い項目のタグを整理 (TrimTagData)
 
 	/// タグ管理。実体は移植済みの TagManager。初回に使うときだけ作る

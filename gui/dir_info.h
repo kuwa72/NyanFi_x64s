@@ -42,6 +42,8 @@ struct ExtStat {
 	UnicodeString ext;   //!< 拡張子 (小文字。無い場合は "(なし)")
 	int count = 0;
 	Int64 bytes = 0;
+	//! 一致したファイルのパス。FileExtList のファイル一覧表示用。
+	std::vector<UnicodeString> files;
 };
 
 /**
