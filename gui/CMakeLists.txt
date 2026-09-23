@@ -119,6 +119,8 @@ add_executable(nyanfi
 	inp_ex_dialog.cpp
 	btn_dialog.cpp
 	key_dialog.cpp
+	calc_dialog.cpp
+	dot_nyan_dialog.cpp
 	key_map_wx.cpp
 	vcl_gui_bridge.cpp
 	worker_thread.cpp

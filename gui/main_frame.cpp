@@ -56,6 +56,9 @@
 #include "gui/sync_dialog.h"
 #include "gui/color_dialog.h"
 #include "gui/comp_dialog.h"
+#include "gui/calc_dialog.h"
+#include "gui/dot_nyan_dialog.h"
+#include "gui/dot_nyan.h"
 #include "gui/sort_mode.h"
 #include "gui/sort_mode_dialog.h"
 #include "gui/pack_settings.h"
@@ -2350,12 +2353,54 @@ void MainFrame::CmdOpenByExplorer()
 }
 
 //---------------------------------------------------------------------------
-void MainFrame::CmdCalculator()
+void MainFrame::CmdCalculator(const UnicodeString &param)
 {
-	const external::LaunchSpec spec = external::CalculatorSpec();
-	if (!launch(spec, static_cast<HWND>(GetHandle()))) {
-		SetStatusWarning(_T("電卓を起動できません: ") + spec.file);
+	// VCL は MainFrm.cpp:14039-14064 で内部 TCalculator をモーダル表示する。
+	// wx 版も同じ Calculator コマンドを受け、式評価は gui/calc.* に委譲する。
+	const bool use_clipboard = ContainsText(param, _T("CB"));
+	if (use_clipboard) {
+		UnicodeString input;
+		if (wxTheClipboard->Open()) {
+			if (wxTheClipboard->IsSupported(wxDF_UNICODETEXT)) {
+				wxTextDataObject data;
+				if (wxTheClipboard->GetData(data)) input = to_us(data.GetText());
+			}
+			wxTheClipboard->Close();
+		}
+		if (input.IsEmpty() && !SameText(param, _T("CB"))) input = param;
+		const calc::EvalResult result = calc::Evaluate(input);
+		UnicodeString output;
+		if (result.ok) output = result.value;
+		else output = _T("ERR: ") + (result.error.IsEmpty() ? _T("入力内容の誤り") : result.error);
+		if (wxTheClipboard->Open()) {
+			wxTheClipboard->SetData(new wxTextDataObject(to_wx(output)));
+			wxTheClipboard->Close();
+		}
+		SetStatusWarning(output);
+		return;
 	}
+
+	// VCL は選択サイズ/テキストを初期式にすることがある (MainFrm.cpp:14050-14054)。
+	// wx の FilePane からはその選択文字列を取得しないため、ここは引数と保存履歴だけを使う。
+	// 未移植 (未実装扱い): 選択ファイル/テキストビューの初期式入力。
+	calc_dialog::Context context;
+	context.initial_line = param;
+	std::unique_ptr<TStringList> history(new TStringList());
+	settings_.Ini().LoadListItems(_T("CalculatorHistory"), history.get(), 12, false);
+	for (int i = 0; i < history->Count; ++i) context.history.push_back(history->Strings[i]);
+	const int angle = settings_.Ini().ReadIntGen(_T("CalculatorAngMode"), 0);
+	context.angle_mode = angle == 1 ? calc::AngleMode::Rad :
+	                     angle == 2 ? calc::AngleMode::Grad : calc::AngleMode::Deg;
+	context.output_digits = 18;
+	if (!calc_dialog::Run(this, context)) return;
+
+	history->Clear();
+	for (const UnicodeString &entry : context.history) history->Add(entry);
+	settings_.Ini().SaveListItems(_T("CalculatorHistory"), history.get(), 12);
+	settings_.Ini().WriteIntGen(_T("CalculatorAngMode"),
+	                           context.angle_mode == calc::AngleMode::Rad ? 1 :
+	                           context.angle_mode == calc::AngleMode::Grad ? 2 : 0);
+	settings_.Save();
 }
 
 // VCL の TExeCmdDlg 呼び出しは MainFrm.cpp:17043。
@@ -4519,7 +4564,7 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		CmdToPrevOnLeft();
 	}
 	else if (SameStr(command, _T("Calculator"))) {
-		CmdCalculator();
+		CmdCalculator(param);
 	}
 	else if (SameStr(command, _T("ExeCommandLine"))) {
 		CmdExeCommandLine(param);
@@ -10433,23 +10478,48 @@ void MainFrame::CmdDistributionDlg(const UnicodeString &param)
 
 /**
  * @brief .nyanfi ファイルの設定 (DotNyanDlg)
- * @details VCL (MainFrm.cpp:16792) は FLIST 外は不可、RS なら再適用、
- *          そうでなければ設定ダイアログ。適用の実体 (ApplyDotNyan) と
- *          ダイアログは未移植のため分岐の解決まで行い警告する
+ * @details VCL (MainFrm.cpp:16792-16810) は FLIST 外は不可、RS なら再適用、
+ *          そうでなければ設定ダイアログ。wx 版は設定の入力・UTF-8 保存まで
+ *          を行う。並び替え/属性/マスクの実際の適用は未移植 (未実装扱い)。
  */
 void MainFrame::CmdDotNyanDlg(const UnicodeString &param)
 {
 	const bool is_flist = viewer_ == nullptr || !viewer_->IsShown();
 	switch (f_batch7_ops::ResolveDotNyanMode(is_flist, param)) {
 	case f_batch7_ops::DotNyanMode::Reapply:
-		SetStatusWarning(_T(".nyanfi の再適用は未対応です"));
-		break;
-	case f_batch7_ops::DotNyanMode::Dialog:
-		SetStatusWarning(_T(".nyanfi の設定は未対応です"));
+		// RS の実体 (ApplyDotNyan と CurPath の再評価) は未移植。
+		SetStatusWarning(_T(".nyanfi の再適用は未移植 (未実装扱い)です"));
 		break;
 	case f_batch7_ops::DotNyanMode::Denied:
 		SetStatusWarning(_T("操作できません"));
 		break;
+	case f_batch7_ops::DotNyanMode::Dialog: {
+		// VCL は get_dotNaynfi (src/Global.cpp:3595-3616) を使う。wx 版は
+		// DotNyanPerUser/継承探索のグローバル状態を持たないため、基本名の
+		// .nyanfi だけを保存先にする (ユーザー別 suffix は未移植)。
+		const UnicodeString path = dot_nyan::ConfigName(ActivePane()->GetPath());
+		dot_nyan::Options options = dot_nyan::DefaultOptions();
+		UnicodeString error;
+		if (file_exists(path) && !dot_nyan::LoadConfig(path, options, error)) {
+			wxMessageBox(to_wx(_T(".nyanfi を読み込めません: ") + error),
+			             to_wx(_T(".nyanfi の設定")), wxOK | wxICON_ERROR, this);
+			return;
+		}
+		if (file_exists(path)) options.hidden = (file_GetAttr(path) & faHidden) != 0;
+		if (!dot_nyan_dialog::Run(this, path, options)) return;
+		if (!dot_nyan::SaveConfig(path, options, error)) {
+			wxMessageBox(to_wx(_T(".nyanfi を保存できません: ") + error),
+			             to_wx(_T(".nyanfi の設定")), wxOK | wxICON_ERROR, this);
+			return;
+		}
+		if (options.hidden) file_SetAttr(path, file_GetAttr(path) | faHidden);
+		else file_SetAttr(path, file_GetAttr(path) & ~faHidden);
+		panes_[0]->Reload();
+		panes_[1]->Reload();
+		UpdateStatus();
+		SetStatusWarning(_T(".nyanfi を保存しました。設定の実際の適用は未移植 (未実装扱い)です"));
+		break;
+	}
 	}
 }
 
