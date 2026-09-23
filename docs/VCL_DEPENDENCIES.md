@@ -191,4 +191,4 @@ python3 scripts/check_commands.py
 python3 scripts/check_literals.py
 ```
 
-実測結果は `ctest` 2/2 PASS、`scripts/probe.sh` 22/22 PASS、`check_commands.py` は VCL のコマンド表 464 個のうち GUI が 405 個を使用（独自 1 個、欠損 0）、`check_literals.py` は 388 files / 0 箇所であった。Windows UCRT64 の実機・CI 結果は PR 作成後に `gh pr checks` で確認する。
+実測結果は `ctest` 2/2 PASS、`scripts/probe.sh` 22/22 PASS、`check_commands.py` は VCL のコマンド表 464 個のうち GUI が 405 個を使用（独自 1 個、欠損 0）、`check_literals.py` は 388 files / 0 箇所であった。PR #80 の CI は `Linux クロスビルド` と `MSYS2 UCRT64 (基準)` の両 job が PASS になった（release job は tag 条件のため skip）。

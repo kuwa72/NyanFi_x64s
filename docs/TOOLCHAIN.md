@@ -229,7 +229,7 @@ PR 作成後は次で Jobs を確認する。
 gh pr checks <PR番号>
 ```
 
-両 job（`Linux クロスビルド`、`MSYS2 UCRT64 (基準)`）が pass するまで待つ。PR 上で check が report されない場合は、分岐を指定して手動実行する。
+両 job（`Linux クロスビルド`、`MSYS2 UCRT64 (基準)`）が pass するまで待つ。今回の PR #80 では両 job が PASS になった（release job は tag 条件のため skip）。PR 上で check が report されない場合は、分岐を指定して手動実行する。
 
 ```bash
 gh workflow run port-ci --ref issue/01-vcl-dependency-audit
