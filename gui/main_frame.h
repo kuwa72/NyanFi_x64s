@@ -159,6 +159,7 @@ private:
 	void CmdImageJumpIndex(const UnicodeString &param);
 	/// 全画面表示を切り替える (I:FullScreen 相当。param ON/OFF/空=トグル)
 	void CmdImageFullScreen(const UnicodeString &param);
+	void CmdPrintImage();          //!< 画像印刷設定 (I:Print)
 
 	// 文字列検索 (gui/grep_dialog.h)。"FV:Grep" (usr_cmdlist.cpp のコマンド表)
 	// に既定キーの記載が無かったため、キー割り当ては推測 (gui/key_map.cpp 参照)
@@ -282,7 +283,7 @@ private:
 	//-- 設定・その他 (機能群13) ----------------------------------------------
 	void CmdIniFile(bool edit);   //!< ini を編集 / 閲覧する
 	void CmdNameFromClip();       //!< クリップボードの内容にファイル名を変える (破壊的)
-	void CmdShareList();          //!< 共有フォルダ一覧
+	void CmdShareList(const UnicodeString &param = EmptyStr); //!< 共有フォルダ一覧 (ShareList)
 	void CmdNetConnect(bool disconnect);  //!< ネットワークドライブの割り当て / 切断
 	void CmdListClipboard();      //!< クリップボードの内容を表示
 	void CmdRestart();            //!< 再起動
