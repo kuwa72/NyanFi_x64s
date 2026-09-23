@@ -328,6 +328,7 @@ if(TARGET nyanfi_core)
 		gui/distribution.cpp
 		gui/function_list.cpp
 		gui/cmd_list.cpp
+		gui/edit_hist.cpp
 	)
 	target_include_directories(nyanfi_gui_core PUBLIC ${PROJECT_SOURCE_DIR})
 	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core shell32 netapi32)
