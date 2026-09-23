@@ -86,6 +86,10 @@ add_executable(nyanfi
 	grep_dialog.cpp
 	diff_dialog.cpp
 	comp_dialog.cpp
+	sort_mode_dialog.cpp
+	pack_dialog.cpp
+	backup_dialog.cpp
+	same_name_dialog.cpp
 	rename_dialog.cpp
 	find_dialog.cpp
 	dupl_dialog.cpp

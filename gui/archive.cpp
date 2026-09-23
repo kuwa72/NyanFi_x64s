@@ -64,6 +64,15 @@ bool LooksLikeArchive(const UnicodeString &path)
 }
 
 //---------------------------------------------------------------------------
+std::array<bool, 5> AvailableFormats()
+{
+	// VCL PackDlg.cpp:44-48 と同じ順序。DLL のロード可否だけを返す。
+	return {unit()->IsAvailable(UARCTYP_ZIP), unit()->IsAvailable(UARCTYP_7Z),
+	        unit()->IsAvailable(UARCTYP_LHA), unit()->IsAvailable(UARCTYP_CAB),
+	        unit()->IsAvailable(UARCTYP_TAR)};
+}
+
+//---------------------------------------------------------------------------
 bool ListEntries(const UnicodeString &archive_path, std::vector<Entry> &out,
                  UnicodeString &error_out)
 {

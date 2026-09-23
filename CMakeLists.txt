@@ -302,6 +302,10 @@ if(TARGET nyanfi_core)
 		gui/f_batch5_ops.cpp
 		gui/f_batch6_ops.cpp
 		gui/f_batch7_ops.cpp
+		gui/sort_mode.cpp
+		gui/pack_settings.cpp
+		gui/backup_settings.cpp
+		gui/same_name.cpp
 	)
 	target_include_directories(nyanfi_gui_core PUBLIC ${PROJECT_SOURCE_DIR})
 	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core shell32 netapi32)

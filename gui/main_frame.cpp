@@ -43,6 +43,14 @@
 #include "gui/sync_dialog.h"
 #include "gui/color_dialog.h"
 #include "gui/comp_dialog.h"
+#include "gui/sort_mode.h"
+#include "gui/sort_mode_dialog.h"
+#include "gui/pack_settings.h"
+#include "gui/pack_dialog.h"
+#include "gui/backup_settings.h"
+#include "gui/backup_dialog.h"
+#include "gui/same_name.h"
+#include "gui/same_name_dialog.h"
 #include "gui/tab_dialog.h"
 #include "gui/image_load.h"
 #include "gui/image_view_ops.h"
@@ -98,6 +106,47 @@ bool ConfirmExecute(wxWindow *parent, const UnicodeString &full_path)
 {
 	const UnicodeString text = _T("実行可能ファイルです。開いてもよろしいですか?\n\n") + full_path;
 	return wxMessageBox(to_wx(text), to_wx(_T("実行の確認")), wxYES_NO | wxICON_WARNING, parent) == wxYES;
+}
+
+enum class SameNameAction { Proceed, Cancelled, Unimplemented };
+
+/// 同一名ファイルがある Copy/Move の前に VCL と同じ選択を受け取る。
+/// wx 版は実タスクコピーを持たないため、Skip 以外は明示的に未実装として止める。
+SameNameAction AskSameNameConflict(wxWindow *parent, FilePane *pane, FilePane *dst)
+{
+	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
+	UnicodeString source;
+	UnicodeString destination;
+	for (const UnicodeString &path : paths) {
+		const UnicodeString candidate = IncludeTrailingPathDelimiter(dst->GetPath()) +
+		                                ExtractFileName(ExcludeTrailingPathDelimiter(path));
+		if (file_exists(candidate) || dir_exists(candidate)) {
+			source = path;
+			destination = candidate;
+			break;
+		}
+	}
+	if (source.IsEmpty()) return SameNameAction::Proceed;
+
+	same_name::Context context;
+	context.source = source;
+	context.destination = destination;
+	context.source_size = get_file_size(source);
+	context.destination_size = get_file_size(destination);
+	context.source_time = static_cast<double>(get_file_age(source));
+	context.destination_time = static_cast<double>(get_file_age(destination));
+	context.same_path = SameText(ExcludeTrailingPathDelimiter(ExtractFilePath(source)),
+	                             ExcludeTrailingPathDelimiter(dst->GetPath()));
+	context.initial_name = ExtractFileName(ExcludeTrailingPathDelimiter(source));
+	same_name::Options options;
+	options.mode = same_name::Mode::Overwrite;
+	options.copy_all = true;
+	if (!same_name_dialog::Run(parent, context, options)) return SameNameAction::Cancelled;
+	if (options.mode == same_name::Mode::Skip) return SameNameAction::Proceed;
+
+	wxMessageBox(to_wx(_T("選択された同名処理は wx 版では未移植 (未実装処理) です\n上書き/最新/自動改名/手動改名は実コピーを行いません")),
+	             to_wx(_T("同名ファイル")), wxOK | wxICON_WARNING, parent);
+	return SameNameAction::Unimplemented;
 }
 
 /// ハードリンクの一覧を Windows API で列挙する (VCL Global.cpp の
@@ -386,6 +435,17 @@ void MainFrame::LoadSettings()
 		                    /*record_history=*/false);
 	}
 	RefreshTabBar();
+
+	// SrtModDlg の拡張設定。単一キーはタブ状態から復元し、残りの設定を
+	// 別キーで保持する (完全復元は未移植として sort_mode.h に明記)。
+	sort_options_[0].natural = settings_.Ini().ReadBoolGen(_T("SortNatural"), true);
+	sort_options_[1].natural = settings_.Ini().ReadBoolGen(_T("SortNatural"), true);
+	sort_options_[0].both = settings_.Ini().ReadBoolGen(_T("SortBoth"));
+	sort_options_[1].both = sort_options_[0].both;
+	sort_options_[0].logical = settings_.Ini().ReadBoolGen(_T("SortLogical"));
+	sort_options_[1].logical = sort_options_[0].logical;
+	sort_options_[0].extension_list = settings_.Ini().ReadStrGen(_T("SortExtList"));
+	sort_options_[1].extension_list = sort_options_[0].extension_list;
 
 	// 履歴。ini から読み直す (種類ごとにキーが分かれている)
 	history::LoadFromIni(settings_.Ini(), history::Kind::Edit, hist_edit_);
@@ -1540,6 +1600,17 @@ void MainFrame::CmdUnPack(bool to_current)
 }
 
 //---------------------------------------------------------------------------
+/**
+ * @brief 書庫作成 (Pack / PackToCurr)
+ * @details VCL は `src/MainFrm.cpp:23339-23361` で TPackArcDlg を作り、
+ *          形式・圧縮レベル・追加スイッチ・パスワードを受け取って
+ *          `usr_ARC->Pack` を呼ぶ。ここでは設定の解決 (gui/pack_settings)、
+ *          wx 入力、既存の archive::Create への接続だけを行う。
+ *
+ *          未移植 (未実装扱い): 圧縮レベル/パスワード/追加スイッチ/SFX、
+ *          PerDir、既存書庫への追加・削除後の再作成。実処理がない場合
+ *          は黙って捨てず警告して操作を中断する。
+ */
 void MainFrame::CmdPack(bool to_current)
 {
 	if (!to_current && RejectIfOppositeIsResultList(_T("書庫の作成"))) return;
@@ -1551,25 +1622,91 @@ void MainFrame::CmdPack(bool to_current)
 	const UnicodeString base = archive::DefaultArchiveBaseName(
 		(cur != nullptr && !cur->is_parent)? cur->name : EmptyStr, names);
 
-	const wxString input = wxGetTextFromUser(
-		to_wx(_T("作る書庫の名前を入力してください (拡張子で形式が決まります)")),
-		to_wx(_T("書庫の作成")), to_wx(base + _T(".zip")), this);
-	if (input.IsEmpty()) return;
+	pack_settings::Options options;
+	options.name = base;
+	options.format = pack_settings::FromIndex(settings_.Ini().ReadIntGen(_T("ArcFormat"), 0));
+	options.compression = settings_.Ini().ReadIntGen(_T("ZipPrm_x"), 5);
+	if (options.format == pack_settings::Format::SevenZip)
+		options.compression = settings_.Ini().ReadIntGen(_T("SevenPrm_x"), 5);
+	else if (options.format == pack_settings::Format::Cab)
+		options.compression = settings_.Ini().ReadIntGen(_T("CabPrm_z"), 0);
+	else if (options.format == pack_settings::Format::Tar)
+		options.compression = settings_.Ini().ReadIntGen(_T("TarPrm_z"), 6);
+	options.self_extract = settings_.Ini().ReadBoolGen(_T("ZipPrm_sfx"));
+	options.confirm_existing = settings_.Ini().ReadBoolGen(_T("SureSameArc"), true);
+	options.include_top_directory = settings_.Ini().ReadBoolGen(_T("PackArcDlgIncDir"));
+	options.existing_mode = static_cast<pack_settings::ExistingMode>(
+		settings_.Ini().ReadIntGen(_T("SameArcMode"), 0));
+	switch (options.format) {
+	case pack_settings::Format::Zip: options.extra_switches = settings_.Ini().ReadStrGen(_T("ExSw_Zip")); break;
+	case pack_settings::Format::SevenZip: options.extra_switches = settings_.Ini().ReadStrGen(_T("ExSw_7z")); break;
+	case pack_settings::Format::Lha: options.extra_switches = settings_.Ini().ReadStrGen(_T("ExSw_Lha")); break;
+	case pack_settings::Format::Cab: options.extra_switches = settings_.Ini().ReadStrGen(_T("ExSw_Cab")); break;
+	case pack_settings::Format::Tar: options.extra_switches = settings_.Ini().ReadStrGen(_T("ExSw_Tar")); break;
+	}
+	const std::array<bool, 5> available = archive::AvailableFormats();
+	pack_settings::Availability availability;
+	availability.zip = available[0];
+	availability.seven_zip = available[1];
+	availability.lha = available[2];
+	availability.cab = available[3];
+	availability.tar = available[4];
+
+	bool per_dir_available = true;
+	for (const FileItem &item : pane->GetSelectedItems()) {
+		if (!item.is_dir) { per_dir_available = false; break; }
+	}
+	pack_dialog::Context context;
+	context.default_name = base;
+	context.availability = availability;
+	context.per_directory_available = per_dir_available;
+	if (!pack_dialog::Run(this, options, context)) return;
+
+	settings_.Ini().WriteStrGen(_T("PackArcName"), options.name);
+	settings_.Ini().WriteIntGen(_T("ArcFormat"), pack_settings::ToIndex(options.format));
+	settings_.Ini().WriteIntGen(_T("ZipPrm_x"), options.compression);
+	settings_.Ini().WriteIntGen(_T("SevenPrm_x"), options.compression);
+	settings_.Ini().WriteIntGen(_T("CabPrm_z"), options.compression);
+	settings_.Ini().WriteIntGen(_T("TarPrm_z"), options.compression);
+	settings_.Ini().WriteBoolGen(_T("ZipPrm_sfx"), options.self_extract);
+	switch (options.format) {
+	case pack_settings::Format::Zip: settings_.Ini().WriteStrGen(_T("ExSw_Zip"), options.extra_switches); break;
+	case pack_settings::Format::SevenZip: settings_.Ini().WriteStrGen(_T("ExSw_7z"), options.extra_switches); break;
+	case pack_settings::Format::Lha: settings_.Ini().WriteStrGen(_T("ExSw_Lha"), options.extra_switches); break;
+	case pack_settings::Format::Cab: settings_.Ini().WriteStrGen(_T("ExSw_Cab"), options.extra_switches); break;
+	case pack_settings::Format::Tar: settings_.Ini().WriteStrGen(_T("ExSw_Tar"), options.extra_switches); break;
+	}
+	settings_.Ini().WriteBoolGen(_T("PackArcDlgIncDir"), options.include_top_directory);
+	settings_.Ini().WriteBoolGen(_T("SureSameArc"), options.confirm_existing);
+	settings_.Ini().WriteIntGen(_T("SameArcMode"), static_cast<int>(options.existing_mode));
+	settings_.Save();
 
 	const UnicodeString dst_dir = to_current? pane->GetPath() : OppositePane()->GetPath();
-	const UnicodeString arc = IncludeTrailingPathDelimiter(dst_dir) + to_us(input);
-
-	if (!ConfirmItems(this, _T("書庫の作成"), _T("書庫に追加"), names, arc)) return;
+	const pack_settings::Resolved resolved = pack_settings::Resolve(options, availability, dst_dir);
+	if (!resolved.core_compatible) {
+		const UnicodeString message = resolved.unsupported_reason.IsEmpty()
+			? _T("この書庫設定は既存の core で実行できません") : resolved.unsupported_reason;
+		SetStatusWarning(_T("書庫は未移植設定のため作成しません: ") + message);
+		log_.Add(log_win::LogStatus::Info, _T("Pack 未実行: ") + message, true);
+		return;
+	}
+	if (file_exists(resolved.archive_path)) {
+		// archive::Create は既存ファイルを上書きしない。VCL の追加/削除選択を
+		// 黙って別の動作へ置換せず、未実装として明示する。
+		SetStatusWarning(_T("同名書庫の追加・再作成は未移植 (未実装処理) です"));
+		return;
+	}
+	if (!ConfirmItems(this, _T("書庫の作成"), _T("書庫に追加"), names, resolved.archive_path)) return;
 
 	UnicodeString error;
-	if (!archive::Create(arc, pane->GetPath(), names, error)) {
+	if (!archive::Create(resolved.archive_path, pane->GetPath(), names, error)) {
 		wxMessageBox(to_wx(error), to_wx(_T("書庫の作成")), wxOK | wxICON_WARNING, this);
 		return;
 	}
 
 	panes_[0]->Reload();
 	panes_[1]->Reload();
-	SetStatusWarning(_T("書庫を作成しました: ") + to_us(input));
+	SetStatusWarning(_T("書庫を作成しました: ") + resolved.file_name);
 	UpdateStatus();
 }
 
@@ -3506,7 +3643,7 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		ShowCmdList();
 	}
 	else if (SameStr(command, _T("SortDlg"))) {
-		ShowSortDialog();
+		ShowSortDialog(param);
 	}
 	else if (SameStr(command, _T("SetPathMask"))) {
 		ShowMaskDialog();
@@ -4234,47 +4371,105 @@ void MainFrame::ShowCmdList()
 
 //---------------------------------------------------------------------------
 /**
- * @brief ソートダイアログ (S)
- * @details SrtModDlg.cpp (ソートダイアログ) の簡略版。並べ替えキー (名前/拡張子/
- *          日時/サイズ/属性。SortModeRadioGroup と同じ並び)・降順・ディレクトリを
- *          先に集めるか、の3点だけを選ぶ。SrtModDlg.cpp にある「両側に適用」
- *          「拡張子リストの優先順」「記号順」などの拡張オプションは対象外
- *          (Phase 2 骨格のスコープ外)
+ * @brief ソートダイアログ (SortDlg)
+ * @details VCL の接続は `src/MainFrm.cpp:26360-26365` (ファイル一覧) と
+ *          `src/MainFrm.cpp:35871-35872` (画像ビューア) である。前者では
+ *          wx の sort_mode_dialog を表示し、ActionParam がある場合は
+ *          gui/sort_mode.cpp の即時変更を使う。
+ *
+ *          未移植 (未実装扱い): 2段ソート・結果リスト場所順・画像ビューア
+ *          固有のソートは、警告または単一 FilePane 設定への縮約に留める。
  */
-void MainFrame::ShowSortDialog()
+void MainFrame::ShowSortDialog(const UnicodeString &param)
 {
+	// VCL の 2つ目の接続 (MainFrm.cpp:35871) は画像ビューア用の
+	// SortDlgIActionExecute。wx 画像ビューアには FilePane のソート項目がない。
+	if (image_viewer_ != nullptr && image_viewer_->IsShown()) {
+		SetStatusWarning(_T("画像ビューアのソートは未移植 (未実装処理) です"));
+		return;
+	}
+
 	FilePane *pane = ActivePane();
+	const int active = active_;
+	sort_mode::Options &options = sort_options_[active];
+	// FilePane が保持する単一キーを現在の設定へ写す。拡張設定は保持する。
+	options.mode = sort_mode::FromIndex(static_cast<int>(pane->GetSortKey()));
+	options.descending_name = false;
+	options.descending_old = false;
+	options.descending_small = false;
+	options.descending_attribute = false;
+	switch (options.mode) {
+	case sort_mode::Mode::Date: options.descending_old = pane->IsSortDescending(); break;
+	case sort_mode::Mode::Size: options.descending_small = pane->IsSortDescending(); break;
+	case sort_mode::Mode::Attribute: options.descending_attribute = pane->IsSortDescending(); break;
+	default: options.descending_name = pane->IsSortDescending(); break;
+	}
+	if (!pane->IsDirsFirst()) {
+		options.dir_mode = sort_mode::DirectoryMode::Mixed;
+	}
+	else if (options.dir_mode == sort_mode::DirectoryMode::Mixed ||
+	         options.dir_mode == sort_mode::DirectoryMode::Icon) {
+		options.dir_mode = sort_mode::DirectoryMode::SameAsFile;
+	}
 
-	wxDialog dlg(this, wxID_ANY, to_wx(_T("ソート")));
+	auto apply = [this](int index, const sort_mode::Options &value) {
+		if (index < 0 || index > 1) return;
+		const sort_mode::PaneSettings ps = sort_mode::ToPaneSettings(value);
+		panes_[index]->SetSortSettings(ps.key, ps.descending, ps.dirs_first);
+	};
 
-	wxArrayString choices;
-	choices.Add(to_wx(_T("名前(&F)")));
-	choices.Add(to_wx(_T("拡張子(&E)")));
-	choices.Add(to_wx(_T("日時(&D)")));
-	choices.Add(to_wx(_T("サイズ(&S)")));
-	choices.Add(to_wx(_T("属性(&A)")));
+	if (!param.Trim().IsEmpty()) {
+		const sort_mode::ParamResult result = sort_mode::ApplyParam(options, param);
+		if (!result.recognized) {
+			SetStatusWarning(_T("SortDlg のパラメータが不正です: ") + param);
+			return;
+		}
+		if (result.path_sort) {
+			SetStatusWarning(_T("結果リストの場所順 (SortDlg_L) は未移植 (未実装処理) です"));
+			return;
+		}
+		if (!result.changed) return;
+		if (result.options.mode == sort_mode::Mode::None ||
+		    result.options.dir_mode == sort_mode::DirectoryMode::Icon) {
+			SetStatusWarning(_T("ソートなし/アイコン順は未移植 (未実装処理) です"));
+			return;
+		}
+		sort_options_[active] = result.options;
+		apply(active, result.options);
+		if (result.options.both) {
+			sort_options_[1 - active] = result.options;
+			apply(1 - active, result.options);
+		}
+		StoreCurrentTabState();
+		settings_.Save();
+		UpdateStatus();
+		return;
+	}
 
-	wxRadioBox *key_box = new wxRadioBox(&dlg, wxID_ANY, to_wx(_T("並べ替えキー")), wxDefaultPosition,
-	                                      wxDefaultSize, choices, 1, wxRA_SPECIFY_COLS);
-	key_box->SetSelection(static_cast<int>(pane->GetSortKey()));
+	if (!sort_mode_dialog::Run(this, options, !pane->IsResultList())) return;
+	options = sort_mode::Normalize(options);
+	if (options.mode == sort_mode::Mode::None ||
+	    options.dir_mode == sort_mode::DirectoryMode::Icon) {
+		SetStatusWarning(_T("ソートなし/アイコン順は未移植 (未実装処理) です"));
+		return;
+	}
+	sort_options_[active] = options;
+	apply(active, options);
+	if (options.both) {
+		sort_options_[1 - active] = options;
+		apply(1 - active, options);
+	}
 
-	wxCheckBox *desc_box = new wxCheckBox(&dlg, wxID_ANY, to_wx(_T("降順")));
-	desc_box->SetValue(pane->IsSortDescending());
-
-	wxCheckBox *dirs_box = new wxCheckBox(&dlg, wxID_ANY, to_wx(_T("ディレクトリを先に集める")));
-	dirs_box->SetValue(pane->IsDirsFirst());
-
-	wxBoxSizer *top = new wxBoxSizer(wxVERTICAL);
-	top->Add(key_box, wxSizerFlags().Expand().Border(wxALL, 8));
-	top->Add(desc_box, wxSizerFlags().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
-	top->Add(dirs_box, wxSizerFlags().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
-	top->Add(dlg.CreateButtonSizer(wxOK | wxCANCEL), wxSizerFlags().Expand().Border(wxALL, 8));
-	dlg.SetSizerAndFit(top);
-	dlg.CentreOnParent();
-
-	if (dlg.ShowModal() != wxID_OK) return;
-
-	pane->SetSortSettings(static_cast<SortKey>(key_box->GetSelection()), desc_box->GetValue(), dirs_box->GetValue());
+	// VCL の SortModeDlg は現在の値を ini に残す。wx 版も専用キーへ保存する。
+	settings_.Ini().WriteIntGen(_T("SortMode"), sort_mode::ToIndex(options.mode));
+	settings_.Ini().WriteIntGen(_T("DirSortMode"), sort_mode::ToIndex(options.dir_mode));
+	settings_.Ini().WriteBoolGen(_T("SortNatural"), options.natural);
+	settings_.Ini().WriteBoolGen(_T("SortBoth"), options.both);
+	settings_.Ini().WriteBoolGen(_T("SortLogical"), options.logical);
+	settings_.Ini().WriteStrGen(_T("SortExtList"), options.extension_list);
+	settings_.Save();
+	StoreCurrentTabState();
+	UpdateStatus();
 }
 
 //---------------------------------------------------------------------------
@@ -4726,6 +4921,8 @@ void MainFrame::CmdCopy()
 	}
 
 	const UnicodeString dst_dir = dst_pane->GetPath();
+	const SameNameAction same_name_action = AskSameNameConflict(this, pane, dst_pane);
+	if (same_name_action != SameNameAction::Proceed) return;
 	if (!ConfirmItems(this, _T("コピー"), _T("コピー"), names, dst_dir)) return;
 
 	// 結果リストの項目は一覧のディレクトリの外にあるので、名前ではなく
@@ -4761,6 +4958,8 @@ void MainFrame::CmdMove()
 	}
 
 	const UnicodeString dst_dir = dst_pane->GetPath();
+	const SameNameAction same_name_action = AskSameNameConflict(this, pane, dst_pane);
+	if (same_name_action != SameNameAction::Proceed) return;
 	if (!ConfirmItems(this, _T("移動"), _T("移動"), names, dst_dir)) return;
 
 	// 結果リストの項目は一覧のディレクトリの外にあるので、名前ではなく
@@ -7707,34 +7906,104 @@ void MainFrame::CmdDeleteADS()
 //---------------------------------------------------------------------------
 
 /**
- * @brief 反対側へバックアップ予約 (Backup)
- * @details VCL (MainFrm.cpp:13645) は BACKUP タスクを発行するが、実コピーの
- *          スレッドは未移植のため、経路の検証 (ValidateBackupPaths) と
- *          確認のうえログへ予約を記録する簡略版にした。**コピーは行わない**
+ * @brief バックアップ設定/予約 (Backup)
+ * @details VCL は `src/MainFrm.cpp:13715-13755` で TBackupDlg を開き、
+ *          マスク・除外・同期・日付条件を取得して Backup タスクを発行する。
+ *          設定の保存/CSV/同期先解決は gui/backup_settings、入力は
+ *          gui/backup_dialog が担当する。
+ *
+ *          未移植 (未実装扱い): TTaskThread による実コピー、タスク進捗、
+ *          設定履歴の永続化。操作は設定の検証・確認・予約ログに留める。
  */
 void MainFrame::CmdBackup(const UnicodeString &param)
 {
-	(void)param;  // VCL は設定名を受けて即時実行する分岐があるが、設定表が無いため常に確認する
 	FilePane *pane = ActivePane();
 	FilePane *opp = OppositePane();
 	if (pane->IsResultList() || opp->IsResultList()) {
 		SetStatusWarning(_T("結果リスト上では操作できません"));
 		return;
 	}
+
+	backup_settings::Options options;
+	options.include_mask = settings_.Ini().ReadStrGen(_T("BackupIncMask"), _T("*"));
+	options.exclude_mask = settings_.Ini().ReadStrGen(_T("BackupExcMask"));
+	options.skip_dirs = settings_.Ini().ReadStrGen(_T("BackupSkipDir"));
+	options.sub_dirs = settings_.Ini().ReadBoolGen(_T("BackupSubDir"));
+	options.mirror = settings_.Ini().ReadBoolGen(_T("BackupMirror"));
+	options.sync = settings_.Ini().ReadBoolGen(_T("BackupSync"));
+	options.date_condition = settings_.Ini().ReadStrGen(_T("BackupDateCond"));
+	options.confirm = settings_.Ini().ReadBoolGen(_T("BackupSureStart"), true);
+
+	std::vector<backup_settings::Setup> setups;
+	const int setup_count = settings_.Ini().ReadInteger(_T("WxGuiBackup"), _T("Count"), 0);
+	for (int i = 0; i < setup_count; ++i) {
+		UnicodeString key;
+		const UnicodeString record = settings_.Ini().ReadString(
+			_T("WxGuiBackup"), key.sprintf(_T("Item%02d"), i), EmptyStr, false);
+		backup_settings::Setup setup;
+		if (!record.IsEmpty() && backup_settings::ParseSetupRecord(record, setup)) setups.push_back(setup);
+	}
+	int selected = settings_.Ini().ReadIntGen(_T("BakupSetupIdx"), -1);
+	if (selected >= 0 && selected < static_cast<int>(setups.size())) {
+		options = setups[static_cast<std::size_t>(selected)].options;
+	}
+
+	UnicodeString setup_name;
+	if (!param.Trim().IsEmpty()) {
+		const int found = backup_settings::FindSetupIndex(setups, param);
+		if (found < 0) {
+			SetStatusWarning(_T("バックアップ設定が見つかりません: ") + param);
+			return;
+		}
+		selected = found;
+		setup_name = setups[static_cast<std::size_t>(found)].name;
+		options = setups[static_cast<std::size_t>(found)].options;
+	}
+	else {
+		backup_dialog::Context context;
+		context.source_dir = pane->GetPath();
+		context.dest_dir = opp->GetPath();
+		context.sync_settings = syncdirs_.Items();
+		if (!backup_dialog::Run(this, context, options, setups, selected)) return;
+		if (selected >= 0 && selected < static_cast<int>(setups.size()))
+			setup_name = setups[static_cast<std::size_t>(selected)].name;
+	}
+
+	settings_.Ini().WriteStrGen(_T("BackupIncMask"), options.include_mask);
+	settings_.Ini().WriteStrGen(_T("BackupExcMask"), options.exclude_mask);
+	settings_.Ini().WriteStrGen(_T("BackupSkipDir"), options.skip_dirs);
+	settings_.Ini().WriteBoolGen(_T("BackupSubDir"), options.sub_dirs);
+	settings_.Ini().WriteBoolGen(_T("BackupMirror"), options.mirror);
+	settings_.Ini().WriteBoolGen(_T("BackupSync"), options.sync);
+	settings_.Ini().WriteStrGen(_T("BackupDateCond"), options.date_condition);
+	settings_.Ini().WriteBoolGen(_T("BackupSureStart"), options.confirm);
+	settings_.Ini().WriteIntGen(_T("BakupSetupIdx"), selected);
+	settings_.Ini().WriteInteger(_T("WxGuiBackup"), _T("Count"), static_cast<int>(setups.size()));
+	for (int i = 0; i < static_cast<int>(setups.size()); ++i) {
+		UnicodeString key;
+		settings_.Ini().WriteString(_T("WxGuiBackup"), key.sprintf(_T("Item%02d"), i),
+		                            backup_settings::FormatSetupRecord(setups[static_cast<std::size_t>(i)]));
+	}
+	settings_.Save();
+
 	UnicodeString error;
-	if (!f_misc_ops::ValidateBackupPaths(pane->GetPath(), opp->GetPath(), error)) {
+	if (!backup_settings::ValidateOptions(options, pane->GetPath(), opp->GetPath(), error)) {
 		SetStatusWarning(error);
 		return;
 	}
+	const auto targets = backup_settings::ResolveDestinations(
+		opp->GetPath(), options.sync, syncdirs_.Items());
 	UnicodeString msg;
-	msg.sprintf(_T("バックアップを予約しますか?\r\n\r\nバックアップ元: %s\r\nバックアップ先: %s"),
+	msg.sprintf(_T("バックアップ設定を記録しますか?\r\n\r\n元: %s\r\n先: %s"),
 	            pane->GetPath().c_str(), opp->GetPath().c_str());
-	if (wxMessageBox(to_wx(msg), to_wx(_T("バックアップ")),
-	                 wxYES_NO | wxICON_QUESTION, this) != wxYES) return;
+	if (!setup_name.IsEmpty()) msg += _T("\r\n設定: ") + setup_name;
+	if (targets.size() > 1) msg += _T("\r\n同期先: ") + IntToStr(static_cast<int>(targets.size() - 1));
+	if (options.confirm && wxMessageBox(to_wx(msg), to_wx(_T("バックアップ")),
+	                                    wxYES_NO | wxICON_QUESTION, this) != wxYES) return;
 	log_.Add(log_win::LogStatus::Info,
-	         _T("バックアップ予約: ") + pane->GetPath() + _T(" ---> ") + opp->GetPath(),
+	         _T("バックアップ設定予約: ") + pane->GetPath() + _T(" ---> ") + opp->GetPath(),
 	         /*show_time=*/true);
-	SetStatusWarning(_T("バックアップを予約しました (実コピーは未対応)"));
+	SetStatusWarning(_T("バックアップ設定を予約しました (実コピーは未移植)"));
 }
 
 /**
