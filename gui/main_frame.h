@@ -260,7 +260,7 @@ private:
 	void CmdOpenTrash();       //!< ごみ箱を開く
 	void CmdFileRun();         //!< 「ファイル名を指定して実行」
 	void CmdOpenCtrlPanel();   //!< コントロールパネルを開く
-	void CmdCalculator();      //!< 電卓を開く (Calculator)
+	void CmdCalculator(const UnicodeString &param); //!< 電卓を開く (Calculator; CB はクリップボード評価)
 	void CmdExeCommandLine(const UnicodeString &param);  //!< 外部コマンド実行 (FN/LC 対応)
 	void CmdOpenByWin(const UnicodeString &param);  //!< 関連付けで開く (OpenByWin)
 	void CmdInputCommands();   //!< コマンドを入力して実行 (InputCommands)
