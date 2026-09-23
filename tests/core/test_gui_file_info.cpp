@@ -51,6 +51,13 @@ FileItem make_item(const UnicodeString &name, Int64 size, bool is_dir = false)
 	return itm;
 }
 
+UnicodeString JoinLines(const std::vector<UnicodeString> &lines)
+{
+	UnicodeString text;
+	for (const UnicodeString &line : lines) text += line + _T("\r\n");
+	return text;
+}
+
 }  // namespace
 
 //===========================================================================
@@ -143,4 +150,93 @@ TEST_CASE("AppendHashLines: \"abc\" のCRC32/SHA256が既知の値と一致す�
 	// get_CRC32_str / get_HashStr はどちらも小文字16進 ("%02x"/"%08x") で返す
 	CHECK(ContainsStr(text, "CRC32: 352441c2"));
 	CHECK(ContainsStr(text, "SHA256: ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"));
+}
+
+//===========================================================================
+// CSV/TSV 項目の集計 (TFileInfoDlg::UpdateInfo の isCalcItem 相当)
+//===========================================================================
+TEST_CASE("file_info::ResolveNumericColumn: 数値列を最初に見つける")
+{
+	const std::vector<UnicodeString> rows = {
+		_T("name,amount,note"),
+		_T("alpha,10,x"),
+		_T("beta,20,y")
+	};
+	CHECK(file_info::ResolveNumericColumn(rows, -1, true) == 1);
+	CHECK(file_info::ResolveNumericColumn(rows, 2, true) == -1);
+}
+
+TEST_CASE("file_info::AnalyzeColumn: CSV の数値を統計し、度数分布を返す")
+{
+	const std::vector<UnicodeString> rows = {
+		_T("name,amount"),
+		_T("a,1"),
+		_T("b,2"),
+		_T("c,3"),
+		_T("d,4")
+	};
+	const file_info::ColumnStats stats = file_info::AnalyzeColumn(rows, 1, true);
+
+	REQUIRE(stats.valid);
+	CHECK(stats.format == file_info::TableFormat::Csv);
+	CHECK(stats.item_name == UnicodeString(_T("amount")));
+	CHECK(stats.count == 4);
+	CHECK(stats.total == 2.5L * 4);
+	CHECK(stats.minimum == 1.0L);
+	CHECK(stats.maximum == 4.0L);
+	CHECK(stats.average == 2.5L);
+	CHECK(stats.median == 2.5L);
+	CHECK(stats.variance == 1.25L);
+	REQUIRE(stats.histogram.size() == 3);
+	CHECK(stats.histogram[0].count == 1);
+	CHECK(stats.histogram[1].count == 1);
+	CHECK(stats.histogram[2].count == 2);
+}
+
+TEST_CASE("file_info::AnalyzeColumn: TSV とヘッダー無しの項目名を扱う")
+{
+	const std::vector<UnicodeString> rows = {
+		_T("alpha\t10"),
+		_T("beta\t20")
+	};
+	const file_info::ColumnStats stats = file_info::AnalyzeColumn(rows, 1, false);
+
+	REQUIRE(stats.valid);
+	CHECK(stats.format == file_info::TableFormat::Tsv);
+	CHECK(stats.item_name == UnicodeString(_T("項目2")));
+	CHECK(stats.count == 2);
+	CHECK(stats.total == 30.0L);
+}
+
+TEST_CASE("file_info::AnalyzeColumn: 数値列が無ければ理由付きで失敗する")
+{
+	const std::vector<UnicodeString> rows = {
+		_T("name,note"),
+		_T("alpha,x"),
+		_T("beta,y")
+	};
+	const file_info::ColumnStats stats = file_info::AnalyzeColumn(rows, 1, true);
+	CHECK_FALSE(stats.valid);
+	CHECK(stats.error == UnicodeString(_T("有効な数値項目がありません")));
+}
+
+TEST_CASE("file_info::BuildColumnStatLines: 集計値と度数分布を表示行へする")
+{
+	const std::vector<UnicodeString> rows = {
+		_T("amount"),
+		_T("10"),
+		_T("20")
+	};
+	const file_info::ColumnStats stats = file_info::AnalyzeColumn(rows, 0, true);
+	const std::vector<UnicodeString> lines = file_info::BuildColumnStatLines(stats);
+
+	REQUIRE(lines.size() >= 12);
+	CHECK(lines[0] == UnicodeString(_T("項目名")));
+	CHECK(ContainsStr(UnicodeString(lines[1]), _T("amount")));
+	CHECK(ContainsStr(JoinLines(lines), _T("有効項目数")));
+	CHECK(ContainsStr(JoinLines(lines), _T("合計値")));
+	CHECK(ContainsStr(JoinLines(lines), _T("平均値")));
+	CHECK(ContainsStr(JoinLines(lines), _T("中央値")));
+	CHECK(ContainsStr(JoinLines(lines), _T("標準偏差")));
+	CHECK(ContainsStr(JoinLines(lines), _T("度数分布")));
 }

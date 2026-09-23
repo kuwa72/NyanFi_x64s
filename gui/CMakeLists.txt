@@ -81,6 +81,9 @@ add_executable(nyanfi
 	main_frame.cpp
 	file_pane.cpp
 	file_info_panel.cpp
+	file_info_dialog.cpp
+	file_ext_dialog.cpp
+	tag_dialog.cpp
 	text_viewer.cpp
 	image_viewer.cpp
 	grep_dialog.cpp

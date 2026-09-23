@@ -121,6 +121,10 @@ public:
 
 	/// 行数 (ViewTail の移動先計算用)
 	int LineCount() const { return static_cast<int>(doc_.lines.size()); }
+	/// CsvCalc の集計元にする読み込み済み行
+	const std::vector<UnicodeString> &DocumentLines() const { return doc_.lines; }
+	/// バイナリ表示なら true
+	bool IsBinary() const { return doc_.is_binary; }
 	/// 表示設定の現在値 (Fモード配線の状態表示・テスト用)
 	bool ShowLineNo() const { return show_line_no_; }
 	bool ShowRuler() const { return show_ruler_; }
