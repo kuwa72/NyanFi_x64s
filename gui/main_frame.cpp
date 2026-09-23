@@ -59,6 +59,9 @@
 #include "gui/backup_dialog.h"
 #include "gui/same_name.h"
 #include "gui/same_name_dialog.h"
+#include "gui/distribution_dialog.h"
+#include "gui/function_list_dialog.h"
+#include "gui/cmd_list_dialog.h"
 #include "gui/cv_img_dialog.h"
 #include "gui/cre_dirs_dialog.h"
 #include "gui/tab_dialog.h"
@@ -3130,6 +3133,25 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	// (CursorUp/Down/PageUp/PageDown/Close は F/I モードと同名のため、
 	// 下の else-if に置くと到達不能になる。選択系・特殊表示系・外部連携系は対象外)
 	if (viewer_ != nullptr && viewer_->IsShown()) {
+		// 関数/ユーザー定義/マーク行一覧 (VCL MainFrm.cpp:33040-33045,
+		// 33600-33637)。F モードの分岐へ落とすと一般の MarkList と衝突する。
+		if (SameStr(command, _T("FunctionList"))) {
+			CmdFunctionList(function_list::Mode::Function, param);
+			return true;
+		}
+		if (SameStr(command, _T("UserDefList"))) {
+			CmdFunctionList(function_list::Mode::UserDefined, param);
+			return true;
+		}
+		if (SameStr(command, _T("MarkList"))) {
+			CmdFunctionList(function_list::Mode::MarkLine, param);
+			return true;
+		}
+		// V:SetUserDefStr はダイアログを開かず、次のユーザー定義一覧へ渡す。
+		if (SameStr(command, _T("SetUserDefStr"))) {
+			pending_user_def_ = param;
+			return true;
+		}
 		if (SameStr(command, _T("CursorUp"))) {
 			viewer_->CmdCursorUp(param);
 			UpdateStatus();
@@ -4309,11 +4331,8 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		SetStatusWarning(_T("メインメニューのポップアップは未対応です"));
 	}
 	else if (SameStr(command, _T("CmdFileList"))) {
-		// VCL は CmdFileListDlg を開くが、ダイアログ自体が Phase 3 の対象外
-		// のため警告のみ ("FF" の有無は image_view_ops::ShouldShowCmdFileFilter
-		// で判定できることをテストで保証する)
-		(void)image_view_ops::ShouldShowCmdFileFilter(param);
-		SetStatusWarning(_T("コマンドファイル一覧は未対応です"));
+		// 実在する FVI コマンド (usr_cmdlist.cpp:347) から開く。
+		CmdFileList(param);
 	}
 	else if (SameStr(command, _T("Grep"))) {
 		CmdGrep();
@@ -5710,6 +5729,113 @@ void MainFrame::ShowViewer(bool show)
 	}
 	Layout();
 	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 関数/ユーザー定義文字列/マーク行一覧を表示する
+ * @details VCL の実呼び出しは `src/MainFrm.cpp:33040-33045` (モード分岐)、
+ *          `33600-33637` (FF/FZ、FileEdit要求) として実測した。wx 側の
+ *          `TextViewer` は行単位の簡略版なので、関数名パターンは拡張子ごとの
+ *          保守的な規則で判定している (gui/function_list.h の未実装コメント参照)。
+ */
+void MainFrame::CmdFunctionList(function_list::Mode mode, const UnicodeString &param)
+{
+	if (viewer_ == nullptr || !viewer_->IsShown()) {
+		SetStatusWarning(_T("テキストビューアを表示してください"));
+		return;
+	}
+	const bool has_marks = !viewer_->Marks().empty();
+	if (!function_list::IsAvailable(mode, true, has_marks)) {
+		SetStatusWarning(_T("マーク行がありません"));
+		return;
+	}
+
+	function_list::Source source;
+	source.file_name = viewer_->FileName();
+	source.lines = viewer_->Lines();
+	source.marks = viewer_->Marks();
+	source.current_line = viewer_->CurrentLine();
+	const UnicodeString ext = get_extension(source.file_name);
+	source.is_dfm = SameText(ext, _T(".dfm"));
+	if (test_FileExt(ext, FEXT_C_SRC) || test_FileExt(ext, FEXT_C_HDR)) {
+		source.function_pattern = _T("^[A-Za-z_][A-Za-z0-9_:<>~]*\\s*\\(");
+	}
+	else if (test_FileExt(ext, _T(".pas.dpr.dpk.inc"))) {
+		source.function_pattern = _T("^\\s*(procedure|function|constructor|destructor)\\b");
+	}
+	source.name_pattern = _T("^[A-Za-z_][A-Za-z0-9_]*");
+
+	function_list::Options options;
+	options.mode = function_list::NormalizeMode(static_cast<int>(mode));
+	const function_list::CommandOptions command = function_list::ParseCommandOptions(param);
+	options.to_filter = command.to_filter;
+	options.fuzzy = command.fuzzy;
+	options.regex = settings_.Ini().ReadBoolGen(_T("FuncListRegEx"));
+	options.name_only = settings_.Ini().ReadBoolGen(_T("FuncListNameOnly"));
+	options.link = settings_.Ini().ReadBoolGen(_T("FuncListLinkLine"), true);
+	source.user_pattern = pending_user_def_.IsEmpty()
+		? settings_.Ini().ReadStrGen(_T("FuncListUserStr")) : pending_user_def_;
+	source.user_regex = options.regex;
+
+	function_list_dialog::Result result;
+	if (!function_list_dialog::Run(this, source, options, result)) return;
+	if (result.line_no >= 0) viewer_->GotoLine(result.line_no);
+
+	settings_.Ini().WriteStrGen(_T("FuncListUserStr"), result.user_pattern);
+	settings_.Ini().WriteBoolGen(_T("FuncListNameOnly"), result.name_only);
+	settings_.Ini().WriteBoolGen(_T("FuncListLinkLine"), result.link);
+	settings_.Ini().WriteBoolGen(_T("FuncListRegEx"), result.regex);
+	settings_.Save();
+	pending_user_def_ = EmptyStr;
+
+	if (result.request_edit) {
+		// VCL は FileEditV を投げる (FuncDlg.cpp:569-573)。既存の
+		// FileEdit 実装へ渡す。
+		Execute(cmd_list::MakeEditCommand(viewer_->FileName()));
+	}
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief コマンドファイル一覧 (FVI:CmdFileList) を開く
+ * @details VCL の `src/MainFrm.cpp:14426-14432` を実測。`OptDlg`/`BtnDlg` の
+ *          ShowToSelect 経路 (OptDlg.cpp:2615-2633,3693-3697,4155-4160、
+ *          BtnDlg.cpp:209-211) は設定画面未移植のため現時点では到達不能。
+ *          新規コマンドは作らず、実在する CmdFileList のみを配線する。
+ */
+void MainFrame::CmdFileList(const UnicodeString &param)
+{
+	cmd_list::Options options;
+	options.to_filter = f_misc_ops::HasParamToken(param, _T("FF"));
+	options.confirm_execute = settings_.Ini().ReadBoolGen(_T("CmdFileListCnfExe"));
+	options.preview = settings_.Ini().ReadBoolGen(_T("CmdFileListPreview"));
+	const FileItem *current = ActivePane()->GetCurrentItem();
+	if (current != nullptr && !current->is_parent && cmd_list::IsCommandFile(current->name)) {
+		options.initial_file = ActivePane()->FullPathOf(*current);
+	}
+
+	const std::vector<cmd_list::Entry> entries = cmd_list_dialog::Enumerate(ExePath);
+	if (entries.empty()) {
+		SetStatusWarning(_T("コマンドファイルがありません"));
+		return;
+	}
+	cmd_list::Result result;
+	if (!cmd_list_dialog::Run(this, entries, options, result)) return;
+	settings_.Ini().WriteBoolGen(_T("CmdFileListPreview"), result.preview);
+	settings_.Ini().WriteBoolGen(_T("CmdFileListMigemo"), result.fuzzy);
+	settings_.Save();
+	if (result.action == cmd_list::Action::Execute) {
+		// VCL は CmdRequestList へ "ExeCommands_\"@...\"" を積む
+		// (CmdListDlg.cpp:399-401)。GUI には ExeCommandsCore の移植が
+		// ないため、要求解決コマンドをログに残して停止する (未実装扱い)。
+		const UnicodeString request = cmd_list::MakeExecutionCommand(result.path);
+		log_.Add(log_win::LogStatus::Info, _T("実行要求: ") + request, /*show_time=*/true);
+		SetStatusWarning(_T("コマンドファイルの実行は未移植です (要求を記録しました)"));
+	}
+	else if (result.action == cmd_list::Action::Edit) {
+		Execute(cmd_list::MakeEditCommand(result.path));
+	}
 }
 
 //---------------------------------------------------------------------------
@@ -9838,36 +9964,127 @@ void MainFrame::CmdDebugCmdFile(const UnicodeString &param)
 
 /**
  * @brief 振り分けダイアログ (DistributionDlg)
- * @details VCL (MainFrm.cpp:16369) の XC/XM/SN は ResolveDistributionMode、
- *          書庫/ADS/Work/FTP ガードは CanUseDistributionDlg。
- *          振り分けダイアログとコピー/移動タスクは未移植のため警告のみ。
- *          .ini 指定は IsDistrIniFile で検出してログに残す
+ * @details VCL (MainFrm.cpp:16369-16419) の実測を基に、wx ダイアログ、
+ *          プレビュー、既存 file_ops への実処理まで接続する。XC/XM/SN の
+ *          優先順位は f_batch7_ops::ResolveDistributionMode に残した。
+ *
+ *          未移植 (未実装扱い): VCL の進捗バー/ListFile の編集 UI、
+ *          \DT/\TS/\XT/\Z の日時書式、DistributionDlg 用の TaskConfig
+ *          (ここでは file_ops の項目単位処理に委譲)。
  */
 void MainFrame::CmdDistributionDlg(const UnicodeString &param)
 {
-	// 特殊リストの状態は未移植のため false (通常の一覧として扱う)
+	// 特殊リストの状態は未移植のため false (通常の一覧として扱う)。ワークリストだけは
+	// MainFrame 自身が保持しているので実測できる。
 	if (!f_batch7_ops::CanUseDistributionDlg(/*is_arc=*/false, /*is_ads=*/false,
-	                                         /*is_work=*/false, /*is_ftp=*/false)) {
+	                                         /*is_work=*/WorkPane() != nullptr, /*is_ftp=*/false)) {
 		SetStatusWarning(_T("操作できません"));
 		return;
 	}
-	if (f_batch7_ops::IsDistrIniFile(param))
-		log_.Add(log_win::LogStatus::Info,
-		         _T("振り分け登録ファイル: ") + param, /*show_time=*/true);
-	switch (f_batch7_ops::ResolveDistributionMode(param)) {
-	case f_batch7_ops::DistributionMode::ImmediateCopy:
-		SetStatusWarning(_T("振り分けの即時コピーは未対応です"));
-		break;
-	case f_batch7_ops::DistributionMode::ImmediateMove:
-		SetStatusWarning(_T("振り分けの即時移動は未対応です"));
-		break;
-	case f_batch7_ops::DistributionMode::SetMask:
-		SetStatusWarning(_T("振り分けのマスク設定は未対応です"));
-		break;
-	case f_batch7_ops::DistributionMode::Dialog:
-		SetStatusWarning(_T("振り分けダイアログは未対応です"));
-		break;
+
+	FilePane *pane = ActivePane();
+	std::vector<distribution::Input> items;
+	for (const FileItem &item : pane->GetSelectedItems()) {
+		if (item.is_parent || item.is_separator || item.missing) continue;
+		UnicodeString path = pane->FullPathOf(item);
+		if (item.is_dir) path = IncludeTrailingPathDelimiter(path);
+		items.push_back({path, item.is_dir});
 	}
+	if (items.empty()) {
+		SetStatusWarning(_T("振り分け対象がありません"));
+		return;
+	}
+
+	distribution::Options initial;
+	initial.opposite_path = OppositePane()->GetPath();
+	initial.create_directories = settings_.Ini().ReadBoolGen(_T("DistrDlgCreDir"), true);
+	const int mode_no = settings_.Ini().ReadIntGen(_T("DistrDlgCopyMode"), 2);
+	initial.copy_mode = static_cast<distribution::CopyMode>(std::clamp(mode_no, 0, 3));
+
+	const f_batch7_ops::DistributionMode command_mode = f_batch7_ops::ResolveDistributionMode(param);
+	initial.move = command_mode == f_batch7_ops::DistributionMode::ImmediateMove;
+
+	std::vector<distribution::Rule> rules;
+	std::unique_ptr<TStringList> stored(new TStringList());
+	if (f_batch7_ops::IsDistrIniFile(param)) {
+		try {
+			std::unique_ptr<UsrIniFile> registration(new UsrIniFile(to_absolute_name(param)));
+			registration->LoadListItems(_T("DistrDefList"), stored.get(), 200, false);
+		}
+		catch (...) {
+			SetStatusWarning(_T("振り分け登録ファイルを読み込めません: ") + param);
+			return;
+		}
+	}
+	else {
+		settings_.Ini().ReadSection(_T("DistrDefList"), stored.get());
+	}
+	for (int i = 0; i < stored->Count; ++i) rules.push_back(distribution::ParseRule(stored->Strings[i]));
+
+	distribution_dialog::Result result;
+	if (!distribution_dialog::Run(this, items, rules, initial, result)) return;
+
+	// 登録と表示オプションを保存する。外部 .ini 指定時は VCL と同じ
+	// DistrDefList セクションへ保存し、GUI 設定にも現在値を保存する。
+	std::unique_ptr<TStringList> save_rules(new TStringList());
+	for (const distribution::Rule &rule : result.rules) save_rules->Add(distribution::MakeRuleRecord(rule));
+	if (f_batch7_ops::IsDistrIniFile(param)) {
+		try {
+			std::unique_ptr<UsrIniFile> registration(new UsrIniFile(to_absolute_name(param)));
+			registration->SaveListItems(_T("DistrDefList"), save_rules.get(), 200);
+			if (!registration->UpdateFile()) SetStatusWarning(_T("振り分け登録ファイルを保存できませんでした"));
+		}
+		catch (...) {
+			SetStatusWarning(_T("振り分け登録ファイルの保存に失敗しました"));
+		}
+	}
+	settings_.Ini().AssignSection(_T("DistrDefList"), save_rules.get());
+	settings_.Ini().WriteIntGen(_T("DistrDlgCopyMode"), static_cast<int>(result.options.copy_mode));
+	settings_.Ini().WriteBoolGen(_T("DistrDlgCreDir"), result.options.create_directories);
+	settings_.Save();
+
+	if (command_mode == f_batch7_ops::DistributionMode::ImmediateCopy ||
+	    command_mode == f_batch7_ops::DistributionMode::ImmediateMove) {
+		// VCL は InitialImmediateExe でダイアログを自動終了するが、wx 版は
+		// 必ず Copy/Move ボタンで確定する。自動実行は未移植 (未実装扱い)。
+		SetStatusWarning(_T("XC/XM の自動実行は未実装です。Copy/Move を確認して実行してください"));
+	}
+	if (command_mode == f_batch7_ops::DistributionMode::SetMask) {
+		SetStatusWarning(_T("SN のマスク事前設定は未実装です。ダイアログで登録してください"));
+	}
+
+	file_ops::FileOpResult operation;
+	const file_ops::ConflictPolicy policy = distribution::ConflictPolicyFor(result.options.copy_mode);
+	int format_skips = 0;
+	for (const distribution::PreviewItem &row : result.preview.items) {
+		if (row.skipped) continue;
+		UnicodeString target = row.destination;
+		// VCL は拡張子なしの振分先をディレクトリとして扱う。実ファイル名を
+		// 補って既存 file_ops の「同名名」経路へ渡す。
+		if (get_extension(target).IsEmpty()) {
+			target = IncludeTrailingPathDelimiter(target) + ExtractFileName(row.source);
+		}
+		const UnicodeString source_name = ExtractFileName(ExcludeTrailingPathDelimiter(row.source));
+		if (!SameText(ExtractFileName(target), source_name)) {
+			++format_skips;
+			operation.failures.push_back(row.source + _T(": 宛先名書式の変更は未実装 (未実装扱い)"));
+			continue;
+		}
+		const UnicodeString dest_dir = ExtractFilePath(ExcludeTrailingPathDelimiter(target));
+		const file_ops::FileOpResult one = result.options.move
+			? file_ops::MoveItems({row.source}, dest_dir, policy)
+			: file_ops::CopyItems({row.source}, dest_dir, policy);
+		operation.success_count += one.success_count;
+		operation.skipped_existing += one.skipped_existing;
+		operation.failures.insert(operation.failures.end(), one.failures.begin(), one.failures.end());
+	}
+	panes_[0]->Reload();
+	panes_[1]->Reload();
+	wxMessageBox(to_wx(file_ops::Summarize(operation) +
+	                   (format_skips > 0? UnicodeString(_T("\n書式変更の未処理: ")) + IntToStr(format_skips) : EmptyStr)),
+	             to_wx(result.options.move? _T("振り分け移動の結果") : _T("振り分けコピーの結果")),
+	             wxOK | wxICON_INFORMATION, this);
+	UpdateStatus();
 }
 
 /**

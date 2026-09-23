@@ -105,6 +105,9 @@ add_executable(nyanfi
 	new_file_dialog.cpp
 	exe_cmd_dialog.cpp
 	pre_same_dialog.cpp
+	distribution_dialog.cpp
+	function_list_dialog.cpp
+	cmd_list_dialog.cpp
 	mask_dialog.cpp
 	tab_dialog.cpp
 	regdir_dialog.cpp
