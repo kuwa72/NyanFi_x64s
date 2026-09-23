@@ -91,6 +91,7 @@ add_executable(nyanfi
 	cv_img_dialog.cpp
 	find_txt_dialog.cpp
 	cre_dirs_dialog.cpp
+	gen_info_dialog.cpp
 	diff_dialog.cpp
 	comp_dialog.cpp
 	sort_mode_dialog.cpp
@@ -105,6 +106,9 @@ add_executable(nyanfi
 	new_file_dialog.cpp
 	exe_cmd_dialog.cpp
 	pre_same_dialog.cpp
+	distribution_dialog.cpp
+	function_list_dialog.cpp
+	cmd_list_dialog.cpp
 	mask_dialog.cpp
 	tab_dialog.cpp
 	regdir_dialog.cpp
