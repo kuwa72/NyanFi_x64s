@@ -84,6 +84,10 @@ add_executable(nyanfi
 	text_viewer.cpp
 	image_viewer.cpp
 	grep_dialog.cpp
+	grep_opt_dialog.cpp
+	cv_img_dialog.cpp
+	find_txt_dialog.cpp
+	cre_dirs_dialog.cpp
 	diff_dialog.cpp
 	comp_dialog.cpp
 	rename_dialog.cpp

@@ -14,6 +14,7 @@
 #include "usr_str.h"
 #include "usr_cmdlist.h"
 #include "gui/text_display.h"
+#include "gui/find_txt_dialog.h"
 
 namespace {
 
@@ -87,6 +88,8 @@ bool TextViewer::LoadFile(const UnicodeString &path, UnicodeString &error)
 	wrap_ = false;
 	marks_.clear();
 	last_search_ = EmptyStr;
+	find_options_ = find_txt::Options();
+	find_options_.keyword = EmptyStr;
 	last_error_ = EmptyStr;
 	forced_code_page_ = 0;
 
@@ -228,21 +231,39 @@ void TextViewer::ToggleWrap()
 //---------------------------------------------------------------------------
 void TextViewer::PromptSearch()
 {
-	wxTextEntryDialog dlg(this, to_wx(_T("検索文字列")), to_wx(_T("検索")), to_wx(last_search_));
-	if (dlg.ShowModal() != wxID_OK) return;
+	// VCL は TxtViewer.cpp:5396-5399 で FindText を利用可能判定し、
+	// MainFrm.cpp:19167-19171 から TFindTextDlg を表示する。wx では
+	// 同じダイアログを gui/find_txt_dialog に移し、判定は find_txt.h へ渡す。
+	find_txt::Options options = find_options_;
+	options.keyword = last_search_;
+	if (!find_txt_dialog::Run(this, doc_.is_binary, options)) return;
 
-	const UnicodeString kwd = to_us(dlg.GetValue());
-	if (kwd.IsEmpty()) return;
+	find_options_ = options;
+	last_search_ = options.keyword;
+	if (last_search_.IsEmpty()) return;
+	if (options.bytes || options.migemo) {
+		wxMessageBox(to_wx(_T("バイト列/Migemo 検索の実処理は未実装です")),
+		             to_wx(_T("検索")), wxOK | wxICON_INFORMATION, this);
+		return;
+	}
 
-	last_search_ = kwd;
-	if (!SearchForward(kwd, current_line_)) {
+	const bool found = options.direction == find_txt::Direction::Up
+		? SearchBackward(last_search_, current_line_, options.direction)
+		: SearchForward(last_search_, current_line_, options.direction);
+	if (!found) {
 		wxMessageBox(to_wx(_T("見つかりませんでした")), to_wx(_T("検索")), wxOK | wxICON_INFORMATION, this);
+	}
+	else if (options.close_after && on_close_) {
+		on_close_();
 	}
 }
 
-bool TextViewer::SearchForward(const UnicodeString &kwd, int from_line)
+bool TextViewer::SearchForward(const UnicodeString &kwd, int from_line,
+                               find_txt::Direction direction)
 {
-	const int found = text_viewer_core::FindNextLine(doc_.lines, kwd, from_line, true);
+	find_txt::Options options = find_options_;
+	options.keyword = kwd;
+	const int found = find_txt::FindNextLine(doc_.lines, options, from_line, direction);
 	if (found == -1) return false;
 	current_line_ = found;
 	EnsureCursorVisible();
@@ -250,9 +271,12 @@ bool TextViewer::SearchForward(const UnicodeString &kwd, int from_line)
 	return true;
 }
 
-bool TextViewer::SearchBackward(const UnicodeString &kwd, int from_line)
+bool TextViewer::SearchBackward(const UnicodeString &kwd, int from_line,
+                                find_txt::Direction direction)
 {
-	const int found = text_viewer_core::FindNextLine(doc_.lines, kwd, from_line, false);
+	find_txt::Options options = find_options_;
+	options.keyword = kwd;
+	const int found = find_txt::FindNextLine(doc_.lines, options, from_line, direction);
 	if (found == -1) return false;
 	current_line_ = found;
 	EnsureCursorVisible();
@@ -438,13 +462,19 @@ void TextViewer::CmdCursorRight(const UnicodeString &param)
 
 void TextViewer::CmdFindText(const UnicodeString &param)
 {
-	if (doc_.is_binary) return;
 	if (param.IsEmpty()) {
 		PromptSearch();
 		return;
 	}
 	last_search_ = param;
-	if (!SearchForward(last_search_, current_line_)) {
+	find_options_.keyword = param;
+	if (doc_.is_binary) {
+		// バイナリ検索ダイアログ自体は開けるが、wx 版の実検索は未実装。
+		wxMessageBox(to_wx(_T("バイト列検索の実処理は未実装です")), to_wx(_T("検索")),
+		             wxOK | wxICON_INFORMATION, this);
+		return;
+	}
+	if (!SearchForward(last_search_, current_line_, find_options_.direction)) {
 		wxMessageBox(to_wx(_T("見つかりませんでした")), to_wx(_T("検索")), wxOK | wxICON_INFORMATION, this);
 	}
 }
@@ -452,9 +482,12 @@ void TextViewer::CmdFindText(const UnicodeString &param)
 bool TextViewer::CmdFindDown(const UnicodeString &param)
 {
 	if (doc_.is_binary) return false;
-	if (!param.IsEmpty()) last_search_ = param;
+	if (!param.IsEmpty()) {
+		last_search_ = param;
+		find_options_.keyword = param;
+	}
 	if (last_search_.IsEmpty()) return false;
-	if (!SearchForward(last_search_, current_line_)) {
+	if (!SearchForward(last_search_, current_line_, find_txt::Direction::Down)) {
 		wxMessageBox(to_wx(_T("見つかりませんでした")), to_wx(_T("検索")), wxOK | wxICON_INFORMATION, this);
 		return false;
 	}
@@ -464,9 +497,12 @@ bool TextViewer::CmdFindDown(const UnicodeString &param)
 bool TextViewer::CmdFindUp(const UnicodeString &param)
 {
 	if (doc_.is_binary) return false;
-	if (!param.IsEmpty()) last_search_ = param;
+	if (!param.IsEmpty()) {
+		last_search_ = param;
+		find_options_.keyword = param;
+	}
 	if (last_search_.IsEmpty()) return false;
-	if (!SearchBackward(last_search_, current_line_)) {
+	if (!SearchBackward(last_search_, current_line_, find_txt::Direction::Up)) {
 		wxMessageBox(to_wx(_T("見つかりませんでした")), to_wx(_T("検索")), wxOK | wxICON_INFORMATION, this);
 		return false;
 	}
