@@ -34,6 +34,7 @@
 #include "gui/file_ext.h"
 #include "gui/file_ext_dialog.h"
 #include "gui/gen_info_dialog.h"
+#include "gui/edit_hist_dialog.h"
 #include "gui/file_narrow.h"
 #include "gui/text_ops.h"
 #include "gui/text_display.h"
@@ -3916,7 +3917,9 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	}
 	//-- 履歴 (機能群20) ------------------------------------------------------
 	else if (SameStr(command, _T("EditHistory"))) {
-		CmdShowHistory(history::Kind::Edit);
+		// VCL は EditHistoryActionExecute (src/MainFrm.cpp:16908-16942) から
+		// TEditHistoryDlg を開く。FF/AC は同じ入口の TestActionParam。
+		CmdEditHistory(param);
 	}
 	else if (SameStr(command, _T("ViewHistory"))) {
 		CmdShowHistory(history::Kind::View);
@@ -8040,6 +8043,86 @@ void MainFrame::CmdCmdHistory(const UnicodeString &param)
 	gen_info_dialog::Result result;
 	if (!gen_info_dialog::Run(this, input, result) || result.primary.IsEmpty()) return;
 	if (!Execute(result.primary)) SetStatusWarning(_T("実行できません: ") + result.primary);
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief EditHistory を wx の編集履歴ダイアログへ渡す
+ * @details VCL の入口は `EditHistoryActionExecute`
+ *          (src/MainFrm.cpp:16908-16942)。`FF` は入力欄へフォーカスし、
+ *          `AC` は VCL と同様にダイアログを開かずに全消去する。
+ *          判定と設定の ini 往復は gui/edit_hist.h、表示/入力は
+ *          gui/edit_hist_dialog.h が担当する。
+ */
+void MainFrame::CmdEditHistory(const UnicodeString &param)
+{
+	const edit_hist::Request request = edit_hist::ParseRequest(param);
+	if (request.clear_all) {
+		if (hist_edit_.Entries().empty()) {
+			SetStatusWarning(_T("編集履歴がありません"));
+			return;
+		}
+		if (wxMessageBox(to_wx(_T("編集履歴をすべて削除しますか?")),
+		                 to_wx(_T("編集履歴の削除")), wxYES_NO | wxICON_QUESTION, this) != wxYES) {
+			return;
+		}
+		hist_edit_.Clear();
+		settings_.Save();
+		SetStatusWarning(_T("編集履歴を消去しました"));
+		return;
+	}
+
+	// VCL の FormShow にある実体ファイルの整理を、表示前にも行う。
+	const int dropped = hist_edit_.DropMissingFiles();
+	if (dropped > 0) {
+		SetStatusWarning(UnicodeString().sprintf(_T("%d 件は実体が無いので外しました"), dropped));
+	}
+
+	edit_hist::Preferences preferences;
+	edit_hist::LoadPreferences(settings_.Ini(), preferences);
+
+	edit_hist_dialog::Input input;
+	input.current_path = ActivePane()->GetPath();
+	input.preferences = preferences;
+	input.focus_filter = request.focus_filter;
+
+	edit_hist_dialog::Result result;
+	const bool accepted = edit_hist_dialog::Run(this, hist_edit_, input, result);
+	edit_hist::SavePreferences(settings_.Ini(), result.preferences);
+	// 設定はCancel時も VCL FormClose と同じよう保存する。履歴の削除が空でも
+	// 画面設定を維持するため、ダイアログを閉じた時点で保存する。
+	settings_.Save();
+	if (!accepted || result.path.IsEmpty()) return;
+
+	if (result.action == edit_hist_dialog::Action::Open) {
+		// VCL は数値キー/FileEdit でテキストエディタを開く (MainFrm.cpp:16923-16931)。
+		if (!Execute(_T("FileEdit_") + result.path)) {
+			SetStatusWarning(_T("編集履歴のファイルを開けません: ") + result.path);
+		}
+		return;
+	}
+
+	if (result.action != edit_hist_dialog::Action::Move) return;
+	const UnicodeString directory = ExtractFilePath(result.path);
+	if (!dir_exists(directory)) {
+		SetStatusWarning(_T("ディレクトリがありません: ") + directory);
+		return;
+	}
+
+	FilePane *pane = ActivePane();
+	if (!pane->SetPath(directory)) {
+		SetStatusWarning(_T("移動できませんでした: ") + directory);
+		return;
+	}
+	const std::vector<UnicodeString> names = pane->VisibleNames();
+	const UnicodeString wanted = ExtractFileName(result.path);
+	for (std::size_t i = 0; i < names.size(); ++i) {
+		if (SameText(names[i], wanted)) {
+			pane->MoveCursorTo(static_cast<int>(i));
+			break;
+		}
+	}
+	UpdateStatus();
 }
 
 //---------------------------------------------------------------------------
