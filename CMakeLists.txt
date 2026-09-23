@@ -306,6 +306,10 @@ if(TARGET nyanfi_core)
 		gui/cv_img.cpp
 		gui/find_txt.cpp
 		gui/cre_dirs.cpp
+		gui/hist.cpp
+		gui/inp_ex.cpp
+		gui/btn.cpp
+		gui/key.cpp
 	)
 	target_include_directories(nyanfi_gui_core PUBLIC ${PROJECT_SOURCE_DIR})
 	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core shell32 netapi32)
