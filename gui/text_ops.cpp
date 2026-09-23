@@ -5,6 +5,7 @@
 #include "gui/text_ops.h"
 
 #include <string>
+#include <utility>
 
 #include "gui/text_viewer_core.h"
 #include "usr_file_ex.h"
@@ -14,14 +15,41 @@ namespace text_ops {
 
 namespace {
 
-/// UnicodeString を指定のコードページのバイト列にする
-std::string to_bytes(const UnicodeString &s, int code_page)
+/// 指定コードページのバイト列にする。UTF-16 は WideCharToMultiByte では
+/// 変換できないので VCL の TEncoding と同じ BOM / エンディアンで書く。
+std::string encode_bytes(const UnicodeString &s, int code_page, bool with_bom,
+                         UnicodeString &error_out)
 {
-	if (s.IsEmpty()) return std::string();
-	const int n = ::WideCharToMultiByte(code_page, 0, s.c_str(), s.Length(), NULL, 0, NULL, NULL);
-	if (n <= 0) return std::string();
-	std::string out(static_cast<std::size_t>(n), '\0');
-	::WideCharToMultiByte(code_page, 0, s.c_str(), s.Length(), &out[0], n, NULL, NULL);
+	std::string out;
+	if (code_page == 1200 || code_page == 1201) {
+		if (with_bom) out += code_page == 1201? "\xFE\xFF" : "\xFF\xFE";
+		const bool big_endian = code_page == 1201;
+		for (int i = 1; i <= s.Length(); ++i) {
+			const unsigned int c = static_cast<unsigned int>(s[i]);
+			const char lo = static_cast<char>(c & 0xFF);
+			const char hi = static_cast<char>((c >> 8) & 0xFF);
+			if (big_endian) { out += hi; out += lo; }
+			else           { out += lo; out += hi; }
+		}
+		return out;
+	}
+
+	if (with_bom && code_page == CP_UTF8) out += "\xEF\xBB\xBF";
+	if (s.IsEmpty()) return out;
+	const int n = ::WideCharToMultiByte(code_page, 0, s.c_str(), s.Length(), nullptr, 0,
+	                                    nullptr, nullptr);
+	if (n <= 0) {
+		error_out = _T("この文字コードに変換できません");
+		return std::string();
+	}
+	const std::size_t old_size = out.size();
+	out.resize(old_size + static_cast<std::size_t>(n));
+	const int written = ::WideCharToMultiByte(code_page, 0, s.c_str(), s.Length(),
+	                                           out.data() + old_size, n, nullptr, nullptr);
+	if (written != n) {
+		error_out = _T("この文字コードに変換できません");
+		return std::string();
+	}
 	return out;
 }
 
@@ -92,6 +120,13 @@ LineStats CountLines(const std::vector<UnicodeString> &lines)
 //---------------------------------------------------------------------------
 JoinResult JoinTextFiles(const std::vector<UnicodeString> &paths, const UnicodeString &out_path)
 {
+	return JoinTextFiles(paths, out_path, CP_UTF8, false, _T("\r\n"));
+}
+
+//---------------------------------------------------------------------------
+JoinResult JoinTextFiles(const std::vector<UnicodeString> &paths, const UnicodeString &out_path,
+                         int target_code_page, bool with_bom, const UnicodeString &line_break)
+{
 	JoinResult result;
 
 	if (file_exists(out_path) || dir_exists(out_path)) {
@@ -99,28 +134,53 @@ JoinResult JoinTextFiles(const std::vector<UnicodeString> &paths, const UnicodeS
 		return result;
 	}
 
-	UnicodeString all;
+	struct Loaded {
+		text_viewer_core::LoadResult text;
+	};
+	std::vector<Loaded> loaded;
+	loaded.reserve(paths.size());
 	for (const UnicodeString &p : paths) {
-		const text_viewer_core::LoadResult r = text_viewer_core::LoadForView(p);
-		if (!r.ok) {
-			result.failures.push_back(p + _T(": ") + r.error);
+		Loaded item;
+		item.text = text_viewer_core::LoadForView(p);
+		if (!item.text.ok) {
+			result.failures.push_back(p + _T(": ") + item.text.error);
 			continue;
 		}
-		const bool utf16 = (r.code_page == 1200 || r.code_page == 1201);
-		if (r.is_binary || (!utf16 && has_nul_byte(p))) {
+		if (item.text.truncated) {
+			result.failures.push_back(p + _T(": ファイルが大きすぎて全体を読めません"));
+			continue;
+		}
+		const bool utf16 = item.text.code_page == 1200 || item.text.code_page == 1201;
+		if (item.text.is_binary || (!utf16 && has_nul_byte(p))) {
 			result.failures.push_back(p + _T(": バイナリなので結合しません"));
 			continue;
 		}
-		for (const UnicodeString &line : r.lines) all += line + _T("\r\n");
-		result.joined++;
+		loaded.push_back(std::move(item));
 	}
 
-	if (result.joined == 0) return result;
+	if (loaded.empty()) return result;
+
+	int output_code_page = target_code_page;
+	bool output_bom = with_bom;
+	if (output_code_page == 0) {
+		output_code_page = loaded.front().text.code_page;
+		if (output_code_page == 0) output_code_page = 932;
+		output_bom = loaded.front().text.has_bom;
+	}
+
+	UnicodeString all;
+	for (const Loaded &item : loaded) {
+		for (const UnicodeString &line : item.text.lines) all += line + line_break;
+		++result.joined;
+	}
 
 	UnicodeString error;
-	if (!write_all(out_path, to_bytes(all, CP_UTF8), error)) {
+	const std::string bytes = encode_bytes(all, output_code_page, output_bom, error);
+	if (!error.IsEmpty() || !write_all(out_path, bytes, error)) {
 		result.joined = 0;
-		result.failures.push_back(out_path + _T(": ") + error);
+		result.failures.push_back(out_path + _T(": ")
+		                          + (error.IsEmpty()? _T("書き込めません") : error));
+		::DeleteFileW(out_path.c_str());
 	}
 	return result;
 }
@@ -128,6 +188,13 @@ JoinResult JoinTextFiles(const std::vector<UnicodeString> &paths, const UnicodeS
 //---------------------------------------------------------------------------
 bool ConvertEncoding(const UnicodeString &path, int target_code_page, bool with_bom,
                      UnicodeString &error_out)
+{
+	return ConvertEncoding(path, target_code_page, with_bom, _T("\r\n"), error_out);
+}
+
+//---------------------------------------------------------------------------
+bool ConvertEncoding(const UnicodeString &path, int target_code_page, bool with_bom,
+                     const UnicodeString &line_break, UnicodeString &error_out)
 {
 	const text_viewer_core::LoadResult r = text_viewer_core::LoadForView(path);
 	if (!r.ok) {
@@ -137,7 +204,7 @@ bool ConvertEncoding(const UnicodeString &path, int target_code_page, bool with_
 	// バイナリは触らない (壊すため)。**判定を2つ通す**:
 	// LoadForView のヒューリスティックは小さなバイナリを取りこぼすので、
 	// NUL バイトの有無も見る (has_nul_byte のコメント参照)
-	const bool utf16 = (r.code_page == 1200 || r.code_page == 1201);
+	const bool utf16 = r.code_page == 1200 || r.code_page == 1201;
 	if (r.is_binary || (!utf16 && has_nul_byte(path))) {
 		error_out = _T("バイナリなので変換しません");
 		return false;
@@ -147,18 +214,15 @@ bool ConvertEncoding(const UnicodeString &path, int target_code_page, bool with_
 		error_out = _T("ファイルが大きすぎて全体を読めません");
 		return false;
 	}
-	if (r.code_page == target_code_page && r.has_bom == with_bom) return true;  // 変換不要
 
 	UnicodeString all;
 	for (std::size_t i = 0; i < r.lines.size(); ++i) {
-		if (i > 0) all += _T("\r\n");
+		if (i > 0) all += line_break;
 		all += r.lines[i];
 	}
 
-	std::string bytes;
-	if (with_bom && target_code_page == CP_UTF8) bytes += "\xEF\xBB\xBF";
-	bytes += to_bytes(all, target_code_page);
-
+	const std::string bytes = encode_bytes(all, target_code_page, with_bom, error_out);
+	if (!error_out.IsEmpty()) return false;
 	return write_all(path, bytes, error_out);
 }
 

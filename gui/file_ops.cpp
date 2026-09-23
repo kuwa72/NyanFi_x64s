@@ -8,6 +8,7 @@
 
 #include <algorithm>
 
+#include "gui/clone_name.h"
 #include "usr_file_ex.h"
 #include "usr_str.h"
 
@@ -25,10 +26,11 @@ UnicodeString LastPathElement(const UnicodeString &path)
 
 /**
  * @brief ディレクトリ1件を再帰的にコピーする
- * @details 宛先ディレクトリが既に存在する場合はマージする (中身を1件ずつ
- * 存在チェックしてスキップするので、既存ファイルを上書きすることはない)。
+ * @details 宛先ディレクトリが既に存在する場合はマージする。既存ファイルは
+ *          ConflictPolicy に従って上書き・最新判定・スキップする。
  */
-bool CopyDirRecursive(const UnicodeString &src_dir, const UnicodeString &dst_dir, FileOpResult &result)
+bool CopyDirRecursive(const UnicodeString &src_dir, const UnicodeString &dst_dir,
+                      FileOpResult &result, ConflictPolicy policy)
 {
 	const UnicodeString dst_nam = ExcludeTrailingPathDelimiter(dst_dir);
 
@@ -64,10 +66,21 @@ bool CopyDirRecursive(const UnicodeString &src_dir, const UnicodeString &dst_dir
 			const UnicodeString d = dst_p + sr.Name;
 
 			if (sr.Attr & faDirectory) {
-				if (!CopyDirRecursive(s, d, result)) ok = false;
+				if (!CopyDirRecursive(s, d, result, policy)) ok = false;
 			}
 			else if (file_exists(d)) {
-				++result.skipped_existing;
+				if (policy == ConflictPolicy::SkipExisting
+				 || (policy == ConflictPolicy::NewestWins
+				     && get_file_age(s) <= get_file_age(d))) {
+					++result.skipped_existing;
+				}
+				else if (copy_File(s, d)) {
+					++result.success_count;
+				}
+				else {
+					result.failures.push_back(d + _T(": コピーに失敗しました"));
+					ok = false;
+				}
 			}
 			else if (copy_File(s, d)) {
 				++result.success_count;
@@ -84,20 +97,26 @@ bool CopyDirRecursive(const UnicodeString &src_dir, const UnicodeString &dst_dir
 }
 
 /// 1件 (ファイルまたはディレクトリ) をコピーする
-void CopyOneItem(const UnicodeString &src, const UnicodeString &dst, FileOpResult &result)
+void CopyOneItem(const UnicodeString &src, const UnicodeString &dst,
+                 FileOpResult &result, ConflictPolicy policy)
 {
+	UnicodeString target = ExcludeTrailingPathDelimiter(dst);
 	if (dir_exists(src)) {
+		if (policy == ConflictPolicy::AutoRename && (file_exists(target) || dir_exists(target))) {
+			target = clone_name::MakeUnique(
+				clone_name::kDefaultFormat, src, ExtractFilePath(target), true,
+				[](const UnicodeString &path) { return file_exists(path) || dir_exists(path); });
+			if (target.IsEmpty()) {
+				result.failures.push_back(src + _T(": 自動的に名前を変更できません"));
+				return;
+			}
+		}
 		// 自分自身、または自分の配下へのコピーは無限再帰になるので弾く
-		if (IsSameOrInside(src, dst)) {
+		if (IsSameOrInside(src, target)) {
 			result.failures.push_back(src + _T(": コピー先がコピー元自身か、その配下です"));
 			return;
 		}
-		CopyDirRecursive(src, dst, result);
-		return;
-	}
-
-	if (SameText(ExcludeTrailingPathDelimiter(src), ExcludeTrailingPathDelimiter(dst))) {
-		result.failures.push_back(src + _T(": コピー元とコピー先が同じです"));
+		CopyDirRecursive(src, target, result, policy);
 		return;
 	}
 
@@ -106,21 +125,41 @@ void CopyOneItem(const UnicodeString &src, const UnicodeString &dst, FileOpResul
 		return;
 	}
 
-	if (file_exists(dst) || dir_exists(dst)) {
-		++result.skipped_existing;
+	if (policy == ConflictPolicy::AutoRename && (file_exists(target) || dir_exists(target))) {
+		target = clone_name::MakeUnique(
+			clone_name::kDefaultFormat, src, ExtractFilePath(target), false,
+			[](const UnicodeString &path) { return file_exists(path) || dir_exists(path); });
+		if (target.IsEmpty()) {
+			result.failures.push_back(src + _T(": 自動的に名前を変更できません"));
+			return;
+		}
+	}
+
+	if (SameText(ExcludeTrailingPathDelimiter(src), ExcludeTrailingPathDelimiter(target))) {
+		result.failures.push_back(src + _T(": コピー元とコピー先が同じです"));
 		return;
 	}
 
-	if (copy_File(src, dst)) {
+	if (file_exists(target) || dir_exists(target)) {
+		if (policy == ConflictPolicy::SkipExisting
+		 || (policy == ConflictPolicy::NewestWins
+		     && get_file_age(src) <= get_file_age(target))) {
+			++result.skipped_existing;
+			return;
+		}
+	}
+
+	if (copy_File(src, target)) {
 		++result.success_count;
 	}
 	else {
-		result.failures.push_back(dst + _T(": コピーに失敗しました"));
+		result.failures.push_back(target + _T(": コピーに失敗しました"));
 	}
 }
 
 /// 1件 (ファイルまたはディレクトリ) を移動する
-void MoveOneItem(const UnicodeString &src, const UnicodeString &dst, FileOpResult &result)
+void MoveOneItem(const UnicodeString &src, const UnicodeString &dst,
+                 FileOpResult &result, ConflictPolicy policy)
 {
 	const bool src_is_dir = dir_exists(src);
 	if (!src_is_dir && !file_exists(src)) {
@@ -128,29 +167,43 @@ void MoveOneItem(const UnicodeString &src, const UnicodeString &dst, FileOpResul
 		return;
 	}
 
+	UnicodeString target = ExcludeTrailingPathDelimiter(dst);
+	if (policy == ConflictPolicy::AutoRename && (file_exists(target) || dir_exists(target))) {
+		target = clone_name::MakeUnique(
+			clone_name::kDefaultFormat, src, ExtractFilePath(target), src_is_dir,
+			[](const UnicodeString &path) { return file_exists(path) || dir_exists(path); });
+		if (target.IsEmpty()) {
+			result.failures.push_back(src + _T(": 自動的に名前を変更できません"));
+			return;
+		}
+	}
 	// 自分自身、または自分の配下への移動。Win32 も拒否するが、意味の分かる
 	// メッセージにするためここで弾く
-	if (src_is_dir && IsSameOrInside(src, dst)) {
+	if (src_is_dir && IsSameOrInside(src, target)) {
 		result.failures.push_back(src + _T(": 移動先が移動元自身か、その配下です"));
 		return;
 	}
 
-	if (file_exists(dst) || dir_exists(dst)) {
-		++result.skipped_existing;
-		return;
+	if (file_exists(target) || dir_exists(target)) {
+		if (policy == ConflictPolicy::SkipExisting
+		 || (policy == ConflictPolicy::NewestWins
+		     && get_file_age(src) <= get_file_age(target))) {
+			++result.skipped_existing;
+			return;
+		}
 	}
 
 	// move_File (MoveFileEx + MOVEFILE_COPY_ALLOWED) はファイルならドライブを
 	// 跨いでも動くが、ディレクトリは同一ボリュームのリネームでしか成功しない
 	// (Win32 の仕様)。跨ぐ場合の再帰移動は実装せず、失敗として報告する。
-	if (move_File(src, dst)) {
+	if (move_File(src, target)) {
 		++result.success_count;
 	}
 	else if (src_is_dir) {
-		result.failures.push_back(dst + _T(": 移動に失敗しました (ディレクトリはドライブを跨げません)"));
+		result.failures.push_back(target + _T(": 移動に失敗しました (ディレクトリはドライブを跨げません)"));
 	}
 	else {
-		result.failures.push_back(dst + _T(": 移動に失敗しました"));
+		result.failures.push_back(target + _T(": 移動に失敗しました"));
 	}
 }
 
@@ -159,7 +212,8 @@ void MoveOneItem(const UnicodeString &src, const UnicodeString &dst, FileOpResul
 //---------------------------------------------------------------------------
 void CopyItemTo(const UnicodeString &src, const UnicodeString &dst, FileOpResult &result)
 {
-	CopyOneItem(ExcludeTrailingPathDelimiter(src), ExcludeTrailingPathDelimiter(dst), result);
+	CopyOneItem(ExcludeTrailingPathDelimiter(src), ExcludeTrailingPathDelimiter(dst),
+	            result, ConflictPolicy::SkipExisting);
 }
 
 /**
@@ -202,23 +256,25 @@ UnicodeString Summarize(const FileOpResult &result)
 }
 
 //---------------------------------------------------------------------------
-FileOpResult CopyItems(const std::vector<UnicodeString> &items, const UnicodeString &dst_dir)
+FileOpResult CopyItems(const std::vector<UnicodeString> &items, const UnicodeString &dst_dir,
+                       ConflictPolicy policy)
 {
 	FileOpResult result;
 	const UnicodeString dst_p = IncludeTrailingPathDelimiter(dst_dir);
 	for (const UnicodeString &src : items) {
-		CopyOneItem(ExcludeTrailingPathDelimiter(src), dst_p + LastPathElement(src), result);
+		CopyOneItem(ExcludeTrailingPathDelimiter(src), dst_p + LastPathElement(src), result, policy);
 	}
 	return result;
 }
 
 //---------------------------------------------------------------------------
-FileOpResult MoveItems(const std::vector<UnicodeString> &items, const UnicodeString &dst_dir)
+FileOpResult MoveItems(const std::vector<UnicodeString> &items, const UnicodeString &dst_dir,
+                       ConflictPolicy policy)
 {
 	FileOpResult result;
 	const UnicodeString dst_p = IncludeTrailingPathDelimiter(dst_dir);
 	for (const UnicodeString &src : items) {
-		MoveOneItem(ExcludeTrailingPathDelimiter(src), dst_p + LastPathElement(src), result);
+		MoveOneItem(ExcludeTrailingPathDelimiter(src), dst_p + LastPathElement(src), result, policy);
 	}
 	return result;
 }

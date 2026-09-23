@@ -51,6 +51,16 @@ struct JoinResult {
 JoinResult JoinTextFiles(const std::vector<UnicodeString> &paths, const UnicodeString &out_path);
 
 /**
+ * @brief 文字コード・BOM・改行を指定してテキストファイルを結合する
+ * @param target_code_page 0 なら先頭で判定したコードページを使う
+ * @param with_bom UTF 系に BOM を付けるか。target_code_page==0 のときは先頭ファイルの判定結果を使う
+ * @param line_break CRLF / LF / CR
+ * @details VCL の TJoinTextDlg の選択肢に対応する。テンプレート連結は未移植 (未実装扱い)
+ */
+JoinResult JoinTextFiles(const std::vector<UnicodeString> &paths, const UnicodeString &out_path,
+                         int target_code_page, bool with_bom, const UnicodeString &line_break);
+
+/**
  * @brief テキストファイルの文字コードを変換する (ConvertTextEnc)
  * @param path 対象のファイル (その場で書き換える)
  * @param target_code_page 変換先のコードページ (65001 = UTF-8, 932 = Shift_JIS)
@@ -62,6 +72,10 @@ JoinResult JoinTextFiles(const std::vector<UnicodeString> &paths, const UnicodeS
  */
 bool ConvertEncoding(const UnicodeString &path, int target_code_page, bool with_bom,
                      UnicodeString &error_out);
+
+/** @brief 改行コードも指定して文字コード変換する (TCvTxtEncDlg 相当) */
+bool ConvertEncoding(const UnicodeString &path, int target_code_page, bool with_bom,
+                     const UnicodeString &line_break, UnicodeString &error_out);
 
 }  // namespace text_ops
 
