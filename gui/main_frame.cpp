@@ -35,6 +35,7 @@
 #include "gui/text_viewer_core.h"
 #include "gui/file_ops.h"
 #include "gui/dupl_dialog.h"
+#include "gui/app_dialog.h"
 #include "gui/find_dialog.h"
 #include "gui/grep_dialog.h"
 #include "gui/regdir_dialog.h"
@@ -8795,24 +8796,56 @@ void MainFrame::CmdPlayList(const UnicodeString &param)
 /**
  * @brief アプリケーション一覧 (AppList)
  * @details VCL (MainFrm.cpp:13499) の AO/LO/LI/FA/FL/FI/FZ/AS は
- *          ParseAppListOpts。一覧ダイアログ (AppListDlg) は未移植のため
- *          解決結果をログに残し警告する
+ *          ParseAppListOpts (表示構成は app_list::ResolveAppView)。
+ *          一覧ダイアログ (AppListDlg) は gui/app_dialog.h に移植済み。
+ *          他アプリへの切替・ウィンドウ実操作・DWM サムネイル・UWP 解決は
+ *          未移植 (未実装扱い。gui/app_list.h の説明を参照)。
+ *          OptDlg (設定全体)・FtpDlg/GitView (外部連携) は対象外
  */
 void MainFrame::CmdAppList(const UnicodeString &param)
 {
 	const f_batch7_ops::AppListOpts o = f_batch7_ops::ParseAppListOpts(param);
-	UnicodeString desc;
-	if (o.only_app) desc += _T("一覧のみ ");
-	if (o.only_launcher) desc += _T("ランチャーのみ ");
-	if (o.to_app) desc += _T("一覧へ ");
-	if (o.to_launcher) desc += _T("ランチャーへ ");
-	if (o.to_incsea) desc += _T("検索へ ");
-	if (o.fuzzy) desc += _T("あいまい ");
-	if (o.add_start) desc += _T("開始メニュー追加 ");
-	if (desc.IsEmpty()) desc = _T("(既定表示) ");
-	log_.Add(log_win::LogStatus::Info, _T("アプリケーション一覧: ") + desc,
-	         /*show_time=*/true);
-	SetStatusWarning(_T("アプリケーション一覧は未対応です"));
+	std::vector<app_list::AppEntry> apps = app_dialog::EnumerateApps(EmptyStr);
+	app_dialog::AppResult r;
+	if (!app_dialog::Run(this, o, apps, ActivePane()->GetPath(), r)) return;
+
+	// 実行ファイル位置へ (VCL の JumpFileName を実測)
+	if (!r.jump_file.IsEmpty()) {
+		const UnicodeString dir = ExtractFilePath(r.jump_file);
+		const UnicodeString name = ExtractFileName(r.jump_file);
+		if (!ActivePane()->SetPath(dir)) {
+			SetStatusWarning(_T("ディレクトリを開けません: ") + dir);
+			return;
+		}
+		const std::vector<UnicodeString> names = ActivePane()->VisibleNames();
+		for (std::size_t i = 0; i < names.size(); ++i) {
+			if (SameText(names[i], name)) {
+				ActivePane()->MoveCursorTo(static_cast<int>(i));
+				break;
+			}
+		}
+	}
+	// ランチャーのディレクトリへ (VCL の JumpPathName を実測)
+	else if (!r.jump_path.IsEmpty()) {
+		if (!ActivePane()->SetPath(r.jump_path)) {
+			SetStatusWarning(_T("ディレクトリを開けません: ") + r.jump_path);
+			return;
+		}
+	}
+	// 実行 (VCL の LaunchFileName を実測)
+	else if (!r.launch_file.IsEmpty()) {
+		const HINSTANCE h = ::ShellExecuteW(static_cast<HWND>(GetHandle()), L"open",
+		                                    r.launch_file.c_str(), NULL, NULL, SW_SHOWNORMAL);
+		if (reinterpret_cast<INT_PTR>(h) <= 32) {
+			SetStatusWarning(_T("起動できません: ") + r.launch_file);
+			return;
+		}
+	}
+	// NyanFi 自体への切り替え・最小化 (VCL の isNyan/AppListChgMin を実測・簡略版)
+	else if (r.minimize_app) {
+		Iconize(true);
+	}
+	UpdateStatus();
 }
 
 /**

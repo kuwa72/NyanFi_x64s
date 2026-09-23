@@ -297,6 +297,7 @@ if(TARGET nyanfi_core)
 		gui/regdir.cpp
 		gui/sync_dirs.cpp
 		gui/color_settings.cpp
+		gui/app_list.cpp
 		gui/f_misc_ops.cpp
 		gui/f_batch5_ops.cpp
 		gui/f_batch6_ops.cpp

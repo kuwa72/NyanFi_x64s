@@ -91,6 +91,7 @@ add_executable(nyanfi
 	tab_dialog.cpp
 	regdir_dialog.cpp
 	sync_dialog.cpp
+	app_dialog.cpp
 	color_dialog.cpp
 	key_map_wx.cpp
 	vcl_gui_bridge.cpp
