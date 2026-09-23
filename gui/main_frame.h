@@ -63,6 +63,7 @@
 #include "usr_tag.h"
 
 class TabBar;  // gui/main_frame.cpp の無名名前空間で定義する自前描画のタブバー
+namespace worker_thread { class CancelableWorkerThread; }
 
 /**
  * @brief メインウィンドウ
@@ -447,7 +448,9 @@ private:
 	std::vector<UnicodeString> watch_tail_;  //!< 監視中のファイル (VCL WatchTailList 相当)
 
 	bool rsv_suspended_ = false;       //!< 予約の保留状態 (VCL RsvSuspended 相当)
-	std::vector<bool> task_paused_;    //!< タスクの一旦停止状態 (実スレッドは未移植のため空)
+	std::vector<bool> task_paused_;    //!< 旧 UI のタスク一時停止状態 (実 task は未移植)
+	//! 実行中の cancellable wxWorker。CmdCancelAllTask から中断する。
+	std::vector<worker_thread::CancelableWorkerThread *> active_workers_;
 	UnicodeString folder_icon_def_;    //!< 既定のフォルダアイコン (VCL DefFldIcoName 相当)
 
 	//-- 表示の切り替え (機能群22。判断は gui/view_settings.h) ------------------
@@ -638,6 +641,11 @@ private:
 
 	void LoadSettings();
 	void SaveSettings();
+
+	/// 実行中の wxWorker に中断を要求する (CmdCancelAllTask と終了時)
+	void RequestCancelActiveWorkers();
+	/// 完了済みワーカーのポインタを manager から外す
+	void ForgetActiveWorker(worker_thread::CancelableWorkerThread *worker);
 
 	FilePane *panes_[2] = {nullptr, nullptr};
 	wxStaticText *headers_[2] = {nullptr, nullptr};
