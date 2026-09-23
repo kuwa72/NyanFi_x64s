@@ -256,6 +256,8 @@ endif()
 # gui/cmd_list.cpp も、3つの VCL ダイアログ (DistrDlg/FuncDlg/CmdListDlg) の
 # 判断だけを wx 非依存で持ち、tests/core/test_gui_{distribution,function_list,
 # cmd_list}.cpp から直接テストする。
+# Issue #40 batch17 の gui/drive_select.cpp・gui/task_man.cpp も同様に、
+# TSelDriveDlg/TTaskManDlg の判断を wx 非依存で固定する。
 #-----------------------------------------------------------------------------
 if(TARGET nyanfi_core)
 	add_library(nyanfi_gui_core STATIC
@@ -304,6 +306,8 @@ if(TARGET nyanfi_core)
 		gui/color_settings.cpp
 		gui/app_list.cpp
 		gui/f_misc_ops.cpp
+		gui/drive_select.cpp
+		gui/task_man.cpp
 		gui/f_batch5_ops.cpp
 		gui/f_batch6_ops.cpp
 		gui/f_batch7_ops.cpp

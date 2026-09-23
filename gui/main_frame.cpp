@@ -58,6 +58,8 @@
 #include "gui/sync_dialog.h"
 #include "gui/color_dialog.h"
 #include "gui/comp_dialog.h"
+#include "gui/drive_select_dialog.h"
+#include "gui/task_man_dialog.h"
 #include "gui/calc_dialog.h"
 #include "gui/dot_nyan_dialog.h"
 #include "gui/dot_nyan.h"
@@ -1249,29 +1251,10 @@ void MainFrame::CmdChangeDir(bool opposite)
 //---------------------------------------------------------------------------
 void MainFrame::CmdChangeDrive()
 {
-	// VCL はパラメータ (ドライブ文字) 必須 (MainFrm.cpp:14087)。こちらは
-	// 利用可能なドライブを一覧して選ぶ (CmdCycleDrive と同じ取得経路)
-	std::unique_ptr<TStringList> drives(new TStringList());
-	get_available_drive_list(drives.get());
-
-	wxArrayString choices;
-	std::vector<UnicodeString> paths;
-	for (int i = 0; i < drives->Count; ++i) {
-		paths.push_back(drives->Strings[i]);
-		choices.Add(to_wx(drives->Strings[i]));
-	}
-	if (paths.empty()) { SetStatusWarning(_T("利用可能なドライブがありません")); return; }
-
-	const int sel = wxGetSingleChoiceIndex(to_wx(_T("移動先を選んでください")),
-	                                       to_wx(_T("ドライブの変更")), choices, this);
-	if (sel < 0) return;
-
-	FilePane *pane = ActivePane();
-	if (!pane->SetPath(paths[static_cast<std::size_t>(sel)])) {
-		SetStatusWarning(_T("ドライブを開けません: ") + paths[static_cast<std::size_t>(sel)]);
-		return;
-	}
-	UpdateStatus();
+	// VCL の ChangeDriveActionExecute (src/MainFrm.cpp:14087-14098) は
+	// パラメータ付き直接移動だが、wx 版の旧実装も選択式だった。ここは
+	// DriveList と同じ TSelDriveDlg の wx 実装へ統一する。
+	ShowDriveListDialog();
 }
 
 //---------------------------------------------------------------------------
@@ -4692,7 +4675,8 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		ShowDirHistoryDialog(param);
 	}
 	else if (SameStr(command, _T("DriveList"))) {
-		ShowDriveListDialog();
+		// VCL: MainFrm.cpp:16855-16866 / usr_cmdlist.cpp:81
+		ShowDriveListDialog(param);
 	}
 	else if (SameStr(command, _T("InputDir"))) {
 		ShowInputDirDialog();
@@ -4848,7 +4832,8 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		CmdJumpTo(param);
 	}
 	else if (SameStr(command, _T("TaskMan"))) {
-		CmdTaskMan();
+		// VCL: MainFrm.cpp:26801-26804 / usr_cmdlist.cpp:302
+		ShowTaskManDialog();
 	}
 	else if (SameStr(command, _T("Suspend"))) {
 		CmdSuspend(param);
@@ -5650,43 +5635,52 @@ void MainFrame::ShowDirHistoryDialog(const UnicodeString &param)
 /**
  * @brief ドライブの一覧から選んで移動する (L。src/Global.cpp の既定キー表
  * "F:L=DriveList" と同じ)
- * @details 移植済みの get_available_drive_list() (usr_file_ex.h) で
- * 利用可能なドライブを列挙し、get_drive_type() の種別を DriveTypeLabel()
- * (gui/navigation.h。Global.cpp の type_str と同じ文言) で添えて表示する。
- * VCL 版 (DriveDlg.cpp::TSelDriveDlg) の空き容量・ボリューム名表示は
- * Phase 2 骨格のスコープ外
+ * @details VCL の `src/MainFrm.cpp:16855-16866` が
+ * `TSelDriveDlg::ShowModal` を呼ぶ経路を、gui/drive_select_dialog の
+ * wx 実装へ置き換える。列挙/空き容量は既存 core の
+ * get_available_drive_list・get_drive_type と Windows API を使い、
+ * Global.cpp 依存のアイコン/仮想ドライブ等は未移植 (未実装扱い) とする。
  */
-void MainFrame::ShowDriveListDialog()
+void MainFrame::ShowDriveListDialog(const UnicodeString &param)
 {
+	// VCL の DriveListActionExecute (src/MainFrm.cpp:16855-16866) は
+	// ND/NS でポップアップメニューへ分岐するが、その UI は未移植
+	// (未実装扱い)。 dialog 本体へ黙って落とすのは避ける。
+	if (f_misc_ops::HasParamToken(param, _T("ND")) ||
+	    f_misc_ops::HasParamToken(param, _T("NS"))) {
+		SetStatusWarning(_T("ドライブ一覧のポップアップ表示は未移植 (未実装扱い) です"));
+		return;
+	}
+
 	FilePane *pane = ActivePane();
-
-	std::unique_ptr<TStringList> drives(new TStringList());
-	get_available_drive_list(drives.get());
-
-	if (drives->Count == 0) {
+	const std::vector<drive_select::DriveInfo> drives = drive_select_dialog::EnumerateDrives();
+	if (drives.empty()) {
 		wxMessageBox(to_wx(_T("利用可能なドライブがありません")), to_wx(_T("ドライブ一覧")),
 		             wxOK | wxICON_INFORMATION, this);
 		return;
 	}
 
-	wxArrayString choices;
-	std::vector<UnicodeString> paths;
-	for (int i = 0; i < drives->Count; ++i) {
-		const UnicodeString drv = drives->Strings[i];
-		const UnicodeString type_label = DriveTypeLabel(get_drive_type(drv));
+	UsrIniFile &ini = settings_.Ini();
+	drive_select_dialog::Context context;
+	context.current_path = pane->GetPath();
+	context.options.only_accessible = ini.ReadBool(_T("WxGuiDrive"), _T("OnlyAccessible"), true);
+	context.options.show_icons = ini.ReadBool(_T("WxGuiDrive"), _T("ShowIcon"), true);
+	context.options.large_icons = ini.ReadBool(_T("WxGuiDrive"), _T("LargeIcon"), false);
+	context.options.to_root = ini.ReadBool(_T("WxGuiDrive"), _T("ToRoot"), true);
 
-		UnicodeString label = drv;
-		if (!type_label.IsEmpty()) label += _T("  ") + type_label;
+	drive_select_dialog::Result result;
+	if (!drive_select_dialog::Run(this, drives, context, result)) return;
 
-		choices.Add(to_wx(label));
-		paths.push_back(drv);
+	ini.WriteBool(_T("WxGuiDrive"), _T("OnlyAccessible"), result.options.only_accessible);
+	ini.WriteBool(_T("WxGuiDrive"), _T("ShowIcon"), result.options.show_icons);
+	ini.WriteBool(_T("WxGuiDrive"), _T("LargeIcon"), result.options.large_icons);
+	ini.WriteBool(_T("WxGuiDrive"), _T("ToRoot"), result.options.to_root);
+	settings_.Save();
+
+	if (result.path.IsEmpty() || !pane->SetPath(result.path)) {
+		SetStatusWarning(_T("ドライブを開けません: ") + result.path);
+		return;
 	}
-
-	const int picked = wxGetSingleChoiceIndex(to_wx(_T("移動先のドライブを選んでください")),
-	                                           to_wx(_T("ドライブ一覧")), choices, this);
-	if (picked == -1) return;
-
-	pane->SetPath(paths[static_cast<std::size_t>(picked)]);
 	UpdateStatus();
 }
 
@@ -9833,16 +9827,33 @@ void MainFrame::CmdJumpTo(const UnicodeString &param)
 
 /**
  * @brief タスクマネージャ (TaskMan)
- * @details VCL (MainFrm.cpp:26801) は TTaskManDlg を出す。wx では実在の
- *          wxWorker 件数と旧状態保持を合算し、項目の要約だけを表示する。
+ * @details VCL の `src/MainFrm.cpp:26801-26804` が `TTaskManDlg` を
+ *          ShowModal する経路を gui/task_man_dialog の wx 実装へ置き換える。
+ *          MainFrame の task_paused_/中断要求/保留状態を渡し、表示と状態
+ *          操作は行うが TTaskThread の実処理・進捗更新・予約開始は未移植
+ *          (未実装扱い) とする。
  */
+void MainFrame::ShowTaskManDialog()
+{
+	task_man::State state;
+	state.paused = task_paused_;
+	state.cancel_requested = task_cancel_requested_;
+	// 予約一覧 (TaskReserveList) は未移植だが、実行中の wxWorker は実数を持つ
+	state.reserved_count = static_cast<int>(active_workers_.size());
+	state.suspended = rsv_suspended_;
+
+	task_man_dialog::Run(this, state);
+
+	// VCL の Action はダイアログ表示中にも即時反映されるため、OK/キャンセル
+	// に関係なく MainFrame 側へ状態を戻す。
+	task_paused_ = state.paused;
+	task_cancel_requested_ = state.cancel_requested;
+	rsv_suspended_ = state.suspended;
+}
+
 void MainFrame::CmdTaskMan()
 {
-	const int busy = static_cast<int>(task_paused_.size() + active_workers_.size());
-	int paused = 0;
-	for (bool p : task_paused_) if (p) paused++;
-	wxMessageBox(to_wx(f_misc_ops::FormatTaskSummary(busy, paused)),
-	             to_wx(_T("タスクマネージャ")), wxOK | wxICON_INFORMATION, this);
+	ShowTaskManDialog();
 }
 
 /**
@@ -9886,6 +9897,7 @@ void MainFrame::CmdCancelAllTask()
 	}
 	RequestCancelActiveWorkers();
 	task_paused_.clear();
+	task_cancel_requested_.clear();
 	log_.Add(log_win::LogStatus::Info, _T("すべてのタスクを中断しました"), /*show_time=*/true);
 	SetStatusWarning(_T("すべてのタスクを中断しました"));
 }
