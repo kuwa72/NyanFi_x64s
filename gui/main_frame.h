@@ -31,6 +31,10 @@
 #include "gui/f_batch6_ops.h"
 #include "gui/f_batch7_ops.h"
 #include "gui/history.h"
+#include "gui/hist.h"
+#include "gui/inp_ex.h"
+#include "gui/btn.h"
+#include "gui/key.h"
 #include "gui/named_state.h"
 #include "gui/system_ops.h"
 #include "gui/view_settings.h"
@@ -108,9 +112,11 @@ private:
 	void RecordIncSearchHistory();
 
 	// ディレクトリ履歴・ドライブ一覧・パス直接入力 (gui/navigation.h)
-	void ShowDirHistoryDialog();  //!< ディレクトリ履歴の一覧から選ぶ (H)
+	void ShowDirHistoryDialog(const UnicodeString &param = EmptyStr);  //!< ディレクトリ履歴の一覧から選ぶ (H)
 	void ShowDriveListDialog();   //!< ドライブの一覧から選ぶ (L)
 	void ShowInputDirDialog();    //!< パスを直接入力して移動する (Ctrl+G、推測のキー)
+	/// VCL の TInputExDlg をモード付きで呼ぶ。OK なら values を確定する。
+	bool RunInputEx(inp_ex::Mode mode, inp_ex::Values &values);
 
 	// ファイル操作 (gui/file_ops.h)。いずれも確認ダイアログを出してから実行し、
 	// 結果 (成功/スキップ/失敗の件数) を必ず表示する。詳細は main_frame.cpp を参照
@@ -498,6 +504,15 @@ private:
 	history::HistoryList hist_view_;    //!< 最近閲覧したファイル (ViewHistory)
 	history::HistoryList hist_recent_;  //!< 最近使ったファイル (RecentList)
 	history::HistoryList hist_cmd_;     //!< 実行したコマンド (CmdHistory)
+	/// 全体ディレクトリ履歴 (HistDlg の All/Search モード用)
+	hist::Store all_dir_history_;
+	hist::Preferences hist_prefs_;
+	/// ツールバーボタンの実データ (ToolBarDlg)
+	btn::Store tool_buttons_;
+	/// キー割り当て一覧の表示設定 (KeyDlg)
+	key::StateStore key_list_state_;
+	/// InputExDlg の既定値/保存値
+	inp_ex::Values input_ex_values_;
 	/// 種類から対応する実体を引く
 	history::HistoryList &HistoryOf(history::Kind kind);
 
@@ -547,7 +562,7 @@ private:
 	UnicodeString OutputDirOrWarn(const UnicodeString &verb);
 
 	//-- ファイル操作の続き (機能群17。判断は gui/file_ops2.h) ------------------
-	void CmdClone(bool to_current);  //!< クローンを作る (Clone / CloneToCurr)
+	void CmdClone(bool to_current, const UnicodeString &param = EmptyStr);  //!< クローンを作る (Clone / CloneToCurr)
 	void CmdCopyDir();               //!< ディレクトリ構造だけを複製 (CopyDir)
 	void CmdCreateDirsDlg();         //!< ディレクトリを一括作成 (CreateDirsDlg)
 	void CmdSwapName();              //!< 選択2件の名前を入れ替える (SwapName)

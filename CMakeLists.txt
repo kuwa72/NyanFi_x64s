@@ -315,6 +315,10 @@ if(TARGET nyanfi_core)
 		gui/cv_img.cpp
 		gui/find_txt.cpp
 		gui/cre_dirs.cpp
+		gui/hist.cpp
+		gui/inp_ex.cpp
+		gui/btn.cpp
+		gui/key.cpp
 		gui/tag.cpp
 		gui/file_ext.cpp
 		# 電卓の式評価と .nyanfi 設定の入出力 (wx 非依存)

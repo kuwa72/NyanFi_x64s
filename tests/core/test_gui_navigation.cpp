@@ -238,6 +238,25 @@ TEST_CASE("DirHistory: JumpTo で一覧の任意の位置へ直接移動でき�
 	CHECK(h.JumpTo(99).IsEmpty());
 }
 
+TEST_CASE("DirHistory: 項目削除と全削除で現在位置も更新する")
+{
+	DirHistory h;
+	h.Navigate(_T("C:\\A\\"));
+	h.Navigate(_T("C:\\B\\"));
+	h.Navigate(_T("C:\\C\\"));
+	h.Back();  // B を現在にする
+
+	CHECK(h.RemoveAt(0));  // 現在より前を削るので位置を左へずらす
+	CHECK(h.CurrentIndex() == 0);
+	CHECK(h.Entries().size() == 2);
+	CHECK_FALSE(h.RemoveAt(9));
+	h.Clear();
+	CHECK(h.Entries().empty());
+	CHECK(h.CurrentIndex() == -1);
+	CHECK_FALSE(h.CanBack());
+	CHECK_FALSE(h.CanForward());
+}
+
 //===========================================================================
 // DriveTypeLabel
 //===========================================================================

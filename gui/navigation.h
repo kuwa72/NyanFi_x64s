@@ -150,6 +150,12 @@ public:
 	/// 現在位置 (Entries() の添字。履歴が空なら -1)
 	int CurrentIndex() const { return pos_; }
 
+	/// 履歴をすべて削除する (HistDlg の ClearAllAction 相当用)
+	void Clear();
+
+	/// 添字の項目を削除する。範囲外なら false
+	bool RemoveAt(int index);
+
 private:
 	std::vector<UnicodeString> entries_;
 	int pos_ = -1;

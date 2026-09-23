@@ -58,6 +58,30 @@ void DirHistory::Navigate(const UnicodeString &path)
 }
 
 //---------------------------------------------------------------------------
+void DirHistory::Clear()
+{
+	entries_.clear();
+	pos_ = -1;
+}
+
+//---------------------------------------------------------------------------
+bool DirHistory::RemoveAt(int index)
+{
+	if (index < 0 || index >= static_cast<int>(entries_.size())) return false;
+	entries_.erase(entries_.begin() + index);
+	if (entries_.empty()) {
+		pos_ = -1;
+	}
+	else if (index < pos_) {
+		--pos_;
+	}
+	else if (index == pos_) {
+		if (pos_ >= static_cast<int>(entries_.size())) pos_ = static_cast<int>(entries_.size()) - 1;
+	}
+	return true;
+}
+
+//---------------------------------------------------------------------------
 UnicodeString DirHistory::Back()
 {
 	if (!CanBack()) return EmptyStr;

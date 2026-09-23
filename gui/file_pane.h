@@ -181,6 +181,10 @@ public:
 	/// 履歴一覧 (古い順) と現在位置 (履歴ダイアログの表示用)
 	const std::vector<UnicodeString> &DirHistoryEntries() const { return history_.Entries(); }
 	int DirHistoryCurrentIndex() const { return history_.CurrentIndex(); }
+	/// 履歴をすべて削除する (HistDlg の現在側 ClearAll)
+	void ClearDirHistory() { history_.Clear(); }
+	/// 履歴の 1 項目を削除する
+	bool RemoveDirHistoryAt(int index) { return history_.RemoveAt(index); }
 	/// 履歴一覧から index (DirHistoryEntries() の添字) の位置へ直接移動する
 	bool GoDirHistoryIndex(int index);
 
