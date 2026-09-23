@@ -120,6 +120,8 @@ add_executable(nyanfi
 	inp_ex_dialog.cpp
 	btn_dialog.cpp
 	key_dialog.cpp
+	net_share_dialog.cpp
+	print_image_dialog.cpp
 	calc_dialog.cpp
 	dot_nyan_dialog.cpp
 	key_map_wx.cpp

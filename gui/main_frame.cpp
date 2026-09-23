@@ -79,6 +79,10 @@
 #include "gui/tag_dialog.h"
 #include "gui/image_load.h"
 #include "gui/image_view_ops.h"
+#include "gui/net_share.h"
+#include "gui/net_share_dialog.h"
+#include "gui/print_image.h"
+#include "gui/print_image_dialog.h"
 #include "gui/worker_thread.h"
 #include "gui/mask_dialog.h"
 #include "gui/rename_dialog.h"
@@ -3034,32 +3038,90 @@ void MainFrame::CmdNameFromClip()
 }
 
 //---------------------------------------------------------------------------
-void MainFrame::CmdShareList()
+void MainFrame::CmdShareList(const UnicodeString &param)
 {
-	std::vector<misc_ops::ShareEntry> shares;
-	UnicodeString error;
-	if (!misc_ops::EnumLocalShares(shares, error)) {
-		wxMessageBox(to_wx(error), to_wx(_T("共有フォルダ一覧")), wxOK | wxICON_WARNING, this);
+	// VCL 実測: src/usr_cmdlist.cpp:221 (F:ShareList)、
+	// src/MainFrm.cpp:25862-25892 でコンピュータ名を決め、NetShareDlg を表示する。
+	UnicodeString computer = param;
+	UnicodeString warning;
+	const UnicodeString current = ActivePane()->GetPath();
+	if (computer.IsEmpty()) {
+		if (StartsStr(_T("\\\\"), current)) {
+			computer = get_root_name(current);
+		}
+		else {
+			const UnicodeString drive = ExtractFileDrive(current);
+			// VCL は WNetGetUniversalName でリモートドライブを UNC 化しているが、
+			// その OS 依存処理は未移植 (未実装扱い)。黙ってローカルへ落とさない。
+			if (!drive.IsEmpty() && ::GetDriveTypeW(drive.c_str()) == DRIVE_REMOTE) {
+				wxMessageBox(to_wx(_T("未移植 (未実装扱い): リモートドライブのUNC解決 "
+				                      "(WNetGetUniversalName)")),
+				             to_wx(_T("共有フォルダ一覧")), wxOK | wxICON_WARNING, this);
+				return;
+			}
+			wchar_t name[256] = {};
+			DWORD size = static_cast<DWORD>(std::size(name));
+			if (!::GetComputerNameW(name, &size)) {
+				wxMessageBox(to_wx(_T("コンピュータ名を取得できません")),
+				             to_wx(_T("共有フォルダ一覧")), wxOK | wxICON_WARNING, this);
+				return;
+			}
+			computer = UnicodeString(name);
+		}
+	}
+
+	const net_share::ValidationResult normalized = net_share::NormalizeComputer(computer);
+	if (!normalized.ok) {
+		wxMessageBox(to_wx(normalized.error), to_wx(_T("共有フォルダ一覧")),
+		             wxOK | wxICON_WARNING, this);
 		return;
 	}
-	if (shares.empty()) { SetStatusWarning(_T("共有フォルダがありません")); return; }
 
-	wxArrayString choices;
-	std::vector<UnicodeString> paths;
-	for (const misc_ops::ShareEntry &e : shares) {
-		UnicodeString label = e.name;
-		if (!e.path.IsEmpty()) label += _T("  ") + e.path;
-		if (!e.remark.IsEmpty()) label += _T("  (") + e.remark + _T(")");
-		choices.Add(to_wx(label));
-		paths.push_back(e.path);
+	net_share_dialog::Context context;
+	context.computer = normalized.value;
+	wchar_t local_name[256] = {};
+	DWORD local_size = static_cast<DWORD>(std::size(local_name));
+	const bool have_local = ::GetComputerNameW(local_name, &local_size) != FALSE;
+	const net_share::ValidationResult local =
+		have_local ? net_share::NormalizeComputer(UnicodeString(local_name))
+		           : net_share::ValidationResult();
+	if (have_local && local.ok && SameText(local.value, normalized.value)) {
+		// 移植済み core の EnumLocalShares を使う (gui/misc_ops.cpp:58-84)。
+		std::vector<misc_ops::ShareEntry> local_shares;
+		UnicodeString error;
+		const bool listed = misc_ops::EnumLocalShares(local_shares, error);
+		const net_share::ConnectionAction action = net_share::ResolveConnectionAction(
+			listed ? net_share::ShareListResult::Success : net_share::ShareListResult::Failure,
+			net_share::ConnectResult::NotAttempted);
+		if (action == net_share::ConnectionAction::Connect) {
+			warning = _T("未移植 (未実装扱い): 共有接続 (WNetAddConnection3)。")
+			        + (error.IsEmpty() ? EmptyStr : _T(" ") + error);
+		}
+		for (const misc_ops::ShareEntry &entry : local_shares) {
+			net_share::ShareItem item;
+			item.name = entry.name;
+			item.local_path = entry.path;
+			item.remark = entry.remark;
+			context.shares.push_back(item);
+		}
 	}
+	else {
+		warning = _T("未移植 (未実装扱い): リモート共有の列挙・接続 "
+		             "(NetShareEnum/WNetAddConnection3)");
+	}
+	context.warning = warning;
 
-	const int sel = wxGetSingleChoiceIndex(to_wx(_T("開く共有フォルダを選んでください")),
-	                                       to_wx(_T("共有フォルダ一覧")), choices, this);
-	if (sel < 0) return;
-	const UnicodeString p = paths[static_cast<std::size_t>(sel)];
-	if (p.IsEmpty() || !dir_exists(p)) { SetStatusWarning(_T("パスを開けません")); return; }
-	ActivePane()->SetPath(p);
+	UnicodeString selected;
+	if (!net_share_dialog::Run(this, context, selected)) return;
+	const net_share::ValidationResult path = net_share::NormalizeUncPath(selected);
+	if (!path.ok) {
+		SetStatusWarning(path.error);
+		return;
+	}
+	if (!ActivePane()->SetPath(path.value)) {
+		SetStatusWarning(_T("共有を開けません: ") + path.value);
+		return;
+	}
 	UpdateStatus();
 }
 
@@ -3920,7 +3982,7 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		CmdNameFromClip();
 	}
 	else if (SameStr(command, _T("ShareList"))) {
-		CmdShareList();
+		CmdShareList(param);
 	}
 	else if (SameStr(command, _T("NetConnect"))) {
 		CmdNetConnect(false);
@@ -4393,6 +4455,12 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	else if (SameStr(command, _T("FullScreen"))) {
 		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
 		CmdImageFullScreen(param);
+	}
+	else if (SameStr(command, _T("Print"))) {
+		// VCL: src/usr_cmdlist.cpp:394 (I:Print),
+		// src/MainFrm.cpp:35689-35697 が TPrintImgDlg を現在の画像で表示する。
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		CmdPrintImage();
 	}
 	else if (SameStr(command, _T("GrayScale"))) {
 		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
@@ -6450,6 +6518,51 @@ void MainFrame::CmdImageFullScreen(const UnicodeString &param)
 	                     : SameText(param, _T("OFF")) ? false
 	                                                  : !IsFullScreen();
 	ShowFullScreen(to_full);
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 画像印刷設定を開く (I:Print)
+ * @details VCL は src/MainFrm.cpp:35689-35697 で現在の file_rec を
+ *          TPrintImgDlg に渡し、src/PrnImgDlg.cpp:347-355 で印刷する。
+ *          ここでは画像一覧をページとして渡し、1枚/全枚/選択範囲と各種設定を
+ *          gui/print_image.h で解決する。実印刷は未移植 (未実装扱い) なので、
+ *          入力が確定しても勝手に実行せず警告を残す。
+ */
+void MainFrame::CmdPrintImage()
+{
+	if (image_nav_list_.empty() || image_nav_index_ < 0 ||
+	    image_nav_index_ >= static_cast<int>(image_nav_list_.size())) {
+		SetStatusWarning(_T("印刷する画像がありません"));
+		return;
+	}
+
+	print_image_dialog::Context context;
+	context.image_path = image_nav_dir_ + image_nav_list_[static_cast<std::size_t>(image_nav_index_)];
+	context.current_page = image_nav_index_ + 1;
+	context.page_count = static_cast<int>(image_nav_list_.size());
+
+	// GetSelectedNames はマーク済み、無ければカーソル位置を返す。VCL の
+	// ViewFileList/選択中ページという概念を、移植済み一覧へ対応させる。
+	const std::vector<UnicodeString> selected_names = ActivePane()->GetSelectedNames();
+	for (const UnicodeString &name : selected_names) {
+		for (std::size_t i = 0; i < image_nav_list_.size(); ++i) {
+			if (SameText(name, image_nav_list_[i])) {
+				context.selected_pages.push_back(static_cast<int>(i) + 1);
+				break;
+			}
+		}
+	}
+
+	print_image::PrintOptions options;
+	bool print_requested = false;
+	if (!print_image_dialog::Run(this, context, options, print_requested)) return;
+	if (!print_requested) return;
+
+	const print_image::ResolvedSettings resolved = print_image::ResolvePrintSettings(
+		options, context.page_count, context.current_page, context.selected_pages);
+	SetStatusWarning(_T("未移植 (未実装扱い): 実印刷。設定: ") +
+	                print_image::FormatPrintSettings(resolved));
 }
 
 //---------------------------------------------------------------------------
