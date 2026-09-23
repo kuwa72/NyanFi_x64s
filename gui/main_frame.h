@@ -240,7 +240,7 @@ private:
 	void CmdCompareHash();    //!< 反対側の同名ファイルとハッシュを比べる
 	void CmdSelOnlyCur();     //!< カレント側だけにあるファイルを選択
 	void CmdToOppSameHash();  //!< 反対側の同ハッシュ項目へ
-	void CmdDiffDir();        //!< 左右のディレクトリを比較
+	void CmdDiffDir(const UnicodeString &param);  //!< 左右のディレクトリを比較 (DiffDir)
 
 	//-- テキスト操作 (機能群9) -----------------------------------------------
 	void CmdCountLines();      //!< 行数を数える

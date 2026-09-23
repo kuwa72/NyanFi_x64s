@@ -55,6 +55,67 @@ struct DiffRow {
 std::vector<DiffRow> DiffDirectories(const std::vector<FileItem> &left,
                                      const std::vector<FileItem> &right, MatchBy how);
 
+//---------------------------------------------------------------------------
+// ディレクトリ比較の条件 (TDiffDirDlg / src/DiffDlg.cpp)
+//
+// VCL 版の該当は `src/MainFrm.cpp` の `DiffDirActionExecute`
+// (AL/DL/CS パラメータ分岐つき) と `src/DiffDlg.cpp` (`TDiffDirDlg`)。
+// ダイアログ自体は `gui/diff_dialog.h` が持つ。ここではパラメータの
+// 解決・マスクの正規化・一覧の絞り込みだけを置く (wx 非依存)。
+//
+// 未移植 (未実装扱い):
+// - 再帰列挙 (`get_all_files_ex` の sub_sw/99階層・除外ディレクトリでの
+//   走査)。こちらは表示中の一覧 (`VisibleItems`) だけを比べる
+// - 内容比較。名前とサイズ (`MatchBy::NameSize`) で比べる
+// - 履歴の永続化 (`DiffIncMaskHistory` 等)。現在値は ini に残す
+//---------------------------------------------------------------------------
+
+/// ディレクトリ比較の条件 (TDiffDirDlg の入力そのまま)
+struct DiffDirOptions {
+	UnicodeString inc_mask = _T("*.*");  //!< 対象マスク (`;` 区切り複数可)
+	UnicodeString exc_mask;              //!< 除外マスク (`;` 区切り複数可)
+	UnicodeString exc_dir;               //!< 除外ディレクトリマスク (sub_dir のときだけ有効)
+	bool sub_dir = false;                //!< サブディレクトリも対象
+	bool case_sensitive = false;         //!< CS パラメータ (表題の切り替え用)
+};
+
+/// 条件の出どころ (MainFrm.cpp の AL/DL 分岐と同じ)
+enum class DiffDirSource {
+	Dialog,        //!< ダイアログで入力
+	AllPreset,     //!< AL: 全件 (`*.*`・サブディレクトリ込み、ダイアログ無し)
+	DefaultPreset, //!< DL: 保存値 (ini) のまま、ダイアログ無し
+};
+
+/// `;` 区切りパラメータから出どころを決める (AL/DL があればそちらが優先)
+DiffDirSource ResolveDiffDirSource(const UnicodeString &param);
+
+/// 空の対象マスクは `*.*` (VCL `TDiffDirDlg::FormClose` と同じ)
+UnicodeString NormalizeDiffIncMask(const UnicodeString &mask);
+
+/// 除外ディレクトリ欄はサブディレクトリ対象のときだけ有効
+/// (VCL `TDiffDirDlg::StartActionUpdate` と同じ)
+inline bool IsDiffExcDirEnabled(bool sub_dir)
+{
+	return sub_dir;
+}
+
+/// AL プリセット (MainFrm.cpp の AL 分岐と同じ)
+DiffDirOptions AllDiffPreset();
+
+/// DL プリセット: 保存値 (ini) をそのまま使う。対象マスクだけ正規化する
+DiffDirOptions DefaultDiffPreset(const UnicodeString &inc_mask, const UnicodeString &exc_mask,
+                                 const UnicodeString &exc_dir, bool sub_dir);
+
+/**
+ * @brief 一覧をマスクで絞り込む
+ * @details 対象マスク (`;` 区切り) のどれかに合い、除外マスクのどれにも
+ *          合わないファイルだけを残す。`..` とディレクトリは落とす
+ *          (VCL は再帰列挙のファイルだけを比べるため)
+ */
+std::vector<FileItem> FilterDiffItems(const std::vector<FileItem> &items,
+                                      const UnicodeString &inc_mask,
+                                      const UnicodeString &exc_mask);
+
 }  // namespace compare
 
 #endif  // NYANFI_GUI_COMPARE_H

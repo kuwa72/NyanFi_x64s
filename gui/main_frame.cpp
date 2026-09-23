@@ -28,6 +28,7 @@
 #include "gui/archive.h"
 #include "gui/clipboard_files.h"
 #include "gui/compare.h"
+#include "gui/diff_dialog.h"
 #include "gui/file_info.h"
 #include "gui/file_narrow.h"
 #include "gui/text_ops.h"
@@ -1677,18 +1678,71 @@ void MainFrame::CmdToOppSameHash()
 }
 
 //---------------------------------------------------------------------------
-void MainFrame::CmdDiffDir()
+void MainFrame::CmdDiffDir(const UnicodeString &param)
 {
-	const std::vector<compare::DiffRow> rows = compare::DiffDirectories(
-		panes_[0]->VisibleItems(), panes_[1]->VisibleItems(), compare::MatchBy::NameSize);
+	// VCL は DiffDirActionExecute (MainFrm.cpp:16480付近) + TDiffDirDlg
+	// (src/DiffDlg.cpp)。AL/DL パラメータがあればダイアログを出さず、
+	// そうでなければ条件入力のダイアログを出す。突き合わせは
+	// gui/compare.h、入力は gui/diff_dialog.h。
+	// 再帰列挙 (get_all_files_ex の sub_sw/除外ディレクトリ走査) と
+	// 結果リストへの出力は未移植のため、表示中の一覧を比べる
+	// (未実装扱い)。マスクの絞り込みと現在値の ini 保存は行う
+	if (SameText(panes_[0]->GetPath(), panes_[1]->GetPath())) {
+		SetStatusWarning(_T("左右が同じディレクトリです"));
+		return;
+	}
+
+	compare::DiffDirOptions opt;
+	opt.case_sensitive = f_misc_ops::HasParamToken(param, _T("CS"));
+	switch (compare::ResolveDiffDirSource(param)) {
+	case compare::DiffDirSource::AllPreset:
+		opt = compare::AllDiffPreset();
+		opt.case_sensitive = f_misc_ops::HasParamToken(param, _T("CS"));
+		break;
+	case compare::DiffDirSource::DefaultPreset:
+		opt = compare::DefaultDiffPreset(
+			settings_.Ini().ReadStrGen(_T("DiffIncMask"), _T("*.*")),
+			settings_.Ini().ReadStrGen(_T("DiffExcMask")),
+			settings_.Ini().ReadStrGen(_T("DiffExcDir")),
+			settings_.Ini().ReadBoolGen(_T("DiffSubDir")));
+		opt.case_sensitive = f_misc_ops::HasParamToken(param, _T("CS"));
+		break;
+	case compare::DiffDirSource::Dialog:
+		opt.inc_mask = settings_.Ini().ReadStrGen(_T("DiffIncMask"), _T("*.*"));
+		opt.exc_mask = settings_.Ini().ReadStrGen(_T("DiffExcMask"));
+		opt.exc_dir = settings_.Ini().ReadStrGen(_T("DiffExcDir"));
+		opt.sub_dir = settings_.Ini().ReadBoolGen(_T("DiffSubDir"));
+		opt.case_sensitive = f_misc_ops::HasParamToken(param, _T("CS"));
+		if (!diff_dialog::Run(this, panes_[0]->GetPath(), panes_[1]->GetPath(), opt)) return;
+		// VCL (TDiffDirDlg::FormClose): 確定したら現在値を残す
+		settings_.Ini().WriteStrGen(_T("DiffIncMask"), opt.inc_mask);
+		settings_.Ini().WriteStrGen(_T("DiffExcMask"), opt.exc_mask);
+		settings_.Ini().WriteStrGen(_T("DiffExcDir"), opt.exc_dir);
+		settings_.Ini().WriteBoolGen(_T("DiffSubDir"), opt.sub_dir);
+		settings_.Save();
+		break;
+	}
+
+	const std::vector<FileItem> left =
+		compare::FilterDiffItems(panes_[0]->VisibleItems(), opt.inc_mask, opt.exc_mask);
+	const std::vector<FileItem> right =
+		compare::FilterDiffItems(panes_[1]->VisibleItems(), opt.inc_mask, opt.exc_mask);
+	const std::vector<compare::DiffRow> rows =
+		compare::DiffDirectories(left, right, compare::MatchBy::NameSize);
+
+	UnicodeString head = UnicodeString().sprintf(
+		_T("対象マスク: %s / 除外マスク: %s"), opt.inc_mask.c_str(), opt.exc_mask.c_str());
+	if (opt.sub_dir) head += _T(" / サブディレクトリも対象");
+	if (opt.case_sensitive) head += _T(" / 大文字・小文字を区別");
+	log_.Add(log_win::LogStatus::Info, _T("ディレクトリ比較開始  ") + head, /*show_time=*/true);
 
 	if (rows.empty()) {
-		wxMessageBox(to_wx(_T("違いは見つかりませんでした (名前とサイズで比較)")),
+		wxMessageBox(to_wx(_T("違いは見つかりませんでした (名前とサイズで比較)\r\n") + head),
 		             to_wx(_T("ディレクトリの比較")), wxOK | wxICON_INFORMATION, this);
 		return;
 	}
 
-	UnicodeString text = _T("名前とサイズで比較しました\r\n\r\n");
+	UnicodeString text = head + _T("\r\n\r\n");
 	int shown = 0;
 	for (const compare::DiffRow &r : rows) {
 		if (shown++ >= 200) { text += _T("...\r\n(以下省略)\r\n"); break; }
@@ -3061,7 +3115,7 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		CmdToOppSameHash();
 	}
 	else if (SameStr(command, _T("DiffDir"))) {
-		CmdDiffDir();
+		CmdDiffDir(param);
 	}
 	//-- テキスト操作 ---------------------------------------------------------
 	else if (SameStr(command, _T("CountLines"))) {

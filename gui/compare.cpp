@@ -7,6 +7,8 @@
 #include <algorithm>
 #include <map>
 
+#include "gui/f_misc_ops.h"
+
 namespace compare {
 
 //---------------------------------------------------------------------------
@@ -97,6 +99,83 @@ std::vector<DiffRow> DiffDirectories(const std::vector<FileItem> &left,
 		return CompareText(a.name, b.name) < 0;
 	});
 	return rows;
+}
+
+//---------------------------------------------------------------------------
+DiffDirSource ResolveDiffDirSource(const UnicodeString &param)
+{
+	// VCL (MainFrm.cpp の DiffDirActionExecute) は AL→DL→ダイアログの順に見る
+	if (f_misc_ops::HasParamToken(param, _T("AL"))) return DiffDirSource::AllPreset;
+	if (f_misc_ops::HasParamToken(param, _T("DL"))) return DiffDirSource::DefaultPreset;
+	return DiffDirSource::Dialog;
+}
+
+//---------------------------------------------------------------------------
+UnicodeString NormalizeDiffIncMask(const UnicodeString &mask)
+{
+	// VCL (DiffDlg.cpp の FormClose): 空なら "*.*" にする
+	if (mask.Trim().IsEmpty()) return UnicodeString(_T("*.*"));
+	return mask;
+}
+
+//---------------------------------------------------------------------------
+DiffDirOptions AllDiffPreset()
+{
+	// VCL (MainFrm.cpp の AL 分岐): マスクは *.*、除外は無し、
+	// サブディレクトリは対象にする
+	DiffDirOptions opt;
+	opt.inc_mask = _T("*.*");
+	opt.exc_mask = EmptyStr;
+	opt.exc_dir = EmptyStr;
+	opt.sub_dir = true;
+	return opt;
+}
+
+//---------------------------------------------------------------------------
+DiffDirOptions DefaultDiffPreset(const UnicodeString &inc_mask, const UnicodeString &exc_mask,
+                                 const UnicodeString &exc_dir, bool sub_dir)
+{
+	// VCL (MainFrm.cpp の DL 分岐): ini の保存値をそのまま使う
+	DiffDirOptions opt;
+	opt.inc_mask = NormalizeDiffIncMask(inc_mask);
+	opt.exc_mask = exc_mask;
+	opt.exc_dir = exc_dir;
+	opt.sub_dir = sub_dir;
+	return opt;
+}
+
+//---------------------------------------------------------------------------
+namespace {
+
+/// `;` 区切りのどれかに合えば true (空リストは「全部」とみなす)
+bool MatchesAnyMask(const TStringDynArray &masks, const UnicodeString &name)
+{
+	if (masks.Length == 0) return true;
+	for (int i = 0; i < masks.Length; ++i) {
+		if (str_match(masks[i], name)) return true;
+	}
+	return false;
+}
+
+}  // namespace
+
+std::vector<FileItem> FilterDiffItems(const std::vector<FileItem> &items,
+                                      const UnicodeString &inc_mask,
+                                      const UnicodeString &exc_mask)
+{
+	// VCL (MainFrm.cpp の DiffDirActionExecute) は対象マスクで列挙し、
+	// 除外マスクに合うものを落とす。こちらは表示中の一覧に同じ絞り込みを掛ける
+	const TStringDynArray inc = split_strings_semicolon(NormalizeDiffIncMask(inc_mask), true);
+	const TStringDynArray exc = split_strings_semicolon(exc_mask, true);
+
+	std::vector<FileItem> out;
+	for (const FileItem &it : items) {
+		if (it.is_parent || it.is_dir) continue;
+		if (!MatchesAnyMask(inc, it.name)) continue;
+		if (exc.Length > 0 && MatchesAnyMask(exc, it.name)) continue;
+		out.push_back(it);
+	}
+	return out;
 }
 
 }  // namespace compare
