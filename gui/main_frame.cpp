@@ -10,6 +10,7 @@
 #include <array>
 #include <functional>
 #include <memory>
+#include <string>
 #include <vector>
 
 #include <wx/choicdlg.h>
@@ -36,6 +37,11 @@
 #include "gui/text_viewer_core.h"
 #include "gui/file_ops.h"
 #include "gui/dupl_dialog.h"
+#include "gui/join_text_dialog.h"
+#include "gui/cv_enc_dialog.h"
+#include "gui/new_file_dialog.h"
+#include "gui/exe_cmd_dialog.h"
+#include "gui/pre_same_dialog.h"
 #include "gui/app_dialog.h"
 #include "gui/find_dialog.h"
 #include "gui/grep_dialog.h"
@@ -51,6 +57,8 @@
 #include "gui/backup_dialog.h"
 #include "gui/same_name.h"
 #include "gui/same_name_dialog.h"
+#include "gui/cv_img_dialog.h"
+#include "gui/cre_dirs_dialog.h"
 #include "gui/tab_dialog.h"
 #include "gui/image_load.h"
 #include "gui/image_view_ops.h"
@@ -147,6 +155,41 @@ SameNameAction AskSameNameConflict(wxWindow *parent, FilePane *pane, FilePane *d
 	wxMessageBox(to_wx(_T("選択された同名処理は wx 版では未移植 (未実装処理) です\n上書き/最新/自動改名/手動改名は実コピーを行いません")),
 	             to_wx(_T("同名ファイル")), wxOK | wxICON_WARNING, parent);
 	return SameNameAction::Unimplemented;
+}
+
+/// Copy/Move PR の事前指定 (VCL MainFrm.cpp:28454 / 28603)。
+/// ダイアログを中断したら proceed=false。
+file_ops::ConflictPolicy choose_pre_same_policy(
+	wxWindow *parent, const UnicodeString &param, const std::vector<UnicodeString> &sources,
+	const UnicodeString &dst_dir, const UnicodeString &verb, bool &proceed)
+{
+	proceed = true;
+	if (!pre_same::IsRequested(param)) return file_ops::ConflictPolicy::SkipExisting;
+
+	pre_same::Mode mode = pre_same::Mode::Automatic;
+	if (!pre_same_dialog::Run(parent, mode)) {
+		proceed = false;
+		return file_ops::ConflictPolicy::SkipExisting;
+	}
+	file_ops::ConflictPolicy policy = pre_same::PolicyFor(mode);
+	if (pre_same::RequiresConfirmation(mode)) {
+		UnicodeString collisions;
+		const UnicodeString base = IncludeTrailingPathDelimiter(dst_dir);
+		for (const UnicodeString &source : sources) {
+			const UnicodeString target = base + ExtractFileName(ExcludeTrailingPathDelimiter(source));
+			if (file_exists(target) || dir_exists(target)) {
+				if (!collisions.IsEmpty()) collisions += _T("\r\n");
+				collisions += _T("・") + ExtractFileName(source);
+			}
+		}
+		if (!collisions.IsEmpty()) {
+			const UnicodeString text = _T("次の同名項目を作成します。続行しますか?\r\n\r\n") + collisions;
+			if (wxMessageBox(to_wx(text), to_wx(verb + _T("の確認")),
+			                 wxYES_NO | wxICON_QUESTION, parent) != wxYES)
+				policy = file_ops::ConflictPolicy::SkipExisting;
+		}
+	}
+	return policy;
 }
 
 /// ハードリンクの一覧を Windows API で列挙する (VCL Global.cpp の
@@ -1272,39 +1315,95 @@ void MainFrame::CmdCopyFileInfo()
 	}
 }
 
+// VCL の TNewFileDlg 呼び出しは MainFrm.cpp:22276。
 //---------------------------------------------------------------------------
-void MainFrame::CmdNewFile()
+void MainFrame::CmdNewFile(bool from_template)
 {
 	if (RejectOnResultList(_T("ファイルの作成は"))) return;
 	FilePane *pane = ActivePane();
-	const wxString input = wxGetTextFromUser(to_wx(_T("作成するファイル名を入力してください")),
-	                                          to_wx(_T("新規ファイルの作成")), wxEmptyString, this);
-	if (input.IsEmpty()) return;
 
-	const UnicodeString path = IncludeTrailingPathDelimiter(pane->GetPath()) + to_us(input);
-	if (file_exists(path) || dir_exists(path)) {
-		// 既存があれば上書きしない (規約: 上書きを既定にしない)
-		wxMessageBox(to_wx(_T("同名のファイルまたはディレクトリが既にあります")),
-		             to_wx(_T("新規ファイルの作成")), wxOK | wxICON_WARNING, this);
-		return;
+	UnicodeString name;
+	UnicodeString template_path;
+	UnicodeString post_command;
+	if (from_template) {
+		new_file_dialog::Options options;
+		std::unique_ptr<TStringList> history(new TStringList());
+		settings_.Ini().LoadListItems(_T("NewTplHistory"), history.get(), 20, true);
+		for (int i = 0; i < history->Count; ++i)
+			options.template_history.push_back(history->Strings[i]);
+		options.default_directory = settings_.Ini().ReadStrGen(
+			_T("NewFileTplDir"), IncludeTrailingPathDelimiter(pane->GetPath()));
+		const bool has_setting = settings_.Ini().KeyExists(_T("General"), _T("NewFileExeCmd"));
+		options.post_command = settings_.Ini().ReadStrGen(
+			_T("NewFileExeCmd"), new_file::DefaultPostCommand(has_setting));
+		if (!new_file_dialog::Run(this, options)) return;
+
+		template_path = options.template_path;
+		name = Trim(options.name);
+		post_command = Trim(options.post_command);
+		history->Clear();
+		for (const UnicodeString &entry : options.template_history) history->Add(entry);
+		settings_.Ini().SaveListItems(_T("NewTplHistory"), history.get(), 20);
+		settings_.Ini().WriteStrGen(_T("NewFileTplDir"),
+		                            new_file::TemplateDirectory(template_path));
+		settings_.Ini().WriteStrGen(_T("NewFileExeCmd"), post_command);
+		settings_.Save();
+	}
+	else {
+		const wxString input = wxGetTextFromUser(
+			to_wx(_T("作成するテキストファイル名を入力してください")),
+			to_wx(_T("新規テキストファイルの作成")), wxEmptyString, this);
+		if (input.IsEmpty()) return;
+		name = to_us(input);
 	}
 
-	HANDLE h = ::CreateFileW(path.c_str(), GENERIC_WRITE, 0, NULL, CREATE_NEW,
-	                         FILE_ATTRIBUTE_NORMAL, NULL);
-	if (h == INVALID_HANDLE_VALUE) {
-		wxMessageBox(to_wx(_T("作成できませんでした: ") + to_us(input)),
-		             to_wx(_T("新規ファイルの作成")), wxOK | wxICON_ERROR, this);
-		return;
+	const UnicodeString path = IncludeTrailingPathDelimiter(pane->GetPath()) + name;
+	bool created = false;
+	if (from_template) {
+		if (!file_exists(template_path)) {
+			wxMessageBox(to_wx(_T("テンプレートが見つかりません: ") + template_path),
+			             to_wx(_T("新規ファイルの作成")), wxOK | wxICON_ERROR, this);
+			return;
+		}
+		file_ops::FileOpResult result;
+		file_ops::CopyItemTo(template_path, path, result);
+		created = result.success_count > 0;
+		if (created && !set_file_age(path, Now())) {
+			--result.success_count;
+			result.failures.push_back(path + _T(": 作成後の日時を設定できません"));
+			created = false;
+		}
+		if (!created) {
+			wxMessageBox(to_wx(file_ops::Summarize(result)), to_wx(_T("新規ファイルの作成")),
+			             wxOK | wxICON_ERROR, this);
+			return;
+		}
 	}
-	::CloseHandle(h);
+	else {
+		HANDLE h = ::CreateFileW(path.c_str(), GENERIC_WRITE, 0, nullptr, CREATE_NEW,
+		                         FILE_ATTRIBUTE_NORMAL, nullptr);
+		if (h != INVALID_HANDLE_VALUE) {
+			::CloseHandle(h);
+			created = true;
+		}
+		if (!created) {
+			wxMessageBox(to_wx(_T("作成できませんでした。既存と同名の場合は上書きしません。")),
+			             to_wx(_T("新規ファイルの作成")), wxOK | wxICON_ERROR, this);
+			return;
+		}
+	}
 
 	pane->Reload();
-	// 作ったファイルにカーソルを合わせる
 	const std::vector<UnicodeString> names = pane->VisibleNames();
 	for (std::size_t i = 0; i < names.size(); ++i) {
-		if (SameText(names[i], to_us(input))) { pane->MoveCursorTo(static_cast<int>(i)); break; }
+		if (SameText(names[i], name)) { pane->MoveCursorTo(static_cast<int>(i)); break; }
 	}
 	UpdateStatus();
+
+	// 未移植 (未実装扱い): NewFileExeCmd のユーザー設定に基づく複数コマンド記法。
+	// ここでは入力されたコマンド名をそのまま MainFrame::Execute に渡す。
+	if (!post_command.IsEmpty() && !Execute(post_command))
+		SetStatusWarning(_T("作成後コマンドを実行できませんでした: ") + post_command);
 }
 
 //---------------------------------------------------------------------------
@@ -1930,37 +2029,58 @@ void MainFrame::CmdCountLines()
 	wxMessageBox(to_wx(text), to_wx(_T("行数のカウント")), wxOK | wxICON_INFORMATION, this);
 }
 
+// VCL の TJoinTextDlg 呼び出しは MainFrm.cpp:20164。
 //---------------------------------------------------------------------------
 void MainFrame::CmdJoinText()
 {
-	// 出力先を「このペインのディレクトリ」に作るので、結果リストでは断る
 	if (RejectOnResultList(_T("テキストの結合は"))) return;
+	if (RejectIfOppositeIsResultList(_T("テキストの結合は"))) return;
 	FilePane *pane = ActivePane();
+	if (pane->GetMarkedCount() == 0) {
+		SetStatusWarning(_T("結合するファイルを選択してください"));
+		return;
+	}
+
+	join_text_dialog::Options options;
+	options.sources = pane->GetSelectedPaths();
+	for (const UnicodeString &path : options.sources) {
+		if (dir_exists(path)) {
+			wxMessageBox(to_wx(_T("ディレクトリは結合対象にできません: ") + ExtractFileName(path)),
+			             to_wx(_T("テキストの結合")), wxOK | wxICON_WARNING, this);
+			return;
+		}
+	}
+	const int code_index = settings_.Ini().ReadIntGen(_T("JoinTextOutCode"));
+	options.output_code = join_text::EncodingName(code_index);
+	options.template_path = settings_.Ini().ReadStrGen(_T("JoinTextTemplate"));
+	options.with_bom = settings_.Ini().ReadBoolGen(_T("JoinTextBOM"));
+	if (!join_text_dialog::Run(this, options)) return;
+
+	settings_.Ini().WriteIntGen(_T("JoinTextOutCode"),
+	                            join_text::EncodingIndex(options.output_code));
+	settings_.Ini().WriteStrGen(_T("JoinTextTemplate"), options.template_path);
+	settings_.Ini().WriteBoolGen(_T("JoinTextBOM"), options.with_bom);
+	settings_.Save();
+
 	const std::vector<UnicodeString> names = pane->GetSelectedNames();
-	if (names.size() < 2) { SetStatusWarning(_T("2件以上を選んでください")); return; }
-
-	const wxString input = wxGetTextFromUser(
-		to_wx(_T("出力するファイル名を入力してください (UTF-8 で書きます)")),
-		to_wx(_T("テキストの結合")), to_wx(_T("joined.txt")), this);
-	if (input.IsEmpty()) return;
-
-	const UnicodeString out = IncludeTrailingPathDelimiter(pane->GetPath()) + to_us(input);
+	const UnicodeString out = join_text::OutputPath(OppositePane()->GetPath(), options.output_name);
 	if (!ConfirmItems(this, _T("テキストの結合"), _T("結合"), names, out)) return;
 
-	// 結果リストの項目は一覧のディレクトリの外にあるので、名前ではなく
-	// フルパスで取る (GetPath() + 名前 だと別のファイルを指す)
-	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
-
-	const text_ops::JoinResult r = text_ops::JoinTextFiles(paths, out);
+	const text_ops::JoinResult r = text_ops::JoinTextFiles(
+		options.sources, out, join_text::CodePageFor(options.output_code),
+		options.with_bom, options.line_break);
 	pane->Reload();
+	OppositePane()->Reload();
 
 	UnicodeString msg;
 	msg.sprintf(_T("%d 件を結合しました"), r.joined);
-	for (const UnicodeString &f : r.failures) msg += _T("\r\n") + f;
-	wxMessageBox(to_wx(msg), to_wx(_T("テキストの結合")), wxOK | wxICON_INFORMATION, this);
+	for (const UnicodeString &failure : r.failures) msg += _T("\r\n") + failure;
+	wxMessageBox(to_wx(msg), to_wx(_T("テキストの結合")),
+	             r.failures.empty()? wxOK | wxICON_INFORMATION : wxOK | wxICON_WARNING, this);
 	UpdateStatus();
 }
 
+// VCL の TCvTxtEncDlg 呼び出しは MainFrm.cpp:29387。
 //---------------------------------------------------------------------------
 void MainFrame::CmdConvertTextEnc()
 {
@@ -1968,35 +2088,48 @@ void MainFrame::CmdConvertTextEnc()
 	const std::vector<UnicodeString> names = pane->GetSelectedNames();
 	if (names.empty()) { SetStatusWarning(_T("対象がありません")); return; }
 
-	wxArrayString choices;
-	choices.Add(to_wx(_T("UTF-8 (BOM 無し)")));
-	choices.Add(to_wx(_T("UTF-8 (BOM 付き)")));
-	choices.Add(to_wx(_T("Shift_JIS")));
-	const int sel = wxGetSingleChoiceIndex(to_wx(_T("変換先の文字コードを選んでください")),
-	                                       to_wx(_T("文字コードの変換")), choices, this);
-	if (sel < 0) return;
+	cv_enc_dialog::Options options;
+	options.code_index = cv_enc::NormalizeSelection(
+		settings_.Ini().ReadIntGen(_T("CvTextEncCode")),
+		static_cast<int>(cv_enc::EncodingNames().size()));
+	options.line_break_index = settings_.Ini().ReadIntGen(_T("CvTextEncLnBrk"));
+	options.with_bom = settings_.Ini().ReadBoolGen(_T("CvTextEncBOM"), true);
+	options.title_suffix = cv_enc::TitleSuffix(pane->GetMarkedCount(), pane->CurrentFullPath());
+	if (!cv_enc_dialog::Run(this, options)) return;
 
-	const int cp = (sel == 2)? 932 : CP_UTF8;
-	const bool bom = (sel == 1);
+	settings_.Ini().WriteIntGen(_T("CvTextEncCode"), options.code_index);
+	settings_.Ini().WriteIntGen(_T("CvTextEncLnBrk"), options.line_break_index);
+	settings_.Ini().WriteBoolGen(_T("CvTextEncBOM"), options.with_bom);
+	settings_.Save();
 
-	// **その場で書き換える破壊的な操作**なので必ず確認する
+	const UnicodeString encoding = cv_enc::EncodingNames()[static_cast<std::size_t>(options.code_index)];
+	const int code_page = cv_enc::CodePageFor(options.code_index);
+	const bool with_bom = options.with_bom && cv_enc::BomAvailable(encoding);
+	const UnicodeString line_break = cv_enc::LineBreakFor(options.line_break_index);
 	if (!ConfirmItems(this, _T("文字コードの変換"), _T("変換"), names, pane->GetPath())) return;
 
 	int ok = 0;
 	std::vector<UnicodeString> failures;
-	for (const UnicodeString &p : pane->GetSelectedPaths()) {
-		if (dir_exists(p)) continue;
+	for (const UnicodeString &path : pane->GetSelectedPaths()) {
+		if (dir_exists(path)) {
+			failures.push_back(ExtractFileName(path) + _T(": ディレクトリは変換できません"));
+			continue;
+		}
 		UnicodeString error;
-		if (text_ops::ConvertEncoding(p, cp, bom, error)) ok++;
-		else failures.push_back(ExtractFileName(p) + _T(": ") + error);
+		if (text_ops::ConvertEncoding(path, code_page, with_bom, line_break, error)) ok++;
+		else failures.push_back(ExtractFileName(path) + _T(": ") + error);
 	}
 
 	pane->Reload();
 	UnicodeString msg;
 	msg.sprintf(_T("%d 件を変換しました"), ok);
-	for (const UnicodeString &f : failures) msg += _T("\r\n") + f;
-	wxMessageBox(to_wx(msg), to_wx(_T("文字コードの変換")), wxOK | wxICON_INFORMATION, this);
+	for (const UnicodeString &failure : failures) msg += _T("\r\n") + failure;
+	wxMessageBox(to_wx(msg), to_wx(_T("文字コードの変換")),
+	             failures.empty()? wxOK | wxICON_INFORMATION : wxOK | wxICON_WARNING, this);
 	UpdateStatus();
+
+	// 未移植 (未実装扱い): VCL は XML/HTML の charset 宣言と出力先を反対ペインへ
+	// 処理する (MainFrm.cpp:29433/29482)。ここでは従来どおり対象ファイルを変更する。
 }
 
 //---------------------------------------------------------------------------
@@ -2032,6 +2165,104 @@ bool launch(const external::LaunchSpec &spec, HWND owner)
 		spec.directory.IsEmpty()? NULL : spec.directory.c_str(), SW_SHOWNORMAL);
 	// ShellExecute は成功時に 32 より大きい値を返す
 	return reinterpret_cast<INT_PTR>(r) > 32;
+}
+
+/// cmd.exe の標準出力・標準エラーを取り込む
+struct CapturedCommand {
+	bool started = false;
+	DWORD exit_code = 0;
+	UnicodeString output;
+	UnicodeString error;
+};
+
+CapturedCommand run_captured_command(const UnicodeString &command, const UnicodeString &directory)
+{
+	CapturedCommand result;
+	SECURITY_ATTRIBUTES security = {};
+	security.nLength = sizeof(security);
+	security.bInheritHandle = TRUE;
+
+	HANDLE read_pipe = nullptr;
+	HANDLE write_pipe = nullptr;
+	if (!::CreatePipe(&read_pipe, &write_pipe, &security, 0)) {
+		result.error = SysErrorMessage(::GetLastError());
+		return result;
+	}
+	::SetHandleInformation(read_pipe, HANDLE_FLAG_INHERIT, 0);
+
+	STARTUPINFOW startup = {};
+	startup.cb = sizeof(startup);
+	startup.dwFlags = STARTF_USESTDHANDLES;
+	startup.hStdInput = ::GetStdHandle(STD_INPUT_HANDLE);
+	startup.hStdOutput = write_pipe;
+	startup.hStdError = write_pipe;
+	PROCESS_INFORMATION process = {};
+
+	std::wstring command_line = L"cmd.exe /d /s /c \"";
+	command_line += command.c_str();
+	command_line += L"\"";
+	const UnicodeString workdir_us = ExcludeTrailingPathDelimiter(directory);
+	const std::wstring workdir(workdir_us.c_str(), static_cast<std::size_t>(workdir_us.Length()));
+	result.started = ::CreateProcessW(
+		L"cmd.exe", command_line.data(), nullptr, nullptr, TRUE,
+		CREATE_NO_WINDOW, nullptr, workdir.c_str(), &startup, &process) != FALSE;
+	if (!result.started) {
+		result.error = SysErrorMessage(::GetLastError());
+		::CloseHandle(read_pipe);
+		::CloseHandle(write_pipe);
+		return result;
+	}
+	::CloseHandle(write_pipe);
+
+	std::string bytes;
+	char buffer[4096];
+	DWORD n = 0;
+	while (::ReadFile(read_pipe, buffer, sizeof(buffer), &n, nullptr) && n > 0)
+		bytes.append(buffer, n);
+	::CloseHandle(read_pipe);
+	::WaitForSingleObject(process.hProcess, INFINITE);
+	::GetExitCodeProcess(process.hProcess, &result.exit_code);
+	::CloseHandle(process.hThread);
+	::CloseHandle(process.hProcess);
+
+	if (!bytes.empty()) {
+		const UINT code_page = CP_ACP;
+		const int chars = ::MultiByteToWideChar(code_page, 0, bytes.data(),
+		                                          static_cast<int>(bytes.size()), nullptr, 0);
+		if (chars > 0) {
+			std::wstring wide(static_cast<std::size_t>(chars), L'\0');
+			::MultiByteToWideChar(code_page, 0, bytes.data(), static_cast<int>(bytes.size()),
+			                      wide.data(), chars);
+			result.output = UnicodeString(wide.c_str());
+		}
+		else {
+			result.output = UnicodeString(bytes.c_str());
+		}
+	}
+	return result;
+}
+
+bool write_utf8_file(const UnicodeString &path, const UnicodeString &text)
+{
+	HANDLE h = ::CreateFileW(path.c_str(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS,
+	                         FILE_ATTRIBUTE_NORMAL, nullptr);
+	if (h == INVALID_HANDLE_VALUE) return false;
+	bool ok = true;
+	if (!text.IsEmpty()) {
+		const int n = ::WideCharToMultiByte(CP_UTF8, 0, text.c_str(), text.Length(),
+		                                    nullptr, 0, nullptr, nullptr);
+		if (n > 0) {
+			std::string bytes(static_cast<std::size_t>(n), '\0');
+			DWORD written = 0;
+			ok = ::WideCharToMultiByte(CP_UTF8, 0, text.c_str(), text.Length(),
+			                            bytes.data(), n, nullptr, nullptr) == n
+			  && ::WriteFile(h, bytes.data(), static_cast<DWORD>(bytes.size()), &written, nullptr)
+			  && written == bytes.size();
+		}
+		else ok = false;
+	}
+	::CloseHandle(h);
+	return ok;
 }
 
 }  // namespace
@@ -2070,19 +2301,99 @@ void MainFrame::CmdCalculator()
 	}
 }
 
+// VCL の TExeCmdDlg 呼び出しは MainFrm.cpp:17043。
 //---------------------------------------------------------------------------
-void MainFrame::CmdExeCommandLine()
+void MainFrame::CmdExeCommandLine(const UnicodeString &param)
 {
-	const wxString input = wxGetTextFromUser(
-		to_wx(_T("実行するコマンドラインを入力してください")),
-		to_wx(_T("コマンドラインの実行")), wxEmptyString, this);
-	if (input.IsEmpty()) return;
+	FilePane *pane = ActivePane();
+	std::unique_ptr<TStringList> history(new TStringList());
+	settings_.Ini().LoadListItems(_T("CmdLnHistory"), history.get(), 20, true);
 
-	const external::LaunchSpec spec =
-		external::CommandLineSpec(to_us(input), ActivePane()->GetPath());
-	if (!launch(spec, static_cast<HWND>(GetHandle()))) {
-		SetStatusWarning(_T("実行できません: ") + to_us(input));
+	exe_cmd::Options options;
+	for (int i = 0; i < history->Count; ++i) options.history.push_back(history->Strings[i]);
+	options.log_stdout = settings_.Ini().ReadBoolGen(_T("ExeDlgLogStdOut"));
+	options.copy_stdout = settings_.Ini().ReadBoolGen(_T("ExeDlgCopyStdOut"));
+	options.save_stdout = settings_.Ini().ReadBoolGen(_T("ExeDlgSaveStdOut"));
+	options.list_stdout = settings_.Ini().ReadBoolGen(_T("ExeDlgListStdOut"));
+	options.save_name = settings_.Ini().ReadStrGen(_T("ExeDlgSaveName"));
+	options.run_as = settings_.Ini().ReadBoolGen(_T("ExeDlgRunAs"));
+
+	const UnicodeString current = pane->CurrentFullPath();
+	const bool current_is_exe = !current.IsEmpty() && exe_cmd::IsExecutablePath(current);
+	const exe_cmd::CommandSeed seed = exe_cmd::MakeSeed(
+		exe_cmd::ParseInitialInput(param), current, current_is_exe, options.history);
+	if (!exe_cmd_dialog::Run(this, options, seed)) return;
+
+	history->Clear();
+	for (const UnicodeString &entry : options.history) history->Add(entry);
+	settings_.Ini().SaveListItems(_T("CmdLnHistory"), history.get(), 20);
+	settings_.Ini().WriteBoolGen(_T("ExeDlgLogStdOut"), options.log_stdout);
+	settings_.Ini().WriteBoolGen(_T("ExeDlgCopyStdOut"), options.copy_stdout);
+	settings_.Ini().WriteBoolGen(_T("ExeDlgSaveStdOut"), options.save_stdout);
+	settings_.Ini().WriteBoolGen(_T("ExeDlgListStdOut"), options.list_stdout);
+	settings_.Ini().WriteStrGen(_T("ExeDlgSaveName"), options.save_name);
+	settings_.Ini().WriteBoolGen(_T("ExeDlgRunAs"), options.run_as);
+	settings_.Save();
+
+	const UnicodeString command = Trim(options.command);
+	if (command.IsEmpty()) return;
+	if (options.run_as) {
+		UnicodeString arguments = command;
+		const UnicodeString executable = split_file_param(arguments);
+		const HINSTANCE r = ::ShellExecuteW(static_cast<HWND>(GetHandle()), L"runas",
+		                                     executable.c_str(),
+		                                     arguments.IsEmpty()? nullptr : arguments.c_str(),
+		                                     ExcludeTrailingPathDelimiter(pane->GetPath()).c_str(),
+		                                     SW_SHOWNORMAL);
+		if (reinterpret_cast<INT_PTR>(r) <= 32) {
+			wxMessageBox(to_wx(_T("管理者として実行できませんでした。")),
+			             to_wx(_T("コマンドラインの実行")), wxOK | wxICON_ERROR, this);
+		}
+		return;
 	}
+
+	const bool capture = options.log_stdout || options.copy_stdout
+	                   || options.save_stdout || options.list_stdout;
+	if (!capture) {
+		const external::LaunchSpec spec = external::CommandLineSpec(command, pane->GetPath());
+		if (!launch(spec, static_cast<HWND>(GetHandle())))
+			SetStatusWarning(_T("実行できません: ") + command);
+		return;
+	}
+
+	const CapturedCommand result = run_captured_command(command, pane->GetPath());
+	if (!result.started) {
+		wxMessageBox(to_wx(_T("コマンドを開始できませんでした: ") + result.error),
+		             to_wx(_T("コマンドラインの実行")), wxOK | wxICON_ERROR, this);
+		return;
+	}
+	if (options.log_stdout) {
+		log_.Add(log_win::LogStatus::Info, _T("EXEC  ") + command, true);
+		if (!result.output.IsEmpty()) log_.Add(log_win::LogStatus::Info, result.output, false);
+	}
+	if (options.copy_stdout && wxTheClipboard->Open()) {
+		wxTheClipboard->SetData(new wxTextDataObject(to_wx(result.output)));
+		wxTheClipboard->Close();
+	}
+	if (options.save_stdout) {
+		const UnicodeString path = exe_cmd::SaveOutputPath(pane->GetPath(), options.save_name);
+		if (!write_utf8_file(path, result.output)) {
+			wxMessageBox(to_wx(_T("標準出力を保存できませんでした: ") + path),
+			             to_wx(_T("コマンドラインの実行")), wxOK | wxICON_ERROR, this);
+		}
+	}
+	if (options.list_stdout) {
+		wxMessageBox(to_wx(result.output.IsEmpty()? _T("(標準出力なし)") : result.output),
+		             to_wx(_T("実行結果")), wxOK | wxICON_INFORMATION, this);
+	}
+	if (result.exit_code != 0) {
+		UnicodeString message;
+		message.sprintf(_T("コマンドはコード %lu で終了しました。"), result.exit_code);
+		SetStatusWarning(message);
+	}
+
+	// 未移植 (未実装扱い): UAC ダイアログ専用の ForcedElevation 指定。
+	// 管理者実行は ShellExecuteW("runas") で実行する。
 }
 
 //---------------------------------------------------------------------------
@@ -3197,8 +3508,11 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	else if (SameStr(command, _T("CopyFileName"))) {
 		CmdCopyFileName(true);
 	}
-	else if (SameStr(command, _T("NewFile")) || SameStr(command, _T("NewTextFile"))) {
-		CmdNewFile();
+	else if (SameStr(command, _T("NewFile"))) {
+		CmdNewFile(/*from_template=*/true);
+	}
+	else if (SameStr(command, _T("NewTextFile"))) {
+		CmdNewFile(/*from_template=*/false);
 	}
 	else if (SameStr(command, _T("CopyToClip"))) {
 		CmdFilesToClip(false);
@@ -3525,7 +3839,8 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		CmdConvertHtm2Txt(SameText(param, _T("MD")));
 	}
 	else if (SameStr(command, _T("ConvertImage"))) {
-		CmdConvertImage();
+		// usr_cmdlist.cpp:668 の CB パラメータだけを受け取る
+		CmdConvertImage(SameText(param, _T("CB")));
 	}
 	//-- ログ (機能群19) ------------------------------------------------------
 	else if (SameStr(command, _T("ClearLog"))) {
@@ -3652,10 +3967,10 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		pane->SetMask(EmptyStr);
 	}
 	else if (SameStr(command, _T("Copy"))) {
-		CmdCopy();
+		CmdCopy(param);
 	}
 	else if (SameStr(command, _T("Move"))) {
-		CmdMove();
+		CmdMove(param);
 	}
 	else if (SameStr(command, _T("Delete"))) {
 		// ワークリストの上での Delete は**ファイルを消さず**一覧から外す
@@ -4092,7 +4407,7 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		CmdCalculator();
 	}
 	else if (SameStr(command, _T("ExeCommandLine"))) {
-		CmdExeCommandLine();
+		CmdExeCommandLine(param);
 	}
 	else if (SameStr(command, _T("OpenByWin"))) {
 		CmdOpenByWin(param);
@@ -4904,7 +5219,7 @@ void MainFrame::ShowInputDirDialog()
  * 結果 (成功/スキップ/失敗の件数) を表示する。ディレクトリの再帰コピー・
  * 上書き回避の判断は gui/file_ops.h を参照
  */
-void MainFrame::CmdCopy()
+void MainFrame::CmdCopy(const UnicodeString &param)
 {
 	// 反対側がワークリストなら、コピーではなく**登録**になる
 	// (MainFrm.cpp:28355 と同じ)。ファイルは動かさない
@@ -4928,8 +5243,12 @@ void MainFrame::CmdCopy()
 	// 結果リストの項目は一覧のディレクトリの外にあるので、名前ではなく
 	// フルパスで取る (GetPath() + 名前 だと別のファイルを指す)
 	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
+	bool proceed = true;
+	const file_ops::ConflictPolicy policy = choose_pre_same_policy(
+		this, param, paths, dst_dir, _T("コピー"), proceed);
+	if (!proceed) return;
 
-	const file_ops::FileOpResult result = file_ops::CopyItems(paths, dst_dir);
+	const file_ops::FileOpResult result = file_ops::CopyItems(paths, dst_dir, policy);
 
 	pane->Reload();
 	dst_pane->Reload();
@@ -4944,7 +5263,7 @@ void MainFrame::CmdCopy()
  * @details Copy と同じ対象の決め方・確認・結果表示。ディレクトリの移動が
  * ボリュームを跨ぐ場合は失敗として報告する (gui/file_ops.h を参照)
  */
-void MainFrame::CmdMove()
+void MainFrame::CmdMove(const UnicodeString &param)
 {
 	if (RejectIfOppositeIsResultList(_T("移動"))) return;
 
@@ -4965,8 +5284,12 @@ void MainFrame::CmdMove()
 	// 結果リストの項目は一覧のディレクトリの外にあるので、名前ではなく
 	// フルパスで取る (GetPath() + 名前 だと別のファイルを指す)
 	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
+	bool proceed = true;
+	const file_ops::ConflictPolicy policy = choose_pre_same_policy(
+		this, param, paths, dst_dir, _T("移動"), proceed);
+	if (!proceed) return;
 
-	const file_ops::FileOpResult result = file_ops::MoveItems(paths, dst_dir);
+	const file_ops::FileOpResult result = file_ops::MoveItems(paths, dst_dir, policy);
 
 	pane->Reload();
 	dst_pane->Reload();
@@ -5544,6 +5867,8 @@ void MainFrame::ShowImageViewer(bool show)
  * まとめてあり、ここは選ばれたマッチをテキストビューアで開くだけ。
  * 走査自体は GrepWorkerThread (gui/worker_thread.h) の別スレッドで回り、
  * GUI スレッドは進捗表示と中断の受付だけを行う (Issue #41 batch3)
+ * TGrepExOptDlg は VCL の GrepOptionAction (MainFrm.cpp:30891) 専用で、
+ * usr_cmdlist.cpp:316-317 に独立コマンド名がないため Execute 分岐は作らない。
  */
 void MainFrame::CmdGrep()
 {
@@ -6783,27 +7108,46 @@ void MainFrame::CmdCopyDir()
 //---------------------------------------------------------------------------
 void MainFrame::CmdCreateDirsDlg()
 {
+	// VCL は MainFrm.cpp:15665-15697 で複数行メモの値を直接作成する。
+	// 入力/変換は cre_dirs_dialog、判定は cre_dirs、実作成は既存
+	// file_ops2::CreateDirs に分けた。
 	if (RejectOnResultList(_T("ディレクトリの一括作成は"))) return;
 	FilePane *pane = ActivePane();
 
-	// VCL は複数行のメモ欄を持つダイアログ。ここは1行入力を "|" 区切りにした
-	// (複数行の入力欄を出す仕組みがまだ無いため。報告書 §26)
-	const wxString input = wxGetTextFromUser(
-		to_wx(_T("作るディレクトリ名を | で区切って入力してください (例: doc|img|src\\lib)")),
-		to_wx(_T("ディレクトリの一括作成")), wxEmptyString, this);
-	if (input.IsEmpty()) return;
+	cre_dirs::DialogState state;
+	// VCL の設定保存 (CreDirsDlg.cpp:28-73) と同じ項目を wx 専用 ini に残す。
+	UsrIniFile &ini = settings_.Ini();
+	state.serial_start = ini.ReadInteger(_T("WxGuiCreDirs"), _T("Start"), 1);
+	state.serial_increment = ini.ReadInteger(_T("WxGuiCreDirs"), _T("Inc"), 1);
+	state.serial_before = ini.ReadInteger(_T("WxGuiCreDirs"), _T("SerMod"), 1) != 0;
+	state.text = ini.ReadString(_T("WxGuiCreDirs"), _T("Str"), EmptyStr);
+	state.text_before = ini.ReadInteger(_T("WxGuiCreDirs"), _T("StrMod"), 1) != 0;
+	state.date_format = ini.ReadString(_T("WxGuiCreDirs"), _T("DtFmt"), _T("yyyy/mm/dd"));
+	state.date_text = ini.ReadString(_T("WxGuiCreDirs"), _T("Date"), EmptyStr);
+	state.date_before = ini.ReadInteger(_T("WxGuiCreDirs"), _T("DateMod"), 1) != 0;
 
-	std::vector<UnicodeString> names;
-	UnicodeString rest = to_us(input);
-	while (!rest.IsEmpty()) {
-		const UnicodeString one = split_tkn(rest, _T("|"));
-		if (!Trim(one).IsEmpty()) names.push_back(Trim(one));
+	if (!cre_dirs_dialog::Run(this, state)) return;
+
+	ini.WriteInteger(_T("WxGuiCreDirs"), _T("Start"), state.serial_start);
+	ini.WriteInteger(_T("WxGuiCreDirs"), _T("Inc"), state.serial_increment);
+	ini.WriteInteger(_T("WxGuiCreDirs"), _T("SerMod"), state.serial_before ? 1 : 0);
+	ini.WriteString(_T("WxGuiCreDirs"), _T("Str"), state.text);
+	ini.WriteInteger(_T("WxGuiCreDirs"), _T("StrMod"), state.text_before ? 1 : 0);
+	ini.WriteString(_T("WxGuiCreDirs"), _T("DtFmt"), state.date_format);
+	ini.WriteString(_T("WxGuiCreDirs"), _T("Date"), state.date_text);
+	ini.WriteInteger(_T("WxGuiCreDirs"), _T("DateMod"), state.date_before ? 1 : 0);
+	settings_.Save();
+
+	const std::vector<UnicodeString> names = cre_dirs::CreatableEntries(state.entries);
+	if (names.empty()) {
+		SetStatusWarning(_T("作成する項目がありません"));
+		return;
 	}
-	if (names.empty()) return;
-
+	::wxBeginBusyCursor();
 	const file_ops::FileOpResult r = file_ops2::CreateDirs(names, pane->GetPath());
+	::wxEndBusyCursor();
 	pane->Reload();
-	wxMessageBox(to_wx(file_ops::Summarize(r)), to_wx(_T("ディレクトリの一括作成の結果")),
+	wxMessageBox(to_wx(file_ops::Summarize(r)), to_wx(_T("ディレクトリ一括作成の結果")),
 	             wxOK | wxICON_INFORMATION, this);
 	UpdateStatus();
 }
@@ -7125,39 +7469,91 @@ void MainFrame::CmdConvertHtm2Txt(bool to_markdown)
 }
 
 //---------------------------------------------------------------------------
-void MainFrame::CmdConvertImage()
+void MainFrame::CmdConvertImage(bool from_clipboard)
 {
-	const UnicodeString dst = OutputDirOrWarn(_T("画像の変換"));
+	// VCL の実測: MainFrm.cpp:29289-29373。usr_cmdlist.cpp:47/668 の
+	// ConvertImage と CB だけを受け取る。wx の core はファイル変換だけ
+	// 実装済みなので、クリップボードはダイアログで条件を受け取った後も
+	// 未実装として明示して実行しない。
+	if (from_clipboard) {
+		if (RejectOnResultList(_T("クリップボード画像の変換は"))) return;
+	}
+	else if (RejectIfOppositeIsResultList(_T("画像の変換"))) {
+		return;
+	}
+
+	const UnicodeString dst = from_clipboard ? ActivePane()->GetPath() : OppositePane()->GetPath();
 	if (dst.IsEmpty()) return;
 
 	FilePane *pane = ActivePane();
-	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
-	if (paths.empty()) { SetStatusWarning(_T("対象がありません")); return; }
+	std::vector<UnicodeString> paths;
+	UnicodeString title_info;
+	if (!from_clipboard) {
+		paths = pane->GetSelectedPaths();
+		if (paths.empty()) {
+			SetStatusWarning(_T("対象がありません"));
+			return;
+		}
+		const std::vector<UnicodeString> names = pane->GetSelectedNames();
+		if (names.size() > 1) title_info.sprintf(_T(" - 選択 %u"), static_cast<unsigned int>(names.size()));
+		else if (!names.empty()) title_info = _T(" - ") + names.front();
+	}
 
-	wxArrayString choices;
-	choices.Add("PNG");
-	choices.Add("JPEG");
-	choices.Add("BMP");
-	choices.Add("TIFF");
-	choices.Add("GIF");
-	const int sel = wxGetSingleChoiceIndex(to_wx(_T("変換先の形式")),
-	                                        to_wx(_T("画像の変換")), choices, this);
-	if (sel < 0) return;
+	cv_img::Options opt;
+	UsrIniFile &ini = settings_.Ini();
+	opt.format = cv_img::FormatFromIndex(ini.ReadInteger(_T("WxGuiCvImg"), _T("Format"), 2));
+	opt.quality = ini.ReadInteger(_T("WxGuiCvImg"), _T("JpgQuality"), 80);
+	opt.ycrcb = ini.ReadInteger(_T("WxGuiCvImg"), _T("JpgYCrCb"), 1);
+	opt.compression = ini.ReadInteger(_T("WxGuiCvImg"), _T("TifCmpMode"), 0);
+	opt.grayscale = ini.ReadBool(_T("WxGuiCvImg"), _T("GrayScale"), false);
+	opt.scale_mode = static_cast<cv_img::ScaleMode>(ini.ReadInteger(_T("WxGuiCvImg"), _T("ScaleMode"), 0));
+	opt.scale_param1 = ini.ReadInteger(_T("WxGuiCvImg"), _T("ScalePrm1"), 100);
+	opt.scale_param2 = ini.ReadInteger(_T("WxGuiCvImg"), _T("ScalePrm2"), 100);
+	opt.interpolation = ini.ReadInteger(_T("WxGuiCvImg"), _T("ScaleOpt"), 0);
+	opt.margin_color = static_cast<unsigned int>(ini.ReadInteger(_T("WxGuiCvImg"), _T("MgnColor"), 0));
+	opt.name_mode = static_cast<cv_img::NameMode>(ini.ReadInteger(_T("WxGuiCvImg"), _T("ChgNameMode"), 1));
+	opt.name_text = ini.ReadString(_T("WxGuiCvImg"), _T("ChgNameStr"), EmptyStr);
+	opt.keep_time = ini.ReadBool(_T("WxGuiCvImg"), _T("KeepTime"), false);
+	opt.not_use_preview = ini.ReadBool(_T("WxGuiCvImg"), _T("NotUsePreview"), false);
+	opt = cv_img::Normalize(opt);
+	opt.from_clipboard = from_clipboard;
 
-	static const wchar_t *const kExt[] = {L".png", L".jpg", L".bmp", L".tif", L".gif"};
-	const UnicodeString ext = UnicodeString(kExt[sel]);
+	if (!cv_img_dialog::Run(this, opt, from_clipboard, title_info)) return;
 
-	int quality = 100;
-	if (sel == 1) {
-		const wxString q = wxGetTextFromUser(to_wx(_T("JPEG の画質 (0〜100)")),
-		                                      to_wx(_T("画像の変換")), to_wx(_T("90")), this);
-		if (q.IsEmpty()) return;
-		quality = to_us(q).ToIntDef(90);
-		if (quality < 0 || quality > 100) quality = 90;
+	ini.WriteInteger(_T("WxGuiCvImg"), _T("Format"), static_cast<int>(opt.format));
+	ini.WriteInteger(_T("WxGuiCvImg"), _T("JpgQuality"), opt.quality);
+	ini.WriteInteger(_T("WxGuiCvImg"), _T("JpgYCrCb"), opt.ycrcb);
+	ini.WriteInteger(_T("WxGuiCvImg"), _T("TifCmpMode"), opt.compression);
+	ini.WriteBool(_T("WxGuiCvImg"), _T("GrayScale"), opt.grayscale);
+	ini.WriteInteger(_T("WxGuiCvImg"), _T("ScaleMode"), static_cast<int>(opt.scale_mode));
+	ini.WriteInteger(_T("WxGuiCvImg"), _T("ScalePrm1"), opt.scale_param1);
+	ini.WriteInteger(_T("WxGuiCvImg"), _T("ScalePrm2"), opt.scale_param2);
+	ini.WriteInteger(_T("WxGuiCvImg"), _T("ScaleOpt"), opt.interpolation);
+	ini.WriteInteger(_T("WxGuiCvImg"), _T("MgnColor"), static_cast<int>(opt.margin_color));
+	ini.WriteInteger(_T("WxGuiCvImg"), _T("ChgNameMode"), static_cast<int>(opt.name_mode));
+	ini.WriteString(_T("WxGuiCvImg"), _T("ChgNameStr"), opt.name_text);
+	ini.WriteBool(_T("WxGuiCvImg"), _T("KeepTime"), opt.keep_time);
+	ini.WriteBool(_T("WxGuiCvImg"), _T("NotUsePreview"), opt.not_use_preview);
+	settings_.Save();
+
+	if (from_clipboard) {
+		// クリップボード画像の実処理は既存の ConvertImages にない。
+		SetStatusWarning(_T("クリップボード画像の変換/保存は未実装です (条件は保存しました)"));
+		return;
+	}
+	if (opt.format == cv_img::Format::Hdp) {
+		SetStatusWarning(_T("HDP の保存は未実装です"));
+		return;
+	}
+	if (cv_img::HasUnsupportedRuntimeOptions(opt)) {
+		wxMessageBox(to_wx(_T("形式・JPEG品質以外は既存 core では未実装のため適用されません。\n"
+		                       _T("指定は wx 専用 ini に保存しました。"))), to_wx(_T("画像の変換")),
+		             wxOK | wxICON_WARNING, this);
 	}
 
 	::wxBeginBusyCursor();
-	const file_ops::FileOpResult r = convert_ops::ConvertImages(paths, dst, ext, quality);
+	const file_ops::FileOpResult r = convert_ops::ConvertImages(
+		paths, dst, cv_img::Extension(opt.format), opt.quality);
 	::wxEndBusyCursor();
 
 	OppositePane()->Reload();

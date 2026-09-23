@@ -306,6 +306,10 @@ if(TARGET nyanfi_core)
 		gui/pack_settings.cpp
 		gui/backup_settings.cpp
 		gui/same_name.cpp
+		gui/grep_opt.cpp
+		gui/cv_img.cpp
+		gui/find_txt.cpp
+		gui/cre_dirs.cpp
 	)
 	target_include_directories(nyanfi_gui_core PUBLIC ${PROJECT_SOURCE_DIR})
 	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core shell32 netapi32)

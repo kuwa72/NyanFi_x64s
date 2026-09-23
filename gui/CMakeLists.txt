@@ -84,6 +84,10 @@ add_executable(nyanfi
 	text_viewer.cpp
 	image_viewer.cpp
 	grep_dialog.cpp
+	grep_opt_dialog.cpp
+	cv_img_dialog.cpp
+	find_txt_dialog.cpp
+	cre_dirs_dialog.cpp
 	diff_dialog.cpp
 	comp_dialog.cpp
 	sort_mode_dialog.cpp
@@ -93,6 +97,11 @@ add_executable(nyanfi
 	rename_dialog.cpp
 	find_dialog.cpp
 	dupl_dialog.cpp
+	join_text_dialog.cpp
+	cv_enc_dialog.cpp
+	new_file_dialog.cpp
+	exe_cmd_dialog.cpp
+	pre_same_dialog.cpp
 	mask_dialog.cpp
 	tab_dialog.cpp
 	regdir_dialog.cpp

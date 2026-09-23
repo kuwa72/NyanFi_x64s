@@ -25,6 +25,7 @@
 #include <wx/wx.h>
 
 #include "gui/text_viewer_core.h"
+#include "gui/find_txt.h"
 
 /**
  * @brief テキストビューア
@@ -161,8 +162,10 @@ private:
 	void EnsureCursorVisible();
 
 	void PromptSearch();
-	bool SearchForward(const UnicodeString &kwd, int from_line);
-	bool SearchBackward(const UnicodeString &kwd, int from_line);
+	bool SearchForward(const UnicodeString &kwd, int from_line,
+	                   find_txt::Direction direction = find_txt::Direction::Down);
+	bool SearchBackward(const UnicodeString &kwd, int from_line,
+	                    find_txt::Direction direction = find_txt::Direction::Up);
 
 	text_viewer_core::LoadResult doc_;
 	UnicodeString path_;
@@ -186,6 +189,7 @@ private:
 	int left_margin_ = 10;            //!< 左余白(px。ViewLeftMargin。SetMargin)
 
 	UnicodeString last_search_;        //!< 直前の検索語 (次回のダイアログ初期値)
+	find_txt::Options find_options_;   //!< VCL FindTextDlg の選択状態
 	UnicodeString last_error_;         //!< 直前の Execute 系エラーメッセージ (無ければ空)
 	std::vector<int> marks_;           //!< 栞マーク (0ベース、昇順。V:Mark 系)
 	int forced_code_page_ = 0;         //!< ChangeCodePage による強制コードページ (0=自動判定)

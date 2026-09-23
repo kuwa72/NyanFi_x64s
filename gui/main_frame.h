@@ -113,8 +113,8 @@ private:
 
 	// ファイル操作 (gui/file_ops.h)。いずれも確認ダイアログを出してから実行し、
 	// 結果 (成功/スキップ/失敗の件数) を必ず表示する。詳細は main_frame.cpp を参照
-	void CmdCopy();       //!< アクティブペインの選択項目を、反対側のペインへコピーする (C)
-	void CmdMove();       //!< アクティブペインの選択項目を、反対側のペインへ移動する (M)
+	void CmdCopy(const UnicodeString &param); //!< コピー (C。PR で同名処理を指定できる)
+	void CmdMove(const UnicodeString &param); //!< 移動 (M。PR で同名処理を指定できる)
 	void CmdDelete();     //!< アクティブペインの選択項目をゴミ箱へ送る (D)
 	void CmdCreateDir();  //!< アクティブペインにディレクトリを作成する (K)
 	void CmdRenameDlg();  //!< 選択項目 (マーク済み、無ければカーソル位置) の一括リネーム (R)
@@ -219,8 +219,8 @@ private:
 	void CmdCopyFileName(bool full_path);
 	/// 完全に削除する (CompleteDelete。ゴミ箱に送らない。破壊的)
 	void CmdCompleteDelete();
-	/// 空のファイルを作る (NewFile)
-	void CmdNewFile();
+	/// テンプレートから新ファイルを作る (NewFile)、または空ファイルを作る (NewTextFile)
+	void CmdNewFile(bool from_template);  //!< NewFile はテンプレート、NewTextFile は空ファイル
 
 	//-- クリップボード経由のファイル操作 (機能群5の続き) ---------------------
 	void CmdFilesToClip(bool cut);  //!< CopyToClip / CutToClip
@@ -257,7 +257,7 @@ private:
 	void CmdFileRun();         //!< 「ファイル名を指定して実行」
 	void CmdOpenCtrlPanel();   //!< コントロールパネルを開く
 	void CmdCalculator();      //!< 電卓を開く (Calculator)
-	void CmdExeCommandLine();  //!< コマンドラインを入力して実行 (ExeCommandLine)
+	void CmdExeCommandLine(const UnicodeString &param);  //!< 外部コマンド実行 (FN/LC 対応)
 	void CmdOpenByWin(const UnicodeString &param);  //!< 関連付けで開く (OpenByWin)
 	void CmdInputCommands();   //!< コマンドを入力して実行 (InputCommands)
 	void CmdCopyCmdName();     //!< コマンド名を選んでクリップボードへ (CopyCmdName)
@@ -536,7 +536,7 @@ private:
 	void CmdExtractIcon();      //!< アイコンを抽出 (ExtractIcon)
 	void CmdConvertDoc2Txt();   //!< バイナリ文書→テキスト (ConvertDoc2Txt)
 	void CmdConvertHtm2Txt(bool to_markdown);  //!< HTML→テキスト/Markdown
-	void CmdConvertImage();     //!< 画像形式の変換 (ConvertImage)
+	void CmdConvertImage(bool from_clipboard);  //!< 画像形式の変換 (ConvertImage、CB=クリップボード)
 
 	/// 抽出・変換の宛先 (反対ペインのディレクトリ)。使えないなら空を返して警告する
 	UnicodeString OutputDirOrWarn(const UnicodeString &verb);
