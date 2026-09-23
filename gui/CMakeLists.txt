@@ -92,6 +92,7 @@ add_executable(nyanfi
 	find_txt_dialog.cpp
 	cre_dirs_dialog.cpp
 	gen_info_dialog.cpp
+	edit_hist_dialog.cpp
 	diff_dialog.cpp
 	comp_dialog.cpp
 	drive_select_dialog.cpp
@@ -121,6 +122,8 @@ add_executable(nyanfi
 	inp_ex_dialog.cpp
 	btn_dialog.cpp
 	key_dialog.cpp
+	net_share_dialog.cpp
+	print_image_dialog.cpp
 	calc_dialog.cpp
 	dot_nyan_dialog.cpp
 	key_map_wx.cpp

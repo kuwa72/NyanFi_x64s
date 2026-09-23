@@ -17,6 +17,7 @@
 #include <wx/colordlg.h>
 #include <wx/dcbuffer.h>
 #include <wx/filedlg.h>
+#include <wx/progdlg.h>
 #include <wx/radiobox.h>
 #include <wx/settings.h>
 #include <wx/statline.h>
@@ -38,6 +39,7 @@
 #include "gui/file_ext.h"
 #include "gui/file_ext_dialog.h"
 #include "gui/gen_info_dialog.h"
+#include "gui/edit_hist_dialog.h"
 #include "gui/file_narrow.h"
 #include "gui/text_ops.h"
 #include "gui/text_display.h"
@@ -79,6 +81,11 @@
 #include "gui/tag_dialog.h"
 #include "gui/image_load.h"
 #include "gui/image_view_ops.h"
+#include "gui/net_share.h"
+#include "gui/net_share_dialog.h"
+#include "gui/print_image.h"
+#include "gui/print_image_dialog.h"
+#include "gui/worker_thread.h"
 #include "gui/mask_dialog.h"
 #include "gui/rename_dialog.h"
 #include "gui/selection.h"
@@ -132,6 +139,43 @@ bool ConfirmExecute(wxWindow *parent, const UnicodeString &full_path)
 	const UnicodeString text = _T("実行可能ファイルです。開いてもよろしいですか?\n\n") + full_path;
 	return wxMessageBox(to_wx(text), to_wx(_T("実行の確認")), wxYES_NO | wxICON_WARNING, parent) == wxYES;
 }
+
+/**
+ * @brief wxWorker の進捗/完了イベントを一時的に受けるだけのセッション
+ * @details wxProgressDialog::Pulse() のネストループでイベントを配送し、
+ *          CmdGetHash は GUI スレッドで結果を読む。vector は Result() 側で受け取る。
+ */
+class WorkerEventSession : public wxEvtHandler {
+public:
+	WorkerEventSession()
+	{
+		Bind(wxEVT_WORKER_PROGRESS, &WorkerEventSession::OnProgress, this);
+		Bind(wxEVT_WORKER_DONE, &WorkerEventSession::OnDone, this);
+	}
+
+	bool IsDone() const { return done_; }
+	int Processed() const { return processed_; }
+	int Total() const { return total_; }
+	bool Cancelled() const { return cancelled_; }
+
+private:
+	void OnProgress(wxThreadEvent &event)
+	{
+		processed_ = event.GetInt();
+		total_ = static_cast<int>(event.GetExtraLong());
+	}
+
+	void OnDone(wxThreadEvent &event)
+	{
+		done_ = true;
+		cancelled_ = event.GetInt() != 0;
+	}
+
+	bool done_ = false;
+	bool cancelled_ = false;
+	int processed_ = 0;
+	int total_ = 0;
+};
 
 enum class SameNameAction { Proceed, Cancelled, Unimplemented };
 
@@ -596,6 +640,22 @@ void MainFrame::SaveSettings()
 	}
 
 	settings_.Save();
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::RequestCancelActiveWorkers()
+{
+	for (worker_thread::CancelableWorkerThread *worker : active_workers_) {
+		if (worker != nullptr) worker->RequestCancel();
+	}
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::ForgetActiveWorker(worker_thread::CancelableWorkerThread *worker)
+{
+	active_workers_.erase(
+		std::remove(active_workers_.begin(), active_workers_.end(), worker),
+		active_workers_.end());
 }
 
 //---------------------------------------------------------------------------
@@ -1872,16 +1932,72 @@ void MainFrame::CmdGetHash()
 	const std::vector<UnicodeString> names = pane->GetSelectedNames();
 	if (names.empty()) { SetStatusWarning(_T("対象がありません")); return; }
 
-	UnicodeString text;
-	for (const UnicodeString &p : pane->GetSelectedPaths()) {
-		if (dir_exists(p)) continue;  // ディレクトリは対象外
-		const UnicodeString h = get_HashStr(p, UnicodeString(kDefaultHashId));
-		text += ExtractFileName(p) + _T("\r\n  ") + (h.IsEmpty()? _T("(取得できません)") : h) + _T("\r\n");
+	// VCL では Task_CPY などの進捗コールバックで中断するが、 wx 版には
+	// 実コピー task がない。ここでは複数ファイルのハッシュ計算を汎用
+	// BatchedWorkerThread に載せ、CmdCancelAllTask からも同じ flag を止める。
+	std::vector<UnicodeString> paths;
+	for (const UnicodeString &path : pane->GetSelectedPaths()) {
+		if (!dir_exists(path)) paths.push_back(path);  // ディレクトリは対象外
 	}
+	if (paths.empty()) { SetStatusWarning(_T("対象のファイルがありません")); return; }
+
+	std::vector<UnicodeString> hashes(paths.size());
+	workers::CancelFlag cancel_flag;
+	WorkerEventSession session;
+	worker_thread::BatchedWorkerThread *thread = new worker_thread::BatchedWorkerThread(
+		&session, static_cast<int>(paths.size()),
+		[&hashes, &paths](int index) {
+			if (index < 0 || index >= static_cast<int>(paths.size())) return;
+			hashes[static_cast<std::size_t>(index)] =
+				get_HashStr(paths[static_cast<std::size_t>(index)], UnicodeString(kDefaultHashId));
+		},
+		&cancel_flag);
+
+	workers::BatchResult batch;
+	const int run_result = thread->Run();
+	if (run_result != wxTHREAD_NO_ERROR) {
+		// 起動失敗時だけ同期 fallback。実接続は通常この経路を通らない。
+		delete thread;
+		for (std::size_t i = 0; i < paths.size(); ++i) {
+			hashes[i] = get_HashStr(paths[i], UnicodeString(kDefaultHashId));
+		}
+		batch.processed = static_cast<int>(paths.size());
+	}
+	else {
+		active_workers_.push_back(thread);
+		wxProgressDialog progress(to_wx(_T("ハッシュ計算中")),
+		                          to_wx(_T("ファイルを選択中...")),
+		                          static_cast<int>(paths.size()), this,
+		                          wxPD_APP_MODAL | wxPD_CAN_ABORT | wxPD_AUTO_HIDE |
+		                              wxPD_ELAPSED_TIME);
+		while (!session.IsDone()) {
+			UnicodeString message;
+			message.sprintf(_T("%d / %d ファイル"),
+			                session.Processed(), static_cast<int>(paths.size()));
+			// Pulse が false を返したら中断。CmdCancelAllTask も同じ flag を使う。
+			if (!progress.Pulse(to_wx(message))) cancel_flag.RequestCancel();
+			if (progress.WasCancelled()) cancel_flag.RequestCancel();
+			wxMilliSleep(10);
+		}
+		thread->Wait();
+		batch = thread->Result();
+		ForgetActiveWorker(thread);
+		delete thread;
+	}
+
+	UnicodeString text;
+	for (std::size_t i = 0; i < paths.size(); ++i) {
+		const UnicodeString &hash = hashes[i];
+		const bool attempted = static_cast<int>(i) < batch.processed;
+		text += ExtractFileName(paths[i]) + _T("\r\n  ") +
+		        (hash.IsEmpty() ? (attempted ? _T("(取得できません)") : _T("(未処理)")) : hash) +
+		        _T("\r\n");
+	}
+	if (batch.cancelled) text += _T("\r\n中断しました (途中経過)\r\n");
 	if (text.IsEmpty()) { SetStatusWarning(_T("対象のファイルがありません")); return; }
 
 	wxMessageBox(to_wx(text), to_wx(UnicodeString(kDefaultHashId) + _T(" ハッシュ値")),
-	             wxOK | wxICON_INFORMATION, this);
+	             batch.cancelled ? (wxOK | wxICON_WARNING) : (wxOK | wxICON_INFORMATION), this);
 }
 
 //---------------------------------------------------------------------------
@@ -2905,32 +3021,90 @@ void MainFrame::CmdNameFromClip()
 }
 
 //---------------------------------------------------------------------------
-void MainFrame::CmdShareList()
+void MainFrame::CmdShareList(const UnicodeString &param)
 {
-	std::vector<misc_ops::ShareEntry> shares;
-	UnicodeString error;
-	if (!misc_ops::EnumLocalShares(shares, error)) {
-		wxMessageBox(to_wx(error), to_wx(_T("共有フォルダ一覧")), wxOK | wxICON_WARNING, this);
+	// VCL 実測: src/usr_cmdlist.cpp:221 (F:ShareList)、
+	// src/MainFrm.cpp:25862-25892 でコンピュータ名を決め、NetShareDlg を表示する。
+	UnicodeString computer = param;
+	UnicodeString warning;
+	const UnicodeString current = ActivePane()->GetPath();
+	if (computer.IsEmpty()) {
+		if (StartsStr(_T("\\\\"), current)) {
+			computer = get_root_name(current);
+		}
+		else {
+			const UnicodeString drive = ExtractFileDrive(current);
+			// VCL は WNetGetUniversalName でリモートドライブを UNC 化しているが、
+			// その OS 依存処理は未移植 (未実装扱い)。黙ってローカルへ落とさない。
+			if (!drive.IsEmpty() && ::GetDriveTypeW(drive.c_str()) == DRIVE_REMOTE) {
+				wxMessageBox(to_wx(_T("未移植 (未実装扱い): リモートドライブのUNC解決 "
+				                      "(WNetGetUniversalName)")),
+				             to_wx(_T("共有フォルダ一覧")), wxOK | wxICON_WARNING, this);
+				return;
+			}
+			wchar_t name[256] = {};
+			DWORD size = static_cast<DWORD>(std::size(name));
+			if (!::GetComputerNameW(name, &size)) {
+				wxMessageBox(to_wx(_T("コンピュータ名を取得できません")),
+				             to_wx(_T("共有フォルダ一覧")), wxOK | wxICON_WARNING, this);
+				return;
+			}
+			computer = UnicodeString(name);
+		}
+	}
+
+	const net_share::ValidationResult normalized = net_share::NormalizeComputer(computer);
+	if (!normalized.ok) {
+		wxMessageBox(to_wx(normalized.error), to_wx(_T("共有フォルダ一覧")),
+		             wxOK | wxICON_WARNING, this);
 		return;
 	}
-	if (shares.empty()) { SetStatusWarning(_T("共有フォルダがありません")); return; }
 
-	wxArrayString choices;
-	std::vector<UnicodeString> paths;
-	for (const misc_ops::ShareEntry &e : shares) {
-		UnicodeString label = e.name;
-		if (!e.path.IsEmpty()) label += _T("  ") + e.path;
-		if (!e.remark.IsEmpty()) label += _T("  (") + e.remark + _T(")");
-		choices.Add(to_wx(label));
-		paths.push_back(e.path);
+	net_share_dialog::Context context;
+	context.computer = normalized.value;
+	wchar_t local_name[256] = {};
+	DWORD local_size = static_cast<DWORD>(std::size(local_name));
+	const bool have_local = ::GetComputerNameW(local_name, &local_size) != FALSE;
+	const net_share::ValidationResult local =
+		have_local ? net_share::NormalizeComputer(UnicodeString(local_name))
+		           : net_share::ValidationResult();
+	if (have_local && local.ok && SameText(local.value, normalized.value)) {
+		// 移植済み core の EnumLocalShares を使う (gui/misc_ops.cpp:58-84)。
+		std::vector<misc_ops::ShareEntry> local_shares;
+		UnicodeString error;
+		const bool listed = misc_ops::EnumLocalShares(local_shares, error);
+		const net_share::ConnectionAction action = net_share::ResolveConnectionAction(
+			listed ? net_share::ShareListResult::Success : net_share::ShareListResult::Failure,
+			net_share::ConnectResult::NotAttempted);
+		if (action == net_share::ConnectionAction::Connect) {
+			warning = _T("未移植 (未実装扱い): 共有接続 (WNetAddConnection3)。")
+			        + (error.IsEmpty() ? EmptyStr : _T(" ") + error);
+		}
+		for (const misc_ops::ShareEntry &entry : local_shares) {
+			net_share::ShareItem item;
+			item.name = entry.name;
+			item.local_path = entry.path;
+			item.remark = entry.remark;
+			context.shares.push_back(item);
+		}
 	}
+	else {
+		warning = _T("未移植 (未実装扱い): リモート共有の列挙・接続 "
+		             "(NetShareEnum/WNetAddConnection3)");
+	}
+	context.warning = warning;
 
-	const int sel = wxGetSingleChoiceIndex(to_wx(_T("開く共有フォルダを選んでください")),
-	                                       to_wx(_T("共有フォルダ一覧")), choices, this);
-	if (sel < 0) return;
-	const UnicodeString p = paths[static_cast<std::size_t>(sel)];
-	if (p.IsEmpty() || !dir_exists(p)) { SetStatusWarning(_T("パスを開けません")); return; }
-	ActivePane()->SetPath(p);
+	UnicodeString selected;
+	if (!net_share_dialog::Run(this, context, selected)) return;
+	const net_share::ValidationResult path = net_share::NormalizeUncPath(selected);
+	if (!path.ok) {
+		SetStatusWarning(path.error);
+		return;
+	}
+	if (!ActivePane()->SetPath(path.value)) {
+		SetStatusWarning(_T("共有を開けません: ") + path.value);
+		return;
+	}
 	UpdateStatus();
 }
 
@@ -3171,6 +3345,17 @@ void MainFrame::OnCharHook(wxKeyEvent &event)
 //---------------------------------------------------------------------------
 void MainFrame::OnClose(wxCloseEvent &event)
 {
+	// 終了時は先に実行中ワーカーを中断し、完了イベントを GUI 側で処理できる
+	// まで閉じるのを延期する。Wait/delete の二重化を避ける。
+	if (!active_workers_.empty()) {
+		RequestCancelActiveWorkers();
+		SetStatusWarning(_T("実行中のワーカーを中断しています"));
+		if (event.CanVeto()) {
+			event.Veto();
+			return;
+		}
+	}
+
 	// ワークリストの未保存の変更を黙って捨てない (VCL も終了時に聞く。
 	// MainFrm.cpp:977)。「中止」なら閉じるのをやめる
 	SyncWorkMarks();
@@ -3780,7 +3965,7 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		CmdNameFromClip();
 	}
 	else if (SameStr(command, _T("ShareList"))) {
-		CmdShareList();
+		CmdShareList(param);
 	}
 	else if (SameStr(command, _T("NetConnect"))) {
 		CmdNetConnect(false);
@@ -4013,7 +4198,9 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	}
 	//-- 履歴 (機能群20) ------------------------------------------------------
 	else if (SameStr(command, _T("EditHistory"))) {
-		CmdShowHistory(history::Kind::Edit);
+		// VCL は EditHistoryActionExecute (src/MainFrm.cpp:16908-16942) から
+		// TEditHistoryDlg を開く。FF/AC は同じ入口の TestActionParam。
+		CmdEditHistory(param);
 	}
 	else if (SameStr(command, _T("ViewHistory"))) {
 		CmdShowHistory(history::Kind::View);
@@ -4251,6 +4438,12 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	else if (SameStr(command, _T("FullScreen"))) {
 		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
 		CmdImageFullScreen(param);
+	}
+	else if (SameStr(command, _T("Print"))) {
+		// VCL: src/usr_cmdlist.cpp:394 (I:Print),
+		// src/MainFrm.cpp:35689-35697 が TPrintImgDlg を現在の画像で表示する。
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		CmdPrintImage();
 	}
 	else if (SameStr(command, _T("GrayScale"))) {
 		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
@@ -6319,6 +6512,51 @@ void MainFrame::CmdImageFullScreen(const UnicodeString &param)
 	                     : SameText(param, _T("OFF")) ? false
 	                                                  : !IsFullScreen();
 	ShowFullScreen(to_full);
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 画像印刷設定を開く (I:Print)
+ * @details VCL は src/MainFrm.cpp:35689-35697 で現在の file_rec を
+ *          TPrintImgDlg に渡し、src/PrnImgDlg.cpp:347-355 で印刷する。
+ *          ここでは画像一覧をページとして渡し、1枚/全枚/選択範囲と各種設定を
+ *          gui/print_image.h で解決する。実印刷は未移植 (未実装扱い) なので、
+ *          入力が確定しても勝手に実行せず警告を残す。
+ */
+void MainFrame::CmdPrintImage()
+{
+	if (image_nav_list_.empty() || image_nav_index_ < 0 ||
+	    image_nav_index_ >= static_cast<int>(image_nav_list_.size())) {
+		SetStatusWarning(_T("印刷する画像がありません"));
+		return;
+	}
+
+	print_image_dialog::Context context;
+	context.image_path = image_nav_dir_ + image_nav_list_[static_cast<std::size_t>(image_nav_index_)];
+	context.current_page = image_nav_index_ + 1;
+	context.page_count = static_cast<int>(image_nav_list_.size());
+
+	// GetSelectedNames はマーク済み、無ければカーソル位置を返す。VCL の
+	// ViewFileList/選択中ページという概念を、移植済み一覧へ対応させる。
+	const std::vector<UnicodeString> selected_names = ActivePane()->GetSelectedNames();
+	for (const UnicodeString &name : selected_names) {
+		for (std::size_t i = 0; i < image_nav_list_.size(); ++i) {
+			if (SameText(name, image_nav_list_[i])) {
+				context.selected_pages.push_back(static_cast<int>(i) + 1);
+				break;
+			}
+		}
+	}
+
+	print_image::PrintOptions options;
+	bool print_requested = false;
+	if (!print_image_dialog::Run(this, context, options, print_requested)) return;
+	if (!print_requested) return;
+
+	const print_image::ResolvedSettings resolved = print_image::ResolvePrintSettings(
+		options, context.page_count, context.current_page, context.selected_pages);
+	SetStatusWarning(_T("未移植 (未実装扱い): 実印刷。設定: ") +
+	                print_image::FormatPrintSettings(resolved));
 }
 
 //---------------------------------------------------------------------------
@@ -8397,6 +8635,86 @@ void MainFrame::CmdCmdHistory(const UnicodeString &param)
 
 //---------------------------------------------------------------------------
 /**
+ * @brief EditHistory を wx の編集履歴ダイアログへ渡す
+ * @details VCL の入口は `EditHistoryActionExecute`
+ *          (src/MainFrm.cpp:16908-16942)。`FF` は入力欄へフォーカスし、
+ *          `AC` は VCL と同様にダイアログを開かずに全消去する。
+ *          判定と設定の ini 往復は gui/edit_hist.h、表示/入力は
+ *          gui/edit_hist_dialog.h が担当する。
+ */
+void MainFrame::CmdEditHistory(const UnicodeString &param)
+{
+	const edit_hist::Request request = edit_hist::ParseRequest(param);
+	if (request.clear_all) {
+		if (hist_edit_.Entries().empty()) {
+			SetStatusWarning(_T("編集履歴がありません"));
+			return;
+		}
+		if (wxMessageBox(to_wx(_T("編集履歴をすべて削除しますか?")),
+		                 to_wx(_T("編集履歴の削除")), wxYES_NO | wxICON_QUESTION, this) != wxYES) {
+			return;
+		}
+		hist_edit_.Clear();
+		settings_.Save();
+		SetStatusWarning(_T("編集履歴を消去しました"));
+		return;
+	}
+
+	// VCL の FormShow にある実体ファイルの整理を、表示前にも行う。
+	const int dropped = hist_edit_.DropMissingFiles();
+	if (dropped > 0) {
+		SetStatusWarning(UnicodeString().sprintf(_T("%d 件は実体が無いので外しました"), dropped));
+	}
+
+	edit_hist::Preferences preferences;
+	edit_hist::LoadPreferences(settings_.Ini(), preferences);
+
+	edit_hist_dialog::Input input;
+	input.current_path = ActivePane()->GetPath();
+	input.preferences = preferences;
+	input.focus_filter = request.focus_filter;
+
+	edit_hist_dialog::Result result;
+	const bool accepted = edit_hist_dialog::Run(this, hist_edit_, input, result);
+	edit_hist::SavePreferences(settings_.Ini(), result.preferences);
+	// 設定はCancel時も VCL FormClose と同じよう保存する。履歴の削除が空でも
+	// 画面設定を維持するため、ダイアログを閉じた時点で保存する。
+	settings_.Save();
+	if (!accepted || result.path.IsEmpty()) return;
+
+	if (result.action == edit_hist_dialog::Action::Open) {
+		// VCL は数値キー/FileEdit でテキストエディタを開く (MainFrm.cpp:16923-16931)。
+		if (!Execute(_T("FileEdit_") + result.path)) {
+			SetStatusWarning(_T("編集履歴のファイルを開けません: ") + result.path);
+		}
+		return;
+	}
+
+	if (result.action != edit_hist_dialog::Action::Move) return;
+	const UnicodeString directory = ExtractFilePath(result.path);
+	if (!dir_exists(directory)) {
+		SetStatusWarning(_T("ディレクトリがありません: ") + directory);
+		return;
+	}
+
+	FilePane *pane = ActivePane();
+	if (!pane->SetPath(directory)) {
+		SetStatusWarning(_T("移動できませんでした: ") + directory);
+		return;
+	}
+	const std::vector<UnicodeString> names = pane->VisibleNames();
+	const UnicodeString wanted = ExtractFileName(result.path);
+	for (std::size_t i = 0; i < names.size(); ++i) {
+		if (SameText(names[i], wanted)) {
+			pane->MoveCursorTo(static_cast<int>(i));
+			break;
+		}
+	}
+	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/**
  * @brief 履歴の一覧から選んで開く
  * @details ファイルの履歴は選ぶとそのディレクトリへ移ってカーソルを合わせる。
  *          コマンドの履歴は選ぶとそのコマンドをもう一度実行する
@@ -9520,7 +9838,8 @@ void MainFrame::ShowTaskManDialog()
 	task_man::State state;
 	state.paused = task_paused_;
 	state.cancel_requested = task_cancel_requested_;
-	state.reserved_count = 0;  // TaskReserveList は未移植
+	// 予約一覧 (TaskReserveList) は未移植だが、実行中の wxWorker は実数を持つ
+	state.reserved_count = static_cast<int>(active_workers_.size());
 	state.suspended = rsv_suspended_;
 
 	task_man_dialog::Run(this, state);
@@ -9551,7 +9870,8 @@ void MainFrame::CmdSuspend(const UnicodeString &param)
 /**
  * @brief 全タスクの一旦停止/再開 (PauseAllTask)
  * @details VCL (MainFrm.cpp:23570) の any(TaskPause)→反転に従う。
- *          実スレッドは未移植のため task_paused_ の状態保持のみ
+ *          task_paused_ は状態保持のみ。実在の wxWorker は Pause ではなく
+ *          CancelFlag による中断はこの PR の接続範囲とする。
  */
 void MainFrame::CmdPauseAllTask(const UnicodeString &param)
 {
@@ -9564,15 +9884,18 @@ void MainFrame::CmdPauseAllTask(const UnicodeString &param)
 
 /**
  * @brief 全タスクの中断 (CancelAllTask)
- * @details VCL (MainFrm.cpp:14070) は全スレッド取消+予約全消去。
- *          実体が無いため件数があれば消去扱い (ログ記録) の簡略版
+ * @details VCL (MainFrm.cpp:14070) は全スレッド取消+予約全消去。wx 移植では
+ *          MainFrame 管理下の Batched/Thumb/Icon worker にも CancelFlag を立てる。
+ *          task_paused_ は旧 UI の状態保持として残し、実 worker の数と合算する。
  */
 void MainFrame::CmdCancelAllTask()
 {
-	if (!f_misc_ops::CanCancelTasks(static_cast<int>(task_paused_.size()))) {
+	const int busy = static_cast<int>(task_paused_.size() + active_workers_.size());
+	if (!f_misc_ops::CanCancelTasks(busy)) {
 		SetStatusWarning(_T("実行中のタスクはありません"));
 		return;
 	}
+	RequestCancelActiveWorkers();
 	task_paused_.clear();
 	task_cancel_requested_.clear();
 	log_.Add(log_win::LogStatus::Info, _T("すべてのタスクを中断しました"), /*show_time=*/true);

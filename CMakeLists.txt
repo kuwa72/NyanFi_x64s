@@ -332,6 +332,10 @@ if(TARGET nyanfi_core)
 		gui/distribution.cpp
 		gui/function_list.cpp
 		gui/cmd_list.cpp
+		# Issue #40 batch18: ネットワーク共有/画像印刷ダイアログの純関数
+		gui/net_share.cpp
+		gui/print_image.cpp
+		gui/edit_hist.cpp
 	)
 	target_include_directories(nyanfi_gui_core PUBLIC ${PROJECT_SOURCE_DIR})
 	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core shell32 netapi32)

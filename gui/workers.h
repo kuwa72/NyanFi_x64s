@@ -3,14 +3,14 @@
  * @brief task/thumb/grep/icon の中断・進捗の純関数層 (wx 非依存, Issue #41)
  *
  * @details VCL 版の該当を実測して wx 非依存に切り出したもの (src 必読済み):
- *   - task: src/task_thread.cpp ProgressCore (169行) の比率・速度・残り時間と
- *     中断/一旦停止の判断、TaskStart (1863行)/FinishTask (1878行)/Execute (1899行)
- *     の状態遷移のうち GUI 非依存の部分。コピー/移動の実体 (CPY_core 等) は
- *     Global/UserFunc 依存のためここには含めない
- *   - thumb: src/thumb_thread.cpp FitSize (73行) と Execute (234行) の
+ *   - task: src/task_thread.cpp ProgressCore (169-213行) の比率・速度・残り時間と
+ *     中断/一旦停止の判断、TaskStart (1863-1873行)/FinishTask (1878-1896行)/
+ *     Execute (1899-1963行) の状態遷移のうち GUI 非依存の部分。コピー/移動の実体
+ *     (CPY_core 等) は Global/UserFunc 依存のためここには含めない
+ *   - thumb: src/thumb_thread.cpp FitSize (73-92行) と Execute (234-297行) の
  *     現在位置から前後交互に取得する順序。WIC デコード自体は
  *     gui/image_load.cpp の担当のため含めない
- *   - icon: src/icon_thread.cpp Execute (40行) のキャッシュ数制限と
+ *   - icon: src/icon_thread.cpp Execute (40-96行) のキャッシュ数制限と
  *     200ms ごとの通知。get_file_SmallIcon の実呼びは GUI 層の仕事のため含めない
  *   - grep: gui/grep.h の SearchDirectory は既に cancel/progress コールバックを
  *     持つため、ここではワーカー駆動の汎用バッチ実行 (ProcessBatched) として
@@ -21,7 +21,8 @@
  *   このヘッダ自体は wx を含まず、nyanfi_gui_core (ルート CMakeLists.txt) で
  *   ビルド・テストする (規約8)。
  *
- *   FTP/Git の外部連携の境界整理は含まない (Issue #41 で分離と明記)。
+ *   未移植 (未実装扱い): FTP/Git の外部連携タスク、書庫の実コピー/移動スレッド、
+ *   OS 依存の実アイコン抽出。
  */
 #ifndef NYANFI_GUI_WORKERS_H
 #define NYANFI_GUI_WORKERS_H
@@ -69,6 +70,19 @@ int TransferSpeed(long long sampled_bytes, int elapsed_ms);
  * @brief 残り時間 (ms)。速度が0以下なら 0 (0除算しない。ProgressCore 196行)
  */
 int RemainingMs(long long total, long long transferred, int speed_bytes_per_ms);
+
+/**
+ * @brief 1回のタスク進捗をまとめて計算する
+ * @details ProgressRatio/TransferSpeed/RemainingMs を同じ契約で組み合わせる。
+ *          wx 層はこの値を wxProgressDialog に渡せるが、GUI に依存しない。
+ */
+struct TaskProgressSnapshot {
+	double ratio = -1.0;             //!< 0.0〜1.0。全体量が不明なら -1
+	int speed_bytes_per_ms = 0;     //!< byte/ms
+	int remaining_ms = 0;           //!< 残り時間 (ms)
+};
+TaskProgressSnapshot CalculateTaskProgress(long long total, long long transferred,
+                                           long long sampled_bytes, int elapsed_ms);
 
 //-----------------------------------------------------------------------
 // スレッドセーフな中断フラグ (wxWorker がポーリングする想定)
@@ -120,6 +134,14 @@ ThumbFit FitThumb(int w, int h, int max_size);
  */
 std::vector<int> ThumbOrder(int count, int start);
 
+/**
+ * @brief ThumbOrder に候補数の上限を適用する
+ * @param count 一覧の件数 / @param start 開始位置
+ * @param max_count 候補数の上限。負なら全件、0なら候補なし
+ * @return 交互取得順の添字列
+ */
+std::vector<int> ThumbCandidates(int count, int start, int max_count);
+
 //-----------------------------------------------------------------------
 // icon: キャッシュ制限と通知間隔 (icon_thread.cpp Execute)
 //-----------------------------------------------------------------------
@@ -142,6 +164,30 @@ std::vector<int> IconPendingIndices(const std::vector<char> &has_icon);
  * @param pending 未通知の取得件数 (cnt に対応)
  */
 bool ShouldNotify(int now_ms, int last_ms, int pending);
+
+/** icon の1バッチで必要な判断をまとめたもの */
+struct IconBatchPlan {
+	int evict_count = 0;             //!< キャッシュ上限超過分の破棄件数
+	std::vector<int> pending_indices; //!< 未取得の添字
+	bool notify = false;             //!< この時点で通知するか
+};
+
+/**
+ * @brief icon のキャッシュ破棄・未取得列挙・通知判定を合成する
+ * @param cache_count 現在キャッシュ件数 / @param cache_limit 上限
+ * @param has_icon 取得済みフラグ (true=取得済み)
+ * @param now_ms 現在時刻 / @param last_ms 前回通知時刻
+ */
+IconBatchPlan PlanIconBatch(int cache_count, int cache_limit,
+                            const std::vector<char> &has_icon,
+                            int now_ms, int last_ms);
+
+/**
+ * @brief 進捗通知を間引くか (最初・最終は常に通知)
+ * @param processed 処理済み件数 / @param total 全体件数
+ * @param interval 通知間隔。0以下は1件ごとに通知
+ */
+bool ShouldReportProgress(int processed, int total, int interval = 1);
 
 /**
  * @brief grep 進捗を間引くか (20件ごと)。
@@ -188,6 +234,8 @@ struct BatchResult {
 
 /// 中断確認。true で打ち切る (呼び出しコストの低い処理にすること)
 using BatchCancelCallback = std::function<bool()>;
+/// 1件処理する_CALLBACK (0始まりの添字を受け取る)
+using BatchItemCallback = std::function<void(int index)>;
 /// 進捗通知 (処理済み件数・全体件数)
 using BatchProgressCallback = std::function<void(int processed, int total)>;
 
@@ -195,12 +243,13 @@ using BatchProgressCallback = std::function<void(int processed, int total)>;
  * @brief total 件を1件ずつ処理し、中断・進捗の契約を固定する
  * @details wxWorker 化の中核。VCL の各 Execute が `while (!Terminated)` と
  *          `Sleep(50)` で回していたポーリングを、「1件処理するたびに
- *          cancel_cb を見て、progress_cb を呼ぶ」という形に純関数化したもの。
- *          実際の1件分の処理は呼び出し元 (wx 層) が行い、ここでは件数の進行と
- *          打ち切りだけを扱う。GUI 非依存のため単体テストできる。
+ *          cancel_cb を見て、item_cb を呼び、progress_cb を呼ぶ」という形に
+ *          純関数化したもの。item_cb を省略すると件数だけを進める。
+ *          実際の副作用は呼び出し元 (wx 層) が担当する。
  */
 BatchResult ProcessBatched(int total, const BatchCancelCallback &cancel_cb,
-                           const BatchProgressCallback &progress_cb = nullptr);
+                           const BatchProgressCallback &progress_cb = nullptr,
+                           const BatchItemCallback &item_cb = nullptr);
 
 }  // namespace workers
 
