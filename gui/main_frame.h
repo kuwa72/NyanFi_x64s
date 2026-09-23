@@ -49,6 +49,7 @@
 #include "gui/regdir.h"
 #include "gui/settings.h"
 #include "gui/sync_dirs.h"
+#include "gui/color_settings.h"
 #include "gui/tab_settings.h"
 #include "gui/tabs.h"
 #include "gui/text_viewer.h"
@@ -431,6 +432,7 @@ private:
 	bool htm2txt_ = false;        //!< HTML→テキスト変換表示か (isHtm2Txt 相当)
 	f_batch5_ops::MarkdownMode md_mode_ = f_batch5_ops::MarkdownMode::Keep;
 	bool show_ruby_ = true;       //!< ルビ表示か (VCL 既定 true。TxtViewer->ShowRuby 相当)
+	std::vector<color_settings::ColorEntry> viewer_colors_;  //!< 配色 (VCL ColBufList 相当。適用は未対応のため保持のみ)
 	std::vector<UnicodeString> watch_tail_;  //!< 監視中のファイル (VCL WatchTailList 相当)
 
 	bool rsv_suspended_ = false;       //!< 予約の保留状態 (VCL RsvSuspended 相当)

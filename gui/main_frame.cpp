@@ -39,6 +39,7 @@
 #include "gui/grep_dialog.h"
 #include "gui/regdir_dialog.h"
 #include "gui/sync_dialog.h"
+#include "gui/color_dialog.h"
 #include "gui/tab_dialog.h"
 #include "gui/image_load.h"
 #include "gui/image_view_ops.h"
@@ -8304,8 +8305,9 @@ void MainFrame::CmdHtmlToText(const UnicodeString &param)
  * @brief 配色の変更 (SetColor)
  * @details VCL (MainFrm.cpp:34202) はパラメータ有りなら配色ファイル指定、
  *          空なら配色ダイアログ (ResolveSetColorMode)。
- *          ビューアの実配色は未移植のため、指定があれば記録し、
- *          空なら色選択だけ受け付ける簡略版
+ *          対話時は `gui/color_dialog.h` (TColorDlg 相当。一覧・参照・無効化)
+ *          で編集し、結果を保持する。ビューアへの適用 (`ObjViewer->SetColor`)
+ *          と全体への反映 (`SetOptColor`) は未移植のため行わない (未実装扱い)
  */
 void MainFrame::CmdSetColor(const UnicodeString &param)
 {
@@ -8320,12 +8322,10 @@ void MainFrame::CmdSetColor(const UnicodeString &param)
 		SetStatusWarning(_T("配色の適用は未対応です (指定をログに記録しました)"));
 		return;
 	}
-	wxColourDialog dlg(this);
-	if (dlg.ShowModal() != wxID_OK) return;
-	const wxColour col = dlg.GetColourData().GetColour();
+	if (!color_dialog::Run(this, viewer_colors_)) return;
 	UnicodeString msg;
-	msg.sprintf(_T("配色の選択: #%02X%02X%02X (適用は未対応)"), col.Red(), col.Green(),
-	            col.Blue());
+	msg.sprintf(_T("配色を更新しました (%u項目。ビューアへの適用は未対応)"),
+	            static_cast<unsigned>(viewer_colors_.size()));
 	SetStatusWarning(msg);
 }
 
