@@ -251,6 +251,11 @@ endif()
 # 含める。正規表現置換は移植済みの TRegEx (compat/include/compat/regex.h)・
 # replace_regex_2 (src/usr_str.cpp) を、実際のリネームは移植済みの
 # rename_File (src/usr_file_ex.h) をそのまま使う。
+#
+# Issue #40 batch13 の gui/distribution.cpp・gui/function_list.cpp・
+# gui/cmd_list.cpp も、3つの VCL ダイアログ (DistrDlg/FuncDlg/CmdListDlg) の
+# 判断だけを wx 非依存で持ち、tests/core/test_gui_{distribution,function_list,
+# cmd_list}.cpp から直接テストする。
 #-----------------------------------------------------------------------------
 if(TARGET nyanfi_core)
 	add_library(nyanfi_gui_core STATIC
@@ -313,6 +318,9 @@ if(TARGET nyanfi_core)
 		gui/tag.cpp
 		gui/file_ext.cpp
 		gui/gen_info.cpp
+		gui/distribution.cpp
+		gui/function_list.cpp
+		gui/cmd_list.cpp
 	)
 	target_include_directories(nyanfi_gui_core PUBLIC ${PROJECT_SOURCE_DIR})
 	target_link_libraries(nyanfi_gui_core PUBLIC nyanfi_core shell32 netapi32)

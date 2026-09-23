@@ -41,6 +41,7 @@
 #include "gui/file_ops.h"
 #include "gui/file_ops2.h"
 #include "gui/find_files.h"
+#include "gui/function_list.h"
 #include "gui/links.h"
 #include "gui/file_pane.h"
 #include "gui/image_viewer.h"
@@ -130,6 +131,8 @@ private:
 	// TextViewer::HandleKey に渡す (OnCharHook を参照)
 	void CmdTextViewer();    //!< カーソル位置のファイルをビューアで開く (V)
 	void ShowViewer(bool show);  //!< ビューアの表示/非表示を切り替える
+	void CmdFunctionList(function_list::Mode mode, const UnicodeString &param); //!< 関数/ユーザー定義/マーク行一覧
+	void CmdFileList(const UnicodeString &param);  //!< コマンドファイル一覧 (CmdFileList)
 
 	// 画像ビューア (gui/image_viewer.h)。"G" は src/Global.cpp の既定キー表
 	// ("F:G=ImageViewer") と同じ。前後の画像への移動キー (Left/Right) は
@@ -626,6 +629,7 @@ private:
 	wxWindow *root_ = nullptr;      //!< 2ペインを収めた親パネル (ShowViewer でのサイズ調整用)
 	TextViewer *viewer_ = nullptr;  //!< テキストビューア (root_ と同じ領域に重ねて表示)
 	ImageViewer *image_viewer_ = nullptr;  //!< 画像ビューア (同じく root_ と同じ領域に重ねて表示)
+	UnicodeString pending_user_def_;  //!< SetUserDefStr で次回のユーザー定義一覧へ渡す文字列
 
 	// CmdImageViewer で画像ビューアを開いた時点のディレクトリ内の対象ファイル
 	// 一覧 (image_load::IsSupportedExt に一致するものだけ、".." は除く)。
