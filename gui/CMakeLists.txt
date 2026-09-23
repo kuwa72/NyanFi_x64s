@@ -93,6 +93,11 @@ add_executable(nyanfi
 	rename_dialog.cpp
 	find_dialog.cpp
 	dupl_dialog.cpp
+	join_text_dialog.cpp
+	cv_enc_dialog.cpp
+	new_file_dialog.cpp
+	exe_cmd_dialog.cpp
+	pre_same_dialog.cpp
 	mask_dialog.cpp
 	tab_dialog.cpp
 	regdir_dialog.cpp
