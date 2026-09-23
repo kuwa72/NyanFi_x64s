@@ -61,6 +61,8 @@
 #ifndef NYANFI_GUI_FILE_INFO_H
 #define NYANFI_GUI_FILE_INFO_H
 
+#include <vector>
+
 #include "gui/file_item.h"
 
 /**
@@ -80,5 +82,60 @@ void BuildFileInfoLines(const UnicodeString &full_path, const FileItem &item, TS
  * 呼び出し側がボタン等で明示的に呼ぶ想定
  */
 void AppendHashLines(const UnicodeString &full_path, TStringList *lst);
+
+namespace file_info {
+
+/// CSV/TSV の入力形式
+enum class TableFormat { Csv, Tsv };
+
+/// 階級分布の1区間
+struct HistogramBin {
+	long double lower = 0.0L;  //!< 階級下限値
+	int count = 0;             //!< 度数
+	double cumulative = 0.0;   //!< 累積相対度数 (0.0-1.0)
+};
+
+/// 数値1列の集計結果
+struct ColumnStats {
+	bool valid = false;
+	TableFormat format = TableFormat::Csv;
+	UnicodeString item_name;
+	int column = -1;
+	int count = 0;
+	int decimal_places = 0;
+	long double total = 0.0L;
+	long double minimum = 0.0L;
+	long double maximum = 0.0L;
+	long double average = 0.0L;
+	long double median = 0.0L;
+	long double variance = 0.0L;
+	long double standard_deviation = 0.0L;
+	std::vector<HistogramBin> histogram;
+	UnicodeString error;
+};
+
+/**
+ * @brief 数値として解析できる列を選ぶ
+ * @param preferred_column 0 以上の指定があればそこから試し、無ければ左から探す
+ * @param top_is_header 先頭行を項目名として除外するか
+ * @return 見つからなければ -1
+ * @details wx 版テキストビューアには CSV 列カーソルが無いため、CsvCalc は
+ *          preferred_column=-1 で数值列の自動解決を使う。
+ */
+int ResolveNumericColumn(const std::vector<UnicodeString> &rows, int preferred_column,
+                         bool top_is_header);
+
+/**
+ * @brief CSV/TSV の指定列を集計する
+ * @details VCL FileInfDlg.cpp:158-301 の isCalcItem 相当。Sturges の階級数、
+ *          中央値、分散、標準偏差、累積相対度数まで同じ考え方で作る。
+ */
+ColumnStats AnalyzeColumn(const std::vector<UnicodeString> &rows, int column,
+                          bool top_is_header);
+
+/** @brief ColumnStats を TFileInfoDlg 相当の表示行へ変換する */
+std::vector<UnicodeString> BuildColumnStatLines(const ColumnStats &stats);
+
+}  // namespace file_info
 
 #endif  // NYANFI_GUI_FILE_INFO_H

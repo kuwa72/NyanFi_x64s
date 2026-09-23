@@ -45,6 +45,7 @@
 #include "gui/file_ops.h"
 #include "gui/file_ops2.h"
 #include "gui/find_files.h"
+#include "gui/function_list.h"
 #include "gui/links.h"
 #include "gui/file_pane.h"
 #include "gui/image_viewer.h"
@@ -55,6 +56,7 @@
 #include "gui/sync_dirs.h"
 #include "gui/color_settings.h"
 #include "gui/tab_settings.h"
+#include "gui/sort_mode.h"
 #include "gui/tabs.h"
 #include "gui/text_viewer.h"
 #include "gui/work_list.h"
@@ -85,7 +87,7 @@ private:
 	void UpdateStatus();
 	void ShowKeyList();
 	void ShowCmdList();
-	void ShowSortDialog();  //!< ソートダイアログ (S)。並べ替えキー/昇降順/Dir集約を選ぶ
+	void ShowSortDialog(const UnicodeString &param = EmptyStr);  //!< ソートダイアログ (SortDlg)。空なら入力ダイアログ
 	void ShowMaskDialog();  //!< パスマスク入力 (Ctrl+M)。ファイル名マスクで一覧を絞り込む
 
 	// インクリメンタルサーチ (gui/navigation.h の IncrementalSearch)。状態遷移は
@@ -118,22 +120,25 @@ private:
 
 	// ファイル操作 (gui/file_ops.h)。いずれも確認ダイアログを出してから実行し、
 	// 結果 (成功/スキップ/失敗の件数) を必ず表示する。詳細は main_frame.cpp を参照
-	void CmdCopy();       //!< アクティブペインの選択項目を、反対側のペインへコピーする (C)
-	void CmdMove();       //!< アクティブペインの選択項目を、反対側のペインへ移動する (M)
+	void CmdCopy(const UnicodeString &param); //!< コピー (C。PR で同名処理を指定できる)
+	void CmdMove(const UnicodeString &param); //!< 移動 (M。PR で同名処理を指定できる)
 	void CmdDelete();     //!< アクティブペインの選択項目をゴミ箱へ送る (D)
 	void CmdCreateDir();  //!< アクティブペインにディレクトリを作成する (K)
 	void CmdRenameDlg();  //!< 選択項目 (マーク済み、無ければカーソル位置) の一括リネーム (R)
 
-	// ファイルを開く (gui/file_open.h) とファイル情報 (gui/file_info_panel.h)
+	// ファイルを開く (gui/file_open.h) とファイル情報 (gui/file_info_dialog.h)
 	void CmdOpenStandard();  //!< 関連付けで開く (ENTER)。ディレクトリなら入る
 	void CmdOpenByApp();     //!< アプリケーションから開く (Ctrl+Enter)
 	void CmdPropertyDlg();   //!< ファイル情報ダイアログ (Alt+Enter、推測のキー)
+	void CmdCsvCalc();       //!< CSV/TSV 項目集計ダイアログ (CsvCalc)
 
 	// テキストビューア (gui/text_viewer.h)。"V" (src/Global.cpp の既定キー表
 	// "F:V=TextViewer" と同じ) で開く。開いている間はキー入力を丸ごと
 	// TextViewer::HandleKey に渡す (OnCharHook を参照)
 	void CmdTextViewer();    //!< カーソル位置のファイルをビューアで開く (V)
 	void ShowViewer(bool show);  //!< ビューアの表示/非表示を切り替える
+	void CmdFunctionList(function_list::Mode mode, const UnicodeString &param); //!< 関数/ユーザー定義/マーク行一覧
+	void CmdFileList(const UnicodeString &param);  //!< コマンドファイル一覧 (CmdFileList)
 
 	// 画像ビューア (gui/image_viewer.h)。"G" は src/Global.cpp の既定キー表
 	// ("F:G=ImageViewer") と同じ。前後の画像への移動キー (Left/Right) は
@@ -224,8 +229,8 @@ private:
 	void CmdCopyFileName(bool full_path);
 	/// 完全に削除する (CompleteDelete。ゴミ箱に送らない。破壊的)
 	void CmdCompleteDelete();
-	/// 空/新規テキストファイルを作る (NewFile/NewTextFile)
-	void CmdNewFile(bool text_mode = false);
+	/// テンプレートから新ファイルを作る (NewFile)、または空ファイルを作る (NewTextFile)
+	void CmdNewFile(bool from_template);  //!< NewFile はテンプレート、NewTextFile は空ファイル
 
 	//-- クリップボード経由のファイル操作 (機能群5の続き) ---------------------
 	void CmdFilesToClip(bool cut);  //!< CopyToClip / CutToClip
@@ -262,14 +267,14 @@ private:
 	void CmdFileRun();         //!< 「ファイル名を指定して実行」
 	void CmdOpenCtrlPanel();   //!< コントロールパネルを開く
 	void CmdCalculator();      //!< 電卓を開く (Calculator)
-	void CmdExeCommandLine();  //!< コマンドラインを入力して実行 (ExeCommandLine)
+	void CmdExeCommandLine(const UnicodeString &param);  //!< 外部コマンド実行 (FN/LC 対応)
 	void CmdOpenByWin(const UnicodeString &param);  //!< 関連付けで開く (OpenByWin)
 	void CmdInputCommands();   //!< コマンドを入力して実行 (InputCommands)
 	void CmdCopyCmdName();     //!< コマンド名を選んでクリップボードへ (CopyCmdName)
 
 	//-- 情報系 (機能群11/12) -------------------------------------------------
 	void CmdCalcDirSize(bool all);  //!< ディレクトリ容量を計算 (CalcDirSize / All)
-	void CmdFileExtList();          //!< 拡張子別の一覧
+	void CmdFileExtList(const UnicodeString &param); //!< 拡張子別の一覧 (FileExtList)
 	void CmdListTree();             //!< ディレクトリ構造のツリー
 	void CmdAbout();                //!< バージョン情報
 	void CmdCopyFileInfo();         //!< カーソル位置のファイル情報をクリップボードへ (CopyFileInfo)
@@ -574,7 +579,7 @@ private:
 	void CmdNextSameName();    //!< 名前主部が同じ次のファイルへ (NextSameName)
 	void CmdSelMask();         //!< 選択項目だけを残す (SelMask)
 	void CmdDelSelMask();      //!< 選択項目を一覧から隠す (DelSelMask)
-	void CmdMaskFind();        //!< マスクで配下を検索して結果リストへ (MaskFind)
+	void CmdMaskFind(const UnicodeString &param = EmptyStr); //!< マスクで配下を検索 (MaskFind)
 	void CmdInputPathMask();   //!< パスマスクを入力 (InputPathMask)
 	void CmdFilter(const UnicodeString &param);  //!< キーワードで一覧を絞り込む (Filter)
 	void CmdSimilarSort();     //!< カーソル項目との名前の類似性で並べ替える (SimilarSort)
@@ -592,10 +597,10 @@ private:
 	void CmdMarkList();        //!< 栞の一覧から選んで飛ぶ (MarkList)
 	void CmdFindMark();        //!< 配下の栞を集めて結果リストに出す (FindMark)
 
-	void CmdSetTag(bool add);  //!< タグを設定 / 追加 (SetTag / AddTag)
-	void CmdDelTag();          //!< タグを削除 (DelTag)
-	void CmdTagSelect();       //!< 指定タグを含む項目を選択 (TagSelect)
-	void CmdFindTag();         //!< 指定タグの項目を集めて結果リストに出す (FindTag)
+	void CmdSetTag(bool add, const UnicodeString &param); //!< タグを設定 / 追加
+	void CmdDelTag();          //!< タグを削除 (DelTag、VCL と同じく直接処理)
+	void CmdTagSelect(const UnicodeString &param); //!< 指定タグを含む項目を選択
+	void CmdFindTag(const UnicodeString &param);   //!< 指定タグの項目を集めて結果表示
 	void CmdTrimTagData();     //!< 実体の無い項目のタグを整理 (TrimTagData)
 
 	/// タグ管理。実体は移植済みの TagManager。初回に使うときだけ作る
@@ -638,6 +643,7 @@ private:
 	wxWindow *root_ = nullptr;      //!< 2ペインを収めた親パネル (ShowViewer でのサイズ調整用)
 	TextViewer *viewer_ = nullptr;  //!< テキストビューア (root_ と同じ領域に重ねて表示)
 	ImageViewer *image_viewer_ = nullptr;  //!< 画像ビューア (同じく root_ と同じ領域に重ねて表示)
+	UnicodeString pending_user_def_;  //!< SetUserDefStr で次回のユーザー定義一覧へ渡す文字列
 
 	// CmdImageViewer で画像ビューアを開いた時点のディレクトリ内の対象ファイル
 	// 一覧 (image_load::IsSupportedExt に一致するものだけ、".." は除く)。
@@ -650,6 +656,7 @@ private:
 	int active_ = 0;
 	KeyMap keymap_;
 	Settings settings_{Settings::DefaultIniPath()};
+	sort_mode::Options sort_options_[2];  //!< SrtModDlg の拡張設定 (タブの単一キーとは別)
 	IncrementalSearch incsearch_;  //!< インクリメンタルサーチの状態 (gui/navigation.h)
 	bool incsearch_migemo_ = false;  //!< サーチ中の Migemo 状態 (辞書が無い環境では常に false)
 	std::vector<UnicodeString> incsearch_history_;  //!< キーワード履歴 (上限 50、VCL の IncSeaHistory)

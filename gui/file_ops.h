@@ -18,10 +18,10 @@
  *   (use_trash=true の場合) と同じ `FOF_ALLOWUNDO | FOF_NOCONFIRMATION |
  *   FOF_SILENT` を踏襲した (GUI 側の確認ダイアログで既に確認済みのため、
  *   シェル自身の確認・進捗 UI は出さない)。
- * - **既存ファイルは上書きしない**。`copy_File`/`move_File` はどちらも
- *   Win32 API 側で上書きが起こる実装 (`CopyFile` の `bFailIfExists=FALSE`、
- *   `MoveFileEx` の `MOVEFILE_REPLACE_EXISTING`) だが、呼び出し前に
- *   `file_exists`/`dir_exists` で存在確認し、存在するなら呼ばずにスキップする。
+ * - **既定では既存ファイルを上書きしない**。`ConflictPolicy` が
+ *   `SkipExisting` のときは `file_exists`/`dir_exists` で存在確認し、
+ *   存在するなら `copy_File`/`move_File` を呼ばずにスキップする。
+ *   `Copy_PR` / `Move_PR` の事前指定だけは、上書き・最新判定・自動改名に対応する。
  * - **ディレクトリの再帰コピーは自前実装** (`usr_file_ex.h` はファイル単位のみ)。
  *   `FindFirst`/`FindNext` で列挙し、ディレクトリは `create_Dir` (無ければ作成、
  *   既存なら中に**マージ**して個別にスキップ判定する)、ファイルは `copy_File`。
@@ -41,6 +41,14 @@
 
 namespace file_ops {
 
+/// 同名ファイル・フォルダがあるときの処理 (PreSameDlg / Copy PR)
+enum class ConflictPolicy {
+	SkipExisting,  //!< 既存があれば上書きせずスキップ
+	Overwrite,     //!< 既存を上書き
+	NewestWins,    //!< 元が新しいときだけ上書き
+	AutoRename     //!< 空いている連番名を作って続行
+};
+
 /// バッチ操作 (Copy/Move) の結果
 struct FileOpResult {
 	int success_count = 0;      //!< 成功した項目数 (ディレクトリは自身+配下の合計)
@@ -59,9 +67,11 @@ UnicodeString Summarize(const FileOpResult &result);
  * @brief 複数項目をコピーする
  * @param items コピー元のフルパスの一覧 (ファイルまたはディレクトリ)
  * @param dst_dir コピー先ディレクトリ (末尾の "\\" は無くてよい)
+ * @param policy 同名時の処理
  * @return 集計結果
  */
-FileOpResult CopyItems(const std::vector<UnicodeString> &items, const UnicodeString &dst_dir);
+FileOpResult CopyItems(const std::vector<UnicodeString> &items, const UnicodeString &dst_dir,
+                       ConflictPolicy policy = ConflictPolicy::SkipExisting);
 
 /**
  * @brief 1件を**名前まで指定して**コピーする
@@ -78,9 +88,11 @@ void CopyItemTo(const UnicodeString &src, const UnicodeString &dst, FileOpResult
  * @brief 複数項目を移動する
  * @param items 移動元のフルパスの一覧 (ファイルまたはディレクトリ)
  * @param dst_dir 移動先ディレクトリ (末尾の "\\" は無くてよい)
+ * @param policy 同名時の処理
  * @return 集計結果
  */
-FileOpResult MoveItems(const std::vector<UnicodeString> &items, const UnicodeString &dst_dir);
+FileOpResult MoveItems(const std::vector<UnicodeString> &items, const UnicodeString &dst_dir,
+                       ConflictPolicy policy = ConflictPolicy::SkipExisting);
 
 /**
  * @brief 名前を変更する (同一ディレクトリ内、ファイル・ディレクトリ共通)

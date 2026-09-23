@@ -119,8 +119,18 @@ public:
 	void CmdSetWidth(const UnicodeString &param);
 	void CmdSetMargin(const UnicodeString &param);
 
+	/// ファイル名 (FunctionList ダイアログへ渡すスナップショット用)
+	const UnicodeString &FileName() const { return path_; }
+	/// 現在の行 (0ベース)
+	int CurrentLine() const { return current_line_; }
+	/// 読み込み済みの行 (0ベース)。関数/ユーザー定義一覧の入力に使う
+	const std::vector<UnicodeString> &Lines() const { return doc_.lines; }
 	/// 行数 (ViewTail の移動先計算用)
 	int LineCount() const { return static_cast<int>(doc_.lines.size()); }
+	/// CsvCalc の集計元にする読み込み済み行
+	const std::vector<UnicodeString> &DocumentLines() const { return doc_.lines; }
+	/// バイナリ表示なら true
+	bool IsBinary() const { return doc_.is_binary; }
 	/// 表示設定の現在値 (Fモード配線の状態表示・テスト用)
 	bool ShowLineNo() const { return show_line_no_; }
 	bool ShowRuler() const { return show_ruler_; }

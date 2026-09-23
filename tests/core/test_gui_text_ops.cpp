@@ -145,3 +145,34 @@ TEST_CASE("ConvertEncoding: 存在しないファイル")
 	CHECK_FALSE(text_ops::ConvertEncoding(_T("C:\\nosuch\\none.txt"), CP_UTF8, false, error));
 	CHECK_FALSE(error.IsEmpty());
 }
+
+TEST_CASE("JoinTextFiles: 文字コード・BOM・改行を指定できる")
+{
+	TempDir tmp;
+	write_bytes(tmp.file(_T("a.txt")), "one\r\ntwo\r\n");
+	write_bytes(tmp.file(_T("b.txt")), "three\r\n");
+
+	const text_ops::JoinResult r = text_ops::JoinTextFiles(
+		{tmp.file(_T("a.txt")), tmp.file(_T("b.txt"))}, tmp.file(_T("utf16.txt")),
+		1200, true, _T("\n"));
+	REQUIRE(r.joined == 2);
+	CHECK(r.failures.empty());
+	const std::string bytes = read_bytes(tmp.file(_T("utf16.txt")));
+	CHECK(bytes.size() > 2);
+	CHECK(bytes.substr(0, 2) == "\xFF\xFE");
+	CHECK(bytes.find('\r') == std::string::npos);
+}
+
+TEST_CASE("ConvertEncoding: UTF-16 と LF を指定できる")
+{
+	TempDir tmp;
+	write_bytes(tmp.file(_T("a.txt")), "a\r\nb\r\n");
+
+	UnicodeString error;
+	REQUIRE(text_ops::ConvertEncoding(tmp.file(_T("a.txt")), 1201, true, _T("\n"), error));
+	CHECK(error.IsEmpty());
+	const std::string bytes = read_bytes(tmp.file(_T("a.txt")));
+	CHECK(bytes.size() > 2);
+	CHECK(bytes.substr(0, 2) == "\xFE\xFF");
+	CHECK(bytes.find('\r') == std::string::npos);
+}

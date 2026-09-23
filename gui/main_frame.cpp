@@ -10,6 +10,7 @@
 #include <array>
 #include <functional>
 #include <memory>
+#include <string>
 #include <vector>
 
 #include <wx/choicdlg.h>
@@ -22,7 +23,7 @@
 #include <wx/textdlg.h>
 #include <wx/utils.h>
 
-#include "gui/file_info_panel.h"
+#include "gui/file_info_dialog.h"
 #include "gui/file_open.h"
 #include "gui/hist_dialog.h"
 #include "gui/inp_ex_dialog.h"
@@ -34,12 +35,19 @@
 #include "gui/compare.h"
 #include "gui/diff_dialog.h"
 #include "gui/file_info.h"
+#include "gui/file_ext.h"
+#include "gui/file_ext_dialog.h"
 #include "gui/file_narrow.h"
 #include "gui/text_ops.h"
 #include "gui/text_display.h"
 #include "gui/text_viewer_core.h"
 #include "gui/file_ops.h"
 #include "gui/dupl_dialog.h"
+#include "gui/join_text_dialog.h"
+#include "gui/cv_enc_dialog.h"
+#include "gui/new_file_dialog.h"
+#include "gui/exe_cmd_dialog.h"
+#include "gui/pre_same_dialog.h"
 #include "gui/app_dialog.h"
 #include "gui/find_dialog.h"
 #include "gui/grep_dialog.h"
@@ -47,9 +55,22 @@
 #include "gui/sync_dialog.h"
 #include "gui/color_dialog.h"
 #include "gui/comp_dialog.h"
+#include "gui/sort_mode.h"
+#include "gui/sort_mode_dialog.h"
+#include "gui/pack_settings.h"
+#include "gui/pack_dialog.h"
+#include "gui/backup_settings.h"
+#include "gui/backup_dialog.h"
+#include "gui/same_name.h"
+#include "gui/same_name_dialog.h"
+#include "gui/distribution_dialog.h"
+#include "gui/function_list_dialog.h"
+#include "gui/cmd_list_dialog.h"
 #include "gui/cv_img_dialog.h"
 #include "gui/cre_dirs_dialog.h"
 #include "gui/tab_dialog.h"
+#include "gui/tag.h"
+#include "gui/tag_dialog.h"
 #include "gui/image_load.h"
 #include "gui/image_view_ops.h"
 #include "gui/mask_dialog.h"
@@ -104,6 +125,82 @@ bool ConfirmExecute(wxWindow *parent, const UnicodeString &full_path)
 {
 	const UnicodeString text = _T("実行可能ファイルです。開いてもよろしいですか?\n\n") + full_path;
 	return wxMessageBox(to_wx(text), to_wx(_T("実行の確認")), wxYES_NO | wxICON_WARNING, parent) == wxYES;
+}
+
+enum class SameNameAction { Proceed, Cancelled, Unimplemented };
+
+/// 同一名ファイルがある Copy/Move の前に VCL と同じ選択を受け取る。
+/// wx 版は実タスクコピーを持たないため、Skip 以外は明示的に未実装として止める。
+SameNameAction AskSameNameConflict(wxWindow *parent, FilePane *pane, FilePane *dst)
+{
+	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
+	UnicodeString source;
+	UnicodeString destination;
+	for (const UnicodeString &path : paths) {
+		const UnicodeString candidate = IncludeTrailingPathDelimiter(dst->GetPath()) +
+		                                ExtractFileName(ExcludeTrailingPathDelimiter(path));
+		if (file_exists(candidate) || dir_exists(candidate)) {
+			source = path;
+			destination = candidate;
+			break;
+		}
+	}
+	if (source.IsEmpty()) return SameNameAction::Proceed;
+
+	same_name::Context context;
+	context.source = source;
+	context.destination = destination;
+	context.source_size = get_file_size(source);
+	context.destination_size = get_file_size(destination);
+	context.source_time = static_cast<double>(get_file_age(source));
+	context.destination_time = static_cast<double>(get_file_age(destination));
+	context.same_path = SameText(ExcludeTrailingPathDelimiter(ExtractFilePath(source)),
+	                             ExcludeTrailingPathDelimiter(dst->GetPath()));
+	context.initial_name = ExtractFileName(ExcludeTrailingPathDelimiter(source));
+	same_name::Options options;
+	options.mode = same_name::Mode::Overwrite;
+	options.copy_all = true;
+	if (!same_name_dialog::Run(parent, context, options)) return SameNameAction::Cancelled;
+	if (options.mode == same_name::Mode::Skip) return SameNameAction::Proceed;
+
+	wxMessageBox(to_wx(_T("選択された同名処理は wx 版では未移植 (未実装処理) です\n上書き/最新/自動改名/手動改名は実コピーを行いません")),
+	             to_wx(_T("同名ファイル")), wxOK | wxICON_WARNING, parent);
+	return SameNameAction::Unimplemented;
+}
+
+/// Copy/Move PR の事前指定 (VCL MainFrm.cpp:28454 / 28603)。
+/// ダイアログを中断したら proceed=false。
+file_ops::ConflictPolicy choose_pre_same_policy(
+	wxWindow *parent, const UnicodeString &param, const std::vector<UnicodeString> &sources,
+	const UnicodeString &dst_dir, const UnicodeString &verb, bool &proceed)
+{
+	proceed = true;
+	if (!pre_same::IsRequested(param)) return file_ops::ConflictPolicy::SkipExisting;
+
+	pre_same::Mode mode = pre_same::Mode::Automatic;
+	if (!pre_same_dialog::Run(parent, mode)) {
+		proceed = false;
+		return file_ops::ConflictPolicy::SkipExisting;
+	}
+	file_ops::ConflictPolicy policy = pre_same::PolicyFor(mode);
+	if (pre_same::RequiresConfirmation(mode)) {
+		UnicodeString collisions;
+		const UnicodeString base = IncludeTrailingPathDelimiter(dst_dir);
+		for (const UnicodeString &source : sources) {
+			const UnicodeString target = base + ExtractFileName(ExcludeTrailingPathDelimiter(source));
+			if (file_exists(target) || dir_exists(target)) {
+				if (!collisions.IsEmpty()) collisions += _T("\r\n");
+				collisions += _T("・") + ExtractFileName(source);
+			}
+		}
+		if (!collisions.IsEmpty()) {
+			const UnicodeString text = _T("次の同名項目を作成します。続行しますか?\r\n\r\n") + collisions;
+			if (wxMessageBox(to_wx(text), to_wx(verb + _T("の確認")),
+			                 wxYES_NO | wxICON_QUESTION, parent) != wxYES)
+				policy = file_ops::ConflictPolicy::SkipExisting;
+		}
+	}
+	return policy;
 }
 
 /// ハードリンクの一覧を Windows API で列挙する (VCL Global.cpp の
@@ -392,6 +489,17 @@ void MainFrame::LoadSettings()
 		                    /*record_history=*/false);
 	}
 	RefreshTabBar();
+
+	// SrtModDlg の拡張設定。単一キーはタブ状態から復元し、残りの設定を
+	// 別キーで保持する (完全復元は未移植として sort_mode.h に明記)。
+	sort_options_[0].natural = settings_.Ini().ReadBoolGen(_T("SortNatural"), true);
+	sort_options_[1].natural = settings_.Ini().ReadBoolGen(_T("SortNatural"), true);
+	sort_options_[0].both = settings_.Ini().ReadBoolGen(_T("SortBoth"));
+	sort_options_[1].both = sort_options_[0].both;
+	sort_options_[0].logical = settings_.Ini().ReadBoolGen(_T("SortLogical"));
+	sort_options_[1].logical = sort_options_[0].logical;
+	sort_options_[0].extension_list = settings_.Ini().ReadStrGen(_T("SortExtList"));
+	sort_options_[1].extension_list = sort_options_[0].extension_list;
 
 	// 履歴。ini から読み直す (種類ごとにキーが分かれている)
 	history::LoadFromIni(settings_.Ini(), history::Kind::Edit, hist_edit_);
@@ -1256,48 +1364,102 @@ void MainFrame::CmdCopyFileInfo()
 	}
 }
 
+// VCL の TNewFileDlg 呼び出しは MainFrm.cpp:22276。
 //---------------------------------------------------------------------------
-void MainFrame::CmdNewFile(bool text_mode)
+void MainFrame::CmdNewFile(bool from_template)
 {
 	if (RejectOnResultList(_T("ファイルの作成は"))) return;
 	FilePane *pane = ActivePane();
 
-	inp_ex::Values values;
-	values.prompt = _T("作成するファイル名を入力してください");
-	values.title = text_mode ? _T("新規テキストの作成") : _T("新規ファイルの作成");
-	values.value = EmptyStr;
-	if (!RunInputEx(text_mode ? inp_ex::Mode::NewTextFile : inp_ex::Mode::Simple, values)) return;
-	if (values.value.IsEmpty()) return;
+	UnicodeString name;
+	UnicodeString template_path;
+	UnicodeString post_command;
+	bool input_options_pending = false;
+	if (from_template) {
+		new_file_dialog::Options options;
+		std::unique_ptr<TStringList> history(new TStringList());
+		settings_.Ini().LoadListItems(_T("NewTplHistory"), history.get(), 20, true);
+		for (int i = 0; i < history->Count; ++i)
+			options.template_history.push_back(history->Strings[i]);
+		options.default_directory = settings_.Ini().ReadStrGen(
+			_T("NewFileTplDir"), IncludeTrailingPathDelimiter(pane->GetPath()));
+		const bool has_setting = settings_.Ini().KeyExists(_T("General"), _T("NewFileExeCmd"));
+		options.post_command = settings_.Ini().ReadStrGen(
+			_T("NewFileExeCmd"), new_file::DefaultPostCommand(has_setting));
+		if (!new_file_dialog::Run(this, options)) return;
 
-	const UnicodeString input = values.value;
-	const UnicodeString path = IncludeTrailingPathDelimiter(pane->GetPath()) + input;
-	if (file_exists(path) || dir_exists(path)) {
-		// 既存があれば上書きしない (規約: 上書きを既定にしない)
-		wxMessageBox(to_wx(_T("同名のファイルまたはディレクトリが既にあります")),
-		             to_wx(_T("新規ファイルの作成")), wxOK | wxICON_WARNING, this);
-		return;
+		template_path = options.template_path;
+		name = Trim(options.name);
+		post_command = Trim(options.post_command);
+		history->Clear();
+		for (const UnicodeString &entry : options.template_history) history->Add(entry);
+		settings_.Ini().SaveListItems(_T("NewTplHistory"), history.get(), 20);
+		settings_.Ini().WriteStrGen(_T("NewFileTplDir"),
+		                            new_file::TemplateDirectory(template_path));
+		settings_.Ini().WriteStrGen(_T("NewFileExeCmd"), post_command);
+		settings_.Save();
+	}
+	else {
+		inp_ex::Values values;
+		values.prompt = _T("作成するテキストファイル名を入力してください");
+		values.title = _T("新規テキストの作成");
+		values.value = EmptyStr;
+		if (!RunInputEx(inp_ex::Mode::NewTextFile, values)) return;
+		name = Trim(values.value);
+		input_options_pending = values.use_clipboard || values.edit_new_text;
 	}
 
-	HANDLE h = ::CreateFileW(path.c_str(), GENERIC_WRITE, 0, NULL, CREATE_NEW,
-	                         FILE_ATTRIBUTE_NORMAL, NULL);
-	if (h == INVALID_HANDLE_VALUE) {
-		wxMessageBox(to_wx(_T("作成できませんでした: ") + input),
-		             to_wx(_T("新規ファイルの作成")), wxOK | wxICON_ERROR, this);
-		return;
+	const UnicodeString path = IncludeTrailingPathDelimiter(pane->GetPath()) + name;
+	bool created = false;
+	if (from_template) {
+		if (!file_exists(template_path)) {
+			wxMessageBox(to_wx(_T("テンプレートが見つかりません: ") + template_path),
+			             to_wx(_T("新規ファイルの作成")), wxOK | wxICON_ERROR, this);
+			return;
+		}
+		file_ops::FileOpResult result;
+		file_ops::CopyItemTo(template_path, path, result);
+		created = result.success_count > 0;
+		if (created && !set_file_age(path, Now())) {
+			--result.success_count;
+			result.failures.push_back(path + _T(": 作成後の日時を設定できません"));
+			created = false;
+		}
+		if (!created) {
+			wxMessageBox(to_wx(file_ops::Summarize(result)), to_wx(_T("新規ファイルの作成")),
+			             wxOK | wxICON_ERROR, this);
+			return;
+		}
 	}
-	::CloseHandle(h);
+	else {
+		HANDLE h = ::CreateFileW(path.c_str(), GENERIC_WRITE, 0, nullptr, CREATE_NEW,
+		                         FILE_ATTRIBUTE_NORMAL, nullptr);
+		if (h != INVALID_HANDLE_VALUE) {
+			::CloseHandle(h);
+			created = true;
+		}
+		if (!created) {
+			wxMessageBox(to_wx(_T("作成できませんでした。既存と同名の場合は上書きしません。")),
+			             to_wx(_T("新規ファイルの作成")), wxOK | wxICON_ERROR, this);
+			return;
+		}
+	}
 
-	if (text_mode && (values.use_clipboard || values.edit_new_text)) {
+	if (input_options_pending) {
 		// VCL の本文/外部エディタ連携は未移植。ファイル自体は確実に作成済み。
 		SetStatusWarning(_T("新規テキストは作成しましたが、クリップボード/外部エディタ連携は未実装です"));
 	}
 	pane->Reload();
-	// 作ったファイルにカーソルを合わせる
 	const std::vector<UnicodeString> names = pane->VisibleNames();
 	for (std::size_t i = 0; i < names.size(); ++i) {
-		if (SameText(names[i], input)) { pane->MoveCursorTo(static_cast<int>(i)); break; }
+		if (SameText(names[i], name)) { pane->MoveCursorTo(static_cast<int>(i)); break; }
 	}
 	UpdateStatus();
+
+	// 未移植 (未実装扱い): NewFileExeCmd のユーザー設定に基づく複数コマンド記法。
+	// ここでは入力されたコマンド名をそのまま MainFrame::Execute に渡す。
+	if (!post_command.IsEmpty() && !Execute(post_command))
+		SetStatusWarning(_T("作成後コマンドを実行できませんでした: ") + post_command);
 }
 
 //---------------------------------------------------------------------------
@@ -1593,6 +1755,17 @@ void MainFrame::CmdUnPack(bool to_current)
 }
 
 //---------------------------------------------------------------------------
+/**
+ * @brief 書庫作成 (Pack / PackToCurr)
+ * @details VCL は `src/MainFrm.cpp:23339-23361` で TPackArcDlg を作り、
+ *          形式・圧縮レベル・追加スイッチ・パスワードを受け取って
+ *          `usr_ARC->Pack` を呼ぶ。ここでは設定の解決 (gui/pack_settings)、
+ *          wx 入力、既存の archive::Create への接続だけを行う。
+ *
+ *          未移植 (未実装扱い): 圧縮レベル/パスワード/追加スイッチ/SFX、
+ *          PerDir、既存書庫への追加・削除後の再作成。実処理がない場合
+ *          は黙って捨てず警告して操作を中断する。
+ */
 void MainFrame::CmdPack(bool to_current)
 {
 	if (!to_current && RejectIfOppositeIsResultList(_T("書庫の作成"))) return;
@@ -1604,25 +1777,91 @@ void MainFrame::CmdPack(bool to_current)
 	const UnicodeString base = archive::DefaultArchiveBaseName(
 		(cur != nullptr && !cur->is_parent)? cur->name : EmptyStr, names);
 
-	const wxString input = wxGetTextFromUser(
-		to_wx(_T("作る書庫の名前を入力してください (拡張子で形式が決まります)")),
-		to_wx(_T("書庫の作成")), to_wx(base + _T(".zip")), this);
-	if (input.IsEmpty()) return;
+	pack_settings::Options options;
+	options.name = base;
+	options.format = pack_settings::FromIndex(settings_.Ini().ReadIntGen(_T("ArcFormat"), 0));
+	options.compression = settings_.Ini().ReadIntGen(_T("ZipPrm_x"), 5);
+	if (options.format == pack_settings::Format::SevenZip)
+		options.compression = settings_.Ini().ReadIntGen(_T("SevenPrm_x"), 5);
+	else if (options.format == pack_settings::Format::Cab)
+		options.compression = settings_.Ini().ReadIntGen(_T("CabPrm_z"), 0);
+	else if (options.format == pack_settings::Format::Tar)
+		options.compression = settings_.Ini().ReadIntGen(_T("TarPrm_z"), 6);
+	options.self_extract = settings_.Ini().ReadBoolGen(_T("ZipPrm_sfx"));
+	options.confirm_existing = settings_.Ini().ReadBoolGen(_T("SureSameArc"), true);
+	options.include_top_directory = settings_.Ini().ReadBoolGen(_T("PackArcDlgIncDir"));
+	options.existing_mode = static_cast<pack_settings::ExistingMode>(
+		settings_.Ini().ReadIntGen(_T("SameArcMode"), 0));
+	switch (options.format) {
+	case pack_settings::Format::Zip: options.extra_switches = settings_.Ini().ReadStrGen(_T("ExSw_Zip")); break;
+	case pack_settings::Format::SevenZip: options.extra_switches = settings_.Ini().ReadStrGen(_T("ExSw_7z")); break;
+	case pack_settings::Format::Lha: options.extra_switches = settings_.Ini().ReadStrGen(_T("ExSw_Lha")); break;
+	case pack_settings::Format::Cab: options.extra_switches = settings_.Ini().ReadStrGen(_T("ExSw_Cab")); break;
+	case pack_settings::Format::Tar: options.extra_switches = settings_.Ini().ReadStrGen(_T("ExSw_Tar")); break;
+	}
+	const std::array<bool, 5> available = archive::AvailableFormats();
+	pack_settings::Availability availability;
+	availability.zip = available[0];
+	availability.seven_zip = available[1];
+	availability.lha = available[2];
+	availability.cab = available[3];
+	availability.tar = available[4];
+
+	bool per_dir_available = true;
+	for (const FileItem &item : pane->GetSelectedItems()) {
+		if (!item.is_dir) { per_dir_available = false; break; }
+	}
+	pack_dialog::Context context;
+	context.default_name = base;
+	context.availability = availability;
+	context.per_directory_available = per_dir_available;
+	if (!pack_dialog::Run(this, options, context)) return;
+
+	settings_.Ini().WriteStrGen(_T("PackArcName"), options.name);
+	settings_.Ini().WriteIntGen(_T("ArcFormat"), pack_settings::ToIndex(options.format));
+	settings_.Ini().WriteIntGen(_T("ZipPrm_x"), options.compression);
+	settings_.Ini().WriteIntGen(_T("SevenPrm_x"), options.compression);
+	settings_.Ini().WriteIntGen(_T("CabPrm_z"), options.compression);
+	settings_.Ini().WriteIntGen(_T("TarPrm_z"), options.compression);
+	settings_.Ini().WriteBoolGen(_T("ZipPrm_sfx"), options.self_extract);
+	switch (options.format) {
+	case pack_settings::Format::Zip: settings_.Ini().WriteStrGen(_T("ExSw_Zip"), options.extra_switches); break;
+	case pack_settings::Format::SevenZip: settings_.Ini().WriteStrGen(_T("ExSw_7z"), options.extra_switches); break;
+	case pack_settings::Format::Lha: settings_.Ini().WriteStrGen(_T("ExSw_Lha"), options.extra_switches); break;
+	case pack_settings::Format::Cab: settings_.Ini().WriteStrGen(_T("ExSw_Cab"), options.extra_switches); break;
+	case pack_settings::Format::Tar: settings_.Ini().WriteStrGen(_T("ExSw_Tar"), options.extra_switches); break;
+	}
+	settings_.Ini().WriteBoolGen(_T("PackArcDlgIncDir"), options.include_top_directory);
+	settings_.Ini().WriteBoolGen(_T("SureSameArc"), options.confirm_existing);
+	settings_.Ini().WriteIntGen(_T("SameArcMode"), static_cast<int>(options.existing_mode));
+	settings_.Save();
 
 	const UnicodeString dst_dir = to_current? pane->GetPath() : OppositePane()->GetPath();
-	const UnicodeString arc = IncludeTrailingPathDelimiter(dst_dir) + to_us(input);
-
-	if (!ConfirmItems(this, _T("書庫の作成"), _T("書庫に追加"), names, arc)) return;
+	const pack_settings::Resolved resolved = pack_settings::Resolve(options, availability, dst_dir);
+	if (!resolved.core_compatible) {
+		const UnicodeString message = resolved.unsupported_reason.IsEmpty()
+			? _T("この書庫設定は既存の core で実行できません") : resolved.unsupported_reason;
+		SetStatusWarning(_T("書庫は未移植設定のため作成しません: ") + message);
+		log_.Add(log_win::LogStatus::Info, _T("Pack 未実行: ") + message, true);
+		return;
+	}
+	if (file_exists(resolved.archive_path)) {
+		// archive::Create は既存ファイルを上書きしない。VCL の追加/削除選択を
+		// 黙って別の動作へ置換せず、未実装として明示する。
+		SetStatusWarning(_T("同名書庫の追加・再作成は未移植 (未実装処理) です"));
+		return;
+	}
+	if (!ConfirmItems(this, _T("書庫の作成"), _T("書庫に追加"), names, resolved.archive_path)) return;
 
 	UnicodeString error;
-	if (!archive::Create(arc, pane->GetPath(), names, error)) {
+	if (!archive::Create(resolved.archive_path, pane->GetPath(), names, error)) {
 		wxMessageBox(to_wx(error), to_wx(_T("書庫の作成")), wxOK | wxICON_WARNING, this);
 		return;
 	}
 
 	panes_[0]->Reload();
 	panes_[1]->Reload();
-	SetStatusWarning(_T("書庫を作成しました: ") + to_us(input));
+	SetStatusWarning(_T("書庫を作成しました: ") + resolved.file_name);
 	UpdateStatus();
 }
 
@@ -1846,37 +2085,58 @@ void MainFrame::CmdCountLines()
 	wxMessageBox(to_wx(text), to_wx(_T("行数のカウント")), wxOK | wxICON_INFORMATION, this);
 }
 
+// VCL の TJoinTextDlg 呼び出しは MainFrm.cpp:20164。
 //---------------------------------------------------------------------------
 void MainFrame::CmdJoinText()
 {
-	// 出力先を「このペインのディレクトリ」に作るので、結果リストでは断る
 	if (RejectOnResultList(_T("テキストの結合は"))) return;
+	if (RejectIfOppositeIsResultList(_T("テキストの結合は"))) return;
 	FilePane *pane = ActivePane();
+	if (pane->GetMarkedCount() == 0) {
+		SetStatusWarning(_T("結合するファイルを選択してください"));
+		return;
+	}
+
+	join_text_dialog::Options options;
+	options.sources = pane->GetSelectedPaths();
+	for (const UnicodeString &path : options.sources) {
+		if (dir_exists(path)) {
+			wxMessageBox(to_wx(_T("ディレクトリは結合対象にできません: ") + ExtractFileName(path)),
+			             to_wx(_T("テキストの結合")), wxOK | wxICON_WARNING, this);
+			return;
+		}
+	}
+	const int code_index = settings_.Ini().ReadIntGen(_T("JoinTextOutCode"));
+	options.output_code = join_text::EncodingName(code_index);
+	options.template_path = settings_.Ini().ReadStrGen(_T("JoinTextTemplate"));
+	options.with_bom = settings_.Ini().ReadBoolGen(_T("JoinTextBOM"));
+	if (!join_text_dialog::Run(this, options)) return;
+
+	settings_.Ini().WriteIntGen(_T("JoinTextOutCode"),
+	                            join_text::EncodingIndex(options.output_code));
+	settings_.Ini().WriteStrGen(_T("JoinTextTemplate"), options.template_path);
+	settings_.Ini().WriteBoolGen(_T("JoinTextBOM"), options.with_bom);
+	settings_.Save();
+
 	const std::vector<UnicodeString> names = pane->GetSelectedNames();
-	if (names.size() < 2) { SetStatusWarning(_T("2件以上を選んでください")); return; }
-
-	const wxString input = wxGetTextFromUser(
-		to_wx(_T("出力するファイル名を入力してください (UTF-8 で書きます)")),
-		to_wx(_T("テキストの結合")), to_wx(_T("joined.txt")), this);
-	if (input.IsEmpty()) return;
-
-	const UnicodeString out = IncludeTrailingPathDelimiter(pane->GetPath()) + to_us(input);
+	const UnicodeString out = join_text::OutputPath(OppositePane()->GetPath(), options.output_name);
 	if (!ConfirmItems(this, _T("テキストの結合"), _T("結合"), names, out)) return;
 
-	// 結果リストの項目は一覧のディレクトリの外にあるので、名前ではなく
-	// フルパスで取る (GetPath() + 名前 だと別のファイルを指す)
-	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
-
-	const text_ops::JoinResult r = text_ops::JoinTextFiles(paths, out);
+	const text_ops::JoinResult r = text_ops::JoinTextFiles(
+		options.sources, out, join_text::CodePageFor(options.output_code),
+		options.with_bom, options.line_break);
 	pane->Reload();
+	OppositePane()->Reload();
 
 	UnicodeString msg;
 	msg.sprintf(_T("%d 件を結合しました"), r.joined);
-	for (const UnicodeString &f : r.failures) msg += _T("\r\n") + f;
-	wxMessageBox(to_wx(msg), to_wx(_T("テキストの結合")), wxOK | wxICON_INFORMATION, this);
+	for (const UnicodeString &failure : r.failures) msg += _T("\r\n") + failure;
+	wxMessageBox(to_wx(msg), to_wx(_T("テキストの結合")),
+	             r.failures.empty()? wxOK | wxICON_INFORMATION : wxOK | wxICON_WARNING, this);
 	UpdateStatus();
 }
 
+// VCL の TCvTxtEncDlg 呼び出しは MainFrm.cpp:29387。
 //---------------------------------------------------------------------------
 void MainFrame::CmdConvertTextEnc()
 {
@@ -1884,35 +2144,48 @@ void MainFrame::CmdConvertTextEnc()
 	const std::vector<UnicodeString> names = pane->GetSelectedNames();
 	if (names.empty()) { SetStatusWarning(_T("対象がありません")); return; }
 
-	wxArrayString choices;
-	choices.Add(to_wx(_T("UTF-8 (BOM 無し)")));
-	choices.Add(to_wx(_T("UTF-8 (BOM 付き)")));
-	choices.Add(to_wx(_T("Shift_JIS")));
-	const int sel = wxGetSingleChoiceIndex(to_wx(_T("変換先の文字コードを選んでください")),
-	                                       to_wx(_T("文字コードの変換")), choices, this);
-	if (sel < 0) return;
+	cv_enc_dialog::Options options;
+	options.code_index = cv_enc::NormalizeSelection(
+		settings_.Ini().ReadIntGen(_T("CvTextEncCode")),
+		static_cast<int>(cv_enc::EncodingNames().size()));
+	options.line_break_index = settings_.Ini().ReadIntGen(_T("CvTextEncLnBrk"));
+	options.with_bom = settings_.Ini().ReadBoolGen(_T("CvTextEncBOM"), true);
+	options.title_suffix = cv_enc::TitleSuffix(pane->GetMarkedCount(), pane->CurrentFullPath());
+	if (!cv_enc_dialog::Run(this, options)) return;
 
-	const int cp = (sel == 2)? 932 : CP_UTF8;
-	const bool bom = (sel == 1);
+	settings_.Ini().WriteIntGen(_T("CvTextEncCode"), options.code_index);
+	settings_.Ini().WriteIntGen(_T("CvTextEncLnBrk"), options.line_break_index);
+	settings_.Ini().WriteBoolGen(_T("CvTextEncBOM"), options.with_bom);
+	settings_.Save();
 
-	// **その場で書き換える破壊的な操作**なので必ず確認する
+	const UnicodeString encoding = cv_enc::EncodingNames()[static_cast<std::size_t>(options.code_index)];
+	const int code_page = cv_enc::CodePageFor(options.code_index);
+	const bool with_bom = options.with_bom && cv_enc::BomAvailable(encoding);
+	const UnicodeString line_break = cv_enc::LineBreakFor(options.line_break_index);
 	if (!ConfirmItems(this, _T("文字コードの変換"), _T("変換"), names, pane->GetPath())) return;
 
 	int ok = 0;
 	std::vector<UnicodeString> failures;
-	for (const UnicodeString &p : pane->GetSelectedPaths()) {
-		if (dir_exists(p)) continue;
+	for (const UnicodeString &path : pane->GetSelectedPaths()) {
+		if (dir_exists(path)) {
+			failures.push_back(ExtractFileName(path) + _T(": ディレクトリは変換できません"));
+			continue;
+		}
 		UnicodeString error;
-		if (text_ops::ConvertEncoding(p, cp, bom, error)) ok++;
-		else failures.push_back(ExtractFileName(p) + _T(": ") + error);
+		if (text_ops::ConvertEncoding(path, code_page, with_bom, line_break, error)) ok++;
+		else failures.push_back(ExtractFileName(path) + _T(": ") + error);
 	}
 
 	pane->Reload();
 	UnicodeString msg;
 	msg.sprintf(_T("%d 件を変換しました"), ok);
-	for (const UnicodeString &f : failures) msg += _T("\r\n") + f;
-	wxMessageBox(to_wx(msg), to_wx(_T("文字コードの変換")), wxOK | wxICON_INFORMATION, this);
+	for (const UnicodeString &failure : failures) msg += _T("\r\n") + failure;
+	wxMessageBox(to_wx(msg), to_wx(_T("文字コードの変換")),
+	             failures.empty()? wxOK | wxICON_INFORMATION : wxOK | wxICON_WARNING, this);
 	UpdateStatus();
+
+	// 未移植 (未実装扱い): VCL は XML/HTML の charset 宣言と出力先を反対ペインへ
+	// 処理する (MainFrm.cpp:29433/29482)。ここでは従来どおり対象ファイルを変更する。
 }
 
 //---------------------------------------------------------------------------
@@ -1948,6 +2221,104 @@ bool launch(const external::LaunchSpec &spec, HWND owner)
 		spec.directory.IsEmpty()? NULL : spec.directory.c_str(), SW_SHOWNORMAL);
 	// ShellExecute は成功時に 32 より大きい値を返す
 	return reinterpret_cast<INT_PTR>(r) > 32;
+}
+
+/// cmd.exe の標準出力・標準エラーを取り込む
+struct CapturedCommand {
+	bool started = false;
+	DWORD exit_code = 0;
+	UnicodeString output;
+	UnicodeString error;
+};
+
+CapturedCommand run_captured_command(const UnicodeString &command, const UnicodeString &directory)
+{
+	CapturedCommand result;
+	SECURITY_ATTRIBUTES security = {};
+	security.nLength = sizeof(security);
+	security.bInheritHandle = TRUE;
+
+	HANDLE read_pipe = nullptr;
+	HANDLE write_pipe = nullptr;
+	if (!::CreatePipe(&read_pipe, &write_pipe, &security, 0)) {
+		result.error = SysErrorMessage(::GetLastError());
+		return result;
+	}
+	::SetHandleInformation(read_pipe, HANDLE_FLAG_INHERIT, 0);
+
+	STARTUPINFOW startup = {};
+	startup.cb = sizeof(startup);
+	startup.dwFlags = STARTF_USESTDHANDLES;
+	startup.hStdInput = ::GetStdHandle(STD_INPUT_HANDLE);
+	startup.hStdOutput = write_pipe;
+	startup.hStdError = write_pipe;
+	PROCESS_INFORMATION process = {};
+
+	std::wstring command_line = L"cmd.exe /d /s /c \"";
+	command_line += command.c_str();
+	command_line += L"\"";
+	const UnicodeString workdir_us = ExcludeTrailingPathDelimiter(directory);
+	const std::wstring workdir(workdir_us.c_str(), static_cast<std::size_t>(workdir_us.Length()));
+	result.started = ::CreateProcessW(
+		L"cmd.exe", command_line.data(), nullptr, nullptr, TRUE,
+		CREATE_NO_WINDOW, nullptr, workdir.c_str(), &startup, &process) != FALSE;
+	if (!result.started) {
+		result.error = SysErrorMessage(::GetLastError());
+		::CloseHandle(read_pipe);
+		::CloseHandle(write_pipe);
+		return result;
+	}
+	::CloseHandle(write_pipe);
+
+	std::string bytes;
+	char buffer[4096];
+	DWORD n = 0;
+	while (::ReadFile(read_pipe, buffer, sizeof(buffer), &n, nullptr) && n > 0)
+		bytes.append(buffer, n);
+	::CloseHandle(read_pipe);
+	::WaitForSingleObject(process.hProcess, INFINITE);
+	::GetExitCodeProcess(process.hProcess, &result.exit_code);
+	::CloseHandle(process.hThread);
+	::CloseHandle(process.hProcess);
+
+	if (!bytes.empty()) {
+		const UINT code_page = CP_ACP;
+		const int chars = ::MultiByteToWideChar(code_page, 0, bytes.data(),
+		                                          static_cast<int>(bytes.size()), nullptr, 0);
+		if (chars > 0) {
+			std::wstring wide(static_cast<std::size_t>(chars), L'\0');
+			::MultiByteToWideChar(code_page, 0, bytes.data(), static_cast<int>(bytes.size()),
+			                      wide.data(), chars);
+			result.output = UnicodeString(wide.c_str());
+		}
+		else {
+			result.output = UnicodeString(bytes.c_str());
+		}
+	}
+	return result;
+}
+
+bool write_utf8_file(const UnicodeString &path, const UnicodeString &text)
+{
+	HANDLE h = ::CreateFileW(path.c_str(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS,
+	                         FILE_ATTRIBUTE_NORMAL, nullptr);
+	if (h == INVALID_HANDLE_VALUE) return false;
+	bool ok = true;
+	if (!text.IsEmpty()) {
+		const int n = ::WideCharToMultiByte(CP_UTF8, 0, text.c_str(), text.Length(),
+		                                    nullptr, 0, nullptr, nullptr);
+		if (n > 0) {
+			std::string bytes(static_cast<std::size_t>(n), '\0');
+			DWORD written = 0;
+			ok = ::WideCharToMultiByte(CP_UTF8, 0, text.c_str(), text.Length(),
+			                            bytes.data(), n, nullptr, nullptr) == n
+			  && ::WriteFile(h, bytes.data(), static_cast<DWORD>(bytes.size()), &written, nullptr)
+			  && written == bytes.size();
+		}
+		else ok = false;
+	}
+	::CloseHandle(h);
+	return ok;
 }
 
 }  // namespace
@@ -1986,19 +2357,99 @@ void MainFrame::CmdCalculator()
 	}
 }
 
+// VCL の TExeCmdDlg 呼び出しは MainFrm.cpp:17043。
 //---------------------------------------------------------------------------
-void MainFrame::CmdExeCommandLine()
+void MainFrame::CmdExeCommandLine(const UnicodeString &param)
 {
-	const wxString input = wxGetTextFromUser(
-		to_wx(_T("実行するコマンドラインを入力してください")),
-		to_wx(_T("コマンドラインの実行")), wxEmptyString, this);
-	if (input.IsEmpty()) return;
+	FilePane *pane = ActivePane();
+	std::unique_ptr<TStringList> history(new TStringList());
+	settings_.Ini().LoadListItems(_T("CmdLnHistory"), history.get(), 20, true);
 
-	const external::LaunchSpec spec =
-		external::CommandLineSpec(to_us(input), ActivePane()->GetPath());
-	if (!launch(spec, static_cast<HWND>(GetHandle()))) {
-		SetStatusWarning(_T("実行できません: ") + to_us(input));
+	exe_cmd::Options options;
+	for (int i = 0; i < history->Count; ++i) options.history.push_back(history->Strings[i]);
+	options.log_stdout = settings_.Ini().ReadBoolGen(_T("ExeDlgLogStdOut"));
+	options.copy_stdout = settings_.Ini().ReadBoolGen(_T("ExeDlgCopyStdOut"));
+	options.save_stdout = settings_.Ini().ReadBoolGen(_T("ExeDlgSaveStdOut"));
+	options.list_stdout = settings_.Ini().ReadBoolGen(_T("ExeDlgListStdOut"));
+	options.save_name = settings_.Ini().ReadStrGen(_T("ExeDlgSaveName"));
+	options.run_as = settings_.Ini().ReadBoolGen(_T("ExeDlgRunAs"));
+
+	const UnicodeString current = pane->CurrentFullPath();
+	const bool current_is_exe = !current.IsEmpty() && exe_cmd::IsExecutablePath(current);
+	const exe_cmd::CommandSeed seed = exe_cmd::MakeSeed(
+		exe_cmd::ParseInitialInput(param), current, current_is_exe, options.history);
+	if (!exe_cmd_dialog::Run(this, options, seed)) return;
+
+	history->Clear();
+	for (const UnicodeString &entry : options.history) history->Add(entry);
+	settings_.Ini().SaveListItems(_T("CmdLnHistory"), history.get(), 20);
+	settings_.Ini().WriteBoolGen(_T("ExeDlgLogStdOut"), options.log_stdout);
+	settings_.Ini().WriteBoolGen(_T("ExeDlgCopyStdOut"), options.copy_stdout);
+	settings_.Ini().WriteBoolGen(_T("ExeDlgSaveStdOut"), options.save_stdout);
+	settings_.Ini().WriteBoolGen(_T("ExeDlgListStdOut"), options.list_stdout);
+	settings_.Ini().WriteStrGen(_T("ExeDlgSaveName"), options.save_name);
+	settings_.Ini().WriteBoolGen(_T("ExeDlgRunAs"), options.run_as);
+	settings_.Save();
+
+	const UnicodeString command = Trim(options.command);
+	if (command.IsEmpty()) return;
+	if (options.run_as) {
+		UnicodeString arguments = command;
+		const UnicodeString executable = split_file_param(arguments);
+		const HINSTANCE r = ::ShellExecuteW(static_cast<HWND>(GetHandle()), L"runas",
+		                                     executable.c_str(),
+		                                     arguments.IsEmpty()? nullptr : arguments.c_str(),
+		                                     ExcludeTrailingPathDelimiter(pane->GetPath()).c_str(),
+		                                     SW_SHOWNORMAL);
+		if (reinterpret_cast<INT_PTR>(r) <= 32) {
+			wxMessageBox(to_wx(_T("管理者として実行できませんでした。")),
+			             to_wx(_T("コマンドラインの実行")), wxOK | wxICON_ERROR, this);
+		}
+		return;
 	}
+
+	const bool capture = options.log_stdout || options.copy_stdout
+	                   || options.save_stdout || options.list_stdout;
+	if (!capture) {
+		const external::LaunchSpec spec = external::CommandLineSpec(command, pane->GetPath());
+		if (!launch(spec, static_cast<HWND>(GetHandle())))
+			SetStatusWarning(_T("実行できません: ") + command);
+		return;
+	}
+
+	const CapturedCommand result = run_captured_command(command, pane->GetPath());
+	if (!result.started) {
+		wxMessageBox(to_wx(_T("コマンドを開始できませんでした: ") + result.error),
+		             to_wx(_T("コマンドラインの実行")), wxOK | wxICON_ERROR, this);
+		return;
+	}
+	if (options.log_stdout) {
+		log_.Add(log_win::LogStatus::Info, _T("EXEC  ") + command, true);
+		if (!result.output.IsEmpty()) log_.Add(log_win::LogStatus::Info, result.output, false);
+	}
+	if (options.copy_stdout && wxTheClipboard->Open()) {
+		wxTheClipboard->SetData(new wxTextDataObject(to_wx(result.output)));
+		wxTheClipboard->Close();
+	}
+	if (options.save_stdout) {
+		const UnicodeString path = exe_cmd::SaveOutputPath(pane->GetPath(), options.save_name);
+		if (!write_utf8_file(path, result.output)) {
+			wxMessageBox(to_wx(_T("標準出力を保存できませんでした: ") + path),
+			             to_wx(_T("コマンドラインの実行")), wxOK | wxICON_ERROR, this);
+		}
+	}
+	if (options.list_stdout) {
+		wxMessageBox(to_wx(result.output.IsEmpty()? _T("(標準出力なし)") : result.output),
+		             to_wx(_T("実行結果")), wxOK | wxICON_INFORMATION, this);
+	}
+	if (result.exit_code != 0) {
+		UnicodeString message;
+		message.sprintf(_T("コマンドはコード %lu で終了しました。"), result.exit_code);
+		SetStatusWarning(message);
+	}
+
+	// 未移植 (未実装扱い): UAC ダイアログ専用の ForcedElevation 指定。
+	// 管理者実行は ShellExecuteW("runas") で実行する。
 }
 
 //---------------------------------------------------------------------------
@@ -2275,22 +2726,36 @@ void MainFrame::CmdCalcDirSize(bool all)
 }
 
 //---------------------------------------------------------------------------
-void MainFrame::CmdFileExtList()
+void MainFrame::CmdFileExtList(const UnicodeString &param)
 {
 	FilePane *pane = ActivePane();
-	bool truncated = false;
-	const auto stats = dir_info::CalcExtStats(pane->GetPath(), false, pane->GetShowHidden(),
-	                                           pane->GetShowSystem(), truncated);
-	if (stats.empty()) { SetStatusWarning(_T("ファイルがありません")); return; }
+	const FileItem *itm = pane->GetCurrentItem();
+	const UnicodeString cursor_path = itm != nullptr && !itm->is_parent
+		? pane->FullPathOf(*itm) : EmptyStr;
+	UnicodeString error;
+	const UnicodeString path = file_ext::ResolveTargetPath(
+		param, pane->GetPath(), cursor_path,
+		itm != nullptr && itm->is_dir, itm != nullptr && itm->is_parent, error);
+	if (path.IsEmpty()) { SetStatusWarning(error); return; }
 
-	UnicodeString text = _T("拡張子            件数           容量\r\n");
-	for (const dir_info::ExtStat &st : stats) {
-		text.cat_sprintf(_T("%-16s %6d %14s\r\n"), st.ext.c_str(), st.count,
-		                 get_size_str_B(st.bytes, 14).Trim().c_str());
+	file_ext_dialog::Context ctx;
+	ctx.show_hidden = pane->GetShowHidden();
+	ctx.show_system = pane->GetShowSystem();
+	ctx.log_output = [this](const std::vector<UnicodeString> &lines) {
+		for (const UnicodeString &line : lines) {
+			log_.Add(log_win::LogStatus::Info, line, /*show_time=*/false);
+		}
+	};
+
+	// VCL は MainFrm.cpp:17650-17679 で FileExtensionDlg を出し、
+	// FextMask なら MaskFind、FileName なら JumpTo を実行する。
+	const file_ext_dialog::Result result = file_ext_dialog::Run(this, path, ctx);
+	if (result.outcome == file_ext_dialog::Outcome::FindMask) {
+		CmdMaskFind(result.mask);
 	}
-	if (truncated) text += _T("\r\n※ 上限に達して打ち切りました");
-
-	wxMessageBox(to_wx(text), to_wx(_T("拡張子別一覧")), wxOK | wxICON_INFORMATION, this);
+	else if (result.outcome == file_ext_dialog::Outcome::OpenFile) {
+		CmdJumpTo(result.path);
+	}
 }
 
 //---------------------------------------------------------------------------
@@ -2717,6 +3182,25 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	// (CursorUp/Down/PageUp/PageDown/Close は F/I モードと同名のため、
 	// 下の else-if に置くと到達不能になる。選択系・特殊表示系・外部連携系は対象外)
 	if (viewer_ != nullptr && viewer_->IsShown()) {
+		// 関数/ユーザー定義/マーク行一覧 (VCL MainFrm.cpp:33040-33045,
+		// 33600-33637)。F モードの分岐へ落とすと一般の MarkList と衝突する。
+		if (SameStr(command, _T("FunctionList"))) {
+			CmdFunctionList(function_list::Mode::Function, param);
+			return true;
+		}
+		if (SameStr(command, _T("UserDefList"))) {
+			CmdFunctionList(function_list::Mode::UserDefined, param);
+			return true;
+		}
+		if (SameStr(command, _T("MarkList"))) {
+			CmdFunctionList(function_list::Mode::MarkLine, param);
+			return true;
+		}
+		// V:SetUserDefStr はダイアログを開かず、次のユーザー定義一覧へ渡す。
+		if (SameStr(command, _T("SetUserDefStr"))) {
+			pending_user_def_ = param;
+			return true;
+		}
 		if (SameStr(command, _T("CursorUp"))) {
 			viewer_->CmdCursorUp(param);
 			UpdateStatus();
@@ -2830,6 +3314,12 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		if (SameStr(command, _T("ChangeCodePage"))) {
 			viewer_->CmdChangeCodePage(param);
 			UpdateStatus();
+			return true;
+		}
+		// V:CsvCalc (usr_cmdlist.cpp:424)。wx の行 viewer では列カーソンが
+		// 無いので、数値列の自動解決は gui/file_info.h へ委ねる。
+		if (SameStr(command, _T("CsvCalc"))) {
+			CmdCsvCalc();
 			return true;
 		}
 		if (SameStr(command, _T("ReloadFile"))) {
@@ -3134,10 +3624,10 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		CmdCopyFileName(true);
 	}
 	else if (SameStr(command, _T("NewFile"))) {
-		CmdNewFile(/*text_mode=*/false);
+		CmdNewFile(/*from_template=*/true);
 	}
 	else if (SameStr(command, _T("NewTextFile"))) {
-		CmdNewFile(/*text_mode=*/true);
+		CmdNewFile(/*from_template=*/false);
 	}
 	else if (SameStr(command, _T("CopyToClip"))) {
 		CmdFilesToClip(false);
@@ -3242,7 +3732,7 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		CmdCalcDirSize(true);
 	}
 	else if (SameStr(command, _T("FileExtList"))) {
-		CmdFileExtList();
+		CmdFileExtList(param);
 	}
 	else if (SameStr(command, _T("ListTree"))) {
 		CmdListTree();
@@ -3367,19 +3857,19 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		CmdFindMark();
 	}
 	else if (SameStr(command, _T("SetTag"))) {
-		CmdSetTag(/*add=*/false);
+		CmdSetTag(/*add=*/false, param);
 	}
 	else if (SameStr(command, _T("AddTag"))) {
-		CmdSetTag(/*add=*/true);
+		CmdSetTag(/*add=*/true, param);
 	}
 	else if (SameStr(command, _T("DelTag"))) {
 		CmdDelTag();
 	}
 	else if (SameStr(command, _T("TagSelect"))) {
-		CmdTagSelect();
+		CmdTagSelect(param);
 	}
 	else if (SameStr(command, _T("FindTag"))) {
-		CmdFindTag();
+		CmdFindTag(param);
 	}
 	else if (SameStr(command, _T("TrimTagData"))) {
 		CmdTrimTagData();
@@ -3408,7 +3898,7 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		CmdDelSelMask();
 	}
 	else if (SameStr(command, _T("MaskFind"))) {
-		CmdMaskFind();
+		CmdMaskFind(param);
 	}
 	else if (SameStr(command, _T("InputPathMask"))) {
 		CmdInputPathMask();
@@ -3583,7 +4073,7 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		ShowCmdList();
 	}
 	else if (SameStr(command, _T("SortDlg"))) {
-		ShowSortDialog();
+		ShowSortDialog(param);
 	}
 	else if (SameStr(command, _T("SetPathMask"))) {
 		ShowMaskDialog();
@@ -3592,10 +4082,10 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		pane->SetMask(EmptyStr);
 	}
 	else if (SameStr(command, _T("Copy"))) {
-		CmdCopy();
+		CmdCopy(param);
 	}
 	else if (SameStr(command, _T("Move"))) {
-		CmdMove();
+		CmdMove(param);
 	}
 	else if (SameStr(command, _T("Delete"))) {
 		// ワークリストの上での Delete は**ファイルを消さず**一覧から外す
@@ -3910,11 +4400,8 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		SetStatusWarning(_T("メインメニューのポップアップは未対応です"));
 	}
 	else if (SameStr(command, _T("CmdFileList"))) {
-		// VCL は CmdFileListDlg を開くが、ダイアログ自体が Phase 3 の対象外
-		// のため警告のみ ("FF" の有無は image_view_ops::ShouldShowCmdFileFilter
-		// で判定できることをテストで保証する)
-		(void)image_view_ops::ShouldShowCmdFileFilter(param);
-		SetStatusWarning(_T("コマンドファイル一覧は未対応です"));
+		// 実在する FVI コマンド (usr_cmdlist.cpp:347) から開く。
+		CmdFileList(param);
 	}
 	else if (SameStr(command, _T("Grep"))) {
 		CmdGrep();
@@ -4032,7 +4519,7 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		CmdCalculator();
 	}
 	else if (SameStr(command, _T("ExeCommandLine"))) {
-		CmdExeCommandLine();
+		CmdExeCommandLine(param);
 	}
 	else if (SameStr(command, _T("OpenByWin"))) {
 		CmdOpenByWin(param);
@@ -4366,47 +4853,105 @@ void MainFrame::ShowCmdList()
 
 //---------------------------------------------------------------------------
 /**
- * @brief ソートダイアログ (S)
- * @details SrtModDlg.cpp (ソートダイアログ) の簡略版。並べ替えキー (名前/拡張子/
- *          日時/サイズ/属性。SortModeRadioGroup と同じ並び)・降順・ディレクトリを
- *          先に集めるか、の3点だけを選ぶ。SrtModDlg.cpp にある「両側に適用」
- *          「拡張子リストの優先順」「記号順」などの拡張オプションは対象外
- *          (Phase 2 骨格のスコープ外)
+ * @brief ソートダイアログ (SortDlg)
+ * @details VCL の接続は `src/MainFrm.cpp:26360-26365` (ファイル一覧) と
+ *          `src/MainFrm.cpp:35871-35872` (画像ビューア) である。前者では
+ *          wx の sort_mode_dialog を表示し、ActionParam がある場合は
+ *          gui/sort_mode.cpp の即時変更を使う。
+ *
+ *          未移植 (未実装扱い): 2段ソート・結果リスト場所順・画像ビューア
+ *          固有のソートは、警告または単一 FilePane 設定への縮約に留める。
  */
-void MainFrame::ShowSortDialog()
+void MainFrame::ShowSortDialog(const UnicodeString &param)
 {
+	// VCL の 2つ目の接続 (MainFrm.cpp:35871) は画像ビューア用の
+	// SortDlgIActionExecute。wx 画像ビューアには FilePane のソート項目がない。
+	if (image_viewer_ != nullptr && image_viewer_->IsShown()) {
+		SetStatusWarning(_T("画像ビューアのソートは未移植 (未実装処理) です"));
+		return;
+	}
+
 	FilePane *pane = ActivePane();
+	const int active = active_;
+	sort_mode::Options &options = sort_options_[active];
+	// FilePane が保持する単一キーを現在の設定へ写す。拡張設定は保持する。
+	options.mode = sort_mode::FromIndex(static_cast<int>(pane->GetSortKey()));
+	options.descending_name = false;
+	options.descending_old = false;
+	options.descending_small = false;
+	options.descending_attribute = false;
+	switch (options.mode) {
+	case sort_mode::Mode::Date: options.descending_old = pane->IsSortDescending(); break;
+	case sort_mode::Mode::Size: options.descending_small = pane->IsSortDescending(); break;
+	case sort_mode::Mode::Attribute: options.descending_attribute = pane->IsSortDescending(); break;
+	default: options.descending_name = pane->IsSortDescending(); break;
+	}
+	if (!pane->IsDirsFirst()) {
+		options.dir_mode = sort_mode::DirectoryMode::Mixed;
+	}
+	else if (options.dir_mode == sort_mode::DirectoryMode::Mixed ||
+	         options.dir_mode == sort_mode::DirectoryMode::Icon) {
+		options.dir_mode = sort_mode::DirectoryMode::SameAsFile;
+	}
 
-	wxDialog dlg(this, wxID_ANY, to_wx(_T("ソート")));
+	auto apply = [this](int index, const sort_mode::Options &value) {
+		if (index < 0 || index > 1) return;
+		const sort_mode::PaneSettings ps = sort_mode::ToPaneSettings(value);
+		panes_[index]->SetSortSettings(ps.key, ps.descending, ps.dirs_first);
+	};
 
-	wxArrayString choices;
-	choices.Add(to_wx(_T("名前(&F)")));
-	choices.Add(to_wx(_T("拡張子(&E)")));
-	choices.Add(to_wx(_T("日時(&D)")));
-	choices.Add(to_wx(_T("サイズ(&S)")));
-	choices.Add(to_wx(_T("属性(&A)")));
+	if (!param.Trim().IsEmpty()) {
+		const sort_mode::ParamResult result = sort_mode::ApplyParam(options, param);
+		if (!result.recognized) {
+			SetStatusWarning(_T("SortDlg のパラメータが不正です: ") + param);
+			return;
+		}
+		if (result.path_sort) {
+			SetStatusWarning(_T("結果リストの場所順 (SortDlg_L) は未移植 (未実装処理) です"));
+			return;
+		}
+		if (!result.changed) return;
+		if (result.options.mode == sort_mode::Mode::None ||
+		    result.options.dir_mode == sort_mode::DirectoryMode::Icon) {
+			SetStatusWarning(_T("ソートなし/アイコン順は未移植 (未実装処理) です"));
+			return;
+		}
+		sort_options_[active] = result.options;
+		apply(active, result.options);
+		if (result.options.both) {
+			sort_options_[1 - active] = result.options;
+			apply(1 - active, result.options);
+		}
+		StoreCurrentTabState();
+		settings_.Save();
+		UpdateStatus();
+		return;
+	}
 
-	wxRadioBox *key_box = new wxRadioBox(&dlg, wxID_ANY, to_wx(_T("並べ替えキー")), wxDefaultPosition,
-	                                      wxDefaultSize, choices, 1, wxRA_SPECIFY_COLS);
-	key_box->SetSelection(static_cast<int>(pane->GetSortKey()));
+	if (!sort_mode_dialog::Run(this, options, !pane->IsResultList())) return;
+	options = sort_mode::Normalize(options);
+	if (options.mode == sort_mode::Mode::None ||
+	    options.dir_mode == sort_mode::DirectoryMode::Icon) {
+		SetStatusWarning(_T("ソートなし/アイコン順は未移植 (未実装処理) です"));
+		return;
+	}
+	sort_options_[active] = options;
+	apply(active, options);
+	if (options.both) {
+		sort_options_[1 - active] = options;
+		apply(1 - active, options);
+	}
 
-	wxCheckBox *desc_box = new wxCheckBox(&dlg, wxID_ANY, to_wx(_T("降順")));
-	desc_box->SetValue(pane->IsSortDescending());
-
-	wxCheckBox *dirs_box = new wxCheckBox(&dlg, wxID_ANY, to_wx(_T("ディレクトリを先に集める")));
-	dirs_box->SetValue(pane->IsDirsFirst());
-
-	wxBoxSizer *top = new wxBoxSizer(wxVERTICAL);
-	top->Add(key_box, wxSizerFlags().Expand().Border(wxALL, 8));
-	top->Add(desc_box, wxSizerFlags().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
-	top->Add(dirs_box, wxSizerFlags().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
-	top->Add(dlg.CreateButtonSizer(wxOK | wxCANCEL), wxSizerFlags().Expand().Border(wxALL, 8));
-	dlg.SetSizerAndFit(top);
-	dlg.CentreOnParent();
-
-	if (dlg.ShowModal() != wxID_OK) return;
-
-	pane->SetSortSettings(static_cast<SortKey>(key_box->GetSelection()), desc_box->GetValue(), dirs_box->GetValue());
+	// VCL の SortModeDlg は現在の値を ini に残す。wx 版も専用キーへ保存する。
+	settings_.Ini().WriteIntGen(_T("SortMode"), sort_mode::ToIndex(options.mode));
+	settings_.Ini().WriteIntGen(_T("DirSortMode"), sort_mode::ToIndex(options.dir_mode));
+	settings_.Ini().WriteBoolGen(_T("SortNatural"), options.natural);
+	settings_.Ini().WriteBoolGen(_T("SortBoth"), options.both);
+	settings_.Ini().WriteBoolGen(_T("SortLogical"), options.logical);
+	settings_.Ini().WriteStrGen(_T("SortExtList"), options.extension_list);
+	settings_.Save();
+	StoreCurrentTabState();
+	UpdateStatus();
 }
 
 //---------------------------------------------------------------------------
@@ -4942,7 +5487,7 @@ void MainFrame::ShowInputDirDialog()
  * 結果 (成功/スキップ/失敗の件数) を表示する。ディレクトリの再帰コピー・
  * 上書き回避の判断は gui/file_ops.h を参照
  */
-void MainFrame::CmdCopy()
+void MainFrame::CmdCopy(const UnicodeString &param)
 {
 	// 反対側がワークリストなら、コピーではなく**登録**になる
 	// (MainFrm.cpp:28355 と同じ)。ファイルは動かさない
@@ -4959,13 +5504,19 @@ void MainFrame::CmdCopy()
 	}
 
 	const UnicodeString dst_dir = dst_pane->GetPath();
+	const SameNameAction same_name_action = AskSameNameConflict(this, pane, dst_pane);
+	if (same_name_action != SameNameAction::Proceed) return;
 	if (!ConfirmItems(this, _T("コピー"), _T("コピー"), names, dst_dir)) return;
 
 	// 結果リストの項目は一覧のディレクトリの外にあるので、名前ではなく
 	// フルパスで取る (GetPath() + 名前 だと別のファイルを指す)
 	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
+	bool proceed = true;
+	const file_ops::ConflictPolicy policy = choose_pre_same_policy(
+		this, param, paths, dst_dir, _T("コピー"), proceed);
+	if (!proceed) return;
 
-	const file_ops::FileOpResult result = file_ops::CopyItems(paths, dst_dir);
+	const file_ops::FileOpResult result = file_ops::CopyItems(paths, dst_dir, policy);
 
 	pane->Reload();
 	dst_pane->Reload();
@@ -4980,7 +5531,7 @@ void MainFrame::CmdCopy()
  * @details Copy と同じ対象の決め方・確認・結果表示。ディレクトリの移動が
  * ボリュームを跨ぐ場合は失敗として報告する (gui/file_ops.h を参照)
  */
-void MainFrame::CmdMove()
+void MainFrame::CmdMove(const UnicodeString &param)
 {
 	if (RejectIfOppositeIsResultList(_T("移動"))) return;
 
@@ -4994,13 +5545,19 @@ void MainFrame::CmdMove()
 	}
 
 	const UnicodeString dst_dir = dst_pane->GetPath();
+	const SameNameAction same_name_action = AskSameNameConflict(this, pane, dst_pane);
+	if (same_name_action != SameNameAction::Proceed) return;
 	if (!ConfirmItems(this, _T("移動"), _T("移動"), names, dst_dir)) return;
 
 	// 結果リストの項目は一覧のディレクトリの外にあるので、名前ではなく
 	// フルパスで取る (GetPath() + 名前 だと別のファイルを指す)
 	const std::vector<UnicodeString> paths = pane->GetSelectedPaths();
+	bool proceed = true;
+	const file_ops::ConflictPolicy policy = choose_pre_same_policy(
+		this, param, paths, dst_dir, _T("移動"), proceed);
+	if (!proceed) return;
 
-	const file_ops::FileOpResult result = file_ops::MoveItems(paths, dst_dir);
+	const file_ops::FileOpResult result = file_ops::MoveItems(paths, dst_dir, policy);
 
 	pane->Reload();
 	dst_pane->Reload();
@@ -5255,7 +5812,30 @@ void MainFrame::CmdPropertyDlg()
 	if (itm == nullptr || itm->is_parent) return;
 
 	const UnicodeString full_path = pane->FullPathOf(*itm);
-	ShowFileInfoDialog(this, full_path, *itm);
+	const file_info_dialog::Result result = file_info_dialog::Run(this, full_path, *itm);
+	if (result.outcome == file_info_dialog::Outcome::OpenLocation) {
+		CmdJumpTo(result.path);
+	}
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief CSV/TSV 項目の集計ダイアログ (CsvCalc)
+ * @details VCL は MainFrm.cpp:33828-33834 で FileInfoDlg に TxtViewer の
+ *          DataList/TopIsHeader/CsvCol を渡す。wx の行単位ビューアには列カーソルが
+ *          無いので、未移植 (未実装扱い) として最初の数値列を自動選択する。
+ */
+void MainFrame::CmdCsvCalc()
+{
+	if (viewer_ == nullptr || !viewer_->IsShown() || viewer_->IsBinary()) {
+		SetStatusWarning(_T("CSV/TSV の集計はテキストビューア表示中だけ実行できます"));
+		return;
+	}
+
+	const std::vector<UnicodeString> &rows = viewer_->DocumentLines();
+	const int column = file_info::ResolveNumericColumn(rows, -1, /*top_is_header=*/false);
+	const file_info::ColumnStats stats = file_info::AnalyzeColumn(rows, column, false);
+	file_info_dialog::Run(this, stats);
 }
 
 //---------------------------------------------------------------------------
@@ -5422,6 +6002,113 @@ void MainFrame::ShowViewer(bool show)
 	}
 	Layout();
 	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 関数/ユーザー定義文字列/マーク行一覧を表示する
+ * @details VCL の実呼び出しは `src/MainFrm.cpp:33040-33045` (モード分岐)、
+ *          `33600-33637` (FF/FZ、FileEdit要求) として実測した。wx 側の
+ *          `TextViewer` は行単位の簡略版なので、関数名パターンは拡張子ごとの
+ *          保守的な規則で判定している (gui/function_list.h の未実装コメント参照)。
+ */
+void MainFrame::CmdFunctionList(function_list::Mode mode, const UnicodeString &param)
+{
+	if (viewer_ == nullptr || !viewer_->IsShown()) {
+		SetStatusWarning(_T("テキストビューアを表示してください"));
+		return;
+	}
+	const bool has_marks = !viewer_->Marks().empty();
+	if (!function_list::IsAvailable(mode, true, has_marks)) {
+		SetStatusWarning(_T("マーク行がありません"));
+		return;
+	}
+
+	function_list::Source source;
+	source.file_name = viewer_->FileName();
+	source.lines = viewer_->Lines();
+	source.marks = viewer_->Marks();
+	source.current_line = viewer_->CurrentLine();
+	const UnicodeString ext = get_extension(source.file_name);
+	source.is_dfm = SameText(ext, _T(".dfm"));
+	if (test_FileExt(ext, FEXT_C_SRC) || test_FileExt(ext, FEXT_C_HDR)) {
+		source.function_pattern = _T("^[A-Za-z_][A-Za-z0-9_:<>~]*\\s*\\(");
+	}
+	else if (test_FileExt(ext, _T(".pas.dpr.dpk.inc"))) {
+		source.function_pattern = _T("^\\s*(procedure|function|constructor|destructor)\\b");
+	}
+	source.name_pattern = _T("^[A-Za-z_][A-Za-z0-9_]*");
+
+	function_list::Options options;
+	options.mode = function_list::NormalizeMode(static_cast<int>(mode));
+	const function_list::CommandOptions command = function_list::ParseCommandOptions(param);
+	options.to_filter = command.to_filter;
+	options.fuzzy = command.fuzzy;
+	options.regex = settings_.Ini().ReadBoolGen(_T("FuncListRegEx"));
+	options.name_only = settings_.Ini().ReadBoolGen(_T("FuncListNameOnly"));
+	options.link = settings_.Ini().ReadBoolGen(_T("FuncListLinkLine"), true);
+	source.user_pattern = pending_user_def_.IsEmpty()
+		? settings_.Ini().ReadStrGen(_T("FuncListUserStr")) : pending_user_def_;
+	source.user_regex = options.regex;
+
+	function_list_dialog::Result result;
+	if (!function_list_dialog::Run(this, source, options, result)) return;
+	if (result.line_no >= 0) viewer_->GotoLine(result.line_no);
+
+	settings_.Ini().WriteStrGen(_T("FuncListUserStr"), result.user_pattern);
+	settings_.Ini().WriteBoolGen(_T("FuncListNameOnly"), result.name_only);
+	settings_.Ini().WriteBoolGen(_T("FuncListLinkLine"), result.link);
+	settings_.Ini().WriteBoolGen(_T("FuncListRegEx"), result.regex);
+	settings_.Save();
+	pending_user_def_ = EmptyStr;
+
+	if (result.request_edit) {
+		// VCL は FileEditV を投げる (FuncDlg.cpp:569-573)。既存の
+		// FileEdit 実装へ渡す。
+		Execute(cmd_list::MakeEditCommand(viewer_->FileName()));
+	}
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief コマンドファイル一覧 (FVI:CmdFileList) を開く
+ * @details VCL の `src/MainFrm.cpp:14426-14432` を実測。`OptDlg`/`BtnDlg` の
+ *          ShowToSelect 経路 (OptDlg.cpp:2615-2633,3693-3697,4155-4160、
+ *          BtnDlg.cpp:209-211) は設定画面未移植のため現時点では到達不能。
+ *          新規コマンドは作らず、実在する CmdFileList のみを配線する。
+ */
+void MainFrame::CmdFileList(const UnicodeString &param)
+{
+	cmd_list::Options options;
+	options.to_filter = f_misc_ops::HasParamToken(param, _T("FF"));
+	options.confirm_execute = settings_.Ini().ReadBoolGen(_T("CmdFileListCnfExe"));
+	options.preview = settings_.Ini().ReadBoolGen(_T("CmdFileListPreview"));
+	const FileItem *current = ActivePane()->GetCurrentItem();
+	if (current != nullptr && !current->is_parent && cmd_list::IsCommandFile(current->name)) {
+		options.initial_file = ActivePane()->FullPathOf(*current);
+	}
+
+	const std::vector<cmd_list::Entry> entries = cmd_list_dialog::Enumerate(ExePath);
+	if (entries.empty()) {
+		SetStatusWarning(_T("コマンドファイルがありません"));
+		return;
+	}
+	cmd_list::Result result;
+	if (!cmd_list_dialog::Run(this, entries, options, result)) return;
+	settings_.Ini().WriteBoolGen(_T("CmdFileListPreview"), result.preview);
+	settings_.Ini().WriteBoolGen(_T("CmdFileListMigemo"), result.fuzzy);
+	settings_.Save();
+	if (result.action == cmd_list::Action::Execute) {
+		// VCL は CmdRequestList へ "ExeCommands_\"@...\"" を積む
+		// (CmdListDlg.cpp:399-401)。GUI には ExeCommandsCore の移植が
+		// ないため、要求解決コマンドをログに残して停止する (未実装扱い)。
+		const UnicodeString request = cmd_list::MakeExecutionCommand(result.path);
+		log_.Add(log_win::LogStatus::Info, _T("実行要求: ") + request, /*show_time=*/true);
+		SetStatusWarning(_T("コマンドファイルの実行は未移植です (要求を記録しました)"));
+	}
+	else if (result.action == cmd_list::Action::Edit) {
+		Execute(cmd_list::MakeEditCommand(result.path));
+	}
 }
 
 //---------------------------------------------------------------------------
@@ -6453,32 +7140,38 @@ void MainFrame::CmdFindMark()
  * @details 既定値は**対象すべてに共通のタグ**。食い違っていれば空にする
  *          (VCL の SetTagActionExecute と同じ)
  */
-void MainFrame::CmdSetTag(bool add)
+void MainFrame::CmdSetTag(bool add, const UnicodeString &param)
 {
 	const std::vector<UnicodeString> paths = TargetPaths();
 	if (paths.empty()) { SetStatusWarning(_T("対象がありません")); return; }
 
 	TagManager *tm = Tags();
 
-	UnicodeString def;
+	UnicodeString initial;
 	if (!add) {
 		bool first = true;
 		for (const UnicodeString &p : paths) {
-			const UnicodeString t = tm->GetTags(p);
-			if (first) { def = t; first = false; }
-			else if (!SameText(def, t)) { def = EmptyStr; break; }
+			const UnicodeString current = tm->GetTags(p);
+			if (first) { initial = current; first = false; }
+			else if (!SameText(initial, current)) { initial = EmptyStr; break; }
 		}
 	}
 
-	inp_ex::Values values;
-	values.prompt = _T("タグ (空白区切り)");
-	values.value = def;
-	if (!RunInputEx(add ? inp_ex::Mode::AddTag : inp_ex::Mode::SetTag, values)) return;
+	const tag::Mode mode = add? tag::Mode::Add : tag::Mode::Set;
+	tag::InputPlan plan = tag::ResolveInput(mode, param, initial);
+	if (plan.show_dialog) {
+		tag::Options options;
+		options.mode = mode;
+		options.tags = plan.tags;
+		options.and_match = plan.and_match;
+		if (!tag_dialog::Run(this, *tm, options)) return;
+		plan.tags = options.tags;
+	}
 
-	const UnicodeString tags = values.value;
-	// 追加のときは空を弾く (足すものが無い)。設定のときは空で「全部消す」
+	// VCL は入力無しで TagManDlg、それ以外は ActionParam をそのまま使う
+	// (MainFrm.cpp:13422-13448 / 25804-25850)。
+	const UnicodeString tags = tm->NormTags(plan.tags, /*sw_add=*/true);
 	if (add && tags.IsEmpty()) return;
-
 	for (const UnicodeString &p : paths) {
 		if (add) tm->AddTags(p, tags); else tm->SetTags(p, tags);
 	}
@@ -6512,47 +7205,92 @@ void MainFrame::CmdDelTag()
 }
 
 //---------------------------------------------------------------------------
-void MainFrame::CmdTagSelect()
+void MainFrame::CmdTagSelect(const UnicodeString &param)
 {
-	inp_ex::Values values;
-	values.prompt = _T("タグ (空白区切り。すべて含むものを選びます)");
-	values.value = EmptyStr;
-	if (!RunInputEx(inp_ex::Mode::TagSelect, values)) return;
-	const UnicodeString input = values.value;
-	if (input.IsEmpty()) return;
 
 	TagManager *tm = Tags();
+	tag::InputPlan plan = tag::ResolveInput(tag::Mode::Select, param, EmptyStr);
+	bool select_mask = false;
+	if (plan.show_dialog) {
+		tag::Options options;
+		options.mode = tag::Mode::Select;
+		options.tags = plan.tags;
+		options.and_match = plan.and_match;
+		if (!tag_dialog::Run(this, *tm, options)) return;
+		plan.tags = options.tags;
+		plan.and_match = options.and_match;
+		select_mask = options.select_mask;
+	}
+
+	const UnicodeString tags = tm->NormTags(plan.tags, /*sw_add=*/false);
+	if (!plan.match_all && tags.IsEmpty()) return;
+
+	// VCL は MainFrm.cpp:26729-26780 で dialog/ActionParam を分岐し、
+	// SelMask 指定時だけ一致項目以外を一覧から隠す。
 	FilePane *pane = ActivePane();
 	std::vector<FileItem> items = pane->VisibleItems();
-
-	int first = -1, hit = 0;
+	int first = -1;
+	int hit = 0;
+	UnicodeString mask;
 	for (std::size_t i = 0; i < items.size(); ++i) {
 		if (items[i].is_parent || items[i].is_separator) continue;
-		const bool on = tm->Match(pane->FullPathOf(items[i]), input, /*and_sw=*/true);
+		const UnicodeString path = pane->FullPathOf(items[i]);
+		const bool on = plan.match_all? tm->HasTag(path) : tm->Match(path, tags, plan.and_match);
 		items[i].marked = on;
-		if (on) { ++hit; if (first < 0) first = static_cast<int>(i); }
+		if (on) {
+			++hit;
+			if (first < 0) first = static_cast<int>(i);
+			if (select_mask) {
+				if (!mask.IsEmpty()) mask += _T(";");
+				mask += items[i].name;
+			}
+		}
 	}
 	pane->ApplyMarks(items);
-
-	if (first < 0) { SetStatusWarning(_T("一致する項目がありません")); return; }
+	if (first == -1) { SetStatusWarning(_T("一致する項目がありません")); return; }
+	if (select_mask) pane->SetMask(mask);
 	pane->MoveCursorTo(first);
 	SetStatusWarning(UnicodeString().sprintf(_T("%d 件を選択しました"), hit));
 	UpdateStatus();
 }
 
 //---------------------------------------------------------------------------
-void MainFrame::CmdFindTag()
+void MainFrame::CmdFindTag(const UnicodeString &param)
 {
-	inp_ex::Values values;
-	values.prompt = _T("タグ (空白区切り。すべて含むものを集めます)");
-	values.value = EmptyStr;
-	if (!RunInputEx(inp_ex::Mode::FindTag, values)) return;
-	const UnicodeString input = values.value;
-	if (input.IsEmpty()) return;
+	TagManager *tm = Tags();
+	tag::InputPlan plan = tag::ResolveInput(tag::Mode::Find, param, EmptyStr);
+	bool resolve_links = false;
+	if (plan.show_dialog) {
+		tag::Options options;
+		options.mode = tag::Mode::Find;
+		options.tags = plan.tags;
+		options.and_match = plan.and_match;
+		if (!tag_dialog::Run(this, *tm, options)) return;
+		plan.tags = options.tags;
+		plan.and_match = options.and_match;
+		resolve_links = options.resolve_links;
+	}
+	if (resolve_links) {
+		SetStatusWarning(_T("リソースリンクの解決は未移植ですが、指定されたタグの検索を実行します"));
+	}
 
+	const UnicodeString tags = tm->NormTags(plan.tags, /*sw_add=*/false);
+	if (!plan.match_all && tags.IsEmpty()) return;
+
+	// VCL は MainFrm.cpp:19087-19129 で dialog/ActionParam を分岐する。
+	// wx 側にも「*」の全タグ一致の解決処理を gui/tag.h へ置いている。
 	std::unique_ptr<TStringList> hits(new TStringList());
-	const int n = Tags()->GetMatchList(input, /*and_sw=*/true, hits.get());
-	if (n == 0) { SetStatusWarning(_T("一致する項目がありません")); return; }
+	int hit_count = 0;
+	if (plan.match_all) {
+		std::unique_ptr<TStringList> all(new TStringList());
+		tm->GetAllList(all.get());
+		for (int i = 0; i < all->Count; ++i) hits->Add(get_pre_tab(all->Strings[i]));
+		hit_count = hits->Count;
+	}
+	else {
+		hit_count = tm->GetMatchList(tags, plan.and_match, hits.get());
+	}
+	if (hit_count == 0) { SetStatusWarning(_T("一致する項目がありません")); return; }
 
 	std::vector<FileItem> items;
 	int gone = 0;
@@ -6572,7 +7310,8 @@ void MainFrame::CmdFindTag()
 	if (items.empty()) { SetStatusWarning(_T("一致した項目は実体がありません")); return; }
 
 	UnicodeString title;
-	title.sprintf(_T("タグ: %s  (%d 件"), input.c_str(), static_cast<int>(items.size()));
+	title.sprintf(_T("タグ%s: %s  (%d 件"), plan.and_match? _T("(AND)") : _T("(OR)"),
+	              tags.c_str(), static_cast<int>(items.size()));
 	// 実体が消えていた分を黙って落とさない
 	if (gone > 0) title.cat_sprintf(_T(" / %d 件は実体なし"), gone);
 	title += _T(")");
@@ -6765,11 +7504,17 @@ void MainFrame::CmdDelSelMask()
  *          `find_files::Search` (gui/find_files.h) に載せる。中身は同じ
  *          「カレント配下を再帰的に走査して名前が一致するものを集める」
  */
-void MainFrame::CmdMaskFind()
+void MainFrame::CmdMaskFind(const UnicodeString &param)
 {
-	const wxString input = wxGetTextFromUser(
-		to_wx(_T("マスクを入力してください (末尾が \\ ならディレクトリだけ)")),
-		to_wx(_T("マスクで検索")), to_wx(_T("*")), this);
+	wxString input;
+	if (param.IsEmpty()) {
+		input = wxGetTextFromUser(
+			to_wx(_T("マスクを入力してください (末尾が \\ ならディレクトリだけ)")),
+			to_wx(_T("マスクで検索")), to_wx(_T("*")), this);
+	}
+	else {
+		input = to_wx(param);
+	}
 	if (input.IsEmpty()) return;
 
 	FilePane *pane = ActivePane();
@@ -8072,34 +8817,104 @@ void MainFrame::CmdDeleteADS()
 //---------------------------------------------------------------------------
 
 /**
- * @brief 反対側へバックアップ予約 (Backup)
- * @details VCL (MainFrm.cpp:13645) は BACKUP タスクを発行するが、実コピーの
- *          スレッドは未移植のため、経路の検証 (ValidateBackupPaths) と
- *          確認のうえログへ予約を記録する簡略版にした。**コピーは行わない**
+ * @brief バックアップ設定/予約 (Backup)
+ * @details VCL は `src/MainFrm.cpp:13715-13755` で TBackupDlg を開き、
+ *          マスク・除外・同期・日付条件を取得して Backup タスクを発行する。
+ *          設定の保存/CSV/同期先解決は gui/backup_settings、入力は
+ *          gui/backup_dialog が担当する。
+ *
+ *          未移植 (未実装扱い): TTaskThread による実コピー、タスク進捗、
+ *          設定履歴の永続化。操作は設定の検証・確認・予約ログに留める。
  */
 void MainFrame::CmdBackup(const UnicodeString &param)
 {
-	(void)param;  // VCL は設定名を受けて即時実行する分岐があるが、設定表が無いため常に確認する
 	FilePane *pane = ActivePane();
 	FilePane *opp = OppositePane();
 	if (pane->IsResultList() || opp->IsResultList()) {
 		SetStatusWarning(_T("結果リスト上では操作できません"));
 		return;
 	}
+
+	backup_settings::Options options;
+	options.include_mask = settings_.Ini().ReadStrGen(_T("BackupIncMask"), _T("*"));
+	options.exclude_mask = settings_.Ini().ReadStrGen(_T("BackupExcMask"));
+	options.skip_dirs = settings_.Ini().ReadStrGen(_T("BackupSkipDir"));
+	options.sub_dirs = settings_.Ini().ReadBoolGen(_T("BackupSubDir"));
+	options.mirror = settings_.Ini().ReadBoolGen(_T("BackupMirror"));
+	options.sync = settings_.Ini().ReadBoolGen(_T("BackupSync"));
+	options.date_condition = settings_.Ini().ReadStrGen(_T("BackupDateCond"));
+	options.confirm = settings_.Ini().ReadBoolGen(_T("BackupSureStart"), true);
+
+	std::vector<backup_settings::Setup> setups;
+	const int setup_count = settings_.Ini().ReadInteger(_T("WxGuiBackup"), _T("Count"), 0);
+	for (int i = 0; i < setup_count; ++i) {
+		UnicodeString key;
+		const UnicodeString record = settings_.Ini().ReadString(
+			_T("WxGuiBackup"), key.sprintf(_T("Item%02d"), i), EmptyStr, false);
+		backup_settings::Setup setup;
+		if (!record.IsEmpty() && backup_settings::ParseSetupRecord(record, setup)) setups.push_back(setup);
+	}
+	int selected = settings_.Ini().ReadIntGen(_T("BakupSetupIdx"), -1);
+	if (selected >= 0 && selected < static_cast<int>(setups.size())) {
+		options = setups[static_cast<std::size_t>(selected)].options;
+	}
+
+	UnicodeString setup_name;
+	if (!param.Trim().IsEmpty()) {
+		const int found = backup_settings::FindSetupIndex(setups, param);
+		if (found < 0) {
+			SetStatusWarning(_T("バックアップ設定が見つかりません: ") + param);
+			return;
+		}
+		selected = found;
+		setup_name = setups[static_cast<std::size_t>(found)].name;
+		options = setups[static_cast<std::size_t>(found)].options;
+	}
+	else {
+		backup_dialog::Context context;
+		context.source_dir = pane->GetPath();
+		context.dest_dir = opp->GetPath();
+		context.sync_settings = syncdirs_.Items();
+		if (!backup_dialog::Run(this, context, options, setups, selected)) return;
+		if (selected >= 0 && selected < static_cast<int>(setups.size()))
+			setup_name = setups[static_cast<std::size_t>(selected)].name;
+	}
+
+	settings_.Ini().WriteStrGen(_T("BackupIncMask"), options.include_mask);
+	settings_.Ini().WriteStrGen(_T("BackupExcMask"), options.exclude_mask);
+	settings_.Ini().WriteStrGen(_T("BackupSkipDir"), options.skip_dirs);
+	settings_.Ini().WriteBoolGen(_T("BackupSubDir"), options.sub_dirs);
+	settings_.Ini().WriteBoolGen(_T("BackupMirror"), options.mirror);
+	settings_.Ini().WriteBoolGen(_T("BackupSync"), options.sync);
+	settings_.Ini().WriteStrGen(_T("BackupDateCond"), options.date_condition);
+	settings_.Ini().WriteBoolGen(_T("BackupSureStart"), options.confirm);
+	settings_.Ini().WriteIntGen(_T("BakupSetupIdx"), selected);
+	settings_.Ini().WriteInteger(_T("WxGuiBackup"), _T("Count"), static_cast<int>(setups.size()));
+	for (int i = 0; i < static_cast<int>(setups.size()); ++i) {
+		UnicodeString key;
+		settings_.Ini().WriteString(_T("WxGuiBackup"), key.sprintf(_T("Item%02d"), i),
+		                            backup_settings::FormatSetupRecord(setups[static_cast<std::size_t>(i)]));
+	}
+	settings_.Save();
+
 	UnicodeString error;
-	if (!f_misc_ops::ValidateBackupPaths(pane->GetPath(), opp->GetPath(), error)) {
+	if (!backup_settings::ValidateOptions(options, pane->GetPath(), opp->GetPath(), error)) {
 		SetStatusWarning(error);
 		return;
 	}
+	const auto targets = backup_settings::ResolveDestinations(
+		opp->GetPath(), options.sync, syncdirs_.Items());
 	UnicodeString msg;
-	msg.sprintf(_T("バックアップを予約しますか?\r\n\r\nバックアップ元: %s\r\nバックアップ先: %s"),
+	msg.sprintf(_T("バックアップ設定を記録しますか?\r\n\r\n元: %s\r\n先: %s"),
 	            pane->GetPath().c_str(), opp->GetPath().c_str());
-	if (wxMessageBox(to_wx(msg), to_wx(_T("バックアップ")),
-	                 wxYES_NO | wxICON_QUESTION, this) != wxYES) return;
+	if (!setup_name.IsEmpty()) msg += _T("\r\n設定: ") + setup_name;
+	if (targets.size() > 1) msg += _T("\r\n同期先: ") + IntToStr(static_cast<int>(targets.size() - 1));
+	if (options.confirm && wxMessageBox(to_wx(msg), to_wx(_T("バックアップ")),
+	                                    wxYES_NO | wxICON_QUESTION, this) != wxYES) return;
 	log_.Add(log_win::LogStatus::Info,
-	         _T("バックアップ予約: ") + pane->GetPath() + _T(" ---> ") + opp->GetPath(),
+	         _T("バックアップ設定予約: ") + pane->GetPath() + _T(" ---> ") + opp->GetPath(),
 	         /*show_time=*/true);
-	SetStatusWarning(_T("バックアップを予約しました (実コピーは未対応)"));
+	SetStatusWarning(_T("バックアップ設定を予約しました (実コピーは未移植)"));
 }
 
 /**
@@ -8515,26 +9330,40 @@ void MainFrame::CmdSetFolderIcon(const UnicodeString &param)
 
 /**
  * @brief フォルダアイコン検索 (FindFolderIcon)
- * @details VCL (MainFrm.cpp:18152) は TagManDlg で選ばせるが、ここでは
- *          最小UI (wxTextEntryDialog でアイコン名の一部を入力) を受け、
- *          実検索コア (FindFolderIconCore) は未移植のためログに残す
- *          簡略版にした
+ * @details VCL (MainFrm.cpp:18152-18172) は TagManDlg でアイコンを選ぶ。
+ *          移植ダイアログは FolderIcon.INI の実定義を読み、選択結果と
+ *          リソースリンク指定をログへ残す。実検索コアは未移植 (未実装扱い)。
  */
 void MainFrame::CmdFindFolderIcon()
 {
-	const wxString kw = wxGetTextFromUser(to_wx(_T("探すアイコン名 (一部)")),
-	                                      to_wx(_T("フォルダアイコン検索")), wxEmptyString, this);
-	if (kw.IsEmpty()) return;
+	const UnicodeString ini_path = ExtractFilePath(Application->ExeName) + _T("FolderIcon.INI");
+	const std::vector<UnicodeString> icons = tag::LoadFolderIcons(ini_path);
+	if (icons.empty()) {
+		SetStatusWarning(_T("FolderIcon.INI にアイコンが登録されていません"));
+		return;
+	}
+
+	tag::Options options;
+	options.mode = tag::Mode::FolderIcon;
+	if (!tag_dialog::Run(this, *Tags(), options, icons)) return;
+
 	UnicodeString error;
 	const UnicodeString path = ActivePane()->GetPath();
-	if (!f_misc_ops::ValidateFolderIconSearch(path, /*icons_empty=*/false, error)) {
+	if (!f_misc_ops::ValidateFolderIconSearch(path, options.tags.IsEmpty(), error)) {
 		SetStatusWarning(error);
 		return;
 	}
+	// VCL は MainFrm.cpp:18152-18172 で選択結果から FindFolderIconCore を呼ぶ。
+	// 未移植 (未実装扱い): FindFolderIconCore。条件は黙って捨てずログへ残す。
 	log_.Add(log_win::LogStatus::Info,
-	         _T("フォルダアイコン検索: ") + path + _T(" [") + UnicodeString(kw.wc_str()) + _T("] (実検索は未対応)"),
+	         _T("フォルダアイコン検索: ") + path + _T(" [") + options.tags + _T("] (実検索は未移植)"),
 	         /*show_time=*/true);
-	SetStatusWarning(_T("フォルダアイコン検索は未対応です (条件をログに記録しました)"));
+	if (options.resolve_links) {
+		SetStatusWarning(_T("リソースリンクの解決と実検索は未移植です (条件をログに記録しました)"));
+	}
+	else {
+		SetStatusWarning(_T("フォルダアイコン検索は未移植です (条件をログに記録しました)"));
+	}
 }
 
 /**
@@ -9413,36 +10242,127 @@ void MainFrame::CmdDebugCmdFile(const UnicodeString &param)
 
 /**
  * @brief 振り分けダイアログ (DistributionDlg)
- * @details VCL (MainFrm.cpp:16369) の XC/XM/SN は ResolveDistributionMode、
- *          書庫/ADS/Work/FTP ガードは CanUseDistributionDlg。
- *          振り分けダイアログとコピー/移動タスクは未移植のため警告のみ。
- *          .ini 指定は IsDistrIniFile で検出してログに残す
+ * @details VCL (MainFrm.cpp:16369-16419) の実測を基に、wx ダイアログ、
+ *          プレビュー、既存 file_ops への実処理まで接続する。XC/XM/SN の
+ *          優先順位は f_batch7_ops::ResolveDistributionMode に残した。
+ *
+ *          未移植 (未実装扱い): VCL の進捗バー/ListFile の編集 UI、
+ *          \DT/\TS/\XT/\Z の日時書式、DistributionDlg 用の TaskConfig
+ *          (ここでは file_ops の項目単位処理に委譲)。
  */
 void MainFrame::CmdDistributionDlg(const UnicodeString &param)
 {
-	// 特殊リストの状態は未移植のため false (通常の一覧として扱う)
+	// 特殊リストの状態は未移植のため false (通常の一覧として扱う)。ワークリストだけは
+	// MainFrame 自身が保持しているので実測できる。
 	if (!f_batch7_ops::CanUseDistributionDlg(/*is_arc=*/false, /*is_ads=*/false,
-	                                         /*is_work=*/false, /*is_ftp=*/false)) {
+	                                         /*is_work=*/WorkPane() != nullptr, /*is_ftp=*/false)) {
 		SetStatusWarning(_T("操作できません"));
 		return;
 	}
-	if (f_batch7_ops::IsDistrIniFile(param))
-		log_.Add(log_win::LogStatus::Info,
-		         _T("振り分け登録ファイル: ") + param, /*show_time=*/true);
-	switch (f_batch7_ops::ResolveDistributionMode(param)) {
-	case f_batch7_ops::DistributionMode::ImmediateCopy:
-		SetStatusWarning(_T("振り分けの即時コピーは未対応です"));
-		break;
-	case f_batch7_ops::DistributionMode::ImmediateMove:
-		SetStatusWarning(_T("振り分けの即時移動は未対応です"));
-		break;
-	case f_batch7_ops::DistributionMode::SetMask:
-		SetStatusWarning(_T("振り分けのマスク設定は未対応です"));
-		break;
-	case f_batch7_ops::DistributionMode::Dialog:
-		SetStatusWarning(_T("振り分けダイアログは未対応です"));
-		break;
+
+	FilePane *pane = ActivePane();
+	std::vector<distribution::Input> items;
+	for (const FileItem &item : pane->GetSelectedItems()) {
+		if (item.is_parent || item.is_separator || item.missing) continue;
+		UnicodeString path = pane->FullPathOf(item);
+		if (item.is_dir) path = IncludeTrailingPathDelimiter(path);
+		items.push_back({path, item.is_dir});
 	}
+	if (items.empty()) {
+		SetStatusWarning(_T("振り分け対象がありません"));
+		return;
+	}
+
+	distribution::Options initial;
+	initial.opposite_path = OppositePane()->GetPath();
+	initial.create_directories = settings_.Ini().ReadBoolGen(_T("DistrDlgCreDir"), true);
+	const int mode_no = settings_.Ini().ReadIntGen(_T("DistrDlgCopyMode"), 2);
+	initial.copy_mode = static_cast<distribution::CopyMode>(std::clamp(mode_no, 0, 3));
+
+	const f_batch7_ops::DistributionMode command_mode = f_batch7_ops::ResolveDistributionMode(param);
+	initial.move = command_mode == f_batch7_ops::DistributionMode::ImmediateMove;
+
+	std::vector<distribution::Rule> rules;
+	std::unique_ptr<TStringList> stored(new TStringList());
+	if (f_batch7_ops::IsDistrIniFile(param)) {
+		try {
+			std::unique_ptr<UsrIniFile> registration(new UsrIniFile(to_absolute_name(param)));
+			registration->LoadListItems(_T("DistrDefList"), stored.get(), 200, false);
+		}
+		catch (...) {
+			SetStatusWarning(_T("振り分け登録ファイルを読み込めません: ") + param);
+			return;
+		}
+	}
+	else {
+		settings_.Ini().ReadSection(_T("DistrDefList"), stored.get());
+	}
+	for (int i = 0; i < stored->Count; ++i) rules.push_back(distribution::ParseRule(stored->Strings[i]));
+
+	distribution_dialog::Result result;
+	if (!distribution_dialog::Run(this, items, rules, initial, result)) return;
+
+	// 登録と表示オプションを保存する。外部 .ini 指定時は VCL と同じ
+	// DistrDefList セクションへ保存し、GUI 設定にも現在値を保存する。
+	std::unique_ptr<TStringList> save_rules(new TStringList());
+	for (const distribution::Rule &rule : result.rules) save_rules->Add(distribution::MakeRuleRecord(rule));
+	if (f_batch7_ops::IsDistrIniFile(param)) {
+		try {
+			std::unique_ptr<UsrIniFile> registration(new UsrIniFile(to_absolute_name(param)));
+			registration->SaveListItems(_T("DistrDefList"), save_rules.get(), 200);
+			if (!registration->UpdateFile()) SetStatusWarning(_T("振り分け登録ファイルを保存できませんでした"));
+		}
+		catch (...) {
+			SetStatusWarning(_T("振り分け登録ファイルの保存に失敗しました"));
+		}
+	}
+	settings_.Ini().AssignSection(_T("DistrDefList"), save_rules.get());
+	settings_.Ini().WriteIntGen(_T("DistrDlgCopyMode"), static_cast<int>(result.options.copy_mode));
+	settings_.Ini().WriteBoolGen(_T("DistrDlgCreDir"), result.options.create_directories);
+	settings_.Save();
+
+	if (command_mode == f_batch7_ops::DistributionMode::ImmediateCopy ||
+	    command_mode == f_batch7_ops::DistributionMode::ImmediateMove) {
+		// VCL は InitialImmediateExe でダイアログを自動終了するが、wx 版は
+		// 必ず Copy/Move ボタンで確定する。自動実行は未移植 (未実装扱い)。
+		SetStatusWarning(_T("XC/XM の自動実行は未実装です。Copy/Move を確認して実行してください"));
+	}
+	if (command_mode == f_batch7_ops::DistributionMode::SetMask) {
+		SetStatusWarning(_T("SN のマスク事前設定は未実装です。ダイアログで登録してください"));
+	}
+
+	file_ops::FileOpResult operation;
+	const file_ops::ConflictPolicy policy = distribution::ConflictPolicyFor(result.options.copy_mode);
+	int format_skips = 0;
+	for (const distribution::PreviewItem &row : result.preview.items) {
+		if (row.skipped) continue;
+		UnicodeString target = row.destination;
+		// VCL は拡張子なしの振分先をディレクトリとして扱う。実ファイル名を
+		// 補って既存 file_ops の「同名名」経路へ渡す。
+		if (get_extension(target).IsEmpty()) {
+			target = IncludeTrailingPathDelimiter(target) + ExtractFileName(row.source);
+		}
+		const UnicodeString source_name = ExtractFileName(ExcludeTrailingPathDelimiter(row.source));
+		if (!SameText(ExtractFileName(target), source_name)) {
+			++format_skips;
+			operation.failures.push_back(row.source + _T(": 宛先名書式の変更は未実装 (未実装扱い)"));
+			continue;
+		}
+		const UnicodeString dest_dir = ExtractFilePath(ExcludeTrailingPathDelimiter(target));
+		const file_ops::FileOpResult one = result.options.move
+			? file_ops::MoveItems({row.source}, dest_dir, policy)
+			: file_ops::CopyItems({row.source}, dest_dir, policy);
+		operation.success_count += one.success_count;
+		operation.skipped_existing += one.skipped_existing;
+		operation.failures.insert(operation.failures.end(), one.failures.begin(), one.failures.end());
+	}
+	panes_[0]->Reload();
+	panes_[1]->Reload();
+	wxMessageBox(to_wx(file_ops::Summarize(operation) +
+	                   (format_skips > 0? UnicodeString(_T("\n書式変更の未処理: ")) + IntToStr(format_skips) : EmptyStr)),
+	             to_wx(result.options.move? _T("振り分け移動の結果") : _T("振り分けコピーの結果")),
+	             wxOK | wxICON_INFORMATION, this);
+	UpdateStatus();
 }
 
 /**
