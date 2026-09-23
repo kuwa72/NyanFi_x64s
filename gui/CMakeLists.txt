@@ -94,6 +94,8 @@ add_executable(nyanfi
 	gen_info_dialog.cpp
 	diff_dialog.cpp
 	comp_dialog.cpp
+	drive_select_dialog.cpp
+	task_man_dialog.cpp
 	sort_mode_dialog.cpp
 	pack_dialog.cpp
 	backup_dialog.cpp

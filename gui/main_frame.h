@@ -113,7 +113,7 @@ private:
 
 	// ディレクトリ履歴・ドライブ一覧・パス直接入力 (gui/navigation.h)
 	void ShowDirHistoryDialog(const UnicodeString &param = EmptyStr);  //!< ディレクトリ履歴の一覧から選ぶ (H)
-	void ShowDriveListDialog();   //!< ドライブの一覧から選ぶ (L)
+	void ShowDriveListDialog(const UnicodeString &param = EmptyStr); //!< ドライブの一覧から選ぶ (L)
 	void ShowInputDirDialog();    //!< パスを直接入力して移動する (Ctrl+G、推測のキー)
 	/// VCL の TInputExDlg をモード付きで呼ぶ。OK なら values を確定する。
 	bool RunInputEx(inp_ex::Mode mode, inp_ex::Values &values);
@@ -381,6 +381,7 @@ private:
 	void CmdFindFolderIcon();                         //!< フォルダアイコン検索 (FindFolderIcon)
 	void CmdJumpTo(const UnicodeString &param);       //!< 指定したファイル位置へ (JumpTo)
 	void CmdTaskMan();                                //!< タスクマネージャ (TaskMan)
+	void ShowTaskManDialog();                         //!< TTaskManDlg の wx 実装を呼ぶ
 	void CmdSuspend(const UnicodeString &param);      //!< 予約項目の保留/解除 (Suspend)
 	void CmdPauseAllTask(const UnicodeString &param); //!< 全タスクの一旦停止/再開 (PauseAllTask)
 	void CmdCancelAllTask();                          //!< 全タスクの中断 (CancelAllTask)
@@ -448,6 +449,7 @@ private:
 
 	bool rsv_suspended_ = false;       //!< 予約の保留状態 (VCL RsvSuspended 相当)
 	std::vector<bool> task_paused_;    //!< タスクの一旦停止状態 (実スレッドは未移植のため空)
+	std::vector<bool> task_cancel_requested_; //!< タスクの中断要求状態 (実スレッドは未移植)
 	UnicodeString folder_icon_def_;    //!< 既定のフォルダアイコン (VCL DefFldIcoName 相当)
 
 	//-- 表示の切り替え (機能群22。判断は gui/view_settings.h) ------------------
