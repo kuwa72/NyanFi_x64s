@@ -302,6 +302,10 @@ if(TARGET nyanfi_core)
 		gui/f_batch5_ops.cpp
 		gui/f_batch6_ops.cpp
 		gui/f_batch7_ops.cpp
+		gui/sort_mode.cpp
+		gui/pack_settings.cpp
+		gui/backup_settings.cpp
+		gui/same_name.cpp
 		gui/grep_opt.cpp
 		gui/cv_img.cpp
 		gui/find_txt.cpp

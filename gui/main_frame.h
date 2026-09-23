@@ -51,6 +51,7 @@
 #include "gui/sync_dirs.h"
 #include "gui/color_settings.h"
 #include "gui/tab_settings.h"
+#include "gui/sort_mode.h"
 #include "gui/tabs.h"
 #include "gui/text_viewer.h"
 #include "gui/work_list.h"
@@ -81,7 +82,7 @@ private:
 	void UpdateStatus();
 	void ShowKeyList();
 	void ShowCmdList();
-	void ShowSortDialog();  //!< ソートダイアログ (S)。並べ替えキー/昇降順/Dir集約を選ぶ
+	void ShowSortDialog(const UnicodeString &param = EmptyStr);  //!< ソートダイアログ (SortDlg)。空なら入力ダイアログ
 	void ShowMaskDialog();  //!< パスマスク入力 (Ctrl+M)。ファイル名マスクで一覧を絞り込む
 
 	// インクリメンタルサーチ (gui/navigation.h の IncrementalSearch)。状態遷移は
@@ -635,6 +636,7 @@ private:
 	int active_ = 0;
 	KeyMap keymap_;
 	Settings settings_{Settings::DefaultIniPath()};
+	sort_mode::Options sort_options_[2];  //!< SrtModDlg の拡張設定 (タブの単一キーとは別)
 	IncrementalSearch incsearch_;  //!< インクリメンタルサーチの状態 (gui/navigation.h)
 	bool incsearch_migemo_ = false;  //!< サーチ中の Migemo 状態 (辞書が無い環境では常に false)
 	std::vector<UnicodeString> incsearch_history_;  //!< キーワード履歴 (上限 50、VCL の IncSeaHistory)

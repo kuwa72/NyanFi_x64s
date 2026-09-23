@@ -11,6 +11,7 @@
 #ifndef NYANFI_GUI_ARCHIVE_H
 #define NYANFI_GUI_ARCHIVE_H
 
+#include <array>
 #include <vector>
 
 namespace archive {
@@ -36,6 +37,12 @@ struct Entry {
 
 /// 書庫として扱える拡張子か (実際に開けるかは DLL の有無による)
 bool LooksLikeArchive(const UnicodeString &path);
+
+/**
+ * @brief 作成ダイアログで確認する書庫形式の利用可否
+ * @return ZIP, 7z, LHA, CAB, TAR の順。VCL の FormatRadioGroup の並びに対応する
+ */
+std::array<bool, 5> AvailableFormats();
 
 /**
  * @brief 書庫の中身を一覧する
