@@ -139,3 +139,58 @@ TEST_CASE("DiffDirectories: 空同士なら空")
 {
 	CHECK(compare::DiffDirectories({}, {}, compare::MatchBy::Name).empty());
 }
+
+TEST_CASE("ResolveDiffDirSource: AL/DL/空の分岐")
+{
+	// VCL DiffDirActionExecute (MainFrm.cpp:16480付近) と同じ分岐。
+	// AL=全件プリセット、DL=保存値プリセット、それ以外はダイアログ
+	CHECK(compare::ResolveDiffDirSource(_T("AL")) == compare::DiffDirSource::AllPreset);
+	CHECK(compare::ResolveDiffDirSource(_T("DL")) == compare::DiffDirSource::DefaultPreset);
+	CHECK(compare::ResolveDiffDirSource(_T("")) == compare::DiffDirSource::Dialog);
+	CHECK(compare::ResolveDiffDirSource(_T("CS")) == compare::DiffDirSource::Dialog);
+	CHECK(compare::ResolveDiffDirSource(_T("AL;CS")) == compare::DiffDirSource::AllPreset);
+}
+
+TEST_CASE("NormalizeDiffIncMask: 空は *.* (VCL FormClose と同じ)")
+{
+	CHECK(compare::NormalizeDiffIncMask(_T("")) == UnicodeString(_T("*.*")));
+	CHECK(compare::NormalizeDiffIncMask(_T("  ")) == UnicodeString(_T("*.*")));
+	CHECK(compare::NormalizeDiffIncMask(_T("*.cpp")) == UnicodeString(_T("*.cpp")));
+}
+
+TEST_CASE("IsDiffExcDirEnabled: サブディレクトリ対象のときだけ有効")
+{
+	// VCL StartActionUpdate (DiffDlg.cpp:89): 除外欄は SubDir のときだけ有効
+	CHECK(compare::IsDiffExcDirEnabled(true));
+	CHECK_FALSE(compare::IsDiffExcDirEnabled(false));
+}
+
+TEST_CASE("AllDiffPreset: 全件・サブディレクトリ込み (VCL AL 分岐)")
+{
+	const compare::DiffDirOptions o = compare::AllDiffPreset();
+	CHECK(o.inc_mask == UnicodeString(_T("*.*")));
+	CHECK(o.exc_mask.IsEmpty());
+	CHECK(o.exc_dir.IsEmpty());
+	CHECK(o.sub_dir);
+}
+
+TEST_CASE("DefaultDiffPreset: 保存値をそのまま使い対象マスクだけ正規化")
+{
+	const compare::DiffDirOptions o =
+		compare::DefaultDiffPreset(_T(""), _T("*.bak"), _T("bin"), true);
+	CHECK(o.inc_mask == UnicodeString(_T("*.*")));
+	CHECK(o.exc_mask == UnicodeString(_T("*.bak")));
+	CHECK(o.exc_dir == UnicodeString(_T("bin")));
+	CHECK(o.sub_dir);
+}
+
+TEST_CASE("FilterDiffItems: 対象に合い除外に合わないものだけ残す")
+{
+	const std::vector<FileItem> items = {f(_T("a.cpp")), f(_T("b.txt")), f(_T("c.bak")),
+	                                     parent(), d(_T("dir"))};
+	// 親 (..) とディレクトリは落とす。除外マスク *.bak も落とす
+	const auto r = compare::FilterDiffItems(items, _T("*.cpp;*.txt;*.bak"), _T("*.bak"));
+	REQUIRE(r.size() == 2);
+	CHECK(r[0].name == UnicodeString(_T("a.cpp")));
+	CHECK(r[1].name == UnicodeString(_T("b.txt")));
+}
