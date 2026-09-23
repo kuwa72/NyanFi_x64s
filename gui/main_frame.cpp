@@ -1977,7 +1977,9 @@ void MainFrame::CmdInputCommands()
 	// (MainFrm.cpp:19834)。こちらは文字列を受けて Execute へ回す簡略版。
 	// 履歴への追加は Execute の先頭で済んでいる
 	const std::vector<UnicodeString> &hist = hist_cmd_.Entries();
-	const wxString def = hist.empty()? wxEmptyString : to_wx(hist.front());
+	// wx 3.3 では wxEmptyString が const wchar_t* として返るため、三項演算子の
+	// 両辺の型がそろわない。空文字列は wxString() で生成する
+	const wxString def = hist.empty()? wxString() : to_wx(hist.front());
 
 	const wxString input = wxGetTextFromUser(
 		to_wx(_T("実行するコマンドを入力してください (例: SortDlg)")),
