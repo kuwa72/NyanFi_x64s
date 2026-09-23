@@ -7163,12 +7163,23 @@ void MainFrame::CmdSetTag(bool add, const UnicodeString &param)
 	const tag::Mode mode = add? tag::Mode::Add : tag::Mode::Set;
 	tag::InputPlan plan = tag::ResolveInput(mode, param, initial);
 	if (plan.show_dialog) {
-		tag::Options options;
-		options.mode = mode;
-		options.tags = plan.tags;
-		options.and_match = plan.and_match;
-		if (!tag_dialog::Run(this, *tm, options)) return;
-		plan.tags = options.tags;
+		// VCL は ActionParam が単独の ";" のときだけ TInputExDlg を使い、
+		// 引数なしは TTagManDlg に渡す (MainFrm.cpp:13422-13448)。
+		if (SameText(param, _T(";"))) {
+			inp_ex::Values values;
+			values.prompt = _T("タグ");
+			values.value = plan.tags;
+			if (!RunInputEx(add ? inp_ex::Mode::AddTag : inp_ex::Mode::SetTag, values)) return;
+			plan.tags = values.value;
+		}
+		else {
+			tag::Options options;
+			options.mode = mode;
+			options.tags = plan.tags;
+			options.and_match = plan.and_match;
+			if (!tag_dialog::Run(this, *tm, options)) return;
+			plan.tags = options.tags;
+		}
 	}
 
 	// VCL は入力無しで TagManDlg、それ以外は ActionParam をそのまま使う
@@ -7215,14 +7226,26 @@ void MainFrame::CmdTagSelect(const UnicodeString &param)
 	tag::InputPlan plan = tag::ResolveInput(tag::Mode::Select, param, EmptyStr);
 	bool select_mask = false;
 	if (plan.show_dialog) {
-		tag::Options options;
-		options.mode = tag::Mode::Select;
-		options.tags = plan.tags;
-		options.and_match = plan.and_match;
-		if (!tag_dialog::Run(this, *tm, options)) return;
-		plan.tags = options.tags;
-		plan.and_match = options.and_match;
-		select_mask = options.select_mask;
+		// ActionParam=";" は VCL の TInputExDlg 経路。通常のキー操作は
+		// TagManDlg の AND/OR・SelMask 設定を維持する。
+		if (SameText(param, _T(";"))) {
+			inp_ex::Values values;
+			values.prompt = _T("タグ");
+			values.value = plan.tags;
+			if (!RunInputEx(inp_ex::Mode::TagSelect, values)) return;
+			plan.tags = ReplaceStr(values.value, _T("|"), _T(";"));
+			plan.and_match = !ContainsStr(values.value, _T("|"));
+		}
+		else {
+			tag::Options options;
+			options.mode = tag::Mode::Select;
+			options.tags = plan.tags;
+			options.and_match = plan.and_match;
+			if (!tag_dialog::Run(this, *tm, options)) return;
+			plan.tags = options.tags;
+			plan.and_match = options.and_match;
+			select_mask = options.select_mask;
+		}
 	}
 
 	const UnicodeString tags = tm->NormTags(plan.tags, /*sw_add=*/false);
@@ -7264,14 +7287,27 @@ void MainFrame::CmdFindTag(const UnicodeString &param)
 	tag::InputPlan plan = tag::ResolveInput(tag::Mode::Find, param, EmptyStr);
 	bool resolve_links = false;
 	if (plan.show_dialog) {
-		tag::Options options;
-		options.mode = tag::Mode::Find;
-		options.tags = plan.tags;
-		options.and_match = plan.and_match;
-		if (!tag_dialog::Run(this, *tm, options)) return;
-		plan.tags = options.tags;
-		plan.and_match = options.and_match;
-		resolve_links = options.resolve_links;
+		// ActionParam=";" は VCL の TInputExDlg 経路 (MainFrm.cpp:19099-19113)。
+		if (SameText(param, _T(";"))) {
+			inp_ex::Values values;
+			values.prompt = _T("タグ");
+			values.value = plan.tags;
+			if (!RunInputEx(inp_ex::Mode::FindTag, values)) return;
+			plan.tags = ReplaceStr(values.value, _T("|"), _T(";"));
+			plan.and_match = !ContainsStr(values.value, _T("|"));
+			plan.match_all = SameText(plan.tags, _T("*"));
+			resolve_links = settings_.Ini().ReadBoolGen(_T("FindTagResLink"));
+		}
+		else {
+			tag::Options options;
+			options.mode = tag::Mode::Find;
+			options.tags = plan.tags;
+			options.and_match = plan.and_match;
+			if (!tag_dialog::Run(this, *tm, options)) return;
+			plan.tags = options.tags;
+			plan.and_match = options.and_match;
+			resolve_links = options.resolve_links;
+		}
 	}
 	if (resolve_links) {
 		SetStatusWarning(_T("リソースリンクの解決は未移植ですが、指定されたタグの検索を実行します"));
