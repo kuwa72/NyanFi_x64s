@@ -321,6 +321,7 @@ if(TARGET nyanfi_core)
 		gui/key.cpp
 		gui/tag.cpp
 		gui/file_ext.cpp
+		gui/gen_info.cpp
 		gui/distribution.cpp
 		gui/function_list.cpp
 		gui/cmd_list.cpp
