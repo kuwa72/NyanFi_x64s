@@ -4968,7 +4968,10 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		Close(true);
 	}
 	else {
-		return false;  // 未実装
+		// 未配線コマンド。無反応だと「機能が動いてない」と分からないので、
+		// コマンド名をステータス警告に出す（Issue #81）
+		SetStatusWarning(UnicodeString().sprintf(_T("未実装コマンド: %s"), command.c_str()));
+		return false;
 	}
 
 	// 現在のタブの記録 (ディレクトリ・並べ替え設定) を、いま実際にペインが
