@@ -837,3 +837,59 @@ void TextViewer::OnPaint(wxPaintEvent &)
 		dc.DrawText(to_wx(text), text_x, y + 1);
 	}
 }
+
+//---------------------------------------------------------------------------
+// ScrollCursorDown/Up 用 (VCL: ListBoxScrollDown/Up の move_csr=true)
+//---------------------------------------------------------------------------
+void TextViewer::SetScrollCursor(int top, int cursor)
+{
+	const int n = static_cast<int>(doc_.lines.size());
+	top_row_ = std::clamp(top, 0, std::max(0, n - 1));
+	current_line_ = std::clamp(cursor, 0, std::max(0, n - 1));
+	Refresh();
+}
+
+//---------------------------------------------------------------------------
+// BackViewHist 用 (VCL: TextViewHistory)
+//---------------------------------------------------------------------------
+UnicodeString TextViewer::GetViewHistoryTop() const
+{
+	if (view_history_.empty()) return EmptyStr;
+	return view_history_.front();
+}
+
+void TextViewer::PopViewHistory()
+{
+	if (!view_history_.empty()) view_history_.erase(view_history_.begin());
+}
+
+bool TextViewer::OpenFileAt(const UnicodeString &path, int line)
+{
+	UnicodeString error;
+	if (!LoadFile(path, error)) return false;
+	GotoLine(line);
+	return true;
+}
+
+//---------------------------------------------------------------------------
+// CsvGraph 用 (VCL: TxtViewer->TxtBufList の 2次元配列化)
+//---------------------------------------------------------------------------
+std::vector<std::vector<UnicodeString>> TextViewer::GetRows() const
+{
+	std::vector<std::vector<UnicodeString>> rows;
+	rows.reserve(doc_.lines.size());
+	for (const UnicodeString &line : doc_.lines) {
+		TStringDynArray fields;
+		if (is_tsv_) {
+			fields = split_strings_tab(line);
+		}
+		else {
+			fields = get_csv_array(line, 99);
+		}
+		std::vector<UnicodeString> row;
+		row.reserve(fields.Length);
+		for (int i = 0; i < fields.Length; i++) row.push_back(fields[i]);
+		rows.push_back(row);
+	}
+	return rows;
+}

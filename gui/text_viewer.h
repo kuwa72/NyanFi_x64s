@@ -145,6 +145,35 @@ public:
 	/// 直前の検索語 (FindDown/FindUp が使う)
 	const UnicodeString &LastSearch() const { return last_search_; }
 
+	//--- BackViewHist 用 (VCL: TextViewHistory) ---
+	UnicodeString GetViewHistoryTop() const;                //!< ビューア履歴の先頭
+	void PopViewHistory();                                  //!< ビューア履歴の先頭を削除
+	bool OpenFileAt(const UnicodeString &path, int line);   //!< ファイルを開いて指定行へ
+
+	//--- ScrollCursorDown/Up 用 (VCL: ListBoxScrollDown/Up の move_csr=true) ---
+	int GetTopIndex() const { return top_row_; }            //!< 表示先頭行
+	int GetCursorIndex() const { return current_line_; }    //!< カーソル行
+	void SetScrollCursor(int top, int cursor);             //!< スクロール位置とカーソルを設定
+
+	//--- CsvGraph/CsvRecord/ExportCsv 用 ---
+	std::vector<std::vector<UnicodeString>> GetRows() const; //!< 2次元配列で行を取得
+	int GetCsvColumn() const { return csv_column_; }        //!< CSV列
+	bool IsTopIsHeader() const { return top_is_header_; }   //!< 先頭行がヘッダか
+	bool IsTsv() const { return is_tsv_; }                  //!< TSV か
+	bool IsCsvRecordVisible() const { return csv_record_visible_; }
+	void SetCsvRecordVisible(bool v) { csv_record_visible_ = v; }
+
+	//--- BitmapView/Inspector/ImgPreview 用 ---
+	bool IsBitmapViewVisible() const { return bitmap_view_visible_; }
+	void SetBitmapViewVisible(bool v) { bitmap_view_visible_ = v; }
+	bool IsInspectorVisible() const { return inspector_visible_; }
+	void SetInspectorVisible(bool v) { inspector_visible_ = v; }
+	bool IsImgPreviewVisible() const { return img_preview_visible_; }
+	void SetImgPreviewVisible(bool v) { img_preview_visible_ = v; }
+
+public:
+	int VisibleRows() const;                 //!< 本文の表示行数
+
 private:
 	void OnPaint(wxPaintEvent &event);
 	void OnSize(wxSizeEvent &event);
@@ -155,7 +184,6 @@ private:
 	void UpdateLineNoCols();    //!< 行番号欄の桁数を行数から決める
 
 	int HeaderHeight() const { return row_height_ + 4; }
-	int VisibleRows() const;                 //!< 本文の表示行数
 	int GutterWidth() const;                 //!< 行番号欄の幅(px)
 	int TextAreaCols() const;                //!< 折り返し計算用の表示幅(半角換算)
 
@@ -182,6 +210,16 @@ private:
 
 	std::vector<int> wrap_rows_;      //!< 各行の折り返し後の表示行数 (折り返し無効なら全て1)
 	std::vector<Int64> prefix_rows_;  //!< 表示行の累積和 (size = 行数+1)
+
+	//--- V: モードのコマンド配線用状態 ---
+	int csv_column_ = 0;              //!< CSV列 (VCL: TxtViewer->CsvCol)
+	bool top_is_header_ = false;      //!< 先頭行がヘッダか (VCL: TxtViewer->TopIsHeader)
+	bool is_tsv_ = false;             //!< TSV か (VCL: ExpCsvDlg の TSV 判定)
+	bool csv_record_visible_ = false; //!< CSVレコード表示 (VCL: CsvRecForm->Visible)
+	bool bitmap_view_visible_ = false;//!< ビットマップビュー (VCL: BitmapForm->Visible)
+	bool inspector_visible_ = false;  //!< インスペクタ (VCL: InspectForm->Visible)
+	bool img_preview_visible_ = false;//!< イメージプレビュー (VCL: PreviewPanel->Visible)
+	std::vector<UnicodeString> view_history_; //!< ビューア履歴 (VCL: TextViewHistory)
 
 	bool wrap_ = false;               //!< 折り返し表示
 	int current_line_ = 0;            //!< カーソル行 (0ベース、行単位)

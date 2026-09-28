@@ -110,4 +110,23 @@ void SaveToIni(UsrIniFile &ini, Kind kind, const HistoryList &list)
 	ini.SaveListItems(IniKeyOf(kind), lst.get(), list.MaxItems());
 }
 
+//---------------------------------------------------------------------------
+// ビューア履歴エントリ (BackViewHist)
+// VCL: src/MainFrm.cpp:32993-33000 (ExeCommandV の BackViewHist 分岐)、
+//      src/TxtViewer.cpp:4830-4844 (add_ViewHistory の "パス,行番号,マーク" CSV)
+//---------------------------------------------------------------------------
+ViewHistoryEntry ParseViewHistoryEntry(const UnicodeString &entry)
+{
+	ViewHistoryEntry r;
+	if (entry.IsEmpty()) return r;
+
+	// VCL: get_csv_array(TextViewHistory->Strings[0], 2, true)
+	// (src/MainFrm.cpp:32995) と同じく先頭2列を取り出す。
+	// 3列目 (マーク一覧) は VCL の BackViewHist では取り出されないため空のまま
+	const TStringDynArray fields = get_csv_array(entry, 2, true);
+	r.path = fields[0];
+	r.line = fields[1].ToIntDef(0);  // VCL: itm_buf[1].ToIntDef(0)
+	return r;
+}
+
 }  // namespace history

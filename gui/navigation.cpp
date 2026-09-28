@@ -186,3 +186,54 @@ UnicodeString NextDriveOf(const std::vector<UnicodeString> &drives,
 	}
 	return drives.back();
 }
+
+//---------------------------------------------------------------------------
+// スクロールしながらカーソルも移動 (ScrollCursorDown / ScrollCursorUp)
+// VCL: src/UserFunc.cpp:964-1008 (ListBoxScrollDown/Up の move_csr=true)、
+//      src/Global.cpp:15045-15046 (ExeCmdListBox の case 10/11)
+//---------------------------------------------------------------------------
+ScrollCursorResult ScrollCursorMove(int count, int top, int cursor, int n, bool down)
+{
+	ScrollCursorResult r;
+	if (count < 0) count = 0;
+
+	if (down) {
+		// VCL の ListBoxScrollDown(lp, n, true):
+		//   TopIndex = min(TopIndex + n, count-1); ItemIndex += 実際の移動量
+		int new_top = top + n;
+		if (new_top > count - 1) new_top = count - 1;
+		if (new_top < 0) new_top = 0;
+		int moved = new_top - top;
+		r.top = new_top;
+		r.cursor = cursor + moved;
+		if (r.cursor > count - 1) r.cursor = count - 1;
+		if (r.cursor < 0) r.cursor = 0;
+	}
+	else {
+		// VCL の ListBoxScrollUp(lp, n, true):
+		//   TopIndex = max(TopIndex - n, 0); ItemIndex += 実際の移動量 (負数)
+		int new_top = top - n;
+		if (new_top < 0) new_top = 0;
+		int moved = new_top - top;  // 負数
+		r.top = new_top;
+		r.cursor = cursor + moved;
+		if (r.cursor < 0) r.cursor = 0;
+		if (r.cursor > count - 1) r.cursor = count - 1;
+	}
+	return r;
+}
+
+int ParseScrollCursorParam(const UnicodeString &param, int pn, bool down)
+{
+	// VCL: src/Global.cpp:15015 (既定 ListWheelSrvLn=2)
+	if (param.IsEmpty()) return 2;
+
+	// VCL: src/UserFunc.cpp:973-1008 (HP/FP/ED/TP)
+	if (SameText(param, _T("HP"))) return pn / 2;
+	if (SameText(param, _T("FP"))) return pn;
+	if (down && SameText(param, _T("ED"))) return pn;  // 末尾まで (呼び出し側で clamp)
+	if (!down && SameText(param, _T("TP"))) return pn; // 先頭まで
+
+	// 数値ならそれ、非数値は 1 (VCL の ToIntDef(1) と同じ)
+	return param.ToIntDef(1);
+}

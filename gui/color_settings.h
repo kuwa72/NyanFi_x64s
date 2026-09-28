@@ -93,6 +93,42 @@ void SetEntry(std::vector<ColorEntry> &entries, const UnicodeString &key, int co
 /// key を無効化する。対象外 (CanDisable が false) なら false を返す
 bool DisableEntry(std::vector<ColorEntry> &entries, const UnicodeString &key);
 
+//---------------------------------------------------------------------------
+// カラーピッカーの色書式化 (ColorPicker)
+// VCL: src/ColPicker.cpp:215-241 (UpdateStt の FmtComboBox 13形式)
+//---------------------------------------------------------------------------
+
+/**
+ * @brief カラーピッカーの色書式 (FmtComboBox の13形式)
+ * @details VCL の ColPicker.cpp:26-41 (FormCreate の set_ComboBoxText) を実測
+ */
+enum class ColorFormat {
+	Rgb,         //!< 0: "R,G,B" (10進)
+	Hsv,         //!< 1: "H,S,V(B)" (10進)
+	Hsl,         //!< 2: "H,S,L" (10進)
+	Colorref,    //!< 3: "0x%08x" (COLORREF)
+	Delphi,      //!< 4: "$00BBGGRR"
+	Vb,          //!< 5: "&H00BBGGRR&"
+	Html,        //!< 6: "#rrggbb"
+	RgbParen,    //!< 7: "RGB(0x..,0x..,0x..)"
+	RgbDec,      //!< 8: "RGB(d,d,d)"
+	ConstSymbol, //!< 9: 定数シンボル (ColorToString)
+	Bitmap32,    //!< 10: "R%d G%d B%d" (BITMAP(32))
+	Bitmap128,   //!< 11: "R%d G%d B%d" (BITMAP(128))
+	Bitmap256,   //!< 12: "R%d G%d B%d" (BITMAP(256))
+};
+
+/**
+ * @brief 色値をカラーピッカーの書式で文字列化する
+ * @details VCL の UpdateStt (src/ColPicker.cpp:215-241) を実測。
+ *          TColor は 0x00BBGGRR (RGB ではなく BGR 順)。
+ *          ConstSymbol は Web 色名への変換 (RGBToWebColorName) は未移植
+ *          (未実装扱い) で "0x%08x" にフォールバックする。
+ * @param color TColor 値 (0x00BBGGRR)
+ * @param fmt 書式
+ */
+UnicodeString FormatColorPickerValue(int color, ColorFormat fmt);
+
 }  // namespace color_settings
 
 #endif  // NYANFI_GUI_COLOR_SETTINGS_H

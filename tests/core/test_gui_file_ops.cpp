@@ -473,3 +473,34 @@ TEST_CASE("DeleteItemsPermanently: 存在しない項目は失敗に数える")
 	CHECK(r.success_count == 0);
 	CHECK(r.failures.size() == 1);
 }
+
+//===========================================================================
+// ParseDuplicateParam / CanExitDupl: 二重起動 (Duplicate / ExitDupl)
+// VCL: src/MainFrm.cpp:16872-16888 (DuplicateActionExecute/Update)、
+//      src/MainFrm.cpp:17210-17218 (ExitDuplActionExecute/Update)
+//===========================================================================
+
+TEST_CASE("ParseDuplicateParam: DM+管理者で demote、RA で run_as、空は両方 false")
+{
+	CHECK(file_ops::ParseDuplicateParam(EmptyStr, false).demote == false);
+	CHECK(file_ops::ParseDuplicateParam(EmptyStr, false).run_as == false);
+
+	file_ops::DuplicateParam dm = file_ops::ParseDuplicateParam(_T("DM"), true);
+	CHECK(dm.demote == true);
+	CHECK(dm.run_as == false);
+
+	// DM でも管理者でなければ demote しない (VCL: IsAdmin チェック)
+	CHECK(file_ops::ParseDuplicateParam(_T("DM"), false).demote == false);
+
+	file_ops::DuplicateParam ra = file_ops::ParseDuplicateParam(_T("RA"), false);
+	CHECK(ra.demote == false);
+	CHECK(ra.run_as == true);
+}
+
+TEST_CASE("CanExitDupl: プライマリかつ二重起動時のみ true (VCL: IsPrimary && MultiInstance)")
+{
+	CHECK(file_ops::CanExitDupl(true, true) == true);
+	CHECK(file_ops::CanExitDupl(true, false) == false);
+	CHECK(file_ops::CanExitDupl(false, true) == false);
+	CHECK(file_ops::CanExitDupl(false, false) == false);
+}
