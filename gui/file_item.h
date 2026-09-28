@@ -75,4 +75,42 @@ int CompareFileItems(const FileItem &a, const FileItem &b, SortKey key, bool des
  */
 bool MatchPathMask(const UnicodeString &mask, const UnicodeString &name, bool is_dir);
 
+/**
+ * @brief ファイル名主部 (拡張子を除いた部分) を返す
+ * @details VCL の get_base_name (src/Global.cpp) 相当。
+ *          "main.cpp" → "main"、"archive.tar.gz" → "archive.tar"、
+ *          ".gitignore" → ".gitignore" (先頭の '.' は拡張子とみなさない)
+ */
+UnicodeString GetBaseName(const UnicodeString &name);
+
+/**
+ * @brief 拡張子を返す (VCL の get_extension 相当)
+ * @details "main.cpp" → ".cpp"、"archive.tar.gz" → ".gz"、
+ *          ".gitignore" → "" (先頭の '.' は拡張子とみなさない)
+ */
+UnicodeString GetExtension(const UnicodeString &name);
+
+/**
+ * @brief リスト内で主部が同じ次のファイルを循環検索する (V:SwitchSameName)
+ * @details VCL の get_NextSameName (src/Global.cpp:4010-4030) の簡易版。
+ *          ディレクトリと ".." をスキップし、主部が同じファイルのみ対象。
+ *          only_text が true のときはテキストファイルのみ (VCL の is_TextFile 相当、
+ *          ここでは拡張子による簡易判定)。次のファイルが無ければ最初の同名ファイルに戻る。
+ * @param items 一覧の項目
+ * @param idx 現在のインデックス
+ * @param only_text true ならテキストファイルのみ対象
+ * @return 次のファイル名。見つからなければ空文字列
+ */
+UnicodeString FindNextSameName(const std::vector<FileItem> &items, int idx, bool only_text);
+
+/**
+ * @brief ソース/ヘッダの対応ファイル名を返す (V:SwitchSrcHdr)
+ * @details VCL の get_SrcHdrName (src/Global.cpp:3965-3981) の簡易版。
+ *          .c/.cc/.cpp/.cxx → .h/.hh/.hpp/.hxx、逆も。
+ *          対応する拡張子以外は空文字列を返す。
+ * @param fnam ファイル名 (パス付きでも可)
+ * @return 対応するファイル名。見つからなければ空文字列
+ */
+UnicodeString GetSrcHdrName(const UnicodeString &fnam);
+
 #endif  // NYANFI_GUI_FILE_ITEM_H

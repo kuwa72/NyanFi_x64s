@@ -361,6 +361,9 @@ bool TextViewer::Execute(const UnicodeString &full_command)
 	else if (SameStr(command, _T("ReloadFile"))) {
 		CmdReload();
 	}
+	else if (SameStr(command, _T("Sort"))) {
+		CmdSort(param);
+	}
 	else if (SameStr(command, _T("ShowLineNo"))) {
 		CmdShowLineNo(param);
 	}
@@ -596,6 +599,33 @@ void TextViewer::CmdReload()
 	marks_.erase(std::remove_if(marks_.begin(), marks_.end(), [&](int m) {
 		return m < 0 || m >= static_cast<int>(doc_.lines.size());
 	}), marks_.end());
+	UpdateLineNoCols();
+	RebuildWrap();
+	EnsureCursorVisible();
+	Refresh();
+}
+
+//---------------------------------------------------------------------------
+void TextViewer::CmdSort(const UnicodeString &param)
+{
+	// VCL の TxtViewer.cpp:5255-5263 の ExeCommand("Sort") 相当。
+	// AssignText(NULL, cur_lno, SameText(prm, "AO")? 1 : SameText(prm, "DO")? -1 : 0)
+	if (doc_.lines.empty() || doc_.is_binary) return;
+
+	const int direction = SameText(param, _T("AO")) ? 1 : SameText(param, _T("DO")) ? -1 : 0;
+	if (direction == 0) return;  // ソートしない
+
+	// カーソル行の内容を覚えておく (VCL の cur_lno 保持と同じ)
+	const UnicodeString cur_line_text = doc_.lines[current_line_];
+
+	doc_.lines = text_viewer_core::SortLines(doc_.lines, direction);
+
+	// ソート後に同じ内容の行へカーソルを移動
+	auto it = std::find(doc_.lines.begin(), doc_.lines.end(), cur_line_text);
+	if (it != doc_.lines.end()) {
+		current_line_ = static_cast<int>(std::distance(doc_.lines.begin(), it));
+	}
+
 	UpdateLineNoCols();
 	RebuildWrap();
 	EnsureCursorVisible();

@@ -82,6 +82,29 @@ UnicodeString BuildSearchCommand(const UnicodeString &tags, bool and_match, bool
  */
 std::vector<UnicodeString> LoadFolderIcons(const UnicodeString &ini_path);
 
+/**
+ * @brief ダイレクトタグジャンプの入力解決 (V:TagJumpDirect/TagViewDirect)
+ * @details VCL の DirectTagJumpCore (src/MainFrm.cpp:33118-33170) の簡易版。
+ *          ctags フォーマット ("タグ名\tファイル名\t行番号") または
+ *          ctags パターン ("タグ名\tファイル名\t/^pattern/") なら直接ジャンプ先として解釈。
+ *          それ以外はタグ名として tags ファイル検索が必要 (実際の検索は wx 側の仕事)。
+ * @param param コマンドパラメーター
+ * @param cur_word 現在の単語 (param が空のときのタグ名)
+ * @param cur_path 現在のファイルパス (基準ディレクトリ)
+ * @param is_edit true なら編集 (TagJumpDirect)、false なら閲覧 (TagViewDirect)
+ * @return ジャンプ先の情報。tags ファイル検索が必要な場合は file_path が空
+ */
+struct TagJumpTarget {
+	bool is_edit = false;           //!< 編集 (TagJumpDirect) か閲覧 (TagViewDirect) か
+	UnicodeString tag_name;         //!< タグ名 (tags ファイル検索用)
+	UnicodeString base_dir;         //!< 基準ディレクトリ (tags ファイル検索用)
+	UnicodeString file_path;        //!< ジャンプ先ファイル (ctags フォーマット時のみ)
+	int line_no = 1;                //!< ジャンプ先行番号 (1ベース)
+};
+
+TagJumpTarget ResolveTagJump(const UnicodeString &param, const UnicodeString &cur_word,
+                             const UnicodeString &cur_path, bool is_edit);
+
 }  // namespace tag
 
 #endif  // NYANFI_GUI_TAG_H
