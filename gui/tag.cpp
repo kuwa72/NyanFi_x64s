@@ -126,4 +126,37 @@ std::vector<UnicodeString> LoadFolderIcons(const UnicodeString &ini_path)
 	return out;
 }
 
+//---------------------------------------------------------------------------
+TagJumpTarget ResolveTagJump(const UnicodeString &param, const UnicodeString &cur_word,
+                             const UnicodeString &cur_path, bool is_edit)
+{
+	TagJumpTarget target;
+	target.is_edit = is_edit;
+
+	// ctags フォーマット: タグ名\tファイル名\t行番号 or /パターン/
+	// VCL の DirectTagJumpCore (MainFrm.cpp:33126) の正規表現
+	// "^.+\t.+\.\w+\t(\d+|/.+/)" と同じ判定
+	if (param.Pos('\t') > 0) {
+		UnicodeString lbuf = get_post_tab(param);  // 2番目以降
+		UnicodeString nptn = get_post_tab(lbuf);  // 3番目
+		UnicodeString fnam = get_pre_tab(lbuf);   // 2番目 (ファイル名)
+		if (!fnam.IsEmpty() && !nptn.IsEmpty()) {
+			target.file_path = fnam;
+			// パターン指定 (/^...$/) は行番号 1
+			if (nptn.Length() >= 2 && nptn[1] == '/' && nptn[nptn.Length()] == '/') {
+				target.line_no = 1;
+			}
+			else {
+				target.line_no = nptn.ToIntDef(1);
+			}
+			return target;
+		}
+	}
+
+	// タグ名のみ: tags ファイル検索が必要
+	target.tag_name = param.IsEmpty() ? cur_word : param;
+	target.base_dir = cur_path;
+	return target;
+}
+
 }  // namespace tag

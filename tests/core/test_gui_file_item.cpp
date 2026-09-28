@@ -214,3 +214,106 @@ TEST_CASE("FullPathOfItem: 名前が空なら空を返す (区切り行を操作
 	FileItem sep;
 	CHECK(FullPathOfItem(_T("C:\\here\\"), sep).IsEmpty());
 }
+
+//===========================================================================
+// FindNextSameName: 同名ファイルの循環検索 (V:SwitchSameName)
+// VCL: src/Global.cpp:4010-4030 get_NextSameName の簡易版
+//===========================================================================
+TEST_CASE("FindNextSameName: 主部が同じ次のファイルを返す")
+{
+	std::vector<FileItem> items{
+		make_file("a.txt"), make_file("b.txt"), make_file("c.txt"),
+		make_file("a.cpp"), make_file("b.cpp"), make_file("c.cpp"),
+	};
+	// a.txt の次は a.cpp
+	CHECK(FindNextSameName(items, 0, false) == UnicodeString(_T("a.cpp")));
+	// b.txt の次は b.cpp
+	CHECK(FindNextSameName(items, 1, false) == UnicodeString(_T("b.cpp")));
+	// c.txt の次は c.cpp
+	CHECK(FindNextSameName(items, 2, false) == UnicodeString(_T("c.cpp")));
+}
+
+TEST_CASE("FindNextSameName: 最後の同名ファイルなら最初に戻る (循環)")
+{
+	std::vector<FileItem> items{
+		make_file("a.txt"), make_file("b.txt"), make_file("a.cpp"),
+	};
+	// a.cpp (idx=2) の次は a.txt (idx=0) に戻る
+	CHECK(FindNextSameName(items, 2, false) == UnicodeString(_T("a.txt")));
+}
+
+TEST_CASE("FindNextSameName: 同名が無ければ空を返す")
+{
+	std::vector<FileItem> items{
+		make_file("a.txt"), make_file("b.txt"), make_file("c.txt"),
+	};
+	CHECK(FindNextSameName(items, 0, false).IsEmpty());
+	CHECK(FindNextSameName(items, 1, false).IsEmpty());
+	CHECK(FindNextSameName(items, 2, false).IsEmpty());
+}
+
+TEST_CASE("FindNextSameName: ディレクトリはスキップする")
+{
+	std::vector<FileItem> items{
+		make_file("a.txt"), make_dir("a_dir"), make_file("a.cpp"),
+	};
+	// a_dir はディレクトリなのでスキップされ、a.cpp が返る
+	CHECK(FindNextSameName(items, 0, false) == UnicodeString(_T("a.cpp")));
+}
+
+TEST_CASE("FindNextSameName: 範囲外のインデックスは空を返す")
+{
+	std::vector<FileItem> items{make_file("a.txt")};
+	CHECK(FindNextSameName(items, -1, false).IsEmpty());
+	CHECK(FindNextSameName(items, 1, false).IsEmpty());
+}
+
+TEST_CASE("FindNextSameName: only_text はテキストファイルのみ対象にする")
+{
+	std::vector<FileItem> items{
+		make_file("a.txt"), make_file("a.exe"), make_file("a.cpp"),
+	};
+	// a.txt の次は a.cpp (a.exe はテキストファイル以外なのでスキップ)
+	CHECK(FindNextSameName(items, 0, true) == UnicodeString(_T("a.cpp")));
+}
+
+//===========================================================================
+// GetSrcHdrName: ソース/ヘッダの切り替え (V:SwitchSrcHdr)
+// VCL: src/Global.cpp:3965-3981 get_SrcHdrName の簡易版
+//===========================================================================
+TEST_CASE("GetSrcHdrName: .c → .h")
+{
+	CHECK(GetSrcHdrName(_T("main.c")) == UnicodeString(_T("main.h")));
+	CHECK(GetSrcHdrName(_T("C:\\src\\main.c")) == UnicodeString(_T("C:\\src\\main.h")));
+}
+
+TEST_CASE("GetSrcHdrName: .cpp → .hpp")
+{
+	CHECK(GetSrcHdrName(_T("main.cpp")) == UnicodeString(_T("main.hpp")));
+	CHECK(GetSrcHdrName(_T("C:\\src\\main.cpp")) == UnicodeString(_T("C:\\src\\main.hpp")));
+}
+
+TEST_CASE("GetSrcHdrName: .h → .c")
+{
+	CHECK(GetSrcHdrName(_T("main.h")) == UnicodeString(_T("main.c")));
+	CHECK(GetSrcHdrName(_T("C:\\src\\main.h")) == UnicodeString(_T("C:\\src\\main.c")));
+}
+
+TEST_CASE("GetSrcHdrName: .hpp → .cpp")
+{
+	CHECK(GetSrcHdrName(_T("main.hpp")) == UnicodeString(_T("main.cpp")));
+}
+
+TEST_CASE("GetSrcHdrName: .cc → .hh, .cxx → .hxx")
+{
+	CHECK(GetSrcHdrName(_T("main.cc")) == UnicodeString(_T("main.hh")));
+	CHECK(GetSrcHdrName(_T("main.cxx")) == UnicodeString(_T("main.hxx")));
+}
+
+TEST_CASE("GetSrcHdrName: 対応する拡張子以外は空を返す")
+{
+	CHECK(GetSrcHdrName(_T("main.txt")).IsEmpty());
+	CHECK(GetSrcHdrName(_T("main.py")).IsEmpty());
+	CHECK(GetSrcHdrName(_T("main")).IsEmpty());
+	CHECK(GetSrcHdrName(_T("")).IsEmpty());
+}

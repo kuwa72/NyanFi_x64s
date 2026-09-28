@@ -611,6 +611,22 @@ private:
 	void CmdFindTag(const UnicodeString &param);   //!< 指定タグの項目を集めて結果表示
 	void CmdTrimTagData();     //!< 実体の無い項目のタグを整理 (TrimTagData)
 
+	//-- V モードの表示切替・タグジャンプ (機能群22。gui/text_viewer.h) ----------
+	//
+	// VCL の ExeCommandV (src/MainFrm.cpp:32789) で TxtViewer->ExeCommand に
+	// 振り分けられる V モード専用コマンドのうち、FilePane 連携が必要なもの。
+	// 判断ロジックは gui/text_viewer_core.h (Sort/DivideFileNameLineNo)、
+	// gui/file_item.h (FindNextSameName/GetSrcHdrName)、gui/tag.h (ResolveTagJump)
+	// の純関数が持ち、ここは受け渡しと FilePane のカーソル移動が仕事。
+	void CmdChangeViewMode();  //!< テキスト/バイナリ表示の切り換え (ChangeViewMode)。
+	                           //!< wx 版にバイナリ表示が無いため未移植 (未実装扱い)
+	void CmdSwitchSameName();  //!< ファイル名主部が同じ次のファイルに切り換え (SwitchSameName)
+	void CmdSwitchSrcHdr();    //!< ソース/ヘッダの切り換え (SwitchSrcHdr)
+	void CmdTagJump(bool direct);  //!< タグジャンプ (TagJump/TagJumpDirect)。
+	                               //!< direct=true はダイレクトタグジャンプ
+	void CmdTagView(bool direct);  //!< ビューアでタグジャンプ (TagView/TagViewDirect)。
+	                               //!< direct=true はダイレクトタグジャンプ
+
 	/// タグ管理。実体は移植済みの TagManager。初回に使うときだけ作る
 	/// (起動のたびに TAGDATA.TXT を読むのを避けるため)
 	TagManager *Tags();
