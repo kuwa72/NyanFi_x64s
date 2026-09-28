@@ -275,4 +275,61 @@ int ParseMoveCount(const UnicodeString &param, int /*visible_rows*/)
 	return n >= 1 ? n : 1;
 }
 
+//---------------------------------------------------------------------------
+std::vector<UnicodeString> SortLines(const std::vector<UnicodeString> &lines, int direction)
+{
+	if (direction == 0) return lines;  // VCL の AssignText 第3引数 0 はソートしない
+
+	std::vector<UnicodeString> sorted = lines;
+	if (direction > 0) {
+		std::sort(sorted.begin(), sorted.end());
+	}
+	else {
+		std::sort(sorted.begin(), sorted.end(), std::greater<UnicodeString>());
+	}
+	return sorted;
+}
+
+//---------------------------------------------------------------------------
+std::pair<UnicodeString, int> DivideFileNameLineNo(const UnicodeString &text, int /*pos*/)
+{
+	UnicodeString fnam = text;
+	fnam = Trim(fnam);
+	if (fnam.IsEmpty()) return {EmptyStr, 0};
+
+	// ctags フォーマット: タグ名\tファイル名\t行番号 or /パターン/
+	// VCL の divide_FileName_LineNo (Global.cpp:13248) の正規表現
+	// "^.+\t.+\.\w+\t(\d+|/.+/)" と同じ判定
+	if (fnam.Pos('\t') > 0) {
+		UnicodeString lbuf = get_post_tab(fnam);  // 2番目以降
+		UnicodeString nptn = get_post_tab(lbuf);  // 3番目
+		fnam = get_pre_tab(lbuf);                 // 2番目 (ファイル名)
+		if (!fnam.IsEmpty() && !nptn.IsEmpty()) {
+			// パターン指定 (/^...$/) は行番号 1
+			if (nptn.Length() >= 2 && nptn[1] == '/' && nptn[nptn.Length()] == '/') {
+				return {fnam, 1};
+			}
+			// 行番号
+			const int lno = nptn.ToIntDef(1);
+			return {fnam, lno};
+		}
+	}
+
+	// ファイル名:行番号 (最後の ':' で分割。ドライブ文字の ':' があるため
+	// Pos ではなく末尾から探す)
+	int colon_pos = 0;
+	for (int i = fnam.Length(); i >= 1; --i) {
+		if (fnam[i] == ':') { colon_pos = i; break; }
+	}
+	if (colon_pos > 0) {
+		UnicodeString lno_str = fnam.SubString(colon_pos + 1, fnam.Length() - colon_pos);
+		const int lno = lno_str.ToIntDef(1);
+		fnam = fnam.SubString(1, colon_pos - 1);
+		return {fnam, lno};
+	}
+
+	// ファイル名のみ
+	return {fnam, 1};
+}
+
 }  // namespace text_viewer_core

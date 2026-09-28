@@ -70,3 +70,47 @@ TEST_CASE("tag::Title: モードと AND/OR が表題に反映される")
 	CHECK(tag::Title(tag::Mode::Select, true) == UnicodeString(_T("タグ選択")));
 	CHECK(tag::Title(tag::Mode::FolderIcon, true) == UnicodeString(_T("フォルダアイコン検索")));
 }
+
+//===========================================================================
+// ResolveTagJump: ダイレクトタグジャンプの入力解決 (V:TagJumpDirect/TagViewDirect)
+// VCL: src/MainFrm.cpp:33118-33170 DirectTagJumpCore の簡易版
+//===========================================================================
+TEST_CASE("tag::ResolveTagJump: ctags フォーマットの直接指定")
+{
+	// タグ名\tファイル名\t行番号 の形式なら直接ジャンプ先として解釈
+	const auto plan = tag::ResolveTagJump(_T("main\tC:\\src\\main.cpp\t42"), EmptyStr, EmptyStr, false);
+	CHECK_FALSE(plan.is_edit);  // 既定は閲覧
+	CHECK(plan.file_path == UnicodeString(_T("C:\\src\\main.cpp")));
+	CHECK(plan.line_no == 42);
+}
+
+TEST_CASE("tag::ResolveTagJump: ctags パターン指定は行番号 1")
+{
+	const auto plan = tag::ResolveTagJump(_T("main\tC:\\src\\main.cpp\t/^int main/"), EmptyStr, EmptyStr, false);
+	CHECK(plan.file_path == UnicodeString(_T("C:\\src\\main.cpp")));
+	CHECK(plan.line_no == 1);
+}
+
+TEST_CASE("tag::ResolveTagJump: タグ名のみ (tags ファイル検索が必要)")
+{
+	// タグ名のみの場合は tags ファイル検索が必要。ここでは検索は行わず、
+	// タグ名と基準ディレクトリを返す (実際の検索は wx 側の仕事)
+	const auto plan = tag::ResolveTagJump(_T("main"), EmptyStr, _T("C:\\src"), false);
+	CHECK(plan.tag_name == UnicodeString(_T("main")));
+	CHECK(plan.base_dir == UnicodeString(_T("C:\\src")));
+	CHECK(plan.file_path.IsEmpty());
+}
+
+TEST_CASE("tag::ResolveTagJump: 空パラメータは現在の単語を使う")
+{
+	const auto plan = tag::ResolveTagJump(_T(""), _T("cur_word"), _T("C:\\src"), false);
+	CHECK(plan.tag_name == UnicodeString(_T("cur_word")));
+	CHECK(plan.base_dir == UnicodeString(_T("C:\\src")));
+}
+
+TEST_CASE("tag::ResolveTagJump: is_edit は呼び出し側が決める (TagJumpDirect=true)")
+{
+	// TagJumpDirect は編集、TagViewDirect は閲覧。ここでは is_edit を引数で受け取る
+	const auto plan = tag::ResolveTagJump(_T("main\tC:\\src\\main.cpp\t42"), EmptyStr, EmptyStr, false);
+	CHECK_FALSE(plan.is_edit);  // 既定は閲覧 (TagViewDirect)
+}

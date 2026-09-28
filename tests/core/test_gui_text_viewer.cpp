@@ -340,3 +340,86 @@ TEST_CASE("ParseMoveCount: 移動行数 (get_MovePrmの数値部分相当)")
 	CHECK(ParseMoveCount(_T("0"), 7) == 1);
 	CHECK(ParseMoveCount(_T("abc"), 7) == 1);
 }
+
+//===========================================================================
+// SortLines: テキストソート (V:Sort / TxtViewer.cpp:5255-5263)
+//===========================================================================
+TEST_CASE("SortLines: AO は昇順にソートする")
+{
+	std::vector<UnicodeString> lines = {_T("banana"), _T("apple"), _T("cherry")};
+	const std::vector<UnicodeString> sorted = text_viewer_core::SortLines(lines, 1);
+	REQUIRE(sorted.size() == 3);
+	CHECK(sorted[0] == UnicodeString(_T("apple")));
+	CHECK(sorted[1] == UnicodeString(_T("banana")));
+	CHECK(sorted[2] == UnicodeString(_T("cherry")));
+}
+
+TEST_CASE("SortLines: DO は降順にソートする")
+{
+	std::vector<UnicodeString> lines = {_T("banana"), _T("apple"), _T("cherry")};
+	const std::vector<UnicodeString> sorted = text_viewer_core::SortLines(lines, -1);
+	REQUIRE(sorted.size() == 3);
+	CHECK(sorted[0] == UnicodeString(_T("cherry")));
+	CHECK(sorted[1] == UnicodeString(_T("banana")));
+	CHECK(sorted[2] == UnicodeString(_T("apple")));
+}
+
+TEST_CASE("SortLines: 0 はソートしない (VCL の AssignText の第3引数 0 と同じ)")
+{
+	std::vector<UnicodeString> lines = {_T("banana"), _T("apple"), _T("cherry")};
+	const std::vector<UnicodeString> sorted = text_viewer_core::SortLines(lines, 0);
+	CHECK(sorted == lines);
+}
+
+TEST_CASE("SortLines: 空リストでも落ちない")
+{
+	std::vector<UnicodeString> lines;
+	const std::vector<UnicodeString> sorted = text_viewer_core::SortLines(lines, 1);
+	CHECK(sorted.empty());
+}
+
+//===========================================================================
+// DivideFileNameLineNo: ファイル名と行番号の分割 (TagJump/TagView)
+// VCL: src/Global.cpp:13179 divide_FileName_LineNo の簡易版
+//===========================================================================
+TEST_CASE("DivideFileNameLineNo: ファイル名のみ")
+{
+	auto [fnam, lno] = text_viewer_core::DivideFileNameLineNo(_T("test.cpp"), 0);
+	CHECK(fnam == UnicodeString(_T("test.cpp")));
+	CHECK(lno == 1);
+}
+
+TEST_CASE("DivideFileNameLineNo: ファイル名:行番号")
+{
+	auto [fnam, lno] = text_viewer_core::DivideFileNameLineNo(_T("test.cpp:42"), 0);
+	CHECK(fnam == UnicodeString(_T("test.cpp")));
+	CHECK(lno == 42);
+}
+
+TEST_CASE("DivideFileNameLineNo: パス付きファイル名:行番号")
+{
+	auto [fnam, lno] = text_viewer_core::DivideFileNameLineNo(_T("C:\\src\\main.cpp:10"), 0);
+	CHECK(fnam == UnicodeString(_T("C:\\src\\main.cpp")));
+	CHECK(lno == 10);
+}
+
+TEST_CASE("DivideFileNameLineNo: 空文字列は失敗")
+{
+	auto [fnam, lno] = text_viewer_core::DivideFileNameLineNo(_T(""), 0);
+	CHECK(fnam.IsEmpty());
+	CHECK(lno == 0);
+}
+
+TEST_CASE("DivideFileNameLineNo: ctags フォーマット (タグ名\tファイル名\t行番号)")
+{
+	auto [fnam, lno] = text_viewer_core::DivideFileNameLineNo(_T("main\tC:\\src\\main.cpp\t42"), 0);
+	CHECK(fnam == UnicodeString(_T("C:\\src\\main.cpp")));
+	CHECK(lno == 42);
+}
+
+TEST_CASE("DivideFileNameLineNo: ctags パターン (/^...$/) は行番号 1")
+{
+	auto [fnam, lno] = text_viewer_core::DivideFileNameLineNo(_T("main\tC:\\src\\main.cpp\t/^int main/"), 0);
+	CHECK(fnam == UnicodeString(_T("C:\\src\\main.cpp")));
+	CHECK(lno == 1);
+}

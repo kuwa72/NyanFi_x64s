@@ -97,6 +97,10 @@ public:
 	void CmdChangeCodePage(const UnicodeString &param);
 	/// V:ReloadFile (現在行・マークを保って再読込)
 	void CmdReload();
+	/// V:Sort (param AO=昇順、DO=降順、それ以外=ソートしない)。
+	/// VCL の TxtViewer.cpp:5255-5263 の ExeCommand("Sort") 相当。
+	/// カーソル行の内容を覚えてソート後に同じ内容の行へ移動する
+	void CmdSort(const UnicodeString &param);
 	/// V:Close (閉じる。SetOnClose 経由)
 	void CmdClose();
 	/**

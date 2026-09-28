@@ -775,6 +775,163 @@ void MainFrame::CmdSimilarSort()
 }
 
 //---------------------------------------------------------------------------
+// V モードの表示切替・タグジャンプ (VCL ExeCommandV:32789 の分岐)
+//---------------------------------------------------------------------------
+void MainFrame::CmdChangeViewMode()
+{
+	// VCL の ChangeViewMode (MainFrm.cpp:32903-32913) はテキスト/バイナリ
+	// 表示の切り替え。wx 版の TextViewer はテキスト専用でバイナリ表示が
+	// 無いため、ここでは未移植 (未実装扱い) として警告を出す
+	SetStatusWarning(_T("ChangeViewMode は未移植 (未実装扱い): wx 版にバイナリ表示モードが無い"));
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdSwitchSameName()
+{
+	// VCL の SwitchSameName (MainFrm.cpp:33000-33010)。
+	// ファイル名主部が同じ次のファイルに切り替える
+	FilePane *pane = ActivePane();
+	if (pane->GetCurrentItem() == nullptr) { SetStatusWarning(_T("項目がありません")); return; }
+
+	const int cursor = pane->GetCursor();
+	const std::vector<FileItem> items = pane->VisibleItems();
+	const UnicodeString next_name = file_item::FindNextSameName(items, cursor, true);
+	if (next_name.IsEmpty()) {
+		SetStatusWarning(_T("同名のファイルが見つかりません"));
+		return;
+	}
+
+	// 一覧のカーソルを移動
+	const int next_index = pane->FindItemIndex(next_name);
+	if (next_index >= 0) {
+		pane->MoveCursorTo(next_index);
+	}
+
+	// ビューアで開く
+	if (viewer_ != nullptr && viewer_->IsShown()) {
+		const UnicodeString full_path = pane->CurrentFullPath();
+		UnicodeString error;
+		if (!viewer_->LoadFile(full_path, error)) {
+			SetStatusWarning(error);
+			return;
+		}
+		viewer_->GotoLine(1);
+		UpdateStatus();
+	}
+	SetStatusWarning(_T("同名のファイルに切り替えました: ") + next_name);
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdSwitchSrcHdr()
+{
+	// VCL の SwitchSrcHdr (MainFrm.cpp:33012-33019)。
+	// ソース/ヘッダの切り替え
+	FilePane *pane = ActivePane();
+	if (pane->GetCurrentItem() == nullptr) { SetStatusWarning(_T("項目がありません")); return; }
+
+	const UnicodeString cur_path = pane->CurrentFullPath();
+	const UnicodeString src_hdr_name = file_item::GetSrcHdrName(cur_path);
+	if (src_hdr_name.IsEmpty()) {
+		SetStatusWarning(_T("対応するソース/ヘッダファイルが見つかりません"));
+		return;
+	}
+
+	// 一覧のカーソルを移動
+	const int next_index = pane->FindItemIndex(src_hdr_name);
+	if (next_index >= 0) {
+		pane->MoveCursorTo(next_index);
+	}
+
+	// ビューアで開く
+	if (viewer_ != nullptr && viewer_->IsShown()) {
+		UnicodeString error;
+		if (!viewer_->LoadFile(src_hdr_name, error)) {
+			SetStatusWarning(error);
+			return;
+		}
+		viewer_->GotoLine(1);
+		UpdateStatus();
+	}
+	SetStatusWarning(_T("ソース/ヘッダに切り替えました: ") + src_hdr_name);
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdTagJump(bool direct)
+{
+	// VCL の TagJump/TagView (MainFrm.cpp:32961-32986)。
+	// カーソル行からファイル名と行番号を分割してジャンプ
+	if (viewer_ == nullptr || !viewer_->IsShown()) {
+		SetStatusWarning(_T("ビューアが表示されていません"));
+		return;
+	}
+
+	const UnicodeString cur_line = viewer_->Lines()[viewer_->CurrentLine()];
+	auto [fnam, lno] = text_viewer_core::DivideFileNameLineNo(cur_line, 0);
+
+	if (fnam.IsEmpty()) {
+		// VCL は "DJ" パラメータがあれば DirectTagJumpCore を呼ぶ
+		// (MainFrm.cpp:32982-32984)。wx 版では未移植
+		SetStatusWarning(_T("タグジャンプ先が見つかりません"));
+		return;
+	}
+
+	// TagJump は編集 (open_by_TextEditor)、TagView は閲覧 (SetAndOpenTxtViewer)
+	if (direct) {
+		// TagJump: 外部エディタで開く。wx 版に外部エディタ起動機能が無いため未移植
+		SetStatusWarning(_T("TagJump (編集) は未移植 (未実装扱い): wx 版に外部エディタ起動機能が無い"));
+		return;
+	}
+
+	// TagView: ビューアで開く
+	UnicodeString error;
+	if (!viewer_->LoadFile(fnam, error)) {
+		SetStatusWarning(error);
+		return;
+	}
+	viewer_->GotoLine(lno);
+	UpdateStatus();
+	SetStatusWarning(_T("タグジャンプ: ") + fnam + _T(":") + IntToStr(lno));
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdTagView(bool direct)
+{
+	// VCL の TagJumpDirect/TagViewDirect (MainFrm.cpp:32988-32991)。
+	// ダイレクトタグジャンプ
+	if (viewer_ == nullptr || !viewer_->IsShown()) {
+		SetStatusWarning(_T("ビューアが表示されていません"));
+		return;
+	}
+
+	const UnicodeString cur_word = viewer_->Lines()[viewer_->CurrentLine()];
+	const tag::TagJumpTarget target = tag::ResolveTagJump(
+		EmptyStr, cur_word, viewer_->FileName(), direct);
+
+	if (target.file_path.IsEmpty()) {
+		// tags ファイル検索が必要。wx 版に tags ファイル検索機能が無いため未移植
+		SetStatusWarning(_T("ダイレクトタグジャンプ (tags ファイル検索) は未移植 (未実装扱い)"));
+		return;
+	}
+
+	// ctags フォーマットの直接指定
+	if (direct) {
+		// TagJumpDirect: 外部エディタで開く。wx 版に外部エディタ起動機能が無いため未移植
+		SetStatusWarning(_T("TagJumpDirect (編集) は未移植 (未実装扱い): wx 版に外部エディタ起動機能が無い"));
+		return;
+	}
+
+	// TagViewDirect: ビューアで開く
+	UnicodeString error;
+	if (!viewer_->LoadFile(target.file_path, error)) {
+		SetStatusWarning(error);
+		return;
+	}
+	viewer_->GotoLine(target.line_no);
+	UpdateStatus();
+	SetStatusWarning(_T("ダイレクトタグジャンプ: ") + target.file_path + _T(":") + IntToStr(target.line_no));
+}
+
+//---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 // 表示の切り替え (判断は gui/view_state.h の純関数が持つ。規約8)
 //---------------------------------------------------------------------------
@@ -3593,6 +3750,40 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		}
 		if (SameStr(command, _T("Close"))) {
 			viewer_->CmdClose();
+			return true;
+		}
+		//-- V モードの表示切替・タグジャンプ (VCL ExeCommandV:32789 の分岐) --
+		// VCL の ChangeViewMode (MainFrm.cpp:32903-32913) はテキスト/バイナリ
+		// 表示の切り替え。wx 版の TextViewer はテキスト専用でバイナリ表示が
+		// 無いため、ここでは未移植 (未実装扱い) として警告を出す
+		if (SameStr(command, _T("ChangeViewMode"))) {
+			SetStatusWarning(_T("ChangeViewMode は未移植 (未実装扱い): wx 版にバイナリ表示モードが無い"));
+			return true;
+		}
+		// VCL の SwitchSameName (MainFrm.cpp:33000-33010)。
+		// ファイル名主部が同じ次のファイルに切り替える
+		if (SameStr(command, _T("SwitchSameName"))) {
+			CmdSwitchSameName();
+			return true;
+		}
+		// VCL の SwitchSrcHdr (MainFrm.cpp:33012-33019)。
+		// ソース/ヘッダの切り替え
+		if (SameStr(command, _T("SwitchSrcHdr"))) {
+			CmdSwitchSrcHdr();
+			return true;
+		}
+		// VCL の TagJump/TagView (MainFrm.cpp:32961-32986)。
+		// カーソル行からファイル名と行番号を分割してジャンプ
+		if (SameStr(command, _T("TagJump")) || SameStr(command, _T("TagView"))) {
+			const bool is_edit = SameStr(command, _T("TagJump"));
+			CmdTagJump(is_edit);
+			return true;
+		}
+		// VCL の TagJumpDirect/TagViewDirect (MainFrm.cpp:32988-32991)。
+		// ダイレクトタグジャンプ
+		if (SameStr(command, _T("TagJumpDirect")) || SameStr(command, _T("TagViewDirect"))) {
+			const bool is_edit = SameStr(command, _T("TagJumpDirect"));
+			CmdTagView(is_edit);
 			return true;
 		}
 	}
