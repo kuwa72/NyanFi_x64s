@@ -47,6 +47,9 @@ public:
 	int GetCursor() const { return cursor_; }
 	const FileItem *GetCurrentItem() const;
 
+	/// 名前から一覧の添字を探す (大文字小文字を区別しない)。見つからなければ -1
+	int FindItemIndex(const UnicodeString &name) const;
+
 	//-- マーク ------------------------------------------------------------
 	//-- 表示の切り替え (gui/view_state.h の純関数が判断を持つ) ---------------
 	/// 隠しファイルを出すか (ShowHideAtr)。変えたら Reload() が要る

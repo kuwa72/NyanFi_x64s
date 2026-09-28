@@ -359,6 +359,16 @@ std::vector<FileItem> FilePane::VisibleItems() const
 	return items;
 }
 
+//---------------------------------------------------------------------------
+int FilePane::FindItemIndex(const UnicodeString &name) const
+{
+	for (int i = 0; i < GetItemCount(); ++i) {
+		const FileItem *it = ItemAt(i);
+		if (it != nullptr && SameText(it->name, name)) return i;
+	}
+	return -1;
+}
+
 void FilePane::ApplyMarks(const std::vector<FileItem> &items)
 {
 	// 件数が食い違っていたら何もしない (取り出してから並びが変わった場合)

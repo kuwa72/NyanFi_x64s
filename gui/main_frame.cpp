@@ -795,7 +795,7 @@ void MainFrame::CmdSwitchSameName()
 
 	const int cursor = pane->GetCursor();
 	const std::vector<FileItem> items = pane->VisibleItems();
-	const UnicodeString next_name = file_item::FindNextSameName(items, cursor, true);
+	const UnicodeString next_name = FindNextSameName(items, cursor, true);
 	if (next_name.IsEmpty()) {
 		SetStatusWarning(_T("同名のファイルが見つかりません"));
 		return;
@@ -830,7 +830,7 @@ void MainFrame::CmdSwitchSrcHdr()
 	if (pane->GetCurrentItem() == nullptr) { SetStatusWarning(_T("項目がありません")); return; }
 
 	const UnicodeString cur_path = pane->CurrentFullPath();
-	const UnicodeString src_hdr_name = file_item::GetSrcHdrName(cur_path);
+	const UnicodeString src_hdr_name = GetSrcHdrName(cur_path);
 	if (src_hdr_name.IsEmpty()) {
 		SetStatusWarning(_T("対応するソース/ヘッダファイルが見つかりません"));
 		return;
