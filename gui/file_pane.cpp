@@ -363,8 +363,8 @@ std::vector<FileItem> FilePane::VisibleItems() const
 int FilePane::FindItemIndex(const UnicodeString &name) const
 {
 	for (int i = 0; i < GetItemCount(); ++i) {
-		const FileItem *it = ItemAt(i);
-		if (it != nullptr && SameText(it->name, name)) return i;
+		const FileItem &it = ItemAt(i);
+		if (SameText(it.name, name)) return i;
 	}
 	return -1;
 }
