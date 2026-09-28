@@ -45,6 +45,11 @@
 #include "gui/text_display.h"
 #include "gui/text_viewer_core.h"
 #include "gui/file_ops.h"
+#include "gui/navigation.h"
+#include "gui/history.h"
+#include "gui/csv.h"
+#include "gui/system_ops.h"
+#include "gui/color_settings.h"
 #include "gui/dupl_dialog.h"
 #include "gui/join_text_dialog.h"
 #include "gui/cv_enc_dialog.h"
@@ -3752,6 +3757,93 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 			viewer_->CmdClose();
 			return true;
 		}
+		// スクロールしながらカーソルも移動 (VCL: src/Global.cpp:15045-15046
+		// ExeCmdListBox の case 10/11 → src/UserFunc.cpp:964-1008
+		// ListBoxScrollDown/Up の move_csr=true)
+		if (SameStr(command, _T("ScrollCursorDown")) || SameStr(command, _T("ScrollCursorUp"))) {
+			const bool down = SameStr(command, _T("ScrollCursorDown"));
+			const int pn = viewer_->VisibleRows();
+			const int n = ParseScrollCursorParam(param, pn, down);
+			const ScrollCursorResult r =
+				ScrollCursorMove(viewer_->LineCount(), viewer_->GetTopIndex(),
+				                 viewer_->GetCursorIndex(), n, down);
+			viewer_->SetScrollCursor(r.top, r.cursor);
+			UpdateStatus();
+			return true;
+		}
+		// ビューアの履歴を戻る (VCL: src/MainFrm.cpp:32993-33000 ExeCommandV の
+		// BackViewHist 分岐。TextViewHistory の先頭を取り出して削除し、
+		// SetAndOpenTxtViewer で開く)
+		if (SameStr(command, _T("BackViewHist"))) {
+			const history::ViewHistoryEntry e = history::ParseViewHistoryEntry(viewer_->GetViewHistoryTop());
+			if (e.path.IsEmpty()) {
+				SetStatusWarning(_T("履歴がありません"));
+				return true;
+			}
+			viewer_->PopViewHistory();
+			if (!viewer_->OpenFileAt(e.path, e.line)) {
+				SetStatusWarning(_T("ファイルを開けません: ") + e.path);
+			}
+			return true;
+		}
+		// CSV/TSV項目のグラフ (VCL: src/MainFrm.cpp:33847-33853 CsvGraphActionExecute)。
+		// GraphForm は UI 依存のため、データ抽出のみ行い、ダイアログ表示は未実装。
+		if (SameStr(command, _T("CsvGraph"))) {
+			const csv::GraphData g = csv::ExtractGraphData(viewer_->GetRows(),
+			                                               viewer_->GetCsvColumn(),
+			                                               viewer_->IsTopIsHeader());
+			if (g.column < 0 || g.values.empty()) {
+				SetStatusWarning(_T("グラフにするデータがありません"));
+				return true;
+			}
+			// 未移植 (未実装扱い): GraphForm の表示 (src/GraphFrm.cpp)。
+			// データ抽出は完了しているが、グラフの描画・表示は行わない。
+			SetStatusWarning(_T("CSVグラフの表示は未実装です (データ抽出のみ完了)"));
+			return true;
+		}
+		// CSV/TSVレコード表示 (VCL: src/MainFrm.cpp:33865-33876 CsvRecordActionExecute)。
+		// isBinary なら強制非表示、それ以外はトグル。
+		if (SameStr(command, _T("CsvRecord"))) {
+			const bool show = csv::ToggleCsvRecord(viewer_->IsCsvRecordVisible(), param);
+			viewer_->SetCsvRecordVisible(show);
+			UpdateStatus();
+			return true;
+		}
+		// CSV/TSVエクスポート (VCL: src/MainFrm.cpp:34000-34005 ExportCsvActionExecute)。
+		// ExpCsvDlg は UI 依存のため、設定解釈のみ行い、ダイアログ表示は未実装。
+		if (SameStr(command, _T("ExportCsv"))) {
+			const csv::ExportSettings s = csv::ParseExportSettings(param, viewer_->IsTsv());
+			// 未移植 (未実装扱い): ExpCsvDlg の表示 (src/ExpCsv.cpp)。
+			// 設定解釈は完了しているが、エクスポート処理は行わない。
+			SetStatusWarning(_T("CSVエクスポートは未実装です (設定解釈のみ完了)"));
+			return true;
+		}
+		// ビットマップビュー (VCL: src/MainFrm.cpp:34040-34049 BitmapViewActionExecute)。
+		// isBinary ならトグル、そうでなければ強制非表示。
+		if (SameStr(command, _T("BitmapView"))) {
+			const bool show = image_view_ops::ShouldShowBitmapView(viewer_->IsBinary(),
+			                                                       viewer_->IsBitmapViewVisible(), param);
+			viewer_->SetBitmapViewVisible(show);
+			UpdateStatus();
+			return true;
+		}
+		// インスペクタ (VCL: src/MainFrm.cpp:34017-34028 InspectorActionExecute)。
+		// isBinary ならトグル、そうでなければ強制非表示。
+		if (SameStr(command, _T("Inspector"))) {
+			const bool show = image_view_ops::ShouldShowInspector(viewer_->IsBinary(),
+			                                                       viewer_->IsInspectorVisible(), param);
+			viewer_->SetInspectorVisible(show);
+			UpdateStatus();
+			return true;
+		}
+		// イメージプレビュー (VCL: src/MainFrm.cpp:26060 ShowImgPreview トグル)。
+		if (SameStr(command, _T("ImgPreview"))) {
+			const bool show = image_view_ops::ToggleViewFlag(viewer_->IsImgPreviewVisible(), param);
+			viewer_->SetImgPreviewVisible(show);
+			UpdateStatus();
+			return true;
+		}
+
 		//-- V モードの表示切替・タグジャンプ (VCL ExeCommandV:32789 の分岐) --
 		// VCL の ChangeViewMode (MainFrm.cpp:32903-32913) はテキスト/バイナリ
 		// 表示の切り替え。wx 版の TextViewer はテキスト専用でバイナリ表示が
@@ -4170,6 +4262,26 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	else if (SameStr(command, _T("Restart"))) {
 		CmdRestart();
 	}
+	// NyanFi の二重起動 (VCL: src/MainFrm.cpp:16872-16888 DuplicateActionExecute)。
+	// "DM"+管理者 → Execute_demote、"RA" → Execute_ex の "A" オプション、
+	// それ以外 → Execute_ex (通常起動)。
+	else if (SameStr(command, _T("Duplicate"))) {
+		const file_ops::DuplicateParam p = file_ops::ParseDuplicateParam(param, system_ops::IsAdmin());
+		if (!system_ops::ExecuteDuplicateProcess(p.demote, p.run_as)) {
+			SetStatusWarning(_T("NyanFi の二重起動に失敗しました"));
+		}
+	}
+	// 二重起動された NyanFi を終了 (VCL: src/MainFrm.cpp:17210-17218 ExitDuplActionExecute)。
+	// IsPrimary && MultiInstance のときだけ有効。
+	else if (SameStr(command, _T("ExitDupl"))) {
+		if (!file_ops::CanExitDupl(system_ops::IsPrimary(), system_ops::IsMultiInstance())) {
+			SetStatusWarning(_T("二重起動された NyanFi がありません"));
+			return true;
+		}
+		if (!system_ops::CloseOtherNyanFi()) {
+			SetStatusWarning(_T("他の NyanFi を終了できません"));
+		}
+	}
 	//-- 検索と結果リスト -----------------------------------------------------
 	else if (SameStr(command, _T("FindFileDlg"))) {
 		CmdFindFiles(find_files::Target::Files);
@@ -4585,6 +4697,16 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	else if (SameStr(command, _T("EqualSize"))) {
 		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
 		image_viewer_->SetEqualSize();
+	}
+	// カラーピッカー (VCL: src/MainFrm.cpp:35132-35135 ColorPickerActionExecute)。
+	// ColorPicker->ViewImage = ViewerImage; ColorPicker->Show();
+	// 未移植 (未実装扱い): ColorPicker フォーム (src/ColPicker.cpp)。
+	// 色の書式化 (color_settings::FormatColorPickerValue) は実装済みだが、
+	// スポイト UI と色取得は画像ビューアの描画依存のため未実装。
+	else if (SameStr(command, _T("ColorPicker"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		SetStatusWarning(_T("カラーピッカーは未実装です (色書式化のみ完了)"));
+		return true;
 	}
 	else if (SameStr(command, _T("FittedSize"))) {
 		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;

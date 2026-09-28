@@ -321,3 +321,33 @@ TEST_CASE("Add -> SaveToIni -> LoadFromIni: 一連の流れで日本語のパス
 	REQUIRE(got.Entries().size() == 1);
 	CHECK(got.Entries()[0] == UnicodeString(_T("C:\\メモ\\日本語.txt")));
 }
+
+//===========================================================================
+// ParseViewHistoryEntry: ビューア履歴エントリ (BackViewHist)
+// VCL: src/MainFrm.cpp:32993-33000 (ExeCommandV の BackViewHist 分岐)、
+//      src/TxtViewer.cpp:4830-4844 (add_ViewHistory の "パス,行番号,マーク" CSV)
+//===========================================================================
+
+TEST_CASE("ParseViewHistoryEntry: パス,行番号,マーク の CSV を分解する")
+{
+	const history::ViewHistoryEntry e =
+		history::ParseViewHistoryEntry(_T("C:\\test\\file.txt,10,1;5;"));
+	CHECK(e.path == UnicodeString(_T("C:\\test\\file.txt")));
+	CHECK(e.line == 10);
+	// VCL の BackViewHist は get_csv_array(entry, 2, true) で2列しか取り出さない
+	// (src/MainFrm.cpp:32995) ため、marks は常に空になる
+	CHECK(e.marks.IsEmpty());
+}
+
+TEST_CASE("ParseViewHistoryEntry: 行番号なしは 0、空はすべて空")
+{
+	const history::ViewHistoryEntry e1 = history::ParseViewHistoryEntry(_T("C:\\a.txt"));
+	CHECK(e1.path == UnicodeString(_T("C:\\a.txt")));
+	CHECK(e1.line == 0);
+	CHECK(e1.marks.IsEmpty());
+
+	const history::ViewHistoryEntry e2 = history::ParseViewHistoryEntry(EmptyStr);
+	CHECK(e2.path.IsEmpty());
+	CHECK(e2.line == 0);
+	CHECK(e2.marks.IsEmpty());
+}

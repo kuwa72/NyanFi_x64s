@@ -175,6 +175,33 @@ void LoadFromIni(UsrIniFile &ini, Kind kind, HistoryList &out);
 /// ini へ書き出す
 void SaveToIni(UsrIniFile &ini, Kind kind, const HistoryList &list);
 
+//---------------------------------------------------------------------------
+// ビューア履歴エントリ (BackViewHist)
+// VCL: src/MainFrm.cpp:32993-33000 (ExeCommandV の BackViewHist 分岐)、
+//      src/TxtViewer.cpp:4830-4844 (add_ViewHistory の "パス,行番号,マーク" CSV)
+//---------------------------------------------------------------------------
+
+/**
+ * @brief ビューア履歴の1エントリ (パス,行番号,マーク一覧)
+ * @details VCL の add_ViewHistory (src/TxtViewer.cpp:4830-4844) が作る
+ *          "パス,行番号,マーク一覧" の CSV を分解したもの。
+ *          BackViewHist (src/MainFrm.cpp:32993-33000) は
+ *          get_csv_array(entry, 2, true) で先頭2列を取り出す
+ */
+struct ViewHistoryEntry {
+	UnicodeString path;  //!< ファイルパス
+	int line = 0;        //!< 行番号 (0-based)
+	UnicodeString marks; //!< マーク一覧 ("1;5;" 形式)
+};
+
+/**
+ * @brief ビューア履歴エントリを分解する
+ * @param entry "パス,行番号,マーク一覧" の CSV 文字列
+ * @details VCL の get_csv_array(entry, 2, true) (src/MainFrm.cpp:32995) と同じ。
+ *          行番号は ToIntDef(0) で解釈 (VCL の itm_buf[1].ToIntDef(0) と同じ)
+ */
+ViewHistoryEntry ParseViewHistoryEntry(const UnicodeString &entry);
+
 }  // namespace history
 
 #endif  // NYANFI_GUI_HISTORY_H

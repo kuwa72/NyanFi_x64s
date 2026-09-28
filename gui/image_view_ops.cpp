@@ -386,4 +386,23 @@ int PopupMenuIndex(const UnicodeString &param)
 	return p - 1;
 }
 
+//---------------------------------------------------------------------------
+// ビットマップビュー・インスペクタの表示判定 (BitmapView / Inspector)
+// VCL: src/MainFrm.cpp:34040-34049 (BitmapViewActionExecute)、
+//      src/MainFrm.cpp:34017-34028 (InspectorActionExecute)
+//---------------------------------------------------------------------------
+bool ShouldShowBitmapView(bool is_binary, bool visible, const UnicodeString &param)
+{
+	// VCL: if (TxtViewer->isBinary) { toggle } else { hide }
+	if (!is_binary) return false;
+	return ToggleViewFlag(visible, param);
+}
+
+bool ShouldShowInspector(bool is_binary, bool visible, const UnicodeString &param)
+{
+	// VCL: if (TxtViewer->isBinary) { toggle } else { hide }
+	if (!is_binary) return false;
+	return ToggleViewFlag(visible, param);
+}
+
 }  // namespace image_view_ops
