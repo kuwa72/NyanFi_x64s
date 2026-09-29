@@ -100,12 +100,12 @@ int FindWordRight(const UnicodeString &text, int pos)
 {
 	if (pos < 0 || pos >= text.Length()) return -1;
 
-	// 区切り文字をスキップ
-	while (pos < text.Length() && is_word_sep(text, pos)) pos++;
+	// 現在の単語の末尾を探す
+	while (pos < text.Length() && !is_word_sep(text, pos)) pos++;
 	if (pos >= text.Length()) return -1;
 
-	// 単語の先頭を探す
-	while (pos < text.Length() && !is_word_sep(text, pos)) pos++;
+	// 区切り文字をスキップ
+	while (pos < text.Length() && is_word_sep(text, pos)) pos++;
 	return pos;
 }
 
