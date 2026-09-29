@@ -16,6 +16,7 @@
 #include <wx/choicdlg.h>
 #include <wx/colordlg.h>
 #include <wx/menu.h>
+#include <imm.h>  // IsImeComposing (Issue #100)
 #include <wx/dcbuffer.h>
 #include <wx/filedlg.h>
 #include <wx/progdlg.h>
@@ -5857,11 +5858,20 @@ void MainFrame::OnSearchText(wxCommandEvent &)
 }
 
 //---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 /// 検索フィールド内の Esc/Enter/上下。文字入力は素通しして IME に任せる
 void MainFrame::OnSearchKeyDown(wxKeyEvent &event)
 {
 	const int code = event.GetKeyCode();
 	if (code == WXK_ESCAPE || code == WXK_RETURN) {
+		// Issue #100: IME 変換確定の Enter/Esc はサーチ終了にしない。
+		// wx は IME 処理前のキーも wxEVT_KEY_DOWN として配送してしまうため、
+		// 変換文字列が存在すれば確定操作とみなして IME に任せる
+		// (VCL は ImmIsUIMessage で同様に食い止める)
+		if (IsImeComposing()) {
+			event.Skip();
+			return;
+		}
 		ExitIncSearch();
 		return;
 	}
@@ -5874,6 +5884,19 @@ void MainFrame::OnSearchKeyDown(wxKeyEvent &event)
 		return;
 	}
 	event.Skip();
+}
+
+//---------------------------------------------------------------------------
+/// 検索フィールドで IME 変換文字列が存在するか (Issue #100)
+bool MainFrame::IsImeComposing() const
+{
+	if (search_field_ == nullptr || !search_field_->IsShown()) return false;
+	HWND hwnd = static_cast<HWND>(search_field_->GetHWND());
+	HIMC imc = ::ImmGetContext(hwnd);
+	if (imc == nullptr) return false;
+	LONG len = ::ImmGetCompositionStringW(imc, GCS_COMPSTR, nullptr, 0);
+	::ImmReleaseContext(hwnd, imc);
+	return len > 0;
 }
 
 //---------------------------------------------------------------------------

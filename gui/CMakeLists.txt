@@ -146,5 +146,6 @@ target_compile_options(nyanfi PRIVATE ${WX_CXXFLAGS_LIST})
 target_compile_definitions(nyanfi PRIVATE NDEBUG)
 
 # mpr: WNetConnectionDialog / WNetDisconnectDialog (ネットワークドライブの割り当て)
-target_link_libraries(nyanfi PRIVATE nyanfi_gui_core nyanfi_core nyanfi_legacy_flags mpr ${WX_LIBS_LIST})
+# imm32: 検索フィールドの IME 変換状態判定 (ImmGetContext)
+target_link_libraries(nyanfi PRIVATE nyanfi_gui_core nyanfi_core nyanfi_legacy_flags mpr imm32 ${WX_LIBS_LIST})
 nyanfi_target_vcl_shim(nyanfi)

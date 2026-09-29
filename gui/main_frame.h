@@ -102,6 +102,7 @@ private:
 	void JumpToNearestIncSearchMatch();           //!< 現在位置から最も近い一致へ移動する
 	void OnSearchText(wxCommandEvent &event);     //!< 検索フィールドの入力同期 (IME 対応)
 	void OnSearchKeyDown(wxKeyEvent &event);      //!< 検索フィールド内の Esc/Enter/上下
+	bool IsImeComposing() const;                  //!< IME変換文字列の有無 (Issue #100)
 	void ApplyIncSearchWord();                    //!< 現在のキーワードで絞り込み反映
 
 	//-- L/S モードと結果リスト (判断は gui/list_search.h の純関数が持つ) ------
