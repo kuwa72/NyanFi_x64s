@@ -127,10 +127,12 @@ bool FindWordAt(const UnicodeString &text, int pos, int &start, int &end)
 //---------------------------------------------------------------------------
 int FindLineStart(const UnicodeString &text, int pos)
 {
+	// pos は0ベース。行頭の0ベース位置を返す
 	if (pos < 0 || pos > text.Length()) return 0;
 	int p = pos;
+	// 1ベースの SubString で参照するため p>=1 のときだけ見る
 	while (p > 0 && text.SubString(p, 1) != _T("\n")) p--;
-	if (p > 0) p++;  // 改行の直後
+	// p==0 か、text[p-1]=='\n' のどちらか。改行の直後 = p
 	return p;
 }
 
