@@ -67,11 +67,11 @@ public:
 		wxBoxSizer *top = new wxBoxSizer(wxVERTICAL);
 		top->Add(grid, wxSizerFlags().Expand().Border(wxALL, 4));
 
-		use_regex_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("正規表現として扱う (OFF ならそのままの文字列として一致)")));
+		use_regex_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("正規表現として扱う (OFF ならそのままの文字列として一致)(&R)")));
 		use_regex_->SetValue(true);
-		case_sensitive_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("大小文字を区別する")));
+		case_sensitive_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("大小文字を区別する(&C)")));
 		case_sensitive_->SetValue(true);
-		only_base_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("拡張子を除いた部分だけに適用する")));
+		only_base_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("拡張子を除いた部分だけに適用する(&T)")));
 
 		top->Add(use_regex_, wxSizerFlags().Border(wxALL, 4));
 		top->Add(case_sensitive_, wxSizerFlags().Border(wxLEFT | wxRIGHT | wxBOTTOM, 4));
@@ -146,7 +146,7 @@ public:
 		top->Add(grid, wxSizerFlags().Expand().Border(wxALL, 4));
 
 		wxBoxSizer *ext_row = new wxBoxSizer(wxHORIZONTAL);
-		change_ext_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("拡張子を変更する")));
+		change_ext_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("拡張子を変更する(&E)")));
 		ext_row->Add(change_ext_, wxSizerFlags().CentreVertical().Border(wxRIGHT, 8));
 		new_ext_ = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(100, -1));
 		new_ext_->Enable(false);
@@ -203,14 +203,14 @@ public:
 	{
 		wxBoxSizer *top = new wxBoxSizer(wxVERTICAL);
 
-		upper_ = new wxRadioButton(this, wxID_ANY, to_wx(_T("大文字に変換 (ABC)")), wxDefaultPosition,
+		upper_ = new wxRadioButton(this, wxID_ANY, to_wx(_T("大文字に変換 (ABC)(&U)")), wxDefaultPosition,
 		                            wxDefaultSize, wxRB_GROUP);
-		lower_ = new wxRadioButton(this, wxID_ANY, to_wx(_T("小文字に変換 (abc)")));
+		lower_ = new wxRadioButton(this, wxID_ANY, to_wx(_T("小文字に変換 (abc)(&L)")));
 		upper_->SetValue(true);
 		top->Add(upper_, wxSizerFlags().Border(wxALL, 4));
 		top->Add(lower_, wxSizerFlags().Border(wxLEFT | wxRIGHT | wxBOTTOM, 4));
 
-		only_base_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("拡張子を除いた部分だけ変換する (拡張子は変化しない)")));
+		only_base_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("拡張子を除いた部分だけ変換する (拡張子は変化しない)(&N)")));
 		top->Add(only_base_, wxSizerFlags().Border(wxALL, 4));
 
 		SetSizerAndFit(top);

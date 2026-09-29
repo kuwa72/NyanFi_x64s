@@ -134,17 +134,17 @@ public:
 		list_->Bind(wxEVT_CHAR, &DriveSelectDialog::OnChar, this);
 
 		wxBoxSizer *options = new wxBoxSizer(wxHORIZONTAL);
-		only_acc_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("アクセス可能のみ表示")));
+		only_acc_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("アクセス可能のみ表示(&A)")));
 		only_acc_->SetValue(context_.options.only_accessible);
 		options->Add(only_acc_, wxSizerFlags().Border(wxRIGHT, 10));
-		show_icon_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("アイコン表示")));
+		show_icon_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("アイコン表示(&I)")));
 		show_icon_->SetValue(context_.options.show_icons);
 		options->Add(show_icon_, wxSizerFlags().Border(wxRIGHT, 10));
-		large_icon_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("大サイズ")));
+		large_icon_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("大サイズ(&L)")));
 		large_icon_->SetValue(context_.options.large_icons);
 		large_icon_->Enable(context_.options.show_icons);
 		options->Add(large_icon_, wxSizerFlags().Border(wxRIGHT, 10));
-		to_root_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("ルートへ移動")));
+		to_root_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("ルートへ移動(&R)")));
 		to_root_->SetValue(context_.options.to_root);
 		options->Add(to_root_);
 		top->Add(options, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
@@ -156,9 +156,9 @@ public:
 		top->Add(note, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 
 		wxBoxSizer *actions = new wxBoxSizer(wxHORIZONTAL);
-		property_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("プロパティ")));
-		eject_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("取り出し")));
-		tray_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("トレイを開く")));
+		property_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("プロパティ(&P)")));
+		eject_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("取り出し(&E)")));
+		tray_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("トレイを開く(&T)")));
 		actions->Add(property_btn_, wxSizerFlags().Border(wxRIGHT, 4));
 		actions->Add(eject_btn_, wxSizerFlags().Border(wxRIGHT, 4));
 		actions->Add(tray_btn_);

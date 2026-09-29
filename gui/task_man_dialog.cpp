@@ -55,13 +55,13 @@ public:
 		top->Add(status_, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 
 		wxBoxSizer *actions = new wxBoxSizer(wxHORIZONTAL);
-		cancel_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("中止")));
-		cancel_all_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("すべて中止")));
-		pause_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("一旦停止")));
-		restart_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("再開")));
-		suspend_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("保留")));
-		start_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("開始")));
-		ext_start_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("割り込み実行")));
+		cancel_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("中止(&C)")));
+		cancel_all_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("すべて中止(&A)")));
+		pause_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("一旦停止(&P)")));
+		restart_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("再開(&R)")));
+		suspend_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("保留(&H)")));
+		start_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("開始(&S)")));
+		ext_start_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("割り込み実行(&W)")));
 		actions->Add(cancel_btn_, wxSizerFlags().Border(wxRIGHT, 4));
 		actions->Add(cancel_all_btn_, wxSizerFlags().Border(wxRIGHT, 4));
 		actions->Add(pause_btn_, wxSizerFlags().Border(wxRIGHT, 4));

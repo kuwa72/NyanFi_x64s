@@ -107,6 +107,11 @@ jobs:
       - name: コマンド名とキー割り当ての確認
         run: python3 scripts/check_commands.py
 
+      # ダイアログのカスタムUI項目にニーモニック (&X) があるか (Issue #93)。
+      # 無いとキーボード完結できない
+      - name: ダイアログニーモニックの確認
+        run: python3 scripts/check_mnemonics.py
+
       - name: Configure
         run: |
           cmake -S . -B build -G Ninja \

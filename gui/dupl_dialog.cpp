@@ -55,7 +55,7 @@ public:
 		grid->Add(mask_ctrl_, wxSizerFlags(1).Expand());
 		top->Add(grid, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 
-		recursive_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("サブディレクトリを含む")));
+		recursive_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("サブディレクトリを含む(&S)")));
 		recursive_chk_->SetValue(true);
 		top->Add(recursive_chk_, wxSizerFlags().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 

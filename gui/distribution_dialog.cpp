@@ -85,12 +85,12 @@ public:
 		top->Add(edit, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT, 8));
 
 		wxBoxSizer *edit_buttons = new wxBoxSizer(wxHORIZONTAL);
-		add_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("追加")));
-		chg_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("変更")));
-		del_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("削除")));
-		up_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("上へ")));
-		down_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("下へ")));
-		all_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("全選択/解除")));
+		add_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("追加(&A)")));
+		chg_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("変更(&H)")));
+		del_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("削除(&D)")));
+		up_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("上へ(&U)")));
+		down_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("下へ(&S)")));
+		all_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("全選択/解除(&Z)")));
 		edit_buttons->Add(add_btn_, wxSizerFlags().Border(wxRIGHT, 4));
 		edit_buttons->Add(chg_btn_, wxSizerFlags().Border(wxRIGHT, 4));
 		edit_buttons->Add(del_btn_, wxSizerFlags().Border(wxRIGHT, 4));
@@ -106,8 +106,8 @@ public:
 		all_btn_->Bind(wxEVT_BUTTON, &DistributionInputDialog::OnToggleAll, this);
 
 		wxBoxSizer *ref_buttons = new wxBoxSizer(wxHORIZONTAL);
-		ref_list_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("リストファイル...")));
-		ref_dir_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("振り分け先...")));
+		ref_list_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("リストファイル(&L)...")));
+		ref_dir_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("振り分け先(&F)...")));
 		find_edit_ = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(180, -1));
 		ref_buttons->Add(ref_list_btn_, wxSizerFlags().Border(wxRIGHT, 4));
 		ref_buttons->Add(ref_dir_btn_, wxSizerFlags().Border(wxRIGHT, 8));
@@ -120,9 +120,9 @@ public:
 		find_edit_->Bind(wxEVT_TEXT, &DistributionInputDialog::OnFind, this);
 
 		wxBoxSizer *options_sizer = new wxBoxSizer(wxHORIZONTAL);
-		create_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("振り分け先を自動作成")));
-		group_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("同一タイトルを同じ状態にする")));
-		preview_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("リストファイルプレビュー (未実装)")));
+		create_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("振り分け先を自動作成(&J)")));
+		group_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("同一タイトルを同じ状態にする(&O)")));
+		preview_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("リストファイルプレビュー(&P) (未実装)")));
 		create_chk_->SetValue(options_.create_directories);
 		group_chk_->SetValue(false);
 		preview_chk_->SetValue(false);
@@ -150,8 +150,8 @@ public:
 		top->Add(status_, wxSizerFlags().Expand().Border(wxALL, 8));
 
 		wxBoxSizer *buttons = new wxBoxSizer(wxHORIZONTAL);
-		copy_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("コピー")));
-		move_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("移動")));
+		copy_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("コピー(&C)")));
+		move_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("移動(&I)")));
 		buttons->Add(copy_btn_, wxSizerFlags().Border(wxRIGHT, 4));
 		buttons->Add(move_btn_, wxSizerFlags().Border(wxRIGHT, 8));
 		buttons->AddStretchSpacer();

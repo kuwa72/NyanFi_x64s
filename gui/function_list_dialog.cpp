@@ -42,9 +42,9 @@ public:
 		                wxSizerFlags().CentreVertical().Border(wxRIGHT, 4));
 		filter_edit_ = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(300, -1));
 		filter_row->Add(filter_edit_, wxSizerFlags(1).Expand().Border(wxRIGHT, 8));
-		migemo_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("Migemo")));
-		name_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("名前だけ")));
-		link_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("行に連動")));
+		migemo_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("&Migemo")));
+		name_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("名前だけ(&N)")));
+		link_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("行に連動(&L)")));
 		migemo_chk_->SetValue(options_.fuzzy);
 		name_chk_->SetValue(options_.name_only);
 		link_chk_->SetValue(options_.link);
@@ -65,10 +65,10 @@ public:
 			user_edit_ = new wxTextCtrl(this, wxID_ANY, to_wx(source_.user_pattern),
 			                             wxDefaultPosition, wxSize(260, -1));
 			user_row->Add(user_edit_, wxSizerFlags(1).Expand().Border(wxRIGHT, 4));
-			regex_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("正規表現")));
+			regex_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("正規表現(&R)")));
 			regex_chk_->SetValue(options_.regex);
 			user_row->Add(regex_chk_, wxSizerFlags().Border(wxRIGHT, 4));
-			update_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("更新")));
+			update_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("更新(&U)")));
 			user_row->Add(update_btn_);
 			top->Add(user_row, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 			user_edit_->Bind(wxEVT_TEXT_ENTER, &FunctionListInputDialog::OnUpdateUser, this);
@@ -84,7 +84,7 @@ public:
 		top->Add(status_, wxSizerFlags().Expand().Border(wxALL, 8));
 
 		wxBoxSizer *buttons = new wxBoxSizer(wxHORIZONTAL);
-		edit_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("編集...")));
+		edit_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("編集(&E)...")));
 		buttons->Add(edit_btn_, wxSizerFlags().Border(wxRIGHT, 4));
 		buttons->AddStretchSpacer();
 		buttons->Add(new wxButton(this, wxID_OK, to_wx(_T("OK"))),

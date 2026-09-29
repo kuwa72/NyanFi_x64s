@@ -41,7 +41,7 @@ public:
 		                                wxDefaultPosition, wxDefaultSize, history, wxTE_PROCESS_ENTER);
 		wxBoxSizer *template_box = new wxBoxSizer(wxHORIZONTAL);
 		template_box->Add(template_ctrl_, wxSizerFlags(1).Expand().Border(wxRIGHT, 6));
-		template_box->Add(new wxButton(this, ID_BROWSE, to_wx(_T("..."))), wxSizerFlags());
+		template_box->Add(new wxButton(this, ID_BROWSE, to_wx(_T("...(&B)"))), wxSizerFlags());
 		grid->Add(new wxStaticText(this, wxID_ANY, to_wx(_T("テンプレート"))), wxSizerFlags().CentreVertical());
 		grid->Add(template_box, wxSizerFlags(1).Expand());
 

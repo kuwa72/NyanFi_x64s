@@ -86,11 +86,11 @@ public:
 		dir_mode_->Show(show_dir_options_);
 		top->Add(dir_mode_, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 
-		natural_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("自然順")));
-		desc_name_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("名前・拡張子，降順")));
-		old_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("更新日時，降順")));
-		small_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("サイズ，小さい順")));
-		attr_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("属性，降順")));
+		natural_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("自然順(&N)")));
+		desc_name_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("名前・拡張子，降順(&K)")));
+		old_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("更新日時，降順(&U)")));
+		small_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("サイズ，小さい順(&C)")));
+		attr_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("属性，降順(&Z)")));
 		natural_->SetValue(initial.natural);
 		desc_name_->SetValue(initial.descending_name);
 		old_->SetValue(initial.descending_old);
@@ -119,11 +119,11 @@ public:
 		ext_row->Add(ext_, wxSizerFlags(1).Expand());
 		top->Add(ext_row, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 
-		both_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("左右同じ設定にする")));
-		logical_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("名前と拡張子に論理順を使う")));
-		acc_dt_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("更新日時(T/D)を切り替える")));
-		same_close_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("同じキーで閉じたら確定")));
-		extended_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("拡張設定を表示")));
+		both_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("左右同じ設定にする(&B)")));
+		logical_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("名前と拡張子に論理順を使う(&L)")));
+		acc_dt_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("更新日時(T/D)を切り替える(&T)")));
+		same_close_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("同じキーで閉じたら確定(&O)")));
+		extended_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("拡張設定を表示(&H)")));
 		both_->SetValue(initial.both);
 		logical_->SetValue(initial.logical);
 		acc_dt_->SetValue(initial.acc_date_time);

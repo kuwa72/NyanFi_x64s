@@ -64,7 +64,7 @@ public:
 		icon_ctrl_ = new wxTextCtrl(this, wxID_ANY, to_wx(initial.icon),
 		                            wxDefaultPosition, wxSize(280, -1));
 		grid->Add(icon_ctrl_, wxSizerFlags(1).Expand());
-		icon_ref_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("参照...")));
+		icon_ref_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("参照(&R)...")));
 		grid->Add(icon_ref_btn_);
 		icon_ref_btn_->Bind(wxEVT_BUTTON, &TabInputDialog::OnRefIcon, this);
 
@@ -73,7 +73,7 @@ public:
 		home0_ctrl_ = new wxTextCtrl(this, wxID_ANY, to_wx(initial.home0),
 		                             wxDefaultPosition, wxSize(280, -1));
 		grid->Add(home0_ctrl_, wxSizerFlags(1).Expand());
-		home0_ref_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("参照...")));
+		home0_ref_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("参照(&H)...")));
 		grid->Add(home0_ref_btn_);
 		home0_ref_btn_->Bind(wxEVT_BUTTON, &TabInputDialog::OnRefHome0, this);
 
@@ -82,14 +82,14 @@ public:
 		home1_ctrl_ = new wxTextCtrl(this, wxID_ANY, to_wx(initial.home1),
 		                             wxDefaultPosition, wxSize(280, -1));
 		grid->Add(home1_ctrl_, wxSizerFlags(1).Expand());
-		home1_ref_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("参照...")));
+		home1_ref_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("参照(&M)...")));
 		grid->Add(home1_ref_btn_);
 		home1_ref_btn_->Bind(wxEVT_BUTTON, &TabInputDialog::OnRefHome1, this);
 
 		top->Add(grid, wxSizerFlags().Expand().Border(wxALL, 8));
 
 		// VCL の SetCurDirBtn (現在のディレクトリを両ホームに入れる)
-		set_cur_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("現在のディレクトリを設定")));
+		set_cur_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("現在のディレクトリを設定(&C)")));
 		top->Add(set_cur_btn_, wxSizerFlags().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 		set_cur_btn_->Bind(wxEVT_BUTTON, &TabInputDialog::OnSetCurDir, this);
 
@@ -112,7 +112,7 @@ public:
 		work_ctrl_ = new wxTextCtrl(this, wxID_ANY, to_wx(initial.work_list),
 		                            wxDefaultPosition, wxSize(220, -1));
 		work_row->Add(work_ctrl_, wxSizerFlags(1).Expand().Border(wxRIGHT, 4));
-		work_ref_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("参照...")));
+		work_ref_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("参照(&W)...")));
 		work_row->Add(work_ref_btn_);
 		work_ref_btn_->Bind(wxEVT_BUTTON, &TabInputDialog::OnRefWork, this);
 		top->Add(work_row, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));

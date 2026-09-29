@@ -61,12 +61,12 @@ public:
 		top->Add(list_ctrl_, wxSizerFlags(1).Expand().Border(wxALL, 8));
 
 		wxBoxSizer *copy_box = new wxBoxSizer(wxHORIZONTAL);
-		copy_selected_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("選択UNCをコピー")));
-		copy_all_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("すべてのUNCをコピー")));
+		copy_selected_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("選択UNCをコピー(&S)")));
+		copy_all_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("すべてのUNCをコピー(&A)")));
 		copy_box->Add(copy_selected_btn_);
 		copy_box->Add(copy_all_btn_, wxSizerFlags().Border(wxLEFT, 8));
 		copy_box->AddStretchSpacer();
-		copy_box->Add(new wxButton(this, wxID_REFRESH, to_wx(_T("更新"))));
+		copy_box->Add(new wxButton(this, wxID_REFRESH, to_wx(_T("更新(&R)"))));
 		open_btn_ = new wxButton(this, wxID_OK, to_wx(_T("開く")));
 		copy_box->Add(open_btn_, wxSizerFlags().Border(wxLEFT, 8));
 		copy_box->Add(new wxButton(this, wxID_CANCEL, to_wx(_T("閉じる"))),

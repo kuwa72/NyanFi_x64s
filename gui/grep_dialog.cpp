@@ -69,9 +69,9 @@ public:
 
 		top->Add(grid, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT, 8));
 
-		recursive_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("サブディレクトリを含む")));
-		regex_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("正規表現として扱う")));
-		case_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("大小文字を区別する")));
+		recursive_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("サブディレクトリを含む(&S)")));
+		regex_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("正規表現として扱う(&R)")));
+		case_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("大小文字を区別する(&C)")));
 		top->Add(recursive_chk_, wxSizerFlags().Border(wxALL, 8));
 		top->Add(regex_chk_, wxSizerFlags().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 		top->Add(case_chk_, wxSizerFlags().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));

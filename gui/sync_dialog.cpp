@@ -70,18 +70,18 @@ public:
 		name_edit_ = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
 		                            wxDefaultPosition, wxSize(160, -1));
 		name_row->Add(name_edit_, wxSizerFlags().Border(wxRIGHT, 8));
-		owr_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("上書き")));
+		owr_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("上書き(&O)")));
 		name_row->Add(owr_chk_, wxSizerFlags().CentreVertical().Border(wxRIGHT, 8));
-		del_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("同期削除")));
+		del_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("同期削除(&S)")));
 		name_row->Add(del_chk_, wxSizerFlags().CentreVertical());
 		top->Add(name_row, wxSizerFlags().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 
 		wxBoxSizer *reg_btn_row = new wxBoxSizer(wxHORIZONTAL);
-		add_reg_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("登録")));
+		add_reg_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("登録(&R)")));
 		reg_btn_row->Add(add_reg_btn_, wxSizerFlags().Border(wxRIGHT, 4));
-		chg_reg_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("変更")));
+		chg_reg_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("変更(&C)")));
 		reg_btn_row->Add(chg_reg_btn_, wxSizerFlags().Border(wxRIGHT, 4));
-		del_reg_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("削除")));
+		del_reg_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("削除(&D)")));
 		reg_btn_row->Add(del_reg_btn_, wxSizerFlags().Border(wxRIGHT, 4));
 		top->Add(reg_btn_row, wxSizerFlags().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 		add_reg_btn_->Bind(wxEVT_BUTTON, &SyncInputDialog::OnAddReg, this);
@@ -93,11 +93,11 @@ public:
 		top->Add(dir_list_, wxSizerFlags(1).Expand().Border(wxALL, 8));
 
 		wxBoxSizer *dir_btn_row = new wxBoxSizer(wxHORIZONTAL);
-		add_dir_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("追加...")));
+		add_dir_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("追加(&A)...")));
 		dir_btn_row->Add(add_dir_btn_, wxSizerFlags().Border(wxRIGHT, 4));
-		del_dir_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("削除")));
+		del_dir_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("削除(&J)")));
 		dir_btn_row->Add(del_dir_btn_, wxSizerFlags().Border(wxRIGHT, 4));
-		clr_dir_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("クリア")));
+		clr_dir_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("クリア(&K)")));
 		dir_btn_row->Add(clr_dir_btn_, wxSizerFlags().Border(wxRIGHT, 4));
 		top->Add(dir_btn_row, wxSizerFlags().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 		add_dir_btn_->Bind(wxEVT_BUTTON, &SyncInputDialog::OnAddDir, this);

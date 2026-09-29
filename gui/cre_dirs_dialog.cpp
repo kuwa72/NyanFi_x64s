@@ -81,7 +81,7 @@ public:
 		wxRadioBox *serial_pos = MakePositionBox(state_.serial_before);
 		serial_pos_ = serial_pos;
 		serial->Add(serial_pos_, wxSizerFlags().Border(wxLEFT, 8));
-		wxButton *serial_add = new wxButton(this, wxID_ANY, to_wx(_T("付加")));
+		wxButton *serial_add = new wxButton(this, wxID_ANY, to_wx(_T("付加(&S)")));
 		serial_add->Bind(wxEVT_BUTTON, &CreateDirsDialog::OnAddSerial, this);
 		serial->Add(serial_add, wxSizerFlags().Border(wxLEFT, 8));
 		top->Add(serial, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
@@ -93,7 +93,7 @@ public:
 		wxRadioBox *text_pos = MakePositionBox(state_.text_before);
 		text_pos_ = text_pos;
 		text->Add(text_pos_, wxSizerFlags().Border(wxLEFT, 8));
-		wxButton *text_add = new wxButton(this, wxID_ANY, to_wx(_T("付加")));
+		wxButton *text_add = new wxButton(this, wxID_ANY, to_wx(_T("付加(&T)")));
 		text_add->Bind(wxEVT_BUTTON, &CreateDirsDialog::OnAddText, this);
 		text->Add(text_add, wxSizerFlags().Border(wxLEFT, 8));
 		top->Add(text, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
@@ -108,17 +108,17 @@ public:
 		wxRadioBox *date_pos = MakePositionBox(state_.date_before);
 		date_pos_ = date_pos;
 		date->Add(date_pos_, wxSizerFlags().Border(wxLEFT, 8));
-		wxButton *date_add = new wxButton(this, wxID_ANY, to_wx(_T("付加")));
+		wxButton *date_add = new wxButton(this, wxID_ANY, to_wx(_T("付加(&D)")));
 		date_add->Bind(wxEVT_BUTTON, &CreateDirsDialog::OnAddDate, this);
 		date->Add(date_add, wxSizerFlags().Border(wxLEFT, 8));
 		top->Add(date, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 
 		wxBoxSizer *actions = new wxBoxSizer(wxHORIZONTAL);
-		wxButton *empty = new wxButton(this, wxID_ANY, to_wx(_T("空項目")));
+		wxButton *empty = new wxButton(this, wxID_ANY, to_wx(_T("空項目(&E)")));
 		empty->Bind(wxEVT_BUTTON, &CreateDirsDialog::OnAddEmpty, this);
-		wxButton *undo = new wxButton(this, wxID_ANY, to_wx(_T("元に戻す")));
+		wxButton *undo = new wxButton(this, wxID_ANY, to_wx(_T("元に戻す(&R)")));
 		undo->Bind(wxEVT_BUTTON, &CreateDirsDialog::OnUndo, this);
-		wxButton *clear = new wxButton(this, wxID_ANY, to_wx(_T("クリア")));
+		wxButton *clear = new wxButton(this, wxID_ANY, to_wx(_T("クリア(&C)")));
 		clear->Bind(wxEVT_BUTTON, &CreateDirsDialog::OnClear, this);
 		actions->Add(empty, wxSizerFlags().Border(wxRIGHT, 4));
 		actions->Add(undo, wxSizerFlags().Border(wxRIGHT, 4));
