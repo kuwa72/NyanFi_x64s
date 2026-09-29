@@ -64,9 +64,9 @@ public:
 
 		top->Add(grid, wxSizerFlags().Expand().Border(wxALL, 8));
 
-		regex_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("正規表現として扱う")));
-		case_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("大小文字を区別する")));
-		and_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("空白区切りを AND で結ぶ (既定は OR)")));
+		regex_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("正規表現として扱う(&E)")));
+		case_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("大小文字を区別する(&D)")));
+		and_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("空白区切りを AND で結ぶ (既定は OR)(&N)")));
 		top->Add(regex_chk_, wxSizerFlags().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 		top->Add(case_chk_, wxSizerFlags().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 		top->Add(and_chk_, wxSizerFlags().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
@@ -81,7 +81,7 @@ public:
 		                            : initial_target == find_files::Target::Both ? 2 : 0);
 		top->Add(target_radio_, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 
-		recursive_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("サブディレクトリを含む")));
+		recursive_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("サブディレクトリを含む(&I)")));
 		recursive_chk_->SetValue(true);
 		top->Add(recursive_chk_, wxSizerFlags().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 
@@ -135,11 +135,11 @@ public:
 		attr_mode_ = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, attr_modes);
 		attr_mode_->SetSelection(0);
 		attr_row->Add(attr_mode_, wxSizerFlags().CentreVertical().Border(wxRIGHT, 8));
-		attr_r_ = new wxCheckBox(this, wxID_ANY, _T("R"));
-		attr_h_ = new wxCheckBox(this, wxID_ANY, _T("H"));
-		attr_s_ = new wxCheckBox(this, wxID_ANY, _T("S"));
-		attr_a_ = new wxCheckBox(this, wxID_ANY, _T("A"));
-		attr_c_ = new wxCheckBox(this, wxID_ANY, _T("C"));
+		attr_r_ = new wxCheckBox(this, wxID_ANY, _T("&R"));
+		attr_h_ = new wxCheckBox(this, wxID_ANY, _T("&H"));
+		attr_s_ = new wxCheckBox(this, wxID_ANY, _T("&S"));
+		attr_a_ = new wxCheckBox(this, wxID_ANY, _T("&A"));
+		attr_c_ = new wxCheckBox(this, wxID_ANY, _T("&C"));
 		attr_row->Add(attr_r_, wxSizerFlags().CentreVertical().Border(wxRIGHT, 4));
 		attr_row->Add(attr_h_, wxSizerFlags().CentreVertical().Border(wxRIGHT, 4));
 		attr_row->Add(attr_s_, wxSizerFlags().CentreVertical().Border(wxRIGHT, 4));

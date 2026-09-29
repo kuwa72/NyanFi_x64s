@@ -129,13 +129,13 @@ public:
 		top->Add(status_, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 
 		wxBoxSizer *op_row = new wxBoxSizer(wxHORIZONTAL);
-		min_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("最小化")));
+		min_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("最小化(&N)")));
 		op_row->Add(min_btn_, wxSizerFlags().Border(wxRIGHT, 4));
-		max_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("最大化")));
+		max_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("最大化(&X)")));
 		op_row->Add(max_btn_, wxSizerFlags().Border(wxRIGHT, 4));
-		norm_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("元に戻す")));
+		norm_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("元に戻す(&R)")));
 		op_row->Add(norm_btn_, wxSizerFlags().Border(wxRIGHT, 4));
-		close_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("閉じる...")));
+		close_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("閉じる(&C)...")));
 		op_row->Add(close_btn_, wxSizerFlags().Border(wxRIGHT, 4));
 		top->Add(op_row, wxSizerFlags().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 		min_btn_->Bind(wxEVT_BUTTON, &AppListDialog::OnWinOp, this);

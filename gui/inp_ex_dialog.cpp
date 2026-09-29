@@ -107,11 +107,11 @@ private:
 	void BuildCreateDirOptions()
 	{
 		wxBoxSizer *box = new wxBoxSizer(wxVERTICAL);
-		change_dir_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("作成後にカレントへ変更")));
+		change_dir_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("作成後にカレントへ変更(&C)")));
 		change_dir_->SetValue(values_.change_dir);
-		convert_chars_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("文字変換を適用")));
+		convert_chars_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("文字変換を適用(&M)")));
 		convert_chars_->SetValue(values_.convert_chars);
-		select_default_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("デフォルトを常に初期選択")));
+		select_default_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("デフォルトを常に初期選択(&D)")));
 		select_default_->SetValue(values_.select_default);
 		box->Add(change_dir_, wxSizerFlags().Border(wxBOTTOM, 4));
 		box->Add(convert_chars_, wxSizerFlags().Border(wxBOTTOM, 4));
@@ -135,11 +135,11 @@ private:
 		box->Add(new wxStaticText(this, wxID_ANY, to_wx(_T("文字コード"))),
 		         wxSizerFlags().CentreVertical().Border(wxRIGHT, 4));
 		box->Add(page_ctrl_, wxSizerFlags(1).Expand());
-		clip_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("クリップボードから内容を使う")));
+		clip_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("クリップボードから内容を使う(&B)")));
 		clip_chk_->SetValue(values_.use_clipboard);
 		clip_chk_->Enable(values_.mode != inp_ex::Mode::ClipPaste);
 		box->Add(clip_chk_, wxSizerFlags().Border(wxTOP, 4));
-		edit_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("エディタで開く")));
+		edit_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("エディタで開く(&E)")));
 		edit_chk_->SetValue(values_.edit_new_text);
 		box->Add(edit_chk_);
 		top_->Add(box, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));

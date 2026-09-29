@@ -118,7 +118,7 @@ public:
 		format_grid->Add(compression_, wxSizerFlags().Expand());
 		top->Add(format_grid, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxTOP, 8));
 
-		grayscale_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("グレースケール")));
+		grayscale_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("グレースケール(&G)")));
 		grayscale_->SetValue(initial.grayscale);
 		top->Add(grayscale_, wxSizerFlags().Border(wxALL, 8));
 
@@ -163,7 +163,7 @@ public:
 		margin->Add(new wxStaticText(this, wxID_ANY, to_wx(_T("余白色"))), wxSizerFlags().CentreVertical());
 		margin_panel_ = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(70, 24));
 		margin_panel_->SetBackgroundColour(from_colour_ref(initial.margin_color));
-		margin_button_ = new wxButton(this, wxID_ANY, _T("..."));
+		margin_button_ = new wxButton(this, wxID_ANY, _T("...(&M)"));
 		margin_button_->Bind(wxEVT_BUTTON, &CvImageDialog::OnMargin, this);
 		margin->Add(margin_panel_, wxSizerFlags().Border(wxLEFT, 6));
 		margin->Add(margin_button_, wxSizerFlags().Border(wxLEFT, 4));
@@ -184,9 +184,9 @@ public:
 		name_box->Add(name_row, wxSizerFlags().Expand());
 		top->Add(name_box, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 
-		keep_time_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("ファイルの時刻を保持")));
+		keep_time_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("ファイルの時刻を保持(&H)")));
 		keep_time_->SetValue(initial.keep_time);
-		no_preview_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("プレビューを使用しない")));
+		no_preview_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("プレビューを使用しない(&P)")));
 		no_preview_->SetValue(initial.not_use_preview);
 		top->Add(keep_time_, wxSizerFlags().Border(wxLEFT | wxRIGHT, 8));
 		top->Add(no_preview_, wxSizerFlags().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
@@ -197,7 +197,7 @@ public:
 			              wxSizerFlags().Border(wxBOTTOM, 4));
 			clip_name_ = new wxTextCtrl(this, wxID_ANY, to_wx(initial.clipboard_name));
 			clip_box->Add(clip_name_, wxSizerFlags().Expand());
-			clip_overwrite_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("同名を手動で変更")));
+			clip_overwrite_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("同名を手動で変更(&D)")));
 			clip_overwrite_->SetValue(initial.clipboard_overwrite);
 			clip_box->Add(clip_overwrite_, wxSizerFlags().Border(wxTOP, 6));
 			top->Add(clip_box, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));

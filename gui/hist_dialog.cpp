@@ -67,7 +67,7 @@ public:
 			filter_ctrl_ = new wxTextCtrl(this, wxID_ANY, to_wx(state_.filter),
 			                              wxDefaultPosition, wxSize(300, -1));
 			filter_row->Add(filter_ctrl_, wxSizerFlags(1).Expand().Border(wxRIGHT, 8));
-			migemo_ctrl_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("Migemo")));
+			migemo_ctrl_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("&Migemo")));
 			migemo_ctrl_->SetValue(state_.migemo);
 			filter_row->Add(migemo_ctrl_, wxSizerFlags().CentreVertical());
 			top->Add(filter_row, wxSizerFlags().Expand().Border(wxALL, 8));
@@ -81,27 +81,27 @@ public:
 
 		wxBoxSizer *actions = new wxBoxSizer(wxHORIZONTAL);
 		if (state_.mode == hist::Mode::Search) {
-			add_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("ディレクトリを追加...")));
+			add_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("ディレクトリを追加...(&D)")));
 			actions->Add(add_btn_, wxSizerFlags().Border(wxRIGHT, 4));
 			add_btn_->Bind(wxEVT_BUTTON, &HistoryDialog::OnAddDirectories, this);
 		}
-		clear_all_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("すべて削除")));
+		clear_all_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("すべて削除(&A)")));
 		actions->Add(clear_all_btn_, wxSizerFlags().Border(wxRIGHT, 4));
 		clear_all_btn_->Bind(wxEVT_BUTTON, &HistoryDialog::OnClearAll, this);
 
-		delete_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("選択項目を削除")));
+		delete_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("選択項目を削除(&S)")));
 		actions->Add(delete_btn_, wxSizerFlags().Border(wxRIGHT, 4));
 		delete_btn_->Bind(wxEVT_BUTTON, &HistoryDialog::OnDelete, this);
 
-		clear_filter_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("絞り込み中を削除")));
+		clear_filter_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("絞り込み中を削除(&F)")));
 		actions->Add(clear_filter_btn_, wxSizerFlags().Border(wxRIGHT, 4));
 		clear_filter_btn_->Bind(wxEVT_BUTTON, &HistoryDialog::OnClearFiltered, this);
 
-		copy_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("コピー")));
+		copy_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("コピー(&C)")));
 		actions->Add(copy_btn_, wxSizerFlags().Border(wxRIGHT, 4));
 		copy_btn_->Bind(wxEVT_BUTTON, &HistoryDialog::OnCopy, this);
 
-		property_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("プロパティ")));
+		property_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("プロパティ(&P)")));
 		actions->Add(property_btn_);
 		property_btn_->Bind(wxEVT_BUTTON, &HistoryDialog::OnProperty, this);
 		top->Add(actions, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));

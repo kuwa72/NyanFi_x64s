@@ -68,15 +68,15 @@ public:
 		                wxSizerFlags().CentreVertical().Border(wxRIGHT, 4));
 		filter_ctrl_ = new wxTextCtrl(this, wxID_ANY, to_wx(state_.filter), wxDefaultPosition, wxSize(260, -1));
 		filter_row->Add(filter_ctrl_, wxSizerFlags(1).Expand().Border(wxRIGHT, 8));
-		show_all_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("未登録コマンドも表示")));
+		show_all_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("未登録コマンドも表示(&U)")));
 		show_all_chk_->SetValue(state_.show_all);
 		filter_row->Add(show_all_chk_, wxSizerFlags().CentreVertical().Border(wxRIGHT, 8));
 		show_all_chk_->Bind(wxEVT_CHECKBOX, &KeyListDialog::OnShowAllChanged, this);
 
-		migemo_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("Migemo")));
+		migemo_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("&Migemo")));
 		migemo_chk_->SetValue(state_.migemo);
 		filter_row->Add(migemo_chk_, wxSizerFlags().CentreVertical().Border(wxRIGHT, 8));
-		confirm_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("確定即実行")));
+		confirm_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("確定即実行(&K)")));
 		confirm_chk_->SetValue(state_.confirm_execute);
 		filter_row->Add(confirm_chk_, wxSizerFlags().CentreVertical());
 		top->Add(filter_row, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
@@ -94,11 +94,11 @@ public:
 		list_->Bind(wxEVT_LIST_ITEM_SELECTED, &KeyListDialog::OnSelect, this);
 
 		wxBoxSizer *actions = new wxBoxSizer(wxHORIZONTAL);
-		wxButton *copy_btn = new wxButton(this, wxID_ANY, to_wx(_T("一覧をコピー")));
+		wxButton *copy_btn = new wxButton(this, wxID_ANY, to_wx(_T("一覧をコピー(&C)")));
 		copy_btn->Bind(wxEVT_BUTTON, &KeyListDialog::OnCopy, this);
-		wxButton *save_btn = new wxButton(this, wxID_ANY, to_wx(_T("名前を付けて保存")));
+		wxButton *save_btn = new wxButton(this, wxID_ANY, to_wx(_T("名前を付けて保存(&N)")));
 		save_btn->Bind(wxEVT_BUTTON, &KeyListDialog::OnSave, this);
-		wxButton *help_btn = new wxButton(this, wxID_ANY, to_wx(_T("コマンドのヘルプ")));
+		wxButton *help_btn = new wxButton(this, wxID_ANY, to_wx(_T("コマンドのヘルプ(&H)")));
 		help_btn->Bind(wxEVT_BUTTON, &KeyListDialog::OnHelp, this);
 		actions->Add(copy_btn, wxSizerFlags().Border(wxRIGHT, 4));
 		actions->Add(save_btn, wxSizerFlags().Border(wxRIGHT, 4));

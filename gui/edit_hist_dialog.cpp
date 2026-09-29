@@ -105,7 +105,7 @@ private:
 		filter_ctrl_ = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
 		                              wxSize(width, -1), wxTE_PROCESS_ENTER);
 		filter_row->Add(filter_ctrl_, wxSizerFlags(1).Expand().Border(wxRIGHT, 8));
-		migemo_chk_ = new wxCheckBox(this, wxID_ANY, _T("Migemo"));
+		migemo_chk_ = new wxCheckBox(this, wxID_ANY, _T("&Migemo"));
 		migemo_chk_->SetValue(input_.preferences.migemo);
 		filter_row->Add(migemo_chk_, wxSizerFlags().CentreVertical().Border(wxRIGHT, 12));
 		mode_ctrl_ = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
@@ -115,19 +115,19 @@ private:
 		mode_ctrl_->Append(_T("現在の場所のみ"));
 		mode_ctrl_->SetSelection(edit_hist::ModeIndex(input_.preferences.mode));
 		filter_row->Add(mode_ctrl_, wxSizerFlags().CentreVertical().Border(wxRIGHT, 12));
-		status_chk_ = new wxCheckBox(this, wxID_ANY, _T("ステータス"));
+		status_chk_ = new wxCheckBox(this, wxID_ANY, _T("ステータス(&S)"));
 		status_chk_->SetValue(input_.preferences.status_bar);
 		filter_row->Add(status_chk_, wxSizerFlags().CentreVertical());
 		top->Add(filter_row, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 
 		wxBoxSizer *tools = new wxBoxSizer(wxHORIZONTAL);
-		delete_btn_ = new wxButton(this, ID_DELETE, _T("選択項目を削除"));
+		delete_btn_ = new wxButton(this, ID_DELETE, _T("選択項目を削除(&D)"));
 		tools->Add(delete_btn_, wxSizerFlags().Border(wxRIGHT, 4));
-		clear_btn_ = new wxButton(this, ID_CLEAR, _T("履歴をすべて削除"));
+		clear_btn_ = new wxButton(this, ID_CLEAR, _T("履歴をすべて削除(&H)"));
 		tools->Add(clear_btn_, wxSizerFlags().Border(wxRIGHT, 4));
-		open_btn_ = new wxButton(this, ID_OPEN, _T("エディタで開く"));
+		open_btn_ = new wxButton(this, ID_OPEN, _T("エディタで開く(&E)"));
 		tools->Add(open_btn_, wxSizerFlags().Border(wxRIGHT, 4));
-		excluded_btn_ = new wxButton(this, ID_EXCLUDED, _T("表示しないパス..."));
+		excluded_btn_ = new wxButton(this, ID_EXCLUDED, _T("表示しないパス(&P)..."));
 		tools->Add(excluded_btn_, wxSizerFlags().Border(wxRIGHT, 4));
 		tools->AddStretchSpacer();
 		tools->Add(CreateButtonSizer(wxOK | wxCANCEL), wxSizerFlags());

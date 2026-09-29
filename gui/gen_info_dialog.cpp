@@ -97,28 +97,28 @@ private:
 		filter_ctrl_ = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
 		                               wxSize(240, -1), wxTE_PROCESS_ENTER);
 		filter_box->Add(filter_ctrl_, wxSizerFlags(1).Expand().Border(wxLEFT | wxRIGHT, 6));
-		any_term_chk_ = new wxCheckBox(this, wxID_ANY, _T("AND/OR"));
-		case_chk_ = new wxCheckBox(this, wxID_ANY, _T("大小文字を区別"));
-		line_no_chk_ = new wxCheckBox(this, wxID_ANY, _T("行番号"));
+		any_term_chk_ = new wxCheckBox(this, wxID_ANY, _T("AND/OR(&O)"));
+		case_chk_ = new wxCheckBox(this, wxID_ANY, _T("大小文字を区別(&K)"));
+		line_no_chk_ = new wxCheckBox(this, wxID_ANY, _T("行番号(&G)"));
 		line_no_chk_->SetValue(true);
 		filter_box->Add(any_term_chk_, wxSizerFlags().CentreVertical().Border(wxRIGHT, 8));
 		filter_box->Add(case_chk_, wxSizerFlags().CentreVertical().Border(wxRIGHT, 8));
 		filter_box->Add(line_no_chk_, wxSizerFlags().CentreVertical());
 		if (kind_ == gen_info::Kind::Log) {
-			errors_chk_ = new wxCheckBox(this, wxID_ANY, _T("エラー部分のみ"));
+			errors_chk_ = new wxCheckBox(this, wxID_ANY, _T("エラー部分のみ(&E)"));
 			filter_box->Add(errors_chk_, wxSizerFlags().CentreVertical().Border(wxLEFT, 8));
 		}
 		top->Add(filter_box, wxSizerFlags().Expand().Border(wxALL, 8));
 
 		wxBoxSizer *actions = new wxBoxSizer(wxHORIZONTAL);
-		actions->Add(new wxButton(this, ID_COPY, _T("コピー")), wxSizerFlags().Border(wxRIGHT, 4));
-		actions->Add(new wxButton(this, ID_SAVE, _T("保存...")), wxSizerFlags().Border(wxRIGHT, 12));
-		actions->Add(new wxButton(this, ID_SORT_ASC, _T("昇順")), wxSizerFlags().Border(wxRIGHT, 4));
-		actions->Add(new wxButton(this, ID_SORT_DESC, _T("降順")), wxSizerFlags().Border(wxRIGHT, 4));
-		actions->Add(new wxButton(this, ID_SORT_ORIGINAL, _T("元順")), wxSizerFlags().Border(wxRIGHT, 12));
-		actions->Add(new wxButton(this, ID_DELETE_DUPLICATES, _T("重複除去")), wxSizerFlags().Border(wxRIGHT, 4));
-		actions->Add(new wxButton(this, ID_RESTORE, _T("再構築")));
-		if (clear_source_) actions->Add(new wxButton(this, ID_CLEAR, _T("履歴を消去")));
+		actions->Add(new wxButton(this, ID_COPY, _T("コピー(&C)")), wxSizerFlags().Border(wxRIGHT, 4));
+		actions->Add(new wxButton(this, ID_SAVE, _T("保存(&S)...")), wxSizerFlags().Border(wxRIGHT, 12));
+		actions->Add(new wxButton(this, ID_SORT_ASC, _T("昇順(&J)")), wxSizerFlags().Border(wxRIGHT, 4));
+		actions->Add(new wxButton(this, ID_SORT_DESC, _T("降順(&D)")), wxSizerFlags().Border(wxRIGHT, 4));
+		actions->Add(new wxButton(this, ID_SORT_ORIGINAL, _T("元順(&M)")), wxSizerFlags().Border(wxRIGHT, 12));
+		actions->Add(new wxButton(this, ID_DELETE_DUPLICATES, _T("重複除去(&F)")), wxSizerFlags().Border(wxRIGHT, 4));
+		actions->Add(new wxButton(this, ID_RESTORE, _T("再構築(&R)")));
+		if (clear_source_) actions->Add(new wxButton(this, ID_CLEAR, _T("履歴を消去(&H)")));
 		actions->AddStretchSpacer();
 		actions->Add(new wxButton(this, wxID_CANCEL, _T("キャンセル")));
 		actions->Add(new wxButton(this, wxID_OK, _T("OK")));

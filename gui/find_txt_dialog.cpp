@@ -56,13 +56,13 @@ public:
 		top->Add(keyword_row, wxSizerFlags().Expand().Border(wxALL, 8));
 
 		wxBoxSizer *options = new wxBoxSizer(wxHORIZONTAL);
-		case_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("大文字小文字を区別")));
+		case_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("大文字小文字を区別(&C)")));
 		case_->SetValue(initial.case_sensitive);
-		word_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("単語")));
+		word_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("単語(&W)")));
 		word_->SetValue(initial.whole_word);
-		regex_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("正規表現")));
+		regex_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("正規表現(&R)")));
 		regex_->SetValue(initial.regex);
-		migemo_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("Migemo")));
+		migemo_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("&Migemo")));
 		migemo_->SetValue(initial.migemo);
 		options->Add(case_, wxSizerFlags().Border(wxRIGHT, 10));
 		options->Add(word_, wxSizerFlags().Border(wxRIGHT, 10));
@@ -81,7 +81,7 @@ public:
 		top->Add(direction_, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 
 		wxBoxSizer *bottom = new wxBoxSizer(wxHORIZONTAL);
-		bytes_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("バイト列")));
+		bytes_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("バイト列(&B)")));
 		bytes_->SetValue(initial.bytes);
 		bottom->Add(bytes_, wxSizerFlags().Border(wxRIGHT, 12));
 		wxArrayString pages;
@@ -100,10 +100,10 @@ public:
 			if (kCodePages[i] == initial.code_page) code_page_->SetSelection(i);
 		}
 		bottom->Add(code_page_, wxSizerFlags().CentreVertical());
-		highlight_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("検索結果を強調")));
+		highlight_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("検索結果を強調(&K)")));
 		highlight_->SetValue(initial.highlight);
 		bottom->Add(highlight_, wxSizerFlags().Border(wxLEFT, 16));
-		close_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("検索後に閉じる")));
+		close_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("検索後に閉じる(&T)")));
 		close_->SetValue(initial.close_after);
 		bottom->Add(close_, wxSizerFlags().Border(wxLEFT, 12));
 		top->Add(bottom, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));

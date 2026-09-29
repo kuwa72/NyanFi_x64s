@@ -74,7 +74,7 @@ public:
 		out_grid->AddGrowableCol(1);
 		output_file_ = AddLabeled(out_page, out_grid, to_wx(_T("ファイル名")), initial_opt.output_file, wxSize(360, -1));
 		out->Add(out_grid, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT, 8));
-		wxButton *out_browse = new wxButton(out_page, wxID_ANY, _T("..."));
+		wxButton *out_browse = new wxButton(out_page, wxID_ANY, _T("...(&O)"));
 		out_browse->Bind(wxEVT_BUTTON, [this](wxCommandEvent &) { BrowseOutput(); });
 		// ファイル欄の右にボタンを置くため、grid の2列目へ入れる
 		out_grid->Add(out_browse, wxSizerFlags().CentreVertical());
@@ -84,7 +84,7 @@ public:
 		out->Add(append_output_, wxSizerFlags().Border(wxALL, 8));
 
 		wxBoxSizer *app_box = new wxBoxSizer(wxVERTICAL);
-		app_enabled_ = new wxCheckBox(out_page, wxID_ANY, to_wx(_T("起動アプリケーション")));
+		app_enabled_ = new wxCheckBox(out_page, wxID_ANY, to_wx(_T("起動アプリケーション(&K)")));
 		app_enabled_->SetValue(initial_opt.app_enabled);
 		app_box->Add(app_enabled_, wxSizerFlags().Border(wxBOTTOM, 6));
 		wxFlexGridSizer *app_grid = new wxFlexGridSizer(2, 4, 8);
@@ -94,8 +94,8 @@ public:
 		app_dir_ = AddLabeled(out_page, app_grid, to_wx(_T("作業ディレクトリ")), initial_opt.app_dir, wxSize(270, -1));
 		app_box->Add(app_grid, wxSizerFlags().Expand());
 		wxBoxSizer *app_buttons = new wxBoxSizer(wxHORIZONTAL);
-		wxButton *app_browse = new wxButton(out_page, wxID_ANY, _T("..."));
-		wxButton *dir_browse = new wxButton(out_page, wxID_ANY, _T("..."));
+		wxButton *app_browse = new wxButton(out_page, wxID_ANY, _T("...(&P)"));
+		wxButton *dir_browse = new wxButton(out_page, wxID_ANY, _T("...(&D)"));
 		app_browse->Bind(wxEVT_BUTTON, [this](wxCommandEvent &) { BrowseApp(); });
 		dir_browse->Bind(wxEVT_BUTTON, [this](wxCommandEvent &) { BrowseDir(app_dir_); });
 		app_buttons->Add(app_browse, wxSizerFlags().Border(wxRIGHT, 4));
@@ -114,27 +114,27 @@ public:
 		                          initial_opt.backup_extension, wxSize(240, -1));
 		backup_dir_ = AddLabeled(replace_page, backup_grid, to_wx(_T("保存先")),
 		                          initial_opt.backup_dir, wxSize(240, -1));
-		wxButton *backup_browse = new wxButton(replace_page, wxID_ANY, _T("..."));
+		wxButton *backup_browse = new wxButton(replace_page, wxID_ANY, _T("...(&B)"));
 		backup_browse->Bind(wxEVT_BUTTON, [this](wxCommandEvent &) { BrowseDir(backup_dir_); });
 		backup_grid->Add(backup_browse, wxSizerFlags().CentreVertical());
 		replace->Add(backup_grid, wxSizerFlags().Expand().Border(wxALL, 8));
-		backup_replace_ = new wxCheckBox(replace_page, wxID_ANY, to_wx(_T("置換前にバックアップを作る")));
+		backup_replace_ = new wxCheckBox(replace_page, wxID_ANY, to_wx(_T("置換前にバックアップを作る(&T)")));
 		backup_replace_->SetValue(initial_opt.backup_replace);
 		replace->Add(backup_replace_, wxSizerFlags().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 
-		save_log_ = new wxCheckBox(replace_page, wxID_ANY, to_wx(_T("置換ログをファイルに保存")));
+		save_log_ = new wxCheckBox(replace_page, wxID_ANY, to_wx(_T("置換ログをファイルに保存(&S)")));
 		save_log_->SetValue(initial_opt.save_log);
 		replace->Add(save_log_, wxSizerFlags().Border(wxLEFT | wxRIGHT, 8));
 		wxFlexGridSizer *log_grid = new wxFlexGridSizer(2, 4, 8);
 		log_grid->AddGrowableCol(1);
 		log_file_ = AddLabeled(replace_page, log_grid, to_wx(_T("ログファイル")), initial_opt.log_file, wxSize(260, -1));
-		wxButton *log_browse = new wxButton(replace_page, wxID_ANY, _T("..."));
+		wxButton *log_browse = new wxButton(replace_page, wxID_ANY, _T("...(&L)"));
 		log_browse->Bind(wxEVT_BUTTON, [this](wxCommandEvent &) { BrowseLog(); });
 		log_grid->Add(log_browse, wxSizerFlags().CentreVertical());
 		replace->Add(log_grid, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT, 8));
-		append_log_ = new wxCheckBox(replace_page, wxID_ANY, to_wx(_T("既存ログに追加")));
+		append_log_ = new wxCheckBox(replace_page, wxID_ANY, to_wx(_T("既存ログに追加(&G)")));
 		append_log_->SetValue(initial_opt.append_log);
-		open_log_ = new wxCheckBox(replace_page, wxID_ANY, to_wx(_T("保存後にログを開く")));
+		open_log_ = new wxCheckBox(replace_page, wxID_ANY, to_wx(_T("保存後にログを開く(&H)")));
 		open_log_->SetValue(initial_opt.open_log);
 		replace->Add(append_log_, wxSizerFlags().Border(wxLEFT | wxRIGHT, 8));
 		replace->Add(open_log_, wxSizerFlags().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
@@ -155,11 +155,11 @@ public:
 		replacement_ = AddLabeled(format_page, format_grid, to_wx(_T("改行の置換")),
 		                          initial_opt.replacement, wxSize(170, -1));
 		format->Add(format_grid, wxSizerFlags().Expand().Border(wxALL, 8));
-		trim_left_ = new wxCheckBox(format_page, wxID_ANY, to_wx(_T("行頭のタブや空白を削除")));
+		trim_left_ = new wxCheckBox(format_page, wxID_ANY, to_wx(_T("行頭のタブや空白を削除(&J)")));
 		trim_left_->SetValue(initial_opt.trim_left);
-		replace_tab_ = new wxCheckBox(format_page, wxID_ANY, to_wx(_T("タブを空白1文字に置換")));
+		replace_tab_ = new wxCheckBox(format_page, wxID_ANY, to_wx(_T("タブを空白1文字に置換(&W)")));
 		replace_tab_->SetValue(initial_opt.replace_tab);
-		replace_cr_ = new wxCheckBox(format_page, wxID_ANY, to_wx(_T("改行を指定文字列を置換")));
+		replace_cr_ = new wxCheckBox(format_page, wxID_ANY, to_wx(_T("改行を指定文字列を置換(&N)")));
 		replace_cr_->SetValue(initial_opt.replace_cr);
 		format->Add(trim_left_, wxSizerFlags().Border(wxLEFT | wxRIGHT, 8));
 		format->Add(replace_tab_, wxSizerFlags().Border(wxLEFT | wxRIGHT, 8));

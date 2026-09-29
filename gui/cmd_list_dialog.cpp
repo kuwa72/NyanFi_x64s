@@ -49,8 +49,8 @@ public:
 		                wxSizerFlags().CentreVertical().Border(wxRIGHT, 4));
 		filter_edit_ = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(260, -1));
 		filter_row->Add(filter_edit_, wxSizerFlags(1).Expand().Border(wxRIGHT, 8));
-		migemo_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("Migemo")));
-		preview_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("プレビュー")));
+		migemo_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("&Migemo")));
+		preview_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("プレビュー(&P)")));
 		preview_chk_->SetValue(options_.preview);
 		filter_row->Add(migemo_chk_, wxSizerFlags().Border(wxRIGHT, 8));
 		filter_row->Add(preview_chk_);
@@ -77,7 +77,7 @@ public:
 		top->Add(status_, wxSizerFlags().Expand().Border(wxALL, 8));
 
 		wxBoxSizer *buttons = new wxBoxSizer(wxHORIZONTAL);
-		edit_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("編集")));
+		edit_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("編集(&E)")));
 		buttons->Add(edit_btn_, wxSizerFlags().Border(wxRIGHT, 4));
 		buttons->AddStretchSpacer();
 		if (options_.select_only) {

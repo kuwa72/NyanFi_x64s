@@ -57,8 +57,8 @@ public:
 		setup_name_ = new wxComboBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
 		                             wxSize(220, -1));
 		setup_row->Add(setup_name_, wxSizerFlags(1).Expand().Border(wxRIGHT, 8));
-		wxButton *save = new wxButton(this, wxID_ANY, to_wx(_T("保存")));
-		wxButton *del = new wxButton(this, wxID_ANY, to_wx(_T("削除")));
+		wxButton *save = new wxButton(this, wxID_ANY, to_wx(_T("保存(&S)")));
+		wxButton *del = new wxButton(this, wxID_ANY, to_wx(_T("削除(&D)")));
 		setup_row->Add(save, wxSizerFlags().Border(wxRIGHT, 4));
 		setup_row->Add(del);
 		top->Add(setup_row, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
@@ -90,10 +90,10 @@ public:
 		fields->Add(date_, wxSizerFlags().Expand());
 		top->Add(fields, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 
-		sub_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("サブディレクトリも対象にする")));
-		mirror_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("ミラーを行う")));
-		sync_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("同期コピー")));
-		confirm_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("開始時に確認")));
+		sub_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("サブディレクトリも対象にする(&U)")));
+		mirror_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("ミラーを行う(&M)")));
+		sync_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("同期コピー(&C)")));
+		confirm_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("開始時に確認(&K)")));
 		sub_->SetValue(initial.sub_dirs);
 		mirror_->SetValue(initial.mirror);
 		sync_->SetValue(initial.sync);
@@ -108,7 +108,7 @@ public:
 		sync_label_ = new wxStaticText(this, wxID_ANY, wxEmptyString);
 		top->Add(sync_label_, wxSizerFlags().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 
-		wxButton *command = new wxButton(this, wxID_ANY, to_wx(_T("コマンドファイルとして保存")));
+		wxButton *command = new wxButton(this, wxID_ANY, to_wx(_T("コマンドファイルとして保存(&F)")));
 		top->Add(command, wxSizerFlags().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 		command->Bind(wxEVT_BUTTON, &BackupInputDialog::OnMakeCommand, this);
 

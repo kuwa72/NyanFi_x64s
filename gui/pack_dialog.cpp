@@ -79,13 +79,13 @@ public:
 		options->Add(password_, wxSizerFlags(1).Expand());
 		top->Add(options, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 
-		sfx_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("自己解凍")));
+		sfx_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("自己解凍(&S)")));
 		sfx_->SetValue(initial.self_extract);
-		per_dir_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("ディレクトリごとに作成")));
+		per_dir_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("ディレクトリごとに作成(&D)")));
 		per_dir_->SetValue(initial.per_directory);
-		include_dir_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("トップディレクトリを含める")));
+		include_dir_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("トップディレクトリを含める(&T)")));
 		include_dir_->SetValue(initial.include_top_directory);
-		confirm_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("確認")));
+		confirm_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("確認(&C)")));
 		confirm_->SetValue(initial.confirm_existing);
 		top->Add(sfx_, wxSizerFlags().Border(wxLEFT | wxRIGHT, 8));
 		top->Add(per_dir_, wxSizerFlags().Border(wxLEFT | wxRIGHT, 8));
@@ -95,9 +95,9 @@ public:
 		wxBoxSizer *same_row = new wxBoxSizer(wxHORIZONTAL);
 		same_row->Add(new wxStaticText(this, wxID_ANY, to_wx(_T("同名アーカイブ"))),
 		              wxSizerFlags().CentreVertical().Border(wxRIGHT, 8));
-		append_ = new wxRadioButton(this, wxID_ANY, to_wx(_T("既存内容に追加")), wxDefaultPosition,
+		append_ = new wxRadioButton(this, wxID_ANY, to_wx(_T("既存内容に追加(&A)")), wxDefaultPosition,
 		                            wxDefaultSize, wxRB_GROUP);
-		recreate_ = new wxRadioButton(this, wxID_ANY, to_wx(_T("削除して新規作成")));
+		recreate_ = new wxRadioButton(this, wxID_ANY, to_wx(_T("削除して新規作成(&R)")));
 		append_->SetValue(initial.existing_mode == pack_settings::ExistingMode::Append);
 		recreate_->SetValue(initial.existing_mode == pack_settings::ExistingMode::Recreate);
 		same_row->Add(append_, wxSizerFlags().Border(wxRIGHT, 12));

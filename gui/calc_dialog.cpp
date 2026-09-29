@@ -44,10 +44,10 @@ public:
 
 		wxBoxSizer *tools = new wxBoxSizer(wxHORIZONTAL);
 		angle_ = new wxButton(this, wxID_ANY, to_wx(AngleName(context.angle_mode)));
-		now_ = new wxButton(this, wxID_ANY, _T("NOW"));
-		hex_ = new wxButton(this, wxID_ANY, _T("HEX/DEC"));
-		not_ = new wxButton(this, wxID_ANY, _T("NOT"));
-		clear_ = new wxButton(this, wxID_ANY, _T("AC"));
+		now_ = new wxButton(this, wxID_ANY, _T("NOW(&O)"));
+		hex_ = new wxButton(this, wxID_ANY, _T("HEX/DEC(&H)"));
+		not_ = new wxButton(this, wxID_ANY, _T("NOT(&T)"));
+		clear_ = new wxButton(this, wxID_ANY, _T("AC(&C)"));
 		tools->Add(angle_, wxSizerFlags().Border(wxRIGHT, 4));
 		tools->Add(now_, wxSizerFlags().Border(wxRIGHT, 4));
 		tools->Add(hex_, wxSizerFlags().Border(wxRIGHT, 4));

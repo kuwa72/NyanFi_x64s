@@ -49,7 +49,7 @@ public:
 		grid->Add(line_ctrl_, wxSizerFlags(1).Expand());
 		top->Add(grid, wxSizerFlags().Expand().Border(wxALL, 8));
 
-		bom_ctrl_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("BOM を付ける")));
+		bom_ctrl_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("BOM を付ける(&B)")));
 		bom_ctrl_->SetValue(options.with_bom);
 		top->Add(bom_ctrl_, wxSizerFlags().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 

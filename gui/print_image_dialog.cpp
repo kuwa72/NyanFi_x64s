@@ -77,7 +77,7 @@ public:
 		printer->Add(orientation_radio_, wxSizerFlags(1).Expand());
 		left->Add(printer, wxSizerFlags().Expand().Border(wxBOTTOM, 8));
 
-		wxButton *printer_setup = new wxButton(this, wxID_ANY, to_wx(_T("プリンタの設定...")));
+		wxButton *printer_setup = new wxButton(this, wxID_ANY, to_wx(_T("プリンタの設定...(&S)")));
 		left->Add(printer_setup, wxSizerFlags().Expand().Border(wxBOTTOM, 8));
 
 		wxNotebook *book = new wxNotebook(this, wxID_ANY);
@@ -108,7 +108,7 @@ public:
 		geometry->Add(offset_x_ctrl_);
 		geometry->Add(offset_y_ctrl_);
 		basic_box->Add(geometry, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 6));
-		gray_chk_ = new wxCheckBox(basic, wxID_ANY, to_wx(_T("グレースケール")));
+		gray_chk_ = new wxCheckBox(basic, wxID_ANY, to_wx(_T("グレースケール(&G)")));
 		gray_chk_->SetValue(options.grayscale);
 		basic_box->Add(gray_chk_, wxSizerFlags().Border(wxLEFT | wxRIGHT | wxBOTTOM, 6));
 		basic->SetSizer(basic_box);
@@ -116,14 +116,14 @@ public:
 
 		wxPanel *text_page = new wxPanel(book);
 		wxBoxSizer *text_box = new wxBoxSizer(wxVERTICAL);
-		text_chk_ = new wxCheckBox(text_page, wxID_ANY, to_wx(_T("文字を印刷")));
+		text_chk_ = new wxCheckBox(text_page, wxID_ANY, to_wx(_T("文字を印刷(&T)")));
 		text_chk_->SetValue(options.print_text);
 		text_box->Add(text_chk_, wxSizerFlags().Border(wxALL, 6));
 		wxFlexGridSizer *text_grid = new wxFlexGridSizer(3, 4, 6);
 		text_grid->Add(new wxStaticText(text_page, wxID_ANY, to_wx(_T("書式"))), wxSizerFlags().CentreVertical());
 		text_format_ctrl_ = new wxTextCtrl(text_page, wxID_ANY, to_wx(options.text_format));
 		text_grid->Add(text_format_ctrl_, wxSizerFlags(1).Expand());
-		font_btn_ = new wxButton(text_page, wxID_ANY, to_wx(_T("フォント...")));
+		font_btn_ = new wxButton(text_page, wxID_ANY, to_wx(_T("フォント...(&F)")));
 		text_grid->Add(font_btn_, wxSizerFlags().CentreVertical());
 		text_grid->Add(new wxStaticText(text_page, wxID_ANY, to_wx(_T("余白"))), wxSizerFlags().CentreVertical());
 		text_margin_ctrl_ = new wxSpinCtrl(text_page, wxID_ANY, wxEmptyString, wxDefaultPosition,
@@ -166,7 +166,7 @@ public:
 		top->Add(new wxStaticLine(this), wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT, 8));
 
 		wxBoxSizer *buttons = new wxBoxSizer(wxHORIZONTAL);
-		buttons->Add(new wxButton(this, wxID_PRINT, to_wx(_T("印刷"))));
+		buttons->Add(new wxButton(this, wxID_PRINT, to_wx(_T("印刷(&P)"))));
 		buttons->AddStretchSpacer();
 		buttons->Add(new wxButton(this, wxID_CANCEL, to_wx(_T("閉じる"))));
 		top->Add(buttons, wxSizerFlags().Expand().Border(wxALL, 8));

@@ -52,13 +52,13 @@ public:
 		top->Add(sort_, wxSizerFlags().Expand().Border(wxALL, 8));
 
 		wxBoxSizer *order_row = new wxBoxSizer(wxHORIZONTAL);
-		no_order_ = new wxCheckBox(this, wxID_ANY, _T("順序指定なし"));
+		no_order_ = new wxCheckBox(this, wxID_ANY, _T("順序指定なし(&N)"));
 		no_order_->SetValue(options.no_order);
-		natural_ = new wxCheckBox(this, wxID_ANY, _T("自然順"));
-		dsc_name_ = new wxCheckBox(this, wxID_ANY, _T("降順"));
-		small_ = new wxCheckBox(this, wxID_ANY, _T("小さい順"));
-		old_ = new wxCheckBox(this, wxID_ANY, _T("古い順"));
-		dsc_attr_ = new wxCheckBox(this, wxID_ANY, _T("属性降順"));
+		natural_ = new wxCheckBox(this, wxID_ANY, _T("自然順(&S)"));
+		dsc_name_ = new wxCheckBox(this, wxID_ANY, _T("降順(&K)"));
+		small_ = new wxCheckBox(this, wxID_ANY, _T("小さい順(&C)"));
+		old_ = new wxCheckBox(this, wxID_ANY, _T("古い順(&F)"));
+		dsc_attr_ = new wxCheckBox(this, wxID_ANY, _T("属性降順(&Z)"));
 		natural_->SetValue(options.natural_order);
 		dsc_name_->SetValue(options.dsc_name_order);
 		small_->SetValue(options.small_order);
@@ -102,9 +102,9 @@ public:
 		AddField(this, fields, _T("コマンドファイル"), options.exe_commands, commands_);
 		top->Add(fields, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 
-		handled_ = new wxCheckBox(this, wxID_ANY, _T("ステップ実行時にコマンドを停止"));
+		handled_ = new wxCheckBox(this, wxID_ANY, _T("ステップ実行時にコマンドを停止(&T)"));
 		handled_->SetValue(options.handled);
-		hidden_ = new wxCheckBox(this, wxID_ANY, _T("隠し属性"));
+		hidden_ = new wxCheckBox(this, wxID_ANY, _T("隠し属性(&H)"));
 		hidden_->SetValue(options.hidden);
 		wxBoxSizer *checks = new wxBoxSizer(wxHORIZONTAL);
 		checks->Add(handled_, wxSizerFlags().Border(wxRIGHT, 12));

@@ -44,9 +44,9 @@ public:
 		top->Add(source_ctrl_, wxSizerFlags(1).Expand().Border(wxALL, 8));
 
 		wxBoxSizer *order = new wxBoxSizer(wxHORIZONTAL);
-		up_ctrl_ = new wxButton(this, ID_UP, to_wx(_T("上へ")));
-		down_ctrl_ = new wxButton(this, ID_DOWN, to_wx(_T("下へ")));
-		delete_ctrl_ = new wxButton(this, ID_DELETE, to_wx(_T("削除")));
+		up_ctrl_ = new wxButton(this, ID_UP, to_wx(_T("上へ(&U)")));
+		down_ctrl_ = new wxButton(this, ID_DOWN, to_wx(_T("下へ(&D)")));
+		delete_ctrl_ = new wxButton(this, ID_DELETE, to_wx(_T("削除(&S)")));
 		order->Add(up_ctrl_, wxSizerFlags().Border(wxRIGHT, 6));
 		order->Add(down_ctrl_, wxSizerFlags().Border(wxRIGHT, 6));
 		order->Add(delete_ctrl_, wxSizerFlags());
@@ -81,15 +81,15 @@ public:
 		grid->Add(new wxStaticText(this, wxID_ANY, to_wx(_T("改行"))), wxSizerFlags().CentreVertical());
 		grid->Add(line_ctrl_, wxSizerFlags(1).Expand());
 
-		bom_ctrl_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("BOM を付ける")));
+		bom_ctrl_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("BOM を付ける(&B)")));
 		bom_ctrl_->SetValue(options.with_bom);
 		grid->Add(new wxStaticText(this, wxID_ANY, wxEmptyString));
 		grid->Add(bom_ctrl_);
 
 		wxBoxSizer *template_box = new wxBoxSizer(wxHORIZONTAL);
 		template_ctrl_ = new wxTextCtrl(this, wxID_ANY, to_wx(options.template_path));
-		wxButton *browse = new wxButton(this, ID_BROWSE_TEMPLATE, to_wx(_T("参照...")));
-		wxButton *edit = new wxButton(this, ID_EDIT_TEMPLATE, to_wx(_T("編集")));
+		wxButton *browse = new wxButton(this, ID_BROWSE_TEMPLATE, to_wx(_T("参照...(&R)")));
+		wxButton *edit = new wxButton(this, ID_EDIT_TEMPLATE, to_wx(_T("編集(&E)")));
 		edit->Enable(false);
 		edit->SetToolTip(to_wx(_T("未移植 (未実装扱い): 外部テキストエディタでの編集")));
 		template_box->Add(template_ctrl_, wxSizerFlags(1).Expand().Border(wxRIGHT, 6));

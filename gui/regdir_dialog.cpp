@@ -65,7 +65,7 @@ public:
 		filter_ctrl_ = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
 		                              wxDefaultPosition, wxSize(260, -1));
 		filter_row->Add(filter_ctrl_, wxSizerFlags(1).Expand().Border(wxRIGHT, 8));
-		and_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("AND")));
+		and_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("&AND")));
 		filter_row->Add(and_chk_, wxSizerFlags().CentreVertical());
 		top->Add(filter_row, wxSizerFlags().Expand().Border(wxALL, 8));
 		filter_ctrl_->Bind(wxEVT_TEXT, &RegDirInputDialog::OnFilter, this);
@@ -79,9 +79,9 @@ public:
 		wxBoxSizer *btn_row = new wxBoxSizer(wxHORIZONTAL);
 		open_btn_ = new wxButton(this, wxID_OK, to_wx(_T("開く")));
 		btn_row->Add(open_btn_, wxSizerFlags().Border(wxRIGHT, 4));
-		add_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("追加...")));
+		add_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("追加...(&T)")));
 		btn_row->Add(add_btn_, wxSizerFlags().Border(wxRIGHT, 4));
-		del_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("削除")));
+		del_btn_ = new wxButton(this, wxID_ANY, to_wx(_T("削除(&D)")));
 		btn_row->Add(del_btn_, wxSizerFlags().Border(wxRIGHT, 4));
 		btn_row->Add(new wxButton(this, wxID_CANCEL, to_wx(_T("キャンセル"))));
 		top->Add(btn_row, wxSizerFlags().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));

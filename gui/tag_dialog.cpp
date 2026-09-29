@@ -63,11 +63,11 @@ public:
 		top->Add(list_, wxSizerFlags(1).Expand().Border(wxLEFT | wxRIGHT, 8));
 
 		wxBoxSizer *opts = new wxBoxSizer(wxHORIZONTAL);
-		and_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("AND検索")));
-		res_link_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("リソースリンクも照合")));
-		hide_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("入力欄を隠す")));
-		mask_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("選択項目だけ残す")));
-		count_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("タグの使用数を表示")));
+		and_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("AND検索(&A)")));
+		res_link_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("リソースリンクも照合(&L)")));
+		hide_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("入力欄を隠す(&H)")));
+		mask_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("選択項目だけ残す(&M)")));
+		count_chk_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("タグの使用数を表示(&C)")));
 		opts->Add(and_chk_, wxSizerFlags().Border(wxRIGHT, 10));
 		opts->Add(res_link_chk_, wxSizerFlags().Border(wxRIGHT, 10));
 		opts->Add(hide_chk_, wxSizerFlags().Border(wxRIGHT, 10));
@@ -79,11 +79,11 @@ public:
 		rename_btn_ = AddTool(this, tools, _T("タグ名変更(&R)"), [this] { RenameSelected(); });
 		delete_btn_ = AddTool(this, tools, _T("タグ削除(&D)"), [this] { DeleteSelected(); });
 		color_btn_ = AddTool(this, tools, _T("タグ色(&O)"), [this] { SetSelectedColor(); });
-		default_color_btn_ = AddTool(this, tools, _T("既定色"), [this] { SetDefaultColor(); });
-		trim_btn_ = AddTool(this, tools, _T("存在しない項目を整理"), [this] { TrimData(); });
-		save_nbt_btn_ = AddTool(this, tools, _T("検索コマンドを保存"),
+		default_color_btn_ = AddTool(this, tools, _T("既定色(&K)"), [this] { SetDefaultColor(); });
+		trim_btn_ = AddTool(this, tools, _T("存在しない項目を整理(&S)"), [this] { TrimData(); });
+		save_nbt_btn_ = AddTool(this, tools, _T("検索コマンドを保存(&V)"),
 		                        [this] { SaveSearchCommand(false); });
-		save_nbt_opp_btn_ = AddTool(this, tools, _T("反対側へ検索"),
+		save_nbt_opp_btn_ = AddTool(this, tools, _T("反対側へ検索(&E)"),
 		                            [this] { SaveSearchCommand(true); });
 		top->Add(tools, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT, 8));
 

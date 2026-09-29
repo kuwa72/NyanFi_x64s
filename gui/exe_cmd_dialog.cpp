@@ -46,21 +46,21 @@ public:
 		command_ctrl_->SetToolTip(to_wx(_T("実行するコマンドライン")));
 		wxBoxSizer *command_box = new wxBoxSizer(wxHORIZONTAL);
 		command_box->Add(command_ctrl_, wxSizerFlags(1).Expand().Border(wxRIGHT, 6));
-		command_box->Add(new wxButton(this, ID_DELETE, to_wx(_T("履歴から削除"))),
+		command_box->Add(new wxButton(this, ID_DELETE, to_wx(_T("履歴から削除(&D)"))),
 		                 wxSizerFlags().Border(wxRIGHT, 6));
-		command_box->Add(new wxButton(this, ID_CLEAR, to_wx(_T("履歴を消去"))));
+		command_box->Add(new wxButton(this, ID_CLEAR, to_wx(_T("履歴を消去(&H)"))));
 		top->Add(command_box, wxSizerFlags().Expand().Border(wxALL, 8));
 
 		wxStaticBox *output_box = new wxStaticBox(this, wxID_ANY, to_wx(_T("オプションの出力")));
 		wxBoxSizer *output_layout = new wxBoxSizer(wxVERTICAL);
 		wxBoxSizer *checks = new wxBoxSizer(wxHORIZONTAL);
-		log_ctrl_ = new wxCheckBox(output_box, wxID_ANY, to_wx(_T("ログに出力")));
+		log_ctrl_ = new wxCheckBox(output_box, wxID_ANY, to_wx(_T("ログに出力(&L)")));
 		log_ctrl_->SetValue(options.log_stdout);
-		copy_ctrl_ = new wxCheckBox(output_box, wxID_ANY, to_wx(_T("クリップボードにコピー")));
+		copy_ctrl_ = new wxCheckBox(output_box, wxID_ANY, to_wx(_T("クリップボードにコピー(&C)")));
 		copy_ctrl_->SetValue(options.copy_stdout);
-		save_ctrl_ = new wxCheckBox(output_box, wxID_ANY, to_wx(_T("ファイルに保存")));
+		save_ctrl_ = new wxCheckBox(output_box, wxID_ANY, to_wx(_T("ファイルに保存(&S)")));
 		save_ctrl_->SetValue(options.save_stdout);
-		list_ctrl_ = new wxCheckBox(output_box, wxID_ANY, to_wx(_T("一覧で表示")));
+		list_ctrl_ = new wxCheckBox(output_box, wxID_ANY, to_wx(_T("一覧で表示(&I)")));
 		list_ctrl_->SetValue(options.list_stdout);
 		checks->Add(log_ctrl_, wxSizerFlags().Border(wxRIGHT, 10));
 		checks->Add(copy_ctrl_, wxSizerFlags().Border(wxRIGHT, 10));
@@ -70,7 +70,7 @@ public:
 
 		wxBoxSizer *save_box = new wxBoxSizer(wxHORIZONTAL);
 		save_name_ctrl_ = new wxTextCtrl(output_box, wxID_ANY, to_wx(options.save_name));
-		save_browse_ctrl_ = new wxButton(output_box, ID_SAVE_BROWSE, to_wx(_T("...")));
+		save_browse_ctrl_ = new wxButton(output_box, ID_SAVE_BROWSE, to_wx(_T("...(&B)")));
 		save_box->Add(new wxStaticText(output_box, wxID_ANY, to_wx(_T("保存先"))),
 		              wxSizerFlags().CentreVertical().Border(wxRIGHT, 6));
 		save_box->Add(save_name_ctrl_, wxSizerFlags(1).Expand().Border(wxRIGHT, 6));
@@ -79,9 +79,9 @@ public:
 		output_box->SetSizer(output_layout);
 		top->Add(output_box, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 
-		run_as_ctrl_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("管理者として実行")));
+		run_as_ctrl_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("管理者として実行(&A)")));
 		run_as_ctrl_->SetValue(options.run_as);
-		uac_ctrl_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("UAC ダイアログを表示")));
+		uac_ctrl_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("UAC ダイアログを表示(&U)")));
 		uac_ctrl_->Enable(false);
 		uac_ctrl_->SetToolTip(to_wx(_T("未移植 (未実装扱い): ForcedElevation を指定する専用動作")));
 		top->Add(run_as_ctrl_, wxSizerFlags().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));

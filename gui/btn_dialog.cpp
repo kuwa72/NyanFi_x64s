@@ -53,26 +53,26 @@ public:
 		command_ctrl_ = new wxComboBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(390, -1));
 		for (const UnicodeString &command : commands) command_ctrl_->Append(to_wx(command));
 		grid->Add(command_ctrl_, wxSizerFlags(1).Expand());
-		ref_command_btn_ = new wxButton(this, wxID_ANY, _T("..."));
+		ref_command_btn_ = new wxButton(this, wxID_ANY, _T("...(&C)"));
 		grid->Add(ref_command_btn_, wxSizerFlags().CentreVertical());
 		ref_command_btn_->Bind(wxEVT_BUTTON, &ToolButtonDialog::OnReferenceCommand, this);
 
 		grid->Add(new wxStaticText(this, wxID_ANY, to_wx(_T("アイコン"))), wxSizerFlags().CentreVertical());
 		icon_ctrl_ = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(390, -1));
 		grid->Add(icon_ctrl_, wxSizerFlags(1).Expand());
-		ref_icon_btn_ = new wxButton(this, wxID_ANY, _T("..."));
+		ref_icon_btn_ = new wxButton(this, wxID_ANY, _T("...(&I)"));
 		grid->Add(ref_icon_btn_, wxSizerFlags().CentreVertical());
 		ref_icon_btn_->Bind(wxEVT_BUTTON, &ToolButtonDialog::OnReferenceIcon, this);
 		top->Add(grid, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 
 		wxBoxSizer *actions = new wxBoxSizer(wxHORIZONTAL);
-		add_btn_ = MakeButton(_T("追加"), &ToolButtonDialog::OnAdd);
-		insert_btn_ = MakeButton(_T("挿入"), &ToolButtonDialog::OnInsert);
-		change_btn_ = MakeButton(_T("変更"), &ToolButtonDialog::OnChange);
-		delete_btn_ = MakeButton(_T("削除"), &ToolButtonDialog::OnDelete);
-		up_btn_ = MakeButton(_T("上へ"), &ToolButtonDialog::OnUp);
-		down_btn_ = MakeButton(_T("下へ"), &ToolButtonDialog::OnDown);
-		edit_file_btn_ = MakeButton(_T("ファイル編集"), &ToolButtonDialog::OnEditFile);
+		add_btn_ = MakeButton(_T("追加(&A)"), &ToolButtonDialog::OnAdd);
+		insert_btn_ = MakeButton(_T("挿入(&N)"), &ToolButtonDialog::OnInsert);
+		change_btn_ = MakeButton(_T("変更(&H)"), &ToolButtonDialog::OnChange);
+		delete_btn_ = MakeButton(_T("削除(&D)"), &ToolButtonDialog::OnDelete);
+		up_btn_ = MakeButton(_T("上へ(&U)"), &ToolButtonDialog::OnUp);
+		down_btn_ = MakeButton(_T("下へ(&O)"), &ToolButtonDialog::OnDown);
+		edit_file_btn_ = MakeButton(_T("ファイル編集(&E)"), &ToolButtonDialog::OnEditFile);
 		actions->Add(add_btn_, wxSizerFlags().Border(wxRIGHT, 4));
 		actions->Add(insert_btn_, wxSizerFlags().Border(wxRIGHT, 4));
 		actions->Add(change_btn_, wxSizerFlags().Border(wxRIGHT, 4));
