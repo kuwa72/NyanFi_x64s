@@ -1,0 +1,8 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/cmake_install.cmake",
+		"/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

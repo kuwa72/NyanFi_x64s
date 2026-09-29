@@ -85,6 +85,19 @@ public:
 	/// V:FindDown / V:FindUp (param 非空=検索語を更新して検索)
 	bool CmdFindDown(const UnicodeString &param);
 	bool CmdFindUp(const UnicodeString &param);
+	/// V:SearchPair (param "/開始/;/終了/" 形式。空=括弧/HTML/定義パターン)
+	void CmdSearchPair(const UnicodeString &param);
+	/// V:FindLinkDown / V:FindLinkUp (リンク先を検索)
+	bool CmdFindLinkDown();
+	bool CmdFindLinkUp();
+	/// V:FindSelDown / V:FindSelUp (選択文字列を検索。param "EM"=強調表示)
+	bool CmdFindSelDown(const UnicodeString &param);
+	bool CmdFindSelUp(const UnicodeString &param);
+
+	/// 選択文字列を返す (V:FindSelDown/FindSelUp 用)
+	/// 未移植 (未実装扱い): TextViewer はカスタム描画で選択範囲の仕組みが無いため、
+	/// 常に空文字列を返す。FindSelDown/Up は「選択文字列なし」の警告を出す。
+	UnicodeString GetSelectedText() const { return EmptyStr; }
 	/// V:JumpLine (param 行番号。空=ダイアログ表示)
 	bool CmdJumpLine(const UnicodeString &param);
 	/// V:Mark (トグル) / V:ClearMark (全解除)
@@ -258,6 +271,8 @@ private:
 
 	bool wrap_ = false;               //!< 折り返し表示
 	int current_line_ = 0;            //!< カーソル行 (0ベース、行単位)
+	int cursor_x_ = 1;                //!< カーソル列 (1ベース)
+	UnicodeString file_ext_;          //!< 開いているファイルの拡張子 (V:SearchPair 用)
 	Int64 top_row_ = 0;                //!< 先頭に表示する表示行番号
 	int h_offset_chars_ = 0;           //!< 折り返し無効時の水平スクロール(文字単位)
 
@@ -276,6 +291,18 @@ private:
 	UnicodeString last_error_;         //!< 直前の Execute 系エラーメッセージ (無ければ空)
 	std::vector<int> marks_;           //!< 栞マーク (0ベース、昇順。V:Mark 系)
 	int forced_code_page_ = 0;         //!< ChangeCodePage による強制コードページ (0=自動判定)
+
+	//-- 選択文字列 (V:FindSelDown/FindSelUp 用) --------------------------------
+	// 未移植 (未実装扱い): TextViewer はカスタム描画で選択範囲の仕組みが無いため、
+	// GetSelectedText は常に空文字列を返す。FindSelDown/Up は「選択文字列なし」
+	// の警告を出す。VCL の TxtViewer は選択範囲からテキストを取得できる。
+	mutable UnicodeString last_sel_word_;  //!< 直前の選択文字列
+
+	//-- 強調表示 (V:FindSelDown/FindSelUp の EM パラメータ用) -------------------
+	// 未移植 (未実装扱い): TextViewer はカスタム描画で強調表示の仕組みが無いため、
+	// フラグは保持するが描画には反映しない。VCL は選択文字列を強調表示する。
+	UnicodeString highlight_word_;     //!< 強調表示する文字列
+	bool highlight_on_ = false;       //!< 強調表示中か
 
 	//-- 選択状態 (VCL: TxtViewer の SelStart/SelEnd/isSelMode/isBoxMode) --
 	int sel_start_line_ = 0;           //!< 選択開始行 (0ベース)

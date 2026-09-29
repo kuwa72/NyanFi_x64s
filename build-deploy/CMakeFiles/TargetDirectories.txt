@@ -1,0 +1,8 @@
+/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_compat.dir
+/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_core.dir
+/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir
+/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/edit_cache.dir
+/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/rebuild_cache.dir
+/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir
+/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/edit_cache.dir
+/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/rebuild_cache.dir

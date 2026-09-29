@@ -319,6 +319,7 @@ if(TARGET nyanfi_core)
 		gui/grep_opt.cpp
 		gui/cv_img.cpp
 		gui/find_txt.cpp
+		gui/search_pair.cpp
 		gui/cre_dirs.cpp
 		gui/hist.cpp
 		gui/inp_ex.cpp
