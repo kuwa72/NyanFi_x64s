@@ -90,6 +90,37 @@ public:
 	/// V:Mark (トグル) / V:ClearMark (全解除)
 	void CmdMark();
 	void CmdClearMark();
+	//-- 選択系コマンド (VCL: src/TxtViewer.cpp の該当case) --
+	/// V:SelectAll (TxtViewer.cpp:3901)。先頭から末尾まで選択
+	void CmdSelectAll();
+	/// V:SelectMode (TxtViewer.cpp:5068)。選択モードの切り替え
+	void CmdSelectMode();
+	/// V:SelCurWord (TxtViewer.cpp:3951)。カーソル位置の単語を選択
+	void CmdSelCurWord();
+	/// V:SelLine (TxtViewer.cpp:3991)。カーソル行を選択
+	void CmdSelLine();
+	/// V:BoxSelMode (TxtViewer.cpp:5150)。箱形選択モードの切り替え
+	void CmdBoxSelMode();
+	/// V:CursorLeftSel (TxtViewer.cpp:5045)。選択しながら左へ
+	void CmdCursorLeftSel();
+	/// V:CursorRightSel (TxtViewer.cpp:5047)。選択しながら右へ
+	void CmdCursorRightSel();
+	/// V:LineTopSel (TxtViewer.cpp:5049)。選択しながら行頭へ
+	void CmdLineTopSel();
+	/// V:LineEndSel (TxtViewer.cpp:5051)。選択しながら行末へ
+	void CmdLineEndSel();
+	/// V:TextTopSel (TxtViewer.cpp:5053)。選択しながら先頭へ
+	void CmdTextTopSel();
+	/// V:TextEndSel (TxtViewer.cpp:5055)。選択しながら末尾へ
+	void CmdTextEndSel();
+	/// V:WordLeft (TxtViewer.cpp:5056)。前の単語へ
+	void CmdWordLeft();
+	/// V:WordRight (TxtViewer.cpp:5057)。次の単語へ
+	void CmdWordRight();
+	/// V:Highlight (TxtViewer.cpp:5154)。強調表示の切り替え
+	void CmdHighlight();
+	/// V:CharInfo (MainFrm.cpp:33804)。文字情報表示の切り替え
+	void CmdCharInfo();
 	/// V:FindMarkDown / V:FindMarkUp。移動したら true
 	bool CmdFindMarkDown();
 	bool CmdFindMarkUp();
@@ -245,6 +276,16 @@ private:
 	UnicodeString last_error_;         //!< 直前の Execute 系エラーメッセージ (無ければ空)
 	std::vector<int> marks_;           //!< 栞マーク (0ベース、昇順。V:Mark 系)
 	int forced_code_page_ = 0;         //!< ChangeCodePage による強制コードページ (0=自動判定)
+
+	//-- 選択状態 (VCL: TxtViewer の SelStart/SelEnd/isSelMode/isBoxMode) --
+	int sel_start_line_ = 0;           //!< 選択開始行 (0ベース)
+	int sel_start_col_ = 0;            //!< 選択開始桁 (0ベース)
+	int sel_end_line_ = 0;             //!< 選択終了行 (0ベース)
+	int sel_end_col_ = 0;              //!< 選択終了桁 (0ベース、含まない)
+	bool is_sel_mode_ = false;         //!< 選択モード (V:SelectMode)
+	bool is_box_mode_ = false;         //!< 箱形選択モード (V:BoxSelMode)
+	bool highlight_ = false;           //!< 強調表示 (V:Highlight)
+	bool char_info_ = false;           //!< 文字情報表示 (V:CharInfo)
 
 	wxFont font_;
 	int row_height_ = 16;

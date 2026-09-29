@@ -3771,6 +3771,113 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 			UpdateStatus();
 			return true;
 		}
+		//-- 選択系コマンド (VCL: src/TxtViewer.cpp の該当case) --
+		// V:SelectAll (TxtViewer.cpp:3901)
+		if (SameStr(command, _T("SelectAll"))) {
+			viewer_->CmdSelectAll();
+			UpdateStatus();
+			return true;
+		}
+		// V:SelectMode (TxtViewer.cpp:5068)
+		if (SameStr(command, _T("SelectMode"))) {
+			viewer_->CmdSelectMode();
+			UpdateStatus();
+			return true;
+		}
+		// V:SelCurWord (TxtViewer.cpp:3951)
+		if (SameStr(command, _T("SelCurWord"))) {
+			viewer_->CmdSelCurWord();
+			UpdateStatus();
+			return true;
+		}
+		// V:SelLine (TxtViewer.cpp:3991)
+		if (SameStr(command, _T("SelLine"))) {
+			viewer_->CmdSelLine();
+			UpdateStatus();
+			return true;
+		}
+		// V:BoxSelMode (TxtViewer.cpp:5150)
+		if (SameStr(command, _T("BoxSelMode"))) {
+			viewer_->CmdBoxSelMode();
+			UpdateStatus();
+			return true;
+		}
+		// V:CursorLeftSel (TxtViewer.cpp:5045)
+		if (SameStr(command, _T("CursorLeftSel"))) {
+			viewer_->CmdCursorLeftSel();
+			UpdateStatus();
+			return true;
+		}
+		// V:CursorRightSel (TxtViewer.cpp:5047)
+		if (SameStr(command, _T("CursorRightSel"))) {
+			viewer_->CmdCursorRightSel();
+			UpdateStatus();
+			return true;
+		}
+		// V:LineTopSel (TxtViewer.cpp:5049)
+		if (SameStr(command, _T("LineTopSel"))) {
+			viewer_->CmdLineTopSel();
+			UpdateStatus();
+			return true;
+		}
+		// V:LineEndSel (TxtViewer.cpp:5051)
+		if (SameStr(command, _T("LineEndSel"))) {
+			viewer_->CmdLineEndSel();
+			UpdateStatus();
+			return true;
+		}
+		// V:TextTopSel (TxtViewer.cpp:5053)
+		if (SameStr(command, _T("TextTopSel"))) {
+			viewer_->CmdTextTopSel();
+			UpdateStatus();
+			return true;
+		}
+		// V:TextEndSel (TxtViewer.cpp:5055)
+		if (SameStr(command, _T("TextEndSel"))) {
+			viewer_->CmdTextEndSel();
+			UpdateStatus();
+			return true;
+		}
+		// V:WordLeft (TxtViewer.cpp:5056)
+		if (SameStr(command, _T("WordLeft"))) {
+			viewer_->CmdWordLeft();
+			UpdateStatus();
+			return true;
+		}
+		// V:WordRight (TxtViewer.cpp:5057)
+		if (SameStr(command, _T("WordRight"))) {
+			viewer_->CmdWordRight();
+			UpdateStatus();
+			return true;
+		}
+		// V:Highlight (TxtViewer.cpp:5154)
+		if (SameStr(command, _T("Highlight"))) {
+			viewer_->CmdHighlight();
+			UpdateStatus();
+			return true;
+		}
+		// V:CharInfo (MainFrm.cpp:33804)
+		if (SameStr(command, _T("CharInfo"))) {
+			viewer_->CmdCharInfo();
+			UpdateStatus();
+			return true;
+		}
+		// V:SelectFile (MainFrm.cpp:32823)。表示中のファイルを一覧で選択
+		if (SameStr(command, _T("SelectFile"))) {
+			const UnicodeString org_name = viewer_->FileName();
+			if (!org_name.IsEmpty()) {
+				const std::vector<FileItem> v = pane->VisibleItems();
+				for (std::size_t i = 0; i < v.size(); ++i) {
+					if (SameText(v[i].name, org_name)) {
+						pane->MoveCursorTo(static_cast<int>(i));
+						pane->ToggleMark();
+						break;
+					}
+				}
+			}
+			UpdateStatus();
+			return true;
+		}
 		// ビューアの履歴を戻る (VCL: src/MainFrm.cpp:32993-33000 ExeCommandV の
 		// BackViewHist 分岐。TextViewHistory の先頭を取り出して削除し、
 		// SetAndOpenTxtViewer で開く)
