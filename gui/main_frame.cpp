@@ -3550,6 +3550,11 @@ void MainFrame::OnCharHook(wxKeyEvent &event)
 		// HOOK で横取りせず素通しし、文字確定は EVT_TEXT 同期に任せる。
 		// (二重追加防止。S モードの ini 単一キー割り当てはこの間だけ不発)
 		if (search_field_ != nullptr && search_field_->IsShown()) {
+			// Issue #102: 一覧クリック等でフォーカスが外れていると、
+			// 素通ししたキーがどこにも届かず無効になる。印字キーの
+			// 到達前にフォーカスをフィールドへ戻す (この1打は
+			// 一覧側で消費されて消えるが、次打からは入力できる)
+			if (wxWindow::FindFocus() != search_field_) search_field_->SetFocus();
 			event.Skip();
 			return;
 		}
