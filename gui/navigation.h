@@ -65,6 +65,10 @@ public:
 	/// 末尾に1文字追加する
 	void Append(wchar_t ch) { word_ += UnicodeString(ch); }
 
+	/// キーワード全文を置き換える (Issue #90: 検索テキストフィールドの
+	/// EVT_TEXT 同期用。IME 確定は複数文字まとめて来るため Append では追えない)
+	void SetWord(const UnicodeString &word) { word_ = word; }
+
 	/// 末尾の1文字を削除する。@return 削除できたら true (キーワードが空でなかった)
 	bool Backspace();
 

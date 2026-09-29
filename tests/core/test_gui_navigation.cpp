@@ -41,6 +41,20 @@ TEST_CASE("IncrementalSearch: Append で末尾に1文字ずつ足す")
 	CHECK(is.Word() == UnicodeString(_T("abc")));
 }
 
+TEST_CASE("IncrementalSearch: SetWord でテキストフィールドの全文を一括同期する")
+{
+	// Issue #90: wxTextCtrl (IME 確定は複数文字まとめ) からの EVT_TEXT 同期用
+	IncrementalSearch is;
+	is.Start();
+	is.SetWord(_T("あいう"));
+	CHECK(is.Word() == UnicodeString(_T("あいう")));
+	is.SetWord(_T("あい"));
+	CHECK(is.Word() == UnicodeString(_T("あい")));
+	is.SetWord(EmptyStr);
+	CHECK(is.Word().IsEmpty());
+	CHECK(is.IsActive());  // 空にしてもモードは維持する
+}
+
 TEST_CASE("IncrementalSearch: Backspace は末尾を1文字削り、空なら false を返す")
 {
 	IncrementalSearch is;

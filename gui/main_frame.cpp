@@ -468,6 +468,16 @@ MainFrame::MainFrame()
 	image_viewer_->SetOnClose([this]() { ShowImageViewer(false); });
 	image_viewer_->SetOnNavigate([this](int direction) { CmdImageNavigate(direction); });
 
+	// 検索テキストフィールド (Issue #90)。サーチ中だけ最下部に inplace 表示し、
+	// wxTextCtrl 標準の IME で日本語入力を受け付ける
+	search_field_ = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
+	                               wxDefaultPosition, wxDefaultSize,
+	                               wxTE_PROCESS_ENTER);
+	search_field_->SetHint(to_wx(_T("検索 (日本語可・Escで終了)")));
+	search_field_->Hide();
+	search_field_->Bind(wxEVT_TEXT, &MainFrame::OnSearchText, this);
+	search_field_->Bind(wxEVT_KEY_DOWN, &MainFrame::OnSearchKeyDown, this);
+
 	CreateStatusBar(2);
 	SetStatusWidths(2, std::array<int, 2>{-3, -1}.data());
 	BuildMenuBar();
@@ -494,13 +504,18 @@ void MainFrame::OnSize(wxSizeEvent &event)
 {
 	const wxSize sz = GetClientSize();
 	const int tab_bar_h = (tab_bar_ != nullptr) ? tab_bar_->GetSize().y : 0;
+	int search_h = 0;
+	if (search_field_ != nullptr && search_field_->IsShown())
+		search_h = search_field_->GetBestSize().y;
 
 	if (tab_bar_ != nullptr) tab_bar_->SetSize(0, 0, sz.x, tab_bar_h);
 
-	const wxRect body(0, tab_bar_h, sz.x, std::max(0, sz.y - tab_bar_h));
+	const wxRect body(0, tab_bar_h, sz.x, std::max(0, sz.y - tab_bar_h - search_h));
 	if (root_ != nullptr) root_->SetSize(body);
 	if (viewer_ != nullptr) viewer_->SetSize(body);
 	if (image_viewer_ != nullptr) image_viewer_->SetSize(body);
+	if (search_h > 0 && search_field_ != nullptr)
+		search_field_->SetSize(0, tab_bar_h + body.height, sz.x, search_h);
 	event.Skip();
 }
 
@@ -3528,6 +3543,13 @@ void MainFrame::OnCharHook(wxKeyEvent &event)
 	// (VCL 版の CurStt->is_IncSea が true の間、FileListIncSearch にキーを
 	// 渡して Key=0 にするのと同じ。gui/key_map.h 冒頭のコメントも参照)
 	if (incsearch_.IsActive()) {
+		// 検索テキストフィールド表示中はそちらが入力を受け持つ (Issue #90)。
+		// HOOK で横取りせず素通しし、文字確定は EVT_TEXT 同期に任せる。
+		// (二重追加防止。S モードの ini 単一キー割り当てはこの間だけ不発)
+		if (search_field_ != nullptr && search_field_->IsShown()) {
+			event.Skip();
+			return;
+		}
 		HandleIncSearchKey(event);
 		return;
 	}
@@ -5690,7 +5712,14 @@ void MainFrame::ShowMaskDialog()
 void MainFrame::StartIncSearch()
 {
 	incsearch_.Start();
+	last_search_word_ = EmptyStr;
 	ActivePane()->ClearIncSearchHighlight();
+	if (search_field_ != nullptr) {
+		search_field_->SetValue(wxEmptyString);
+		search_field_->Show();
+		SendSizeEvent();
+		search_field_->SetFocus();
+	}
 	UpdateStatus();
 }
 
@@ -5761,7 +5790,13 @@ void MainFrame::ExitIncSearch()
 	RecordIncSearchHistory();
 	incsearch_.Exit();
 	incsearch_migemo_ = false;
+	last_search_word_ = EmptyStr;
 	ActivePane()->ClearIncSearchHighlight();
+	if (search_field_ != nullptr && search_field_->IsShown()) {
+		search_field_->Hide();
+		SendSizeEvent();
+		ActivePane()->SetFocus();
+	}
 	UpdateStatus();
 }
 
@@ -5774,20 +5809,69 @@ void MainFrame::ExitIncSearch()
  */
 void MainFrame::HandleIncSearchChar(wchar_t ch)
 {
+	incsearch_.Append(ch);
+	ApplyIncSearchWord();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 現在のキーワードで絞り込みを反映する
+ * @details VCL 版の FileListIncSearch の「見つからなかった場合: 警告表示 +
+ * beep + 直前の状態に戻す」と同じ。1文字追加 (HOOK 経路) でもフィールド
+ * 全文同期 (EVT_TEXT 経路、複数文字まとめ) でも、一致0件の入力は受け付けず
+ * 最後に一致したキーワードに戻す
+ */
+void MainFrame::ApplyIncSearchWord()
+{
 	FilePane *pane = ActivePane();
 
-	incsearch_.Append(ch);
 	pane->ApplyIncSearchHighlight(incsearch_.Word());
-
 	if (pane->GetMatchedCount() == 0) {
-		incsearch_.Backspace();
+		incsearch_.SetWord(last_search_word_);
+		if (search_field_ != nullptr && search_field_->IsShown())
+			search_field_->ChangeValue(to_wx(last_search_word_));
 		pane->ApplyIncSearchHighlight(incsearch_.Word());
 		wxBell();
 	}
 	else {
+		last_search_word_ = incsearch_.Word();
 		JumpToNearestIncSearchMatch();
 	}
 	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief 検索テキストフィールドの入力をキーワードへ同期する (Issue #90)
+ * @details wxTextCtrl 標準の IME で確定した文字列 (日本語含む、複数文字
+ * まとめ) が EVT_TEXT で来る。HOOK 経路 (GetUnicodeKey) との二重追加に
+ * ならないよう、フィールド表示中の HOOK は素通しする (OnCharHook 参照)
+ */
+void MainFrame::OnSearchText(wxCommandEvent &)
+{
+	if (!incsearch_.IsActive() || search_field_ == nullptr) return;
+	incsearch_.SetWord(to_us(search_field_->GetValue()));
+	ApplyIncSearchWord();
+}
+
+//---------------------------------------------------------------------------
+/// 検索フィールド内の Esc/Enter/上下。文字入力は素通しして IME に任せる
+void MainFrame::OnSearchKeyDown(wxKeyEvent &event)
+{
+	const int code = event.GetKeyCode();
+	if (code == WXK_ESCAPE || code == WXK_RETURN) {
+		ExitIncSearch();
+		return;
+	}
+	if (code == WXK_UP) {
+		CmdIncSearchStep(false);
+		return;
+	}
+	if (code == WXK_DOWN) {
+		CmdIncSearchStep(true);
+		return;
+	}
+	event.Skip();
 }
 
 //---------------------------------------------------------------------------
