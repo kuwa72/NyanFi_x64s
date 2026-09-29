@@ -279,6 +279,7 @@ if(TARGET nyanfi_core)
 		gui/clipboard_files.cpp
 		gui/links.cpp
 		gui/archive.cpp
+		gui/menu_def.cpp
 		gui/compare.cpp
 		gui/text_ops.cpp
 		gui/external.cpp

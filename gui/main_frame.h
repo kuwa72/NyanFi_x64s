@@ -83,6 +83,7 @@ private:
 	void OnCharHook(wxKeyEvent &event);
 	void OnClose(wxCloseEvent &event);
 	void OnSize(wxSizeEvent &event);
+	void BuildMenuBar();
 
 	void SetActivePane(int index);
 	void UpdateStatus();
