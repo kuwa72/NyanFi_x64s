@@ -27,6 +27,11 @@ struct Item {
 	UnicodeString command;
 };
 
+/// メニュー表示用のラベルを作る。キーがある場合は "ラベル (キー)"。
+/// "\t" 接尾は付けない (Issue #105: wx がメニューアクセラレータ表を
+/// 自動生成してキー入力を横取りするため。キー処理は OnCharHook に一元化)
+UnicodeString DisplayLabel(const UnicodeString &label, const UnicodeString &key);
+
 /// 基本メニューの全項目。順序=表示順
 const std::vector<Item> &Items();
 

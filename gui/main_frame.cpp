@@ -545,7 +545,9 @@ void MainFrame::BuildMenuBar()
 		}
 		UnicodeString label = it.label;
 		const UnicodeString key = keymap_.FindKey(it.command);
-		if (!key.IsEmpty()) label = label + UnicodeString(_T("\t")) + key;
+		// "\t" は付けない (アクセラレータ自動生成の横取り防止。Issue #105)。
+		// ショートカット表示は DisplayLabel() の "(キー)" 形式
+		label = menu_def::DisplayLabel(label, key);
 		const UnicodeString command = it.command;
 		wxMenuItem *item = current->Append(wxID_ANY, to_wx(label));
 		Bind(wxEVT_MENU,

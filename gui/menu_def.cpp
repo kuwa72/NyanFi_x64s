@@ -6,6 +6,12 @@
 
 namespace menu_def {
 
+UnicodeString DisplayLabel(const UnicodeString &label, const UnicodeString &key)
+{
+	if (key.IsEmpty()) return label;
+	return label + UnicodeString(_T(" (")) + key + UnicodeString(_T(")"));
+}
+
 const std::vector<Item> &Items()
 {
 	// 全て実装済みコマンドのみ (E2E 済みか実ダイアログ持ち)。
