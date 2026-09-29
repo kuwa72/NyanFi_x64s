@@ -160,8 +160,8 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Ctrl+B"), _T("ShowByteSize"));     // バイト単位
 	Assign(_T("Shift+LEFT"), _T("BorderLeft"));   // 境界を左へ
 	Assign(_T("Shift+RIGHT"), _T("BorderRight")); // 境界を右へ
-	Assign(_T("Ctrl+Shift+E"), _T("EqualListWidth"));
-	Assign(_T("Ctrl+Shift+S"), _T("SwapLR"));
+	Assign(_T("Shift+Ctrl+E"), _T("EqualListWidth"));
+	Assign(_T("Shift+Ctrl+S"), _T("SwapLR"));
 
 	// ディレクトリ移動。O / Shift+O は src/Global.cpp:2089,2112 の既定表にある
 	// 実際の割り当て
@@ -172,24 +172,24 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Ctrl+RIGHT"), _T("CsrDirToOpp"));
 	Assign(_T("Ctrl+PGDN"), _T("NextDrive"));
 	Assign(_T("Ctrl+PGUP"), _T("PrevDrive"));
-	Assign(_T("Ctrl+Shift+D"), _T("PushDir"));
-	Assign(_T("Ctrl+Shift+P"), _T("PopDir"));
+	Assign(_T("Shift+Ctrl+D"), _T("PushDir"));
+	Assign(_T("Shift+Ctrl+P"), _T("PopDir"));
 
 	// タブ操作。VCL の既定表にタブのエントリが1件も無いので全部推測
 	// (既存の Ctrl+T / Ctrl+W / Ctrl+Tab と揃えた)
-	Assign(_T("Ctrl+Shift+T"), _T("SoloTab"));
-	Assign(_T("Ctrl+Shift+H"), _T("TabHome"));
-	Assign(_T("Ctrl+Shift+M"), _T("MoveTab"));
-	Assign(_T("Ctrl+Shift+G"), _T("ToTab"));
+	Assign(_T("Shift+Ctrl+T"), _T("SoloTab"));
+	Assign(_T("Shift+Ctrl+H"), _T("TabHome"));
+	Assign(_T("Shift+Ctrl+M"), _T("MoveTab"));
+	Assign(_T("Shift+Ctrl+G"), _T("ToTab"));
 	// ディレクトリ一覧
-	Assign(_T("Ctrl+Shift+L"), _T("SubDirList"));
-	Assign(_T("Ctrl+Shift+F"), _T("SpecialDirList"));
+	Assign(_T("Shift+Ctrl+L"), _T("SubDirList"));
+	Assign(_T("Shift+Ctrl+F"), _T("SpecialDirList"));
 
 	// ファイル操作。VCL の既定表に無いので推測
 	Assign(_T("Shift+C"), _T("CopyTo"));
 	Assign(_T("Shift+M"), _T("MoveTo"));
-	Assign(_T("Ctrl+Shift+U"), _T("NameToUpper"));
-	Assign(_T("Ctrl+Shift+N"), _T("NameToLower"));
+	Assign(_T("Shift+Ctrl+U"), _T("NameToUpper"));
+	Assign(_T("Shift+Ctrl+N"), _T("NameToLower"));
 	Assign(_T("Ctrl+N"), _T("NewFile"));
 	// クリップボード経由。エクスプローラと同じ Ctrl+C / Ctrl+X / Ctrl+V にした。
 	// **Ctrl+C はファイル名のコピーではなくファイルのコピー**にしてある
@@ -197,13 +197,13 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Ctrl+C"), _T("CopyToClip"));
 	Assign(_T("Ctrl+X"), _T("CutToClip"));
 	Assign(_T("Ctrl+V"), _T("Paste"));
-	Assign(_T("Ctrl+Shift+C"), _T("CopyFileName"));
+	Assign(_T("Shift+Ctrl+C"), _T("CopyFileName"));
 
 	// リンク・属性。VCL の既定表に無いので推測
 	Assign(_T("Ctrl+L"), _T("CreateShortcut"));
-	Assign(_T("Ctrl+Shift+K"), _T("CreateHardLink"));
-	Assign(_T("Ctrl+Shift+Y"), _T("CreateSymLink"));
-	Assign(_T("Ctrl+Shift+I"), _T("SetDirTime"));
+	Assign(_T("Shift+Ctrl+K"), _T("CreateHardLink"));
+	Assign(_T("Shift+Ctrl+Y"), _T("CreateSymLink"));
+	Assign(_T("Shift+Ctrl+I"), _T("SetDirTime"));
 
 	// 書庫。P / U は src/Global.cpp:2090,2094 の既定表にある実際の割り当て
 	Assign(_T("P"), _T("Pack"));
@@ -211,24 +211,24 @@ void KeyMap::LoadDefaults()
 	// 以下は既定表に無いので推測
 	Assign(_T("Shift+P"), _T("PackToCurr"));
 	Assign(_T("Shift+U"), _T("UnPackToCurr"));
-	Assign(_T("Ctrl+Shift+A"), _T("ListArchive"));
+	Assign(_T("Shift+Ctrl+A"), _T("ListArchive"));
 
 	// 比較・ハッシュ。VCL の既定表に無いので推測
-	Assign(_T("Ctrl+Shift+X"), _T("GetHash"));
-	Assign(_T("Ctrl+Shift+Z"), _T("CompareHash"));
-	Assign(_T("Ctrl+Shift+O"), _T("SelOnlyCur"));
-	Assign(_T("Ctrl+Shift+V"), _T("DiffDir"));
+	Assign(_T("Shift+Ctrl+X"), _T("GetHash"));
+	Assign(_T("Shift+Ctrl+Z"), _T("CompareHash"));
+	Assign(_T("Shift+Ctrl+O"), _T("SelOnlyCur"));
+	Assign(_T("Shift+Ctrl+V"), _T("DiffDir"));
 
 	// テキスト操作。VCL の既定表に無いので推測
-	Assign(_T("Ctrl+Shift+W"), _T("CountLines"));
-	Assign(_T("Ctrl+Shift+J"), _T("JoinText"));
-	Assign(_T("Ctrl+Shift+R"), _T("ConvertTextEnc"));
-	Assign(_T("Ctrl+Shift+B"), _T("ListFileName"));
+	Assign(_T("Shift+Ctrl+W"), _T("CountLines"));
+	Assign(_T("Shift+Ctrl+J"), _T("JoinText"));
+	Assign(_T("Shift+Ctrl+R"), _T("ConvertTextEnc"));
+	Assign(_T("Shift+Ctrl+B"), _T("ListFileName"));
 
 	// 外部連携。X は src/Global.cpp:2097 の既定表にある実際の割り当て
 	Assign(_T("X"), _T("ContextMenu"));
 	// 以下は既定表に無いので推測
-	Assign(_T("Ctrl+Shift+Q"), _T("CommandPrompt"));
+	Assign(_T("Shift+Ctrl+Q"), _T("CommandPrompt"));
 	Assign(_T("Ctrl+Alt+P"), _T("PowerShell"));
 	Assign(_T("Ctrl+Alt+E"), _T("OpenByExp"));
 
@@ -299,7 +299,9 @@ void KeyMap::LoadDefaults()
 	Assign(_T("Alt+W"), _T("MaskSelect"));
 	Assign(_T("Alt+B"), _T("SelByList"));
 	Assign(_T("Alt+E"), _T("SelEmptyDir"));
-	Assign(_T("Alt+Shift+E"), _T("SelEmptyDir_NF"));  // ファイルを含まないものまで
+	Assign(_T("Shift+Alt+J"), _T("SelEmptyDir_NF"));  // ファイルを含まないものまで
+	// (旧 "Alt+Shift+E" は生成順序 (Shift,Ctrl,Alt) と逆で到達不能だった。
+	//  "Shift+Alt+E" は EditHistory が正順で使っているため J に退避)
 	Assign(_T("Alt+Y"), _T("DateSelect"));
 	Assign(_T("Alt+X"), _T("NextSameName"));
 	Assign(_T("Alt+O"), _T("SelMask"));
