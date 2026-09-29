@@ -100,6 +100,9 @@ private:
 	void HandleIncSearchChar(wchar_t ch);         //!< 1文字追加。一致0件なら元に戻す
 	void HandleIncSearchBackspace();              //!< 1文字削除 (BackSpace)
 	void JumpToNearestIncSearchMatch();           //!< 現在位置から最も近い一致へ移動する
+	void OnSearchText(wxCommandEvent &event);     //!< 検索フィールドの入力同期 (IME 対応)
+	void OnSearchKeyDown(wxKeyEvent &event);      //!< 検索フィールド内の Esc/Enter/上下
+	void ApplyIncSearchWord();                    //!< 現在のキーワードで絞り込み反映
 
 	//-- L/S モードと結果リスト (判断は gui/list_search.h の純関数が持つ) ------
 	void CmdNextErr(bool forward);       //!< 次/前のエラー位置へ (NextErr / PrevErr)
@@ -673,6 +676,8 @@ private:
 	wxWindow *root_ = nullptr;      //!< 2ペインを収めた親パネル (ShowViewer でのサイズ調整用)
 	TextViewer *viewer_ = nullptr;  //!< テキストビューア (root_ と同じ領域に重ねて表示)
 	ImageViewer *image_viewer_ = nullptr;  //!< 画像ビューア (同じく root_ と同じ領域に重ねて表示)
+	wxTextCtrl *search_field_ = nullptr;  //!< 検索テキストフィールド (Issue #90。IME 対応)
+	UnicodeString last_search_word_;  //!< 一致があった最後のキーワード (0件時の復元用)
 	UnicodeString pending_user_def_;  //!< SetUserDefStr で次回のユーザー定義一覧へ渡す文字列
 
 	// CmdImageViewer で画像ビューアを開いた時点のディレクトリ内の対象ファイル
