@@ -139,6 +139,10 @@ void KeyMap::LoadDefaults()
 	// Phase 2 骨格向けに新規で割り当てた (推測。要検証)
 	Assign(_T("Ctrl+F"), _T("Grep"));
 
+	// 登録フォルダ一覧・追加・ジャンプ。"J" は src/Global.cpp の既定キー表
+	// ("F:J=RegDirDlg", Global.cpp:2085) と同じ
+	Assign(_T("J"), _T("RegDirDlg"));
+
 	// マーク
 	Assign(_T("SPACE"), _T("Select"));
 	Assign(_T("Ctrl+A"), _T("SelAllItem"));

@@ -122,6 +122,7 @@ TEST_CASE("KeyMap: 既定の割り当てが引ける")
 	KeyMap km;
 	CHECK(km.Lookup(_T("F5")) == UnicodeString(_T("ReloadList")));
 	CHECK(km.Lookup(_T("Ctrl+Q")) == UnicodeString(_T("Exit")));
+	CHECK(km.Lookup(_T("J")) == UnicodeString(_T("RegDirDlg")));  // VCL既定 F:J
 	CHECK(km.Lookup(_T("NoSuchKey")).IsEmpty());
 	CHECK(km.Lookup(EmptyStr).IsEmpty());
 }

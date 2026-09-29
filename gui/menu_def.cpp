@@ -38,6 +38,7 @@ const std::vector<Item> &Items()
 		{{}, _T("並べ替え"), _T("SortDlg")},
 		{_T("検索"), _T("インクリメンタルサーチ"), _T("IncSearch")},
 		{{}, _T("Grep"), _T("Grep")},
+		{_T("設定"), _T("登録フォルダ"), _T("RegDirDlg")},
 		{_T("設定"), _T("キー一覧"), _T("KeyList")},
 		{{}, _T("コマンド一覧"), _T("ShowCmdList")},
 		{_T("ヘルプ"), _T("バージョン情報"), _T("AboutNyanFi")},
