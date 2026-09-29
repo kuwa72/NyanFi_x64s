@@ -47,3 +47,18 @@ TEST_CASE("menu: 全コマンドはキー割り当て表に存在する")
 		CHECK(!km.FindKey(it.command).IsEmpty());
 	}
 }
+
+TEST_CASE("menu: 表示ラベルにタブ文字を含めない")
+{
+	// Issue #105: "\t" 接尾は wx のメニューアクセラレータ表を自動生成し、
+	// 単一文字キーまで横取りして検索入力等を破壊する。表示は " (キー)" 形式。
+	CHECK(menu_def::DisplayLabel(_T("新規ファイル"), _T("Ctrl+N")) ==
+	      UnicodeString(_T("新規ファイル (Ctrl+N)")));
+	CHECK(menu_def::DisplayLabel(_T("終了"), EmptyStr) == UnicodeString(_T("終了")));
+	KeyMap km;
+	for (const menu_def::Item &it : menu_def::Items()) {
+		if (it.label.IsEmpty()) continue;
+		const UnicodeString shown = menu_def::DisplayLabel(it.label, km.FindKey(it.command));
+		CHECK(shown.Pos(_T("\t")) == 0);
+	}
+}
