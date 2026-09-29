@@ -56,7 +56,8 @@ wchar_t Match(wchar_t open_ch)
 PairPattern GetPairPattern(const UnicodeString &ext)
 {
 	UnicodeString e = ext;
-	if (!e.IsEmpty() && e[0] != _T('.')) e = _T(".") + e;
+	// UnicodeString の [] は1ベースなので、最初の文字は e[1]
+	if (!e.IsEmpty() && e[1] != _T('.')) e = _T(".") + e;
 	e = e.LowerCase();
 
 	if (e == _T(".dfm")) return PairPattern::Pascal;
