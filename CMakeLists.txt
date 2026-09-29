@@ -298,6 +298,7 @@ if(TARGET nyanfi_core)
 		gui/view_settings.cpp
 		gui/panel_state.cpp
 		gui/system_ops.cpp
+		gui/csv.cpp
 		gui/workers.cpp
 		gui/git_ftp.cpp
 		gui/tab_settings.cpp

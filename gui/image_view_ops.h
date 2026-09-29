@@ -241,6 +241,26 @@ bool ShouldShowCmdFileFilter(const UnicodeString &param);
  */
 int PopupMenuIndex(const UnicodeString &param);
 
+/**
+ * @brief ビットマップビューを表示すべきか (VCL の BitmapViewActionExecute と同じ)
+ * @details src/MainFrm.cpp:34040-34049 を実測。isBinary のときだけトグル
+ *          (SetToggleAction)、そうでなければ強制非表示 (false) にする
+ * @param is_binary バイナリ表示中か (VCL の TxtViewer->isBinary)
+ * @param visible 現在の表示状態
+ * @param param アクションパラメータ
+ */
+bool ShouldShowBitmapView(bool is_binary, bool visible, const UnicodeString &param);
+
+/**
+ * @brief インスペクタを表示すべきか (VCL の InspectorActionExecute と同じ)
+ * @details src/MainFrm.cpp:34017-34028 を実測。isBinary のときだけトグル、
+ *          そうでなければ強制非表示 (false) にする
+ * @param is_binary バイナリ表示中か (VCL の TxtViewer->isBinary)
+ * @param visible 現在の表示状態
+ * @param param アクションパラメータ
+ */
+bool ShouldShowInspector(bool is_binary, bool visible, const UnicodeString &param);
+
 }  // namespace image_view_ops
 
 #endif  // NYANFI_GUI_IMAGE_VIEW_OPS_H

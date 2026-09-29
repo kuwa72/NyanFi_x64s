@@ -74,3 +74,43 @@ TEST_CASE("ColorSettings: DisableEntry は対象外で false、対象で無効�
 	REQUIRE(fgpair != nullptr);
 	CHECK(fgpair->color == color_settings::DisabledColor());
 }
+
+//===========================================================================
+// FormatColorPickerValue: カラーピッカーの色書式化 (ColorPicker)
+// VCL: src/ColPicker.cpp:215-241 (UpdateStt の FmtComboBox 13形式)
+//===========================================================================
+
+TEST_CASE("FormatColorPickerValue: RGB(255,0,0) を各形式で書式化")
+{
+	const int red = 0x000000FF;  // TColor RGB(255,0,0)
+	CHECK(color_settings::FormatColorPickerValue(red, color_settings::ColorFormat::Rgb)
+		== UnicodeString(_T("255,0,0")));
+	CHECK(color_settings::FormatColorPickerValue(red, color_settings::ColorFormat::Colorref)
+		== UnicodeString(_T("0x000000ff")));
+	CHECK(color_settings::FormatColorPickerValue(red, color_settings::ColorFormat::Delphi)
+		== UnicodeString(_T("$000000FF")));
+	CHECK(color_settings::FormatColorPickerValue(red, color_settings::ColorFormat::Vb)
+		== UnicodeString(_T("&H000000FF&")));
+	CHECK(color_settings::FormatColorPickerValue(red, color_settings::ColorFormat::Html)
+		== UnicodeString(_T("#ff0000")));
+	CHECK(color_settings::FormatColorPickerValue(red, color_settings::ColorFormat::RgbParen)
+		== UnicodeString(_T("RGB(0xff,0x00,0x00)")));
+	CHECK(color_settings::FormatColorPickerValue(red, color_settings::ColorFormat::RgbDec)
+		== UnicodeString(_T("RGB(255,0,0)")));
+}
+
+TEST_CASE("FormatColorPickerValue: HSV/HSL 形式 (赤は H0 S100 V100)")
+{
+	const int red = 0x000000FF;
+	CHECK(color_settings::FormatColorPickerValue(red, color_settings::ColorFormat::Hsv)
+		== UnicodeString(_T("0,100,100")));
+	CHECK(color_settings::FormatColorPickerValue(red, color_settings::ColorFormat::Hsl)
+		== UnicodeString(_T("0,100,50")));
+}
+
+TEST_CASE("FormatColorPickerValue: BITMAP 形式")
+{
+	const int red = 0x000000FF;
+	CHECK(color_settings::FormatColorPickerValue(red, color_settings::ColorFormat::Bitmap32)
+		== UnicodeString(_T("R255 G0 B0")));
+}

@@ -480,4 +480,26 @@ UnicodeString FormatFileNames(const std::vector<UnicodeString> &paths, bool full
 	return out;
 }
 
+//---------------------------------------------------------------------------
+// 二重起動 (Duplicate / ExitDupl)
+// VCL: src/MainFrm.cpp:16872-16888 (DuplicateActionExecute/Update)、
+//      src/MainFrm.cpp:17210-17218 (ExitDuplActionExecute/Update)
+//---------------------------------------------------------------------------
+DuplicateParam ParseDuplicateParam(const UnicodeString &param, bool is_admin)
+{
+	DuplicateParam r;
+	// VCL: TestActionParam("DM") && IsAdmin → Execute_demote
+	if (is_admin && SameText(param, _T("DM"))) r.demote = true;
+	// VCL: TestActionParam("RA") → Execute_ex の "A" オプション
+	else if (SameText(param, _T("RA"))) r.run_as = true;
+	return r;
+}
+
+bool CanExitDupl(bool is_primary, bool multi_instance)
+{
+	// VCL: ExitDuplActionUpdate (src/MainFrm.cpp:17215-17217)
+	// ap->Enabled = IsPrimary && MultiInstance
+	return is_primary && multi_instance;
+}
+
 }  // namespace file_ops

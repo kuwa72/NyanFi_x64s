@@ -13,6 +13,7 @@
 
 #include "usr_str.h"
 #include "usr_cmdlist.h"
+#include "gui/selection.h"
 #include "gui/text_display.h"
 #include "gui/find_txt_dialog.h"
 #include "gui/search_pair.h"
@@ -377,6 +378,9 @@ bool TextViewer::Execute(const UnicodeString &full_command)
 	else if (SameStr(command, _T("ReloadFile"))) {
 		CmdReload();
 	}
+	else if (SameStr(command, _T("Sort"))) {
+		CmdSort(param);
+	}
 	else if (SameStr(command, _T("ShowLineNo"))) {
 		CmdShowLineNo(param);
 	}
@@ -715,6 +719,214 @@ bool TextViewer::CmdFindMarkUp()
 	return true;
 }
 
+//---------------------------------------------------------------------------
+// 選択系コマンド (VCL: src/TxtViewer.cpp の該当case)
+//---------------------------------------------------------------------------
+
+void TextViewer::CmdSelectAll()
+{
+	// VCL: TxtViewer::SelectAll (TxtViewer.cpp:3901)
+	if (doc_.lines.empty()) return;
+	sel_start_line_ = 0;
+	sel_start_col_ = 0;
+	sel_end_line_ = static_cast<int>(doc_.lines.size()) - 1;
+	sel_end_col_ = doc_.lines.back().Length();
+	is_box_mode_ = false;
+	Refresh();
+}
+
+void TextViewer::CmdSelectMode()
+{
+	// VCL: TxtViewer::ExeCommand case 32 (TxtViewer.cpp:5068)
+	is_sel_mode_ = !is_sel_mode_;
+	if (!is_sel_mode_) {
+		// 選択モード解除時は選択範囲をクリア
+		sel_start_line_ = sel_end_line_ = current_line_;
+		sel_start_col_ = sel_end_col_ = 0;
+	}
+	Refresh();
+}
+
+void TextViewer::CmdSelCurWord()
+{
+	// VCL: TxtViewer::SelCurWord (TxtViewer.cpp:3951)
+	if (doc_.is_binary || doc_.lines.empty()) return;
+	const UnicodeString &line = doc_.lines[current_line_];
+	int start, end;
+	if (selection::FindWordAt(line, h_offset_chars_, start, end)) {
+		sel_start_line_ = current_line_;
+		sel_start_col_ = start;
+		sel_end_line_ = current_line_;
+		sel_end_col_ = end;
+		Refresh();
+	}
+}
+
+void TextViewer::CmdSelLine()
+{
+	// VCL: TxtViewer::SelLine (TxtViewer.cpp:3991)
+	if (doc_.is_binary || doc_.lines.empty()) return;
+	int start, end;
+	selection::FindLineRange(doc_.lines[current_line_], 0, start, end);
+	sel_start_line_ = current_line_;
+	sel_start_col_ = start;
+	sel_end_line_ = current_line_;
+	sel_end_col_ = end;
+	Refresh();
+}
+
+void TextViewer::CmdBoxSelMode()
+{
+	// VCL: TxtViewer::ExeCommand "BoxSelMode" (TxtViewer.cpp:5150)
+	is_box_mode_ = !is_box_mode_;
+	is_sel_mode_ = is_box_mode_;
+	Refresh();
+}
+
+void TextViewer::CmdCursorLeftSel()
+{
+	// VCL: TxtViewer::CursorLeft(true) (TxtViewer.cpp:5045)
+	if (doc_.is_binary) return;
+	if (is_sel_mode_) {
+		// 選択しながら左へ
+		if (h_offset_chars_ > 0) {
+			h_offset_chars_--;
+			sel_end_line_ = current_line_;
+			sel_end_col_ = h_offset_chars_;
+			Refresh();
+		}
+	}
+	else {
+		CmdCursorLeft(EmptyStr);
+	}
+}
+
+void TextViewer::CmdCursorRightSel()
+{
+	// VCL: TxtViewer::CursorRight(true) (TxtViewer.cpp:5047)
+	if (doc_.is_binary || wrap_) return;
+	if (is_sel_mode_) {
+		// 選択しながら右へ
+		const UnicodeString &line = doc_.lines[current_line_];
+		if (h_offset_chars_ < line.Length()) {
+			h_offset_chars_++;
+			sel_end_line_ = current_line_;
+			sel_end_col_ = h_offset_chars_;
+			Refresh();
+		}
+	}
+	else {
+		CmdCursorRight(EmptyStr);
+	}
+}
+
+void TextViewer::CmdLineTopSel()
+{
+	// VCL: TxtViewer::LineTop(true) (TxtViewer.cpp:5049)
+	if (doc_.is_binary) return;
+	if (is_sel_mode_) {
+		h_offset_chars_ = 0;
+		sel_end_line_ = current_line_;
+		sel_end_col_ = 0;
+		Refresh();
+	}
+	else {
+		CmdLineTop();
+	}
+}
+
+void TextViewer::CmdLineEndSel()
+{
+	// VCL: TxtViewer::LineEnd(true) (TxtViewer.cpp:5051)
+	if (doc_.is_binary || wrap_) return;
+	if (is_sel_mode_) {
+		const UnicodeString &line = doc_.lines[current_line_];
+		h_offset_chars_ = line.Length();
+		sel_end_line_ = current_line_;
+		sel_end_col_ = h_offset_chars_;
+		Refresh();
+	}
+	else {
+		CmdLineEnd();
+	}
+}
+
+void TextViewer::CmdTextTopSel()
+{
+	// VCL: TxtViewer::TextTop(true) (TxtViewer.cpp:5053)
+	if (doc_.is_binary) return;
+	if (is_sel_mode_) {
+		GotoTop();
+		sel_end_line_ = current_line_;
+		sel_end_col_ = h_offset_chars_;
+		Refresh();
+	}
+	else {
+		CmdTextTop();
+	}
+}
+
+void TextViewer::CmdTextEndSel()
+{
+	// VCL: TxtViewer::TextEnd(true) (TxtViewer.cpp:5055)
+	if (doc_.is_binary) return;
+	if (is_sel_mode_) {
+		GotoEnd();
+		sel_end_line_ = current_line_;
+		sel_end_col_ = h_offset_chars_;
+		Refresh();
+	}
+	else {
+		CmdTextEnd();
+	}
+}
+
+void TextViewer::CmdWordLeft()
+{
+	// VCL: TxtViewer::WordLeft(isSelMode) (TxtViewer.cpp:5056)
+	if (doc_.is_binary || doc_.lines.empty()) return;
+	const UnicodeString &line = doc_.lines[current_line_];
+	const int pos = selection::FindWordLeft(line, h_offset_chars_);
+	if (pos >= 0) {
+		h_offset_chars_ = pos;
+		if (is_sel_mode_) {
+			sel_end_line_ = current_line_;
+			sel_end_col_ = pos;
+		}
+		Refresh();
+	}
+}
+
+void TextViewer::CmdWordRight()
+{
+	// VCL: TxtViewer::WordRight(isSelMode) (TxtViewer.cpp:5057)
+	if (doc_.is_binary || doc_.lines.empty()) return;
+	const UnicodeString &line = doc_.lines[current_line_];
+	const int pos = selection::FindWordRight(line, h_offset_chars_);
+	if (pos >= 0) {
+		h_offset_chars_ = pos;
+		if (is_sel_mode_) {
+			sel_end_line_ = current_line_;
+			sel_end_col_ = pos;
+		}
+		Refresh();
+	}
+}
+
+void TextViewer::CmdHighlight()
+{
+	// VCL: TxtViewer::ExeCommand "Highlight" (TxtViewer.cpp:5154)
+	highlight_ = !highlight_;
+	Refresh();
+}
+
+void TextViewer::CmdCharInfo()
+{
+	// VCL: CharInfoActionExecute (MainFrm.cpp:33804)
+	char_info_ = !char_info_;
+	Refresh();
+}
+
 void TextViewer::CmdChangeCodePage(const UnicodeString &param)
 {
 	if (path_.IsEmpty() || doc_.is_binary) return;
@@ -752,6 +964,33 @@ void TextViewer::CmdReload()
 	marks_.erase(std::remove_if(marks_.begin(), marks_.end(), [&](int m) {
 		return m < 0 || m >= static_cast<int>(doc_.lines.size());
 	}), marks_.end());
+	UpdateLineNoCols();
+	RebuildWrap();
+	EnsureCursorVisible();
+	Refresh();
+}
+
+//---------------------------------------------------------------------------
+void TextViewer::CmdSort(const UnicodeString &param)
+{
+	// VCL の TxtViewer.cpp:5255-5263 の ExeCommand("Sort") 相当。
+	// AssignText(NULL, cur_lno, SameText(prm, "AO")? 1 : SameText(prm, "DO")? -1 : 0)
+	if (doc_.lines.empty() || doc_.is_binary) return;
+
+	const int direction = SameText(param, _T("AO")) ? 1 : SameText(param, _T("DO")) ? -1 : 0;
+	if (direction == 0) return;  // ソートしない
+
+	// カーソル行の内容を覚えておく (VCL の cur_lno 保持と同じ)
+	const UnicodeString cur_line_text = doc_.lines[current_line_];
+
+	doc_.lines = text_viewer_core::SortLines(doc_.lines, direction);
+
+	// ソート後に同じ内容の行へカーソルを移動
+	auto it = std::find(doc_.lines.begin(), doc_.lines.end(), cur_line_text);
+	if (it != doc_.lines.end()) {
+		current_line_ = static_cast<int>(std::distance(doc_.lines.begin(), it));
+	}
+
 	UpdateLineNoCols();
 	RebuildWrap();
 	EnsureCursorVisible();
@@ -992,4 +1231,60 @@ void TextViewer::OnPaint(wxPaintEvent &)
 
 		dc.DrawText(to_wx(text), text_x, y + 1);
 	}
+}
+
+//---------------------------------------------------------------------------
+// ScrollCursorDown/Up 用 (VCL: ListBoxScrollDown/Up の move_csr=true)
+//---------------------------------------------------------------------------
+void TextViewer::SetScrollCursor(int top, int cursor)
+{
+	const int n = static_cast<int>(doc_.lines.size());
+	top_row_ = std::clamp(top, 0, std::max(0, n - 1));
+	current_line_ = std::clamp(cursor, 0, std::max(0, n - 1));
+	Refresh();
+}
+
+//---------------------------------------------------------------------------
+// BackViewHist 用 (VCL: TextViewHistory)
+//---------------------------------------------------------------------------
+UnicodeString TextViewer::GetViewHistoryTop() const
+{
+	if (view_history_.empty()) return EmptyStr;
+	return view_history_.front();
+}
+
+void TextViewer::PopViewHistory()
+{
+	if (!view_history_.empty()) view_history_.erase(view_history_.begin());
+}
+
+bool TextViewer::OpenFileAt(const UnicodeString &path, int line)
+{
+	UnicodeString error;
+	if (!LoadFile(path, error)) return false;
+	GotoLine(line);
+	return true;
+}
+
+//---------------------------------------------------------------------------
+// CsvGraph 用 (VCL: TxtViewer->TxtBufList の 2次元配列化)
+//---------------------------------------------------------------------------
+std::vector<std::vector<UnicodeString>> TextViewer::GetRows() const
+{
+	std::vector<std::vector<UnicodeString>> rows;
+	rows.reserve(doc_.lines.size());
+	for (const UnicodeString &line : doc_.lines) {
+		TStringDynArray fields;
+		if (is_tsv_) {
+			fields = split_strings_tab(line);
+		}
+		else {
+			fields = get_csv_array(line, 99);
+		}
+		std::vector<UnicodeString> row;
+		row.reserve(fields.Length);
+		for (int i = 0; i < fields.Length; i++) row.push_back(fields[i]);
+		rows.push_back(row);
+	}
+	return rows;
 }

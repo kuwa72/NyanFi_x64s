@@ -329,3 +329,54 @@ TEST_CASE("ResolveDirectoryInput: 相対パス (..\\) を基準ディレクト�
 	CHECK(ResolveDirectoryInput(_T("..\\"), IncludeTrailingPathDelimiter(sub), resolved));
 	CHECK(SameText(resolved, dir.path));
 }
+
+//===========================================================================
+// ScrollCursorMove: スクロールしながらカーソルも移動 (ScrollCursorDown/Up)
+// VCL: src/UserFunc.cpp:964-1008 (ListBoxScrollDown/Up の move_csr=true)、
+//      src/Global.cpp:15045-15046 (ExeCmdListBox の case 10/11)
+//===========================================================================
+
+TEST_CASE("ScrollCursorMove: 下方向は TopIndex と ItemIndex が同時に移動する")
+{
+	// VCL の ListBoxScrollDown(lp, n, true): TopIndex += n, ItemIndex += n
+	const ScrollCursorResult r = ScrollCursorMove(10, 0, 2, 3, true);
+	CHECK(r.top == 3);
+	CHECK(r.cursor == 5);
+}
+
+TEST_CASE("ScrollCursorMove: 上方向は TopIndex と ItemIndex が同時に戻る")
+{
+	// VCL の ListBoxScrollUp(lp, n, true): TopIndex -= n (clamp 0), ItemIndex += 変化量
+	const ScrollCursorResult r = ScrollCursorMove(10, 5, 7, 3, false);
+	CHECK(r.top == 2);
+	CHECK(r.cursor == 4);
+}
+
+TEST_CASE("ScrollCursorMove: 上方向は TopIndex が 0 で clamp される")
+{
+	const ScrollCursorResult r = ScrollCursorMove(10, 2, 5, 5, false);
+	CHECK(r.top == 0);
+	// VCL の ListBoxScrollUp(lp, n, true): TopIndex が 0 に clamp されたとき、
+	// ItemIndex は TopIndex の変化量 (-2) だけ戻る (5 + (-2) = 3)
+	CHECK(r.cursor == 3);
+}
+
+TEST_CASE("ScrollCursorMove: 下方向は末尾で clamp される")
+{
+	const ScrollCursorResult r = ScrollCursorMove(10, 8, 9, 5, true);
+	CHECK(r.top == 9);   // count-1
+	CHECK(r.cursor == 9); // カーソルも末尾で止まる
+}
+
+TEST_CASE("ParseScrollCursorParam: 空は既定 (ListWheelSrvLn=2)、数値・HP/FP/ED/TP を解釈")
+{
+	// VCL: src/Global.cpp:15015 (既定 ListWheelSrvLn=2)、
+	//      src/UserFunc.cpp:973-986 (HP=pn/2, FP=pn, ED=末尾)
+	CHECK(ParseScrollCursorParam(EmptyStr, 10, true) == 2);
+	CHECK(ParseScrollCursorParam(_T("5"), 10, true) == 5);
+	CHECK(ParseScrollCursorParam(_T("HP"), 10, true) == 5);  // pn/2
+	CHECK(ParseScrollCursorParam(_T("FP"), 10, true) == 10); // pn
+	CHECK(ParseScrollCursorParam(_T("ED"), 10, true) == 10); // 末尾まで
+	CHECK(ParseScrollCursorParam(_T("TP"), 10, false) == 10); // 先頭まで (up)
+	CHECK(ParseScrollCursorParam(_T("XX"), 10, true) == 1);  // 非数値は 1
+}

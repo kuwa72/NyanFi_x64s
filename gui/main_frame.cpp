@@ -45,6 +45,11 @@
 #include "gui/text_display.h"
 #include "gui/text_viewer_core.h"
 #include "gui/file_ops.h"
+#include "gui/navigation.h"
+#include "gui/history.h"
+#include "gui/csv.h"
+#include "gui/system_ops.h"
+#include "gui/color_settings.h"
 #include "gui/dupl_dialog.h"
 #include "gui/join_text_dialog.h"
 #include "gui/cv_enc_dialog.h"
@@ -772,6 +777,163 @@ void MainFrame::CmdSimilarSort()
 	}
 	SetStatusWarning(_T("名前の類似性で並べ替えました"));
 	UpdateStatus();
+}
+
+//---------------------------------------------------------------------------
+// V モードの表示切替・タグジャンプ (VCL ExeCommandV:32789 の分岐)
+//---------------------------------------------------------------------------
+void MainFrame::CmdChangeViewMode()
+{
+	// VCL の ChangeViewMode (MainFrm.cpp:32903-32913) はテキスト/バイナリ
+	// 表示の切り替え。wx 版の TextViewer はテキスト専用でバイナリ表示が
+	// 無いため、ここでは未移植 (未実装扱い) として警告を出す
+	SetStatusWarning(_T("ChangeViewMode は未移植 (未実装扱い): wx 版にバイナリ表示モードが無い"));
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdSwitchSameName()
+{
+	// VCL の SwitchSameName (MainFrm.cpp:33000-33010)。
+	// ファイル名主部が同じ次のファイルに切り替える
+	FilePane *pane = ActivePane();
+	if (pane->GetCurrentItem() == nullptr) { SetStatusWarning(_T("項目がありません")); return; }
+
+	const int cursor = pane->GetCursor();
+	const std::vector<FileItem> items = pane->VisibleItems();
+	const UnicodeString next_name = FindNextSameName(items, cursor, true);
+	if (next_name.IsEmpty()) {
+		SetStatusWarning(_T("同名のファイルが見つかりません"));
+		return;
+	}
+
+	// 一覧のカーソルを移動
+	const int next_index = pane->FindItemIndex(next_name);
+	if (next_index >= 0) {
+		pane->MoveCursorTo(next_index);
+	}
+
+	// ビューアで開く
+	if (viewer_ != nullptr && viewer_->IsShown()) {
+		const UnicodeString full_path = pane->CurrentFullPath();
+		UnicodeString error;
+		if (!viewer_->LoadFile(full_path, error)) {
+			SetStatusWarning(error);
+			return;
+		}
+		viewer_->GotoLine(1);
+		UpdateStatus();
+	}
+	SetStatusWarning(_T("同名のファイルに切り替えました: ") + next_name);
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdSwitchSrcHdr()
+{
+	// VCL の SwitchSrcHdr (MainFrm.cpp:33012-33019)。
+	// ソース/ヘッダの切り替え
+	FilePane *pane = ActivePane();
+	if (pane->GetCurrentItem() == nullptr) { SetStatusWarning(_T("項目がありません")); return; }
+
+	const UnicodeString cur_path = pane->CurrentFullPath();
+	const UnicodeString src_hdr_name = GetSrcHdrName(cur_path);
+	if (src_hdr_name.IsEmpty()) {
+		SetStatusWarning(_T("対応するソース/ヘッダファイルが見つかりません"));
+		return;
+	}
+
+	// 一覧のカーソルを移動
+	const int next_index = pane->FindItemIndex(src_hdr_name);
+	if (next_index >= 0) {
+		pane->MoveCursorTo(next_index);
+	}
+
+	// ビューアで開く
+	if (viewer_ != nullptr && viewer_->IsShown()) {
+		UnicodeString error;
+		if (!viewer_->LoadFile(src_hdr_name, error)) {
+			SetStatusWarning(error);
+			return;
+		}
+		viewer_->GotoLine(1);
+		UpdateStatus();
+	}
+	SetStatusWarning(_T("ソース/ヘッダに切り替えました: ") + src_hdr_name);
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdTagJump(bool direct)
+{
+	// VCL の TagJump/TagView (MainFrm.cpp:32961-32986)。
+	// カーソル行からファイル名と行番号を分割してジャンプ
+	if (viewer_ == nullptr || !viewer_->IsShown()) {
+		SetStatusWarning(_T("ビューアが表示されていません"));
+		return;
+	}
+
+	const UnicodeString cur_line = viewer_->Lines()[viewer_->CurrentLine()];
+	auto [fnam, lno] = text_viewer_core::DivideFileNameLineNo(cur_line, 0);
+
+	if (fnam.IsEmpty()) {
+		// VCL は "DJ" パラメータがあれば DirectTagJumpCore を呼ぶ
+		// (MainFrm.cpp:32982-32984)。wx 版では未移植
+		SetStatusWarning(_T("タグジャンプ先が見つかりません"));
+		return;
+	}
+
+	// TagJump は編集 (open_by_TextEditor)、TagView は閲覧 (SetAndOpenTxtViewer)
+	if (direct) {
+		// TagJump: 外部エディタで開く。wx 版に外部エディタ起動機能が無いため未移植
+		SetStatusWarning(_T("TagJump (編集) は未移植 (未実装扱い): wx 版に外部エディタ起動機能が無い"));
+		return;
+	}
+
+	// TagView: ビューアで開く
+	UnicodeString error;
+	if (!viewer_->LoadFile(fnam, error)) {
+		SetStatusWarning(error);
+		return;
+	}
+	viewer_->GotoLine(lno);
+	UpdateStatus();
+	SetStatusWarning(_T("タグジャンプ: ") + fnam + _T(":") + IntToStr(lno));
+}
+
+//---------------------------------------------------------------------------
+void MainFrame::CmdTagView(bool direct)
+{
+	// VCL の TagJumpDirect/TagViewDirect (MainFrm.cpp:32988-32991)。
+	// ダイレクトタグジャンプ
+	if (viewer_ == nullptr || !viewer_->IsShown()) {
+		SetStatusWarning(_T("ビューアが表示されていません"));
+		return;
+	}
+
+	const UnicodeString cur_word = viewer_->Lines()[viewer_->CurrentLine()];
+	const tag::TagJumpTarget target = tag::ResolveTagJump(
+		EmptyStr, cur_word, viewer_->FileName(), direct);
+
+	if (target.file_path.IsEmpty()) {
+		// tags ファイル検索が必要。wx 版に tags ファイル検索機能が無いため未移植
+		SetStatusWarning(_T("ダイレクトタグジャンプ (tags ファイル検索) は未移植 (未実装扱い)"));
+		return;
+	}
+
+	// ctags フォーマットの直接指定
+	if (direct) {
+		// TagJumpDirect: 外部エディタで開く。wx 版に外部エディタ起動機能が無いため未移植
+		SetStatusWarning(_T("TagJumpDirect (編集) は未移植 (未実装扱い): wx 版に外部エディタ起動機能が無い"));
+		return;
+	}
+
+	// TagViewDirect: ビューアで開く
+	UnicodeString error;
+	if (!viewer_->LoadFile(target.file_path, error)) {
+		SetStatusWarning(error);
+		return;
+	}
+	viewer_->GotoLine(target.line_no);
+	UpdateStatus();
+	SetStatusWarning(_T("ダイレクトタグジャンプ: ") + target.file_path + _T(":") + IntToStr(target.line_no));
 }
 
 //---------------------------------------------------------------------------
@@ -3595,6 +3757,234 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 			viewer_->CmdClose();
 			return true;
 		}
+		// スクロールしながらカーソルも移動 (VCL: src/Global.cpp:15045-15046
+		// ExeCmdListBox の case 10/11 → src/UserFunc.cpp:964-1008
+		// ListBoxScrollDown/Up の move_csr=true)
+		if (SameStr(command, _T("ScrollCursorDown")) || SameStr(command, _T("ScrollCursorUp"))) {
+			const bool down = SameStr(command, _T("ScrollCursorDown"));
+			const int pn = viewer_->VisibleRows();
+			const int n = ParseScrollCursorParam(param, pn, down);
+			const ScrollCursorResult r =
+				ScrollCursorMove(viewer_->LineCount(), viewer_->GetTopIndex(),
+				                 viewer_->GetCursorIndex(), n, down);
+			viewer_->SetScrollCursor(r.top, r.cursor);
+			UpdateStatus();
+			return true;
+		}
+		//-- 選択系コマンド (VCL: src/TxtViewer.cpp の該当case) --
+		// V:SelectAll (TxtViewer.cpp:3901)
+		if (SameStr(command, _T("SelectAll"))) {
+			viewer_->CmdSelectAll();
+			UpdateStatus();
+			return true;
+		}
+		// V:SelectMode (TxtViewer.cpp:5068)
+		if (SameStr(command, _T("SelectMode"))) {
+			viewer_->CmdSelectMode();
+			UpdateStatus();
+			return true;
+		}
+		// V:SelCurWord (TxtViewer.cpp:3951)
+		if (SameStr(command, _T("SelCurWord"))) {
+			viewer_->CmdSelCurWord();
+			UpdateStatus();
+			return true;
+		}
+		// V:SelLine (TxtViewer.cpp:3991)
+		if (SameStr(command, _T("SelLine"))) {
+			viewer_->CmdSelLine();
+			UpdateStatus();
+			return true;
+		}
+		// V:BoxSelMode (TxtViewer.cpp:5150)
+		if (SameStr(command, _T("BoxSelMode"))) {
+			viewer_->CmdBoxSelMode();
+			UpdateStatus();
+			return true;
+		}
+		// V:CursorLeftSel (TxtViewer.cpp:5045)
+		if (SameStr(command, _T("CursorLeftSel"))) {
+			viewer_->CmdCursorLeftSel();
+			UpdateStatus();
+			return true;
+		}
+		// V:CursorRightSel (TxtViewer.cpp:5047)
+		if (SameStr(command, _T("CursorRightSel"))) {
+			viewer_->CmdCursorRightSel();
+			UpdateStatus();
+			return true;
+		}
+		// V:LineTopSel (TxtViewer.cpp:5049)
+		if (SameStr(command, _T("LineTopSel"))) {
+			viewer_->CmdLineTopSel();
+			UpdateStatus();
+			return true;
+		}
+		// V:LineEndSel (TxtViewer.cpp:5051)
+		if (SameStr(command, _T("LineEndSel"))) {
+			viewer_->CmdLineEndSel();
+			UpdateStatus();
+			return true;
+		}
+		// V:TextTopSel (TxtViewer.cpp:5053)
+		if (SameStr(command, _T("TextTopSel"))) {
+			viewer_->CmdTextTopSel();
+			UpdateStatus();
+			return true;
+		}
+		// V:TextEndSel (TxtViewer.cpp:5055)
+		if (SameStr(command, _T("TextEndSel"))) {
+			viewer_->CmdTextEndSel();
+			UpdateStatus();
+			return true;
+		}
+		// V:WordLeft (TxtViewer.cpp:5056)
+		if (SameStr(command, _T("WordLeft"))) {
+			viewer_->CmdWordLeft();
+			UpdateStatus();
+			return true;
+		}
+		// V:WordRight (TxtViewer.cpp:5057)
+		if (SameStr(command, _T("WordRight"))) {
+			viewer_->CmdWordRight();
+			UpdateStatus();
+			return true;
+		}
+		// V:Highlight (TxtViewer.cpp:5154)
+		if (SameStr(command, _T("Highlight"))) {
+			viewer_->CmdHighlight();
+			UpdateStatus();
+			return true;
+		}
+		// V:CharInfo (MainFrm.cpp:33804)
+		if (SameStr(command, _T("CharInfo"))) {
+			viewer_->CmdCharInfo();
+			UpdateStatus();
+			return true;
+		}
+		// V:SelectFile (MainFrm.cpp:32823)。表示中のファイルを一覧で選択
+		if (SameStr(command, _T("SelectFile"))) {
+			const UnicodeString org_name = viewer_->FileName();
+			if (!org_name.IsEmpty()) {
+				const std::vector<FileItem> v = pane->VisibleItems();
+				for (std::size_t i = 0; i < v.size(); ++i) {
+					if (SameText(v[i].name, org_name)) {
+						pane->MoveCursorTo(static_cast<int>(i));
+						pane->ToggleMark();
+						break;
+					}
+				}
+			}
+			UpdateStatus();
+			return true;
+		}
+		// ビューアの履歴を戻る (VCL: src/MainFrm.cpp:32993-33000 ExeCommandV の
+		// BackViewHist 分岐。TextViewHistory の先頭を取り出して削除し、
+		// SetAndOpenTxtViewer で開く)
+		if (SameStr(command, _T("BackViewHist"))) {
+			const history::ViewHistoryEntry e = history::ParseViewHistoryEntry(viewer_->GetViewHistoryTop());
+			if (e.path.IsEmpty()) {
+				SetStatusWarning(_T("履歴がありません"));
+				return true;
+			}
+			viewer_->PopViewHistory();
+			if (!viewer_->OpenFileAt(e.path, e.line)) {
+				SetStatusWarning(_T("ファイルを開けません: ") + e.path);
+			}
+			return true;
+		}
+		// CSV/TSV項目のグラフ (VCL: src/MainFrm.cpp:33847-33853 CsvGraphActionExecute)。
+		// GraphForm は UI 依存のため、データ抽出のみ行い、ダイアログ表示は未実装。
+		if (SameStr(command, _T("CsvGraph"))) {
+			const csv::GraphData g = csv::ExtractGraphData(viewer_->GetRows(),
+			                                               viewer_->GetCsvColumn(),
+			                                               viewer_->IsTopIsHeader());
+			if (g.column < 0 || g.values.empty()) {
+				SetStatusWarning(_T("グラフにするデータがありません"));
+				return true;
+			}
+			// 未移植 (未実装扱い): GraphForm の表示 (src/GraphFrm.cpp)。
+			// データ抽出は完了しているが、グラフの描画・表示は行わない。
+			SetStatusWarning(_T("CSVグラフの表示は未実装です (データ抽出のみ完了)"));
+			return true;
+		}
+		// CSV/TSVレコード表示 (VCL: src/MainFrm.cpp:33865-33876 CsvRecordActionExecute)。
+		// isBinary なら強制非表示、それ以外はトグル。
+		if (SameStr(command, _T("CsvRecord"))) {
+			const bool show = csv::ToggleCsvRecord(viewer_->IsCsvRecordVisible(), param);
+			viewer_->SetCsvRecordVisible(show);
+			UpdateStatus();
+			return true;
+		}
+		// CSV/TSVエクスポート (VCL: src/MainFrm.cpp:34000-34005 ExportCsvActionExecute)。
+		// ExpCsvDlg は UI 依存のため、設定解釈のみ行い、ダイアログ表示は未実装。
+		if (SameStr(command, _T("ExportCsv"))) {
+			const csv::ExportSettings s = csv::ParseExportSettings(param, viewer_->IsTsv());
+			// 未移植 (未実装扱い): ExpCsvDlg の表示 (src/ExpCsv.cpp)。
+			// 設定解釈は完了しているが、エクスポート処理は行わない。
+			SetStatusWarning(_T("CSVエクスポートは未実装です (設定解釈のみ完了)"));
+			return true;
+		}
+		// ビットマップビュー (VCL: src/MainFrm.cpp:34040-34049 BitmapViewActionExecute)。
+		// isBinary ならトグル、そうでなければ強制非表示。
+		if (SameStr(command, _T("BitmapView"))) {
+			const bool show = image_view_ops::ShouldShowBitmapView(viewer_->IsBinary(),
+			                                                       viewer_->IsBitmapViewVisible(), param);
+			viewer_->SetBitmapViewVisible(show);
+			UpdateStatus();
+			return true;
+		}
+		// インスペクタ (VCL: src/MainFrm.cpp:34017-34028 InspectorActionExecute)。
+		// isBinary ならトグル、そうでなければ強制非表示。
+		if (SameStr(command, _T("Inspector"))) {
+			const bool show = image_view_ops::ShouldShowInspector(viewer_->IsBinary(),
+			                                                       viewer_->IsInspectorVisible(), param);
+			viewer_->SetInspectorVisible(show);
+			UpdateStatus();
+			return true;
+		}
+		// イメージプレビュー (VCL: src/MainFrm.cpp:26060 ShowImgPreview トグル)。
+		if (SameStr(command, _T("ImgPreview"))) {
+			const bool show = image_view_ops::ToggleViewFlag(viewer_->IsImgPreviewVisible(), param);
+			viewer_->SetImgPreviewVisible(show);
+			UpdateStatus();
+			return true;
+		}
+
+		//-- V モードの表示切替・タグジャンプ (VCL ExeCommandV:32789 の分岐) --
+		// VCL の ChangeViewMode (MainFrm.cpp:32903-32913) はテキスト/バイナリ
+		// 表示の切り替え。wx 版の TextViewer はテキスト専用でバイナリ表示が
+		// 無いため、ここでは未移植 (未実装扱い) として警告を出す
+		if (SameStr(command, _T("ChangeViewMode"))) {
+			SetStatusWarning(_T("ChangeViewMode は未移植 (未実装扱い): wx 版にバイナリ表示モードが無い"));
+			return true;
+		}
+		// VCL の SwitchSameName (MainFrm.cpp:33000-33010)。
+		// ファイル名主部が同じ次のファイルに切り替える
+		if (SameStr(command, _T("SwitchSameName"))) {
+			CmdSwitchSameName();
+			return true;
+		}
+		// VCL の SwitchSrcHdr (MainFrm.cpp:33012-33019)。
+		// ソース/ヘッダの切り替え
+		if (SameStr(command, _T("SwitchSrcHdr"))) {
+			CmdSwitchSrcHdr();
+			return true;
+		}
+		// VCL の TagJump/TagView (MainFrm.cpp:32961-32986)。
+		// カーソル行からファイル名と行番号を分割してジャンプ
+		if (SameStr(command, _T("TagJump")) || SameStr(command, _T("TagView"))) {
+			const bool is_edit = SameStr(command, _T("TagJump"));
+			CmdTagJump(is_edit);
+			return true;
+		}
+		// VCL の TagJumpDirect/TagViewDirect (MainFrm.cpp:32988-32991)。
+		// ダイレクトタグジャンプ
+		if (SameStr(command, _T("TagJumpDirect")) || SameStr(command, _T("TagViewDirect"))) {
+			const bool is_edit = SameStr(command, _T("TagJumpDirect"));
+			CmdTagView(is_edit);
+			return true;
+		}
 	}
 
 	if (SameStr(command, _T("CursorUp"))) {
@@ -3978,6 +4368,26 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	}
 	else if (SameStr(command, _T("Restart"))) {
 		CmdRestart();
+	}
+	// NyanFi の二重起動 (VCL: src/MainFrm.cpp:16872-16888 DuplicateActionExecute)。
+	// "DM"+管理者 → Execute_demote、"RA" → Execute_ex の "A" オプション、
+	// それ以外 → Execute_ex (通常起動)。
+	else if (SameStr(command, _T("Duplicate"))) {
+		const file_ops::DuplicateParam p = file_ops::ParseDuplicateParam(param, system_ops::IsAdmin());
+		if (!system_ops::ExecuteDuplicateProcess(p.demote, p.run_as)) {
+			SetStatusWarning(_T("NyanFi の二重起動に失敗しました"));
+		}
+	}
+	// 二重起動された NyanFi を終了 (VCL: src/MainFrm.cpp:17210-17218 ExitDuplActionExecute)。
+	// IsPrimary && MultiInstance のときだけ有効。
+	else if (SameStr(command, _T("ExitDupl"))) {
+		if (!file_ops::CanExitDupl(system_ops::IsPrimary(), system_ops::IsMultiInstance())) {
+			SetStatusWarning(_T("二重起動された NyanFi がありません"));
+			return true;
+		}
+		if (!system_ops::CloseOtherNyanFi()) {
+			SetStatusWarning(_T("他の NyanFi を終了できません"));
+		}
 	}
 	//-- 検索と結果リスト -----------------------------------------------------
 	else if (SameStr(command, _T("SearchPair"))) {
@@ -4414,6 +4824,16 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 	else if (SameStr(command, _T("EqualSize"))) {
 		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
 		image_viewer_->SetEqualSize();
+	}
+	// カラーピッカー (VCL: src/MainFrm.cpp:35132-35135 ColorPickerActionExecute)。
+	// ColorPicker->ViewImage = ViewerImage; ColorPicker->Show();
+	// 未移植 (未実装扱い): ColorPicker フォーム (src/ColPicker.cpp)。
+	// 色の書式化 (color_settings::FormatColorPickerValue) は実装済みだが、
+	// スポイト UI と色取得は画像ビューアの描画依存のため未実装。
+	else if (SameStr(command, _T("ColorPicker"))) {
+		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;
+		SetStatusWarning(_T("カラーピッカーは未実装です (色書式化のみ完了)"));
+		return true;
 	}
 	else if (SameStr(command, _T("FittedSize"))) {
 		if (image_viewer_ == nullptr || !image_viewer_->IsShown()) return false;

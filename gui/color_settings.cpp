@@ -4,6 +4,8 @@
  */
 #include "gui/color_settings.h"
 
+#include "usr_color.h"
+
 namespace color_settings {
 
 namespace {
@@ -150,6 +152,65 @@ bool DisableEntry(std::vector<ColorEntry> &entries, const UnicodeString &key)
 	if (!CanDisable(key)) return false;
 	SetEntry(entries, key, DisabledColor());
 	return true;
+}
+
+//---------------------------------------------------------------------------
+// カラーピッカーの色書式化 (ColorPicker)
+// VCL: src/ColPicker.cpp:215-241 (UpdateStt の FmtComboBox 13形式)
+//---------------------------------------------------------------------------
+UnicodeString FormatColorPickerValue(int color, ColorFormat fmt)
+{
+	// TColor は 0x00BBGGRR (BGR 順)
+	const int cref = ColorToRGB(color);
+	const int r = GetRValue(cref);
+	const int g = GetGValue(cref);
+	const int b = GetBValue(cref);
+
+	int h = 0, s = 0, v = 0, l = 0;
+	RgbToHsv(cref, &h, &s, &v);
+	RgbToHsl(cref, &h, &s, &l);
+
+	UnicodeString out;
+	switch (fmt) {
+	case ColorFormat::Rgb:
+		out.sprintf(_T("%d,%d,%d"), r, g, b);
+		break;
+	case ColorFormat::Hsv:
+		out.sprintf(_T("%d,%d,%d"), h, s, v);
+		break;
+	case ColorFormat::Hsl:
+		out.sprintf(_T("%d,%d,%d"), h, s, l);
+		break;
+	case ColorFormat::Colorref:
+		out.sprintf(_T("0x%08x"), cref);
+		break;
+	case ColorFormat::Delphi:
+		out.sprintf(_T("$00%02X%02X%02X"), b, g, r);
+		break;
+	case ColorFormat::Vb:
+		out.sprintf(_T("&H00%02X%02X%02X&"), b, g, r);
+		break;
+	case ColorFormat::Html:
+		out.sprintf(_T("#%02x%02x%02x"), r, g, b);
+		break;
+	case ColorFormat::RgbParen:
+		out.sprintf(_T("RGB(0x%02x,0x%02x,0x%02x)"), r, g, b);
+		break;
+	case ColorFormat::RgbDec:
+		out.sprintf(_T("RGB(%d,%d,%d)"), r, g, b);
+		break;
+	case ColorFormat::ConstSymbol:
+		// VCL: ColorToString(c2) → Web 色名変換 (RGBToWebColorName)。
+		// Web 色名テーブルは未移植 (未実装扱い) なので COLORREF にフォールバック。
+		out.sprintf(_T("0x%08x"), cref);
+		break;
+	case ColorFormat::Bitmap32:
+	case ColorFormat::Bitmap128:
+	case ColorFormat::Bitmap256:
+		out.sprintf(_T("R%d G%d B%d"), r, g, b);
+		break;
+	}
+	return out;
 }
 
 }  // namespace color_settings

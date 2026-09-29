@@ -1,0 +1,998 @@
+[
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -o CMakeFiles/nyanfi_compat.dir/compat/src/application.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/application.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/application.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_compat.dir/compat/src/application.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -o CMakeFiles/nyanfi_compat.dir/compat/src/ustring.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/ustring.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/ustring.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_compat.dir/compat/src/ustring.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -o CMakeFiles/nyanfi_compat.dir/compat/src/sysutils.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/sysutils.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/sysutils.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_compat.dir/compat/src/sysutils.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -o CMakeFiles/nyanfi_compat.dir/compat/src/datetime.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/datetime.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/datetime.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_compat.dir/compat/src/datetime.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -o CMakeFiles/nyanfi_compat.dir/compat/src/math.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/math.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/math.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_compat.dir/compat/src/math.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -o CMakeFiles/nyanfi_compat.dir/compat/src/classes.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/classes.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/classes.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_compat.dir/compat/src/classes.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -o CMakeFiles/nyanfi_compat.dir/compat/src/streams.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/streams.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/streams.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_compat.dir/compat/src/streams.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -o CMakeFiles/nyanfi_compat.dir/compat/src/encoding.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/encoding.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/encoding.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_compat.dir/compat/src/encoding.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -o CMakeFiles/nyanfi_compat.dir/compat/src/ioutils.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/ioutils.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/ioutils.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_compat.dir/compat/src/ioutils.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -o CMakeFiles/nyanfi_compat.dir/compat/src/regex.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/regex.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/regex.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_compat.dir/compat/src/regex.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -o CMakeFiles/nyanfi_compat.dir/compat/src/json.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/json.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/json.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_compat.dir/compat/src/json.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -o CMakeFiles/nyanfi_compat.dir/compat/src/graphics.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/graphics.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/graphics.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_compat.dir/compat/src/graphics.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -o CMakeFiles/nyanfi_compat.dir/compat/src/registry.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/registry.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/registry.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_compat.dir/compat/src/registry.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -o CMakeFiles/nyanfi_compat.dir/compat/src/iduri.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/iduri.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/iduri.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_compat.dir/compat/src/iduri.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -o CMakeFiles/nyanfi_compat.dir/compat/src/netencoding.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/netencoding.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/src/netencoding.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_compat.dir/compat/src/netencoding.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_core.dir/src/file_filter.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/file_filter.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/file_filter.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_core.dir/src/file_filter.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_core.dir/src/htmconv.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/htmconv.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/htmconv.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_core.dir/src/htmconv.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_core.dir/src/usr_arc.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_arc.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_arc.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_core.dir/src/usr_arc.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_core.dir/src/usr_cmdlist.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_cmdlist.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_cmdlist.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_core.dir/src/usr_cmdlist.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_core.dir/src/usr_color.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_color.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_color.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_core.dir/src/usr_color.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_core.dir/src/usr_exif.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_exif.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_exif.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_core.dir/src/usr_exif.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_core.dir/src/usr_file_ex.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_file_ex.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_file_ex.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_core.dir/src/usr_file_ex.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_core.dir/src/usr_file_inf.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_file_inf.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_file_inf.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_core.dir/src/usr_file_inf.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_core.dir/src/usr_id3.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_id3.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_id3.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_core.dir/src/usr_id3.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_core.dir/src/usr_key.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_key.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_key.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_core.dir/src/usr_key.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_core.dir/src/usr_migemo.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_migemo.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_migemo.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_core.dir/src/usr_migemo.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_core.dir/src/usr_mmfile.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_mmfile.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_mmfile.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_core.dir/src/usr_mmfile.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_core.dir/src/usr_msg.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_msg.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_msg.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_core.dir/src/usr_msg.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_core.dir/src/usr_str.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_str.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_str.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_core.dir/src/usr_str.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_core.dir/src/usr_wic.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_wic.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_wic.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_core.dir/src/usr_wic.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_core.dir/src/usr_xd2tx.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_xd2tx.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_xd2tx.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_core.dir/src/usr_xd2tx.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_core.dir/src/usr_scale.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_scale.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_scale.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_core.dir/src/usr_scale.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_core.dir/src/usr_swatch.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_swatch.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_swatch.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_core.dir/src/usr_swatch.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_core.dir/src/usr_tag.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_tag.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_tag.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_core.dir/src/usr_tag.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_core.dir/src/usr_scrpanel.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_scrpanel.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_scrpanel.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_core.dir/src/usr_scrpanel.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_core.dir/src/UIniFile.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/UIniFile.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/UIniFile.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_core.dir/src/UIniFile.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_core.dir/src/usr_highlight.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_highlight.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src/usr_highlight.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_core.dir/src/usr_highlight.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_core.dir/gui/usr_shell_fmt_shim.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/usr_shell_fmt_shim.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/usr_shell_fmt_shim.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_core.dir/gui/usr_shell_fmt_shim.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_core.dir/gui/usr_file_inf_link_shim.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/usr_file_inf_link_shim.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/usr_file_inf_link_shim.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_core.dir/gui/usr_file_inf_link_shim.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/settings.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/settings.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/settings.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/settings.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/key_map.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/key_map.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/key_map.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/key_map.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/file_item.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/file_item.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/file_item.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/file_item.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/file_ops.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/file_ops.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/file_ops.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/file_ops.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/file_open.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/file_open.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/file_open.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/file_open.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/file_info.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/file_info.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/file_info.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/file_info.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/text_viewer_core.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/text_viewer_core.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/text_viewer_core.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/text_viewer_core.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/navigation.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/navigation.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/navigation.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/navigation.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/grep.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/grep.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/grep.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/grep.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/image_load.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/image_load.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/image_load.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/image_load.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/image_view_ops.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/image_view_ops.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/image_view_ops.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/image_view_ops.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/tabs.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/tabs.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/tabs.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/tabs.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/rename.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/rename.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/rename.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/rename.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/selection.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/selection.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/selection.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/selection.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/view_state.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/view_state.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/view_state.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/view_state.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/clipboard_files.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/clipboard_files.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/clipboard_files.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/clipboard_files.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/links.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/links.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/links.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/links.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/archive.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/archive.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/archive.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/archive.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/compare.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/compare.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/compare.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/compare.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/text_ops.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/text_ops.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/text_ops.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/text_ops.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/external.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/external.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/external.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/external.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/file_narrow.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/file_narrow.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/file_narrow.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/file_narrow.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/dir_info.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/dir_info.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/dir_info.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/dir_info.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/text_display.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/text_display.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/text_display.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/text_display.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/misc_ops.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/misc_ops.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/misc_ops.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/misc_ops.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/find_files.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/find_files.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/find_files.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/find_files.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/work_list.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/work_list.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/work_list.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/work_list.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/list_search.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/list_search.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/list_search.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/list_search.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/bookmarks.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/bookmarks.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/bookmarks.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/bookmarks.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/clone_name.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/clone_name.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/clone_name.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/clone_name.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/file_ops2.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/file_ops2.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/file_ops2.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/file_ops2.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/convert_ops.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/convert_ops.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/convert_ops.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/convert_ops.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/log_win.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/log_win.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/log_win.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/log_win.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/history.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/history.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/history.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/history.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/named_state.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/named_state.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/named_state.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/named_state.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/view_settings.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/view_settings.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/view_settings.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/view_settings.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/panel_state.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/panel_state.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/panel_state.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/panel_state.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/system_ops.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/system_ops.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/system_ops.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/system_ops.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/workers.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/workers.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/workers.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/workers.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/git_ftp.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/git_ftp.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/git_ftp.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/git_ftp.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/tab_settings.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/tab_settings.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/tab_settings.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/tab_settings.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/regdir.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/regdir.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/regdir.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/regdir.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/sync_dirs.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/sync_dirs.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/sync_dirs.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/sync_dirs.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/color_settings.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/color_settings.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/color_settings.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/color_settings.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/app_list.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/app_list.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/app_list.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/app_list.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/f_misc_ops.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/f_misc_ops.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/f_misc_ops.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/f_misc_ops.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/drive_select.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/drive_select.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/drive_select.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/drive_select.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/task_man.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/task_man.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/task_man.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/task_man.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/f_batch5_ops.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/f_batch5_ops.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/f_batch5_ops.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/f_batch5_ops.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/f_batch6_ops.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/f_batch6_ops.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/f_batch6_ops.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/f_batch6_ops.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/f_batch7_ops.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/f_batch7_ops.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/f_batch7_ops.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/f_batch7_ops.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/sort_mode.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/sort_mode.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/sort_mode.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/sort_mode.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/pack_settings.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/pack_settings.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/pack_settings.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/pack_settings.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/backup_settings.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/backup_settings.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/backup_settings.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/backup_settings.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/same_name.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/same_name.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/same_name.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/same_name.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/grep_opt.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/grep_opt.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/grep_opt.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/grep_opt.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/cv_img.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/cv_img.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/cv_img.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/cv_img.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/find_txt.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/find_txt.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/find_txt.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/find_txt.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/cre_dirs.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/cre_dirs.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/cre_dirs.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/cre_dirs.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/hist.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/hist.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/hist.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/hist.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/inp_ex.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/inp_ex.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/inp_ex.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/inp_ex.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/btn.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/btn.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/btn.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/btn.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/key.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/key.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/key.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/key.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/tag.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/tag.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/tag.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/tag.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/file_ext.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/file_ext.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/file_ext.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/file_ext.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/calc.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/calc.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/calc.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/calc.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/dot_nyan.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/dot_nyan.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/dot_nyan.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/dot_nyan.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/gen_info.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/gen_info.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/gen_info.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/gen_info.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/distribution.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/distribution.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/distribution.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/distribution.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/function_list.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/function_list.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/function_list.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/function_list.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/cmd_list.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/cmd_list.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/cmd_list.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/cmd_list.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/net_share.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/net_share.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/net_share.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/net_share.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/print_image.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/print_image.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/print_image.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/print_image.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o CMakeFiles/nyanfi_gui_core.dir/gui/edit_hist.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/edit_hist.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/edit_hist.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/CMakeFiles/nyanfi_gui_core.dir/gui/edit_hist.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "x86_64-w64-mingw32-windres -O coff -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I /home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I /home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/nyanfi.rc gui/CMakeFiles/nyanfi.dir/nyanfi.rc.res",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/nyanfi.rc",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/nyanfi.rc.res"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/nyanfi_app.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/nyanfi_app.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/nyanfi_app.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/nyanfi_app.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/main_frame.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/main_frame.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/main_frame.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/main_frame.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/file_pane.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/file_pane.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/file_pane.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/file_pane.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/file_info_panel.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/file_info_panel.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/file_info_panel.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/file_info_panel.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/file_info_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/file_info_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/file_info_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/file_info_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/file_ext_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/file_ext_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/file_ext_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/file_ext_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/tag_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/tag_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/tag_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/tag_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/text_viewer.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/text_viewer.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/text_viewer.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/text_viewer.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/image_viewer.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/image_viewer.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/image_viewer.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/image_viewer.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/grep_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/grep_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/grep_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/grep_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/grep_opt_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/grep_opt_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/grep_opt_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/grep_opt_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/cv_img_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/cv_img_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/cv_img_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/cv_img_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/find_txt_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/find_txt_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/find_txt_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/find_txt_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/cre_dirs_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/cre_dirs_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/cre_dirs_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/cre_dirs_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/gen_info_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/gen_info_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/gen_info_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/gen_info_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/edit_hist_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/edit_hist_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/edit_hist_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/edit_hist_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/diff_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/diff_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/diff_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/diff_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/comp_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/comp_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/comp_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/comp_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/drive_select_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/drive_select_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/drive_select_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/drive_select_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/task_man_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/task_man_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/task_man_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/task_man_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/sort_mode_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/sort_mode_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/sort_mode_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/sort_mode_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/pack_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/pack_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/pack_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/pack_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/backup_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/backup_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/backup_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/backup_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/same_name_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/same_name_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/same_name_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/same_name_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/rename_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/rename_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/rename_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/rename_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/find_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/find_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/find_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/find_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/dupl_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/dupl_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/dupl_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/dupl_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/join_text_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/join_text_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/join_text_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/join_text_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/cv_enc_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/cv_enc_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/cv_enc_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/cv_enc_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/new_file_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/new_file_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/new_file_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/new_file_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/exe_cmd_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/exe_cmd_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/exe_cmd_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/exe_cmd_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/pre_same_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/pre_same_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/pre_same_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/pre_same_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/distribution_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/distribution_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/distribution_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/distribution_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/function_list_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/function_list_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/function_list_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/function_list_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/cmd_list_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/cmd_list_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/cmd_list_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/cmd_list_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/mask_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/mask_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/mask_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/mask_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/tab_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/tab_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/tab_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/tab_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/regdir_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/regdir_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/regdir_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/regdir_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/sync_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/sync_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/sync_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/sync_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/app_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/app_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/app_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/app_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/color_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/color_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/color_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/color_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/hist_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/hist_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/hist_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/hist_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/inp_ex_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/inp_ex_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/inp_ex_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/inp_ex_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/btn_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/btn_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/btn_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/btn_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/key_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/key_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/key_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/key_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/net_share_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/net_share_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/net_share_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/net_share_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/print_image_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/print_image_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/print_image_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/print_image_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/calc_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/calc_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/calc_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/calc_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/dot_nyan_dialog.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/dot_nyan_dialog.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/dot_nyan_dialog.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/dot_nyan_dialog.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/key_map_wx.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/key_map_wx.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/key_map_wx.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/key_map_wx.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/vcl_gui_bridge.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/vcl_gui_bridge.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/vcl_gui_bridge.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/vcl_gui_bridge.cpp.obj"
+},
+{
+  "directory": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy",
+  "command": "/home/linuxbrew/.linuxbrew/bin/x86_64-w64-mingw32-g++ -DNDEBUG -DNOMINMAX -DUNICODE -DWINVER=0x0601 -D_UNICODE -D_WIN32_WINNT=0x0601 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/src -I/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/compat/include -O3 -DNDEBUG -std=c++20 -I/home/kuwa72/opt/wx-3.3.3-mingw64/lib/wx/include/x86_64-w64-mingw32-msw-unicode-static-3.3 -I/home/kuwa72/opt/wx-3.3.3-mingw64/include/wx-3.3 -D_FILE_OFFSET_BITS=64 -D__WXMSW__ -include vcl_shim.h -finput-charset=UTF-8 -fexec-charset=CP932 -ffunction-sections -fdata-sections -fpermissive -o gui/CMakeFiles/nyanfi.dir/worker_thread.cpp.obj -c /home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/worker_thread.cpp",
+  "file": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/gui/worker_thread.cpp",
+  "output": "/home/kuwa72/ghq/github.com/kuwa72/NyanFi_x64s/build-deploy/gui/CMakeFiles/nyanfi.dir/worker_thread.cpp.obj"
+}
+]

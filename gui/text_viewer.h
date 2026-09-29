@@ -103,6 +103,37 @@ public:
 	/// V:Mark (トグル) / V:ClearMark (全解除)
 	void CmdMark();
 	void CmdClearMark();
+	//-- 選択系コマンド (VCL: src/TxtViewer.cpp の該当case) --
+	/// V:SelectAll (TxtViewer.cpp:3901)。先頭から末尾まで選択
+	void CmdSelectAll();
+	/// V:SelectMode (TxtViewer.cpp:5068)。選択モードの切り替え
+	void CmdSelectMode();
+	/// V:SelCurWord (TxtViewer.cpp:3951)。カーソル位置の単語を選択
+	void CmdSelCurWord();
+	/// V:SelLine (TxtViewer.cpp:3991)。カーソル行を選択
+	void CmdSelLine();
+	/// V:BoxSelMode (TxtViewer.cpp:5150)。箱形選択モードの切り替え
+	void CmdBoxSelMode();
+	/// V:CursorLeftSel (TxtViewer.cpp:5045)。選択しながら左へ
+	void CmdCursorLeftSel();
+	/// V:CursorRightSel (TxtViewer.cpp:5047)。選択しながら右へ
+	void CmdCursorRightSel();
+	/// V:LineTopSel (TxtViewer.cpp:5049)。選択しながら行頭へ
+	void CmdLineTopSel();
+	/// V:LineEndSel (TxtViewer.cpp:5051)。選択しながら行末へ
+	void CmdLineEndSel();
+	/// V:TextTopSel (TxtViewer.cpp:5053)。選択しながら先頭へ
+	void CmdTextTopSel();
+	/// V:TextEndSel (TxtViewer.cpp:5055)。選択しながら末尾へ
+	void CmdTextEndSel();
+	/// V:WordLeft (TxtViewer.cpp:5056)。前の単語へ
+	void CmdWordLeft();
+	/// V:WordRight (TxtViewer.cpp:5057)。次の単語へ
+	void CmdWordRight();
+	/// V:Highlight (TxtViewer.cpp:5154)。強調表示の切り替え
+	void CmdHighlight();
+	/// V:CharInfo (MainFrm.cpp:33804)。文字情報表示の切り替え
+	void CmdCharInfo();
 	/// V:FindMarkDown / V:FindMarkUp。移動したら true
 	bool CmdFindMarkDown();
 	bool CmdFindMarkUp();
@@ -110,6 +141,10 @@ public:
 	void CmdChangeCodePage(const UnicodeString &param);
 	/// V:ReloadFile (現在行・マークを保って再読込)
 	void CmdReload();
+	/// V:Sort (param AO=昇順、DO=降順、それ以外=ソートしない)。
+	/// VCL の TxtViewer.cpp:5255-5263 の ExeCommand("Sort") 相当。
+	/// カーソル行の内容を覚えてソート後に同じ内容の行へ移動する
+	void CmdSort(const UnicodeString &param);
 	/// V:Close (閉じる。SetOnClose 経由)
 	void CmdClose();
 	/**
@@ -158,6 +193,35 @@ public:
 	/// 直前の検索語 (FindDown/FindUp が使う)
 	const UnicodeString &LastSearch() const { return last_search_; }
 
+	//--- BackViewHist 用 (VCL: TextViewHistory) ---
+	UnicodeString GetViewHistoryTop() const;                //!< ビューア履歴の先頭
+	void PopViewHistory();                                  //!< ビューア履歴の先頭を削除
+	bool OpenFileAt(const UnicodeString &path, int line);   //!< ファイルを開いて指定行へ
+
+	//--- ScrollCursorDown/Up 用 (VCL: ListBoxScrollDown/Up の move_csr=true) ---
+	int GetTopIndex() const { return top_row_; }            //!< 表示先頭行
+	int GetCursorIndex() const { return current_line_; }    //!< カーソル行
+	void SetScrollCursor(int top, int cursor);             //!< スクロール位置とカーソルを設定
+
+	//--- CsvGraph/CsvRecord/ExportCsv 用 ---
+	std::vector<std::vector<UnicodeString>> GetRows() const; //!< 2次元配列で行を取得
+	int GetCsvColumn() const { return csv_column_; }        //!< CSV列
+	bool IsTopIsHeader() const { return top_is_header_; }   //!< 先頭行がヘッダか
+	bool IsTsv() const { return is_tsv_; }                  //!< TSV か
+	bool IsCsvRecordVisible() const { return csv_record_visible_; }
+	void SetCsvRecordVisible(bool v) { csv_record_visible_ = v; }
+
+	//--- BitmapView/Inspector/ImgPreview 用 ---
+	bool IsBitmapViewVisible() const { return bitmap_view_visible_; }
+	void SetBitmapViewVisible(bool v) { bitmap_view_visible_ = v; }
+	bool IsInspectorVisible() const { return inspector_visible_; }
+	void SetInspectorVisible(bool v) { inspector_visible_ = v; }
+	bool IsImgPreviewVisible() const { return img_preview_visible_; }
+	void SetImgPreviewVisible(bool v) { img_preview_visible_ = v; }
+
+public:
+	int VisibleRows() const;                 //!< 本文の表示行数
+
 private:
 	void OnPaint(wxPaintEvent &event);
 	void OnSize(wxSizeEvent &event);
@@ -168,7 +232,6 @@ private:
 	void UpdateLineNoCols();    //!< 行番号欄の桁数を行数から決める
 
 	int HeaderHeight() const { return row_height_ + 4; }
-	int VisibleRows() const;                 //!< 本文の表示行数
 	int GutterWidth() const;                 //!< 行番号欄の幅(px)
 	int TextAreaCols() const;                //!< 折り返し計算用の表示幅(半角換算)
 
@@ -195,6 +258,16 @@ private:
 
 	std::vector<int> wrap_rows_;      //!< 各行の折り返し後の表示行数 (折り返し無効なら全て1)
 	std::vector<Int64> prefix_rows_;  //!< 表示行の累積和 (size = 行数+1)
+
+	//--- V: モードのコマンド配線用状態 ---
+	int csv_column_ = 0;              //!< CSV列 (VCL: TxtViewer->CsvCol)
+	bool top_is_header_ = false;      //!< 先頭行がヘッダか (VCL: TxtViewer->TopIsHeader)
+	bool is_tsv_ = false;             //!< TSV か (VCL: ExpCsvDlg の TSV 判定)
+	bool csv_record_visible_ = false; //!< CSVレコード表示 (VCL: CsvRecForm->Visible)
+	bool bitmap_view_visible_ = false;//!< ビットマップビュー (VCL: BitmapForm->Visible)
+	bool inspector_visible_ = false;  //!< インスペクタ (VCL: InspectForm->Visible)
+	bool img_preview_visible_ = false;//!< イメージプレビュー (VCL: PreviewPanel->Visible)
+	std::vector<UnicodeString> view_history_; //!< ビューア履歴 (VCL: TextViewHistory)
 
 	bool wrap_ = false;               //!< 折り返し表示
 	int current_line_ = 0;            //!< カーソル行 (0ベース、行単位)
@@ -230,6 +303,16 @@ private:
 	// フラグは保持するが描画には反映しない。VCL は選択文字列を強調表示する。
 	UnicodeString highlight_word_;     //!< 強調表示する文字列
 	bool highlight_on_ = false;       //!< 強調表示中か
+
+	//-- 選択状態 (VCL: TxtViewer の SelStart/SelEnd/isSelMode/isBoxMode) --
+	int sel_start_line_ = 0;           //!< 選択開始行 (0ベース)
+	int sel_start_col_ = 0;            //!< 選択開始桁 (0ベース)
+	int sel_end_line_ = 0;             //!< 選択終了行 (0ベース)
+	int sel_end_col_ = 0;              //!< 選択終了桁 (0ベース、含まない)
+	bool is_sel_mode_ = false;         //!< 選択モード (V:SelectMode)
+	bool is_box_mode_ = false;         //!< 箱形選択モード (V:BoxSelMode)
+	bool highlight_ = false;           //!< 強調表示 (V:Highlight)
+	bool char_info_ = false;           //!< 文字情報表示 (V:CharInfo)
 
 	wxFont font_;
 	int row_height_ = 16;

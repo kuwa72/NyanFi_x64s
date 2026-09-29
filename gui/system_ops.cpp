@@ -261,4 +261,38 @@ bool ToggleMute()
 	return SUCCEEDED(endp_vol->SetMute(!mute, NULL));
 }
 
+//---------------------------------------------------------------------------
+// 二重起動 (Duplicate / ExitDupl)
+// VCL: src/MainFrm.cpp:16872-16888 (DuplicateActionExecute)、
+//      src/MainFrm.cpp:17210-17218 (ExitDuplActionExecute)、
+//      src/Global.cpp:15285-15300 (CloseOtherNyanFi)
+//---------------------------------------------------------------------------
+
+namespace {
+bool g_is_admin = false;       //!< VCL: IsAdmin (src/Global.cpp:71)
+bool g_is_primary = true;      //!< VCL: IsPrimary (src/Global.cpp:72)
+bool g_multi_instance = false; //!< VCL: MultiInstance (src/Global.cpp:145)
+}  // namespace
+
+bool IsAdmin() { return g_is_admin; }
+bool IsPrimary() { return g_is_primary; }
+bool IsMultiInstance() { return g_multi_instance; }
+
+bool ExecuteDuplicateProcess(bool demote, bool run_as)
+{
+	// 未移植 (未実装扱い): VCL の Execute_ex (src/Global.cpp:13431) /
+	// Execute_demote (src/Global.cpp:13669)。CreateProcessW / ShellExecuteEx
+	// による実際の起動は行わない。呼び出し側は SetStatusWarning で警告を出す。
+	(void)demote;
+	(void)run_as;
+	return false;
+}
+
+bool CloseOtherNyanFi()
+{
+	// 未移植 (未実装扱い): VCL の CloseOtherNyanFi (src/Global.cpp:15285-15300)。
+	// EnumWindows によるウィンドウ列挙と WM_CLOSE 送信は行わない。
+	return false;
+}
+
 }  // namespace system_ops

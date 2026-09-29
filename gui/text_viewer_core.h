@@ -164,6 +164,34 @@ int ParseCodePageParam(const UnicodeString &param, int cur_code_page);
  */
 int ParseMoveCount(const UnicodeString &param, int visible_rows);
 
+/**
+ * @brief テキスト全体を改行単位でソートする (V:Sort)
+ * @details VCL の TxtViewer.cpp:5255-5263 の ExeCommand("Sort") 相当。
+ *          `AssignText(NULL, cur_lno, SameText(prm, "AO")? 1 : SameText(prm, "DO")? -1 : 0)`
+ *          で、AO=昇順(1)、DO=降順(-1)、それ以外=0 (ソートしない)。
+ *          ソート後のカーソル位置の保持は呼び出し側 (TextViewer::CmdSort) の仕事。
+ * @param lines ソート対象の行 (変更しない)
+ * @param direction 1=昇順、-1=降順、0=ソートしない
+ * @return ソート後の行。direction==0 は lines をそのまま返す
+ */
+std::vector<UnicodeString> SortLines(const std::vector<UnicodeString> &lines, int direction);
+
+/**
+ * @brief 文字列をファイル名と行番号に分割する (TagJump/TagView 用)
+ * @details VCL の divide_FileName_LineNo (src/Global.cpp:13179) の簡易版。
+ *          VCL 版は html リンク・マークダウン・c インクルード・ctags パターン等を
+ *          処理するが、wx 版の行単位ビューアでは次の3形式に対応する:
+ *          - ファイル名のみ ("test.cpp") → 行番号 1
+ *          - ファイル名:行番号 ("test.cpp:42") → 行番号 42
+ *          - ctags フォーマット ("タグ名\tファイル名\t行番号") → 行番号
+ *          - ctags パターン ("タグ名\tファイル名\t/^pattern/") → 行番号 1
+ *          空文字列は失敗 (file_path が空、line_no が 0) を返す。
+ * @param text 分割対象の文字列
+ * @param pos 取得開始位置 (VCL と同じ引数だが、簡易版では未使用)
+ * @return ファイル名と行番号のペア。失敗時は file_path が空、line_no が 0
+ */
+std::pair<UnicodeString, int> DivideFileNameLineNo(const UnicodeString &text, int pos);
+
 }  // namespace text_viewer_core
 
 #endif  // NYANFI_GUI_TEXT_VIEWER_CORE_H

@@ -252,4 +252,50 @@ UnicodeString DriveTypeLabel(unsigned int drive_type);
  */
 bool ResolveDirectoryInput(const UnicodeString &input, const UnicodeString &base_dir, UnicodeString &resolved_out);
 
+//---------------------------------------------------------------------------
+// スクロールしながらカーソルも移動 (ScrollCursorDown / ScrollCursorUp)
+//---------------------------------------------------------------------------
+
+/**
+ * @brief スクロールしながらカーソルも移動した結果
+ * @details VCL の ListBoxScrollDown/Up(lp, n, true) (src/UserFunc.cpp:964-1008)
+ *          の move_csr=true 版と同じ。TopIndex (表示先頭) と ItemIndex
+ *          (カーソル) が同じ量だけ動く
+ */
+struct ScrollCursorResult {
+	int top = 0;     //!< 新しい TopIndex (表示先頭)
+	int cursor = 0;  //!< 新しい ItemIndex (カーソル位置)
+};
+
+/**
+ * @brief スクロールしながらカーソルも移動する (ScrollCursorDown / ScrollCursorUp)
+ * @details VCL の ListBoxScrollDown/Up(lp, n, true) (src/UserFunc.cpp:964-1008) と
+ *          ExeCmdListBox の case 10/11 (src/Global.cpp:15045-15046) を実測。
+ *          - 下方向: TopIndex += n (末尾 count-1 で clamp)、ItemIndex += n (同 clamp)
+ *          - 上方向: TopIndex -= n (0 で clamp)、ItemIndex は TopIndex の変化量だけ戻る
+ * @param count 一覧の件数
+ * @param top 現在の TopIndex
+ * @param cursor 現在の ItemIndex
+ * @param n 移動量 (行数)
+ * @param down true=下 (ScrollCursorDown) / false=上 (ScrollCursorUp)
+ */
+ScrollCursorResult ScrollCursorMove(int count, int top, int cursor, int n, bool down);
+
+/**
+ * @brief スクロール行数パラメータを解釈する
+ * @details VCL の ExeCmdListBox (src/Global.cpp:15015) と
+ *          ListBoxScrollDown/Up の prm 版 (src/UserFunc.cpp:973-1008) を実測。
+ *          - 空: ListWheelSrvLn 既定値 (2、src/Global.cpp:1594)
+ *          - "HP": pn/2 (半ページ)
+ *          - "FP": pn (全ページ)
+ *          - "ED" (下方向のみ): 末尾まで (count-1)
+ *          - "TP" (上方向のみ): 先頭まで (top)
+ *          - 数値: その値
+ *          - それ以外: 1
+ * @param param パラメータ文字列
+ * @param pn ページサイズ (表示件数)
+ * @param down true=下方向 / false=上方向
+ */
+int ParseScrollCursorParam(const UnicodeString &param, int pn, bool down);
+
 #endif  // NYANFI_GUI_NAVIGATION_H

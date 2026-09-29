@@ -185,6 +185,39 @@ UnicodeString FormatFileNames(const std::vector<UnicodeString> &paths, bool full
 
 bool IsSameOrInside(const UnicodeString &src, const UnicodeString &dst);
 
+//---------------------------------------------------------------------------
+// 二重起動 (Duplicate / ExitDupl)
+// VCL: src/MainFrm.cpp:16872-16888 (DuplicateActionExecute/Update)、
+//      src/MainFrm.cpp:17210-17218 (ExitDuplActionExecute/Update)
+//---------------------------------------------------------------------------
+
+/**
+ * @brief Duplicate の起動パラメータ
+ * @details VCL の DuplicateActionExecute (src/MainFrm.cpp:16872-16879) を実測。
+ *          - "DM" + IsAdmin: 管理者権限で demote 起動 (Execute_demote)
+ *          - "RA": 管理者として起動 (Execute_ex の "A" オプション)
+ *          - それ以外: 通常起動
+ */
+struct DuplicateParam {
+	bool demote = false;  //!< "DM" + 管理者
+	bool run_as = false;  //!< "RA"
+};
+
+/**
+ * @brief Duplicate のパラメータを解釈する
+ * @param param アクションパラメータ
+ * @param is_admin 管理者権限で実行中か (VCL の IsAdmin)
+ */
+DuplicateParam ParseDuplicateParam(const UnicodeString &param, bool is_admin);
+
+/**
+ * @brief ExitDupl が実行できるか (VCL: IsPrimary && MultiInstance)
+ * @details src/MainFrm.cpp:17215-17217 (ExitDuplActionUpdate) を実測
+ * @param is_primary プライマリインスタンスか (VCL の IsPrimary)
+ * @param multi_instance 二重起動されているか (VCL の MultiInstance)
+ */
+bool CanExitDupl(bool is_primary, bool multi_instance);
+
 }  // namespace file_ops
 
 #endif  // NYANFI_GUI_FILE_OPS_H

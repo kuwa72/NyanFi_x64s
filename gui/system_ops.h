@@ -206,6 +206,52 @@ bool TurnOffMonitor();
  */
 bool ToggleMute();
 
+//---------------------------------------------------------------------------
+// 二重起動 (Duplicate / ExitDupl)
+// VCL: src/MainFrm.cpp:16872-16888 (DuplicateActionExecute)、
+//      src/MainFrm.cpp:17210-17218 (ExitDuplActionExecute)、
+//      src/Global.cpp:15285-15300 (CloseOtherNyanFi)
+//---------------------------------------------------------------------------
+
+/**
+ * @brief 管理者権限で実行中か (VCL: IsAdmin, src/Global.cpp:71)
+ * @details VCL は起動時にトークン判定で設定する。wx 版では状態を保持し、
+ *          呼び出し側が設定する (未実装: 実際のトークン判定は Windows API 依存)
+ */
+bool IsAdmin();
+
+/**
+ * @brief プライマリインスタンスか (VCL: IsPrimary, src/Global.cpp:72)
+ * @details VCL は二重起動時に 2 番目以降を false にする。wx 版では状態を保持する
+ */
+bool IsPrimary();
+
+/**
+ * @brief 二重起動を許す設定か (VCL: MultiInstance, src/Global.cpp:145)
+ * @details VCL は ini の MultiInstance オプション。wx 版では状態を保持する
+ */
+bool IsMultiInstance();
+
+/**
+ * @brief NyanFi を二重起動する (VCL: Execute_ex / Execute_demote)
+ * @param demote 管理者権限で demote 起動するか (VCL: "DM" + IsAdmin)
+ * @param run_as 管理者として起動するか (VCL: "RA")
+ * @details VCL の Execute_ex (src/Global.cpp:13431) / Execute_demote
+ *          (src/Global.cpp:13669) は CreateProcessW / ShellExecuteEx を使う。
+ *          wx 版では未移植 (未実装扱い) で、状態を返すのみ
+ * @return 起動要求を受理したら true (実際の起動は未実装)
+ */
+bool ExecuteDuplicateProcess(bool demote, bool run_as);
+
+/**
+ * @brief 二重起動された NyanFi を終了する (VCL: CloseOtherNyanFi)
+ * @details VCL は EnumWindows で他の NyanFi ウィンドウを列挙し、
+ *          WM_CLOSE を送って終了を待つ (src/Global.cpp:15285-15300)。
+ *          wx 版では未移植 (未実装扱い) で、状態を返すのみ
+ * @return 終了要求を受理したら true (実際の終了は未実装)
+ */
+bool CloseOtherNyanFi();
+
 }  // namespace system_ops
 
 #endif  // NYANFI_GUI_SYSTEM_OPS_H
