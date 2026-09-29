@@ -133,8 +133,8 @@ TEST_CASE("search_pair: 選択文字列を上方向に検索する")
 	const std::vector<UnicodeString> lines = {
 		_T("foo"), _T("bar"), _T("foo"), _T("baz"),
 	};
-	CHECK(search_pair::SearchSelection(lines, _T("foo"), 3, false) == 2);
-	CHECK(search_pair::SearchSelection(lines, _T("baz"), 3, false) == 3);
+	CHECK(search_pair::SearchSelection(lines, _T("foo"), 3, true) == 2);
+	CHECK(search_pair::SearchSelection(lines, _T("baz"), 3, true) == 3);
 }
 
 TEST_CASE("search_pair: 選択文字列が見つからないときは -1")
