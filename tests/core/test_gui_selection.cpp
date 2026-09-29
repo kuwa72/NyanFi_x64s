@@ -51,6 +51,166 @@ std::vector<FileItem> sample()
 }  // namespace
 
 //===========================================================================
+// SelectAll / SelectFile / 単語・行範囲
+//===========================================================================
+
+TEST_CASE("SelectAll: 全項目を選択する (\"..\" は対象外)")
+{
+	std::vector<FileItem> v = sample();
+	selection::SelectAll(v);
+	CHECK_FALSE(v[0].marked);  // ".."
+	CHECK(v[1].marked);
+	CHECK(v[2].marked);
+	CHECK(v[3].marked);
+	CHECK(v[4].marked);
+}
+
+TEST_CASE("SelectAll: 既に選択済みでも全選択")
+{
+	std::vector<FileItem> v = sample();
+	v[2].marked = true;
+	selection::SelectAll(v);
+	CHECK(selection::MarkedCount(v) == 4);  // ".." 以外
+}
+
+TEST_CASE("SelectFile: 指定名前のファイルを選択する")
+{
+	std::vector<FileItem> v = sample();
+	CHECK(selection::SelectFile(v, _T("b.txt")));
+	CHECK(v[3].marked);
+	CHECK_FALSE(v[2].marked);
+}
+
+TEST_CASE("SelectFile: 大文字小文字は区別しない")
+{
+	std::vector<FileItem> v = {file_of(_T("Alpha.txt")), file_of(_T("beta.txt"))};
+	CHECK(selection::SelectFile(v, _T("ALPHA.TXT")));
+	CHECK(v[0].marked);
+}
+
+TEST_CASE("SelectFile: 既に選択済みなら false を返す")
+{
+	std::vector<FileItem> v = {file_of(_T("a.txt"), true)};
+	CHECK_FALSE(selection::SelectFile(v, _T("a.txt")));
+}
+
+TEST_CASE("SelectFile: 見つからないなら false")
+{
+	std::vector<FileItem> v = {file_of(_T("a.txt"))};
+	CHECK_FALSE(selection::SelectFile(v, _T("nothere.txt")));
+	CHECK_FALSE(v[0].marked);
+}
+
+TEST_CASE("SelectFile: 空文字列なら false")
+{
+	std::vector<FileItem> v = {file_of(_T("a.txt"))};
+	CHECK_FALSE(selection::SelectFile(v, EmptyStr));
+}
+
+TEST_CASE("FindWordLeft: 前の単語の先頭へ")
+{
+	const UnicodeString text = _T("foo bar baz");
+	CHECK(selection::FindWordLeft(text, 10) == 8);  // "baz" → "bar"
+	CHECK(selection::FindWordLeft(text, 7) == 4);   // "bar" → "foo"
+	CHECK(selection::FindWordLeft(text, 3) == 0);   // "foo" → 先頭
+}
+
+TEST_CASE("FindWordLeft: 先頭にいるなら -1")
+{
+	const UnicodeString text = _T("foo bar");
+	CHECK(selection::FindWordLeft(text, 0) == -1);
+}
+
+TEST_CASE("FindWordLeft: 区切り文字の上にいる場合")
+{
+	const UnicodeString text = _T("foo  bar");  // 2つのスペース
+	CHECK(selection::FindWordLeft(text, 4) == 0);  // 2つ目のスペース → "foo"
+}
+
+TEST_CASE("FindWordRight: 次の単語の先頭へ")
+{
+	const UnicodeString text = _T("foo bar baz");
+	CHECK(selection::FindWordRight(text, 0) == 4);   // "foo" → "bar"
+	CHECK(selection::FindWordRight(text, 4) == 8);   // "bar" → "baz"
+	CHECK(selection::FindWordRight(text, 8) == -1);  // "baz" → なし
+}
+
+TEST_CASE("FindWordRight: 末尾にいるなら -1")
+{
+	const UnicodeString text = _T("foo");
+	CHECK(selection::FindWordRight(text, 0) == -1);
+}
+
+TEST_CASE("FindWordAt: カーソル位置を含む単語の範囲")
+{
+	const UnicodeString text = _T("foo bar baz");
+	int start, end;
+	CHECK(selection::FindWordAt(text, 5, start, end));
+	CHECK(start == 4);
+	CHECK(end == 7);
+}
+
+TEST_CASE("FindWordAt: 区切り文字の上にいるなら false")
+{
+	const UnicodeString text = _T("foo bar");
+	int start, end;
+	CHECK_FALSE(selection::FindWordAt(text, 3, start, end));
+}
+
+TEST_CASE("FindWordAt: 先頭の単語")
+{
+	const UnicodeString text = _T("foo bar");
+	int start, end;
+	CHECK(selection::FindWordAt(text, 0, start, end));
+	CHECK(start == 0);
+	CHECK(end == 3);
+}
+
+TEST_CASE("FindLineStart: 行頭の位置")
+{
+	const UnicodeString text = _T("foo\nbar\nbaz");
+	CHECK(selection::FindLineStart(text, 0) == 0);
+	CHECK(selection::FindLineStart(text, 4) == 4);   // "bar" の先頭
+	CHECK(selection::FindLineStart(text, 8) == 8);   // "baz" の先頭
+	CHECK(selection::FindLineStart(text, 6) == 4);   // "ar" の中
+}
+
+TEST_CASE("FindLineEnd: 行末の位置")
+{
+	const UnicodeString text = _T("foo\nbar\nbaz");
+	CHECK(selection::FindLineEnd(text, 0) == 3);   // "foo" の末尾
+	CHECK(selection::FindLineEnd(text, 4) == 7);   // "bar" の末尾
+	CHECK(selection::FindLineEnd(text, 8) == 11);  // "baz" の末尾
+}
+
+TEST_CASE("FindLineRange: 行全体の範囲")
+{
+	const UnicodeString text = _T("foo\nbar\nbaz");
+	int start, end;
+	selection::FindLineRange(text, 5, start, end);
+	CHECK(start == 4);
+	CHECK(end == 7);
+}
+
+TEST_CASE("FindLineRange: 先頭行")
+{
+	const UnicodeString text = _T("foo\nbar");
+	int start, end;
+	selection::FindLineRange(text, 1, start, end);
+	CHECK(start == 0);
+	CHECK(end == 3);
+}
+
+TEST_CASE("FindLineRange: 末尾行")
+{
+	const UnicodeString text = _T("foo\nbar");
+	int start, end;
+	selection::FindLineRange(text, 5, start, end);
+	CHECK(start == 4);
+	CHECK(end == 7);
+}
+
+//===========================================================================
 // 反転
 //===========================================================================
 

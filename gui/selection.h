@@ -33,6 +33,89 @@ namespace selection {
 int MarkedCount(const std::vector<FileItem> &items);
 
 /**
+ * @brief すべての項目を選択する (SelectAll)
+ * @details VCL の TxtViewer::SelectAll (TxtViewer.cpp:3901) とは異なり、
+ *          一覧向けの「全選択」(トグルではない)。`..` は対象外
+ */
+void SelectAll(std::vector<FileItem> &items);
+
+/**
+ * @brief 指定名前のファイルを選択する (SelectFile)
+ * @param items 一覧
+ * @param name 選択したいファイル名 (大文字小文字は区別しない)
+ * @return 選択できたら true。見つからない・既に選択済みなら false
+ * @details VCL の SelectFile (MainFrm.cpp:32823) は TxtViewer->OrgName を
+ *          一覧で選択し、既に選択済みなら何もしない。ここも同じにする
+ */
+bool SelectFile(std::vector<FileItem> &items, const UnicodeString &name);
+
+/**
+ * @brief 前の単語の先頭位置を返す (WordLeft)
+ * @param text 対象文字列
+ * @param pos 現在位置 (0ベース)
+ * @return 移動先の位置。動かないなら -1
+ * @details VCL の TxtViewer::WordLeft (TxtViewer.cpp:3663) は WORD_MATCH_PTN
+ *          で単語を検出し、カーソル位置より前の単語の先頭へ移動する。
+ *          ここでは空白を単語の区切りとする (VCL の正規表現と完全一致ではない)
+ */
+int FindWordLeft(const UnicodeString &text, int pos);
+
+/**
+ * @brief 次の単語の先頭位置を返す (WordRight)
+ * @param text 対象文字列
+ * @param pos 現在位置 (0ベース)
+ * @return 移動先の位置。動かないなら -1
+ * @details VCL の TxtViewer::WordRight (TxtViewer.cpp:3610) は WORD_MATCH_PTN
+ *          で単語を検出し、カーソル位置より後の単語の先頭へ移動する
+ */
+int FindWordRight(const UnicodeString &text, int pos);
+
+/**
+ * @brief カーソル位置を含む単語の範囲を返す (SelCurWord)
+ * @param text 対象文字列
+ * @param pos 現在位置 (0ベース)
+ * @param start [out] 単語の開始位置
+ * @param end [out] 単語の終了位置 (含まない)
+ * @return 単語が見つからないなら false
+ * @details VCL の TxtViewer::SelCurWord (TxtViewer.cpp:3951) は WORD_MATCH_PTN
+ *          で単語を検出し、カーソル位置を含む単語の範囲を返す。ここでは空白を
+ *          単語の区切りとする
+ */
+bool FindWordAt(const UnicodeString &text, int pos, int &start, int &end);
+
+/**
+ * @brief 行頭の位置を返す (LineTopSel)
+ * @param text 対象文字列
+ * @param pos 現在位置 (0ベース)
+ * @return 行頭の位置
+ * @details VCL の TxtViewer::LineTop(true) (TxtViewer.cpp:5049) はカーソルを
+ *          行頭へ移動する。行頭は改行の直後 (または文字列の先頭)
+ */
+int FindLineStart(const UnicodeString &text, int pos);
+
+/**
+ * @brief 行末の位置を返す (LineEndSel)
+ * @param text 対象文字列
+ * @param pos 現在位置 (0ベース)
+ * @return 行末の位置 (改行の直前、または文字列の末尾)
+ * @details VCL の TxtViewer::LineEnd(true) (TxtViewer.cpp:5051) はカーソルを
+ *          行末へ移動する
+ */
+int FindLineEnd(const UnicodeString &text, int pos);
+
+/**
+ * @brief カーソル位置の単語全体を改行単位で選択する範囲を返す (SelLine)
+ * @param text 対象文字列
+ * @param pos 現在位置 (0ベース)
+ * @param start [out] 選択開始位置
+ * @param end [out] 選択終了位置 (含まない)
+ * @details VCL の TxtViewer::SelLine (TxtViewer.cpp:3991) は行頭から行末まで
+ *          を選択し、cr 指定時は折り返し行も含める。ここではカーソル位置の
+ *          行全体を選択する
+ */
+void FindLineRange(const UnicodeString &text, int pos, int &start, int &end);
+
+/**
  * @brief すべての項目の選択状態を反転する (SelReverseAll)
  * @details MainFrm.cpp:25284。**ディレクトリも対象**。`..` は対象外
  */

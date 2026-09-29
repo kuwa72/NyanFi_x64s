@@ -44,6 +44,113 @@ int MarkedCount(const std::vector<FileItem> &items)
 }
 
 //---------------------------------------------------------------------------
+void SelectAll(std::vector<FileItem> &items)
+{
+	for (FileItem &it : items) {
+		if (is_selectable(it)) it.marked = true;
+	}
+}
+
+//---------------------------------------------------------------------------
+bool SelectFile(std::vector<FileItem> &items, const UnicodeString &name)
+{
+	if (name.IsEmpty()) return false;
+
+	for (FileItem &it : items) {
+		if (!is_selectable(it)) continue;
+		if (SameText(it.name, name)) {
+			if (it.marked) return false;  // 既に選択済み
+			it.marked = true;
+			return true;
+		}
+	}
+	return false;
+}
+
+//---------------------------------------------------------------------------
+namespace {
+
+/// 単語の区切り文字か (VCL の WORD_MATCH_PTN とは異なるが、実用上は十分)
+bool is_word_sep(const UnicodeString &text, int pos)
+{
+	if (pos < 0 || pos >= text.Length()) return true;
+	return text.SubString(pos + 1, 1).IsEmpty() ||
+	       ContainsText(_T(" \t\r\n"), text.SubString(pos + 1, 1));
+}
+
+}  // namespace
+
+//---------------------------------------------------------------------------
+int FindWordLeft(const UnicodeString &text, int pos)
+{
+	if (pos < 0 || pos > text.Length()) return -1;
+	if (pos > 0 && is_word_sep(text, pos - 1)) pos--;  // 区切り文字の上にいる場合は1つ戻る
+
+	// 区切り文字をスキップ
+	while (pos > 0 && is_word_sep(text, pos - 1)) pos--;
+	if (pos == 0) return -1;
+
+	// 単語の先頭を探す
+	while (pos > 0 && !is_word_sep(text, pos - 1)) pos--;
+	return pos;
+}
+
+//---------------------------------------------------------------------------
+int FindWordRight(const UnicodeString &text, int pos)
+{
+	if (pos < 0 || pos >= text.Length()) return -1;
+
+	// 区切り文字をスキップ
+	while (pos < text.Length() && is_word_sep(text, pos)) pos++;
+	if (pos >= text.Length()) return -1;
+
+	// 単語の先頭を探す
+	while (pos < text.Length() && !is_word_sep(text, pos)) pos++;
+	return pos;
+}
+
+//---------------------------------------------------------------------------
+bool FindWordAt(const UnicodeString &text, int pos, int &start, int &end)
+{
+	if (pos < 0 || pos > text.Length()) return false;
+	if (pos < text.Length() && is_word_sep(text, pos)) return false;
+
+	start = pos;
+	while (start > 0 && !is_word_sep(text, start - 1)) start--;
+
+	end = pos;
+	while (end < text.Length() && !is_word_sep(text, end)) end++;
+
+	return true;
+}
+
+//---------------------------------------------------------------------------
+int FindLineStart(const UnicodeString &text, int pos)
+{
+	if (pos < 0 || pos > text.Length()) return 0;
+	int p = pos;
+	while (p > 0 && text.SubString(p, 1) != _T("\n")) p--;
+	if (p > 0) p++;  // 改行の直後
+	return p;
+}
+
+//---------------------------------------------------------------------------
+int FindLineEnd(const UnicodeString &text, int pos)
+{
+	if (pos < 0 || pos > text.Length()) return text.Length();
+	int p = pos;
+	while (p < text.Length() && text.SubString(p + 1, 1) != _T("\n")) p++;
+	return p;
+}
+
+//---------------------------------------------------------------------------
+void FindLineRange(const UnicodeString &text, int pos, int &start, int &end)
+{
+	start = FindLineStart(text, pos);
+	end = FindLineEnd(text, pos);
+}
+
+//---------------------------------------------------------------------------
 void ReverseAll(std::vector<FileItem> &items)
 {
 	for (FileItem &it : items) {
