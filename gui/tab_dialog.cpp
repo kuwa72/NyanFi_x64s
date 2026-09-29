@@ -95,10 +95,10 @@ public:
 
 		// VCL の Work*RadioBtn (0=使わない/1=現在のワークリスト/2=指定)
 		wxArrayString work_modes;
-		work_modes.Add(to_wx(_T("使わない")));
-		work_modes.Add(to_wx(_T("現在のワークリスト")));
-		work_modes.Add(to_wx(_T("指定のワークリスト")));
-		work_radio_ = new wxRadioBox(this, wxID_ANY, to_wx(_T("ワークリスト")),
+		work_modes.Add(to_wx(_T("使わない(&N)")));
+		work_modes.Add(to_wx(_T("現在のワークリスト(&G)")));
+		work_modes.Add(to_wx(_T("指定のワークリスト(&S)")));
+		work_radio_ = new wxRadioBox(this, wxID_ANY, to_wx(_T("ワークリスト(&L)")),
 		                             wxDefaultPosition, wxDefaultSize, work_modes, 1,
 		                             wxRA_SPECIFY_COLS);
 		work_radio_->SetSelection(initial.work_mode >= 0 && initial.work_mode <= 2

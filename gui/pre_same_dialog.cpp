@@ -27,7 +27,7 @@ public:
 		for (int i = 0; i <= static_cast<int>(pre_same::Mode::AutoRename); ++i)
 			choices.Add(to_wx(pre_same::ModeLabel(static_cast<pre_same::Mode>(i))));
 
-		radio_ = new wxRadioBox(this, wxID_ANY, to_wx(_T("処理方法")),
+		radio_ = new wxRadioBox(this, wxID_ANY, to_wx(_T("処理方法(&S)")),
 		                        wxDefaultPosition, wxDefaultSize, choices, 1,
 		                        wxRA_SPECIFY_ROWS);
 		radio_->SetSelection(static_cast<int>(pre_same::NormalizeMode(static_cast<int>(mode))));

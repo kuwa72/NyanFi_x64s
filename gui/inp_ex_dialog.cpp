@@ -160,9 +160,9 @@ private:
 	void BuildAddressOptions()
 	{
 		wxArrayString notations;
-		notations.Add(to_wx(_T("16進")));
-		notations.Add(to_wx(_T("10進")));
-		notation_ctrl_ = new wxRadioBox(this, wxID_ANY, to_wx(_T("表記")),
+		notations.Add(to_wx(_T("16進(&X)")));
+		notations.Add(to_wx(_T("10進(&1)")));
+		notation_ctrl_ = new wxRadioBox(this, wxID_ANY, to_wx(_T("表記(&H)")),
 		                                wxDefaultPosition, wxDefaultSize, notations, 1, wxRA_SPECIFY_ROWS);
 		notation_ctrl_->SetSelection(values_.hexadecimal ? 0 : 1);
 		top_->Add(notation_ctrl_, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));

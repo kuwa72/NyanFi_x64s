@@ -72,10 +72,10 @@ public:
 		top->Add(and_chk_, wxSizerFlags().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 
 		wxArrayString targets;
-		targets.Add(to_wx(_T("ファイル名")));
-		targets.Add(to_wx(_T("ディレクトリ名")));
-		targets.Add(to_wx(_T("両方")));
-		target_radio_ = new wxRadioBox(this, wxID_ANY, to_wx(_T("対象")),
+		targets.Add(to_wx(_T("ファイル名(&F)")));
+		targets.Add(to_wx(_T("ディレクトリ名(&L)")));
+		targets.Add(to_wx(_T("両方(&B)")));
+		target_radio_ = new wxRadioBox(this, wxID_ANY, to_wx(_T("対象(&T)")),
 		                               wxDefaultPosition, wxDefaultSize, targets, 1, wxRA_SPECIFY_COLS);
 		target_radio_->SetSelection(initial_target == find_files::Target::Directories ? 1
 		                            : initial_target == find_files::Target::Both ? 2 : 0);

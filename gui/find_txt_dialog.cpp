@@ -71,9 +71,9 @@ public:
 		top->Add(options, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 
 		wxArrayString dirs;
-		dirs.Add(to_wx(_T("上へ")));
-		dirs.Add(to_wx(_T("下へ")));
-		wxRadioBox *direction = new wxRadioBox(this, wxID_ANY, to_wx(_T("検索方向")),
+		dirs.Add(to_wx(_T("上へ(&U)")));
+		dirs.Add(to_wx(_T("下へ(&D)")));
+		wxRadioBox *direction = new wxRadioBox(this, wxID_ANY, to_wx(_T("検索方向(&H)")),
 		                                       wxDefaultPosition, wxDefaultSize, dirs, 1,
 		                                       wxRA_SPECIFY_ROWS);
 		direction->SetSelection(find_txt::DirectionIndex(initial.direction));

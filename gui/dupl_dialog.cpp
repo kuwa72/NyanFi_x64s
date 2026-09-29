@@ -40,9 +40,9 @@ public:
 		wxBoxSizer *top = new wxBoxSizer(wxVERTICAL);
 
 		wxArrayString methods;
-		methods.Add(to_wx(_T("内容で比べる (サイズで絞ってからハッシュ)")));
-		methods.Add(to_wx(_T("名前とサイズで比べる (速い)")));
-		method_radio_ = new wxRadioBox(this, wxID_ANY, to_wx(_T("判定方法")),
+		methods.Add(to_wx(_T("内容で比べる (サイズで絞ってからハッシュ)(&C)")));
+		methods.Add(to_wx(_T("名前とサイズで比べる (速い)(&N)")));
+		method_radio_ = new wxRadioBox(this, wxID_ANY, to_wx(_T("判定方法(&H)")),
 		                               wxDefaultPosition, wxDefaultSize, methods, 1, wxRA_SPECIFY_COLS);
 		method_radio_->SetSelection(0);
 		top->Add(method_radio_, wxSizerFlags().Expand().Border(wxALL, 8));
