@@ -3980,6 +3980,26 @@ bool MainFrame::Execute(const UnicodeString &full_command)
 		CmdRestart();
 	}
 	//-- 検索と結果リスト -----------------------------------------------------
+	else if (SameStr(command, _T("SearchPair"))) {
+		viewer_->CmdSearchPair(param);
+		UpdateStatus();
+	}
+	else if (SameStr(command, _T("FindLinkDown"))) {
+		viewer_->CmdFindLinkDown();
+		UpdateStatus();
+	}
+	else if (SameStr(command, _T("FindLinkUp"))) {
+		viewer_->CmdFindLinkUp();
+		UpdateStatus();
+	}
+	else if (SameStr(command, _T("FindSelDown"))) {
+		viewer_->CmdFindSelDown(param);
+		UpdateStatus();
+	}
+	else if (SameStr(command, _T("FindSelUp"))) {
+		viewer_->CmdFindSelUp(param);
+		UpdateStatus();
+	}
 	else if (SameStr(command, _T("FindFileDlg"))) {
 		CmdFindFiles(find_files::Target::Files);
 	}

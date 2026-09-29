@@ -15,6 +15,7 @@
 #include "usr_cmdlist.h"
 #include "gui/text_display.h"
 #include "gui/find_txt_dialog.h"
+#include "gui/search_pair.h"
 
 namespace {
 
@@ -330,6 +331,21 @@ bool TextViewer::Execute(const UnicodeString &full_command)
 	else if (SameStr(command, _T("FindText"))) {
 		CmdFindText(param);
 	}
+	else if (SameStr(command, _T("SearchPair"))) {
+		CmdSearchPair(param);
+	}
+	else if (SameStr(command, _T("FindLinkDown"))) {
+		if (!CmdFindLinkDown()) last_error_ = _T("リンクが見つかりません");
+	}
+	else if (SameStr(command, _T("FindLinkUp"))) {
+		if (!CmdFindLinkUp()) last_error_ = _T("リンクが見つかりません");
+	}
+	else if (SameStr(command, _T("FindSelDown"))) {
+		if (!CmdFindSelDown(param)) last_error_ = _T("選択文字列が見つかりません");
+	}
+	else if (SameStr(command, _T("FindSelUp"))) {
+		if (!CmdFindSelUp(param)) last_error_ = _T("選択文字列が見つかりません");
+	}
 	else if (SameStr(command, _T("FindDown"))) {
 		if (!CmdFindDown(param) && param.IsEmpty() && last_search_.IsEmpty()) {
 			last_error_ = _T("検索文字列がありません");
@@ -508,6 +524,146 @@ bool TextViewer::CmdFindUp(const UnicodeString &param)
 	}
 	return true;
 }
+
+//---------------------------------------------------------------------------
+// V:SearchPair (対応する括弧/HTMLブロック/行パターンを検索)
+// VCL: TTxtViewer::SearchPair (TxtViewer.cpp:4543-4667)
+//---------------------------------------------------------------------------
+void TextViewer::CmdSearchPair(const UnicodeString &param)
+{
+	if (doc_.is_binary) return;
+
+	bool found = false;
+
+	// 1. 括弧モード (UpdatePairPos 相当)
+	// VCL: カーソル位置の文字が括弧かどうかを判定してから探索を始める
+	{
+		const UnicodeString &cur_line = (current_line_ >= 0 && current_line_ < (int)doc_.lines.size())
+			? doc_.lines[current_line_] : UnicodeString();
+		int cur_x = cursor_x_;
+		if (cur_x > 0 && cur_x <= (int)cur_line.Length()) {
+			wchar_t ch = cur_line.c_str()[cur_x - 1];
+			if (search_pair::IsOpen(ch) || search_pair::IsClose(ch)) {
+				auto pos = search_pair::FindBracket(doc_.lines, cur_x, current_line_, true);
+				if (pos.first < 0) pos = search_pair::FindBracket(doc_.lines, cur_x, current_line_, false);
+				if (pos.first >= 0) {
+					current_line_ = pos.second;
+					cursor_x_ = pos.first;
+					found = true;
+				}
+			}
+		}
+	}
+
+	// 2. パラメータ指定モード ("/開始/;/終了/" 形式)
+	if (!found && !param.IsEmpty()) {
+		UnicodeString begin_ptn, end_ptn;
+		if (search_pair::ParsePairParam(param, begin_ptn, end_ptn)) {
+			found = search_pair::SearchPairCore(doc_.lines, current_line_, begin_ptn, end_ptn);
+			if (found) {
+				// SearchPairCore は current_line_ を更新する
+			}
+		}
+	}
+
+	// 3. デフォルト/ユーザ定義パターン (PairPtnList 相当)
+	if (!found) {
+		search_pair::PairPattern pat = search_pair::GetPairPattern(file_ext_);
+		if (pat != search_pair::PairPattern::None) {
+			UnicodeString begin_ptn, end_ptn;
+			if (search_pair::GetRegexPair(pat, begin_ptn, end_ptn)) {
+				found = search_pair::SearchPairCore(doc_.lines, current_line_, begin_ptn, end_ptn);
+			}
+		}
+	}
+
+	if (found) {
+		EnsureCursorVisible();
+		Refresh();
+	}
+}
+
+//---------------------------------------------------------------------------
+// V:FindLinkDown / V:FindLinkUp (リンク先を検索)
+// VCL: TxtViewer.cpp:5265-5272
+//---------------------------------------------------------------------------
+bool TextViewer::CmdFindLinkDown()
+{
+	if (doc_.is_binary) return false;
+	int found = search_pair::SearchLink(doc_.lines, current_line_, false);
+	if (found == -1) return false;
+	current_line_ = found;
+	EnsureCursorVisible();
+	Refresh();
+	return true;
+}
+
+bool TextViewer::CmdFindLinkUp()
+{
+	if (doc_.is_binary) return false;
+	int found = search_pair::SearchLink(doc_.lines, current_line_, true);
+	if (found == -1) return false;
+	current_line_ = found;
+	EnsureCursorVisible();
+	Refresh();
+	return true;
+}
+
+//---------------------------------------------------------------------------
+// V:FindSelDown / V:FindSelUp (選択文字列を検索)
+// VCL: TTxtViewer::SearchSel (TxtViewer.cpp:4393-4409)
+//---------------------------------------------------------------------------
+bool TextViewer::CmdFindSelDown(const UnicodeString &param)
+{
+	if (doc_.is_binary) return false;
+	UnicodeString sel = GetSelectedText();
+	if (!sel.IsEmpty()) last_sel_word_ = sel;
+	UnicodeString s = last_sel_word_;
+	if (s.IsEmpty()) return false;
+
+	// EM パラメータ: 強調表示
+	bool em = SameText(param, _T("EM"));
+	if (em) {
+		highlight_word_ = s;
+		highlight_on_ = true;
+	}
+
+	int found = search_pair::SearchSelection(doc_.lines, s, current_line_, false);
+	if (found == -1) return false;
+	current_line_ = found;
+	EnsureCursorVisible();
+	Refresh();
+	return true;
+}
+
+bool TextViewer::CmdFindSelUp(const UnicodeString &param)
+{
+	if (doc_.is_binary) return false;
+	UnicodeString sel = GetSelectedText();
+	if (!sel.IsEmpty()) last_sel_word_ = sel;
+	UnicodeString s = last_sel_word_;
+	if (s.IsEmpty()) return false;
+
+	// EM パラメータ: 強調表示
+	bool em = SameText(param, _T("EM"));
+	if (em) {
+		highlight_word_ = s;
+		highlight_on_ = true;
+	}
+
+	int found = search_pair::SearchSelection(doc_.lines, s, current_line_, true);
+	if (found == -1) return false;
+	current_line_ = found;
+	EnsureCursorVisible();
+	Refresh();
+	return true;
+}
+
+//---------------------------------------------------------------------------
+// V:SearchPair (対応する括弧/HTMLブロック/行パターンを検索)
+// VCL: TTxtViewer::SearchPair (TxtViewer.cpp:4543-4667)
+//---------------------------------------------------------------------------
+
 
 bool TextViewer::CmdJumpLine(const UnicodeString &param)
 {
