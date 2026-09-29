@@ -460,6 +460,16 @@ UnicodeString KeyMap::Lookup(const UnicodeString &key_str) const
 }
 
 //---------------------------------------------------------------------------
+UnicodeString KeyMap::FindKey(const UnicodeString &command) const
+{
+	if (command.IsEmpty()) return EmptyStr;
+	for (int i = 0; i < entries_->GetCount(); ++i) {
+		if (SameText(entries_->ValueFromIndex[i], command)) return entries_->NameAt(i);
+	}
+	return EmptyStr;
+}
+
+//---------------------------------------------------------------------------
 // KeyMap::KeyStrOf() は wx に依存するため gui/key_map_wx.cpp に定義がある
 //---------------------------------------------------------------------------
 

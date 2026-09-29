@@ -154,6 +154,18 @@ TEST_CASE("KeyMap: 複合修飾子は生成順序で引ける")
 	CHECK(km.Lookup(_T("Shift+Ctrl+Tab")) == UnicodeString(_T("PrevTab")));
 }
 
+TEST_CASE("KeyMap: FindKey はコマンドからキー名を逆引きする")
+{
+	KeyMap km;
+	CHECK(km.FindKey(_T("AddTab")) == UnicodeString(_T("Ctrl+T")));
+	CHECK(km.FindKey(_T("ReloadList")) == UnicodeString(_T("F5")));
+	CHECK(km.FindKey(_T("GetHash")) == UnicodeString(_T("Shift+Ctrl+X")));
+	CHECK(km.FindKey(_T("NoSuchCommand")).IsEmpty());
+	CHECK(km.FindKey(EmptyStr).IsEmpty());
+	// 逆引き結果は Lookup で往復できる
+	CHECK(km.Lookup(km.FindKey(_T("Delete"))) == UnicodeString(_T("Delete")));
+}
+
 TEST_CASE("KeyMap: 逆順表記のデッドキーが1つも無い")
 {
 	KeyMap km;

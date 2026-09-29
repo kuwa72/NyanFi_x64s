@@ -66,6 +66,10 @@ public:
 	/// キー名に割り当てられたコマンド名を返す。無ければ空文字列
 	UnicodeString Lookup(const UnicodeString &key_str) const;
 
+	/// コマンド名に割り当てられたキー名を返す (メニューのショートカット表示用)。
+	/// 複数ある場合は最初の1つ。無ければ空文字列
+	UnicodeString FindKey(const UnicodeString &command) const;
+
 	/// 割り当てを追加・上書きする
 	void Assign(const UnicodeString &key_str, const UnicodeString &command);
 

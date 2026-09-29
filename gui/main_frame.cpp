@@ -15,6 +15,7 @@
 
 #include <wx/choicdlg.h>
 #include <wx/colordlg.h>
+#include <wx/menu.h>
 #include <wx/dcbuffer.h>
 #include <wx/filedlg.h>
 #include <wx/progdlg.h>
@@ -28,6 +29,7 @@
 #include "gui/file_open.h"
 #include "gui/hist_dialog.h"
 #include "gui/inp_ex_dialog.h"
+#include "gui/menu_def.h"
 #include "gui/btn_dialog.h"
 #include "gui/key_dialog.h"
 #include "gui/panel_state.h"
@@ -468,6 +470,7 @@ MainFrame::MainFrame()
 
 	CreateStatusBar(2);
 	SetStatusWidths(2, std::array<int, 2>{-3, -1}.data());
+	BuildMenuBar();
 
 	// キー割り当て: VCL 版と同じ ini (<exe名>.ini) に "KeyFuncList" セクションが
 	// あれば、既定の割り当て (key_map.cpp の LoadDefaults) を上書きする。
@@ -499,6 +502,41 @@ void MainFrame::OnSize(wxSizeEvent &event)
 	if (viewer_ != nullptr) viewer_->SetSize(body);
 	if (image_viewer_ != nullptr) image_viewer_->SetSize(body);
 	event.Skip();
+}
+
+//---------------------------------------------------------------------------
+/**
+ * @brief メニューバーを組み立てる (Issue #89)
+ * @details 定義は gui/menu_def.h の表、ショートカット表示は
+ * KeyMap::FindKey() の逆引き。選択した項目は Execute() にそのまま渡す
+ * (キー入力と同じ経路のため、動作の二重実装にならない)。
+ */
+void MainFrame::BuildMenuBar()
+{
+	wxMenuBar *bar = new wxMenuBar();
+	wxMenu *current = nullptr;
+	for (const menu_def::Item &it : menu_def::Items()) {
+		if (!it.menu.IsEmpty()) {
+			current = new wxMenu();
+			bar->Append(current, to_wx(it.menu));
+		}
+		if (current == nullptr) continue;
+		if (it.label.IsEmpty()) {
+			current->AppendSeparator();
+			continue;
+		}
+		UnicodeString label = it.label;
+		const UnicodeString key = keymap_.FindKey(it.command);
+		if (!key.IsEmpty()) label = label + UnicodeString(_T("\t")) + key;
+		const UnicodeString command = it.command;
+		wxMenuItem *item = current->Append(wxID_ANY, to_wx(label));
+		Bind(wxEVT_MENU,
+		     [this, command](wxCommandEvent &) {
+			     if (Execute(command)) UpdateStatus();
+		     },
+		     item->GetId());
+	}
+	SetMenuBar(bar);
 }
 
 //---------------------------------------------------------------------------
