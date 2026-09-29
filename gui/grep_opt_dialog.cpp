@@ -61,10 +61,10 @@ public:
 		wxPanel *out_page = new wxPanel(book);
 		wxBoxSizer *out = new wxBoxSizer(wxVERTICAL);
 		wxArrayString out_choices;
-		out_choices.Add(to_wx(_T("出力なし")));
-		out_choices.Add(to_wx(_T("ファイル")));
-		out_choices.Add(to_wx(_T("クリップボード")));
-		output_mode_ = new wxRadioBox(out_page, wxID_ANY, to_wx(_T("出力方式")),
+		out_choices.Add(to_wx(_T("出力なし(&U)")));
+		out_choices.Add(to_wx(_T("ファイル(&F)")));
+		out_choices.Add(to_wx(_T("クリップボード(&C)")));
+		output_mode_ = new wxRadioBox(out_page, wxID_ANY, to_wx(_T("出力方式(&Y)")),
 		                              wxDefaultPosition, wxDefaultSize, out_choices, 1,
 		                              wxRA_SPECIFY_ROWS);
 		output_mode_->SetSelection(grep_opt::OutputModeIndex(initial_opt.output_mode));

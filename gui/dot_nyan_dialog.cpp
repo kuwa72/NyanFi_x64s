@@ -46,7 +46,7 @@ public:
 
 		const wchar_t *sort_items[] = {_T("指定なし"), _T("名前"), _T("拡張子"), _T("更新日"),
 		                               _T("サイズ"), _T("属性"), _T("その他")};
-		sort_ = new wxRadioBox(this, wxID_ANY, to_wx(_T("ソート方法")), wxDefaultPosition,
+		sort_ = new wxRadioBox(this, wxID_ANY, to_wx(_T("ソート方法(&M)")), wxDefaultPosition,
 		                        wxDefaultSize, Choices(sort_items, 7), 2, wxRA_SPECIFY_COLS);
 		sort_->SetSelection(Clamp(options.sort_mode, 0, 6));
 		top->Add(sort_, wxSizerFlags().Expand().Border(wxALL, 8));

@@ -156,8 +156,8 @@ private:
 	wxRadioBox *MakePositionBox(bool before)
 	{
 		wxArrayString items;
-		items.Add(to_wx(_T("前")));
-		items.Add(to_wx(_T("後")));
+		items.Add(to_wx(_T("前(&B)")));
+		items.Add(to_wx(_T("後(&A)")));
 		wxRadioBox *box = new wxRadioBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
 		                                 wxDefaultSize, items, 1, wxRA_SPECIFY_ROWS);
 		box->SetSelection(before ? 0 : 1);

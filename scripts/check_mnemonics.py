@@ -26,11 +26,118 @@ CTRL_RE = re.compile(
 )
 LITERAL_RE = re.compile(r'(?:to_wx\s*\(\s*)?(?:_T\s*\(\s*)?"((?:[^"\\]|\\.)*)"')
 
+# wxRadioBox: ボックスラベル (第3引数) と選択肢配列の両方にニーモニックが必要。
+# (wxChoice/wxComboBox の項目は Alt 処理が無いため対象外)
+RADIOBOX_RE = re.compile(r"new\s+wxRadioBox\s*\(")
+CHOICE_ADD_RE = re.compile(r"(\w+)\.Add\(to_wx\(_T\(\"((?:[^\"\\]|\\.)*)\"\)\)")
+BUILDER_DEF_RE = re.compile(r"wxArrayString\s+(\w+)\s*\(\s*\)")
+
 
 def mnemonic_of(label: str) -> str | None:
     """単独 `&` の次文字を返す。無ければ None。`&&` は除外。"""
     m = re.search(r"(?<!&)&(?!&)(.)", label)
     return m.group(1) if m else None
+
+
+def split_top_args(text: str, open_pos: int) -> list[str]:
+    """open_pos の '(' に対応する引数リストをトップレベルカンマで分割する。"""
+    args: list[str] = []
+    depth = 0
+    cur: list[str] = []
+    in_str = False
+    esc = False
+    for ch in text[open_pos:]:
+        if in_str:
+            cur.append(ch)
+            if esc:
+                esc = False
+            elif ch == "\\":
+                esc = True
+            elif ch == '"':
+                in_str = False
+            continue
+        if ch == '"':
+            in_str = True
+            cur.append(ch)
+        elif ch == "(":
+            depth += 1
+            if depth > 1:
+                cur.append(ch)
+        elif ch == ")":
+            depth -= 1
+            if depth == 0:
+                args.append("".join(cur))
+                break
+            cur.append(ch)
+        elif ch == "," and depth == 1:
+            args.append("".join(cur))
+            cur = []
+        else:
+            cur.append(ch)
+    return args
+
+
+def check_radioboxes(
+    path, text: str, errors: list[str], warnings: list[str]
+) -> int:
+    """wxRadioBox のボックスラベルと選択肢配列を検査する。戻り値は検査件数。"""
+    checked = 0
+    lines = text.splitlines()
+    radio_vars: set[str] = set()
+    radio_builders: set[str] = set()
+    for m in RADIOBOX_RE.finditer(text):
+        args = split_top_args(text, m.end() - 1)
+        lineno = text.count("\n", 0, m.start()) + 1
+        if len(args) < 6:
+            warnings.append(f"{path.name}:{lineno}: RadioBox引数を読めない (要目視)")
+            continue
+        lm = LITERAL_RE.search(args[2])
+        if lm:
+            label = lm.group(1)
+            if label:
+                checked += 1
+                if mnemonic_of(label) is None:
+                    errors.append(
+                        f"{path.name}:{lineno}: RadioBoxラベルにニーモニック無し: {label}"
+                    )
+        sixth = args[5].strip()
+        bm = re.match(r"(\w+)\s*\(\s*\)$", sixth)
+        if bm:
+            radio_builders.add(bm.group(1))
+        elif re.match(r"^[A-Za-z_]\w*$", sixth):
+            radio_vars.add(sixth)
+    # 生成関数の本体 (wxArrayString Name() ... ^}) 内の Add を検査
+    if radio_builders:
+        cur_builder: str | None = None
+        for lineno, line in enumerate(lines, 1):
+            if cur_builder is None:
+                dm = BUILDER_DEF_RE.search(line)
+                if dm and dm.group(1) in radio_builders:
+                    cur_builder = dm.group(1)
+                continue
+            if line == "}":
+                cur_builder = None
+                continue
+            am = CHOICE_ADD_RE.search(line)
+            if am:
+                checked += 1
+                if mnemonic_of(am.group(2)) is None:
+                    errors.append(
+                        f"{path.name}:{lineno}: RadioBox選択肢にニーモニック無し"
+                        f" ({cur_builder}): {am.group(2)}"
+                    )
+    # 変数配列の Add を検査
+    if radio_vars:
+        for lineno, line in enumerate(lines, 1):
+            am = CHOICE_ADD_RE.search(line)
+            if am and am.group(1) in radio_vars:
+                checked += 1
+                if mnemonic_of(am.group(2)) is None:
+                    errors.append(
+                        f"{path.name}:{lineno}: RadioBox選択肢にニーモニック無し"
+                        f" ({am.group(1)}): {am.group(2)}"
+                    )
+    return checked
 
 
 def main() -> int:
@@ -40,9 +147,9 @@ def main() -> int:
     checked = 0
     for path in sorted(GUI.glob("*.cpp")):
         seen: dict[str, list[int]] = {}
-        for lineno, line in enumerate(
-            path.read_text(encoding="utf-8").splitlines(), 1
-        ):
+        text = path.read_text(encoding="utf-8")
+        checked += check_radioboxes(path, text, errors, warnings)
+        for lineno, line in enumerate(text.splitlines(), 1):
             m = CTRL_RE.search(line)
             if not m:
                 continue

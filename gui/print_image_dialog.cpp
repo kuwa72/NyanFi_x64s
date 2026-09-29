@@ -27,12 +27,12 @@ inline UnicodeString to_us(const wxString &value)
 	return UnicodeString(value.wc_str());
 }
 
-const wchar_t *const kOrientationItems[] = {_T("縦"), _T("横")};
-const wchar_t *const kFitItems[] = {_T("用紙に合わせる"), _T("用紙サイズで切り抜き"),
-                                    _T("中央"), _T("左上")};
-const wchar_t *const kRangeItems[] = {_T("1枚"), _T("全枚"), _T("選択範囲")};
-const wchar_t *const kTextPositionItems[] = {_T("上"), _T("下")};
-const wchar_t *const kTextAlignmentItems[] = {_T("左"), _T("中央"), _T("右")};
+const wchar_t *const kOrientationItems[] = {_T("縦(&V)"), _T("横(&Y)")};
+const wchar_t *const kFitItems[] = {_T("用紙に合わせる(&A)"), _T("用紙サイズで切り抜き(&K)"),
+                                    _T("中央(&C)"), _T("左上(&L)")};
+const wchar_t *const kRangeItems[] = {_T("1枚(&M)"), _T("全枚(&Z)"), _T("選択範囲(&E)")};
+const wchar_t *const kTextPositionItems[] = {_T("上(&U)"), _T("下(&D)")};
+const wchar_t *const kTextAlignmentItems[] = {_T("左(&X)"), _T("中央(&N)"), _T("右(&J)")};
 
 wxArrayString MakeChoices(const wchar_t *const *items, int count)
 {
@@ -70,7 +70,7 @@ public:
 		copies_ctrl_ = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
 		                              wxSize(100, -1), wxSP_ARROW_KEYS, 1, 32767, options.copies);
 		printer->Add(copies_ctrl_, wxSizerFlags().CentreVertical());
-		orientation_radio_ = new wxRadioBox(this, wxID_ANY, to_wx(_T("方向")),
+		orientation_radio_ = new wxRadioBox(this, wxID_ANY, to_wx(_T("方向(&H)")),
 		                                    wxDefaultPosition, wxDefaultSize,
 		                                    MakeChoices(kOrientationItems, 2), 2, wxRA_SPECIFY_COLS);
 		orientation_radio_->SetSelection(options.orientation == print_image::Orientation::Landscape ? 1 : 0);
@@ -83,12 +83,12 @@ public:
 		wxNotebook *book = new wxNotebook(this, wxID_ANY);
 		wxPanel *basic = new wxPanel(book);
 		wxBoxSizer *basic_box = new wxBoxSizer(wxVERTICAL);
-		range_radio_ = new wxRadioBox(basic, wxID_ANY, to_wx(_T("印刷範囲")),
+		range_radio_ = new wxRadioBox(basic, wxID_ANY, to_wx(_T("印刷範囲(&R)")),
 		                               wxDefaultPosition, wxDefaultSize,
 		                               MakeChoices(kRangeItems, 3), 1, wxRA_SPECIFY_COLS);
 		range_radio_->SetSelection(static_cast<int>(options.print_range));
 		basic_box->Add(range_radio_, wxSizerFlags().Expand().Border(wxALL, 6));
-		fit_radio_ = new wxRadioBox(basic, wxID_ANY, to_wx(_T("サイズ・位置")),
+		fit_radio_ = new wxRadioBox(basic, wxID_ANY, to_wx(_T("サイズ・位置(&I)")),
 		                             wxDefaultPosition, wxDefaultSize,
 		                             MakeChoices(kFitItems, 4), 2, wxRA_SPECIFY_COLS);
 		fit_radio_->SetSelection(static_cast<int>(options.fit));
@@ -133,11 +133,11 @@ public:
 		text_grid->Add(new wxStaticText(text_page, wxID_ANY, to_wx("%")), wxSizerFlags().CentreVertical());
 		text_box->Add(text_grid, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 6));
 		wxBoxSizer *text_radios = new wxBoxSizer(wxHORIZONTAL);
-		text_position_radio_ = new wxRadioBox(text_page, wxID_ANY, to_wx(_T("位置")),
+		text_position_radio_ = new wxRadioBox(text_page, wxID_ANY, to_wx(_T("位置(&O)")),
 		                                      wxDefaultPosition, wxDefaultSize,
 		                                      MakeChoices(kTextPositionItems, 2), 2, wxRA_SPECIFY_COLS);
 		text_position_radio_->SetSelection(static_cast<int>(options.text_position));
-		text_alignment_radio_ = new wxRadioBox(text_page, wxID_ANY, to_wx(_T("揃え")),
+		text_alignment_radio_ = new wxRadioBox(text_page, wxID_ANY, to_wx(_T("揃え(&W)")),
 		                                       wxDefaultPosition, wxDefaultSize,
 		                                       MakeChoices(kTextAlignmentItems, 3), 3, wxRA_SPECIFY_COLS);
 		text_alignment_radio_->SetSelection(static_cast<int>(options.text_alignment));

@@ -71,13 +71,13 @@ public:
 		wxBoxSizer *top = new wxBoxSizer(wxVERTICAL);
 
 		wxArrayString formats;
-		formats.Add(to_wx(_T("BMP")));
-		formats.Add(to_wx(_T("JPG")));
-		formats.Add(to_wx(_T("PNG")));
-		formats.Add(to_wx(_T("GIF")));
-		formats.Add(to_wx(_T("TIF")));
-		formats.Add(to_wx(_T("HDP")));
-		format_ = new wxRadioBox(this, wxID_ANY, to_wx(_T("変換形式")), wxDefaultPosition,
+		formats.Add(to_wx(_T("BMP(&B)")));
+		formats.Add(to_wx(_T("JPG(&J)")));
+		formats.Add(to_wx(_T("PNG(&N)")));
+		formats.Add(to_wx(_T("GIF(&I)")));
+		formats.Add(to_wx(_T("TIF(&T)")));
+		formats.Add(to_wx(_T("HDP(&A)")));
+		format_ = new wxRadioBox(this, wxID_ANY, to_wx(_T("変換形式(&F)")), wxDefaultPosition,
 		                         wxDefaultSize, formats, 2, wxRA_SPECIFY_COLS);
 		format_->SetSelection(cv_img::FormatIndex(initial.format));
 		top->Add(format_, wxSizerFlags().Expand().Border(wxALL, 8));

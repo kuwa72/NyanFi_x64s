@@ -32,20 +32,20 @@ wxArrayString ModeChoices()
 	choices.Add(to_wx(_T("更新日時(&D)")));
 	choices.Add(to_wx(_T("サイズ(&S)")));
 	choices.Add(to_wx(_T("属性(&A)")));
-	choices.Add(to_wx(_T("なし")));
+	choices.Add(to_wx(_T("なし(&X)")));
 	return choices;
 }
 
 wxArrayString DirectoryChoices()
 {
 	wxArrayString choices;
-	choices.Add(to_wx(_T("ファイルと同じ")));
-	choices.Add(to_wx(_T("名前")));
-	choices.Add(to_wx(_T("更新日時")));
-	choices.Add(to_wx(_T("サイズ")));
-	choices.Add(to_wx(_T("属性")));
-	choices.Add(to_wx(_T("ディレクトリを区別しない")));
-	choices.Add(to_wx(_T("アイコン(未実装)")));
+	choices.Add(to_wx(_T("ファイルと同じ(&W)")));
+	choices.Add(to_wx(_T("名前(&M)")));
+	choices.Add(to_wx(_T("更新日時(&G)")));
+	choices.Add(to_wx(_T("サイズ(&I)")));
+	choices.Add(to_wx(_T("属性(&J)")));
+	choices.Add(to_wx(_T("ディレクトリを区別しない(&R)")));
+	choices.Add(to_wx(_T("アイコン(未実装)(&Q)")));
 	return choices;
 }
 
@@ -72,14 +72,14 @@ public:
 	{
 		wxBoxSizer *top = new wxBoxSizer(wxVERTICAL);
 
-		mode_ = new wxRadioBox(this, wxID_ANY, to_wx(_T("ソート方法")),
+		mode_ = new wxRadioBox(this, wxID_ANY, to_wx(_T("ソート方法(&P)")),
 		                       wxDefaultPosition, wxDefaultSize, ModeChoices(), 1,
 		                       wxRA_SPECIFY_ROWS);
 		mode_->SetSelection(sort_mode::ToIndex(initial.mode));
 		top->Add(mode_, wxSizerFlags().Expand().Border(wxALL, 8));
 		mode_->Bind(wxEVT_RADIOBOX, &SortInputDialog::OnModeChanged, this);
 
-		dir_mode_ = new wxRadioBox(this, wxID_ANY, to_wx(_T("ディレクトリのソート方法")),
+		dir_mode_ = new wxRadioBox(this, wxID_ANY, to_wx(_T("ディレクトリのソート方法(&V)")),
 		                            wxDefaultPosition, wxDefaultSize, DirectoryChoices(), 1,
 		                            wxRA_SPECIFY_ROWS);
 		dir_mode_->SetSelection(sort_mode::ToIndex(initial.dir_mode));
