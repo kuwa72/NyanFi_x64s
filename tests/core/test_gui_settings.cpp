@@ -137,6 +137,40 @@ TEST_CASE("KeyMap: Assign は同じキーなら上書きする")
 }
 
 //===========================================================================
+// KeyMap: 修飾子2つの割り当ては Shift→Ctrl→Alt の順序で書く
+//
+// get_ShiftStr() (src/usr_key.cpp) は Shift,Ctrl,Alt の順で連結するため、
+// 物理キーから生成される文字列もこの順序になる ("Shift+Ctrl+X")。逆順で
+// 書かれたエントリ ("Ctrl+Shift+X") は Lookup に一生ヒットしないデッドキーに
+// なる。E2E (windows-mcp 実機) で GetHash 等 29 件が無反応だった。
+//===========================================================================
+
+TEST_CASE("KeyMap: 複合修飾子は生成順序で引ける")
+{
+	KeyMap km;
+	CHECK(km.Lookup(_T("Shift+Ctrl+X")) == UnicodeString(_T("GetHash")));
+	CHECK(km.Lookup(_T("Shift+Ctrl+S")) == UnicodeString(_T("SwapLR")));
+	CHECK(km.Lookup(_T("Shift+Alt+J")) == UnicodeString(_T("SelEmptyDir_NF")));
+	CHECK(km.Lookup(_T("Shift+Ctrl+Tab")) == UnicodeString(_T("PrevTab")));
+}
+
+TEST_CASE("KeyMap: 逆順表記のデッドキーが1つも無い")
+{
+	KeyMap km;
+	const TStringList *entries = km.Entries();
+	REQUIRE(entries != nullptr);
+	int bad_count = 0;
+	for (int i = 0; i < entries->GetCount(); ++i) {
+		const UnicodeString name = entries->NameAt(i);
+		// 生成順序 (Shift,Ctrl,Alt) に反する並びは物理キーから到達不能
+		if (name.Pos(_T("Ctrl+Shift")) > 0 || name.Pos(_T("Alt+Shift")) > 0 ||
+		    name.Pos(_T("Ctrl+Alt+Shift")) > 0 || name.Pos(_T("Alt+Ctrl")) > 0)
+			++bad_count;
+	}
+	CHECK(bad_count == 0);
+}
+
+//===========================================================================
 // KeyMap::VkFromWxKeyCode: wx のキーコード → 仮想キーコード
 //
 // この変換にテストが無く、KeyStrOf() が wx の GetKeyCode() をそのまま
