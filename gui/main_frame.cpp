@@ -530,10 +530,12 @@ void MainFrame::BuildMenuBar()
 {
 	wxMenuBar *bar = new wxMenuBar();
 	wxMenu *current = nullptr;
+	UnicodeString cur_name;
 	for (const menu_def::Item &it : menu_def::Items()) {
-		if (!it.menu.IsEmpty()) {
+		if (!it.menu.IsEmpty() && it.menu != cur_name) {
 			current = new wxMenu();
 			bar->Append(current, to_wx(it.menu));
+			cur_name = it.menu;
 		}
 		if (current == nullptr) continue;
 		if (it.label.IsEmpty()) {
