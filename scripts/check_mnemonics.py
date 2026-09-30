@@ -21,6 +21,15 @@ STOCK_IDS = {
     "wxID_APPLY", "wxID_SAVE",
 }
 
+# VCL 原本に合わせてニーモニックを付けない項目 (Issue #109)。
+# (ファイル名, ラベル部分一致) の集合。増やす場合は原本の根拠を記すこと。
+NO_MNEMONIC_EXCEPTIONS = {
+    ("sort_mode_dialog.cpp", "現モードのキーを押したときも閉じる"),  # VCL SameCloseCheckBox
+    ("sort_mode_dialog.cpp", "拡張設定を常に表示"),  # VCL ExOptCheckBox
+    ("sort_mode_dialog.cpp", "自然順無効時に論理ソート"),  # VCL SortLogicalCheckBox
+    ("sort_mode_dialog.cpp", "更新日時のアクセラレータを"),  # VCL AccDtoTCheckBox
+}
+
 CTRL_RE = re.compile(
     r"new\s+wx(?:Button|CheckBox|RadioButton)\s*\(\s*[^,]+,\s*([^,]+),\s*(.*)$"
 )
@@ -164,6 +173,8 @@ def main() -> int:
             checked += 1
             mn = mnemonic_of(label)
             if mn is None:
+                if any(f == path.name and s in label for f, s in NO_MNEMONIC_EXCEPTIONS):
+                    continue
                 errors.append(f"{path.name}:{lineno}: ニーモニック無し: {label}")
             else:
                 seen.setdefault(mn.upper(), []).append(lineno)
