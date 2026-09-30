@@ -40,11 +40,11 @@ wxArrayString DirectoryChoices()
 {
 	wxArrayString choices;
 	choices.Add(to_wx(_T("ファイルと同じ(&W)")));
-	choices.Add(to_wx(_T("名前(&M)")));
+	choices.Add(to_wx(_T("名前(&C)")));
 	choices.Add(to_wx(_T("更新日時(&G)")));
 	choices.Add(to_wx(_T("サイズ(&I)")));
 	choices.Add(to_wx(_T("属性(&J)")));
-	choices.Add(to_wx(_T("ディレクトリを区別しない(&R)")));
+	choices.Add(to_wx(_T("ディレクトリを区別しない(&K)")));
 	choices.Add(to_wx(_T("アイコン(未実装)(&Q)")));
 	return choices;
 }
@@ -87,10 +87,10 @@ public:
 		top->Add(dir_mode_, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 
 		natural_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("自然順(&N)")));
-		desc_name_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("名前・拡張子，降順(&K)")));
-		old_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("更新日時，降順(&Y)")));
-		small_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("サイズ，小さい順(&C)")));
-		attr_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("属性，降順(&Z)")));
+		desc_name_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("降順(&R)")));
+		old_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("古い順(&O)")));
+		small_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("小さい順(&M)")));
+		attr_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("降順(&V)")));
 		natural_->SetValue(initial.natural);
 		desc_name_->SetValue(initial.descending_name);
 		old_->SetValue(initial.descending_old);
@@ -114,16 +114,16 @@ public:
 		ext_ = new wxTextCtrl(this, wxID_ANY, to_wx(initial.extension_list),
 		                       wxDefaultPosition, wxSize(260, -1), wxTE_PROCESS_ENTER);
 		wxBoxSizer *ext_row = new wxBoxSizer(wxHORIZONTAL);
-		ext_row->Add(new wxStaticText(this, wxID_ANY, to_wx(_T("優先する拡張子"))),
+		ext_row->Add(new wxStaticText(this, wxID_ANY, to_wx(_T("拡張子順で優先する拡張子"))),
 		             wxSizerFlags().CentreVertical().Border(wxRIGHT, 8));
 		ext_row->Add(ext_, wxSizerFlags(1).Expand());
 		top->Add(ext_row, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM, 8));
 
-		both_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("左右同じ設定にする(&B)")));
-		logical_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("名前と拡張子に論理順を使う(&L)")));
-		acc_dt_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("更新日時(T/D)を切り替える(&T)")));
-		same_close_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("同じキーで閉じたら確定(&O)")));
-		extended_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("拡張設定を表示(&H)")));
+		both_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("左右とも変更(&B)")));
+		logical_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("自然順無効時に論理ソート")));
+		acc_dt_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("更新日時のアクセラレータを'T'に変更")));
+		same_close_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("現モードのキーを押したときも閉じる")));
+		extended_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("拡張設定を常に表示")));
 		both_->SetValue(initial.both);
 		logical_->SetValue(initial.logical);
 		acc_dt_->SetValue(initial.acc_date_time);
