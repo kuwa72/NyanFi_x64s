@@ -32,7 +32,7 @@ wxArrayString ModeChoices()
 	choices.Add(to_wx(_T("更新日時(&D)")));
 	choices.Add(to_wx(_T("サイズ(&S)")));
 	choices.Add(to_wx(_T("属性(&A)")));
-	choices.Add(to_wx(_T("なし(&X)")));
+	choices.Add(to_wx(_T("なし(&U)")));
 	return choices;
 }
 
@@ -73,14 +73,14 @@ public:
 		wxBoxSizer *top = new wxBoxSizer(wxVERTICAL);
 
 		mode_ = new wxRadioBox(this, wxID_ANY, to_wx(_T("ソート方法(&P)")),
-		                       wxDefaultPosition, wxDefaultSize, ModeChoices(), 1,
+		                       wxDefaultPosition, wxDefaultSize, ModeChoices(), 3,
 		                       wxRA_SPECIFY_ROWS);
 		mode_->SetSelection(sort_mode::ToIndex(initial.mode));
 		top->Add(mode_, wxSizerFlags().Expand().Border(wxALL, 8));
 		mode_->Bind(wxEVT_RADIOBOX, &SortInputDialog::OnModeChanged, this);
 
 		dir_mode_ = new wxRadioBox(this, wxID_ANY, to_wx(_T("ディレクトリのソート方法(&V)")),
-		                            wxDefaultPosition, wxDefaultSize, DirectoryChoices(), 1,
+		                            wxDefaultPosition, wxDefaultSize, DirectoryChoices(), 4,
 		                            wxRA_SPECIFY_ROWS);
 		dir_mode_->SetSelection(sort_mode::ToIndex(initial.dir_mode));
 		dir_mode_->Show(show_dir_options_);
@@ -88,7 +88,7 @@ public:
 
 		natural_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("自然順(&N)")));
 		desc_name_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("名前・拡張子，降順(&K)")));
-		old_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("更新日時，降順(&U)")));
+		old_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("更新日時，降順(&Y)")));
 		small_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("サイズ，小さい順(&C)")));
 		attr_ = new wxCheckBox(this, wxID_ANY, to_wx(_T("属性，降順(&Z)")));
 		natural_->SetValue(initial.natural);
